@@ -180,23 +180,23 @@ namespace ByteManager
         }
 
         /// <summary>
-        /// 查找int数组在文件中所在的地址索引(可能不止一条记录)
+        /// Find the the int array address in the file where the index (may be more than one record)
         /// </summary>
-        /// <param name="it">要查找的int数组</param>
-        /// <returns>int数组所在位置索引列表</returns>
+        /// <param name="it">To find an array of int</param>
+        /// <returns>int Location of the array index list</returns>
         public List<int> FindIndexList(int[] it)
         {
             if (btList == null)
             {
-                throw new Exception("文件未打开");
+                throw new Exception("File is not open");
             }
             if (it == null || it.Length == 0)
             {
-                throw new Exception("不允许查找空数组");
+                throw new Exception("Find an empty array is not allowed");
             }
             if (btList.Length < it.Length)
             {
-                throw new Exception("文件过短");
+                throw new Exception("The file is too short");
             }
 
             List<int> indexList = new List<int>();
@@ -224,24 +224,24 @@ namespace ByteManager
         }
 
         /// <summary>
-        /// 从某地址开始查找int数组在文件中所在的第一个地址索引
+        /// Find int array in the file where the first address index from an address
         /// </summary>
-        /// <param name="startIndex">开始地址</param>
-        /// <param name="it">要查找的int数组</param>
-        /// <returns>第一个索引(没有则返回-1)</returns>
+        /// <param name="startIndex">Start address</param>
+        /// <param name="it">To find an array of int</param>
+        /// <returns>First index -1 is returned (no)</returns>
         public int FindFirstIndex(int startIndex, int[] it)
         {
             if (btList == null)
             {
-                throw new Exception("文件未打开");
+                throw new Exception("File is not open");
             }
             if (it == null || it.Length == 0)
             {
-                throw new Exception("不允许查找空数组");
+                throw new Exception("Find an empty array is not allowed");
             }
             if (btList.Length < it.Length)
             {
-                throw new Exception("文件过短");
+                throw new Exception("The file is too short");
             }
 
             int index = -1;
@@ -268,24 +268,24 @@ namespace ByteManager
         }
 
         /// <summary>
-        /// 从某地址开始查找byte数组在文件中所在的第一个地址索引(查不到则返回-1)
+        /// Find an address byte array in the file where the first address index (finding out -1 is returned)
         /// </summary>
-        /// <param name="startIndex">开始地址</param>
-        /// <param name="bt">要查找的byte数组</param>
-        /// <returns>第一个索引(没有则返回-1)</returns>
+        /// <param name="startIndex">Start address</param>
+        /// <param name="bt">To find the byte array</param>
+        /// <returns>First index -1 is returned (no)</returns>
         public int FindFirstIndex(int startIndex, byte[] bt)
         {
             if (btList == null)
             {
-                throw new Exception("文件未打开");
+                throw new Exception("File is not open");
             }
             if (bt == null || bt.Length == 0)
             {
-                throw new Exception("不允许查找空数组");
+                throw new Exception("Find an empty array is not allowed");
             }
             if (btList.Length < bt.Length)
             {
-                throw new Exception("文件过短");
+                throw new Exception("The file is too short");
             }
 
             int index = -1;
@@ -312,47 +312,47 @@ namespace ByteManager
         }
 
         /// <summary>
-        /// 获取从某索引开始某长度的字符串(只支持英文)
+        /// Get a length of string from index (only supports English)
         /// </summary>
-        /// <param name="index">索引开头</param>
+        /// <param name="index">The beginning of the index</param>
         /// <param name="length">长度</param>
         /// <returns>字符串</returns>
         public String GetStringByIndexAndLength(int index, int length)
         {
             if (btList == null)
             {
-                throw new Exception("文件未打开");
+                throw new Exception("File is not open");
             }
             if (index < 0)
             {
-                throw new Exception("索引无效");
+                throw new Exception("Index is invalid");
             }
             else if ((length + index) > btList.Length)
             {
-                throw new Exception("长度超出界限");
+                throw new Exception("Length out of bounds");
             }
             return new String(System.Text.Encoding.Default.GetChars(btList, index, length));
         }
 
         /// <summary>
-        /// 获取从某索引开始某长度的int数组
+        /// Get a length int array from a index
         /// </summary>
-        /// <param name="index">索引开头</param>
-        /// <param name="length">长度</param>
-        /// <returns>int数组</returns>
+        /// <param name="index">The beginning of the index</param>
+        /// <param name="length">Length</param>
+        /// <returns>int array</returns>
         public int[] GetIntsByIndexAndLength(int index, int length)
         {
             if (btList == null)
             {
-                throw new Exception("文件未打开");
+                throw new Exception("File is not open");
             }
             if (index < 0)
             {
-                throw new Exception("索引无效");
+                throw new Exception("Index is invalid");
             }
             else if ((length + index) > btList.Length)
             {
-                throw new Exception("长度超出界限");
+                throw new Exception("Length out of bounds");
             }
             int[] it = new int[length];
             for (int i = 0; i < length; i++)
@@ -363,24 +363,24 @@ namespace ByteManager
         }
 
         /// <summary>
-        /// 获取从某索引开始某长度的byte数组
+        /// Get a length byte array starting from index
         /// </summary>
-        /// <param name="index">索引开头</param>
-        /// <param name="length">长度</param>
-        /// <returns>byte数组</returns>
+        /// <param name="index">The beginning of the index</param>
+        /// <param name="length">Length</param>
+        /// <returns>byte Array/returns>
         public byte[] GetBytsByIndexAndLength(int index, int length)
         {
             if (btList == null)
             {
-                throw new Exception("文件未打开");
+                throw new Exception("File is not open");
             }
             if (index < 0)
             {
-                throw new Exception("索引无效");
+                throw new Exception("Index is invalid");
             }
             else if ((length + index) > btList.Length)
             {
-                throw new Exception("长度超出界限");
+                throw new Exception("Length out of bounds");
             }
             byte[] it = new byte[length];
             for (int i = 0; i < length; i++)
@@ -391,24 +391,25 @@ namespace ByteManager
         }
 
         /// <summary>
-        /// 获取指定索引开始至少某长度的符合规范的字符串(如果字符串不止这些长度,则自动向后延长,规范:字符串不包含中文和特殊字符)
+        /// Get the specified index began at least a length compliant string (if the string is more than the length,
+        /// automatic backward extension, specification: string does not contain Chinese and special characters)
         /// </summary>
-        /// <param name="index">指定索引开头</param>
-        /// <param name="length">最小长度</param>
-        /// <returns>字符串</returns>
+        /// <param name="index">Starting with a specified index</param>
+        /// <param name="length">Minimum length</param>
+        /// <returns>String</returns>
         public String GetStringByIndexAndMinLength(int index, int length)
         {
             if (btList == null)
             {
-                throw new Exception("文件未打开");
+                throw new Exception("File is not open");
             }
             if (index < 0)
             {
-                throw new Exception("索引无效");
+                throw new Exception("Index is invalid");
             }
             else if ((length + index) > btList.Length)
             {
-                throw new Exception("长度超出界限");
+                throw new Exception("Length out of bounds");
             }
 
             int addLength = 0;
@@ -428,15 +429,15 @@ namespace ByteManager
         {
             if (btList == null)
             {
-                throw new Exception("文件未打开");
+                throw new Exception("File is not open");
             }
             if (index < 0)
             {
-                throw new Exception("索引无效");
+                throw new Exception("Index is invalid");
             }
             else if ((length + index) > btList.Length)
             {
-                throw new Exception("长度超出界限");
+                throw new Exception("Length out of bounds");
             }
             List<byte> temp = new List<byte>();
             for (int i = 0; i < btList.Length; i++)
@@ -458,18 +459,18 @@ namespace ByteManager
         {
             if (btList == null)
             {
-                throw new Exception("文件未打开");
+                throw new Exception("File is not open");
             }else if (start < 0)
             {
-                throw new Exception("起始索引无效");
+                throw new Exception("Starting Index is invalid");
             }
             else if (end<start)
             {
-                throw new Exception("终止索引无效");
+                throw new Exception("Termination Index is invalid");
             }
             else if (end > btList.Length - 1)
             {
-                throw new Exception("终止索引无效");
+                throw new Exception("Termination Index is invalid");
             }
 
             List<byte> temp = new List<byte>();
@@ -493,15 +494,15 @@ namespace ByteManager
         {
             if (btList == null)
             {
-                throw new Exception("文件未打开");
+                throw new Exception("File is not open");
             }
             if (index < 0)
             {
-                throw new Exception("索引无效");
+                throw new Exception("Index is invalid");
             }
             else if ((newInts.Length + index) > btList.Length)
             {
-                throw new Exception("新数组长度超出界限");
+                throw new Exception("Length of the new array out of bounds");
             }
             for (int i = 0; i < newInts.Length; i++)
             {
@@ -518,15 +519,15 @@ namespace ByteManager
         {
             if (btList == null)
             {
-                throw new Exception("文件未打开");
+                throw new Exception("File is not open");
             }
             if (index < 0)
             {
-                throw new Exception("索引无效");
+                throw new Exception("Index is invalid");
             }
             else if ((newBytes.Length + index) > btList.Length)
             {
-                throw new Exception("新数组长度超出界限");
+                throw new Exception("Length of the new array out of bounds");
             }
             for (int i = 0; i < newBytes.Length; i++)
             {
@@ -543,11 +544,11 @@ namespace ByteManager
         {
             if (btList == null)
             {
-                throw new Exception("文件未打开");
+                throw new Exception("File is not open");
             }
             if (index < 0)
             {
-                throw new Exception("索引无效");
+                throw new Exception("Index is invalid");
             }
             List<byte> temp = new List<byte>();
             for (int i = 0; i < btList.Length; i++)
@@ -573,11 +574,11 @@ namespace ByteManager
         {
             if (btList == null)
             {
-                throw new Exception("文件未打开");
+                throw new Exception("File is not open");
             }
             if (index < 0)
             {
-                throw new Exception("索引无效");
+                throw new Exception("Index is invalid");
             }
             List<byte> temp = new List<byte>();
             for (int i = 0; i < btList.Length; i++)
@@ -605,19 +606,19 @@ namespace ByteManager
         {
             if (btList == null)
             {
-                throw new Exception("文件未打开");
+                throw new Exception("File is not open");
             }
             if (index < 0)
             {
-                throw new Exception("索引无效");
+                throw new Exception("Index is invalid");
             }
             if (index + length > btList.Length)
             {
-                throw new Exception("长度超出界限");
+                throw new Exception("Length out of bounds");
             }
             if (length < ints.Length -1)
             {
-                throw new Exception("新数组长度过长");
+                throw new Exception("The length of the new array is too long");
             }
             bool isInts=false;
             for (int i = index;i<= index + length- ints.Length; i++)
@@ -656,19 +657,19 @@ namespace ByteManager
         {
             if (btList == null)
             {
-                throw new Exception("文件未打开");
+                throw new Exception("File is not open");
             }
             if (index < 0)
             {
-                throw new Exception("索引无效");
+                throw new Exception("Index is invalid");
             }
             if (index + length > btList.Length)
             {
-                throw new Exception("长度超出界限");
+                throw new Exception("Length out of bounds");
             }
             if (length < bytes.Length-1)
             {
-                throw new Exception("新数组长度过长");
+                throw new Exception("The length of the new array is too long");
             }
             bool isInts = false;
             for (int i = index; i <= index + length-bytes.Length; i++)
@@ -704,7 +705,7 @@ namespace ByteManager
         {
             if (btList == null)
             {
-                throw new Exception("文件未打开");
+                throw new Exception("File is not open");
             }
             List<byte> temp = new List<byte>(btList);
             temp.AddRange(bt);

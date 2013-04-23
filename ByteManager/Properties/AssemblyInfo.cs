@@ -11,7 +11,7 @@ using System.Resources;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("APK Games")]
 [assembly: AssemblyProduct("ByteManager")]
-[assembly: AssemblyCopyright("Copyright ©  2013 Power By Raziel23x")]
+[assembly: AssemblyCopyright("Copyright © 2013 Power By Raziel23x")]
 [assembly: AssemblyTrademark("RenYue")]
 [assembly: AssemblyCulture("")]
 
@@ -25,14 +25,14 @@ using System.Resources;
 
 // The assembly version information consists of the following four values:
 //
-//      主版本
-//      次版本 
-//      内部版本号
-//      修订号
+//      Major version
+//      Minor version 
+//      Internal version number
+//      Revision Number
 //
-// 可以指定所有这些值，也可以使用“内部版本号”和“修订号”的默认值，
-// 方法是按如下所示使用“*”:
-// [assembly: AssemblyVersion("1.0.*")]
+// Internal version number and revision number, you can use the default values ​​you can specify all the values​​,
+// The method is as follows with "*":
+
 [assembly: AssemblyVersion("1.6.0.1")]
 [assembly: AssemblyFileVersion("1.6.0.1")]
 [assembly: NeutralResourcesLanguageAttribute("en")]
