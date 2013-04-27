@@ -118,12 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="label1.Text" xml:space="preserve">
-    <value>1.DO NOT USE SPECIAL CHARAKTERS
+    <value>1.DO NOT USE SPECIAL CHARACTERS
 2.Click File - Open the save-file
-  SKIDROW version:
-  Win7/Vista: %USERPROFILE%\AppData\Local\SKIDROW\102500\Storage
-  XP: %USERPROFILE%(Username)\Local Settings\Application Data\SKIDROW\102500\Storage
-  THETA: My Documents\My Games\Reckoning
+  For Example Windows Vista/7/8 location: 
+C:\Users\UserName\Documents\my games\Reckoning
 3.Select the Item you want to modify in the Equipment-window
 4.Click the modify Button
 5.In the pop-up window modify your propertys
@@ -132,6 +130,8 @@
 
 Note: Your Properties are not limited to the drop-down list, you can use Notepad to open the xml-file in the "data" folder
 
-Item-ids can be found in the forunms around the web</value>
+Item-ids can be found in the forums around the web
+
+Note: System generated equipment will Normally be displayed as "unknown", please slaughter mobs to decrease durability to identify item</value>
   </data>
 </root>

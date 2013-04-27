@@ -57,7 +57,6 @@
             this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tslblEditState = new System.Windows.Forms.ToolStripStatusLabel();
             this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
             this.txtCurrendDur = new System.Windows.Forms.TextBox();
             this.txtMaxDur = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -87,13 +86,13 @@
             this.tsmiFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiOpen});
             this.tsmiFile.Name = "tsmiFile";
-            this.tsmiFile.Size = new System.Drawing.Size(38, 20);
+            this.tsmiFile.Size = new System.Drawing.Size(37, 20);
             this.tsmiFile.Text = "File";
             // 
             // tsmiOpen
             // 
             this.tsmiOpen.Name = "tsmiOpen";
-            this.tsmiOpen.Size = new System.Drawing.Size(104, 22);
+            this.tsmiOpen.Size = new System.Drawing.Size(103, 22);
             this.tsmiOpen.Text = "Open";
             this.tsmiOpen.Click += new System.EventHandler(this.tsmiOpen_Click);
             // 
@@ -101,7 +100,7 @@
             // 
             this.tsmiBag.Enabled = false;
             this.tsmiBag.Name = "tsmiBag";
-            this.tsmiBag.Size = new System.Drawing.Size(81, 20);
+            this.tsmiBag.Size = new System.Drawing.Size(83, 20);
             this.tsmiBag.Text = "Change Bag";
             this.tsmiBag.Visible = false;
             this.tsmiBag.Click += new System.EventHandler(this.tsmiBag_Click);
@@ -116,7 +115,7 @@
             // optionToolStripMenuItem
             // 
             this.optionToolStripMenuItem.Name = "optionToolStripMenuItem";
-            this.optionToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
+            this.optionToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
             this.optionToolStripMenuItem.Text = "Option";
             this.optionToolStripMenuItem.Visible = false;
             // 
@@ -283,7 +282,7 @@
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(80, 17);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(77, 17);
             this.toolStripStatusLabel1.Text = "Archive path:";
             // 
             // tslblFileLocal
@@ -298,13 +297,13 @@
             // toolStripStatusLabel3
             // 
             this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
-            this.toolStripStatusLabel3.Size = new System.Drawing.Size(68, 17);
+            this.toolStripStatusLabel3.Size = new System.Drawing.Size(64, 17);
             this.toolStripStatusLabel3.Text = "Save-state:";
             // 
             // tslblEditState
             // 
             this.tslblEditState.Name = "tslblEditState";
-            this.tslblEditState.Size = new System.Drawing.Size(46, 17);
+            this.tslblEditState.Size = new System.Drawing.Size(70, 17);
             this.tslblEditState.Text = "Unmodified";
             this.tslblEditState.Click += new System.EventHandler(this.tslblEditState_Click);
             // 
@@ -316,17 +315,6 @@
             this.label3.Size = new System.Drawing.Size(92, 13);
             this.label3.TabIndex = 7;
             this.label3.Text = "Filter by Durability:";
-            // 
-            // label4
-            // 
-            this.label4.Font = new System.Drawing.Font("SimSun", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label4.ForeColor = System.Drawing.Color.Red;
-            this.label4.Location = new System.Drawing.Point(247, 30);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(491, 41);
-            this.label4.TabIndex = 8;
-            this.label4.Text = "Note: System generated equipment will Normally be displayed as \"unknown\", please " +
-                "slaughter mobs to decrease durability to identify item";
             // 
             // txtCurrendDur
             // 
@@ -390,7 +378,6 @@
             this.Controls.Add(this.btnSearchByDur);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.label4);
             this.Controls.Add(this.txtMaxDur);
             this.Controls.Add(this.txtCurrendDur);
             this.Controls.Add(this.label3);
@@ -443,7 +430,6 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
         private System.Windows.Forms.ToolStripStatusLabel tslblEditState;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox txtCurrendDur;
         private System.Windows.Forms.TextBox txtMaxDur;
         private System.Windows.Forms.Label label5;
