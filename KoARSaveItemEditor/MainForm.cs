@@ -22,7 +22,7 @@ namespace KoARSaveItemEditor
             lvMain.Columns[4].Width = 100;
         }
 
-        private void tsmiOpen_Click(object sender, EventArgs e)
+        private void TsmiOpen_Click(object sender, EventArgs e)
         {
             if (opfMain.ShowDialog() == DialogResult.OK)
             {
@@ -35,7 +35,7 @@ namespace KoARSaveItemEditor
             }
         }
 
-        private void btnSearch_Click(object sender, EventArgs e)
+        private void BtnSearch_Click(object sender, EventArgs e)
         {
             searchType = "name";
             if (txtSearch.Text == "")
@@ -62,7 +62,7 @@ namespace KoARSaveItemEditor
             lvMain.SelectedItems.Clear();
         }
 
-        private void btnSearchByDur_Click(object sender, EventArgs e)
+        private void BtnSearchByDur_Click(object sender, EventArgs e)
         {
             if (txtCurrendDur.Text.Trim() == "" && txtMaxDur.Text.Trim() == "")
             {
@@ -135,7 +135,7 @@ namespace KoARSaveItemEditor
             lvMain.SelectedItems.Clear();
         }
 
-        private void btnShowAll_Click(object sender, EventArgs e)
+        private void BtnShowAll_Click(object sender, EventArgs e)
         {
             lvMain.Items.Clear();
             if (editer == null)
@@ -200,7 +200,7 @@ namespace KoARSaveItemEditor
             }
             catch
             {
-                MessageBox.Show("Failed to load property list, please check if \"data\" folder is present and xml-file is present");
+                MessageBox.Show("Failed to load property list. Please check if \"Data\" folder is in the editor's directory and properties.xml is inside.");
                 Application.Exit();
             }
         }
@@ -221,7 +221,7 @@ namespace KoARSaveItemEditor
             }
         }
 
-        private void btnSave_Click(object sender, EventArgs e)
+        private void BtnSave_Click(object sender, EventArgs e)
         {
             if (editer != null)
             {
@@ -233,13 +233,13 @@ namespace KoARSaveItemEditor
             }
         }
 
-        private void tsmiHelp_Click(object sender, EventArgs e)
+        private void TsmiHelp_Click(object sender, EventArgs e)
         {
             HelpForm form = new HelpForm();
             form.ShowDialog();
         }
 
-        private void tsmiBag_Click(object sender, EventArgs e)
+        private void TsmiBag_Click(object sender, EventArgs e)
         {
             BagEditForm form = new BagEditForm(editer);
             if (form.ShowDialog() == DialogResult.Yes)
@@ -248,7 +248,7 @@ namespace KoARSaveItemEditor
             }
         } 
 
-        private void btnEdit_Click(object sender, EventArgs e)
+        private void BtnEdit_Click(object sender, EventArgs e)
         {
             WeaponMemoryInfo weaponInfo = (WeaponMemoryInfo)lvMain.SelectedItems[0].Tag;
 
@@ -262,9 +262,9 @@ namespace KoARSaveItemEditor
             }
         }
 
-        private void btnDelete_Click(object sender, EventArgs e)
+        private void BtnDelete_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Removing equipment forcefully may lead to bugs, removing worn-equipment will lead to an invalid save-file, if it is not absolutly necessary, do not use this feature, are you sure you want to delete you item?", "Message", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (MessageBox.Show("Removing equipment forcefully may lead to bugs. Removing equipped items will lead to an invalid save. It is recommended not to use this feature.\n\nAre you sure you want to delete this item?", "Message", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
             {
                 WeaponMemoryInfo weaponInfo = (WeaponMemoryInfo)lvMain.SelectedItems[0].Tag;
                 editer.DeleteWeapon(weaponInfo);
@@ -287,7 +287,7 @@ namespace KoARSaveItemEditor
             btnSave.Enabled = true;
         }
 
-        private void btnPrint_Click(object sender, EventArgs e)
+        private void BtnPrint_Click(object sender, EventArgs e)
         {
             btnPrint.Enabled = false;
             btnEdit.Enabled = false;
@@ -299,7 +299,7 @@ namespace KoARSaveItemEditor
             }
         }
 
-        private void btnBag_Click(object sender, EventArgs e)
+        private void BtnBag_Click(object sender, EventArgs e)
         {
             BagEditForm form = new BagEditForm(editer);
             if (form.ShowDialog() == DialogResult.Yes)
@@ -308,12 +308,22 @@ namespace KoARSaveItemEditor
             }
         }
 
-        private void tslblFileLocal_Click(object sender, EventArgs e)
+        private void TslblFileLocal_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void tslblEditState_Click(object sender, EventArgs e)
+        private void TslblEditState_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Label6_Click(object sender, EventArgs e)
         {
 
         }

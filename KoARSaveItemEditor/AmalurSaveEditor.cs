@@ -90,7 +90,7 @@ namespace KoARSaveItemEditor
         /// <param name="weaponInfo">Equipment Object</param>
         /// <param name="attInfoList">Description of Properties</param>
         /// <returns>List of Attributes</returns>
-        public List<AttributeMemoryInfo> getAttList(WeaponMemoryInfo weaponInfo, List<AttributeInfo> attInfoList)
+        public List<AttributeMemoryInfo> GetAttList(WeaponMemoryInfo weaponInfo, List<AttributeInfo> attInfoList)
         {
             if (br.BtList == null)
             {

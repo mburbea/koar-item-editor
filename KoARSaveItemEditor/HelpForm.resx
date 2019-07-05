@@ -118,20 +118,22 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="label1.Text" xml:space="preserve">
-    <value>1.DO NOT USE SPECIAL CHARACTERS
-2.Click File - Open the save-file
-  For Example Windows Vista/7/8 location: 
-C:\Users\UserName\Documents\my games\Reckoning
-3.Select the Item you want to modify in the Equipment-window
-4.Click the modify Button
-5.In the pop-up window modify your propertys
-6.Click Modify and close the Equipment-window
-7.Save the modified Item/items and overwrite the original save-file
+    <value>1. It is highly suggested to use this with as few items in your inventory as possible OR to damage your item's durability to an identifiable degree for better item identification if the item is not crafted.
 
-Note: Your Properties are not limited to the drop-down list, you can use Notepad to open the xml-file in the "data" folder
+2. Your saves are usually not in the same folder as the game. For Windows 7, they can be in C:\Program Files (x86)\Steam\userdata\&lt;user_id&gt;\102500\remote\.
 
-Item-ids can be found in the forums around the web
+3. When modifying item names, do NOT use special characters.
 
-Note: System generated equipment will Normally be displayed as "unknown", please slaughter mobs to decrease durability to identify item</value>
+4. Items that are not crafted will show as "unknown". Edit these items at your own risk.
+
+5. This is best used with crafted items that have a lot of properties, i.e. lots of flawless components.
+
+6. You can only add as many as you can delete. For example, if the editor says you have 4 attributes (despite the item having more in-game), you can only delete the 4 and add up to 4.
+
+7. Editing unique items or adding properties beyond the maximum detected will cause your file to not load.
+
+8. The provided property.xml file is exhaustive but not complete. You can play around with in-game properties and make educated guesses on which attributes the unknown properties are by way of deleting and tracking.
+
+9. While tricky, using the Hex Code edit can hypothetically give you any item with any property. It's unknown if this can bypass the unique item rule or the save corruption in 7. I haven't tested it personally.</value>
   </data>
 </root>

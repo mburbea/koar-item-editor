@@ -56,7 +56,7 @@ namespace KoARSaveItemEditor
 
         private void DataBinding()
         {
-            List<AttributeMemoryInfo> attList = editer.getAttList(weaponInfo, attributeList);
+            List<AttributeMemoryInfo> attList = editer.GetAttList(weaponInfo, attributeList);
             List<AttributeMemoryInfo> temp = new List<AttributeMemoryInfo>();
             
             foreach(AttributeMemoryInfo att in attList)

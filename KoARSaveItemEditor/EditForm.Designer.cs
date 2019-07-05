@@ -222,7 +222,7 @@
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(63, 13);
             this.label10.TabIndex = 34;
-            this.label10.Text = "Hand-Input:";
+            this.label10.Text = "Hex Code:";
             // 
             // txtAttCodeInput
             // 
@@ -267,7 +267,7 @@
             this.chkEditName.Name = "chkEditName";
             this.chkEditName.Size = new System.Drawing.Size(93, 17);
             this.chkEditName.TabIndex = 40;
-            this.chkEditName.Text = "change Name";
+            this.chkEditName.Text = "Change Name";
             this.chkEditName.UseVisualStyleBackColor = true;
             this.chkEditName.CheckedChanged += new System.EventHandler(this.chkEditName_CheckedChanged);
             // 
@@ -278,7 +278,7 @@
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(73, 13);
             this.label6.TabIndex = 41;
-            this.label6.Text = "Valid Number:";
+            this.label6.Text = "# of Instances:";
             this.label6.Click += new System.EventHandler(this.label6_Click);
             // 
             // lblCodeCount
@@ -326,7 +326,7 @@
             this.MinimizeBox = false;
             this.Name = "EditForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Equipment Modification - Please TRY NOT TO Modifiy Unknown Equimpment";
+            this.Text = "Equipment Modification (Modify unknown equipment at your own risk!)";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EditForm_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.numAddByInput)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numAddBySelect)).EndInit();
