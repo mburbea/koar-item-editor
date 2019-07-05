@@ -16,10 +16,11 @@ namespace KoARSaveItemEditor
         public MainForm()
         {
             InitializeComponent();
+            lvMain.Columns[0].Width = 100;
             lvMain.Columns[1].Width = 100;
-            lvMain.Columns[2].Width = 100;
-            lvMain.Columns[3].Width = 100;
-            lvMain.Columns[4].Width = 100;
+            lvMain.Columns[2].Width = -2;
+            lvMain.Columns[3].Width = -2;
+            lvMain.Columns[4].Width = -2;
         }
 
         private void TsmiOpen_Click(object sender, EventArgs e)

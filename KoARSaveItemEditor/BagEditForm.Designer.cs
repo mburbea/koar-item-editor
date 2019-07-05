@@ -32,14 +32,13 @@
             this.txtCurrentBag = new System.Windows.Forms.TextBox();
             this.txtBag = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.btnSave = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(16, 65);
+            this.label1.Location = new System.Drawing.Point(14, 15);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(115, 13);
             this.label1.TabIndex = 0;
@@ -47,46 +46,36 @@
             // 
             // txtCurrentBag
             // 
-            this.txtCurrentBag.Location = new System.Drawing.Point(134, 62);
+            this.txtCurrentBag.Location = new System.Drawing.Point(132, 12);
             this.txtCurrentBag.Name = "txtCurrentBag";
             this.txtCurrentBag.ReadOnly = true;
-            this.txtCurrentBag.Size = new System.Drawing.Size(100, 20);
+            this.txtCurrentBag.Size = new System.Drawing.Size(283, 20);
             this.txtCurrentBag.TabIndex = 1;
             this.txtCurrentBag.TabStop = false;
+            this.txtCurrentBag.TextChanged += new System.EventHandler(this.TxtCurrentBag_TextChanged);
             // 
             // txtBag
             // 
-            this.txtBag.Location = new System.Drawing.Point(134, 88);
+            this.txtBag.Location = new System.Drawing.Point(132, 38);
             this.txtBag.Name = "txtBag";
-            this.txtBag.Size = new System.Drawing.Size(100, 20);
+            this.txtBag.Size = new System.Drawing.Size(283, 20);
             this.txtBag.TabIndex = 2;
-            this.txtBag.Text = "Do not exceed 8 digits";
+            this.txtBag.Text = "Do not exceed 8 digits.";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(16, 91);
+            this.label2.Location = new System.Drawing.Point(14, 41);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(103, 13);
             this.label2.TabIndex = 3;
             this.label2.Text = "New Inventory Limit:";
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("SimSun", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label3.Location = new System.Drawing.Point(46, 9);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(207, 33);
-            this.label3.TabIndex = 4;
-            this.label3.Text = "only 1.0.0.2";
-            this.label3.Click += new System.EventHandler(this.label3_Click);
-            // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(240, 60);
+            this.btnSave.Location = new System.Drawing.Point(421, 12);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(55, 52);
+            this.btnSave.Size = new System.Drawing.Size(46, 46);
             this.btnSave.TabIndex = 5;
             this.btnSave.Text = "Save";
             this.btnSave.UseVisualStyleBackColor = true;
@@ -96,9 +85,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(313, 124);
+            this.ClientSize = new System.Drawing.Size(481, 70);
             this.Controls.Add(this.btnSave);
-            this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtBag);
             this.Controls.Add(this.txtCurrentBag);
@@ -121,7 +109,6 @@
         private System.Windows.Forms.TextBox txtCurrentBag;
         private System.Windows.Forms.TextBox txtBag;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnSave;
     }
 }

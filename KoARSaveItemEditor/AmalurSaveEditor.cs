@@ -64,7 +64,7 @@ namespace KoARSaveItemEditor
             {
                 throw new Exception("Save file not open.");
             }
-            int index = br.FindIndexByString("current_inventory_count")[0] + 35;
+            int index = br.FindIndexByString("inventory_limit")[0] + 51;
             byte[] bt = br.GetBytesByIndexAndLength(index, 4);
             return BitConverter.ToInt32(bt,0);
         }
@@ -79,7 +79,7 @@ namespace KoARSaveItemEditor
             {
                 throw new Exception("Save file not open.");
             }
-            int index = br.FindIndexByString("current_inventory_count")[0] + 35;
+            int index = br.FindIndexByString("inventory_limit")[0] + 51;
             byte[] bt = BitConverter.GetBytes(c);
             br.EditByIndex(index, bt);
         }

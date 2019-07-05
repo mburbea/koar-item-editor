@@ -10,19 +10,19 @@ namespace KoARSaveItemEditor
 {
     public partial class BagEditForm : Form
     {
-        private AmalurSaveEditor editer;
+        private AmalurSaveEditor editor;
         bool isEdit = false;
 
-        public BagEditForm(AmalurSaveEditor editer)
+        public BagEditForm(AmalurSaveEditor editor)
         {
             InitializeComponent();
-            this.editer = editer;
+            this.editor = editor;
             FormatAll();
         }
 
         private void FormatAll()
         {
-            txtCurrentBag.Text = editer.GetMaxBagCount().ToString();
+            txtCurrentBag.Text = editor.GetMaxBagCount().ToString();
         }
 
         private void BtnSave_Click(object sender, EventArgs e)
@@ -31,7 +31,7 @@ namespace KoARSaveItemEditor
             if (int.TryParse(txtBag.Text, out count) && int.Parse(txtBag.Text) > 0 && int.Parse(txtBag.Text) <= 99999999)
             {
                 count = int.Parse(txtBag.Text);
-                editer.EditMaxBagCount(count);
+                editor.EditMaxBagCount(count);
                 isEdit = true;
                 MessageBox.Show("Modification successful!");
             }
@@ -50,6 +50,11 @@ namespace KoARSaveItemEditor
         }
 
         private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void TxtCurrentBag_TextChanged(object sender, EventArgs e)
         {
 
         }

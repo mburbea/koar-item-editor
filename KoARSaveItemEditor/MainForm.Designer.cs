@@ -89,17 +89,15 @@
             // tsmiOpen
             // 
             this.tsmiOpen.Name = "tsmiOpen";
-            this.tsmiOpen.Size = new System.Drawing.Size(180, 22);
+            this.tsmiOpen.Size = new System.Drawing.Size(103, 22);
             this.tsmiOpen.Text = "Open";
             this.tsmiOpen.Click += new System.EventHandler(this.TsmiOpen_Click);
             // 
             // tsmiBag
             // 
-            this.tsmiBag.Enabled = false;
             this.tsmiBag.Name = "tsmiBag";
             this.tsmiBag.Size = new System.Drawing.Size(83, 20);
             this.tsmiBag.Text = "Change Bag";
-            this.tsmiBag.Visible = false;
             this.tsmiBag.Click += new System.EventHandler(this.TsmiBag_Click);
             // 
             // tsmiHelp
@@ -236,20 +234,17 @@
             // curDur
             // 
             this.curDur.Text = "Current Durability";
-            //this.curDur.Width = 104;
-            this.curDur.Width = -2;
+            this.curDur.Width = 92;
             // 
             // maxDur
             // 
             this.maxDur.Text = "Max Durability";
-            //this.maxDur.Width = 89;
-            this.maxDur.Width = -2;
+            this.maxDur.Width = 78;
             // 
             // attCount
             // 
             this.attCount.Text = "Number of Properties";
-            //this.attCount.Width = 229;
-            this.attCount.Width = -2;
+            this.attCount.Width = 252;
             // 
             // statusStrip1
             // 
@@ -268,7 +263,7 @@
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(77, 17);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(61, 17);
             this.toolStripStatusLabel1.Text = "Save path:";
             // 
             // tslblFileLocal
@@ -283,7 +278,7 @@
             // toolStripStatusLabel3
             // 
             this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
-            this.toolStripStatusLabel3.Size = new System.Drawing.Size(63, 17);
+            this.toolStripStatusLabel3.Size = new System.Drawing.Size(62, 17);
             this.toolStripStatusLabel3.Text = "Save state:";
             // 
             // tslblEditState
