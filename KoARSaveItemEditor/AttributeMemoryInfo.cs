@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace KingdomsofAmalurReckoningSaveEditer
+namespace KoARSaveItemEditor
 {
     /// <summary>
     /// Attribute Memory Information

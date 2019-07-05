@@ -8,8 +8,8 @@
     <ProjectGuid>{4BAF838E-FC53-4804-877C-5606846FEFF4}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>KingdomsofAmalurReckoningSaveEditer</RootNamespace>
-    <AssemblyName>KOAR Save Editor</AssemblyName>
+    <RootNamespace>KoARSaveItemEditor</RootNamespace>
+    <AssemblyName>KoAR Save Item Editor</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -64,7 +64,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AmalurSaveEditerFor1.0.0.2.cs" />
+    <Compile Include="AmalurSaveEditor.cs" />
     <Compile Include="BagEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -105,7 +105,7 @@
     <Compile Include="WeaponBytesForm.Designer.cs">
       <DependentUpon>WeaponBytesForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="WeaponMemoryInfoFor1.0.0.2.cs" />
+    <Compile Include="WeaponMemoryInfo.cs" />
     <EmbeddedResource Include="BagEditForm.resx">
       <DependentUpon>BagEditForm.cs</DependentUpon>
     </EmbeddedResource>

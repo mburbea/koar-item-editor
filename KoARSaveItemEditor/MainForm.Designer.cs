@@ -1,4 +1,4 @@
-﻿namespace KingdomsofAmalurReckoningSaveEditer
+﻿namespace KoARSaveItemEditor
 {
     partial class MainForm
     {

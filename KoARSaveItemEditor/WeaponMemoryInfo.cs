@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace KingdomsofAmalurReckoningSaveEditer
+namespace KoARSaveItemEditor
 {
     /// <summary>
     /// Equipment Memory Information
@@ -66,20 +65,20 @@ namespace KingdomsofAmalurReckoningSaveEditer
             }
             set
             {
-                ByteManager.ByteEditer byteEditer = new ByteManager.ByteEditer(weaponBytes);
-                byteEditer.DeleteToEnd(AmalurSaveEditer.WeaponAttHeadOffSet + 22 + AttCount * 8+1);
+                ByteManager.ByteEditor byteEditor = new ByteManager.ByteEditor(weaponBytes);
+                byteEditor.DeleteToEnd(AmalurSaveEditer.WeaponAttHeadOffSet + 22 + AttCount * 8+1);
                 if (value.Length != 0)
                 {
-                    byteEditer.EditByIndex(AmalurSaveEditer.WeaponAttHeadOffSet + 22 + AttCount * 8, new byte[] { 1 });
-                    byteEditer.AddToEnd(BitConverter.GetBytes(value.Length));
+                    byteEditor.EditByIndex(AmalurSaveEditer.WeaponAttHeadOffSet + 22 + AttCount * 8, new byte[] { 1 });
+                    byteEditor.AddToEnd(BitConverter.GetBytes(value.Length));
                     byte[] nameList = System.Text.Encoding.Default.GetBytes(value);
-                    byteEditer.AddToEnd(nameList);
+                    byteEditor.AddToEnd(nameList);
                 }
                 else
                 {
-                    byteEditer.EditByIndex(AmalurSaveEditer.WeaponAttHeadOffSet + 22 + AttCount * 8, new byte[] { 0 });
+                    byteEditor.EditByIndex(AmalurSaveEditer.WeaponAttHeadOffSet + 22 + AttCount * 8, new byte[] { 0 });
                 }
-                weaponBytes = byteEditer.BtList;
+                weaponBytes = byteEditor.BtList;
             }
         }
 
@@ -100,9 +99,9 @@ namespace KingdomsofAmalurReckoningSaveEditer
             set
             {
                 byte[] bt = BitConverter.GetBytes(value);
-                ByteManager.ByteEditer byteEditer = new ByteManager.ByteEditer(weaponBytes);
-                byteEditer.EditByIndex(AmalurSaveEditer.WeaponAttHeadOffSet + 8 + 8 * AttCount, bt);
-                weaponBytes = byteEditer.BtList;
+                ByteManager.ByteEditor byteEditor = new ByteManager.ByteEditor(weaponBytes);
+                byteEditor.EditByIndex(AmalurSaveEditer.WeaponAttHeadOffSet + 8 + 8 * AttCount, bt);
+                weaponBytes = byteEditor.BtList;
             }
         }
 
@@ -115,9 +114,9 @@ namespace KingdomsofAmalurReckoningSaveEditer
             set
             {
                 byte[] bt = BitConverter.GetBytes(value);
-                ByteManager.ByteEditer byteEditer = new ByteManager.ByteEditer(weaponBytes);
-                byteEditer.EditByIndex(AmalurSaveEditer.WeaponAttHeadOffSet + 12 + 8 * AttCount, bt);
-                weaponBytes = byteEditer.BtList;
+                ByteManager.ByteEditor byteEditor = new ByteManager.ByteEditor(weaponBytes);
+                byteEditor.EditByIndex(AmalurSaveEditer.WeaponAttHeadOffSet + 12 + 8 * AttCount, bt);
+                weaponBytes = byteEditor.BtList;
             }
         }
 
@@ -128,7 +127,7 @@ namespace KingdomsofAmalurReckoningSaveEditer
         {
             get
             {
-                ByteManager.ByteEditer byteEditer = new ByteManager.ByteEditer(weaponBytes);
+                ByteManager.ByteEditor byteEditor = new ByteManager.ByteEditor(weaponBytes);
                 List<AttributeMemoryInfo> attList = new List<AttributeMemoryInfo>();
 
                 int attIndex = AmalurSaveEditer.WeaponAttHeadOffSet + 4;
@@ -136,7 +135,7 @@ namespace KingdomsofAmalurReckoningSaveEditer
                 {
                     AttributeMemoryInfo att = new AttributeMemoryInfo();
 
-                    att.Value = byteEditer.GetIntsByIndexAndLength(attIndex, 4);
+                    att.Value = byteEditor.GetIntsByIndexAndLength(attIndex, 4);
                     String val1 = Convert.ToString(att.Value[2], 16).ToUpper();
                     String val2 = Convert.ToString(att.Value[1], 16).ToUpper();
                     String val3 = Convert.ToString(att.Value[0], 16).ToUpper();
@@ -150,9 +149,9 @@ namespace KingdomsofAmalurReckoningSaveEditer
             }
             set
             {
-                ByteManager.ByteEditer byteEditer = new ByteManager.ByteEditer(weaponBytes);
-                byteEditer.DeleteIntsByIndexAndLength(AmalurSaveEditer.WeaponAttHeadOffSet + 4, 8 * AttCount);
-                byteEditer.EditByIndex(AmalurSaveEditer.WeaponAttHeadOffSet, BitConverter.GetBytes(value.Count));
+                ByteManager.ByteEditor byteEditor = new ByteManager.ByteEditor(weaponBytes);
+                byteEditor.DeleteIntsByIndexAndLength(AmalurSaveEditer.WeaponAttHeadOffSet + 4, 8 * AttCount);
+                byteEditor.EditByIndex(AmalurSaveEditer.WeaponAttHeadOffSet, BitConverter.GetBytes(value.Count));
                 foreach (AttributeMemoryInfo att in value)
                 {
                     byte[] news = new byte[8];
@@ -164,9 +163,9 @@ namespace KingdomsofAmalurReckoningSaveEditer
                     news[5] = 255;
                     news[6] = 255;
                     news[7] = 255;
-                    byteEditer.AddByIndex(AmalurSaveEditer.WeaponAttHeadOffSet + 4, news);
+                    byteEditor.AddByIndex(AmalurSaveEditer.WeaponAttHeadOffSet + 4, news);
                 }
-                weaponBytes = byteEditer.BtList;
+                weaponBytes = byteEditor.BtList;
             }
         }
     }

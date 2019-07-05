@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using ByteManager;
 
-namespace KingdomsofAmalurReckoningSaveEditer
+namespace KoARSaveItemEditor
 {
     /// <summary>
     /// Archive Operation for Kingdosm of Amalur(supports 1.0.0.2)
@@ -14,7 +13,7 @@ namespace KingdomsofAmalurReckoningSaveEditer
         /// The head of the equipment, property and indicate the number of attributes of the data relative to equipment data head offset
         /// </summary>
         public static int WeaponAttHeadOffSet = 21;
-        private ByteEditer br = null;
+        private ByteEditor br = null;
 
         /// <summary>
         /// Read save-file
@@ -22,7 +21,7 @@ namespace KingdomsofAmalurReckoningSaveEditer
         /// <param name="path">archive path</param>
         public void ReadFile(string path)
         {
-            br = new ByteEditer();
+            br = new ByteEditor();
             try
             {
                 br.ReadFile(path);
@@ -66,7 +65,7 @@ namespace KingdomsofAmalurReckoningSaveEditer
                 throw new Exception("save-file not open");
             }
             int index = br.FindIndexByString("current_inventory_count")[0] + 35;
-            byte[] bt = br.GetBytsByIndexAndLength(index, 4);
+            byte[] bt = br.GetBytesByIndexAndLength(index, 4);
             return BitConverter.ToInt32(bt,0);
         }
 
@@ -195,7 +194,7 @@ namespace KingdomsofAmalurReckoningSaveEditer
                 if (i != indexList.Count - 1)
                 {
                     weapon.NextWeaponIndex = indexList[i + 1];
-                    weapon.WeaponBytes = br.GetBytsByIndexAndLength(indexList[i], indexList[i + 1] - indexList[i]);
+                    weapon.WeaponBytes = br.GetBytesByIndexAndLength(indexList[i], indexList[i + 1] - indexList[i]);
 
                     if (weapon.CurrentDurability != 100 && weapon.MaxDurability != -1 && weapon.MaxDurability != 100 && weapon.CurrentDurability != 0 && weapon.MaxDurability != 0)
                     {
@@ -221,7 +220,7 @@ namespace KingdomsofAmalurReckoningSaveEditer
                         nameLength = BitConverter.ToInt32(br.BtList, attHeadIndex + 22 + attCount * 8 + 1);
                         endIndex = attHeadIndex + 22 + attCount * 8 + nameLength + 4;
                     }
-                    weapon.WeaponBytes = br.GetBytsByIndexAndLength(weapon.WeaponIndex, endIndex - weapon.WeaponIndex+1);
+                    weapon.WeaponBytes = br.GetBytesByIndexAndLength(weapon.WeaponIndex, endIndex - weapon.WeaponIndex+1);
                     if (weapon.CurrentDurability != 100 && weapon.MaxDurability != -1 && weapon.MaxDurability != 100 && weapon.CurrentDurability != 0 && weapon.MaxDurability != 0)
                     {
                         weaponList.Add(weapon);
