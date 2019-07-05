@@ -8,7 +8,7 @@ namespace KoARSaveItemEditor
 {
     public partial class MainForm : Form
     {
-        AmalurSaveEditer editer = null;
+        AmalurSaveEditor editor = null;
         List<AttributeInfo> attributeList = null;
         List<WeaponMemoryInfo> weaponList = null;
         string searchType = "";
@@ -28,8 +28,8 @@ namespace KoARSaveItemEditor
             {
                 lvMain.Items.Clear();
                 String fileName = opfMain.FileName;
-                editer = new AmalurSaveEditer();
-                editer.ReadFile(fileName);
+                editor = new AmalurSaveEditor();
+                editor.ReadFile(fileName);
                 tslblFileLocal.Text = fileName;
                 btnSearchAll.PerformClick();
             }
@@ -79,7 +79,7 @@ namespace KoARSaveItemEditor
                 }
                 catch
                 {
-                    MessageBox.Show("No Durability entered");
+                    MessageBox.Show("No durability entered!");
                     return;
                 }
             }
@@ -91,7 +91,7 @@ namespace KoARSaveItemEditor
                 }
                 catch
                 {
-                    MessageBox.Show("No Durability entered");
+                    MessageBox.Show("No durability entered!");
                     return;
                 }
             }
@@ -138,19 +138,19 @@ namespace KoARSaveItemEditor
         private void BtnShowAll_Click(object sender, EventArgs e)
         {
             lvMain.Items.Clear();
-            if (editer == null)
+            if (editor == null)
             {
-                MessageBox.Show("No save-file opened, click ok to open a save-file");
+                MessageBox.Show("No save file opened! Click OK to open a save file.");
                 tsmiOpen.PerformClick();
             }
             else
             {
-                List<WeaponMemoryInfo> weaponTemp = editer.GetAllWeapon();
+                List<WeaponMemoryInfo> weaponTemp = editor.GetAllWeapon();
 
                 weaponList = new List<WeaponMemoryInfo>();
                 foreach (WeaponMemoryInfo w in weaponTemp)
                 {
-                    if (w.WeaponName == "unknown")
+                    if (w.WeaponName == "Unknown")
                     {
                         weaponList.Add(w);
                     }
@@ -223,13 +223,13 @@ namespace KoARSaveItemEditor
 
         private void BtnSave_Click(object sender, EventArgs e)
         {
-            if (editer != null)
+            if (editor != null)
             {
                 File.Copy(opfMain.FileName, opfMain.FileName + ".bak", true);
-                editer.SaveFile(opfMain.FileName);
+                editor.SaveFile(opfMain.FileName);
                 tslblEditState.Text = "Unmodified";
                 btnSave.Enabled = false;
-                MessageBox.Show("Save successful, original save under"+opfMain.FileName+".bak");
+                MessageBox.Show("Save successful! Original save backed up as " + opfMain.FileName + ".bak.");
             }
         }
 
@@ -241,7 +241,7 @@ namespace KoARSaveItemEditor
 
         private void TsmiBag_Click(object sender, EventArgs e)
         {
-            BagEditForm form = new BagEditForm(editer);
+            BagEditForm form = new BagEditForm(editor);
             if (form.ShowDialog() == DialogResult.Yes)
             {
                 btnSave.Enabled = true;
@@ -252,7 +252,7 @@ namespace KoARSaveItemEditor
         {
             WeaponMemoryInfo weaponInfo = (WeaponMemoryInfo)lvMain.SelectedItems[0].Tag;
 
-            EditForm form = new EditForm(editer, attributeList, weaponInfo);
+            EditForm form = new EditForm(editor, attributeList, weaponInfo);
             btnPrint.Enabled = false;
             btnEdit.Enabled = false;
             btnDelete.Enabled = false;
@@ -267,7 +267,7 @@ namespace KoARSaveItemEditor
             if (MessageBox.Show("Removing equipment forcefully may lead to bugs. Removing equipped items will lead to an invalid save. It is recommended not to use this feature.\n\nAre you sure you want to delete this item?", "Message", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
             {
                 WeaponMemoryInfo weaponInfo = (WeaponMemoryInfo)lvMain.SelectedItems[0].Tag;
-                editer.DeleteWeapon(weaponInfo);
+                editor.DeleteWeapon(weaponInfo);
                 CanSave();
             }
         }
@@ -292,7 +292,7 @@ namespace KoARSaveItemEditor
             btnPrint.Enabled = false;
             btnEdit.Enabled = false;
             btnDelete.Enabled = false;
-            WeaponBytesForm form = new WeaponBytesForm(editer,lvMain.SelectedItems[0].Tag as WeaponMemoryInfo);
+            WeaponBytesForm form = new WeaponBytesForm(editor,lvMain.SelectedItems[0].Tag as WeaponMemoryInfo);
             if (form.ShowDialog() == DialogResult.Yes)
             {
                 CanSave();
@@ -301,7 +301,7 @@ namespace KoARSaveItemEditor
 
         private void BtnBag_Click(object sender, EventArgs e)
         {
-            BagEditForm form = new BagEditForm(editer);
+            BagEditForm form = new BagEditForm(editor);
             if (form.ShowDialog() == DialogResult.Yes)
             {
                 btnSave.Enabled = true;

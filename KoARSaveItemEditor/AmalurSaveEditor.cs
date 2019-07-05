@@ -7,7 +7,7 @@ namespace KoARSaveItemEditor
     /// <summary>
     /// Archive Operation for Kingdosm of Amalur(supports 1.0.0.2)
     /// </summary>
-    public class AmalurSaveEditer
+    public class AmalurSaveEditor
     {
         /// <summary>
         /// The head of the equipment, property and indicate the number of attributes of the data relative to equipment data head offset
@@ -29,7 +29,7 @@ namespace KoARSaveItemEditor
             catch
             {
                 br = null;
-                throw new Exception("save-file failed to open");
+                throw new Exception("Save file failed to open.");
             }
         }
 
@@ -41,7 +41,7 @@ namespace KoARSaveItemEditor
         {
             if (br.BtList == null)
             {
-                throw new Exception("save-file not open");
+                throw new Exception("Save file not open.");
             }
 
             try
@@ -50,7 +50,7 @@ namespace KoARSaveItemEditor
             }
             catch
             {
-                throw new Exception("saving failed");
+                throw new Exception("Saving failed!");
             }
         }
 
@@ -62,7 +62,7 @@ namespace KoARSaveItemEditor
         {
             if (br.BtList == null)
             {
-                throw new Exception("save-file not open");
+                throw new Exception("Save file not open.");
             }
             int index = br.FindIndexByString("current_inventory_count")[0] + 35;
             byte[] bt = br.GetBytesByIndexAndLength(index, 4);
@@ -77,7 +77,7 @@ namespace KoARSaveItemEditor
         {
             if (br.BtList == null)
             {
-                throw new Exception("save-file not open");
+                throw new Exception("Save file not open.");
             }
             int index = br.FindIndexByString("current_inventory_count")[0] + 35;
             byte[] bt = BitConverter.GetBytes(c);
@@ -94,7 +94,7 @@ namespace KoARSaveItemEditor
         {
             if (br.BtList == null)
             {
-                throw new Exception("save-file not open");
+                throw new Exception("Save file not open.");
             }
 
             List<AttributeMemoryInfo> attList = weaponInfo.WeaponAttList;
@@ -126,7 +126,7 @@ namespace KoARSaveItemEditor
         {
             if (br.BtList == null)
             {
-                throw new Exception("save-file not open");
+                throw new Exception("Save file not open.");
             }
 
             byte[] bytes = new byte[9];
@@ -157,7 +157,7 @@ namespace KoARSaveItemEditor
         {
             if (br.BtList == null)
             {
-                throw new Exception("save-file not open");
+                throw new Exception("Save file not open.");
             }
 
             List<WeaponMemoryInfo> weaponList = new List<WeaponMemoryInfo>();
@@ -207,7 +207,7 @@ namespace KoARSaveItemEditor
                 }
                 else
                 {
-                    int attHeadIndex = weapon.WeaponIndex + AmalurSaveEditer.WeaponAttHeadOffSet;
+                    int attHeadIndex = weapon.WeaponIndex + AmalurSaveEditor.WeaponAttHeadOffSet;
                     int attCount = BitConverter.ToInt32(br.BtList,attHeadIndex);
                     int endIndex = 0;
                     if (br.BtList[attHeadIndex + 22 + attCount * 8] != 1)
@@ -243,7 +243,7 @@ namespace KoARSaveItemEditor
         {
             if (br.BtList == null)
             {
-                throw new Exception("save-file not open");
+                throw new Exception("Save file not open.");
             }
 
             weapon.WeaponBytes = new byte[] {0,0,0,0 };
@@ -258,7 +258,7 @@ namespace KoARSaveItemEditor
         {
             if (br.BtList == null)
             {
-                throw new Exception("save-file not open");
+                throw new Exception("Save file not open.");
             }
 
             br.DeleteIntsByStartAndEnd(weapon.WeaponIndex, weapon.NextWeaponIndex - 1);

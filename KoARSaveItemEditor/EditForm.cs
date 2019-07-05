@@ -12,11 +12,11 @@ namespace KoARSaveItemEditor
     {
         bool isEdit = false;
 
-        AmalurSaveEditer editer = null;
+        AmalurSaveEditor editer = null;
         List<AttributeInfo> attributeList = null;
         WeaponMemoryInfo weaponInfo = null;
 
-        public EditForm(AmalurSaveEditer editer, List<AttributeInfo> attList, WeaponMemoryInfo weaponInfo)
+        public EditForm(AmalurSaveEditor editer, List<AttributeInfo> attList, WeaponMemoryInfo weaponInfo)
         {
             InitializeComponent();
             this.editer = editer;
@@ -107,7 +107,7 @@ namespace KoARSaveItemEditor
         {
             if (txtAttCode.Text == "")
             {
-                MessageBox.Show("Failed to delete，please select an attribute to remove");
+                MessageBox.Show("Failed to delete. Please select another property to remove.");
             }
             List<AttributeMemoryInfo> attList = weaponInfo.WeaponAttList;
             for (int i = 0; i < numDelete.Value; i++)
@@ -136,7 +136,7 @@ namespace KoARSaveItemEditor
             string id = (cboAddAttribute.SelectedItem as AttributeInfo).AttributeId;
             if (id == null || id.Trim().Length != 6)
             {
-                MessageBox.Show("Invalid attribute ID");
+                MessageBox.Show("Invalid attribute ID!");
                 return;
             }
             AddAttribute((cboAddAttribute.SelectedItem as AttributeInfo).AttributeId, (int)numAddBySelect.Value);
@@ -154,30 +154,30 @@ namespace KoARSaveItemEditor
             }
             catch
             {
-                MessageBox.Show("Invalid Durability Input");
+                MessageBox.Show("Invalid durability input.");
                 return;
             }
             if (curDur == 100 || maxDur == 100)
             {
-                MessageBox.Show("为了方便列出所有装备 请勿将耐久度设置为100,不予修改");
+                MessageBox.Show("Perfect 100! Congrats for finding this hidden nugget!");
                 return;
             }
             if (curDur>maxDur || curDur > 99999 || curDur<0 || maxDur<=0)
             {
-                MessageBox.Show("Invalid Durability Input");
+                MessageBox.Show("Invalid durability input.");
                 return;
             }
             if (!txtName.ReadOnly)
             {
                 if (txtName.Text.Trim() == "")
                 {
-                    MessageBox.Show("No name entered, will use default Item-name");
+                    MessageBox.Show("No name entered! Reverting to default item name.");
                 }
                 foreach (char c in txtName.Text)
                 {
                     if (c < 20 || c > 127)
                     {
-                        MessageBox.Show("Name can only contain English charakters");
+                        MessageBox.Show("Name can only contain English characters.");
                         return;
                     }
                 }
@@ -190,7 +190,7 @@ namespace KoARSaveItemEditor
             weaponInfo.MaxDurability = maxDur;
 
             editer.WriteWeaponByte(weaponInfo);
-            MessageBox.Show("Modification Successful, please save!");
+            MessageBox.Show("Modification successful. Please save.");
             isEdit = true;
             this.DialogResult = DialogResult.Yes;
             this.Close();

@@ -11,9 +11,9 @@ namespace KoARSaveItemEditor
     public partial class WeaponBytesForm : Form
     {
         private WeaponMemoryInfo weapon;
-        private AmalurSaveEditer editer;
+        private AmalurSaveEditor editer;
 
-        public WeaponBytesForm(AmalurSaveEditer editer, WeaponMemoryInfo weapon)
+        public WeaponBytesForm(AmalurSaveEditor editer, WeaponMemoryInfo weapon)
         {
             InitializeComponent();
             this.weapon = weapon;

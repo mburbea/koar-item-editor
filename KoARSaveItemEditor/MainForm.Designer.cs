@@ -236,17 +236,20 @@
             // curDur
             // 
             this.curDur.Text = "Current Durability";
-            this.curDur.Width = 104;
+            //this.curDur.Width = 104;
+            this.curDur.Width = -2;
             // 
             // maxDur
             // 
-            this.maxDur.Text = "Max. Durability";
-            this.maxDur.Width = 89;
+            this.maxDur.Text = "Max Durability";
+            //this.maxDur.Width = 89;
+            this.maxDur.Width = -2;
             // 
             // attCount
             // 
             this.attCount.Text = "Number of Properties";
-            this.attCount.Width = 229;
+            //this.attCount.Width = 229;
+            this.attCount.Width = -2;
             // 
             // statusStrip1
             // 
@@ -266,7 +269,7 @@
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(77, 17);
-            this.toolStripStatusLabel1.Text = "Archive path:";
+            this.toolStripStatusLabel1.Text = "Save path:";
             // 
             // tslblFileLocal
             // 
@@ -281,7 +284,7 @@
             // 
             this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
             this.toolStripStatusLabel3.Size = new System.Drawing.Size(63, 17);
-            this.toolStripStatusLabel3.Text = "Save State:";
+            this.toolStripStatusLabel3.Text = "Save state:";
             // 
             // tslblEditState
             // 
