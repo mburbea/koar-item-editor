@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Xml;
 using System.IO;
+using System.Linq;
 
 namespace KoARSaveItemEditor
 {
@@ -23,7 +24,7 @@ namespace KoARSaveItemEditor
             lvMain.Columns[4].Width = -2;
         }
 
-        private void TsmiOpen_Click(object sender, EventArgs e)
+        private void LoadSaveFile(object sender, EventArgs e)
         {
             if (opfMain.ShowDialog() == DialogResult.OK)
             {
@@ -36,103 +37,34 @@ namespace KoARSaveItemEditor
             }
         }
 
-        private void BtnSearch_Click(object sender, EventArgs e)
+        private void SearchOnUpdate()
         {
-            searchType = "name";
-            if (txtSearch.Text == "")
-            {
-                return;
-            }
+            String itemName = txtSearch.Text != "" ? txtSearch.Text.ToUpper() : "";
+            float currDur = Single.TryParse(txtCurrentDur.Text, out currDur) ? currDur : 0;
+            float maxDur = Single.TryParse(txtMaxDur.Text, out maxDur) ? maxDur : 0;
+
+            var query = from w in weaponList select w;
+            if (itemName != "")
+                query = query.Where(w => w.WeaponName.ToUpper().Contains(itemName));
+            if (currDur > 0)
+                query = query.Where(w => w.CurrentDurability == currDur);
+            if (maxDur > 0)
+                query = query.Where(w => w.MaxDurability == maxDur);
+
             lvMain.Items.Clear();
-
-            foreach (WeaponMemoryInfo w in weaponList)
+            foreach (var element in query)
             {
-                if (w.WeaponName.ToUpper().Contains(txtSearch.Text.ToUpper()))
-                {
-                    ListViewItem item = new ListViewItem();
-                    item.Name = w.WeaponIndex.ToString();
-                    item.Text = w.WeaponIndex.ToString();
-                    item.SubItems.Add(w.WeaponName);
-                    item.SubItems.Add(w.CurrentDurability.ToString());
-                    item.SubItems.Add(w.MaxDurability.ToString());
-                    item.SubItems.Add(w.AttCount.ToString());
-                    item.Tag = w;
-                    lvMain.Items.Add(item);
-                }
-            }
-            lvMain.SelectedItems.Clear();
-        }
-
-        private void BtnSearchByDur_Click(object sender, EventArgs e)
-        {
-            if (txtCurrendDur.Text.Trim() == "" && txtMaxDur.Text.Trim() == "")
-            {
-                return;
-            }
-            float curDur = 0;
-            float maxDur = 0;
-
-            if (txtCurrendDur.Text.Trim() != "")
-            {
-                try
-                {
-                    curDur = float.Parse(txtCurrendDur.Text);
-                }
-                catch
-                {
-                    MessageBox.Show("No durability entered!");
-                    return;
-                }
-            }
-            if (txtMaxDur.Text.Trim() != "")
-            {
-                try
-                {
-                    maxDur = float.Parse(txtMaxDur.Text);
-                }
-                catch
-                {
-                    MessageBox.Show("No durability entered!");
-                    return;
-                }
-            }
-
-            searchType = "dur";
-            lvMain.Items.Clear();
-
-            foreach (WeaponMemoryInfo w in weaponList)
-            {
-                if (txtCurrendDur.Text.Trim() != "" && txtMaxDur.Text.Trim() == "")
-                {
-                    if (curDur != w.CurrentDurability)
-                    {
-                        continue;
-                    }
-                }
-                else if (txtCurrendDur.Text.Trim() == "" && txtMaxDur.Text.Trim() != "")
-                {
-                    if (maxDur != w.MaxDurability)
-                    {
-                        continue;
-                    }
-                }
-                else
-                {
-                    if (maxDur != w.MaxDurability || curDur!=w.CurrentDurability)
-                    {
-                        continue;
-                    }
-                }
                 ListViewItem item = new ListViewItem();
-                item.Name = w.WeaponIndex.ToString();
-                item.Text = w.WeaponIndex.ToString();
-                item.SubItems.Add(w.WeaponName);
-                item.SubItems.Add(w.CurrentDurability.ToString());
-                item.SubItems.Add(w.MaxDurability.ToString());
-                item.SubItems.Add(w.AttCount.ToString());
-                item.Tag = w;
+                item.Name = element.WeaponIndex.ToString();
+                item.Text = element.WeaponIndex.ToString();
+                item.SubItems.Add(element.WeaponName);
+                item.SubItems.Add(element.CurrentDurability.ToString());
+                item.SubItems.Add(element.MaxDurability.ToString());
+                item.SubItems.Add(element.AttCount.ToString());
+                item.Tag = element;
                 lvMain.Items.Add(item);
             }
+
             lvMain.SelectedItems.Clear();
         }
 
@@ -172,13 +104,14 @@ namespace KoARSaveItemEditor
                     item.Tag = w;
                     lvMain.Items.Add(item);
                 }
-                btnSearchByDur.Enabled = true;
-                btnSearchByName.Enabled = true;
                 tsmiBag.Visible = true;
                 btnPrint.Enabled = false;
                 btnEdit.Enabled = false;
                 btnDelete.Enabled = false;
                 btnSave.Enabled = false;
+                txtSearch.Text = "";
+                txtMaxDur.Text = "";
+                txtCurrentDur.Text = "";
                 lvMain.SelectedItems.Clear();
             }
         }
@@ -278,11 +211,11 @@ namespace KoARSaveItemEditor
             btnSearchAll.PerformClick();
             if (searchType == "name")
             {
-                btnSearchByName.PerformClick();
+
             }
             else if (searchType == "dur")
             {
-                btnSearchByDur.PerformClick();
+
             }
             tslblEditState.Text = "Modified";
             btnSave.Enabled = true;
@@ -338,15 +271,38 @@ namespace KoARSaveItemEditor
             }
             else
             {
-                if (txtSearch.Text == "")
-                {
-                    this.BtnShowAll_Click(sender, e);
+                SearchOnUpdate();
+            }
+        }
 
-                }
-                else
-                {
-                    this.BtnSearch_Click(sender, e);
-                }
+        private void GroupBox2_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void TxtCurrentDur_TextChanged(object sender, EventArgs e)
+        {
+            if (editor == null)
+            {
+                MessageBox.Show("No save file opened! Click OK to open a save file.");
+                tsmiOpen.PerformClick();
+            }
+            else
+            {
+                SearchOnUpdate();
+            }
+        }
+
+        private void TxtMaxDur_TextChanged(object sender, EventArgs e)
+        {
+            if (editor == null)
+            {
+                MessageBox.Show("No save file opened! Click OK to open a save file.");
+                tsmiOpen.PerformClick();
+            }
+            else
+            {
+                SearchOnUpdate();
             }
         }
     }

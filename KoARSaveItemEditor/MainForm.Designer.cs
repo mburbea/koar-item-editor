@@ -36,9 +36,8 @@
             this.tsmiHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.opfMain = new System.Windows.Forms.OpenFileDialog();
             this.txtSearch = new System.Windows.Forms.TextBox();
-            this.btnSearchByName = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnSearchAll = new System.Windows.Forms.Button();
             this.btnPrint = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
             this.btnEdit = new System.Windows.Forms.Button();
@@ -54,16 +53,19 @@
             this.tslblFileLocal = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tslblEditState = new System.Windows.Forms.ToolStripStatusLabel();
-            this.label3 = new System.Windows.Forms.Label();
-            this.txtCurrendDur = new System.Windows.Forms.TextBox();
+            this.txtCurrentDur = new System.Windows.Forms.TextBox();
             this.txtMaxDur = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.btnSearchByDur = new System.Windows.Forms.Button();
-            this.btnSearchAll = new System.Windows.Forms.Button();
+            this.filterGroupBox = new System.Windows.Forms.GroupBox();
+            this.durabilityGroupBox = new System.Windows.Forms.GroupBox();
+            this.nameGroupBox = new System.Windows.Forms.GroupBox();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
+            this.filterGroupBox.SuspendLayout();
+            this.durabilityGroupBox.SuspendLayout();
+            this.nameGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -74,7 +76,7 @@
             this.tsmiHelp});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(758, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(941, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -91,7 +93,7 @@
             this.tsmiOpen.Name = "tsmiOpen";
             this.tsmiOpen.Size = new System.Drawing.Size(103, 22);
             this.tsmiOpen.Text = "Open";
-            this.tsmiOpen.Click += new System.EventHandler(this.TsmiOpen_Click);
+            this.tsmiOpen.Click += new System.EventHandler(this.LoadSaveFile);
             // 
             // tsmiBag
             // 
@@ -114,45 +116,36 @@
             // 
             // txtSearch
             // 
-            this.txtSearch.Location = new System.Drawing.Point(140, 75);
+            this.txtSearch.Location = new System.Drawing.Point(6, 21);
             this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(525, 22);
+            this.txtSearch.Size = new System.Drawing.Size(156, 22);
             this.txtSearch.TabIndex = 2;
             this.txtSearch.TextChanged += new System.EventHandler(this.TxtSearch_TextChanged);
             // 
-            // btnSearchByName
-            // 
-            this.btnSearchByName.Enabled = false;
-            this.btnSearchByName.Location = new System.Drawing.Point(671, 73);
-            this.btnSearchByName.Name = "btnSearchByName";
-            this.btnSearchByName.Size = new System.Drawing.Size(75, 25);
-            this.btnSearchByName.TabIndex = 3;
-            this.btnSearchByName.Text = "Filter";
-            this.btnSearchByName.UseVisualStyleBackColor = true;
-            this.btnSearchByName.Click += new System.EventHandler(this.BtnSearch_Click);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(22, 78);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(83, 13);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "Filter by Name:";
-            // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btnSearchAll);
             this.groupBox1.Controls.Add(this.btnPrint);
             this.groupBox1.Controls.Add(this.btnDelete);
             this.groupBox1.Controls.Add(this.btnEdit);
             this.groupBox1.Controls.Add(this.btnSave);
             this.groupBox1.Controls.Add(this.lvMain);
-            this.groupBox1.Location = new System.Drawing.Point(14, 144);
+            this.groupBox1.Location = new System.Drawing.Point(12, 27);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(732, 339);
+            this.groupBox1.Size = new System.Drawing.Size(733, 339);
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Equipment:";
+            // 
+            // btnSearchAll
+            // 
+            this.btnSearchAll.Location = new System.Drawing.Point(301, 312);
+            this.btnSearchAll.Name = "btnSearchAll";
+            this.btnSearchAll.Size = new System.Drawing.Size(92, 22);
+            this.btnSearchAll.TabIndex = 14;
+            this.btnSearchAll.Text = "Reset Fields";
+            this.btnSearchAll.UseVisualStyleBackColor = true;
+            this.btnSearchAll.Click += new System.EventHandler(this.BtnShowAll_Click);
             // 
             // btnPrint
             // 
@@ -161,7 +154,7 @@
             this.btnPrint.Name = "btnPrint";
             this.btnPrint.Size = new System.Drawing.Size(84, 22);
             this.btnPrint.TabIndex = 17;
-            this.btnPrint.Text = "Edit Hex-Code";
+            this.btnPrint.Text = "Hex Edit";
             this.btnPrint.UseVisualStyleBackColor = true;
             this.btnPrint.Click += new System.EventHandler(this.BtnPrint_Click);
             // 
@@ -215,7 +208,7 @@
             this.lvMain.Location = new System.Drawing.Point(3, 18);
             this.lvMain.MultiSelect = false;
             this.lvMain.Name = "lvMain";
-            this.lvMain.Size = new System.Drawing.Size(726, 287);
+            this.lvMain.Size = new System.Drawing.Size(727, 287);
             this.lvMain.TabIndex = 3;
             this.lvMain.UseCompatibleStateImageBehavior = false;
             this.lvMain.View = System.Windows.Forms.View.Details;
@@ -230,7 +223,7 @@
             // name
             // 
             this.name.Text = "Name";
-            this.name.Width = 200;
+            this.name.Width = 100;
             // 
             // curDur
             // 
@@ -245,7 +238,7 @@
             // attCount
             // 
             this.attCount.Text = "Number of Properties";
-            this.attCount.Width = 252;
+            this.attCount.Width = 353;
             // 
             // statusStrip1
             // 
@@ -254,9 +247,9 @@
             this.tslblFileLocal,
             this.toolStripStatusLabel3,
             this.tslblEditState});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 490);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 373);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(758, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(941, 22);
             this.statusStrip1.SizingGrip = false;
             this.statusStrip1.TabIndex = 6;
             this.statusStrip1.Text = "statusStrip1";
@@ -289,86 +282,86 @@
             this.tslblEditState.Text = "Unmodified";
             this.tslblEditState.Click += new System.EventHandler(this.TslblEditState_Click);
             // 
-            // label3
+            // txtCurrentDur
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(22, 112);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(104, 13);
-            this.label3.TabIndex = 7;
-            this.label3.Text = "Filter by Durability:";
-            // 
-            // txtCurrendDur
-            // 
-            this.txtCurrendDur.Location = new System.Drawing.Point(254, 107);
-            this.txtCurrendDur.Name = "txtCurrendDur";
-            this.txtCurrendDur.Size = new System.Drawing.Size(87, 22);
-            this.txtCurrendDur.TabIndex = 9;
+            this.txtCurrentDur.Location = new System.Drawing.Point(74, 21);
+            this.txtCurrentDur.Name = "txtCurrentDur";
+            this.txtCurrentDur.Size = new System.Drawing.Size(87, 22);
+            this.txtCurrentDur.TabIndex = 9;
+            this.txtCurrentDur.TextChanged += new System.EventHandler(this.TxtCurrentDur_TextChanged);
             // 
             // txtMaxDur
             // 
-            this.txtMaxDur.Location = new System.Drawing.Point(440, 107);
+            this.txtMaxDur.Location = new System.Drawing.Point(75, 49);
             this.txtMaxDur.Name = "txtMaxDur";
             this.txtMaxDur.Size = new System.Drawing.Size(86, 22);
             this.txtMaxDur.TabIndex = 10;
+            this.txtMaxDur.TextChanged += new System.EventHandler(this.TxtMaxDur_TextChanged);
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(146, 112);
+            this.label5.Location = new System.Drawing.Point(22, 24);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(102, 13);
+            this.label5.Size = new System.Drawing.Size(46, 13);
             this.label5.TabIndex = 11;
-            this.label5.Text = "Current Durability:";
+            this.label5.Text = "Current";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(353, 112);
+            this.label6.Location = new System.Drawing.Point(13, 52);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(84, 13);
+            this.label6.Size = new System.Drawing.Size(56, 13);
             this.label6.TabIndex = 12;
-            this.label6.Text = "Max Durability:";
+            this.label6.Text = "Maximum";
+            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.label6.Click += new System.EventHandler(this.Label6_Click);
             // 
-            // btnSearchByDur
+            // filterGroupBox
             // 
-            this.btnSearchByDur.Enabled = false;
-            this.btnSearchByDur.Location = new System.Drawing.Point(671, 104);
-            this.btnSearchByDur.Name = "btnSearchByDur";
-            this.btnSearchByDur.Size = new System.Drawing.Size(75, 25);
-            this.btnSearchByDur.TabIndex = 13;
-            this.btnSearchByDur.Text = "Filter";
-            this.btnSearchByDur.UseVisualStyleBackColor = true;
-            this.btnSearchByDur.Click += new System.EventHandler(this.BtnSearchByDur_Click);
+            this.filterGroupBox.Controls.Add(this.durabilityGroupBox);
+            this.filterGroupBox.Controls.Add(this.nameGroupBox);
+            this.filterGroupBox.Location = new System.Drawing.Point(751, 27);
+            this.filterGroupBox.Name = "filterGroupBox";
+            this.filterGroupBox.Size = new System.Drawing.Size(180, 339);
+            this.filterGroupBox.TabIndex = 14;
+            this.filterGroupBox.TabStop = false;
+            this.filterGroupBox.Text = "Filters";
+            this.filterGroupBox.Enter += new System.EventHandler(this.GroupBox2_Enter);
             // 
-            // btnSearchAll
+            // durabilityGroupBox
             // 
-            this.btnSearchAll.Location = new System.Drawing.Point(24, 25);
-            this.btnSearchAll.Name = "btnSearchAll";
-            this.btnSearchAll.Size = new System.Drawing.Size(224, 39);
-            this.btnSearchAll.TabIndex = 14;
-            this.btnSearchAll.Text = "Refresh List";
-            this.btnSearchAll.UseVisualStyleBackColor = true;
-            this.btnSearchAll.Click += new System.EventHandler(this.BtnShowAll_Click);
+            this.durabilityGroupBox.Controls.Add(this.txtCurrentDur);
+            this.durabilityGroupBox.Controls.Add(this.label5);
+            this.durabilityGroupBox.Controls.Add(this.label6);
+            this.durabilityGroupBox.Controls.Add(this.txtMaxDur);
+            this.durabilityGroupBox.Location = new System.Drawing.Point(7, 76);
+            this.durabilityGroupBox.Name = "durabilityGroupBox";
+            this.durabilityGroupBox.Size = new System.Drawing.Size(167, 77);
+            this.durabilityGroupBox.TabIndex = 4;
+            this.durabilityGroupBox.TabStop = false;
+            this.durabilityGroupBox.Text = "Durability";
+            // 
+            // nameGroupBox
+            // 
+            this.nameGroupBox.Controls.Add(this.txtSearch);
+            this.nameGroupBox.Location = new System.Drawing.Point(6, 21);
+            this.nameGroupBox.Name = "nameGroupBox";
+            this.nameGroupBox.Size = new System.Drawing.Size(168, 49);
+            this.nameGroupBox.TabIndex = 3;
+            this.nameGroupBox.TabStop = false;
+            this.nameGroupBox.Text = "Name";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(758, 512);
-            this.Controls.Add(this.btnSearchAll);
-            this.Controls.Add(this.btnSearchByDur);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.txtMaxDur);
-            this.Controls.Add(this.txtCurrendDur);
-            this.Controls.Add(this.label3);
+            this.ClientSize = new System.Drawing.Size(941, 395);
+            this.Controls.Add(this.filterGroupBox);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.btnSearchByName);
-            this.Controls.Add(this.txtSearch);
             this.Controls.Add(this.menuStrip1);
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -385,6 +378,11 @@
             this.groupBox1.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.filterGroupBox.ResumeLayout(false);
+            this.durabilityGroupBox.ResumeLayout(false);
+            this.durabilityGroupBox.PerformLayout();
+            this.nameGroupBox.ResumeLayout(false);
+            this.nameGroupBox.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -397,8 +395,6 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiOpen;
         private System.Windows.Forms.OpenFileDialog opfMain;
         private System.Windows.Forms.TextBox txtSearch;
-        private System.Windows.Forms.Button btnSearchByName;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.ListView lvMain;
         private System.Windows.Forms.ColumnHeader id;
@@ -411,12 +407,10 @@
         private System.Windows.Forms.ToolStripStatusLabel tslblFileLocal;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
         private System.Windows.Forms.ToolStripStatusLabel tslblEditState;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox txtCurrendDur;
+        private System.Windows.Forms.TextBox txtCurrentDur;
         private System.Windows.Forms.TextBox txtMaxDur;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Button btnSearchByDur;
         private System.Windows.Forms.Button btnSearchAll;
         private System.Windows.Forms.ColumnHeader curDur;
         private System.Windows.Forms.ColumnHeader maxDur;
@@ -424,6 +418,9 @@
         private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.Button btnPrint;
         private System.Windows.Forms.ToolStripMenuItem tsmiBag;
+        private System.Windows.Forms.GroupBox filterGroupBox;
+        private System.Windows.Forms.GroupBox nameGroupBox;
+        private System.Windows.Forms.GroupBox durabilityGroupBox;
     }
 }
 
