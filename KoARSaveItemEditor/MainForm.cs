@@ -328,5 +328,26 @@ namespace KoARSaveItemEditor
         {
 
         }
+
+        private void TxtSearch_TextChanged(object sender, EventArgs e)
+        {
+            if (editor == null)
+            {
+                MessageBox.Show("No save file opened! Click OK to open a save file.");
+                tsmiOpen.PerformClick();
+            }
+            else
+            {
+                if (txtSearch.Text == "")
+                {
+                    this.BtnShowAll_Click(sender, e);
+
+                }
+                else
+                {
+                    this.BtnSearch_Click(sender, e);
+                }
+            }
+        }
     }
 }

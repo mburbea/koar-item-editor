@@ -13,6 +13,7 @@ namespace KoARSaveItemEditor
         /// The head of the equipment, property and indicate the number of attributes of the data relative to equipment data head offset
         /// </summary>
         public static int WeaponAttHeadOffSet = 21;
+        public static int InventoryCapacityOffset = 51;
         private ByteEditor br = null;
 
         /// <summary>
@@ -55,7 +56,7 @@ namespace KoARSaveItemEditor
         }
 
         /// <summary>
-        /// 获取背包容量上限
+        /// Get maximum backpack capacity.
         /// </summary>
         /// <returns></returns>
         public int GetMaxBagCount()
@@ -64,13 +65,13 @@ namespace KoARSaveItemEditor
             {
                 throw new Exception("Save file not open.");
             }
-            int index = br.FindIndexByString("inventory_limit")[0] + 51;
+            int index = br.FindIndexByString("inventory_limit")[0] + AmalurSaveEditor.InventoryCapacityOffset;
             byte[] bt = br.GetBytesByIndexAndLength(index, 4);
-            return BitConverter.ToInt32(bt,0);
+            return BitConverter.ToInt32(bt, 0);
         }
 
         /// <summary>
-        /// Edit maximum Backpack capacity
+        /// Modify maximum backpack capacity.
         /// </summary>
         /// <param name="c"></param>
         public void EditMaxBagCount(int c)
@@ -79,7 +80,7 @@ namespace KoARSaveItemEditor
             {
                 throw new Exception("Save file not open.");
             }
-            int index = br.FindIndexByString("inventory_limit")[0] + 51;
+            int index = br.FindIndexByString("inventory_limit")[0] + AmalurSaveEditor.InventoryCapacityOffset;
             byte[] bt = BitConverter.GetBytes(c);
             br.EditByIndex(index, bt);
         }
