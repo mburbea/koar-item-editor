@@ -12,30 +12,30 @@ namespace KoARSaveItemEditor
     {
         bool isEdit = false;
 
-        AmalurSaveEditor editer = null;
+        AmalurSaveEditor editor = null;
         List<AttributeInfo> attributeList = null;
         WeaponMemoryInfo weaponInfo = null;
 
-        public EditForm(AmalurSaveEditor editer, List<AttributeInfo> attList, WeaponMemoryInfo weaponInfo)
+        public EditForm(AmalurSaveEditor editor, List<AttributeInfo> attList, WeaponMemoryInfo weaponInfo)
         {
             InitializeComponent();
-            this.editer = editer;
+            this.editor = editor;
             this.attributeList = attList;
             this.weaponInfo = weaponInfo;
 
-            FormatAll();
+            FormatAll(attList);
         }
 
-        private void FormatAll()
+        private void FormatAll(List<AttributeInfo> attList)
         {
-            cboAddAttribute.DataSource = attributeList;
+            cboAddAttribute.DataSource = attList;
             cboAddAttribute.ValueMember = "AttributeId";
             cboAddAttribute.DisplayMember = "AttributeText";
 
             txtName.Text = weaponInfo.WeaponName;
             lblAttCount.Text = weaponInfo.AttCount.ToString();
-            txtCurrentDurability.Text = weaponInfo.CurrentDurability.ToString();
-            txtMaxDurability.Text = weaponInfo.MaxDurability.ToString();
+            this.txtCurrentDurability.Text = weaponInfo.CurrentDurability.ToString();
+            this.txtMaxDurability.Text = weaponInfo.MaxDurability.ToString();
             btnAdd.Enabled = true;
 
             txtAttCode.Text = "";
@@ -56,7 +56,7 @@ namespace KoARSaveItemEditor
 
         private void DataBinding()
         {
-            List<AttributeMemoryInfo> attList = editer.GetAttList(weaponInfo, attributeList);
+            List<AttributeMemoryInfo> attList = editor.GetAttList(weaponInfo, this.attributeList);
             List<AttributeMemoryInfo> temp = new List<AttributeMemoryInfo>();
             
             foreach(AttributeMemoryInfo att in attList)
@@ -189,7 +189,7 @@ namespace KoARSaveItemEditor
             weaponInfo.CurrentDurability = curDur;
             weaponInfo.MaxDurability = maxDur;
 
-            editer.WriteWeaponByte(weaponInfo);
+            editor.WriteWeaponByte(weaponInfo);
             MessageBox.Show("Modification successful. Please save.");
             isEdit = true;
             this.DialogResult = DialogResult.Yes;
@@ -268,6 +268,11 @@ namespace KoARSaveItemEditor
         }
 
         private void label6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void TxtCurrentDurability_TextChanged(object sender, EventArgs e)
         {
 
         }

@@ -1,4 +1,6 @@
-﻿namespace KoARSaveItemEditor
+﻿using System.Windows.Forms;
+
+namespace KoARSaveItemEditor
 {
     partial class MainForm
     {
@@ -32,22 +34,23 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.tsmiFile = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiOpen = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiBag = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.opfMain = new System.Windows.Forms.OpenFileDialog();
             this.txtSearch = new System.Windows.Forms.TextBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.btnSearchAll = new System.Windows.Forms.Button();
-            this.btnPrint = new System.Windows.Forms.Button();
-            this.btnDelete = new System.Windows.Forms.Button();
-            this.btnEdit = new System.Windows.Forms.Button();
-            this.btnSave = new System.Windows.Forms.Button();
+            this.itemViewGroupBox = new System.Windows.Forms.GroupBox();
             this.lvMain = new System.Windows.Forms.ListView();
             this.id = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.name = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.curDur = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.maxDur = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.attCount = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.btnSearchAll = new System.Windows.Forms.Button();
+            this.btnPrint = new System.Windows.Forms.Button();
+            this.btnDelete = new System.Windows.Forms.Button();
+            this.btnEdit = new System.Windows.Forms.Button();
+            this.btnSave = new System.Windows.Forms.Button();
+            this.inventorySizeLabel = new System.Windows.Forms.Label();
+            this.invetorySizeTextBox = new System.Windows.Forms.TextBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tslblFileLocal = new System.Windows.Forms.ToolStripStatusLabel();
@@ -60,23 +63,38 @@
             this.filterGroupBox = new System.Windows.Forms.GroupBox();
             this.durabilityGroupBox = new System.Windows.Forms.GroupBox();
             this.nameGroupBox = new System.Windows.Forms.GroupBox();
+            this.propertiesGroupBox = new System.Windows.Forms.GroupBox();
+            this.groupBoxPropAttributes = new System.Windows.Forms.GroupBox();
+            this.txtPropAttCount = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.groupBoxPropDurability = new System.Windows.Forms.GroupBox();
+            this.txtPropCurrDur = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txtPropMaxDur = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.groupBoxPropName = new System.Windows.Forms.GroupBox();
+            this.txtPropName = new System.Windows.Forms.TextBox();
+            this.comboAttList = new System.Windows.Forms.ComboBox();
             this.menuStrip1.SuspendLayout();
-            this.groupBox1.SuspendLayout();
+            this.itemViewGroupBox.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.filterGroupBox.SuspendLayout();
             this.durabilityGroupBox.SuspendLayout();
             this.nameGroupBox.SuspendLayout();
+            this.propertiesGroupBox.SuspendLayout();
+            this.groupBoxPropAttributes.SuspendLayout();
+            this.groupBoxPropDurability.SuspendLayout();
+            this.groupBoxPropName.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiFile,
-            this.tsmiBag,
             this.tsmiHelp});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(941, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(971, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -94,13 +112,6 @@
             this.tsmiOpen.Size = new System.Drawing.Size(103, 22);
             this.tsmiOpen.Text = "Open";
             this.tsmiOpen.Click += new System.EventHandler(this.LoadSaveFile);
-            // 
-            // tsmiBag
-            // 
-            this.tsmiBag.Name = "tsmiBag";
-            this.tsmiBag.Size = new System.Drawing.Size(83, 20);
-            this.tsmiBag.Text = "Change Bag";
-            this.tsmiBag.Click += new System.EventHandler(this.TsmiBag_Click);
             // 
             // tsmiHelp
             // 
@@ -122,74 +133,20 @@
             this.txtSearch.TabIndex = 2;
             this.txtSearch.TextChanged += new System.EventHandler(this.TxtSearch_TextChanged);
             // 
-            // groupBox1
+            // itemViewGroupBox
             // 
-            this.groupBox1.Controls.Add(this.btnSearchAll);
-            this.groupBox1.Controls.Add(this.btnPrint);
-            this.groupBox1.Controls.Add(this.btnDelete);
-            this.groupBox1.Controls.Add(this.btnEdit);
-            this.groupBox1.Controls.Add(this.btnSave);
-            this.groupBox1.Controls.Add(this.lvMain);
-            this.groupBox1.Location = new System.Drawing.Point(12, 27);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(733, 339);
-            this.groupBox1.TabIndex = 5;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Equipment:";
-            // 
-            // btnSearchAll
-            // 
-            this.btnSearchAll.Location = new System.Drawing.Point(301, 312);
-            this.btnSearchAll.Name = "btnSearchAll";
-            this.btnSearchAll.Size = new System.Drawing.Size(92, 22);
-            this.btnSearchAll.TabIndex = 14;
-            this.btnSearchAll.Text = "Reset Fields";
-            this.btnSearchAll.UseVisualStyleBackColor = true;
-            this.btnSearchAll.Click += new System.EventHandler(this.BtnShowAll_Click);
-            // 
-            // btnPrint
-            // 
-            this.btnPrint.Enabled = false;
-            this.btnPrint.Location = new System.Drawing.Point(399, 312);
-            this.btnPrint.Name = "btnPrint";
-            this.btnPrint.Size = new System.Drawing.Size(84, 22);
-            this.btnPrint.TabIndex = 17;
-            this.btnPrint.Text = "Hex Edit";
-            this.btnPrint.UseVisualStyleBackColor = true;
-            this.btnPrint.Click += new System.EventHandler(this.BtnPrint_Click);
-            // 
-            // btnDelete
-            // 
-            this.btnDelete.Enabled = false;
-            this.btnDelete.Location = new System.Drawing.Point(570, 312);
-            this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(75, 22);
-            this.btnDelete.TabIndex = 16;
-            this.btnDelete.Text = "Delete";
-            this.btnDelete.UseVisualStyleBackColor = true;
-            this.btnDelete.Click += new System.EventHandler(this.BtnDelete_Click);
-            // 
-            // btnEdit
-            // 
-            this.btnEdit.Enabled = false;
-            this.btnEdit.Location = new System.Drawing.Point(489, 312);
-            this.btnEdit.Name = "btnEdit";
-            this.btnEdit.Size = new System.Drawing.Size(75, 22);
-            this.btnEdit.TabIndex = 14;
-            this.btnEdit.Text = "Modify";
-            this.btnEdit.UseVisualStyleBackColor = true;
-            this.btnEdit.Click += new System.EventHandler(this.BtnEdit_Click);
-            // 
-            // btnSave
-            // 
-            this.btnSave.Enabled = false;
-            this.btnSave.Location = new System.Drawing.Point(651, 312);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(75, 22);
-            this.btnSave.TabIndex = 11;
-            this.btnSave.Text = "Save";
-            this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.BtnSave_Click);
+            this.itemViewGroupBox.Controls.Add(this.lvMain);
+            this.itemViewGroupBox.Controls.Add(this.btnSearchAll);
+            this.itemViewGroupBox.Controls.Add(this.btnPrint);
+            this.itemViewGroupBox.Controls.Add(this.btnDelete);
+            this.itemViewGroupBox.Controls.Add(this.btnEdit);
+            this.itemViewGroupBox.Controls.Add(this.btnSave);
+            this.itemViewGroupBox.Location = new System.Drawing.Point(199, 27);
+            this.itemViewGroupBox.Name = "itemViewGroupBox";
+            this.itemViewGroupBox.Size = new System.Drawing.Size(560, 339);
+            this.itemViewGroupBox.TabIndex = 5;
+            this.itemViewGroupBox.TabStop = false;
+            this.itemViewGroupBox.Text = "Items";
             // 
             // lvMain
             // 
@@ -204,11 +161,11 @@
             this.lvMain.Dock = System.Windows.Forms.DockStyle.Top;
             this.lvMain.FullRowSelect = true;
             this.lvMain.GridLines = true;
-            this.lvMain.HoverSelection = true;
+            this.lvMain.HideSelection = false;
             this.lvMain.Location = new System.Drawing.Point(3, 18);
             this.lvMain.MultiSelect = false;
             this.lvMain.Name = "lvMain";
-            this.lvMain.Size = new System.Drawing.Size(727, 287);
+            this.lvMain.Size = new System.Drawing.Size(554, 288);
             this.lvMain.TabIndex = 3;
             this.lvMain.UseCompatibleStateImageBehavior = false;
             this.lvMain.View = System.Windows.Forms.View.Details;
@@ -222,23 +179,94 @@
             // 
             // name
             // 
-            this.name.Text = "Name";
-            this.name.Width = 100;
+            this.name.Text = "Item Name";
+            this.name.Width = 150;
             // 
             // curDur
             // 
-            this.curDur.Text = "Current Durability";
-            this.curDur.Width = 92;
+            this.curDur.Text = "Current Dur.";
+            this.curDur.Width = 100;
             // 
             // maxDur
             // 
-            this.maxDur.Text = "Max Durability";
-            this.maxDur.Width = 78;
+            this.maxDur.Text = "Max Dur.";
+            this.maxDur.Width = 100;
             // 
             // attCount
             // 
-            this.attCount.Text = "Number of Properties";
-            this.attCount.Width = 353;
+            this.attCount.Text = "# Properties";
+            this.attCount.Width = 100;
+            // 
+            // btnSearchAll
+            // 
+            this.btnSearchAll.Location = new System.Drawing.Point(6, 311);
+            this.btnSearchAll.Name = "btnSearchAll";
+            this.btnSearchAll.Size = new System.Drawing.Size(92, 22);
+            this.btnSearchAll.TabIndex = 14;
+            this.btnSearchAll.Text = "Reset Fields";
+            this.btnSearchAll.UseVisualStyleBackColor = true;
+            this.btnSearchAll.Click += new System.EventHandler(this.BtnShowAll_Click);
+            // 
+            // btnPrint
+            // 
+            this.btnPrint.Enabled = false;
+            this.btnPrint.Location = new System.Drawing.Point(104, 311);
+            this.btnPrint.Name = "btnPrint";
+            this.btnPrint.Size = new System.Drawing.Size(84, 22);
+            this.btnPrint.TabIndex = 17;
+            this.btnPrint.Text = "Hex Edit";
+            this.btnPrint.UseVisualStyleBackColor = true;
+            this.btnPrint.Click += new System.EventHandler(this.BtnPrint_Click);
+            // 
+            // btnDelete
+            // 
+            this.btnDelete.Enabled = false;
+            this.btnDelete.Location = new System.Drawing.Point(275, 311);
+            this.btnDelete.Name = "btnDelete";
+            this.btnDelete.Size = new System.Drawing.Size(75, 22);
+            this.btnDelete.TabIndex = 16;
+            this.btnDelete.Text = "Delete";
+            this.btnDelete.UseVisualStyleBackColor = true;
+            this.btnDelete.Click += new System.EventHandler(this.BtnDelete_Click);
+            // 
+            // btnEdit
+            // 
+            this.btnEdit.Enabled = false;
+            this.btnEdit.Location = new System.Drawing.Point(194, 311);
+            this.btnEdit.Name = "btnEdit";
+            this.btnEdit.Size = new System.Drawing.Size(75, 22);
+            this.btnEdit.TabIndex = 14;
+            this.btnEdit.Text = "Modify";
+            this.btnEdit.UseVisualStyleBackColor = true;
+            this.btnEdit.Click += new System.EventHandler(this.BtnEdit_Click);
+            // 
+            // btnSave
+            // 
+            this.btnSave.Enabled = false;
+            this.btnSave.Location = new System.Drawing.Point(356, 311);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(75, 22);
+            this.btnSave.TabIndex = 11;
+            this.btnSave.Text = "Save";
+            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.BtnSave_Click);
+            // 
+            // inventorySizeLabel
+            // 
+            this.inventorySizeLabel.AutoSize = true;
+            this.inventorySizeLabel.Location = new System.Drawing.Point(15, 201);
+            this.inventorySizeLabel.Name = "inventorySizeLabel";
+            this.inventorySizeLabel.Size = new System.Drawing.Size(78, 13);
+            this.inventorySizeLabel.TabIndex = 18;
+            this.inventorySizeLabel.Text = "Inventory Size";
+            this.inventorySizeLabel.Click += new System.EventHandler(this.Label1_Click);
+            // 
+            // invetorySizeTextBox
+            // 
+            this.invetorySizeTextBox.Location = new System.Drawing.Point(12, 228);
+            this.invetorySizeTextBox.Name = "invetorySizeTextBox";
+            this.invetorySizeTextBox.Size = new System.Drawing.Size(181, 22);
+            this.invetorySizeTextBox.TabIndex = 0;
             // 
             // statusStrip1
             // 
@@ -249,7 +277,7 @@
             this.tslblEditState});
             this.statusStrip1.Location = new System.Drawing.Point(0, 373);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(941, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(971, 22);
             this.statusStrip1.SizingGrip = false;
             this.statusStrip1.TabIndex = 6;
             this.statusStrip1.Text = "statusStrip1";
@@ -323,9 +351,9 @@
             // 
             this.filterGroupBox.Controls.Add(this.durabilityGroupBox);
             this.filterGroupBox.Controls.Add(this.nameGroupBox);
-            this.filterGroupBox.Location = new System.Drawing.Point(751, 27);
+            this.filterGroupBox.Location = new System.Drawing.Point(12, 27);
             this.filterGroupBox.Name = "filterGroupBox";
-            this.filterGroupBox.Size = new System.Drawing.Size(180, 339);
+            this.filterGroupBox.Size = new System.Drawing.Size(181, 159);
             this.filterGroupBox.TabIndex = 14;
             this.filterGroupBox.TabStop = false;
             this.filterGroupBox.Text = "Filters";
@@ -354,14 +382,134 @@
             this.nameGroupBox.TabStop = false;
             this.nameGroupBox.Text = "Name";
             // 
+            // propertiesGroupBox
+            // 
+            this.propertiesGroupBox.Controls.Add(this.groupBoxPropAttributes);
+            this.propertiesGroupBox.Controls.Add(this.groupBoxPropDurability);
+            this.propertiesGroupBox.Controls.Add(this.groupBoxPropName);
+            this.propertiesGroupBox.Location = new System.Drawing.Point(765, 27);
+            this.propertiesGroupBox.Name = "propertiesGroupBox";
+            this.propertiesGroupBox.Size = new System.Drawing.Size(180, 339);
+            this.propertiesGroupBox.TabIndex = 19;
+            this.propertiesGroupBox.TabStop = false;
+            this.propertiesGroupBox.Text = "Properties";
+            // 
+            // groupBoxPropAttributes
+            // 
+            this.groupBoxPropAttributes.Controls.Add(this.comboAttList);
+            this.groupBoxPropAttributes.Controls.Add(this.txtPropAttCount);
+            this.groupBoxPropAttributes.Controls.Add(this.label3);
+            this.groupBoxPropAttributes.Location = new System.Drawing.Point(7, 156);
+            this.groupBoxPropAttributes.Name = "groupBoxPropAttributes";
+            this.groupBoxPropAttributes.Size = new System.Drawing.Size(167, 177);
+            this.groupBoxPropAttributes.TabIndex = 6;
+            this.groupBoxPropAttributes.TabStop = false;
+            this.groupBoxPropAttributes.Text = "Attributes";
+            // 
+            // txtPropAttCount
+            // 
+            this.txtPropAttCount.Cursor = System.Windows.Forms.Cursors.No;
+            this.txtPropAttCount.Enabled = false;
+            this.txtPropAttCount.Location = new System.Drawing.Point(105, 15);
+            this.txtPropAttCount.Name = "txtPropAttCount";
+            this.txtPropAttCount.Size = new System.Drawing.Size(56, 22);
+            this.txtPropAttCount.TabIndex = 14;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 20);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(93, 13);
+            this.label3.TabIndex = 13;
+            this.label3.Text = "No. of Attributes";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // groupBoxPropDurability
+            // 
+            this.groupBoxPropDurability.Controls.Add(this.txtPropCurrDur);
+            this.groupBoxPropDurability.Controls.Add(this.label1);
+            this.groupBoxPropDurability.Controls.Add(this.txtPropMaxDur);
+            this.groupBoxPropDurability.Controls.Add(this.label2);
+            this.groupBoxPropDurability.Location = new System.Drawing.Point(7, 77);
+            this.groupBoxPropDurability.Name = "groupBoxPropDurability";
+            this.groupBoxPropDurability.Size = new System.Drawing.Size(167, 72);
+            this.groupBoxPropDurability.TabIndex = 5;
+            this.groupBoxPropDurability.TabStop = false;
+            this.groupBoxPropDurability.Text = "Durability";
+            // 
+            // txtPropCurrDur
+            // 
+            this.txtPropCurrDur.Location = new System.Drawing.Point(73, 15);
+            this.txtPropCurrDur.Name = "txtPropCurrDur";
+            this.txtPropCurrDur.Size = new System.Drawing.Size(88, 22);
+            this.txtPropCurrDur.TabIndex = 13;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(21, 18);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(46, 13);
+            this.label1.TabIndex = 15;
+            this.label1.Text = "Current";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // txtPropMaxDur
+            // 
+            this.txtPropMaxDur.Location = new System.Drawing.Point(74, 43);
+            this.txtPropMaxDur.Name = "txtPropMaxDur";
+            this.txtPropMaxDur.Size = new System.Drawing.Size(87, 22);
+            this.txtPropMaxDur.TabIndex = 14;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(12, 46);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(56, 13);
+            this.label2.TabIndex = 16;
+            this.label2.Text = "Maximum";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // groupBoxPropName
+            // 
+            this.groupBoxPropName.Controls.Add(this.txtPropName);
+            this.groupBoxPropName.Location = new System.Drawing.Point(6, 21);
+            this.groupBoxPropName.Name = "groupBoxPropName";
+            this.groupBoxPropName.Size = new System.Drawing.Size(168, 49);
+            this.groupBoxPropName.TabIndex = 4;
+            this.groupBoxPropName.TabStop = false;
+            this.groupBoxPropName.Text = "Name";
+            // 
+            // txtPropName
+            // 
+            this.txtPropName.Location = new System.Drawing.Point(6, 21);
+            this.txtPropName.Name = "txtPropName";
+            this.txtPropName.Size = new System.Drawing.Size(156, 22);
+            this.txtPropName.TabIndex = 2;
+            // 
+            // comboAttList
+            // 
+            this.comboAttList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboAttList.DropDownWidth = 500;
+            this.comboAttList.FormattingEnabled = true;
+            this.comboAttList.Location = new System.Drawing.Point(9, 43);
+            this.comboAttList.Name = "comboAttList";
+            this.comboAttList.Size = new System.Drawing.Size(152, 21);
+            this.comboAttList.TabIndex = 20;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(941, 395);
+            this.ClientSize = new System.Drawing.Size(971, 395);
+            this.Controls.Add(this.propertiesGroupBox);
             this.Controls.Add(this.filterGroupBox);
+            this.Controls.Add(this.invetorySizeTextBox);
+            this.Controls.Add(this.inventorySizeLabel);
             this.Controls.Add(this.statusStrip1);
-            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.itemViewGroupBox);
             this.Controls.Add(this.menuStrip1);
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -372,10 +520,10 @@
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Kingdoms of Amalur: Reckoning Save Item Editor";
-            this.Load += new System.EventHandler(this.AmalurEditer_Load);
+            this.Load += new System.EventHandler(this.LoadAmalurEditor);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
+            this.itemViewGroupBox.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.filterGroupBox.ResumeLayout(false);
@@ -383,6 +531,13 @@
             this.durabilityGroupBox.PerformLayout();
             this.nameGroupBox.ResumeLayout(false);
             this.nameGroupBox.PerformLayout();
+            this.propertiesGroupBox.ResumeLayout(false);
+            this.groupBoxPropAttributes.ResumeLayout(false);
+            this.groupBoxPropAttributes.PerformLayout();
+            this.groupBoxPropDurability.ResumeLayout(false);
+            this.groupBoxPropDurability.PerformLayout();
+            this.groupBoxPropName.ResumeLayout(false);
+            this.groupBoxPropName.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -395,7 +550,7 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiOpen;
         private System.Windows.Forms.OpenFileDialog opfMain;
         private System.Windows.Forms.TextBox txtSearch;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox itemViewGroupBox;
         private System.Windows.Forms.ListView lvMain;
         private System.Windows.Forms.ColumnHeader id;
         private System.Windows.Forms.ColumnHeader name;
@@ -417,10 +572,23 @@
         private System.Windows.Forms.ColumnHeader attCount;
         private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.Button btnPrint;
-        private System.Windows.Forms.ToolStripMenuItem tsmiBag;
         private System.Windows.Forms.GroupBox filterGroupBox;
         private System.Windows.Forms.GroupBox nameGroupBox;
         private System.Windows.Forms.GroupBox durabilityGroupBox;
+        private System.Windows.Forms.TextBox invetorySizeTextBox;
+        private System.Windows.Forms.Label inventorySizeLabel;
+        private GroupBox propertiesGroupBox;
+        private GroupBox groupBoxPropName;
+        private TextBox txtPropName;
+        private GroupBox groupBoxPropDurability;
+        private TextBox txtPropCurrDur;
+        private Label label1;
+        private TextBox txtPropMaxDur;
+        private Label label2;
+        private GroupBox groupBoxPropAttributes;
+        private Label label3;
+        private TextBox txtPropAttCount;
+        private ComboBox comboAttList;
     }
 }
 

@@ -35,7 +35,7 @@
             // 
             // txtByte
             // 
-            this.txtByte.Font = new System.Drawing.Font("SimSun", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.txtByte.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtByte.Location = new System.Drawing.Point(0, 0);
             this.txtByte.Multiline = true;
             this.txtByte.Name = "txtByte";

@@ -12,16 +12,16 @@ namespace KoARSaveItemEditor
         AmalurSaveEditor editor = null;
         List<AttributeInfo> attributeList = null;
         List<WeaponMemoryInfo> weaponList = null;
-        string searchType = "";
+        String searchType = "";
 
         public MainForm()
         {
             InitializeComponent();
-            lvMain.Columns[0].Width = 100;
-            lvMain.Columns[1].Width = 100;
-            lvMain.Columns[2].Width = -2;
-            lvMain.Columns[3].Width = -2;
-            lvMain.Columns[4].Width = -2;
+            //lvMain.Columns[0].Width = 100;
+            //lvMain.Columns[1].Width = 100;
+            //lvMain.Columns[2].Width = -2;
+            //lvMain.Columns[3].Width = -2;
+            //lvMain.Columns[4].Width = -2;
         }
 
         private void LoadSaveFile(object sender, EventArgs e)
@@ -33,11 +33,12 @@ namespace KoARSaveItemEditor
                 editor = new AmalurSaveEditor();
                 editor.ReadFile(fileName);
                 tslblFileLocal.Text = fileName;
+                invetorySizeTextBox.Text = editor.GetMaxBagCount().ToString();
                 btnSearchAll.PerformClick();
             }
         }
 
-        private void SearchOnUpdate()
+        private void RefreshListOnFilterUpdate()
         {
             String itemName = txtSearch.Text != "" ? txtSearch.Text.ToUpper() : "";
             float currDur = Single.TryParse(txtCurrentDur.Text, out currDur) ? currDur : 0;
@@ -66,6 +67,20 @@ namespace KoARSaveItemEditor
             }
 
             lvMain.SelectedItems.Clear();
+        }
+
+        private void LoadItemPropertiesOnClick()
+        {
+            WeaponMemoryInfo weaponInfo = (WeaponMemoryInfo)lvMain.SelectedItems[0].Tag;
+            List<AttributeMemoryInfo> attList = editor.GetAttList(weaponInfo, this.attributeList);
+
+            this.txtPropName.Text = weaponInfo.WeaponName;
+            this.txtPropCurrDur.Text = weaponInfo.CurrentDurability.ToString();
+            this.txtPropMaxDur.Text = weaponInfo.MaxDurability.ToString();
+            this.txtPropAttCount.Text = weaponInfo.AttCount.ToString();
+
+            this.comboAttList.DisplayMember = "Detail";
+            this.comboAttList.DataSource = attList;
         }
 
         private void BtnShowAll_Click(object sender, EventArgs e)
@@ -104,7 +119,6 @@ namespace KoARSaveItemEditor
                     item.Tag = w;
                     lvMain.Items.Add(item);
                 }
-                tsmiBag.Visible = true;
                 btnPrint.Enabled = false;
                 btnEdit.Enabled = false;
                 btnDelete.Enabled = false;
@@ -116,10 +130,10 @@ namespace KoARSaveItemEditor
             }
         }
 
-        private void AmalurEditer_Load(object sender, EventArgs e)
+        private void LoadAmalurEditor(object sender, EventArgs e)
         {
             XmlDocument doc = new XmlDocument();
-            attributeList = new List<AttributeInfo>();
+            List<AttributeInfo> attributeList = new List<AttributeInfo>();
             try
             {
                 doc.Load(Application.StartupPath + @"\Data\properties.xml");
@@ -131,6 +145,7 @@ namespace KoARSaveItemEditor
                     att.AttributeText = n.InnerText.ToUpper();
                     attributeList.Add(att);
                 }
+                this.attributeList = attributeList;
             }
             catch
             {
@@ -139,20 +154,37 @@ namespace KoARSaveItemEditor
             }
         }
 
+        private void LoadItemAttributes(WeaponMemoryInfo itemInfo)
+        {
+            List<AttributeMemoryInfo> attList = editor.GetAttList(itemInfo, this.attributeList);
+            List<AttributeMemoryInfo> temp = new List<AttributeMemoryInfo>();
+
+            foreach (AttributeMemoryInfo att in attList)
+            {
+                bool isAtt = false;
+                foreach (AttributeMemoryInfo t in temp)
+                {
+                    if (t.Code == att.Code)
+                    {
+                        isAtt = true;
+                        break;
+                    }
+                }
+                if (!isAtt)
+                {
+                    temp.Add(att);
+                }
+            }
+            comboAttList.DataSource = null;
+            comboAttList.DataSource = temp;
+        }
+
         private void lvMain_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (lvMain.SelectedItems.Count > 0)
             {
-                btnEdit.Enabled = true;
-                btnDelete.Enabled = true;
-                btnPrint.Enabled = true;
-            }
-            else
-            {
-                btnEdit.Enabled = false;
-                btnDelete.Enabled = false;
-                btnPrint.Enabled = false;
-            }
+                LoadItemPropertiesOnClick();
+            }            
         }
 
         private void BtnSave_Click(object sender, EventArgs e)
@@ -186,14 +218,15 @@ namespace KoARSaveItemEditor
         {
             WeaponMemoryInfo weaponInfo = (WeaponMemoryInfo)lvMain.SelectedItems[0].Tag;
 
-            EditForm form = new EditForm(editor, attributeList, weaponInfo);
-            btnPrint.Enabled = false;
-            btnEdit.Enabled = false;
-            btnDelete.Enabled = false;
-            if (form.ShowDialog() == DialogResult.Yes)
-            {
-                CanSave();
-            }
+            //EditForm form = new EditForm(editor, attributeList, weaponInfo);
+            //btnPrint.Enabled = false;
+            //btnEdit.Enabled = false;
+            //btnDelete.Enabled = false;
+            //if (form.ShowDialog() == DialogResult.Yes)
+            //{
+            //    CanSave();
+            //}
+
         }
 
         private void BtnDelete_Click(object sender, EventArgs e)
@@ -271,7 +304,7 @@ namespace KoARSaveItemEditor
             }
             else
             {
-                SearchOnUpdate();
+                RefreshListOnFilterUpdate();
             }
         }
 
@@ -289,7 +322,7 @@ namespace KoARSaveItemEditor
             }
             else
             {
-                SearchOnUpdate();
+                RefreshListOnFilterUpdate();
             }
         }
 
@@ -302,8 +335,18 @@ namespace KoARSaveItemEditor
             }
             else
             {
-                SearchOnUpdate();
+                RefreshListOnFilterUpdate();
             }
+        }
+
+        private void Label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Label2_Click_1(object sender, EventArgs e)
+        {
+
         }
     }
 }

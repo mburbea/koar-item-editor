@@ -178,6 +178,7 @@
             this.txtCurrentDurability.Name = "txtCurrentDurability";
             this.txtCurrentDurability.Size = new System.Drawing.Size(38, 20);
             this.txtCurrentDurability.TabIndex = 29;
+            this.txtCurrentDurability.TextChanged += new System.EventHandler(this.TxtCurrentDurability_TextChanged);
             // 
             // label9
             // 
@@ -220,7 +221,7 @@
             this.label10.AutoSize = true;
             this.label10.Location = new System.Drawing.Point(12, 131);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(63, 13);
+            this.label10.Size = new System.Drawing.Size(57, 13);
             this.label10.TabIndex = 34;
             this.label10.Text = "Hex Code:";
             // 
@@ -265,7 +266,7 @@
             this.chkEditName.AutoSize = true;
             this.chkEditName.Location = new System.Drawing.Point(233, 9);
             this.chkEditName.Name = "chkEditName";
-            this.chkEditName.Size = new System.Drawing.Size(93, 17);
+            this.chkEditName.Size = new System.Drawing.Size(94, 17);
             this.chkEditName.TabIndex = 40;
             this.chkEditName.Text = "Change Name";
             this.chkEditName.UseVisualStyleBackColor = true;
@@ -276,7 +277,7 @@
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(317, 68);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(73, 13);
+            this.label6.Size = new System.Drawing.Size(78, 13);
             this.label6.TabIndex = 41;
             this.label6.Text = "# of Instances:";
             this.label6.Click += new System.EventHandler(this.label6_Click);
