@@ -14,9 +14,9 @@ namespace KoARSaveItemEditor
 
         AmalurSaveEditor editor = null;
         List<AttributeInfo> attributeList = null;
-        WeaponMemoryInfo weaponInfo = null;
+        ItemMemoryInfo weaponInfo = null;
 
-        public EditForm(AmalurSaveEditor editor, List<AttributeInfo> attList, WeaponMemoryInfo weaponInfo)
+        public EditForm(AmalurSaveEditor editor, List<AttributeInfo> attList, ItemMemoryInfo weaponInfo)
         {
             InitializeComponent();
             this.editor = editor;
@@ -32,7 +32,7 @@ namespace KoARSaveItemEditor
             cboAddAttribute.ValueMember = "AttributeId";
             cboAddAttribute.DisplayMember = "AttributeText";
 
-            txtName.Text = weaponInfo.WeaponName;
+            txtName.Text = weaponInfo.ItemName;
             lblAttCount.Text = weaponInfo.AttCount.ToString();
             this.txtCurrentDurability.Text = weaponInfo.CurrentDurability.ToString();
             this.txtMaxDurability.Text = weaponInfo.MaxDurability.ToString();
@@ -87,7 +87,7 @@ namespace KoARSaveItemEditor
             {
                 txtAttCode.Text = (cboExtendAttIndex.SelectedItem as AttributeMemoryInfo).Code;
                 int i = 0;
-                foreach (AttributeMemoryInfo att in weaponInfo.WeaponAttList)
+                foreach (AttributeMemoryInfo att in weaponInfo.ItemAttList)
                 {
                     if (att.Code.ToUpper() == txtAttCode.Text.ToUpper())
                     {
@@ -109,7 +109,7 @@ namespace KoARSaveItemEditor
             {
                 MessageBox.Show("Failed to delete. Please select another property to remove.");
             }
-            List<AttributeMemoryInfo> attList = weaponInfo.WeaponAttList;
+            List<AttributeMemoryInfo> attList = weaponInfo.ItemAttList;
             for (int i = 0; i < numDelete.Value; i++)
             {
                 foreach (AttributeMemoryInfo att in attList)
@@ -121,7 +121,7 @@ namespace KoARSaveItemEditor
                     }
                 }
             }
-            weaponInfo.WeaponAttList = attList;
+            weaponInfo.ItemAttList = attList;
             DataBinding();
             isEdit = true;
             numDelete.Value = 0;
@@ -184,7 +184,7 @@ namespace KoARSaveItemEditor
             }
             if (!txtName.ReadOnly)
             {
-                weaponInfo.WeaponName = txtName.Text.Trim();
+                weaponInfo.ItemName = txtName.Text.Trim();
             }
             weaponInfo.CurrentDurability = curDur;
             weaponInfo.MaxDurability = maxDur;
@@ -233,14 +233,14 @@ namespace KoARSaveItemEditor
 
         private void AddAttribute(string attCode,int count)
         {
-            List<AttributeMemoryInfo> attList = weaponInfo.WeaponAttList;
+            List<AttributeMemoryInfo> attList = weaponInfo.ItemAttList;
             for (int i = 0; i < count; i++)
             {
                 AttributeMemoryInfo attInfo = new AttributeMemoryInfo();
                 attInfo.Code = attCode;
                 attList.Add(attInfo);
             }
-            weaponInfo.WeaponAttList = attList;
+            weaponInfo.ItemAttList = attList;
             DataBinding();
             isEdit = true;
         }
@@ -273,6 +273,16 @@ namespace KoARSaveItemEditor
         }
 
         private void TxtCurrentDurability_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void EditForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void TxtAttCodeInput_TextChanged(object sender, EventArgs e)
         {
 
         }

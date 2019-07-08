@@ -8,12 +8,12 @@ using System.Windows.Forms;
 
 namespace KoARSaveItemEditor
 {
-    public partial class WeaponBytesForm : Form
+    public partial class ItemBytesForm : Form
     {
-        private WeaponMemoryInfo weapon;
+        private ItemMemoryInfo weapon;
         private AmalurSaveEditor editer;
 
-        public WeaponBytesForm(AmalurSaveEditor editer, WeaponMemoryInfo weapon)
+        public ItemBytesForm(AmalurSaveEditor editer, ItemMemoryInfo weapon)
         {
             InitializeComponent();
             this.weapon = weapon;
@@ -24,9 +24,9 @@ namespace KoARSaveItemEditor
         private void FormatAll()
         {
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < weapon.WeaponBytes.Length; i++)
+            for (int i = 0; i < weapon.ItemBytes.Length; i++)
             {
-                string s = Convert.ToString(weapon.WeaponBytes[i], 16).ToUpper();
+                string s = Convert.ToString(weapon.ItemBytes[i], 16).ToUpper();
                 if (s.Length == 1)
                 {
                     s = "0" + s;
@@ -61,7 +61,7 @@ namespace KoARSaveItemEditor
                     btList.Add(b);
                 }
             }
-            weapon.WeaponBytes = btList.ToArray();
+            weapon.ItemBytes = btList.ToArray();
             editer.WriteWeaponByte(weapon);
             this.DialogResult = DialogResult.Yes;
             btnSave.Enabled = false;

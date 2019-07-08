@@ -8,6 +8,8 @@ namespace KoARSaveItemEditor
     public class AttributeInfo
     {
         private String attributeId;
+        private String attributeText;
+
         /// <summary>
         /// Attribute ID
         /// </summary>
@@ -16,7 +18,7 @@ namespace KoARSaveItemEditor
             get { return attributeId; }
             set { attributeId = value; }
         }
-        private String attributeText;
+        
         /// <summary>
         /// Attribute Description
         /// </summary>

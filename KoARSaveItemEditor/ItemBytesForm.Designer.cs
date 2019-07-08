@@ -1,6 +1,6 @@
 ﻿namespace KoARSaveItemEditor
 {
-    partial class WeaponBytesForm
+    partial class ItemBytesForm
     {
         /// <summary>
         /// Required designer variable.

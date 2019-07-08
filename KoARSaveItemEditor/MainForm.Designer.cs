@@ -36,7 +36,7 @@ namespace KoARSaveItemEditor
             this.tsmiOpen = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.opfMain = new System.Windows.Forms.OpenFileDialog();
-            this.txtSearch = new System.Windows.Forms.TextBox();
+            this.txtFilterItemName = new System.Windows.Forms.TextBox();
             this.itemViewGroupBox = new System.Windows.Forms.GroupBox();
             this.lvMain = new System.Windows.Forms.ListView();
             this.id = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -47,17 +47,14 @@ namespace KoARSaveItemEditor
             this.btnSearchAll = new System.Windows.Forms.Button();
             this.btnPrint = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
-            this.btnEdit = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
-            this.inventorySizeLabel = new System.Windows.Forms.Label();
-            this.invetorySizeTextBox = new System.Windows.Forms.TextBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tslblFileLocal = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tslblEditState = new System.Windows.Forms.ToolStripStatusLabel();
-            this.txtCurrentDur = new System.Windows.Forms.TextBox();
-            this.txtMaxDur = new System.Windows.Forms.TextBox();
+            this.txtFilterCurrentDur = new System.Windows.Forms.TextBox();
+            this.txtFilterMaxDur = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.filterGroupBox = new System.Windows.Forms.GroupBox();
@@ -65,6 +62,16 @@ namespace KoARSaveItemEditor
             this.nameGroupBox = new System.Windows.Forms.GroupBox();
             this.propertiesGroupBox = new System.Windows.Forms.GroupBox();
             this.groupBoxPropAttributes = new System.Windows.Forms.GroupBox();
+            this.groupBoxAddAttribute = new System.Windows.Forms.GroupBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.txtPropAddAttributeHexCode = new System.Windows.Forms.TextBox();
+            this.comboAddAttList = new System.Windows.Forms.ComboBox();
+            this.buttonPropAddAttribute = new System.Windows.Forms.Button();
+            this.groupBoxPropExistingAttributes = new System.Windows.Forms.GroupBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.txtPropSelectedAttributeHexCode = new System.Windows.Forms.TextBox();
+            this.comboExistingAttList = new System.Windows.Forms.ComboBox();
+            this.buttonPropDeleteAttribute = new System.Windows.Forms.Button();
             this.txtPropAttCount = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.groupBoxPropDurability = new System.Windows.Forms.GroupBox();
@@ -74,7 +81,11 @@ namespace KoARSaveItemEditor
             this.label2 = new System.Windows.Forms.Label();
             this.groupBoxPropName = new System.Windows.Forms.GroupBox();
             this.txtPropName = new System.Windows.Forms.TextBox();
-            this.comboAttList = new System.Windows.Forms.ComboBox();
+            this.invSizeGroupBox = new System.Windows.Forms.GroupBox();
+            this.checkBoxUnlockName = new System.Windows.Forms.CheckBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.buttonInvSizeLocate = new System.Windows.Forms.Button();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.menuStrip1.SuspendLayout();
             this.itemViewGroupBox.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -83,8 +94,12 @@ namespace KoARSaveItemEditor
             this.nameGroupBox.SuspendLayout();
             this.propertiesGroupBox.SuspendLayout();
             this.groupBoxPropAttributes.SuspendLayout();
+            this.groupBoxAddAttribute.SuspendLayout();
+            this.groupBoxPropExistingAttributes.SuspendLayout();
             this.groupBoxPropDurability.SuspendLayout();
             this.groupBoxPropName.SuspendLayout();
+            this.invSizeGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -94,7 +109,7 @@ namespace KoARSaveItemEditor
             this.tsmiHelp});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(971, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(815, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -125,25 +140,20 @@ namespace KoARSaveItemEditor
             this.opfMain.FileName = "openFileDialog1";
             this.opfMain.Filter = "Save File Archive|*.sav";
             // 
-            // txtSearch
+            // txtFilterItemName
             // 
-            this.txtSearch.Location = new System.Drawing.Point(6, 21);
-            this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(156, 22);
-            this.txtSearch.TabIndex = 2;
-            this.txtSearch.TextChanged += new System.EventHandler(this.TxtSearch_TextChanged);
+            this.txtFilterItemName.Location = new System.Drawing.Point(6, 21);
+            this.txtFilterItemName.Name = "txtFilterItemName";
+            this.txtFilterItemName.Size = new System.Drawing.Size(156, 22);
+            this.txtFilterItemName.TabIndex = 2;
+            this.txtFilterItemName.TextChanged += new System.EventHandler(this.TxtSearch_TextChanged);
             // 
             // itemViewGroupBox
             // 
             this.itemViewGroupBox.Controls.Add(this.lvMain);
-            this.itemViewGroupBox.Controls.Add(this.btnSearchAll);
-            this.itemViewGroupBox.Controls.Add(this.btnPrint);
-            this.itemViewGroupBox.Controls.Add(this.btnDelete);
-            this.itemViewGroupBox.Controls.Add(this.btnEdit);
-            this.itemViewGroupBox.Controls.Add(this.btnSave);
-            this.itemViewGroupBox.Location = new System.Drawing.Point(199, 27);
+            this.itemViewGroupBox.Location = new System.Drawing.Point(12, 111);
             this.itemViewGroupBox.Name = "itemViewGroupBox";
-            this.itemViewGroupBox.Size = new System.Drawing.Size(560, 339);
+            this.itemViewGroupBox.Size = new System.Drawing.Size(560, 409);
             this.itemViewGroupBox.TabIndex = 5;
             this.itemViewGroupBox.TabStop = false;
             this.itemViewGroupBox.Text = "Items";
@@ -165,7 +175,7 @@ namespace KoARSaveItemEditor
             this.lvMain.Location = new System.Drawing.Point(3, 18);
             this.lvMain.MultiSelect = false;
             this.lvMain.Name = "lvMain";
-            this.lvMain.Size = new System.Drawing.Size(554, 288);
+            this.lvMain.Size = new System.Drawing.Size(554, 385);
             this.lvMain.TabIndex = 3;
             this.lvMain.UseCompatibleStateImageBehavior = false;
             this.lvMain.View = System.Windows.Forms.View.Details;
@@ -199,20 +209,20 @@ namespace KoARSaveItemEditor
             // 
             // btnSearchAll
             // 
-            this.btnSearchAll.Location = new System.Drawing.Point(6, 311);
+            this.btnSearchAll.Location = new System.Drawing.Point(491, 21);
             this.btnSearchAll.Name = "btnSearchAll";
-            this.btnSearchAll.Size = new System.Drawing.Size(92, 22);
+            this.btnSearchAll.Size = new System.Drawing.Size(63, 49);
             this.btnSearchAll.TabIndex = 14;
-            this.btnSearchAll.Text = "Reset Fields";
+            this.btnSearchAll.Text = "Reset Filter";
             this.btnSearchAll.UseVisualStyleBackColor = true;
             this.btnSearchAll.Click += new System.EventHandler(this.BtnShowAll_Click);
             // 
             // btnPrint
             // 
             this.btnPrint.Enabled = false;
-            this.btnPrint.Location = new System.Drawing.Point(104, 311);
+            this.btnPrint.Location = new System.Drawing.Point(7, 379);
             this.btnPrint.Name = "btnPrint";
-            this.btnPrint.Size = new System.Drawing.Size(84, 22);
+            this.btnPrint.Size = new System.Drawing.Size(68, 22);
             this.btnPrint.TabIndex = 17;
             this.btnPrint.Text = "Hex Edit";
             this.btnPrint.UseVisualStyleBackColor = true;
@@ -221,52 +231,23 @@ namespace KoARSaveItemEditor
             // btnDelete
             // 
             this.btnDelete.Enabled = false;
-            this.btnDelete.Location = new System.Drawing.Point(275, 311);
+            this.btnDelete.Location = new System.Drawing.Point(81, 379);
             this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(75, 22);
+            this.btnDelete.Size = new System.Drawing.Size(61, 22);
             this.btnDelete.TabIndex = 16;
             this.btnDelete.Text = "Delete";
             this.btnDelete.UseVisualStyleBackColor = true;
             this.btnDelete.Click += new System.EventHandler(this.BtnDelete_Click);
             // 
-            // btnEdit
-            // 
-            this.btnEdit.Enabled = false;
-            this.btnEdit.Location = new System.Drawing.Point(194, 311);
-            this.btnEdit.Name = "btnEdit";
-            this.btnEdit.Size = new System.Drawing.Size(75, 22);
-            this.btnEdit.TabIndex = 14;
-            this.btnEdit.Text = "Modify";
-            this.btnEdit.UseVisualStyleBackColor = true;
-            this.btnEdit.Click += new System.EventHandler(this.BtnEdit_Click);
-            // 
             // btnSave
             // 
-            this.btnSave.Enabled = false;
-            this.btnSave.Location = new System.Drawing.Point(356, 311);
+            this.btnSave.Location = new System.Drawing.Point(148, 379);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 22);
             this.btnSave.TabIndex = 11;
             this.btnSave.Text = "Save";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.BtnSave_Click);
-            // 
-            // inventorySizeLabel
-            // 
-            this.inventorySizeLabel.AutoSize = true;
-            this.inventorySizeLabel.Location = new System.Drawing.Point(15, 201);
-            this.inventorySizeLabel.Name = "inventorySizeLabel";
-            this.inventorySizeLabel.Size = new System.Drawing.Size(78, 13);
-            this.inventorySizeLabel.TabIndex = 18;
-            this.inventorySizeLabel.Text = "Inventory Size";
-            this.inventorySizeLabel.Click += new System.EventHandler(this.Label1_Click);
-            // 
-            // invetorySizeTextBox
-            // 
-            this.invetorySizeTextBox.Location = new System.Drawing.Point(12, 228);
-            this.invetorySizeTextBox.Name = "invetorySizeTextBox";
-            this.invetorySizeTextBox.Size = new System.Drawing.Size(181, 22);
-            this.invetorySizeTextBox.TabIndex = 0;
             // 
             // statusStrip1
             // 
@@ -275,9 +256,9 @@ namespace KoARSaveItemEditor
             this.tslblFileLocal,
             this.toolStripStatusLabel3,
             this.tslblEditState});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 373);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 525);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(971, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(815, 22);
             this.statusStrip1.SizingGrip = false;
             this.statusStrip1.TabIndex = 6;
             this.statusStrip1.Text = "statusStrip1";
@@ -310,26 +291,26 @@ namespace KoARSaveItemEditor
             this.tslblEditState.Text = "Unmodified";
             this.tslblEditState.Click += new System.EventHandler(this.TslblEditState_Click);
             // 
-            // txtCurrentDur
+            // txtFilterCurrentDur
             // 
-            this.txtCurrentDur.Location = new System.Drawing.Point(74, 21);
-            this.txtCurrentDur.Name = "txtCurrentDur";
-            this.txtCurrentDur.Size = new System.Drawing.Size(87, 22);
-            this.txtCurrentDur.TabIndex = 9;
-            this.txtCurrentDur.TextChanged += new System.EventHandler(this.TxtCurrentDur_TextChanged);
+            this.txtFilterCurrentDur.Location = new System.Drawing.Point(58, 21);
+            this.txtFilterCurrentDur.Name = "txtFilterCurrentDur";
+            this.txtFilterCurrentDur.Size = new System.Drawing.Size(87, 22);
+            this.txtFilterCurrentDur.TabIndex = 9;
+            this.txtFilterCurrentDur.TextChanged += new System.EventHandler(this.TxtCurrentDur_TextChanged);
             // 
-            // txtMaxDur
+            // txtFilterMaxDur
             // 
-            this.txtMaxDur.Location = new System.Drawing.Point(75, 49);
-            this.txtMaxDur.Name = "txtMaxDur";
-            this.txtMaxDur.Size = new System.Drawing.Size(86, 22);
-            this.txtMaxDur.TabIndex = 10;
-            this.txtMaxDur.TextChanged += new System.EventHandler(this.TxtMaxDur_TextChanged);
+            this.txtFilterMaxDur.Location = new System.Drawing.Point(213, 21);
+            this.txtFilterMaxDur.Name = "txtFilterMaxDur";
+            this.txtFilterMaxDur.Size = new System.Drawing.Size(86, 22);
+            this.txtFilterMaxDur.TabIndex = 10;
+            this.txtFilterMaxDur.TextChanged += new System.EventHandler(this.TxtMaxDur_TextChanged);
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(22, 24);
+            this.label5.Location = new System.Drawing.Point(6, 24);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(46, 13);
             this.label5.TabIndex = 11;
@@ -339,7 +320,7 @@ namespace KoARSaveItemEditor
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(13, 52);
+            this.label6.Location = new System.Drawing.Point(151, 24);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(56, 13);
             this.label6.TabIndex = 12;
@@ -350,10 +331,11 @@ namespace KoARSaveItemEditor
             // filterGroupBox
             // 
             this.filterGroupBox.Controls.Add(this.durabilityGroupBox);
+            this.filterGroupBox.Controls.Add(this.btnSearchAll);
             this.filterGroupBox.Controls.Add(this.nameGroupBox);
             this.filterGroupBox.Location = new System.Drawing.Point(12, 27);
             this.filterGroupBox.Name = "filterGroupBox";
-            this.filterGroupBox.Size = new System.Drawing.Size(181, 159);
+            this.filterGroupBox.Size = new System.Drawing.Size(560, 78);
             this.filterGroupBox.TabIndex = 14;
             this.filterGroupBox.TabStop = false;
             this.filterGroupBox.Text = "Filters";
@@ -361,20 +343,20 @@ namespace KoARSaveItemEditor
             // 
             // durabilityGroupBox
             // 
-            this.durabilityGroupBox.Controls.Add(this.txtCurrentDur);
+            this.durabilityGroupBox.Controls.Add(this.txtFilterCurrentDur);
             this.durabilityGroupBox.Controls.Add(this.label5);
             this.durabilityGroupBox.Controls.Add(this.label6);
-            this.durabilityGroupBox.Controls.Add(this.txtMaxDur);
-            this.durabilityGroupBox.Location = new System.Drawing.Point(7, 76);
+            this.durabilityGroupBox.Controls.Add(this.txtFilterMaxDur);
+            this.durabilityGroupBox.Location = new System.Drawing.Point(180, 21);
             this.durabilityGroupBox.Name = "durabilityGroupBox";
-            this.durabilityGroupBox.Size = new System.Drawing.Size(167, 77);
+            this.durabilityGroupBox.Size = new System.Drawing.Size(305, 49);
             this.durabilityGroupBox.TabIndex = 4;
             this.durabilityGroupBox.TabStop = false;
             this.durabilityGroupBox.Text = "Durability";
             // 
             // nameGroupBox
             // 
-            this.nameGroupBox.Controls.Add(this.txtSearch);
+            this.nameGroupBox.Controls.Add(this.txtFilterItemName);
             this.nameGroupBox.Location = new System.Drawing.Point(6, 21);
             this.nameGroupBox.Name = "nameGroupBox";
             this.nameGroupBox.Size = new System.Drawing.Size(168, 49);
@@ -386,39 +368,144 @@ namespace KoARSaveItemEditor
             // 
             this.propertiesGroupBox.Controls.Add(this.groupBoxPropAttributes);
             this.propertiesGroupBox.Controls.Add(this.groupBoxPropDurability);
+            this.propertiesGroupBox.Controls.Add(this.btnDelete);
+            this.propertiesGroupBox.Controls.Add(this.btnSave);
+            this.propertiesGroupBox.Controls.Add(this.btnPrint);
             this.propertiesGroupBox.Controls.Add(this.groupBoxPropName);
-            this.propertiesGroupBox.Location = new System.Drawing.Point(765, 27);
+            this.propertiesGroupBox.Location = new System.Drawing.Point(578, 111);
             this.propertiesGroupBox.Name = "propertiesGroupBox";
-            this.propertiesGroupBox.Size = new System.Drawing.Size(180, 339);
+            this.propertiesGroupBox.Size = new System.Drawing.Size(229, 409);
             this.propertiesGroupBox.TabIndex = 19;
             this.propertiesGroupBox.TabStop = false;
             this.propertiesGroupBox.Text = "Properties";
             // 
             // groupBoxPropAttributes
             // 
-            this.groupBoxPropAttributes.Controls.Add(this.comboAttList);
+            this.groupBoxPropAttributes.Controls.Add(this.groupBoxAddAttribute);
+            this.groupBoxPropAttributes.Controls.Add(this.groupBoxPropExistingAttributes);
             this.groupBoxPropAttributes.Controls.Add(this.txtPropAttCount);
             this.groupBoxPropAttributes.Controls.Add(this.label3);
-            this.groupBoxPropAttributes.Location = new System.Drawing.Point(7, 156);
+            this.groupBoxPropAttributes.Location = new System.Drawing.Point(7, 173);
             this.groupBoxPropAttributes.Name = "groupBoxPropAttributes";
-            this.groupBoxPropAttributes.Size = new System.Drawing.Size(167, 177);
+            this.groupBoxPropAttributes.Size = new System.Drawing.Size(216, 200);
             this.groupBoxPropAttributes.TabIndex = 6;
             this.groupBoxPropAttributes.TabStop = false;
             this.groupBoxPropAttributes.Text = "Attributes";
+            // 
+            // groupBoxAddAttribute
+            // 
+            this.groupBoxAddAttribute.Controls.Add(this.label7);
+            this.groupBoxAddAttribute.Controls.Add(this.txtPropAddAttributeHexCode);
+            this.groupBoxAddAttribute.Controls.Add(this.comboAddAttList);
+            this.groupBoxAddAttribute.Controls.Add(this.buttonPropAddAttribute);
+            this.groupBoxAddAttribute.Location = new System.Drawing.Point(6, 121);
+            this.groupBoxAddAttribute.Name = "groupBoxAddAttribute";
+            this.groupBoxAddAttribute.Size = new System.Drawing.Size(204, 74);
+            this.groupBoxAddAttribute.TabIndex = 24;
+            this.groupBoxAddAttribute.TabStop = false;
+            this.groupBoxAddAttribute.Text = "Add Attribute/s";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(6, 53);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(56, 13);
+            this.label7.TabIndex = 23;
+            this.label7.Text = "Hex Code";
+            // 
+            // txtPropAddAttributeHexCode
+            // 
+            this.txtPropAddAttributeHexCode.Location = new System.Drawing.Point(68, 48);
+            this.txtPropAddAttributeHexCode.Name = "txtPropAddAttributeHexCode";
+            this.txtPropAddAttributeHexCode.Size = new System.Drawing.Size(49, 22);
+            this.txtPropAddAttributeHexCode.TabIndex = 22;
+            this.txtPropAddAttributeHexCode.TextChanged += new System.EventHandler(this.TxtPropAddAttributeHexCode_TextChanged);
+            // 
+            // comboAddAttList
+            // 
+            this.comboAddAttList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboAddAttList.DropDownWidth = 500;
+            this.comboAddAttList.FormattingEnabled = true;
+            this.comboAddAttList.Location = new System.Drawing.Point(6, 21);
+            this.comboAddAttList.Name = "comboAddAttList";
+            this.comboAddAttList.Size = new System.Drawing.Size(192, 21);
+            this.comboAddAttList.TabIndex = 20;
+            // 
+            // buttonPropAddAttribute
+            // 
+            this.buttonPropAddAttribute.Location = new System.Drawing.Point(123, 48);
+            this.buttonPropAddAttribute.Name = "buttonPropAddAttribute";
+            this.buttonPropAddAttribute.Size = new System.Drawing.Size(75, 22);
+            this.buttonPropAddAttribute.TabIndex = 21;
+            this.buttonPropAddAttribute.Text = "Add";
+            this.buttonPropAddAttribute.UseVisualStyleBackColor = true;
+            this.buttonPropAddAttribute.Click += new System.EventHandler(this.ButtonPropAddAttribute_Click);
+            // 
+            // groupBoxPropExistingAttributes
+            // 
+            this.groupBoxPropExistingAttributes.Controls.Add(this.label4);
+            this.groupBoxPropExistingAttributes.Controls.Add(this.txtPropSelectedAttributeHexCode);
+            this.groupBoxPropExistingAttributes.Controls.Add(this.comboExistingAttList);
+            this.groupBoxPropExistingAttributes.Controls.Add(this.buttonPropDeleteAttribute);
+            this.groupBoxPropExistingAttributes.Location = new System.Drawing.Point(6, 41);
+            this.groupBoxPropExistingAttributes.Name = "groupBoxPropExistingAttributes";
+            this.groupBoxPropExistingAttributes.Size = new System.Drawing.Size(204, 74);
+            this.groupBoxPropExistingAttributes.TabIndex = 22;
+            this.groupBoxPropExistingAttributes.TabStop = false;
+            this.groupBoxPropExistingAttributes.Text = "Existing Attributes";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 53);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(56, 13);
+            this.label4.TabIndex = 23;
+            this.label4.Text = "Hex Code";
+            // 
+            // txtPropSelectedAttributeHexCode
+            // 
+            this.txtPropSelectedAttributeHexCode.Location = new System.Drawing.Point(68, 48);
+            this.txtPropSelectedAttributeHexCode.Name = "txtPropSelectedAttributeHexCode";
+            this.txtPropSelectedAttributeHexCode.ReadOnly = true;
+            this.txtPropSelectedAttributeHexCode.Size = new System.Drawing.Size(49, 22);
+            this.txtPropSelectedAttributeHexCode.TabIndex = 22;
+            // 
+            // comboExistingAttList
+            // 
+            this.comboExistingAttList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboExistingAttList.DropDownWidth = 500;
+            this.comboExistingAttList.FormattingEnabled = true;
+            this.comboExistingAttList.Location = new System.Drawing.Point(6, 21);
+            this.comboExistingAttList.Name = "comboExistingAttList";
+            this.comboExistingAttList.Size = new System.Drawing.Size(192, 21);
+            this.comboExistingAttList.TabIndex = 20;
+            this.comboExistingAttList.SelectedIndexChanged += new System.EventHandler(this.ComboAttList_SelectedIndexChanged);
+            // 
+            // buttonPropDeleteAttribute
+            // 
+            this.buttonPropDeleteAttribute.Location = new System.Drawing.Point(123, 48);
+            this.buttonPropDeleteAttribute.Name = "buttonPropDeleteAttribute";
+            this.buttonPropDeleteAttribute.Size = new System.Drawing.Size(75, 22);
+            this.buttonPropDeleteAttribute.TabIndex = 21;
+            this.buttonPropDeleteAttribute.Text = "Delete";
+            this.buttonPropDeleteAttribute.UseVisualStyleBackColor = true;
+            this.buttonPropDeleteAttribute.Click += new System.EventHandler(this.ButtonPropDeleteAttribute_Click);
             // 
             // txtPropAttCount
             // 
             this.txtPropAttCount.Cursor = System.Windows.Forms.Cursors.No;
             this.txtPropAttCount.Enabled = false;
-            this.txtPropAttCount.Location = new System.Drawing.Point(105, 15);
+            this.txtPropAttCount.Location = new System.Drawing.Point(105, 13);
             this.txtPropAttCount.Name = "txtPropAttCount";
-            this.txtPropAttCount.Size = new System.Drawing.Size(56, 22);
+            this.txtPropAttCount.Size = new System.Drawing.Size(105, 22);
             this.txtPropAttCount.TabIndex = 14;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 20);
+            this.label3.Location = new System.Drawing.Point(6, 18);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(93, 13);
             this.label3.TabIndex = 13;
@@ -431,9 +518,9 @@ namespace KoARSaveItemEditor
             this.groupBoxPropDurability.Controls.Add(this.label1);
             this.groupBoxPropDurability.Controls.Add(this.txtPropMaxDur);
             this.groupBoxPropDurability.Controls.Add(this.label2);
-            this.groupBoxPropDurability.Location = new System.Drawing.Point(7, 77);
+            this.groupBoxPropDurability.Location = new System.Drawing.Point(7, 95);
             this.groupBoxPropDurability.Name = "groupBoxPropDurability";
-            this.groupBoxPropDurability.Size = new System.Drawing.Size(167, 72);
+            this.groupBoxPropDurability.Size = new System.Drawing.Size(216, 72);
             this.groupBoxPropDurability.TabIndex = 5;
             this.groupBoxPropDurability.TabStop = false;
             this.groupBoxPropDurability.Text = "Durability";
@@ -442,7 +529,7 @@ namespace KoARSaveItemEditor
             // 
             this.txtPropCurrDur.Location = new System.Drawing.Point(73, 15);
             this.txtPropCurrDur.Name = "txtPropCurrDur";
-            this.txtPropCurrDur.Size = new System.Drawing.Size(88, 22);
+            this.txtPropCurrDur.Size = new System.Drawing.Size(137, 22);
             this.txtPropCurrDur.TabIndex = 13;
             // 
             // label1
@@ -459,7 +546,7 @@ namespace KoARSaveItemEditor
             // 
             this.txtPropMaxDur.Location = new System.Drawing.Point(74, 43);
             this.txtPropMaxDur.Name = "txtPropMaxDur";
-            this.txtPropMaxDur.Size = new System.Drawing.Size(87, 22);
+            this.txtPropMaxDur.Size = new System.Drawing.Size(136, 22);
             this.txtPropMaxDur.TabIndex = 14;
             // 
             // label2
@@ -474,10 +561,11 @@ namespace KoARSaveItemEditor
             // 
             // groupBoxPropName
             // 
+            this.groupBoxPropName.Controls.Add(this.checkBoxUnlockName);
             this.groupBoxPropName.Controls.Add(this.txtPropName);
-            this.groupBoxPropName.Location = new System.Drawing.Point(6, 21);
+            this.groupBoxPropName.Location = new System.Drawing.Point(7, 21);
             this.groupBoxPropName.Name = "groupBoxPropName";
-            this.groupBoxPropName.Size = new System.Drawing.Size(168, 49);
+            this.groupBoxPropName.Size = new System.Drawing.Size(216, 68);
             this.groupBoxPropName.TabIndex = 4;
             this.groupBoxPropName.TabStop = false;
             this.groupBoxPropName.Text = "Name";
@@ -486,28 +574,72 @@ namespace KoARSaveItemEditor
             // 
             this.txtPropName.Location = new System.Drawing.Point(6, 21);
             this.txtPropName.Name = "txtPropName";
-            this.txtPropName.Size = new System.Drawing.Size(156, 22);
+            this.txtPropName.ReadOnly = true;
+            this.txtPropName.Size = new System.Drawing.Size(204, 22);
             this.txtPropName.TabIndex = 2;
             // 
-            // comboAttList
+            // invSizeGroupBox
             // 
-            this.comboAttList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboAttList.DropDownWidth = 500;
-            this.comboAttList.FormattingEnabled = true;
-            this.comboAttList.Location = new System.Drawing.Point(9, 43);
-            this.comboAttList.Name = "comboAttList";
-            this.comboAttList.Size = new System.Drawing.Size(152, 21);
-            this.comboAttList.TabIndex = 20;
+            this.invSizeGroupBox.Controls.Add(this.numericUpDown1);
+            this.invSizeGroupBox.Controls.Add(this.buttonInvSizeLocate);
+            this.invSizeGroupBox.Controls.Add(this.label8);
+            this.invSizeGroupBox.Location = new System.Drawing.Point(578, 27);
+            this.invSizeGroupBox.Name = "invSizeGroupBox";
+            this.invSizeGroupBox.Size = new System.Drawing.Size(229, 78);
+            this.invSizeGroupBox.TabIndex = 20;
+            this.invSizeGroupBox.TabStop = false;
+            this.invSizeGroupBox.Text = "Inventory Size";
+            // 
+            // checkBoxUnlockName
+            // 
+            this.checkBoxUnlockName.AutoSize = true;
+            this.checkBoxUnlockName.Location = new System.Drawing.Point(6, 49);
+            this.checkBoxUnlockName.Name = "checkBoxUnlockName";
+            this.checkBoxUnlockName.Size = new System.Drawing.Size(178, 17);
+            this.checkBoxUnlockName.TabIndex = 3;
+            this.checkBoxUnlockName.Text = "Unlock (only if not Unknown)";
+            this.checkBoxUnlockName.UseVisualStyleBackColor = true;
+            this.checkBoxUnlockName.CheckedChanged += new System.EventHandler(this.CheckBoxUnlockName_CheckedChanged);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(6, 26);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(77, 13);
+            this.label8.TabIndex = 16;
+            this.label8.Text = "Enter current:";
+            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // buttonInvSizeLocate
+            // 
+            this.buttonInvSizeLocate.Location = new System.Drawing.Point(171, 21);
+            this.buttonInvSizeLocate.Name = "buttonInvSizeLocate";
+            this.buttonInvSizeLocate.Size = new System.Drawing.Size(52, 22);
+            this.buttonInvSizeLocate.TabIndex = 24;
+            this.buttonInvSizeLocate.Text = "Locate";
+            this.buttonInvSizeLocate.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(89, 21);
+            this.numericUpDown1.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(76, 22);
+            this.numericUpDown1.TabIndex = 25;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(971, 395);
+            this.ClientSize = new System.Drawing.Size(815, 547);
+            this.Controls.Add(this.invSizeGroupBox);
             this.Controls.Add(this.propertiesGroupBox);
             this.Controls.Add(this.filterGroupBox);
-            this.Controls.Add(this.invetorySizeTextBox);
-            this.Controls.Add(this.inventorySizeLabel);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.itemViewGroupBox);
             this.Controls.Add(this.menuStrip1);
@@ -534,10 +666,17 @@ namespace KoARSaveItemEditor
             this.propertiesGroupBox.ResumeLayout(false);
             this.groupBoxPropAttributes.ResumeLayout(false);
             this.groupBoxPropAttributes.PerformLayout();
+            this.groupBoxAddAttribute.ResumeLayout(false);
+            this.groupBoxAddAttribute.PerformLayout();
+            this.groupBoxPropExistingAttributes.ResumeLayout(false);
+            this.groupBoxPropExistingAttributes.PerformLayout();
             this.groupBoxPropDurability.ResumeLayout(false);
             this.groupBoxPropDurability.PerformLayout();
             this.groupBoxPropName.ResumeLayout(false);
             this.groupBoxPropName.PerformLayout();
+            this.invSizeGroupBox.ResumeLayout(false);
+            this.invSizeGroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -549,21 +688,20 @@ namespace KoARSaveItemEditor
         private System.Windows.Forms.ToolStripMenuItem tsmiFile;
         private System.Windows.Forms.ToolStripMenuItem tsmiOpen;
         private System.Windows.Forms.OpenFileDialog opfMain;
-        private System.Windows.Forms.TextBox txtSearch;
+        private System.Windows.Forms.TextBox txtFilterItemName;
         private System.Windows.Forms.GroupBox itemViewGroupBox;
         private System.Windows.Forms.ListView lvMain;
         private System.Windows.Forms.ColumnHeader id;
         private System.Windows.Forms.ColumnHeader name;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.ToolStripMenuItem tsmiHelp;
-        private System.Windows.Forms.Button btnEdit;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripStatusLabel tslblFileLocal;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
         private System.Windows.Forms.ToolStripStatusLabel tslblEditState;
-        private System.Windows.Forms.TextBox txtCurrentDur;
-        private System.Windows.Forms.TextBox txtMaxDur;
+        private System.Windows.Forms.TextBox txtFilterCurrentDur;
+        private System.Windows.Forms.TextBox txtFilterMaxDur;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button btnSearchAll;
@@ -575,8 +713,6 @@ namespace KoARSaveItemEditor
         private System.Windows.Forms.GroupBox filterGroupBox;
         private System.Windows.Forms.GroupBox nameGroupBox;
         private System.Windows.Forms.GroupBox durabilityGroupBox;
-        private System.Windows.Forms.TextBox invetorySizeTextBox;
-        private System.Windows.Forms.Label inventorySizeLabel;
         private GroupBox propertiesGroupBox;
         private GroupBox groupBoxPropName;
         private TextBox txtPropName;
@@ -588,7 +724,21 @@ namespace KoARSaveItemEditor
         private GroupBox groupBoxPropAttributes;
         private Label label3;
         private TextBox txtPropAttCount;
-        private ComboBox comboAttList;
+        private ComboBox comboExistingAttList;
+        private GroupBox invSizeGroupBox;
+        private Button buttonPropDeleteAttribute;
+        private GroupBox groupBoxPropExistingAttributes;
+        private TextBox txtPropSelectedAttributeHexCode;
+        private Label label4;
+        private GroupBox groupBoxAddAttribute;
+        private Label label7;
+        private TextBox txtPropAddAttributeHexCode;
+        private ComboBox comboAddAttList;
+        private Button buttonPropAddAttribute;
+        private CheckBox checkBoxUnlockName;
+        private Button buttonInvSizeLocate;
+        private Label label8;
+        private NumericUpDown numericUpDown1;
     }
 }
 

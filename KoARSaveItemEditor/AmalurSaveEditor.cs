@@ -12,7 +12,7 @@ namespace KoARSaveItemEditor
         /// <summary>
         /// The head of the equipment, property and indicate the number of attributes of the data relative to equipment data head offset
         /// </summary>
-        public static int WeaponAttHeadOffSet = 21;
+        public static int ItemAttHeadOffSet = 21;
         public static int InventoryCapacityOffset = 51;
         private ByteEditor br = null;
 
@@ -91,14 +91,14 @@ namespace KoARSaveItemEditor
         /// <param name="weaponInfo">Equipment Object</param>
         /// <param name="attInfoList">Description of Properties</param>
         /// <returns>List of Attributes</returns>
-        public List<AttributeMemoryInfo> GetAttList(WeaponMemoryInfo weaponInfo, List<AttributeInfo> attInfoList)
+        public List<AttributeMemoryInfo> GetAttList(ItemMemoryInfo weaponInfo, List<AttributeInfo> attInfoList)
         {
             if (br.BtList == null)
             {
                 throw new Exception("Save file not open.");
             }
 
-            List<AttributeMemoryInfo> attList = weaponInfo.WeaponAttList;
+            List<AttributeMemoryInfo> attList = weaponInfo.ItemAttList;
             foreach(AttributeMemoryInfo attInfo in attList)
             {
                 String text = "";
@@ -123,7 +123,7 @@ namespace KoARSaveItemEditor
         /// </summary>
         /// <param name="weapon">Equipment Object</param>
         /// <returns></returns>
-        public bool IsWeapon(WeaponMemoryInfo weapon)
+        public bool IsWeapon(ItemMemoryInfo weapon)
         {
             if (br.BtList == null)
             {
@@ -142,7 +142,7 @@ namespace KoARSaveItemEditor
             bytes[8] = 3;
             try
             {
-                return br.HasBytesByIndexAndLength(bytes, weapon.WeaponIndex+4, 17);
+                return br.HasBytesByIndexAndLength(bytes, weapon.ItemIndex+4, 17);
             }
             catch
             {
@@ -154,14 +154,14 @@ namespace KoARSaveItemEditor
         /// Get all Equipment
         /// </summary>
         /// <returns></returns>
-        public List<WeaponMemoryInfo> GetAllWeapon()
+        public List<ItemMemoryInfo> GetAllWeapon()
         {
             if (br.BtList == null)
             {
                 throw new Exception("Save file not open.");
             }
 
-            List<WeaponMemoryInfo> weaponList = new List<WeaponMemoryInfo>();
+            List<ItemMemoryInfo> weaponList = new List<ItemMemoryInfo>();
 
             byte[] bytes = new byte[9];
             bytes[0] = 11;
@@ -190,12 +190,12 @@ namespace KoARSaveItemEditor
                     }
                 }
 
-                WeaponMemoryInfo weapon = new WeaponMemoryInfo();
-                weapon.WeaponIndex = indexList[i];
+                ItemMemoryInfo weapon = new ItemMemoryInfo();
+                weapon.ItemIndex = indexList[i];
                 if (i != indexList.Count - 1)
                 {
-                    weapon.NextWeaponIndex = indexList[i + 1];
-                    weapon.WeaponBytes = br.GetBytesByIndexAndLength(indexList[i], indexList[i + 1] - indexList[i]);
+                    weapon.NextItemIndex = indexList[i + 1];
+                    weapon.ItemBytes = br.GetBytesByIndexAndLength(indexList[i], indexList[i + 1] - indexList[i]);
 
                     if (weapon.CurrentDurability != 100 && weapon.MaxDurability != -1 && weapon.MaxDurability != 100 && weapon.CurrentDurability != 0 && weapon.MaxDurability != 0)
                     {
@@ -208,7 +208,7 @@ namespace KoARSaveItemEditor
                 }
                 else
                 {
-                    int attHeadIndex = weapon.WeaponIndex + AmalurSaveEditor.WeaponAttHeadOffSet;
+                    int attHeadIndex = weapon.ItemIndex + AmalurSaveEditor.ItemAttHeadOffSet;
                     int attCount = BitConverter.ToInt32(br.BtList,attHeadIndex);
                     int endIndex = 0;
                     if (br.BtList[attHeadIndex + 22 + attCount * 8] != 1)
@@ -221,7 +221,7 @@ namespace KoARSaveItemEditor
                         nameLength = BitConverter.ToInt32(br.BtList, attHeadIndex + 22 + attCount * 8 + 1);
                         endIndex = attHeadIndex + 22 + attCount * 8 + nameLength + 4;
                     }
-                    weapon.WeaponBytes = br.GetBytesByIndexAndLength(weapon.WeaponIndex, endIndex - weapon.WeaponIndex+1);
+                    weapon.ItemBytes = br.GetBytesByIndexAndLength(weapon.ItemIndex, endIndex - weapon.ItemIndex+1);
                     if (weapon.CurrentDurability != 100 && weapon.MaxDurability != -1 && weapon.MaxDurability != 100 && weapon.CurrentDurability != 0 && weapon.MaxDurability != 0)
                     {
                         weaponList.Add(weapon);
@@ -240,14 +240,14 @@ namespace KoARSaveItemEditor
         /// Delete Equipment
         /// </summary>
         /// <param name="weapon"></param>
-        public void DeleteWeapon(WeaponMemoryInfo weapon)
+        public void DeleteWeapon(ItemMemoryInfo weapon)
         {
             if (br.BtList == null)
             {
                 throw new Exception("Save file not open.");
             }
 
-            weapon.WeaponBytes = new byte[] {0,0,0,0 };
+            weapon.ItemBytes = new byte[] {0,0,0,0 };
             WriteWeaponByte(weapon);
         }
 
@@ -255,15 +255,15 @@ namespace KoARSaveItemEditor
         /// Saveing Equipment
         /// </summary>
         /// <param name="weapon">Written Equipment</param>
-        public void WriteWeaponByte(WeaponMemoryInfo weapon)
+        public void WriteWeaponByte(ItemMemoryInfo weapon)
         {
             if (br.BtList == null)
             {
                 throw new Exception("Save file not open.");
             }
 
-            br.DeleteIntsByStartAndEnd(weapon.WeaponIndex, weapon.NextWeaponIndex - 1);
-            br.AddByIndex(weapon.WeaponIndex, weapon.WeaponBytes);
+            br.DeleteIntsByStartAndEnd(weapon.ItemIndex, weapon.NextItemIndex - 1);
+            br.AddByIndex(weapon.ItemIndex, weapon.ItemBytes);
         }
     }
 }

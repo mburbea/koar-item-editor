@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using System.Xml;
 using System.IO;
 using System.Linq;
+using System.Drawing;
 
 namespace KoARSaveItemEditor
 {
@@ -11,17 +12,12 @@ namespace KoARSaveItemEditor
     {
         AmalurSaveEditor editor = null;
         List<AttributeInfo> attributeList = null;
-        List<WeaponMemoryInfo> weaponList = null;
-        String searchType = "";
+        List<ItemMemoryInfo> itemList = null;
+        ItemMemoryInfo selectedItem = null;
 
         public MainForm()
         {
             InitializeComponent();
-            //lvMain.Columns[0].Width = 100;
-            //lvMain.Columns[1].Width = 100;
-            //lvMain.Columns[2].Width = -2;
-            //lvMain.Columns[3].Width = -2;
-            //lvMain.Columns[4].Width = -2;
         }
 
         private void LoadSaveFile(object sender, EventArgs e)
@@ -33,20 +29,29 @@ namespace KoARSaveItemEditor
                 editor = new AmalurSaveEditor();
                 editor.ReadFile(fileName);
                 tslblFileLocal.Text = fileName;
-                invetorySizeTextBox.Text = editor.GetMaxBagCount().ToString();
+                //inventorySizeTextBox.Text = editor.GetMaxBagCount().ToString();
                 btnSearchAll.PerformClick();
             }
         }
 
+        private void ResetFilterFields()
+        {
+            this.txtFilterItemName.Clear();
+            this.txtFilterCurrentDur.Clear();
+            this.txtFilterMaxDur.Clear();
+
+            this.lvMain.SelectedItems.Clear();
+        }
+
         private void RefreshListOnFilterUpdate()
         {
-            String itemName = txtSearch.Text != "" ? txtSearch.Text.ToUpper() : "";
-            float currDur = Single.TryParse(txtCurrentDur.Text, out currDur) ? currDur : 0;
-            float maxDur = Single.TryParse(txtMaxDur.Text, out maxDur) ? maxDur : 0;
+            String itemName = txtFilterItemName.Text != "" ? txtFilterItemName.Text.ToUpper() : "";
+            float currDur = Single.TryParse(txtFilterCurrentDur.Text, out currDur) ? currDur : 0;
+            float maxDur = Single.TryParse(txtFilterMaxDur.Text, out maxDur) ? maxDur : 0;
 
-            var query = from w in weaponList select w;
+            var query = from w in itemList select w;
             if (itemName != "")
-                query = query.Where(w => w.WeaponName.ToUpper().Contains(itemName));
+                query = query.Where(w => w.ItemName.ToUpper().Contains(itemName));
             if (currDur > 0)
                 query = query.Where(w => w.CurrentDurability == currDur);
             if (maxDur > 0)
@@ -56,9 +61,9 @@ namespace KoARSaveItemEditor
             foreach (var element in query)
             {
                 ListViewItem item = new ListViewItem();
-                item.Name = element.WeaponIndex.ToString();
-                item.Text = element.WeaponIndex.ToString();
-                item.SubItems.Add(element.WeaponName);
+                item.Name = element.ItemIndex.ToString();
+                item.Text = element.ItemIndex.ToString();
+                item.SubItems.Add(element.ItemName);
                 item.SubItems.Add(element.CurrentDurability.ToString());
                 item.SubItems.Add(element.MaxDurability.ToString());
                 item.SubItems.Add(element.AttCount.ToString());
@@ -69,22 +74,52 @@ namespace KoARSaveItemEditor
             lvMain.SelectedItems.Clear();
         }
 
-        private void LoadItemPropertiesOnClick()
+        private void LoadItemAttributesOnClick()
         {
-            WeaponMemoryInfo weaponInfo = (WeaponMemoryInfo)lvMain.SelectedItems[0].Tag;
-            List<AttributeMemoryInfo> attList = editor.GetAttList(weaponInfo, this.attributeList);
+            ItemMemoryInfo itemInfo = (ItemMemoryInfo)lvMain.SelectedItems[0].Tag;
+            List<AttributeMemoryInfo> itemAttList = editor.GetAttList(itemInfo, this.attributeList);
+            this.selectedItem = itemInfo;
 
-            this.txtPropName.Text = weaponInfo.WeaponName;
-            this.txtPropCurrDur.Text = weaponInfo.CurrentDurability.ToString();
-            this.txtPropMaxDur.Text = weaponInfo.MaxDurability.ToString();
-            this.txtPropAttCount.Text = weaponInfo.AttCount.ToString();
+            this.txtPropName.Text = itemInfo.ItemName;
+            this.txtPropCurrDur.Text = itemInfo.CurrentDurability.ToString();
+            this.txtPropMaxDur.Text = itemInfo.MaxDurability.ToString();
+            this.txtPropAttCount.Text = itemInfo.AttCount.ToString();
 
-            this.comboAttList.DisplayMember = "Detail";
-            this.comboAttList.DataSource = attList;
+            this.comboExistingAttList.DisplayMember = "Detail";
+            this.comboExistingAttList.DataSource = itemAttList;
+
+            this.comboAddAttList.DisplayMember = "AttributeText";
+            this.comboAddAttList.ValueMember = "AttributeId";
+            this.comboAddAttList.DataSource = this.attributeList;
+        }
+
+        private void DeleteItemAttribute()
+        {
+            ItemMemoryInfo itemInfo = (ItemMemoryInfo)lvMain.SelectedItems[0].Tag;
+            List<AttributeMemoryInfo> itemAttList = itemInfo.ItemAttList;
+            AttributeMemoryInfo selectedAttribute = (AttributeMemoryInfo) comboExistingAttList.SelectedItem;
+
+            foreach (AttributeMemoryInfo att in itemAttList)
+            {
+                if (att.Code.ToUpper() == selectedAttribute.Code.ToUpper())
+                {
+                    itemAttList.Remove(att);
+                    break;
+                }
+            }
+
+            itemInfo.ItemAttList = itemAttList;
+            this.txtPropAttCount.Text = itemAttList.Count.ToString();
+            if (itemAttList.Count <= 0)
+            {
+                this.txtPropSelectedAttributeHexCode.Text = "";
+            }
+            LoadItemAttributesOnClick();
         }
 
         private void BtnShowAll_Click(object sender, EventArgs e)
         {
+            ResetFilterFields();
             lvMain.Items.Clear();
             if (editor == null)
             {
@@ -93,26 +128,26 @@ namespace KoARSaveItemEditor
             }
             else
             {
-                List<WeaponMemoryInfo> weaponTemp = editor.GetAllWeapon();
+                List<ItemMemoryInfo> weaponTemp = editor.GetAllWeapon();
 
-                weaponList = new List<WeaponMemoryInfo>();
-                foreach (WeaponMemoryInfo w in weaponTemp)
+                itemList = new List<ItemMemoryInfo>();
+                foreach (ItemMemoryInfo w in weaponTemp)
                 {
-                    if (w.WeaponName == "Unknown")
+                    if (w.ItemName == "Unknown")
                     {
-                        weaponList.Add(w);
+                        itemList.Add(w);
                     }
                     else
                     {
-                        weaponList.Insert(0, w);
+                        itemList.Insert(0, w);
                     }
                 }
-                foreach (WeaponMemoryInfo w in weaponList)
+                foreach (ItemMemoryInfo w in itemList)
                 {
                     ListViewItem item = new ListViewItem();
-                    item.Name = w.WeaponIndex.ToString();
-                    item.Text = w.WeaponIndex.ToString();
-                    item.SubItems.Add(w.WeaponName);
+                    item.Name = w.ItemIndex.ToString();
+                    item.Text = w.ItemIndex.ToString();
+                    item.SubItems.Add(w.ItemName);
                     item.SubItems.Add(w.CurrentDurability.ToString());
                     item.SubItems.Add(w.MaxDurability.ToString());
                     item.SubItems.Add(w.AttCount.ToString());
@@ -120,13 +155,13 @@ namespace KoARSaveItemEditor
                     lvMain.Items.Add(item);
                 }
                 btnPrint.Enabled = false;
-                btnEdit.Enabled = false;
                 btnDelete.Enabled = false;
                 btnSave.Enabled = false;
-                txtSearch.Text = "";
-                txtMaxDur.Text = "";
-                txtCurrentDur.Text = "";
+                txtFilterItemName.Text = "";
+                txtFilterMaxDur.Text = "";
+                txtFilterCurrentDur.Text = "";
                 lvMain.SelectedItems.Clear();
+                this.selectedItem = null;
             }
         }
 
@@ -154,7 +189,7 @@ namespace KoARSaveItemEditor
             }
         }
 
-        private void LoadItemAttributes(WeaponMemoryInfo itemInfo)
+        private void LoadItemAttributes(ItemMemoryInfo itemInfo)
         {
             List<AttributeMemoryInfo> attList = editor.GetAttList(itemInfo, this.attributeList);
             List<AttributeMemoryInfo> temp = new List<AttributeMemoryInfo>();
@@ -175,15 +210,15 @@ namespace KoARSaveItemEditor
                     temp.Add(att);
                 }
             }
-            comboAttList.DataSource = null;
-            comboAttList.DataSource = temp;
+            comboExistingAttList.DataSource = null;
+            comboExistingAttList.DataSource = temp;
         }
 
         private void lvMain_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (lvMain.SelectedItems.Count > 0)
             {
-                LoadItemPropertiesOnClick();
+                LoadItemAttributesOnClick();
             }            
         }
 
@@ -216,9 +251,9 @@ namespace KoARSaveItemEditor
 
         private void BtnEdit_Click(object sender, EventArgs e)
         {
-            WeaponMemoryInfo weaponInfo = (WeaponMemoryInfo)lvMain.SelectedItems[0].Tag;
+            ItemMemoryInfo weaponInfo = (ItemMemoryInfo)lvMain.SelectedItems[0].Tag;
 
-            //EditForm form = new EditForm(editor, attributeList, weaponInfo);
+            //EditForm form = new EditForm(editor, attributeList, itemInfo);
             //btnPrint.Enabled = false;
             //btnEdit.Enabled = false;
             //btnDelete.Enabled = false;
@@ -233,23 +268,14 @@ namespace KoARSaveItemEditor
         {
             if (MessageBox.Show("Removing equipment forcefully may lead to bugs. Removing equipped items will lead to an invalid save. It is recommended not to use this feature.\n\nAre you sure you want to delete this item?", "Message", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
             {
-                WeaponMemoryInfo weaponInfo = (WeaponMemoryInfo)lvMain.SelectedItems[0].Tag;
+                ItemMemoryInfo weaponInfo = (ItemMemoryInfo)lvMain.SelectedItems[0].Tag;
                 editor.DeleteWeapon(weaponInfo);
-                CanSave();
             }
         }
 
         private void CanSave()
         {
             btnSearchAll.PerformClick();
-            if (searchType == "name")
-            {
-
-            }
-            else if (searchType == "dur")
-            {
-
-            }
             tslblEditState.Text = "Modified";
             btnSave.Enabled = true;
         }
@@ -257,9 +283,8 @@ namespace KoARSaveItemEditor
         private void BtnPrint_Click(object sender, EventArgs e)
         {
             btnPrint.Enabled = false;
-            btnEdit.Enabled = false;
             btnDelete.Enabled = false;
-            WeaponBytesForm form = new WeaponBytesForm(editor,lvMain.SelectedItems[0].Tag as WeaponMemoryInfo);
+            ItemBytesForm form = new ItemBytesForm(editor,lvMain.SelectedItems[0].Tag as ItemMemoryInfo);
             if (form.ShowDialog() == DialogResult.Yes)
             {
                 CanSave();
@@ -347,6 +372,79 @@ namespace KoARSaveItemEditor
         private void Label2_Click_1(object sender, EventArgs e)
         {
 
+        }
+
+        private void ButtonPropDeleteAttribute_Click(object sender, EventArgs e)
+        {
+            DeleteItemAttribute();
+        }
+
+        private void ComboAttList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            AttributeMemoryInfo itemAttribute = (AttributeMemoryInfo)comboExistingAttList.SelectedItem;
+            this.txtPropSelectedAttributeHexCode.Text = itemAttribute.Code;
+        }
+
+        private void TxtPropAddAttributeHexCode_TextChanged(object sender, EventArgs e)
+        {
+            string hexCode = txtPropAddAttributeHexCode.Text;
+            int index = 0;
+            if (hexCode == "" || hexCode.Length != 6)
+            {
+                return;
+            }
+
+            try
+            {
+                AttributeInfo matchingAttribute = comboAddAttList.Items.Cast<AttributeInfo>().Where(x => x.AttributeId == hexCode).FirstOrDefault();
+                index = comboAddAttList.Items.IndexOf(matchingAttribute);
+            }
+            catch
+            {
+                index = 0;
+            }
+            finally
+            {
+                comboAddAttList.SelectedIndex = index;
+            }           
+        }
+
+        private void ButtonPropAddAttribute_Click(object sender, EventArgs e)
+        {
+            string hexCode = txtPropAddAttributeHexCode.Text;
+            if (hexCode == "" || hexCode.Length != 6)
+            {
+                MessageBox.Show("Invalid hex code. Attribute will not be added.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            long validCode;
+            bool isValidCode = long.TryParse(hexCode, System.Globalization.NumberStyles.HexNumber, null, out validCode);
+            if (isValidCode)
+            {
+                AddAttribute(this.selectedItem, hexCode);
+            }
+        }
+
+        private void AddAttribute(ItemMemoryInfo selectedItem, string attCode)
+        {
+            List<AttributeMemoryInfo> attList = selectedItem.ItemAttList;
+            AttributeMemoryInfo attInfo = new AttributeMemoryInfo();
+            attInfo.Code = attCode;
+            attList.Add(attInfo);
+            selectedItem.ItemAttList = attList;
+            LoadItemAttributesOnClick();
+        }
+
+        private void CheckBoxUnlockName_CheckedChanged(object sender, EventArgs e)
+        {
+            if (this.txtPropName.Text == "Unknown" && this.checkBoxUnlockName.Checked == true)
+            {
+                this.checkBoxUnlockName.Checked = false;
+                MessageBox.Show("Editing not allowed.");
+                return;
+            }
+            txtPropName.ReadOnly = !txtPropName.ReadOnly;
         }
     }
 }

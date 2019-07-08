@@ -231,6 +231,7 @@
             this.txtAttCodeInput.Name = "txtAttCodeInput";
             this.txtAttCodeInput.Size = new System.Drawing.Size(333, 20);
             this.txtAttCodeInput.TabIndex = 35;
+            this.txtAttCodeInput.TextChanged += new System.EventHandler(this.TxtAttCodeInput_TextChanged);
             // 
             // txtName
             // 
@@ -329,6 +330,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Equipment Modification (Modify unknown equipment at your own risk!)";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EditForm_FormClosing);
+            this.Load += new System.EventHandler(this.EditForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numAddByInput)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numAddBySelect)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numDelete)).EndInit();

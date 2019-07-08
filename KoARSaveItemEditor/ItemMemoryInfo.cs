@@ -6,26 +6,26 @@ namespace KoARSaveItemEditor
     /// <summary>
     /// Equipment Memory Information
     /// </summary>
-    public class WeaponMemoryInfo
+    public class ItemMemoryInfo
     {
-        private int weaponIndex;
+        private int itemIndex;
         /// <summary>
         /// Equipment head Index(XX XX XX XX 0B 00 00 00 68 D5 24 00 03)
         /// </summary>
-        public int WeaponIndex
+        public int ItemIndex
         {
-            get { return weaponIndex; }
-            set { weaponIndex = value; }
+            get { return itemIndex; }
+            set { itemIndex = value; }
         }
 
-        private int nextWeaponIndex;
+        private int nextItemIndex;
         /// <summary>
         /// Next Equipment head Index
         /// </summary>
-        public int NextWeaponIndex
+        public int NextItemIndex
         {
-            get { return nextWeaponIndex; }
-            set { nextWeaponIndex = value; }
+            get { return nextItemIndex; }
+            set { nextItemIndex = value; }
         }
 
         /// <summary>
@@ -33,52 +33,52 @@ namespace KoARSaveItemEditor
         /// </summary>
         public int AttHeadIndex
         {
-            get { return weaponIndex + AmalurSaveEditor.WeaponAttHeadOffSet; }
+            get { return itemIndex + AmalurSaveEditor.ItemAttHeadOffSet; }
         }
 
-        private byte[] weaponBytes;
+        private byte[] itemBytes;
         /// <summary>
         /// Equipment data
         /// </summary>
-        public byte[] WeaponBytes
+        public byte[] ItemBytes
         {
-            get { return weaponBytes; }
-            set { weaponBytes = value; }
+            get { return itemBytes; }
+            set { itemBytes = value; }
         }
 
         /// <summary>
         /// Equipment Name
         /// </summary>
-        public String WeaponName
+        public String ItemName
         {
             get
             {
-                if (weaponBytes[AmalurSaveEditor.WeaponAttHeadOffSet + 22 + AttCount * 8] != 1)
+                if (itemBytes[AmalurSaveEditor.ItemAttHeadOffSet + 22 + AttCount * 8] != 1)
                 {
                     return "Unknown";
                 }
                 else
                 {
-                    int count = BitConverter.ToInt32(weaponBytes,AmalurSaveEditor.WeaponAttHeadOffSet+22+AttCount*8+1);
-                    return System.Text.Encoding.Default.GetString(weaponBytes, AmalurSaveEditor.WeaponAttHeadOffSet + 27 + 8 * AttCount, count);
+                    int count = BitConverter.ToInt32(itemBytes,AmalurSaveEditor.ItemAttHeadOffSet+22+AttCount*8+1);
+                    return System.Text.Encoding.Default.GetString(itemBytes, AmalurSaveEditor.ItemAttHeadOffSet + 27 + 8 * AttCount, count);
                 }
             }
             set
             {
-                ByteManager.ByteEditor byteEditor = new ByteManager.ByteEditor(weaponBytes);
-                byteEditor.DeleteToEnd(AmalurSaveEditor.WeaponAttHeadOffSet + 22 + AttCount * 8+1);
+                ByteManager.ByteEditor byteEditor = new ByteManager.ByteEditor(itemBytes);
+                byteEditor.DeleteToEnd(AmalurSaveEditor.ItemAttHeadOffSet + 22 + AttCount * 8+1);
                 if (value.Length != 0)
                 {
-                    byteEditor.EditByIndex(AmalurSaveEditor.WeaponAttHeadOffSet + 22 + AttCount * 8, new byte[] { 1 });
+                    byteEditor.EditByIndex(AmalurSaveEditor.ItemAttHeadOffSet + 22 + AttCount * 8, new byte[] { 1 });
                     byteEditor.AddToEnd(BitConverter.GetBytes(value.Length));
                     byte[] nameList = System.Text.Encoding.Default.GetBytes(value);
                     byteEditor.AddToEnd(nameList);
                 }
                 else
                 {
-                    byteEditor.EditByIndex(AmalurSaveEditor.WeaponAttHeadOffSet + 22 + AttCount * 8, new byte[] { 0 });
+                    byteEditor.EditByIndex(AmalurSaveEditor.ItemAttHeadOffSet + 22 + AttCount * 8, new byte[] { 0 });
                 }
-                weaponBytes = byteEditor.BtList;
+                itemBytes = byteEditor.BtList;
             }
         }
 
@@ -87,7 +87,7 @@ namespace KoARSaveItemEditor
         /// </summary>
         public int AttCount
         {
-            get { return BitConverter.ToInt32(weaponBytes, AmalurSaveEditor.WeaponAttHeadOffSet); }
+            get { return BitConverter.ToInt32(itemBytes, AmalurSaveEditor.ItemAttHeadOffSet); }
         }
 
         /// <summary>
@@ -95,13 +95,13 @@ namespace KoARSaveItemEditor
         /// </summary>
         public float CurrentDurability
         {
-            get { return BitConverter.ToSingle(weaponBytes, AmalurSaveEditor.WeaponAttHeadOffSet + 8 + 8 * AttCount); }
+            get { return BitConverter.ToSingle(itemBytes, AmalurSaveEditor.ItemAttHeadOffSet + 8 + 8 * AttCount); }
             set
             {
                 byte[] bt = BitConverter.GetBytes(value);
-                ByteManager.ByteEditor byteEditor = new ByteManager.ByteEditor(weaponBytes);
-                byteEditor.EditByIndex(AmalurSaveEditor.WeaponAttHeadOffSet + 8 + 8 * AttCount, bt);
-                weaponBytes = byteEditor.BtList;
+                ByteManager.ByteEditor byteEditor = new ByteManager.ByteEditor(itemBytes);
+                byteEditor.EditByIndex(AmalurSaveEditor.ItemAttHeadOffSet + 8 + 8 * AttCount, bt);
+                itemBytes = byteEditor.BtList;
             }
         }
 
@@ -110,27 +110,27 @@ namespace KoARSaveItemEditor
         /// </summary>
         public float MaxDurability
         {
-            get { return BitConverter.ToSingle(weaponBytes, AmalurSaveEditor.WeaponAttHeadOffSet + 12 + 8 * AttCount); }
+            get { return BitConverter.ToSingle(itemBytes, AmalurSaveEditor.ItemAttHeadOffSet + 12 + 8 * AttCount); }
             set
             {
                 byte[] bt = BitConverter.GetBytes(value);
-                ByteManager.ByteEditor byteEditor = new ByteManager.ByteEditor(weaponBytes);
-                byteEditor.EditByIndex(AmalurSaveEditor.WeaponAttHeadOffSet + 12 + 8 * AttCount, bt);
-                weaponBytes = byteEditor.BtList;
+                ByteManager.ByteEditor byteEditor = new ByteManager.ByteEditor(itemBytes);
+                byteEditor.EditByIndex(AmalurSaveEditor.ItemAttHeadOffSet + 12 + 8 * AttCount, bt);
+                itemBytes = byteEditor.BtList;
             }
         }
 
         /// <summary>
         /// list of attributes on equipment
         /// </summary>
-        public List<AttributeMemoryInfo> WeaponAttList
+        public List<AttributeMemoryInfo> ItemAttList
         {
             get
             {
-                ByteManager.ByteEditor byteEditor = new ByteManager.ByteEditor(weaponBytes);
+                ByteManager.ByteEditor byteEditor = new ByteManager.ByteEditor(itemBytes);
                 List<AttributeMemoryInfo> attList = new List<AttributeMemoryInfo>();
 
-                int attIndex = AmalurSaveEditor.WeaponAttHeadOffSet + 4;
+                int attIndex = AmalurSaveEditor.ItemAttHeadOffSet + 4;
                 for (int i = 0; i < AttCount; i++)
                 {
                     AttributeMemoryInfo att = new AttributeMemoryInfo();
@@ -149,9 +149,9 @@ namespace KoARSaveItemEditor
             }
             set
             {
-                ByteManager.ByteEditor byteEditor = new ByteManager.ByteEditor(weaponBytes);
-                byteEditor.DeleteIntsByIndexAndLength(AmalurSaveEditor.WeaponAttHeadOffSet + 4, 8 * AttCount);
-                byteEditor.EditByIndex(AmalurSaveEditor.WeaponAttHeadOffSet, BitConverter.GetBytes(value.Count));
+                ByteManager.ByteEditor byteEditor = new ByteManager.ByteEditor(itemBytes);
+                byteEditor.DeleteIntsByIndexAndLength(AmalurSaveEditor.ItemAttHeadOffSet + 4, 8 * AttCount);
+                byteEditor.EditByIndex(AmalurSaveEditor.ItemAttHeadOffSet, BitConverter.GetBytes(value.Count));
                 foreach (AttributeMemoryInfo att in value)
                 {
                     byte[] news = new byte[8];
@@ -163,9 +163,9 @@ namespace KoARSaveItemEditor
                     news[5] = 255;
                     news[6] = 255;
                     news[7] = 255;
-                    byteEditor.AddByIndex(AmalurSaveEditor.WeaponAttHeadOffSet + 4, news);
+                    byteEditor.AddByIndex(AmalurSaveEditor.ItemAttHeadOffSet + 4, news);
                 }
-                weaponBytes = byteEditor.BtList;
+                itemBytes = byteEditor.BtList;
             }
         }
     }
