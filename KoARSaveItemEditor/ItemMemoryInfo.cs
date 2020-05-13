@@ -81,9 +81,7 @@ namespace KoARSaveItemEditor
             set
             {
                 byte[] bt = BitConverter.GetBytes(value);
-                ByteEditor byteEditor = new ByteEditor(ItemBytes);
-                byteEditor.EditByIndex(AmalurSaveEditor.ItemAttHeadOffSet + 8 + 8 * AttCount, bt);
-                ItemBytes = byteEditor.BtList;
+                bt.CopyTo(ItemBytes.AsSpan(AmalurSaveEditor.ItemAttHeadOffSet + 8 + 8 * AttCount, 4));
             }
         }
 
@@ -96,15 +94,28 @@ namespace KoARSaveItemEditor
             set
             {
                 byte[] bt = BitConverter.GetBytes(value);
-                ByteEditor byteEditor = new ByteEditor(ItemBytes);
-                byteEditor.EditByIndex(AmalurSaveEditor.ItemAttHeadOffSet + 12 + 8 * AttCount, bt);
-                ItemBytes = byteEditor.BtList;
+                bt.CopyTo(ItemBytes.AsSpan(AmalurSaveEditor.ItemAttHeadOffSet + 12 + 8 * AttCount, 4));
+
             }
         }
 
-        public bool Unsellable =>
-                (ItemBytes[AmalurSaveEditor.ItemAttHeadOffSet + 20 + 8 * AttCount] & 0x80) == 0x80;
-         
+        public bool Unsellable
+        {
+            get => (ItemBytes[AmalurSaveEditor.ItemAttHeadOffSet + 20 + 8 * AttCount] & 0x80) == 0x80;
+            set
+            {
+                if (value)
+                {
+                    ItemBytes[AmalurSaveEditor.ItemAttHeadOffSet + 20 + 8 * AttCount] |= 0x80;
+                }
+                else
+                {
+                    ItemBytes[AmalurSaveEditor.ItemAttHeadOffSet + 20 + 8 * AttCount] &= 0x7F;
+                }
+            }
+
+        }
+
 
         /// <summary>
         /// list of attributes on equipment

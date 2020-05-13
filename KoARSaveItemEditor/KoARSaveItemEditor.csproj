@@ -133,6 +133,9 @@
     <None Update="9190114save84.sav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="9190114save87.sav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Data\properties.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

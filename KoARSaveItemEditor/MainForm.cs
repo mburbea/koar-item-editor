@@ -90,6 +90,8 @@ namespace KoARSaveItemEditor
             txtPropName.Text = itemInfo.ItemName;
             txtPropCurrDur.Text = itemInfo.CurrentDurability.ToString();
             txtPropMaxDur.Text = itemInfo.MaxDurability.ToString();
+            txtPropCurrDur.Enabled = true;
+            txtPropMaxDur.Enabled = true;
             txtPropAttCount.Text = itemInfo.AttCount.ToString();
 
             comboExistingAttList.DisplayMember = nameof(EffectInfo.DisplayText);
@@ -173,9 +175,12 @@ namespace KoARSaveItemEditor
                 btnPrint.Enabled = false;
                 btnDelete.Enabled = false;
                 btnSave.Enabled = false;
+                makeAllItemsSellable.Enabled = true;
                 txtFilterItemName.Text = "";
                 txtFilterMaxDur.Text = "";
                 txtFilterCurrentDur.Text = "";
+                txtPropCurrDur.Enabled = false;
+                txtPropMaxDur.Enabled = false;
                 lvMain.SelectedItems.Clear();
                 selectedItem = null;
             }
@@ -268,12 +273,16 @@ namespace KoARSaveItemEditor
 
         private void CanSave()
         {
-            var selected = selectedItem.ItemIndex;
+            int? selected = selectedItem?.ItemIndex;
             btnSearchAll.PerformClick();
-            var elem = lvMain.Items.Cast<ListViewItem>().FirstOrDefault(x => (x.Tag as ItemMemoryInfo).ItemIndex == selected);
-            elem.Focused = true;
-            elem.Selected = true;
-            selectedItem = elem.Tag as ItemMemoryInfo;
+
+            if (selected != null)
+            {
+                var elem = lvMain.Items.Cast<ListViewItem>().FirstOrDefault(x => (x.Tag as ItemMemoryInfo).ItemIndex == selected);
+                elem.Focused = true;
+                elem.Selected = true;
+                selectedItem = elem.Tag as ItemMemoryInfo;
+            }
             tslblEditState.Text = "Modified";
             btnSave.Enabled = true;
         }
@@ -462,6 +471,65 @@ namespace KoARSaveItemEditor
         private void buttonInvSizeLocate_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void MakeAllItemsSellable_Click(object sender, EventArgs e)
+        {
+            int count = 0;
+            foreach(ItemMemoryInfo item in lvMain.Items.Cast<ListViewItem>().Select(x=> x.Tag as ItemMemoryInfo))
+            {
+                if (item.Unsellable)
+                {
+                    item.Unsellable = false;
+                    editor.WriteWeaponByte(item);
+                    count++;
+                }
+            }
+                MessageBox.Show($"Modified {count} items.");
+            if (count > 0)
+            {
+                CanSave();
+            }
+        }
+
+        private void txtPropCurrDur_Leave(object sender, EventArgs e)
+        {
+            if (editor == null)
+            {
+                MessageBox.Show("No save file opened! Click OK to open a save file.");
+                tsmiOpen.PerformClick();
+            }
+            if (selectedItem is null)
+            {
+                return;
+            }
+            var newValue = float.Parse(txtPropCurrDur.Text);
+            if (newValue != selectedItem.CurrentDurability)
+            {
+                selectedItem.CurrentDurability = newValue;
+                editor.WriteWeaponByte(selectedItem);
+                CanSave();
+            }
+        }
+
+        private void txtPropMaxDur_Leave(object sender, EventArgs e)
+        {
+            if (editor == null)
+            {
+                MessageBox.Show("No save file opened! Click OK to open a save file.");
+                tsmiOpen.PerformClick();
+            }
+            if (selectedItem is null)
+            {
+                return;
+            }
+            var newValue = float.Parse(txtPropMaxDur.Text);
+            if (newValue != selectedItem.MaxDurability)
+            {
+                selectedItem.MaxDurability = newValue;
+                editor.WriteWeaponByte(selectedItem);
+                CanSave();
+            }
         }
     }
 }

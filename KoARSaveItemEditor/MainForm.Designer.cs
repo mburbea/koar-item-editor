@@ -34,6 +34,7 @@ namespace KoARSaveItemEditor
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.tsmiFile = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiOpen = new System.Windows.Forms.ToolStripMenuItem();
+            this.makeAllItemsSellable = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.opfMain = new System.Windows.Forms.OpenFileDialog();
             this.txtFilterItemName = new System.Windows.Forms.TextBox();
@@ -106,6 +107,7 @@ namespace KoARSaveItemEditor
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiFile,
+            this.makeAllItemsSellable,
             this.tsmiHelp});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -127,6 +129,14 @@ namespace KoARSaveItemEditor
             this.tsmiOpen.Size = new System.Drawing.Size(103, 22);
             this.tsmiOpen.Text = "Open";
             this.tsmiOpen.Click += new System.EventHandler(this.LoadSaveFile);
+            // 
+            // makeAllItemsSellable
+            // 
+            this.makeAllItemsSellable.Enabled = false;
+            this.makeAllItemsSellable.Name = "makeAllItemsSellable";
+            this.makeAllItemsSellable.Size = new System.Drawing.Size(140, 20);
+            this.makeAllItemsSellable.Text = "Make All Items Sellable";
+            this.makeAllItemsSellable.Click += new System.EventHandler(this.MakeAllItemsSellable_Click);
             // 
             // tsmiHelp
             // 
@@ -532,6 +542,7 @@ namespace KoARSaveItemEditor
             this.txtPropCurrDur.Name = "txtPropCurrDur";
             this.txtPropCurrDur.Size = new System.Drawing.Size(137, 22);
             this.txtPropCurrDur.TabIndex = 13;
+            this.txtPropCurrDur.Leave += new System.EventHandler(this.txtPropCurrDur_Leave);
             // 
             // label1
             // 
@@ -549,6 +560,7 @@ namespace KoARSaveItemEditor
             this.txtPropMaxDur.Name = "txtPropMaxDur";
             this.txtPropMaxDur.Size = new System.Drawing.Size(136, 22);
             this.txtPropMaxDur.TabIndex = 14;
+            this.txtPropMaxDur.Leave += new System.EventHandler(this.txtPropMaxDur_Leave);
             // 
             // label2
             // 
@@ -741,6 +753,7 @@ namespace KoARSaveItemEditor
         private Button buttonInvSizeLocate;
         private Label label8;
         private NumericUpDown inventorySizeText;
+        private ToolStripMenuItem makeAllItemsSellable;
     }
 }
 
