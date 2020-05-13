@@ -17,7 +17,7 @@ namespace KoARSaveItemEditor
 
         private void button1_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         private void Label1_Click(object sender, EventArgs e)

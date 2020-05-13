@@ -9,7 +9,6 @@ namespace ByteManager
     /// </summary>
     public class ByteEditor
     {
-        byte[] btList;
         /// <summary>
         /// Constructor parameters (need to call Open to open the file)
         /// </summary>
@@ -22,69 +21,55 @@ namespace ByteManager
         /// <param name="btList"></param>
         public ByteEditor(byte[] btList)
         {
-            this.btList = btList;
+            BtList = btList;
         }
 
         /// <summary>
         /// Binary array file
         /// </summary>
-        public byte[] BtList
-        {
-            get { return btList; }
-        }
+        public byte[] BtList { get; private set; }
 
         /// <summary>
         /// Read file
         /// </summary>
         /// <param name="path">Absolute file-path</param>
-        public void ReadFile(String path)
+        public void ReadFile(string path)
         {
-            FileStream fs = null;
             try
             {
-                fs = new FileStream(path, FileMode.Open);
-                btList = new byte[fs.Length];
-                fs.Read(btList, 0, (int)fs.Length);
+                using (var fs = new FileStream(path, FileMode.Open))
+                {
+                    BtList = new byte[fs.Length];
+                    fs.Read(BtList, 0, (int)fs.Length);
+                }
             }
             catch
             {
-                throw new Exception("File reading fails");
+                throw new Exception("File cannot open!");
             }
-            finally
-            {
-                if (fs != null)
-                {
-                    fs.Close();
-                }
-            }
+            
         }
 
         /// <summary>
         /// Save file
         /// </summary>
         /// <param name="path">Save the file's absolute path</param>
-        public void SaveFile(String path)
+        public void SaveFile(string path)
         {
-            if (btList == null)
+            if (BtList == null)
             {
                 throw new Exception("File not open");
             }
-            FileStream fs = null;
             try
             {
-                fs = new FileStream(path, FileMode.Create);
-                fs.Write(btList, 0, btList.Length);
+                using (var fs = new FileStream(path, FileMode.Create))
+                {
+                    fs.Write(BtList, 0, BtList.Length);
+                }
             }
             catch
             {
                 throw new Exception("Archive saving failed");
-            }
-            finally
-            {
-                if (fs != null)
-                {
-                    fs.Close();
-                }
             }
         }
 
@@ -93,28 +78,28 @@ namespace ByteManager
         /// </summary>
         /// <param name="name">String name</param>
         /// <returns>Strings where binary array start index</returns>
-        public List<int> FindIndexByString(String name)
+        public List<int> FindIndexByString(string name)
         {
-            if (btList == null)
+            if (BtList == null)
             {
                 throw new Exception("File not open");
             }
-            if (name=="")
+            if (name == "")
             {
                 throw new Exception("Empty string is not allowed");
             }
-            if (btList.Length < name.Length)
+            if (BtList.Length < name.Length)
             {
                 throw new Exception("File is too short");
             }
-            
+
             List<int> indexList = new List<int>();
             int index = -1;
-            for (int i = 0; i <= btList.Length-name.Length; i++)
+            for (int i = 0; i <= BtList.Length - name.Length; i++)
             {
                 for (int j = 0; j < name.Length; j++)
                 {
-                    if (btList[i + j] == name[j])
+                    if (BtList[i + j] == name[j])
                     {
                         index = i;
                         continue;
@@ -125,7 +110,7 @@ namespace ByteManager
                         break;
                     }
                 }
-                if (index !=-1)
+                if (index != -1)
                 {
                     indexList.Add(index);
                 }
@@ -141,7 +126,7 @@ namespace ByteManager
         /// <returns>byte array where the position index list</returns>
         public List<int> FindIndexList(byte[] bt)
         {
-            if (btList == null)
+            if (BtList == null)
             {
                 throw new Exception("The file is not open");
             }
@@ -149,18 +134,18 @@ namespace ByteManager
             {
                 throw new Exception("Find an empty array is not allowed");
             }
-            if (btList.Length < bt.Length)
+            if (BtList.Length < bt.Length)
             {
                 throw new Exception("File is too short");
             }
 
             List<int> indexList = new List<int>();
             int index = -1;
-            for (int i = 0; i <= btList.Length-bt.Length; i++)
+            for (int i = 0; i <= BtList.Length-bt.Length; i++)
             {
                 for (int j = 0; j < bt.Length; j++)
                 {
-                    if (btList[i + j] == bt[j])
+                    if (BtList[i + j] == bt[j])
                     {
                         index = i;
                     }
@@ -185,7 +170,7 @@ namespace ByteManager
         /// <returns>int Location of the array index list</returns>
         public List<int> FindIndexList(int[] it)
         {
-            if (btList == null)
+            if (BtList == null)
             {
                 throw new Exception("File is not open");
             }
@@ -193,18 +178,18 @@ namespace ByteManager
             {
                 throw new Exception("Find an empty array is not allowed");
             }
-            if (btList.Length < it.Length)
+            if (BtList.Length < it.Length)
             {
                 throw new Exception("The file is too short");
             }
 
             List<int> indexList = new List<int>();
             int index = -1;
-            for (int i = 0; i <= btList.Length - it.Length; i++)
+            for (int i = 0; i <= BtList.Length - it.Length; i++)
             {
                 for (int j = 0; j < it.Length; j++)
                 {
-                    if (btList[i + j] == it[j])
+                    if (BtList[i + j] == it[j])
                     {
                         index = i;
                     }
@@ -230,7 +215,7 @@ namespace ByteManager
         /// <returns>First index -1 is returned (no)</returns>
         public int FindFirstIndex(int startIndex, int[] it)
         {
-            if (btList == null)
+            if (BtList == null)
             {
                 throw new Exception("File is not open");
             }
@@ -238,17 +223,17 @@ namespace ByteManager
             {
                 throw new Exception("Find an empty array is not allowed");
             }
-            if (btList.Length < it.Length)
+            if (BtList.Length < it.Length)
             {
                 throw new Exception("The file is too short");
             }
 
             int index = -1;
-            for (int i = startIndex; i <= btList.Length - it.Length; i++)
+            for (int i = startIndex; i <= BtList.Length - it.Length; i++)
             {
                 for (int j = 0; j < it.Length; j++)
                 {
-                    if (btList[i + j] == it[j])
+                    if (BtList[i + j] == it[j])
                     {
                         index = i;
                     }
@@ -274,7 +259,7 @@ namespace ByteManager
         /// <returns>First index -1 is returned (no)</returns>
         public int FindFirstIndex(int startIndex, byte[] bt)
         {
-            if (btList == null)
+            if (BtList == null)
             {
                 throw new Exception("File is not open");
             }
@@ -282,17 +267,17 @@ namespace ByteManager
             {
                 throw new Exception("Find an empty array is not allowed");
             }
-            if (btList.Length < bt.Length)
+            if (BtList.Length < bt.Length)
             {
                 throw new Exception("The file is too short");
             }
 
             int index = -1;
-            for (int i = startIndex; i <= btList.Length - bt.Length; i++)
+            for (int i = startIndex; i <= BtList.Length - bt.Length; i++)
             {
                 for (int j = 0; j < bt.Length; j++)
                 {
-                    if (btList[i + j] == bt[j])
+                    if (BtList[i + j] == bt[j])
                     {
                         index = i;
                     }
@@ -316,9 +301,9 @@ namespace ByteManager
         /// <param name="index">The beginning of the index</param>
         /// <param name="length">长度</param>
         /// <returns>字符串</returns>
-        public String GetStringByIndexAndLength(int index, int length)
+        public string GetStringByIndexAndLength(int index, int length)
         {
-            if (btList == null)
+            if (BtList == null)
             {
                 throw new Exception("File is not open");
             }
@@ -326,11 +311,11 @@ namespace ByteManager
             {
                 throw new Exception("Index is invalid");
             }
-            else if ((length + index) > btList.Length)
+            else if ((length + index) > BtList.Length)
             {
                 throw new Exception("Length out of bounds");
             }
-            return new String(System.Text.Encoding.Default.GetChars(btList, index, length));
+            return new string(System.Text.Encoding.Default.GetChars(BtList, index, length));
         }
 
         /// <summary>
@@ -341,7 +326,7 @@ namespace ByteManager
         /// <returns>int array</returns>
         public int[] GetIntsByIndexAndLength(int index, int length)
         {
-            if (btList == null)
+            if (BtList == null)
             {
                 throw new Exception("File is not open");
             }
@@ -349,14 +334,14 @@ namespace ByteManager
             {
                 throw new Exception("Index is invalid");
             }
-            else if ((length + index) > btList.Length)
+            else if ((length + index) > BtList.Length)
             {
                 throw new Exception("Length out of bounds");
             }
             int[] it = new int[length];
             for (int i = 0; i < length; i++)
             {
-                it[i] = btList[index + i];
+                it[i] = BtList[index + i];
             }
             return it;
         }
@@ -369,7 +354,7 @@ namespace ByteManager
         /// <returns>byte Array</returns>
         public byte[] GetBytesByIndexAndLength(int index, int length)
         {
-            if (btList == null)
+            if (BtList == null)
             {
                 throw new Exception("File is not open");
             }
@@ -377,14 +362,14 @@ namespace ByteManager
             {
                 throw new Exception("Index is invalid");
             }
-            else if ((length + index) > btList.Length)
+            else if ((length + index) > BtList.Length)
             {
                 throw new Exception("Length out of bounds");
             }
             byte[] it = new byte[length];
             for (int i = 0; i < length; i++)
             {
-                it[i] = btList[index + i];
+                it[i] = BtList[index + i];
             }
             return it;
         }
@@ -396,9 +381,9 @@ namespace ByteManager
         /// <param name="index">Starting with a specified index</param>
         /// <param name="length">Minimum length</param>
         /// <returns>String</returns>
-        public String GetStringByIndexAndMinLength(int index, int length)
+        public string GetStringByIndexAndMinLength(int index, int length)
         {
-            if (btList == null)
+            if (BtList == null)
             {
                 throw new Exception("File is not open");
             }
@@ -406,7 +391,7 @@ namespace ByteManager
             {
                 throw new Exception("Index is invalid");
             }
-            else if ((length + index) > btList.Length)
+            else if ((length + index) > BtList.Length)
             {
                 throw new Exception("Length out of bounds");
             }
@@ -416,7 +401,7 @@ namespace ByteManager
             {
                 addLength++;
             }
-            return new String(System.Text.Encoding.Default.GetChars(BtList, index, length + addLength));
+            return new string(System.Text.Encoding.Default.GetChars(BtList, index, length + addLength));
         }
 
         /// <summary>
@@ -426,7 +411,7 @@ namespace ByteManager
         /// <param name="length">要删除的长度</param>
         public void DeleteIntsByIndexAndLength(int index, int length)
         {
-            if (btList == null)
+            if (BtList == null)
             {
                 throw new Exception("File is not open");
             }
@@ -434,19 +419,19 @@ namespace ByteManager
             {
                 throw new Exception("Index is invalid");
             }
-            else if ((length + index) > btList.Length)
+            else if ((length + index) > BtList.Length)
             {
                 throw new Exception("Length out of bounds");
             }
             List<byte> temp = new List<byte>();
-            for (int i = 0; i < btList.Length; i++)
+            for (int i = 0; i < BtList.Length; i++)
             {
                 if (i < index || i >= index + length)
                 {
-                    temp.Add(btList[i]);
+                    temp.Add(BtList[i]);
                 } 
             }
-            btList = temp.ToArray();
+            BtList = temp.ToArray();
         }
 
         /// <summary>
@@ -456,7 +441,7 @@ namespace ByteManager
         /// <param name="end">终止索引</param>
         public void DeleteIntsByStartAndEnd(int start,int end)
         {
-            if (btList == null)
+            if (BtList == null)
             {
                 throw new Exception("File is not open");
             }else if (start < 0)
@@ -467,21 +452,21 @@ namespace ByteManager
             {
                 throw new Exception("Termination Index is invalid");
             }
-            else if (end > btList.Length - 1)
+            else if (end > BtList.Length - 1)
             {
                 throw new Exception("Termination Index is invalid");
             }
 
             List<byte> temp = new List<byte>();
-            for (int i = 0; i < btList.Length; i++)
+            for (int i = 0; i < BtList.Length; i++)
             {
                 if (i >= start && i<=end )
                 {
                     continue;
                 }
-                temp.Add(btList[i]);
+                temp.Add(BtList[i]);
             }
-            btList = temp.ToArray();
+            BtList = temp.ToArray();
         }
 
         /// <summary>
@@ -491,7 +476,7 @@ namespace ByteManager
         /// <param name="newInts">要修改的数值</param>
         public void EditByIndex(int index, int[] newInts)
         {
-            if (btList == null)
+            if (BtList == null)
             {
                 throw new Exception("File is not open");
             }
@@ -499,13 +484,13 @@ namespace ByteManager
             {
                 throw new Exception("Index is invalid");
             }
-            else if ((newInts.Length + index) > btList.Length)
+            else if ((newInts.Length + index) > BtList.Length)
             {
                 throw new Exception("Length of the new array out of bounds");
             }
             for (int i = 0; i < newInts.Length; i++)
             {
-                btList[index + i] = (byte)newInts[i];
+                BtList[index + i] = (byte)newInts[i];
             }
         }
 
@@ -516,7 +501,7 @@ namespace ByteManager
         /// <param name="newBytes">要修改的数值</param>
         public void EditByIndex(int index, byte[] newBytes)
         {
-            if (btList == null)
+            if (BtList == null)
             {
                 throw new Exception("File is not open");
             }
@@ -524,13 +509,13 @@ namespace ByteManager
             {
                 throw new Exception("Index is invalid");
             }
-            else if ((newBytes.Length + index) > btList.Length)
+            else if ((newBytes.Length + index) > BtList.Length)
             {
                 throw new Exception("Length of the new array out of bounds");
             }
             for (int i = 0; i < newBytes.Length; i++)
             {
-                btList[index + i] = newBytes[i];
+                BtList[index + i] = newBytes[i];
             }
         }
 
@@ -541,7 +526,7 @@ namespace ByteManager
         /// <param name="newInts">int数组</param>
         public void AddByIndex(int index, int[] newInts)
         {
-            if (btList == null)
+            if (BtList == null)
             {
                 throw new Exception("File is not open");
             }
@@ -550,7 +535,7 @@ namespace ByteManager
                 throw new Exception("Index is invalid");
             }
             List<byte> temp = new List<byte>();
-            for (int i = 0; i < btList.Length; i++)
+            for (int i = 0; i < BtList.Length; i++)
             {
                 if (i == index)
                 {
@@ -559,9 +544,9 @@ namespace ByteManager
                         temp.Add((byte)newInts[j]);
                     }
                 }
-                temp.Add(btList[i]);
+                temp.Add(BtList[i]);
             }
-            btList = temp.ToArray();
+            BtList = temp.ToArray();
         }
 
         /// <summary>
@@ -571,7 +556,7 @@ namespace ByteManager
         /// <param name="newBytes">byte数组</param>
         public void AddByIndex(int index, byte[] newBytes)
         {
-            if (btList == null)
+            if (BtList == null)
             {
                 throw new Exception("File is not open");
             }
@@ -580,7 +565,7 @@ namespace ByteManager
                 throw new Exception("Index is invalid");
             }
             List<byte> temp = new List<byte>();
-            for (int i = 0; i < btList.Length; i++)
+            for (int i = 0; i < BtList.Length; i++)
             {
                 if (i == index)
                 {
@@ -589,9 +574,9 @@ namespace ByteManager
                         temp.Add(newBytes[j]);
                     }
                 }
-                temp.Add(btList[i]);
+                temp.Add(BtList[i]);
             }
-            btList = temp.ToArray();
+            BtList = temp.ToArray();
         }
 
         /// <summary>
@@ -603,7 +588,7 @@ namespace ByteManager
         /// <returns>是否存在某数组</returns>
         public bool HasIntsByIndexAndLength(int[] ints, int index, int length)
         {
-            if (btList == null)
+            if (BtList == null)
             {
                 throw new Exception("File is not open");
             }
@@ -611,7 +596,7 @@ namespace ByteManager
             {
                 throw new Exception("Index is invalid");
             }
-            if (index + length > btList.Length)
+            if (index + length > BtList.Length)
             {
                 throw new Exception("Length out of bounds");
             }
@@ -624,7 +609,7 @@ namespace ByteManager
             {
                 for (int j = 0; j < ints.Length; j++)
                 {
-                    if (btList[i + j] == ints[j])
+                    if (BtList[i + j] == ints[j])
                     {
                         isInts = true;
                         continue;
@@ -654,7 +639,7 @@ namespace ByteManager
         /// <returns>是否存在某数组</returns>
         public bool HasBytesByIndexAndLength(byte[] bytes, int index, int length)
         {
-            if (btList == null)
+            if (BtList == null)
             {
                 throw new Exception("File is not open");
             }
@@ -662,7 +647,7 @@ namespace ByteManager
             {
                 throw new Exception("Index is invalid");
             }
-            if (index + length > btList.Length)
+            if (index + length > BtList.Length)
             {
                 throw new Exception("Length out of bounds");
             }
@@ -675,7 +660,7 @@ namespace ByteManager
             {
                 for (int j = 0; j < bytes.Length; j++)
                 {
-                    if (btList[i + j] == bytes[j])
+                    if (BtList[i + j] == bytes[j])
                     {
                         isInts = true;
                         continue;
@@ -702,13 +687,13 @@ namespace ByteManager
         /// <param name="bt"></param>
         public void AddToEnd(byte[] bt)
         {
-            if (btList == null)
+            if (BtList == null)
             {
                 throw new Exception("File is not open");
             }
-            List<byte> temp = new List<byte>(btList);
+            List<byte> temp = new List<byte>(BtList);
             temp.AddRange(bt);
-            btList = temp.ToArray();
+            BtList = temp.ToArray();
         }
 
         /// <summary>
@@ -717,9 +702,9 @@ namespace ByteManager
         /// <param name="index">开始索引</param>
         public void DeleteToEnd(int index)
         {
-            List<byte> temp = new List<byte>(btList);
+            List<byte> temp = new List<byte>(BtList);
             temp.RemoveRange(index, temp.Count - index);
-            btList = temp.ToArray();
+            BtList = temp.ToArray();
         }
     }
 }

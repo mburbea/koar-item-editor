@@ -25,7 +25,7 @@ namespace KoARSaveItemEditor
             if (opfMain.ShowDialog() == DialogResult.OK)
             {
                 lvMain.Items.Clear();
-                String fileName = opfMain.FileName;
+                string fileName = opfMain.FileName;
                 editor = new AmalurSaveEditor();
                 editor.ReadFile(fileName);
                 tslblFileLocal.Text = fileName;
@@ -36,18 +36,18 @@ namespace KoARSaveItemEditor
 
         private void ResetFilterFields()
         {
-            this.txtFilterItemName.Clear();
-            this.txtFilterCurrentDur.Clear();
-            this.txtFilterMaxDur.Clear();
+            txtFilterItemName.Clear();
+            txtFilterCurrentDur.Clear();
+            txtFilterMaxDur.Clear();
 
-            this.lvMain.SelectedItems.Clear();
+            lvMain.SelectedItems.Clear();
         }
 
         private void RefreshListOnFilterUpdate()
         {
-            String itemName = txtFilterItemName.Text != "" ? txtFilterItemName.Text.ToUpper() : "";
-            float currDur = Single.TryParse(txtFilterCurrentDur.Text, out currDur) ? currDur : 0;
-            float maxDur = Single.TryParse(txtFilterMaxDur.Text, out maxDur) ? maxDur : 0;
+            string itemName = txtFilterItemName.Text != "" ? txtFilterItemName.Text.ToUpper() : "";
+            float currDur = float.TryParse(txtFilterCurrentDur.Text, out currDur) ? currDur : 0;
+            float maxDur = float.TryParse(txtFilterMaxDur.Text, out maxDur) ? maxDur : 0;
 
             var query = from w in itemList select w;
             if (itemName != "")
@@ -60,9 +60,11 @@ namespace KoARSaveItemEditor
             lvMain.Items.Clear();
             foreach (var element in query)
             {
-                ListViewItem item = new ListViewItem();
-                item.Name = element.ItemIndex.ToString();
-                item.Text = element.ItemIndex.ToString();
+                ListViewItem item = new ListViewItem
+                {
+                    Name = element.ItemIndex.ToString(),
+                    Text = element.ItemIndex.ToString()
+                };
                 item.SubItems.Add(element.ItemName);
                 item.SubItems.Add(element.CurrentDurability.ToString());
                 item.SubItems.Add(element.MaxDurability.ToString());
@@ -77,20 +79,20 @@ namespace KoARSaveItemEditor
         private void LoadItemAttributesOnClick()
         {
             ItemMemoryInfo itemInfo = (ItemMemoryInfo)lvMain.SelectedItems[0].Tag;
-            List<AttributeMemoryInfo> itemAttList = editor.GetAttList(itemInfo, this.attributeList);
-            this.selectedItem = itemInfo;
+            List<AttributeMemoryInfo> itemAttList = editor.GetAttList(itemInfo, attributeList);
+            selectedItem = itemInfo;
 
-            this.txtPropName.Text = itemInfo.ItemName;
-            this.txtPropCurrDur.Text = itemInfo.CurrentDurability.ToString();
-            this.txtPropMaxDur.Text = itemInfo.MaxDurability.ToString();
-            this.txtPropAttCount.Text = itemInfo.AttCount.ToString();
+            txtPropName.Text = itemInfo.ItemName;
+            txtPropCurrDur.Text = itemInfo.CurrentDurability.ToString();
+            txtPropMaxDur.Text = itemInfo.MaxDurability.ToString();
+            txtPropAttCount.Text = itemInfo.AttCount.ToString();
 
-            this.comboExistingAttList.DisplayMember = "Detail";
-            this.comboExistingAttList.DataSource = itemAttList;
+            comboExistingAttList.DisplayMember = "Detail";
+            comboExistingAttList.DataSource = itemAttList;
 
-            this.comboAddAttList.DisplayMember = "AttributeText";
-            this.comboAddAttList.ValueMember = "AttributeId";
-            this.comboAddAttList.DataSource = this.attributeList;
+            comboAddAttList.DisplayMember = "AttributeText";
+            comboAddAttList.ValueMember = "AttributeId";
+            comboAddAttList.DataSource = attributeList;
         }
 
         private void DeleteItemAttribute()
@@ -109,10 +111,10 @@ namespace KoARSaveItemEditor
             }
 
             itemInfo.ItemAttList = itemAttList;
-            this.txtPropAttCount.Text = itemAttList.Count.ToString();
+            txtPropAttCount.Text = itemAttList.Count.ToString();
             if (itemAttList.Count <= 0)
             {
-                this.txtPropSelectedAttributeHexCode.Text = "";
+                txtPropSelectedAttributeHexCode.Text = "";
             }
             LoadItemAttributesOnClick();
         }
@@ -144,9 +146,11 @@ namespace KoARSaveItemEditor
                 }
                 foreach (ItemMemoryInfo w in itemList)
                 {
-                    ListViewItem item = new ListViewItem();
-                    item.Name = w.ItemIndex.ToString();
-                    item.Text = w.ItemIndex.ToString();
+                    ListViewItem item = new ListViewItem
+                    {
+                        Name = w.ItemIndex.ToString(),
+                        Text = w.ItemIndex.ToString()
+                    };
                     item.SubItems.Add(w.ItemName);
                     item.SubItems.Add(w.CurrentDurability.ToString());
                     item.SubItems.Add(w.MaxDurability.ToString());
@@ -161,7 +165,7 @@ namespace KoARSaveItemEditor
                 txtFilterMaxDur.Text = "";
                 txtFilterCurrentDur.Text = "";
                 lvMain.SelectedItems.Clear();
-                this.selectedItem = null;
+                selectedItem = null;
             }
         }
 
@@ -175,9 +179,11 @@ namespace KoARSaveItemEditor
                 XmlNodeList nodes = doc.DocumentElement.ChildNodes;
                 foreach (XmlNode n in nodes)
                 {
-                    AttributeInfo att = new AttributeInfo();
-                    att.AttributeId = n.Attributes["id"].Value.ToUpper();
-                    att.AttributeText = n.InnerText.ToUpper();
+                    AttributeInfo att = new AttributeInfo
+                    {
+                        AttributeId = n.Attributes["id"].Value.ToUpper(),
+                        AttributeText = n.InnerText.ToUpper()
+                    };
                     attributeList.Add(att);
                 }
                 this.attributeList = attributeList;
@@ -191,7 +197,7 @@ namespace KoARSaveItemEditor
 
         private void LoadItemAttributes(ItemMemoryInfo itemInfo)
         {
-            List<AttributeMemoryInfo> attList = editor.GetAttList(itemInfo, this.attributeList);
+            List<AttributeMemoryInfo> attList = editor.GetAttList(itemInfo, attributeList);
             List<AttributeMemoryInfo> temp = new List<AttributeMemoryInfo>();
 
             foreach (AttributeMemoryInfo att in attList)
@@ -382,7 +388,7 @@ namespace KoARSaveItemEditor
         private void ComboAttList_SelectedIndexChanged(object sender, EventArgs e)
         {
             AttributeMemoryInfo itemAttribute = (AttributeMemoryInfo)comboExistingAttList.SelectedItem;
-            this.txtPropSelectedAttributeHexCode.Text = itemAttribute.Code;
+            txtPropSelectedAttributeHexCode.Text = itemAttribute.Code;
         }
 
         private void TxtPropAddAttributeHexCode_TextChanged(object sender, EventArgs e)
@@ -422,15 +428,17 @@ namespace KoARSaveItemEditor
             bool isValidCode = long.TryParse(hexCode, System.Globalization.NumberStyles.HexNumber, null, out validCode);
             if (isValidCode)
             {
-                AddAttribute(this.selectedItem, hexCode);
+                AddAttribute(selectedItem, hexCode);
             }
         }
 
         private void AddAttribute(ItemMemoryInfo selectedItem, string attCode)
         {
             List<AttributeMemoryInfo> attList = selectedItem.ItemAttList;
-            AttributeMemoryInfo attInfo = new AttributeMemoryInfo();
-            attInfo.Code = attCode;
+            AttributeMemoryInfo attInfo = new AttributeMemoryInfo
+            {
+                Code = attCode
+            };
             attList.Add(attInfo);
             selectedItem.ItemAttList = attList;
             LoadItemAttributesOnClick();
@@ -438,9 +446,9 @@ namespace KoARSaveItemEditor
 
         private void CheckBoxUnlockName_CheckedChanged(object sender, EventArgs e)
         {
-            if (this.txtPropName.Text == "Unknown" && this.checkBoxUnlockName.Checked == true)
+            if (txtPropName.Text == "Unknown" && checkBoxUnlockName.Checked == true)
             {
-                this.checkBoxUnlockName.Checked = false;
+                checkBoxUnlockName.Checked = false;
                 MessageBox.Show("Editing not allowed.");
                 return;
             }

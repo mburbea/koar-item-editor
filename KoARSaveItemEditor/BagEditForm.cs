@@ -27,10 +27,8 @@ namespace KoARSaveItemEditor
 
         private void BtnSave_Click(object sender, EventArgs e)
         {
-            int count = 0;
-            if (int.TryParse(txtBag.Text, out count) && int.Parse(txtBag.Text) > 0 && int.Parse(txtBag.Text) <= 99999999)
+            if (int.TryParse(txtBag.Text, out int count) && count > 0 && count <= 99999999)
             {
-                count = int.Parse(txtBag.Text);
                 editor.EditMaxBagCount(count);
                 isEdit = true;
                 MessageBox.Show("Modification successful!");
@@ -45,7 +43,7 @@ namespace KoARSaveItemEditor
         {
             if (isEdit)
             {
-                this.DialogResult = DialogResult.Yes;
+                DialogResult = DialogResult.Yes;
             }
         }
 

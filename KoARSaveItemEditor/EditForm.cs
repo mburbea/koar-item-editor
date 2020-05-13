@@ -20,7 +20,7 @@ namespace KoARSaveItemEditor
         {
             InitializeComponent();
             this.editor = editor;
-            this.attributeList = attList;
+            attributeList = attList;
             this.weaponInfo = weaponInfo;
 
             FormatAll(attList);
@@ -34,8 +34,8 @@ namespace KoARSaveItemEditor
 
             txtName.Text = weaponInfo.ItemName;
             lblAttCount.Text = weaponInfo.AttCount.ToString();
-            this.txtCurrentDurability.Text = weaponInfo.CurrentDurability.ToString();
-            this.txtMaxDurability.Text = weaponInfo.MaxDurability.ToString();
+            txtCurrentDurability.Text = weaponInfo.CurrentDurability.ToString();
+            txtMaxDurability.Text = weaponInfo.MaxDurability.ToString();
             btnAdd.Enabled = true;
 
             txtAttCode.Text = "";
@@ -56,7 +56,7 @@ namespace KoARSaveItemEditor
 
         private void DataBinding()
         {
-            List<AttributeMemoryInfo> attList = editor.GetAttList(weaponInfo, this.attributeList);
+            List<AttributeMemoryInfo> attList = editor.GetAttList(weaponInfo, attributeList);
             List<AttributeMemoryInfo> temp = new List<AttributeMemoryInfo>();
             
             foreach(AttributeMemoryInfo att in attList)
@@ -192,15 +192,15 @@ namespace KoARSaveItemEditor
             editor.WriteWeaponByte(weaponInfo);
             MessageBox.Show("Modification successful. Please save.");
             isEdit = true;
-            this.DialogResult = DialogResult.Yes;
-            this.Close();
+            DialogResult = DialogResult.Yes;
+            Close();
         }
 
         private void EditForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (isEdit)
             {
-                this.DialogResult = DialogResult.Yes;
+                DialogResult = DialogResult.Yes;
             }
         }
 
@@ -236,8 +236,10 @@ namespace KoARSaveItemEditor
             List<AttributeMemoryInfo> attList = weaponInfo.ItemAttList;
             for (int i = 0; i < count; i++)
             {
-                AttributeMemoryInfo attInfo = new AttributeMemoryInfo();
-                attInfo.Code = attCode;
+                AttributeMemoryInfo attInfo = new AttributeMemoryInfo
+                {
+                    Code = attCode
+                };
                 attList.Add(attInfo);
             }
             weaponInfo.ItemAttList = attList;

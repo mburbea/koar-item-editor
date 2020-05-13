@@ -65,7 +65,7 @@ namespace KoARSaveItemEditor
             {
                 throw new Exception("Save file not open.");
             }
-            int index = br.FindIndexByString("inventory_limit")[0] + AmalurSaveEditor.InventoryCapacityOffset;
+            int index = br.FindIndexByString("inventory_limit")[0] + InventoryCapacityOffset;
             byte[] bt = br.GetBytesByIndexAndLength(index, 4);
             return BitConverter.ToInt32(bt, 0);
         }
@@ -80,7 +80,7 @@ namespace KoARSaveItemEditor
             {
                 throw new Exception("Save file not open.");
             }
-            int index = br.FindIndexByString("inventory_limit")[0] + AmalurSaveEditor.InventoryCapacityOffset;
+            int index = br.FindIndexByString("inventory_limit")[0] + InventoryCapacityOffset;
             byte[] bt = BitConverter.GetBytes(c);
             br.EditByIndex(index, bt);
         }
@@ -99,9 +99,9 @@ namespace KoARSaveItemEditor
             }
 
             List<AttributeMemoryInfo> attList = weaponInfo.ItemAttList;
-            foreach(AttributeMemoryInfo attInfo in attList)
+            foreach (AttributeMemoryInfo attInfo in attList)
             {
-                String text = "";
+                string text = "";
                 foreach (AttributeInfo att in attInfoList)
                 {
                     if (att.AttributeId == attInfo.Code)
@@ -130,19 +130,11 @@ namespace KoARSaveItemEditor
                 throw new Exception("Save file not open.");
             }
 
-            byte[] bytes = new byte[9];
-            bytes[0] = 11;
-            bytes[1] = 0;
-            bytes[2] = 0;
-            bytes[3] = 0;
-            bytes[4] = 104;
-            bytes[5] = 213;
-            bytes[6] = 36;
-            bytes[7] = 0;
-            bytes[8] = 3;
+            byte[] bytes = new byte[9] { 11, 0, 0, 0, 104, 213, 36, 0, 3 };
+
             try
             {
-                return br.HasBytesByIndexAndLength(bytes, weapon.ItemIndex+4, 17);
+                return br.HasBytesByIndexAndLength(bytes, weapon.ItemIndex + 4, 17);
             }
             catch
             {
@@ -163,26 +155,17 @@ namespace KoARSaveItemEditor
 
             List<ItemMemoryInfo> weaponList = new List<ItemMemoryInfo>();
 
-            byte[] bytes = new byte[9];
-            bytes[0] = 11;
-            bytes[1] = 0;
-            bytes[2] = 0;
-            bytes[3] = 0;
-            bytes[4] = 104;
-            bytes[5] = 213;
-            bytes[6] = 36;
-            bytes[7] = 0;
-            bytes[8] = 3;
+            byte[] bytes = new byte[9] { 11, 0, 0, 0, 104, 213, 36, 0, 3 };
             List<int> indexList = br.FindIndexList(bytes);
-            
+
             for (int i = 0; i < indexList.Count; i++)
             {
-                indexList[i] -=4;
+                indexList[i] -= 4;
             }
 
-            for(int i=0;i<indexList.Count;i++)
+            for (int i = 0; i < indexList.Count; i++)
             {
-                if(i!=indexList.Count-1)
+                if (i != indexList.Count - 1)
                 {
                     if (indexList[i + 1] - indexList[i] < 44)
                     {
@@ -190,8 +173,10 @@ namespace KoARSaveItemEditor
                     }
                 }
 
-                ItemMemoryInfo weapon = new ItemMemoryInfo();
-                weapon.ItemIndex = indexList[i];
+                ItemMemoryInfo weapon = new ItemMemoryInfo
+                {
+                    ItemIndex = indexList[i]
+                };
                 if (i != indexList.Count - 1)
                 {
                     weapon.NextItemIndex = indexList[i + 1];
@@ -208,8 +193,8 @@ namespace KoARSaveItemEditor
                 }
                 else
                 {
-                    int attHeadIndex = weapon.ItemIndex + AmalurSaveEditor.ItemAttHeadOffSet;
-                    int attCount = BitConverter.ToInt32(br.BtList,attHeadIndex);
+                    int attHeadIndex = weapon.ItemIndex + ItemAttHeadOffSet;
+                    int attCount = BitConverter.ToInt32(br.BtList, attHeadIndex);
                     int endIndex = 0;
                     if (br.BtList[attHeadIndex + 22 + attCount * 8] != 1)
                     {
@@ -221,7 +206,7 @@ namespace KoARSaveItemEditor
                         nameLength = BitConverter.ToInt32(br.BtList, attHeadIndex + 22 + attCount * 8 + 1);
                         endIndex = attHeadIndex + 22 + attCount * 8 + nameLength + 4;
                     }
-                    weapon.ItemBytes = br.GetBytesByIndexAndLength(weapon.ItemIndex, endIndex - weapon.ItemIndex+1);
+                    weapon.ItemBytes = br.GetBytesByIndexAndLength(weapon.ItemIndex, endIndex - weapon.ItemIndex + 1);
                     if (weapon.CurrentDurability != 100 && weapon.MaxDurability != -1 && weapon.MaxDurability != 100 && weapon.CurrentDurability != 0 && weapon.MaxDurability != 0)
                     {
                         weaponList.Add(weapon);
@@ -247,7 +232,7 @@ namespace KoARSaveItemEditor
                 throw new Exception("Save file not open.");
             }
 
-            weapon.ItemBytes = new byte[] {0,0,0,0 };
+            weapon.ItemBytes = new byte[4];
             WriteWeaponByte(weapon);
         }
 
