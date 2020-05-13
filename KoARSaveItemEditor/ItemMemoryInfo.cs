@@ -105,19 +105,19 @@ namespace KoARSaveItemEditor
         /// <summary>
         /// list of attributes on equipment
         /// </summary>
-        public List<AttributeMemoryInfo> ItemAttList
+        public List<EffectInfo> ItemAttList
         {
             get
             {
                 ByteEditor byteEditor = new ByteEditor(ItemBytes);
-                List<AttributeMemoryInfo> attList = new List<AttributeMemoryInfo>();
+                List<EffectInfo> attList = new List<EffectInfo>();
 
                 int attIndex = AmalurSaveEditor.ItemAttHeadOffSet + 4;
                 for (int i = 0; i < AttCount; i++)
                 {
-                    AttributeMemoryInfo att = new AttributeMemoryInfo
+                    EffectInfo att = new EffectInfo
                     {
-                        Code = byteEditor.GetUInt32ByIndexAndLength(attIndex).ToString("X")
+                        Code = byteEditor.GetUInt32ByIndexAndLength(attIndex).ToString("X6")
                     };
 
                     attList.Add(att);
@@ -132,7 +132,7 @@ namespace KoARSaveItemEditor
                 byteEditor.DeleteIntsByIndexAndLength(AmalurSaveEditor.ItemAttHeadOffSet + 4, 8 * AttCount);
                 byteEditor.EditByIndex(AmalurSaveEditor.ItemAttHeadOffSet, BitConverter.GetBytes(value.Count));
                 
-                foreach (AttributeMemoryInfo att in value)
+                foreach (EffectInfo att in value)
                 {
                     Span<uint> uints = stackalloc uint[2];
                     uints[0] = uint.Parse(att.Code, NumberStyles.HexNumber);

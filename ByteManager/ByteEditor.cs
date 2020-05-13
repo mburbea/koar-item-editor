@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace ByteManager
@@ -48,7 +49,7 @@ namespace ByteManager
             {
                 throw new Exception("File cannot open!");
             }
-            
+
         }
 
         /// <summary>
@@ -131,7 +132,7 @@ namespace ByteManager
             {
                 throw new Exception("The file is not open");
             }
-            if (bt ==null || bt.Length==0)
+            if (bt == null || bt.Length == 0)
             {
                 throw new Exception("Find an empty array is not allowed");
             }
@@ -142,7 +143,7 @@ namespace ByteManager
 
             List<int> indexList = new List<int>();
             int index = -1;
-            for (int i = 0; i <= BtList.Length-bt.Length; i++)
+            for (int i = 0; i <= BtList.Length - bt.Length; i++)
             {
                 for (int j = 0; j < bt.Length; j++)
                 {
@@ -395,7 +396,7 @@ namespace ByteManager
                 if (i < index || i >= index + length)
                 {
                     temp.Add(BtList[i]);
-                } 
+                }
             }
             BtList = temp.ToArray();
         }
@@ -405,16 +406,17 @@ namespace ByteManager
         /// </summary>
         /// <param name="start">起始索引</param>
         /// <param name="end">终止索引</param>
-        public void DeleteIntsByStartAndEnd(int start,int end)
+        public void DeleteIntsByStartAndEnd(int start, int end)
         {
             if (BtList == null)
             {
                 throw new Exception("File is not open");
-            }else if (start < 0)
+            }
+            else if (start < 0)
             {
                 throw new Exception("Starting Index is invalid");
             }
-            else if (end<start)
+            else if (end < start)
             {
                 throw new Exception("Termination Index is invalid");
             }
@@ -426,7 +428,7 @@ namespace ByteManager
             List<byte> temp = new List<byte>();
             for (int i = 0; i < BtList.Length; i++)
             {
-                if (i >= start && i<=end )
+                if (i >= start && i <= end)
                 {
                     continue;
                 }
@@ -566,12 +568,12 @@ namespace ByteManager
             {
                 throw new Exception("Length out of bounds");
             }
-            if (length < ints.Length -1)
+            if (length < ints.Length - 1)
             {
                 throw new Exception("The length of the new array is too long");
             }
-            bool isInts=false;
-            for (int i = index;i<= index + length- ints.Length; i++)
+            bool isInts = false;
+            for (int i = index; i <= index + length - ints.Length; i++)
             {
                 for (int j = 0; j < ints.Length; j++)
                 {
@@ -617,12 +619,12 @@ namespace ByteManager
             {
                 throw new Exception("Length out of bounds");
             }
-            if (length < bytes.Length-1)
+            if (length < bytes.Length - 1)
             {
                 throw new Exception("The length of the new array is too long");
             }
             bool isInts = false;
-            for (int i = index; i <= index + length-bytes.Length; i++)
+            for (int i = index; i <= index + length - bytes.Length; i++)
             {
                 for (int j = 0; j < bytes.Length; j++)
                 {
@@ -657,9 +659,11 @@ namespace ByteManager
             {
                 throw new Exception("File is not open");
             }
-            List<byte> temp = new List<byte>(BtList);
-            temp.AddRange(bt);
-            BtList = temp.ToArray();
+
+            byte[] array = new byte[BtList.Length + bt.Length];
+            BtList.CopyTo(array, 0);
+            bt.CopyTo(array, BtList.Length);
+            BtList = array;
         }
 
         /// <summary>
@@ -668,9 +672,7 @@ namespace ByteManager
         /// <param name="index">开始索引</param>
         public void DeleteToEnd(int index)
         {
-            List<byte> temp = new List<byte>(BtList);
-            temp.RemoveRange(index, temp.Count - index);
-            BtList = temp.ToArray();
+            BtList = BtList.AsSpan(0, index).ToArray();
         }
     }
 }

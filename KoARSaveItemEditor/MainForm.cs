@@ -11,7 +11,7 @@ namespace KoARSaveItemEditor
     public partial class MainForm : Form
     {
         AmalurSaveEditor editor = null;
-        List<AttributeInfo> attributeList = null;
+        List<EffectInfo> attributeList = null;
         List<ItemMemoryInfo> itemList = null;
         ItemMemoryInfo selectedItem = null;
 
@@ -79,7 +79,7 @@ namespace KoARSaveItemEditor
         private void LoadItemAttributesOnClick()
         {
             ItemMemoryInfo itemInfo = (ItemMemoryInfo)lvMain.SelectedItems[0].Tag;
-            List<AttributeMemoryInfo> itemAttList = editor.GetAttList(itemInfo, attributeList);
+            List<EffectInfo> itemAttList = editor.GetAttList(itemInfo, attributeList);
             selectedItem = itemInfo;
 
             txtPropName.Text = itemInfo.ItemName;
@@ -87,21 +87,21 @@ namespace KoARSaveItemEditor
             txtPropMaxDur.Text = itemInfo.MaxDurability.ToString();
             txtPropAttCount.Text = itemInfo.AttCount.ToString();
 
-            comboExistingAttList.DisplayMember = "Detail";
+            comboExistingAttList.DisplayMember = nameof(EffectInfo.DisplayText);
             comboExistingAttList.DataSource = itemAttList;
 
-            comboAddAttList.DisplayMember = "AttributeText";
-            comboAddAttList.ValueMember = "AttributeId";
+            comboAddAttList.DisplayMember = nameof(EffectInfo.DisplayText);
+            comboAddAttList.ValueMember = nameof(EffectInfo.Code);
             comboAddAttList.DataSource = attributeList;
         }
 
         private void DeleteItemAttribute()
         {
             ItemMemoryInfo itemInfo = (ItemMemoryInfo)lvMain.SelectedItems[0].Tag;
-            List<AttributeMemoryInfo> itemAttList = itemInfo.ItemAttList;
-            AttributeMemoryInfo selectedAttribute = (AttributeMemoryInfo) comboExistingAttList.SelectedItem;
+            List<EffectInfo> itemAttList = itemInfo.ItemAttList;
+            EffectInfo selectedAttribute = (EffectInfo) comboExistingAttList.SelectedItem;
 
-            foreach (AttributeMemoryInfo att in itemAttList)
+            foreach (EffectInfo att in itemAttList)
             {
                 if (att.Code.ToUpper() == selectedAttribute.Code.ToUpper())
                 {
@@ -172,17 +172,17 @@ namespace KoARSaveItemEditor
         private void LoadAmalurEditor(object sender, EventArgs e)
         {
             XmlDocument doc = new XmlDocument();
-            List<AttributeInfo> attributeList = new List<AttributeInfo>();
+            List<EffectInfo> attributeList = new List<EffectInfo>();
             try
             {
                 doc.Load(Application.StartupPath + @"\Data\properties.xml");
                 XmlNodeList nodes = doc.DocumentElement.ChildNodes;
                 foreach (XmlNode n in nodes)
                 {
-                    AttributeInfo att = new AttributeInfo
+                    EffectInfo att = new EffectInfo
                     {
-                        AttributeId = n.Attributes["id"].Value.ToUpper(),
-                        AttributeText = n.InnerText.ToUpper()
+                        Code = n.Attributes["id"].Value.ToUpper(),
+                        DisplayText = n.InnerText.ToUpper()
                     };
                     attributeList.Add(att);
                 }
@@ -197,13 +197,13 @@ namespace KoARSaveItemEditor
 
         private void LoadItemAttributes(ItemMemoryInfo itemInfo)
         {
-            List<AttributeMemoryInfo> attList = editor.GetAttList(itemInfo, attributeList);
-            List<AttributeMemoryInfo> temp = new List<AttributeMemoryInfo>();
+            List<EffectInfo> attList = editor.GetAttList(itemInfo, attributeList);
+            List<EffectInfo> temp = new List<EffectInfo>();
 
-            foreach (AttributeMemoryInfo att in attList)
+            foreach (EffectInfo att in attList)
             {
                 bool isAtt = false;
-                foreach (AttributeMemoryInfo t in temp)
+                foreach (EffectInfo t in temp)
                 {
                     if (t.Code == att.Code)
                     {
@@ -387,7 +387,7 @@ namespace KoARSaveItemEditor
 
         private void ComboAttList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            AttributeMemoryInfo itemAttribute = (AttributeMemoryInfo)comboExistingAttList.SelectedItem;
+            EffectInfo itemAttribute = (EffectInfo)comboExistingAttList.SelectedItem;
             txtPropSelectedAttributeHexCode.Text = itemAttribute.Code;
         }
 
@@ -402,7 +402,7 @@ namespace KoARSaveItemEditor
 
             try
             {
-                AttributeInfo matchingAttribute = comboAddAttList.Items.Cast<AttributeInfo>().Where(x => x.AttributeId == hexCode).FirstOrDefault();
+                EffectInfo matchingAttribute = comboAddAttList.Items.Cast<EffectInfo>().Where(x => x.Code == hexCode).FirstOrDefault();
                 index = comboAddAttList.Items.IndexOf(matchingAttribute);
             }
             catch
@@ -434,8 +434,8 @@ namespace KoARSaveItemEditor
 
         private void AddAttribute(ItemMemoryInfo selectedItem, string attCode)
         {
-            List<AttributeMemoryInfo> attList = selectedItem.ItemAttList;
-            AttributeMemoryInfo attInfo = new AttributeMemoryInfo
+            List<EffectInfo> attList = selectedItem.ItemAttList;
+            EffectInfo attInfo = new EffectInfo
             {
                 Code = attCode
             };
@@ -458,10 +458,10 @@ namespace KoARSaveItemEditor
         private void ComboAddAttList_SelectedIndexChanged(object sender, EventArgs e)
         {
             ComboBox box = (ComboBox)sender;
-            AttributeInfo info = (AttributeInfo)box.SelectedItem;
-            if (!string.IsNullOrEmpty(info?.AttributeId))
+            EffectInfo info = (EffectInfo)box.SelectedItem;
+            if (!string.IsNullOrEmpty(info?.Code))
             {
-                txtPropAddAttributeHexCode.Text = info.AttributeId;
+                txtPropAddAttributeHexCode.Text = info.Code;
             }
         }
     }

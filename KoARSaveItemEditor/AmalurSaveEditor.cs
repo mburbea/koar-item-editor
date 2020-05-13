@@ -91,29 +91,29 @@ namespace KoARSaveItemEditor
         /// <param name="weaponInfo">Equipment Object</param>
         /// <param name="attInfoList">Description of Properties</param>
         /// <returns>List of Attributes</returns>
-        public List<AttributeMemoryInfo> GetAttList(ItemMemoryInfo weaponInfo, List<AttributeInfo> attInfoList)
+        public List<EffectInfo> GetAttList(ItemMemoryInfo weaponInfo, List<EffectInfo> attInfoList)
         {
             if (br.BtList == null)
             {
                 throw new Exception("Save file not open.");
             }
 
-            List<AttributeMemoryInfo> attList = weaponInfo.ItemAttList;
-            foreach (AttributeMemoryInfo attInfo in attList)
+            List<EffectInfo> attList = weaponInfo.ItemAttList;
+            foreach (EffectInfo attInfo in attList)
             {
                 string text = "";
-                foreach (AttributeInfo att in attInfoList)
+                foreach (EffectInfo att in attInfoList)
                 {
-                    if (att.AttributeId == attInfo.Code)
+                    if (att.Code == attInfo.Code)
                     {
-                        text = att.AttributeText;
+                        text = att.DisplayText;
                     }
                 }
                 if (text == "")
                 {
                     text = "Unknown";
                 }
-                attInfo.Detail = text;
+                attInfo.DisplayText = text;
             }
             return attList;
         }

@@ -13,10 +13,10 @@ namespace KoARSaveItemEditor
         bool isEdit = false;
 
         AmalurSaveEditor editor = null;
-        List<AttributeInfo> attributeList = null;
+        List<EffectInfo> attributeList = null;
         ItemMemoryInfo weaponInfo = null;
 
-        public EditForm(AmalurSaveEditor editor, List<AttributeInfo> attList, ItemMemoryInfo weaponInfo)
+        public EditForm(AmalurSaveEditor editor, List<EffectInfo> attList, ItemMemoryInfo weaponInfo)
         {
             InitializeComponent();
             this.editor = editor;
@@ -26,7 +26,7 @@ namespace KoARSaveItemEditor
             FormatAll(attList);
         }
 
-        private void FormatAll(List<AttributeInfo> attList)
+        private void FormatAll(List<EffectInfo> attList)
         {
             cboAddAttribute.DataSource = attList;
             cboAddAttribute.ValueMember = "AttributeId";
@@ -56,13 +56,13 @@ namespace KoARSaveItemEditor
 
         private void DataBinding()
         {
-            List<AttributeMemoryInfo> attList = editor.GetAttList(weaponInfo, attributeList);
-            List<AttributeMemoryInfo> temp = new List<AttributeMemoryInfo>();
+            List<EffectInfo> attList = editor.GetAttList(weaponInfo, attributeList);
+            List<EffectInfo> temp = new List<EffectInfo>();
             
-            foreach(AttributeMemoryInfo att in attList)
+            foreach(EffectInfo att in attList)
             {
                 bool isAtt = false;
-                foreach (AttributeMemoryInfo t in temp)
+                foreach (EffectInfo t in temp)
                 {
                     if (t.Code == att.Code)
                     {
@@ -85,9 +85,9 @@ namespace KoARSaveItemEditor
         {
             if (cboExtendAttIndex.SelectedIndex >= 0)
             {
-                txtAttCode.Text = (cboExtendAttIndex.SelectedItem as AttributeMemoryInfo).Code;
+                txtAttCode.Text = (cboExtendAttIndex.SelectedItem as EffectInfo).Code;
                 int i = 0;
-                foreach (AttributeMemoryInfo att in weaponInfo.ItemAttList)
+                foreach (EffectInfo att in weaponInfo.ItemAttList)
                 {
                     if (att.Code.ToUpper() == txtAttCode.Text.ToUpper())
                     {
@@ -109,10 +109,10 @@ namespace KoARSaveItemEditor
             {
                 MessageBox.Show("Failed to delete. Please select another property to remove.");
             }
-            List<AttributeMemoryInfo> attList = weaponInfo.ItemAttList;
+            List<EffectInfo> attList = weaponInfo.ItemAttList;
             for (int i = 0; i < numDelete.Value; i++)
             {
-                foreach (AttributeMemoryInfo att in attList)
+                foreach (EffectInfo att in attList)
                 {
                     if (att.Code.ToUpper() == txtAttCode.Text.ToUpper())
                     {
@@ -133,13 +133,13 @@ namespace KoARSaveItemEditor
             {
                 return;
             }
-            string id = (cboAddAttribute.SelectedItem as AttributeInfo).AttributeId;
+            string id = (cboAddAttribute.SelectedItem as EffectInfo).Code;
             if (id == null || id.Trim().Length != 6)
             {
                 MessageBox.Show("Invalid attribute ID!");
                 return;
             }
-            AddAttribute((cboAddAttribute.SelectedItem as AttributeInfo).AttributeId, (int)numAddBySelect.Value);
+            AddAttribute((cboAddAttribute.SelectedItem as EffectInfo).Code, (int)numAddBySelect.Value);
             numAddBySelect.Value = 0;
         }
 
@@ -233,10 +233,10 @@ namespace KoARSaveItemEditor
 
         private void AddAttribute(string attCode,int count)
         {
-            List<AttributeMemoryInfo> attList = weaponInfo.ItemAttList;
+            List<EffectInfo> attList = weaponInfo.ItemAttList;
             for (int i = 0; i < count; i++)
             {
-                AttributeMemoryInfo attInfo = new AttributeMemoryInfo
+                EffectInfo attInfo = new EffectInfo
                 {
                     Code = attCode
                 };

@@ -5,16 +5,16 @@ namespace KoARSaveItemEditor
     /// <summary>
     /// Attribute Information
     /// </summary>
-    public class AttributeInfo
+    public class EffectInfo
     {
         /// <summary>
         /// Attribute ID
         /// </summary>
-        public string AttributeId { get; set; }
+        public string Code { get; set; }
 
         /// <summary>
         /// Attribute Description
         /// </summary>
-        public string AttributeText { get; set; }
+        public string DisplayText { get; set; }
     }
 }
