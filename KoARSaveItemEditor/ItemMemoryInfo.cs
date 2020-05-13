@@ -102,6 +102,10 @@ namespace KoARSaveItemEditor
             }
         }
 
+        public bool Unsellable =>
+                (ItemBytes[AmalurSaveEditor.ItemAttHeadOffSet + 20 + 8 * AttCount] & 0x80) == 0x80;
+         
+
         /// <summary>
         /// list of attributes on equipment
         /// </summary>

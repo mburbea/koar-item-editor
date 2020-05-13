@@ -109,6 +109,11 @@ namespace KoARSaveItemEditor
             {
                 throw new Exception("Save file not open.");
             }
+            var byte41 = weaponInfo.Unsellable;
+            if(byte41)
+            {
+                Console.WriteLine(byte41);
+            }
 
             List<EffectInfo> attList = weaponInfo.ItemAttList;
             foreach (EffectInfo attInfo in attList)
