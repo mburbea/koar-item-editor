@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace ByteManager
 {
@@ -319,34 +320,6 @@ namespace ByteManager
         }
 
         /// <summary>
-        /// Get a length int array from a index
-        /// </summary>
-        /// <param name="index">The beginning of the index</param>
-        /// <param name="length">Length</param>
-        /// <returns>int array</returns>
-        public int[] GetIntsByIndexAndLength(int index, int length)
-        {
-            if (BtList == null)
-            {
-                throw new Exception("File is not open");
-            }
-            if (index < 0)
-            {
-                throw new Exception("Index is invalid");
-            }
-            else if ((length + index) > BtList.Length)
-            {
-                throw new Exception("Length out of bounds");
-            }
-            int[] it = new int[length];
-            for (int i = 0; i < length; i++)
-            {
-                it[i] = BtList[index + i];
-            }
-            return it;
-        }
-
-        /// <summary>
         /// Get a length byte array starting from index
         /// </summary>
         /// <param name="index">The beginning of the index</param>
@@ -354,24 +327,17 @@ namespace ByteManager
         /// <returns>byte Array</returns>
         public byte[] GetBytesByIndexAndLength(int index, int length)
         {
-            if (BtList == null)
-            {
-                throw new Exception("File is not open");
-            }
-            if (index < 0)
-            {
-                throw new Exception("Index is invalid");
-            }
-            else if ((length + index) > BtList.Length)
-            {
-                throw new Exception("Length out of bounds");
-            }
-            byte[] it = new byte[length];
-            for (int i = 0; i < length; i++)
-            {
-                it[i] = BtList[index + i];
-            }
-            return it;
+            return BtList.AsSpan(index, length).ToArray();
+        }
+
+        /// <summary>
+        /// Get a uint at this location.
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public uint GetUInt32ByIndexAndLength(int index)
+        {
+            return MemoryMarshal.Read<uint>(BtList.AsSpan(index, 4));
         }
 
         /// <summary>

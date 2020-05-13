@@ -117,13 +117,9 @@ namespace KoARSaveItemEditor
                 {
                     AttributeMemoryInfo att = new AttributeMemoryInfo
                     {
-                        Value = byteEditor.GetIntsByIndexAndLength(attIndex, 4)
+                        Code = byteEditor.GetUInt32ByIndexAndLength(attIndex).ToString("X")
                     };
-                    string val1 = Convert.ToString(att.Value[2], 16).ToUpper();
-                    string val2 = Convert.ToString(att.Value[1], 16).ToUpper();
-                    string val3 = Convert.ToString(att.Value[0], 16).ToUpper();
 
-                    att.Code = (val1.Length == 2 ? val1 : ("0" + val1)) + (val2.Length == 2 ? val2 : ("0" + val2)) + (val3.Length == 2 ? val3 : ("0" + val3));
                     attList.Add(att);
 
                     attIndex += 8;

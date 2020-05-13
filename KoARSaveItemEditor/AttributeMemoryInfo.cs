@@ -8,11 +8,6 @@ namespace KoARSaveItemEditor
     public class AttributeMemoryInfo
     {
         /// <summary>
-        /// Attribute value
-        /// </summary>
-        public int[] Value { get; set; }
-
-        /// <summary>
         /// Attribute Code
         /// </summary>
         public string Code { get; set; }
