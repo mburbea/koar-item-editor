@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
+using System.Xml;
 
 namespace ByteManager
 {
@@ -86,27 +88,41 @@ namespace ByteManager
 
             List<int> indexList = new List<int>();
             int index = -1;
-            for (int i = 0; i <= BtList.Length - name.Length; i++)
+            var bytes = Encoding.ASCII.GetBytes(name);
+            Span<byte> span = BtList;
+            while(true)
             {
-                for (int j = 0; j < name.Length; j++)
+                var ix = span.IndexOf(bytes);
+                if (ix == -1)
                 {
-                    if (BtList[i + j] == name[j])
-                    {
-                        index = i;
-                        continue;
-                    }
-                    else
-                    {
-                        index = -1;
-                        break;
-                    }
+                    break;
                 }
-                if (index != -1)
-                {
-                    indexList.Add(index);
-                }
-                continue;
+                indexList.Add(ix);
+                span = span.Slice(ix + name.Length + 1);
             }
+
+
+            //for (int i = 0; i <= BtList.Length - name.Length; i++)
+            //{
+            //    for (int j = 0; j < name.Length; j++)
+            //    {
+            //        if (BtList[i + j] == name[j])
+            //        {
+            //            index = i;
+            //            continue;
+            //        }
+            //        else
+            //        {
+            //            index = -1;
+            //            break;
+            //        }
+            //    }
+            //    if (index != -1)
+            //    {
+            //        indexList.Add(index);
+            //    }
+            //    continue;
+            //}
             return indexList;
         }
 
@@ -413,6 +429,7 @@ namespace ByteManager
             {
                 throw new Exception("Termination Index is invalid");
             }
+
 
             List<byte> temp = new List<byte>();
             for (int i = 0; i < BtList.Length; i++)

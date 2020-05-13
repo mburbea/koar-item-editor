@@ -80,12 +80,12 @@ namespace KoARSaveItemEditor
             this.txtPropMaxDur = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.groupBoxPropName = new System.Windows.Forms.GroupBox();
+            this.checkBoxUnlockName = new System.Windows.Forms.CheckBox();
             this.txtPropName = new System.Windows.Forms.TextBox();
             this.invSizeGroupBox = new System.Windows.Forms.GroupBox();
-            this.checkBoxUnlockName = new System.Windows.Forms.CheckBox();
-            this.label8 = new System.Windows.Forms.Label();
+            this.inventorySizeText = new System.Windows.Forms.NumericUpDown();
             this.buttonInvSizeLocate = new System.Windows.Forms.Button();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.label8 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.itemViewGroupBox.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -99,7 +99,7 @@ namespace KoARSaveItemEditor
             this.groupBoxPropDurability.SuspendLayout();
             this.groupBoxPropName.SuspendLayout();
             this.invSizeGroupBox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.inventorySizeText)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -431,7 +431,7 @@ namespace KoARSaveItemEditor
             this.comboAddAttList.Name = "comboAddAttList";
             this.comboAddAttList.Size = new System.Drawing.Size(192, 21);
             this.comboAddAttList.TabIndex = 20;
-            this.comboAddAttList.SelectedIndexChanged += new System.EventHandler(ComboAddAttList_SelectedIndexChanged);
+            this.comboAddAttList.SelectedIndexChanged += new System.EventHandler(this.ComboAddAttList_SelectedIndexChanged);
             // 
             // buttonPropAddAttribute
             // 
@@ -571,26 +571,6 @@ namespace KoARSaveItemEditor
             this.groupBoxPropName.TabStop = false;
             this.groupBoxPropName.Text = "Name";
             // 
-            // txtPropName
-            // 
-            this.txtPropName.Location = new System.Drawing.Point(6, 21);
-            this.txtPropName.Name = "txtPropName";
-            this.txtPropName.ReadOnly = true;
-            this.txtPropName.Size = new System.Drawing.Size(204, 22);
-            this.txtPropName.TabIndex = 2;
-            // 
-            // invSizeGroupBox
-            // 
-            this.invSizeGroupBox.Controls.Add(this.numericUpDown1);
-            this.invSizeGroupBox.Controls.Add(this.buttonInvSizeLocate);
-            this.invSizeGroupBox.Controls.Add(this.label8);
-            this.invSizeGroupBox.Location = new System.Drawing.Point(578, 27);
-            this.invSizeGroupBox.Name = "invSizeGroupBox";
-            this.invSizeGroupBox.Size = new System.Drawing.Size(229, 78);
-            this.invSizeGroupBox.TabIndex = 20;
-            this.invSizeGroupBox.TabStop = false;
-            this.invSizeGroupBox.Text = "Inventory Size";
-            // 
             // checkBoxUnlockName
             // 
             this.checkBoxUnlockName.AutoSize = true;
@@ -602,15 +582,37 @@ namespace KoARSaveItemEditor
             this.checkBoxUnlockName.UseVisualStyleBackColor = true;
             this.checkBoxUnlockName.CheckedChanged += new System.EventHandler(this.CheckBoxUnlockName_CheckedChanged);
             // 
-            // label8
+            // txtPropName
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(6, 26);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(77, 13);
-            this.label8.TabIndex = 16;
-            this.label8.Text = "Enter current:";
-            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.txtPropName.Location = new System.Drawing.Point(6, 21);
+            this.txtPropName.Name = "txtPropName";
+            this.txtPropName.ReadOnly = true;
+            this.txtPropName.Size = new System.Drawing.Size(204, 22);
+            this.txtPropName.TabIndex = 2;
+            // 
+            // invSizeGroupBox
+            // 
+            this.invSizeGroupBox.Controls.Add(this.inventorySizeText);
+            this.invSizeGroupBox.Controls.Add(this.buttonInvSizeLocate);
+            this.invSizeGroupBox.Controls.Add(this.label8);
+            this.invSizeGroupBox.Location = new System.Drawing.Point(578, 27);
+            this.invSizeGroupBox.Name = "invSizeGroupBox";
+            this.invSizeGroupBox.Size = new System.Drawing.Size(229, 78);
+            this.invSizeGroupBox.TabIndex = 20;
+            this.invSizeGroupBox.TabStop = false;
+            this.invSizeGroupBox.Text = "Inventory Size";
+            // 
+            // inventorySizeText
+            // 
+            this.inventorySizeText.Location = new System.Drawing.Point(89, 21);
+            this.inventorySizeText.Maximum = new decimal(new int[] {
+            999999,
+            0,
+            0,
+            0});
+            this.inventorySizeText.Name = "inventorySizeText";
+            this.inventorySizeText.Size = new System.Drawing.Size(76, 22);
+            this.inventorySizeText.TabIndex = 25;
             // 
             // buttonInvSizeLocate
             // 
@@ -618,20 +620,19 @@ namespace KoARSaveItemEditor
             this.buttonInvSizeLocate.Name = "buttonInvSizeLocate";
             this.buttonInvSizeLocate.Size = new System.Drawing.Size(52, 22);
             this.buttonInvSizeLocate.TabIndex = 24;
-            this.buttonInvSizeLocate.Text = "Locate";
+            this.buttonInvSizeLocate.Text = "Save";
             this.buttonInvSizeLocate.UseVisualStyleBackColor = true;
+            this.buttonInvSizeLocate.Click += new System.EventHandler(this.buttonInvSizeLocate_Click);
             // 
-            // numericUpDown1
+            // label8
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(89, 21);
-            this.numericUpDown1.Maximum = new decimal(new int[] {
-            1000000,
-            0,
-            0,
-            0});
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(76, 22);
-            this.numericUpDown1.TabIndex = 25;
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(6, 26);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(79, 13);
+            this.label8.TabIndex = 16;
+            this.label8.Text = "Enter Desired:";
+            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // MainForm
             // 
@@ -677,7 +678,7 @@ namespace KoARSaveItemEditor
             this.groupBoxPropName.PerformLayout();
             this.invSizeGroupBox.ResumeLayout(false);
             this.invSizeGroupBox.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.inventorySizeText)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -739,7 +740,7 @@ namespace KoARSaveItemEditor
         private CheckBox checkBoxUnlockName;
         private Button buttonInvSizeLocate;
         private Label label8;
-        private NumericUpDown numericUpDown1;
+        private NumericUpDown inventorySizeText;
     }
 }
 

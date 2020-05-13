@@ -29,7 +29,7 @@ namespace KoARSaveItemEditor
                 editor = new AmalurSaveEditor();
                 editor.ReadFile(fileName);
                 tslblFileLocal.Text = fileName;
-                //inventorySizeTextBox.Text = editor.GetMaxBagCount().ToString();
+                inventorySizeText.Text = editor.GetMaxBagCount().ToString();
                 btnSearchAll.PerformClick();
             }
         }
@@ -49,7 +49,7 @@ namespace KoARSaveItemEditor
             float currDur = float.TryParse(txtFilterCurrentDur.Text, out currDur) ? currDur : 0;
             float maxDur = float.TryParse(txtFilterMaxDur.Text, out maxDur) ? maxDur : 0;
 
-            var query = from w in itemList select w;
+            IEnumerable<ItemMemoryInfo> query = itemList;
             if (itemName != "")
                 query = query.Where(w => w.ItemName.ToUpper().Contains(itemName));
             if (currDur > 0)
@@ -79,6 +79,11 @@ namespace KoARSaveItemEditor
         private void LoadItemAttributesOnClick()
         {
             ItemMemoryInfo itemInfo = (ItemMemoryInfo)lvMain.SelectedItems[0].Tag;
+            RebindAttrList(itemInfo);
+        }
+
+        private void RebindAttrList(ItemMemoryInfo itemInfo)
+        {
             List<EffectInfo> itemAttList = editor.GetAttList(itemInfo, attributeList);
             selectedItem = itemInfo;
 
@@ -93,6 +98,7 @@ namespace KoARSaveItemEditor
             comboAddAttList.DisplayMember = nameof(EffectInfo.DisplayText);
             comboAddAttList.ValueMember = nameof(EffectInfo.Code);
             comboAddAttList.DataSource = attributeList;
+            btnPrint.Enabled = true;
         }
 
         private void DeleteItemAttribute()
@@ -103,7 +109,7 @@ namespace KoARSaveItemEditor
 
             foreach (EffectInfo att in itemAttList)
             {
-                if (att.Code.ToUpper() == selectedAttribute.Code.ToUpper())
+                if (att.Code.Equals(selectedAttribute.Code, StringComparison.OrdinalIgnoreCase))
                 {
                     itemAttList.Remove(att);
                     break;
@@ -116,7 +122,9 @@ namespace KoARSaveItemEditor
             {
                 txtPropSelectedAttributeHexCode.Text = "";
             }
-            LoadItemAttributesOnClick();
+            editor.WriteWeaponByte(selectedItem);
+            RebindAttrList(itemInfo);
+            CanSave();
         }
 
         private void BtnShowAll_Click(object sender, EventArgs e)
@@ -144,20 +152,24 @@ namespace KoARSaveItemEditor
                         itemList.Insert(0, w);
                     }
                 }
+
                 foreach (ItemMemoryInfo w in itemList)
                 {
-                    ListViewItem item = new ListViewItem
+                    lvMain.Items.Add(new ListViewItem
                     {
                         Name = w.ItemIndex.ToString(),
-                        Text = w.ItemIndex.ToString()
-                    };
-                    item.SubItems.Add(w.ItemName);
-                    item.SubItems.Add(w.CurrentDurability.ToString());
-                    item.SubItems.Add(w.MaxDurability.ToString());
-                    item.SubItems.Add(w.AttCount.ToString());
-                    item.Tag = w;
-                    lvMain.Items.Add(item);
+                        Text = w.ItemIndex.ToString(),
+                        Tag = w,
+                        SubItems =
+                        {
+                            w.ItemName,
+                            w.CurrentDurability.ToString(),
+                            w.MaxDurability.ToString(),
+                            w.AttCount.ToString()
+                        }
+                    });
                 }
+
                 btnPrint.Enabled = false;
                 btnDelete.Enabled = false;
                 btnSave.Enabled = false;
@@ -193,31 +205,6 @@ namespace KoARSaveItemEditor
                 MessageBox.Show("Failed to load property list. Please check if \"Data\" folder is in the editor's directory and properties.xml is inside.");
                 Application.Exit();
             }
-        }
-
-        private void LoadItemAttributes(ItemMemoryInfo itemInfo)
-        {
-            List<EffectInfo> attList = editor.GetAttList(itemInfo, attributeList);
-            List<EffectInfo> temp = new List<EffectInfo>();
-
-            foreach (EffectInfo att in attList)
-            {
-                bool isAtt = false;
-                foreach (EffectInfo t in temp)
-                {
-                    if (t.Code == att.Code)
-                    {
-                        isAtt = true;
-                        break;
-                    }
-                }
-                if (!isAtt)
-                {
-                    temp.Add(att);
-                }
-            }
-            comboExistingAttList.DataSource = null;
-            comboExistingAttList.DataSource = temp;
         }
 
         private void lvMain_SelectedIndexChanged(object sender, EventArgs e)
@@ -281,7 +268,12 @@ namespace KoARSaveItemEditor
 
         private void CanSave()
         {
+            var selected = selectedItem.ItemIndex;
             btnSearchAll.PerformClick();
+            var elem = lvMain.Items.Cast<ListViewItem>().FirstOrDefault(x => (x.Tag as ItemMemoryInfo).ItemIndex == selected);
+            elem.Focused = true;
+            elem.Selected = true;
+            selectedItem = elem.Tag as ItemMemoryInfo;
             tslblEditState.Text = "Modified";
             btnSave.Enabled = true;
         }
@@ -429,6 +421,7 @@ namespace KoARSaveItemEditor
             if (isValidCode)
             {
                 AddAttribute(selectedItem, hexCode);
+                CanSave();
             }
         }
 
@@ -441,7 +434,8 @@ namespace KoARSaveItemEditor
             };
             attList.Add(attInfo);
             selectedItem.ItemAttList = attList;
-            LoadItemAttributesOnClick();
+            editor.WriteWeaponByte(selectedItem);
+            RebindAttrList(selectedItem);
         }
 
         private void CheckBoxUnlockName_CheckedChanged(object sender, EventArgs e)
@@ -463,6 +457,11 @@ namespace KoARSaveItemEditor
             {
                 txtPropAddAttributeHexCode.Text = info.Code;
             }
+        }
+
+        private void buttonInvSizeLocate_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

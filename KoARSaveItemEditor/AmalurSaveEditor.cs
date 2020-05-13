@@ -12,8 +12,10 @@ namespace KoARSaveItemEditor
         /// <summary>
         /// The head of the equipment, property and indicate the number of attributes of the data relative to equipment data head offset
         /// </summary>
-        public static int ItemAttHeadOffSet = 21;
-        public static int InventoryCapacityOffset = 51;
+        public const int ItemAttHeadOffSet = 21;
+        public const int InventoryCapacityOffset = 36;
+        public const string InventoryLimit = "inventory_limit";
+        public const int AltOffset = InventoryCapacityOffset + 22;
         private ByteEditor br = null;
 
         /// <summary>
@@ -65,9 +67,19 @@ namespace KoARSaveItemEditor
             {
                 throw new Exception("Save file not open.");
             }
-            int index = br.FindIndexByString("inventory_limit")[0] + InventoryCapacityOffset;
-            byte[] bt = br.GetBytesByIndexAndLength(index, 4);
-            return BitConverter.ToInt32(bt, 0);
+            var res = br.FindIndexByString(InventoryLimit);
+            uint val = uint.MaxValue;
+            var index = res[0] + InventoryCapacityOffset + InventoryLimit.Length;
+            var desired = br.FindFirstIndex(index, BitConverter.GetBytes(131091));
+            var firstStep = true;
+            while (val == 0 ||  val > 999_999)
+            {
+                
+                val = br.GetUInt32ByIndexAndLength(index);
+                index += firstStep ? InventoryLimit.Length : 7;
+                firstStep = false;
+            }
+            return (int)val;
         }
 
         /// <summary>
