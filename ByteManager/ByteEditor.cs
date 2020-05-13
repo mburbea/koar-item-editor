@@ -12,16 +12,9 @@ namespace ByteManager
     public class ByteEditor
     {
         /// <summary>
-        /// Constructor parameters (need to call Open to open the file)
+        /// Constructor.
         /// </summary>
-        public ByteEditor()
-        {
-        }
-        /// <summary>
-        /// Create a known instance of a byte array
-        /// </summary>
-        /// <param name="btList"></param>
-        public ByteEditor(byte[] btList)
+        public ByteEditor(byte[] btList = null)
         {
             BtList = btList;
         }
@@ -39,11 +32,9 @@ namespace ByteManager
         {
             try
             {
-                using (var fs = new FileStream(path, FileMode.Open))
-                {
-                    BtList = new byte[fs.Length];
-                    fs.Read(BtList, 0, (int)fs.Length);
-                }
+                using FileStream fs = new FileStream(path, FileMode.Open);
+                BtList = new byte[fs.Length];
+                fs.Read(BtList, 0, (int)fs.Length);
             }
             catch
             {
@@ -64,10 +55,8 @@ namespace ByteManager
             }
             try
             {
-                using (var fs = new FileStream(path, FileMode.Create))
-                {
-                    fs.Write(BtList, 0, BtList.Length);
-                }
+                using var fs = new FileStream(path, FileMode.Create);
+                fs.Write(BtList, 0, BtList.Length);
             }
             catch
             {
