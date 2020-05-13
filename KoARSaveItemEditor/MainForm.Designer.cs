@@ -431,6 +431,7 @@ namespace KoARSaveItemEditor
             this.comboAddAttList.Name = "comboAddAttList";
             this.comboAddAttList.Size = new System.Drawing.Size(192, 21);
             this.comboAddAttList.TabIndex = 20;
+            this.comboAddAttList.SelectedIndexChanged += new System.EventHandler(ComboAddAttList_SelectedIndexChanged);
             // 
             // buttonPropAddAttribute
             // 

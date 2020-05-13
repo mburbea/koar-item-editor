@@ -454,5 +454,15 @@ namespace KoARSaveItemEditor
             }
             txtPropName.ReadOnly = !txtPropName.ReadOnly;
         }
+
+        private void ComboAddAttList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ComboBox box = (ComboBox)sender;
+            AttributeInfo info = (AttributeInfo)box.SelectedItem;
+            if (!string.IsNullOrEmpty(info?.AttributeId))
+            {
+                txtPropAddAttributeHexCode.Text = info.AttributeId;
+            }
+        }
     }
 }
