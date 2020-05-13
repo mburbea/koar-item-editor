@@ -149,8 +149,8 @@ namespace ByteManager
             {
                 throw new Exception("The file is too short");
             }
-
-            return BtList.AsSpan(startIndex).IndexOf(bt);
+            int ix = BtList.AsSpan(startIndex).IndexOf(bt);
+            return ix == -1? -1 : startIndex + ix;
         }
 
         /// <summary>
