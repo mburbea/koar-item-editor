@@ -85,177 +85,48 @@ namespace ByteManager
             {
                 throw new Exception("File is too short");
             }
-
-            List<int> indexList = new List<int>();
-            int index = -1;
             var bytes = Encoding.ASCII.GetBytes(name);
-            Span<byte> span = BtList;
-            while(true)
-            {
-                var ix = span.IndexOf(bytes);
-                if (ix == -1)
-                {
-                    break;
-                }
-                indexList.Add(ix);
-                span = span.Slice(ix + name.Length + 1);
-            }
 
-
-            //for (int i = 0; i <= BtList.Length - name.Length; i++)
-            //{
-            //    for (int j = 0; j < name.Length; j++)
-            //    {
-            //        if (BtList[i + j] == name[j])
-            //        {
-            //            index = i;
-            //            continue;
-            //        }
-            //        else
-            //        {
-            //            index = -1;
-            //            break;
-            //        }
-            //    }
-            //    if (index != -1)
-            //    {
-            //        indexList.Add(index);
-            //    }
-            //    continue;
-            //}
-            return indexList;
+            return FindIndexBySpan(bytes);
         }
 
+        private List<int> FindIndexBySpan(Span<byte> bytes)
+        {
+            var array = BtList;
+            var indexList = new List<int>();
+            int ix = array.AsSpan().IndexOf(bytes);
+            int start = 0;
+            while(ix != -1)
+            {
+                indexList.Add(start + ix);
+                start += ix + bytes.Length;
+                ix = array.AsSpan(start).IndexOf(bytes);
+            }
+
+            return indexList;
+
+        }
         /// <summary>
         /// Find the address where the index by an array of byte in the file (possibly more than one record)
         /// </summary>
-        /// <param name="bt">To find an array of byte</param>
+        /// <param name="bytes">To find an array of byte</param>
         /// <returns>byte array where the position index list</returns>
-        public List<int> FindIndexList(byte[] bt)
+        public List<int> FindIndexList(byte[] bytes)
         {
             if (BtList == null)
             {
                 throw new Exception("The file is not open");
             }
-            if (bt == null || bt.Length == 0)
+            if (bytes == null || bytes.Length == 0)
             {
                 throw new Exception("Find an empty array is not allowed");
             }
-            if (BtList.Length < bt.Length)
+            if (BtList.Length < bytes.Length)
             {
                 throw new Exception("File is too short");
             }
 
-            List<int> indexList = new List<int>();
-            int index = -1;
-            for (int i = 0; i <= BtList.Length - bt.Length; i++)
-            {
-                for (int j = 0; j < bt.Length; j++)
-                {
-                    if (BtList[i + j] == bt[j])
-                    {
-                        index = i;
-                    }
-                    else
-                    {
-                        index = -1;
-                        break;
-                    }
-                }
-                if (index != -1)
-                {
-                    indexList.Add(index);
-                }
-            }
-            return indexList;
-        }
-
-        /// <summary>
-        /// Find the the int array address in the file where the index (may be more than one record)
-        /// </summary>
-        /// <param name="it">To find an array of int</param>
-        /// <returns>int Location of the array index list</returns>
-        public List<int> FindIndexList(int[] it)
-        {
-            if (BtList == null)
-            {
-                throw new Exception("File is not open");
-            }
-            if (it == null || it.Length == 0)
-            {
-                throw new Exception("Find an empty array is not allowed");
-            }
-            if (BtList.Length < it.Length)
-            {
-                throw new Exception("The file is too short");
-            }
-
-            List<int> indexList = new List<int>();
-            int index = -1;
-            for (int i = 0; i <= BtList.Length - it.Length; i++)
-            {
-                for (int j = 0; j < it.Length; j++)
-                {
-                    if (BtList[i + j] == it[j])
-                    {
-                        index = i;
-                    }
-                    else
-                    {
-                        index = -1;
-                        break;
-                    }
-                }
-                if (index != -1)
-                {
-                    indexList.Add(index);
-                }
-            }
-            return indexList;
-        }
-
-        /// <summary>
-        /// Find int array in the file where the first address index from an address
-        /// </summary>
-        /// <param name="startIndex">Start address</param>
-        /// <param name="it">To find an array of int</param>
-        /// <returns>First index -1 is returned (no)</returns>
-        public int FindFirstIndex(int startIndex, int[] it)
-        {
-            if (BtList == null)
-            {
-                throw new Exception("File is not open");
-            }
-            if (it == null || it.Length == 0)
-            {
-                throw new Exception("Find an empty array is not allowed");
-            }
-            if (BtList.Length < it.Length)
-            {
-                throw new Exception("The file is too short");
-            }
-
-            int index = -1;
-            for (int i = startIndex; i <= BtList.Length - it.Length; i++)
-            {
-                for (int j = 0; j < it.Length; j++)
-                {
-                    if (BtList[i + j] == it[j])
-                    {
-                        index = i;
-                    }
-                    else
-                    {
-                        index = -1;
-                        break;
-                    }
-                }
-                if (index != -1)
-                {
-                    return index;
-                }
-            }
-            return index;
+            return FindIndexBySpan(bytes);
         }
 
         /// <summary>
@@ -279,50 +150,7 @@ namespace ByteManager
                 throw new Exception("The file is too short");
             }
 
-            int index = -1;
-            for (int i = startIndex; i <= BtList.Length - bt.Length; i++)
-            {
-                for (int j = 0; j < bt.Length; j++)
-                {
-                    if (BtList[i + j] == bt[j])
-                    {
-                        index = i;
-                    }
-                    else
-                    {
-                        index = -1;
-                        break;
-                    }
-                }
-                if (index != -1)
-                {
-                    return index;
-                }
-            }
-            return index;
-        }
-
-        /// <summary>
-        /// Get a length of string from index (only supports English)
-        /// </summary>
-        /// <param name="index">The beginning of the index</param>
-        /// <param name="length">长度</param>
-        /// <returns>字符串</returns>
-        public string GetStringByIndexAndLength(int index, int length)
-        {
-            if (BtList == null)
-            {
-                throw new Exception("File is not open");
-            }
-            if (index < 0)
-            {
-                throw new Exception("Index is invalid");
-            }
-            else if ((length + index) > BtList.Length)
-            {
-                throw new Exception("Length out of bounds");
-            }
-            return new string(System.Text.Encoding.Default.GetChars(BtList, index, length));
+            return BtList.AsSpan(startIndex).IndexOf(bt);
         }
 
         /// <summary>
@@ -344,36 +172,6 @@ namespace ByteManager
         public uint GetUInt32ByIndexAndLength(int index)
         {
             return MemoryMarshal.Read<uint>(BtList.AsSpan(index, 4));
-        }
-
-        /// <summary>
-        /// Get the specified index began at least a length compliant string (if the string is more than the length,
-        /// automatic backward extension, specification: string does not contain Chinese and special characters)
-        /// </summary>
-        /// <param name="index">Starting with a specified index</param>
-        /// <param name="length">Minimum length</param>
-        /// <returns>String</returns>
-        public string GetStringByIndexAndMinLength(int index, int length)
-        {
-            if (BtList == null)
-            {
-                throw new Exception("File is not open");
-            }
-            if (index < 0)
-            {
-                throw new Exception("Index is invalid");
-            }
-            else if ((length + index) > BtList.Length)
-            {
-                throw new Exception("Length out of bounds");
-            }
-
-            int addLength = 0;
-            while (BtList[index + length + addLength] >= '0' && BtList[index + length + addLength] <= '9' || BtList[index + length + addLength] >= 'a' && BtList[index + length + addLength] <= 'z' || BtList[index + length + addLength] >= 'A' && BtList[index + length + addLength] <= 'Z' || BtList[index + length + addLength] == ' ' || BtList[index + length + addLength] == '_')
-            {
-                addLength++;
-            }
-            return new string(System.Text.Encoding.Default.GetChars(BtList, index, length + addLength));
         }
 
         /// <summary>
@@ -444,31 +242,6 @@ namespace ByteManager
         }
 
         /// <summary>
-        /// 修改指定索引开始的数据为新int数组
-        /// </summary>
-        /// <param name="index">要修改的起始索引</param>
-        /// <param name="newInts">要修改的数值</param>
-        public void EditByIndex(int index, int[] newInts)
-        {
-            if (BtList == null)
-            {
-                throw new Exception("File is not open");
-            }
-            if (index < 0)
-            {
-                throw new Exception("Index is invalid");
-            }
-            else if ((newInts.Length + index) > BtList.Length)
-            {
-                throw new Exception("Length of the new array out of bounds");
-            }
-            for (int i = 0; i < newInts.Length; i++)
-            {
-                BtList[index + i] = (byte)newInts[i];
-            }
-        }
-
-        /// <summary>
         /// 修改指定索引开始的指定数组为新byte数组
         /// </summary>
         /// <param name="index">要修改的起始索引</param>
@@ -487,40 +260,8 @@ namespace ByteManager
             {
                 throw new Exception("Length of the new array out of bounds");
             }
-            for (int i = 0; i < newBytes.Length; i++)
-            {
-                BtList[index + i] = newBytes[i];
-            }
-        }
 
-        /// <summary>
-        /// 添加指定int数组到指定索引处
-        /// </summary>
-        /// <param name="index">要添加到的索引位置</param>
-        /// <param name="newInts">int数组</param>
-        public void AddByIndex(int index, int[] newInts)
-        {
-            if (BtList == null)
-            {
-                throw new Exception("File is not open");
-            }
-            if (index < 0)
-            {
-                throw new Exception("Index is invalid");
-            }
-            List<byte> temp = new List<byte>();
-            for (int i = 0; i < BtList.Length; i++)
-            {
-                if (i == index)
-                {
-                    for (int j = 0; j < newInts.Length; j++)
-                    {
-                        temp.Add((byte)newInts[j]);
-                    }
-                }
-                temp.Add(BtList[i]);
-            }
-            BtList = temp.ToArray();
+            newBytes.CopyTo(BtList.AsSpan(index, newBytes.Length));
         }
 
         /// <summary>
@@ -538,6 +279,10 @@ namespace ByteManager
             {
                 throw new Exception("Index is invalid");
             }
+            var buffer = new byte[BtList.Length + newBytes.Length];
+            BtList.AsSpan(0, index).CopyTo(buffer);
+            newBytes.CopyTo(buffer, index);
+            BtList.AsSpan(index, BtList.Length - index).CopyTo(buffer.AsSpan(index + newBytes.Length));
             List<byte> temp = new List<byte>();
             for (int i = 0; i < BtList.Length; i++)
             {
@@ -550,59 +295,16 @@ namespace ByteManager
                 }
                 temp.Add(BtList[i]);
             }
-            BtList = temp.ToArray();
-        }
-
-        /// <summary>
-        /// 检查从某索引开始指定长度内是否存在某int数组
-        /// </summary>
-        /// <param name="ints">要查找的数组</param>
-        /// <param name="index">要开始查找的索引</param>
-        /// <param name="length">指定最大查找长度</param>
-        /// <returns>是否存在某数组</returns>
-        public bool HasIntsByIndexAndLength(int[] ints, int index, int length)
-        {
-            if (BtList == null)
+            for(int i=0; i < temp.Count; i++)
             {
-                throw new Exception("File is not open");
-            }
-            if (index < 0)
-            {
-                throw new Exception("Index is invalid");
-            }
-            if (index + length > BtList.Length)
-            {
-                throw new Exception("Length out of bounds");
-            }
-            if (length < ints.Length - 1)
-            {
-                throw new Exception("The length of the new array is too long");
-            }
-            bool isInts = false;
-            for (int i = index; i <= index + length - ints.Length; i++)
-            {
-                for (int j = 0; j < ints.Length; j++)
+                if(temp[i] != buffer[i])
                 {
-                    if (BtList[i + j] == ints[j])
-                    {
-                        isInts = true;
-                        continue;
-                    }
-                    else
-                    {
-                        isInts = false;
-                        break;
-                    }
-                }
-                if (isInts)
-                {
-                    isInts = true;
-                    break;
+                    throw null;
                 }
             }
-
-            return isInts;
+            BtList = buffer;
         }
+
 
         /// <summary>
         /// 检查从某索引开始指定长度内是否存在某byte数组
