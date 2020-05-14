@@ -81,7 +81,7 @@ namespace KoARSaveItemEditor
                 {
                     var newLength = newBytes.Length;
                     var buffer = new byte[Offset.CustomNameText + value.Length];
-                    ItemBytes.AsSpan(0, Offset.CustomNameLength);
+                    ItemBytes.AsSpan(0, Offset.CustomNameLength).CopyTo(buffer);
                     MemoryMarshal.Write(buffer.AsSpan(Offset.CustomNameLength), ref newLength);
                     newBytes.CopyTo(buffer, Offset.CustomNameText);
                     ItemBytes = buffer;

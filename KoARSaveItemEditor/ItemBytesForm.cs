@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
 using System.Windows.Forms;
 
 namespace KoARSaveItemEditor
@@ -21,12 +20,7 @@ namespace KoARSaveItemEditor
 
         private void FormatAll()
         {
-            StringBuilder builder = new StringBuilder(3 * weapon.ItemBytes.Length);
-            foreach (byte current in weapon.ItemBytes)
-            {
-                builder.Append(current.ToString("X2")).Append(' ');
-            }
-            txtByte.Text = builder.ToString();
+            txtByte.Text = string.Join(" ", Array.ConvertAll(weapon.ItemBytes, x => x.ToString("X2")));
             txtByte.Select(txtByte.Text.Length, 0);
         }
 
