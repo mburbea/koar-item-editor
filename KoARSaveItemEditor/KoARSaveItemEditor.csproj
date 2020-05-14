@@ -96,10 +96,10 @@
     <Content Include="Reckoning0.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ByteManager\ByteManager.csproj" />
+    <PackageReference Include="System.Memory" Version="4.5.4" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="System.Memory" Version="4.5.4" />
+    <ProjectReference Include="..\KoAR.Core\KoAR.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="9190114save84.sav">

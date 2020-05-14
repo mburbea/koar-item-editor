@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace ByteManager
+namespace KoAR.Core
 {
     /// <summary>
     /// File Operationing in binary mode

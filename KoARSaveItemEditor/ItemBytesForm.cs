@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Forms;
+using KoAR.Core;
 
 namespace KoARSaveItemEditor
 {

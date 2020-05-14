@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
+using KoAR.Core;
 
 namespace KoARSaveItemEditor
 {

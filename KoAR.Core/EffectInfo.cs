@@ -1,4 +1,4 @@
-﻿namespace KoARSaveItemEditor
+﻿namespace KoAR.Core
 {
     /// <summary>
     /// Attribute Information

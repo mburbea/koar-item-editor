@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
-using ByteManager;
 
-namespace KoARSaveItemEditor
+namespace KoAR.Core
 {
     /// <summary>
     /// Archive Operation for Kingdosm of Amalur(supports 1.0.0.2)
