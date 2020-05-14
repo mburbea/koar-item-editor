@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using System.Windows.Forms;
 
@@ -8,30 +9,25 @@ namespace KoARSaveItemEditor
     public partial class ItemBytesForm : Form
     {
         private ItemMemoryInfo weapon;
-        private AmalurSaveEditor editer;
+        private AmalurSaveEditor editor;
 
-        public ItemBytesForm(AmalurSaveEditor editer, ItemMemoryInfo weapon)
+        public ItemBytesForm(AmalurSaveEditor editor, ItemMemoryInfo weapon)
         {
             InitializeComponent();
             this.weapon = weapon;
-            this.editer = editer;
+            this.editor = editor;
             FormatAll();
         }
 
         private void FormatAll()
         {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < weapon.ItemBytes.Length; i++)
+            StringBuilder builder = new StringBuilder(3 * weapon.ItemBytes.Length);
+            foreach (byte current in weapon.ItemBytes)
             {
-                string s = Convert.ToString(weapon.ItemBytes[i], 16).ToUpper();
-                if (s.Length == 1)
-                {
-                    s = "0" + s;
-                }
-                sb.Append(s+" ");
+                builder.Append(current.ToString("X2")).Append(' ');
             }
-            txtByte.Text = sb.ToString();
-            txtByte.Select(txtByte.Text.Length,0);
+            txtByte.Text = builder.ToString();
+            txtByte.Select(txtByte.Text.Length, 0);
         }
 
         private void btnEdit_Click(object sender, EventArgs e)
@@ -44,22 +40,22 @@ namespace KoARSaveItemEditor
         private void btnSave_Click(object sender, EventArgs e)
         {
             List<byte> btList = new List<byte>();
-            foreach(string line in txtByte.Lines)
+            foreach (string line in txtByte.Lines)
             {
                 string[] str = line.Trim().Split(' ');
                 foreach (string s in str)
                 {
-                    if(s.Trim().Length !=2)
+                    if (s.Trim().Length != 2)
                     {
                         MessageBox.Show("输入的代码格式不正确");
                         return;
                     }
-                    byte b = byte.Parse(s.Trim(), System.Globalization.NumberStyles.HexNumber);
+                    byte b = byte.Parse(s.Trim(), NumberStyles.HexNumber);
                     btList.Add(b);
                 }
             }
             weapon.ItemBytes = btList.ToArray();
-            editer.WriteWeaponByte(weapon);
+            editor.WriteWeaponByte(weapon);
             DialogResult = DialogResult.Yes;
             btnSave.Enabled = false;
         }

@@ -305,7 +305,7 @@ namespace KoARSaveItemEditor
             this.txtFilterCurrentDur.Name = "txtFilterCurrentDur";
             this.txtFilterCurrentDur.Size = new System.Drawing.Size(87, 22);
             this.txtFilterCurrentDur.TabIndex = 9;
-            this.txtFilterCurrentDur.TextChanged += new System.EventHandler(this.TxtCurrentDur_TextChanged);
+            this.txtFilterCurrentDur.TextChanged += new System.EventHandler(this.DurabilityTextBox_TextChanged);
             // 
             // txtFilterMaxDur
             // 
@@ -313,7 +313,7 @@ namespace KoARSaveItemEditor
             this.txtFilterMaxDur.Name = "txtFilterMaxDur";
             this.txtFilterMaxDur.Size = new System.Drawing.Size(86, 22);
             this.txtFilterMaxDur.TabIndex = 10;
-            this.txtFilterMaxDur.TextChanged += new System.EventHandler(this.TxtMaxDur_TextChanged);
+            this.txtFilterMaxDur.TextChanged += new System.EventHandler(this.DurabilityTextBox_TextChanged);
             // 
             // label5
             // 

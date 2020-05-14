@@ -42,7 +42,6 @@
             this.label1.TabIndex = 0;
             this.label1.Text = resources.GetString("label1.Text");
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label1.Click += new System.EventHandler(this.Label1_Click);
             // 
             // button1
             // 
@@ -52,7 +51,7 @@
             this.button1.TabIndex = 1;
             this.button1.Text = "OK";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.OKButton_Click);
             // 
             // HelpForm
             // 

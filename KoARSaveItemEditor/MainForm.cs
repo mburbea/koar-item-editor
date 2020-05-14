@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -53,14 +54,15 @@ namespace KoARSaveItemEditor
 
         private void BtnSave_Click(object sender, EventArgs e)
         {
-            if (editor != null)
+            if (editor == null)
             {
-                File.Copy(opfMain.FileName, opfMain.FileName + ".bak", true);
-                editor.SaveFile(opfMain.FileName);
-                tslblEditState.Text = "Unmodified";
-                btnSave.Enabled = false;
-                MessageBox.Show("Save successful! Original save backed up as " + opfMain.FileName + ".bak.");
+                return;
             }
+            File.Copy(opfMain.FileName, opfMain.FileName + ".bak", true);
+            editor.SaveFile(opfMain.FileName);
+            tslblEditState.Text = "Unmodified";
+            btnSave.Enabled = false;
+            MessageBox.Show("Save successful! Original save backed up as " + opfMain.FileName + ".bak.");
         }
 
         private void BtnShowAll_Click(object sender, EventArgs e)
@@ -71,53 +73,45 @@ namespace KoARSaveItemEditor
             {
                 MessageBox.Show("No save file opened! Click OK to open a save file.");
                 tsmiOpen.PerformClick();
+                return;
             }
-            else
+            List<ItemMemoryInfo> equipment = editor.GetAllEquipment();
+
+            itemList = new List<ItemMemoryInfo>();
+            foreach (ItemMemoryInfo info in equipment)
             {
-                List<ItemMemoryInfo> weaponTemp = editor.GetAllEquipment();
-
-                itemList = new List<ItemMemoryInfo>();
-                foreach (ItemMemoryInfo w in weaponTemp)
+                if (info.ItemName == "Unknown")
                 {
-                    if (w.ItemName == "Unknown")
-                    {
-                        itemList.Add(w);
-                    }
-                    else
-                    {
-                        itemList.Insert(0, w);
-                    }
+                    itemList.Add(info);
                 }
-
-                foreach (ItemMemoryInfo w in itemList)
+                else
                 {
-                    lvMain.Items.Add(new ListViewItem
-                    {
-                        Name = w.ItemIndex.ToString(),
-                        Text = w.ItemIndex.ToString(),
-                        Tag = w,
-                        SubItems =
-                        {
-                            w.ItemName,
-                            w.CurrentDurability.ToString(),
-                            w.MaxDurability.ToString(),
-                            w.EffectCount.ToString()
-                        }
-                    });
+                    itemList.Insert(0, info);
                 }
-
-                btnPrint.Enabled = false;
-                btnDelete.Enabled = false;
-                btnSave.Enabled = false;
-                makeAllItemsSellable.Enabled = true;
-                txtFilterItemName.Text = "";
-                txtFilterMaxDur.Text = "";
-                txtFilterCurrentDur.Text = "";
-                txtPropCurrDur.Enabled = false;
-                txtPropMaxDur.Enabled = false;
-                lvMain.SelectedItems.Clear();
-                selectedItem = null;
             }
+
+            foreach (ItemMemoryInfo info in itemList)
+            {
+                lvMain.Items.Add(new ListViewItem
+                {
+                    Name = info.ItemIndex.ToString(),
+                    Text = info.ItemIndex.ToString(),
+                    Tag = info,
+                    SubItems =
+                    {
+                        info.ItemName,
+                        info.CurrentDurability.ToString(),
+                        info.MaxDurability.ToString(),
+                        info.EffectCount.ToString()
+                    }
+                });
+            }
+
+            makeAllItemsSellable.Enabled = true;
+            txtFilterItemName.Text = txtFilterMaxDur.Text = txtFilterCurrentDur.Text = string.Empty;
+            btnPrint.Enabled = btnDelete.Enabled = btnSave.Enabled = txtPropCurrDur.Enabled = txtPropMaxDur.Enabled = false;
+            lvMain.SelectedItems.Clear();
+            selectedItem = null;
         }
 
         private void buttonInvSizeLocate_Click(object sender, EventArgs e)
@@ -130,13 +124,13 @@ namespace KoARSaveItemEditor
         private void ButtonPropAddAttribute_Click(object sender, EventArgs e)
         {
             string hexCode = txtPropAddAttributeHexCode.Text;
-            if (hexCode == "" || hexCode.Length != 6)
+            if (hexCode.Length != 6)
             {
                 MessageBox.Show("Invalid hex code. Attribute will not be added.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            bool isValidCode = long.TryParse(hexCode, System.Globalization.NumberStyles.HexNumber, null, out long validCode);
+            bool isValidCode = long.TryParse(hexCode, NumberStyles.HexNumber, null, out long _);
             if (isValidCode)
             {
                 AddAttribute(selectedItem, hexCode);
@@ -156,7 +150,7 @@ namespace KoARSaveItemEditor
 
             if (selected != null)
             {
-                var elem = lvMain.Items.Cast<ListViewItem>().FirstOrDefault(x => (x.Tag as ItemMemoryInfo).ItemIndex == selected);
+                ListViewItem elem = lvMain.Items.Cast<ListViewItem>().FirstOrDefault(x => (x.Tag as ItemMemoryInfo).ItemIndex == selected);
                 elem.Focused = true;
                 elem.Selected = true;
                 selectedItem = elem.Tag as ItemMemoryInfo;
@@ -209,21 +203,34 @@ namespace KoARSaveItemEditor
 
             itemInfo.ItemAttList = itemAttList;
             txtPropAttCount.Text = itemAttList.Count.ToString();
-            if (itemAttList.Count <= 0)
+            if (itemAttList.Count == 0)
             {
-                txtPropSelectedAttributeHexCode.Text = "";
+                txtPropSelectedAttributeHexCode.Text = string.Empty;
             }
             editor.WriteWeaponByte(selectedItem);
             RebindAttrList(itemInfo);
             CanSave();
         }
 
+        private void DurabilityTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (editor == null)
+            {
+                MessageBox.Show("No save file opened! Click OK to open a save file.");
+                tsmiOpen.PerformClick();
+            }
+            else
+            {
+                RefreshListOnFilterUpdate();
+            }
+        }
+
         private void LoadAmalurEditor(object sender, EventArgs e)
         {
-            XmlDocument doc = new XmlDocument();
-            List<EffectInfo> attributeList = new List<EffectInfo>();
             try
             {
+                List<EffectInfo> attributeList = new List<EffectInfo>();
+                XmlDocument doc = new XmlDocument();
                 doc.Load(Application.StartupPath + @"\Data\properties.xml");
                 XmlNodeList nodes = doc.DocumentElement.ChildNodes;
                 foreach (XmlNode n in nodes)
@@ -252,16 +259,17 @@ namespace KoARSaveItemEditor
 
         private void LoadSaveFile(object sender, EventArgs e)
         {
-            if (opfMain.ShowDialog() == DialogResult.OK)
+            if (opfMain.ShowDialog() != DialogResult.OK)
             {
-                lvMain.Items.Clear();
-                string fileName = opfMain.FileName;
-                editor = new AmalurSaveEditor();
-                editor.ReadFile(fileName);
-                tslblFileLocal.Text = fileName;
-                inventorySizeText.Text = editor.GetMaxBagCount().ToString();
-                btnSearchAll.PerformClick();
+                return;
             }
+            lvMain.Items.Clear();
+            string fileName = opfMain.FileName;
+            editor = new AmalurSaveEditor();
+            editor.ReadFile(fileName);
+            tslblFileLocal.Text = fileName;
+            inventorySizeText.Text = editor.GetMaxBagCount().ToString();
+            btnSearchAll.PerformClick();
         }
 
         private void lvMain_SelectedIndexChanged(object sender, EventArgs e)
@@ -277,16 +285,46 @@ namespace KoARSaveItemEditor
             int count = 0;
             foreach (ItemMemoryInfo item in lvMain.Items.Cast<ListViewItem>().Select(x => x.Tag as ItemMemoryInfo))
             {
-                if (item.Unsellable)
+                if (!item.Unsellable)
                 {
-                    item.Unsellable = false;
-                    editor.WriteWeaponByte(item);
-                    count++;
+                    continue;
                 }
+                item.Unsellable = false;
+                editor.WriteWeaponByte(item);
+                count++;
             }
             MessageBox.Show($"Modified {count} items.");
             if (count > 0)
             {
+                CanSave();
+            }
+        }
+
+        private void OnDurabilityTextLeave(object sender, Func<ItemMemoryInfo, float> getDurability, Action<ItemMemoryInfo, float> setDurability)
+        {
+            if (editor == null)
+            {
+                MessageBox.Show("No save file opened! Click OK to open a save file.");
+                tsmiOpen.PerformClick();
+            }
+            if (selectedItem is null)
+            {
+                return;
+            }
+
+            TextBox textBox = (TextBox)sender;
+            float currentValue = getDurability(selectedItem);
+            if (!float.TryParse(textBox.Text, out var newValue) || newValue < 0f || newValue >= 100f)
+            {
+                MessageBox.Show($"Invalid value '{textBox.Text}'. Durability must be a number such that, 0 ≤ durability < 100.");
+                textBox.Text = currentValue.ToString();
+                textBox.Focus();
+                textBox.SelectAll();
+            }
+            else if (newValue != currentValue)
+            {
+                setDurability(selectedItem, newValue);
+                editor.WriteWeaponByte(selectedItem);
                 CanSave();
             }
         }
@@ -362,44 +400,18 @@ namespace KoARSaveItemEditor
             form.ShowDialog();
         }
 
-        private void TxtCurrentDur_TextChanged(object sender, EventArgs e)
-        {
-            if (editor == null)
-            {
-                MessageBox.Show("No save file opened! Click OK to open a save file.");
-                tsmiOpen.PerformClick();
-            }
-            else
-            {
-                RefreshListOnFilterUpdate();
-            }
-        }
-
-        private void TxtMaxDur_TextChanged(object sender, EventArgs e)
-        {
-            if (editor == null)
-            {
-                MessageBox.Show("No save file opened! Click OK to open a save file.");
-                tsmiOpen.PerformClick();
-            }
-            else
-            {
-                RefreshListOnFilterUpdate();
-            }
-        }
-
         private void TxtPropAddAttributeHexCode_TextChanged(object sender, EventArgs e)
         {
             string hexCode = txtPropAddAttributeHexCode.Text;
-            int index = 0;
-            if (hexCode == "" || hexCode.Length != 6)
+            if (hexCode.Length != 6)
             {
                 return;
             }
 
+            int index = 0;
             try
             {
-                EffectInfo matchingAttribute = comboAddAttList.Items.Cast<EffectInfo>().Where(x => x.Code == hexCode).FirstOrDefault();
+                EffectInfo matchingAttribute = comboAddAttList.Items.Cast<EffectInfo>().FirstOrDefault(x => x.Code == hexCode);
                 index = comboAddAttList.Items.IndexOf(matchingAttribute);
             }
             catch
@@ -414,62 +426,12 @@ namespace KoARSaveItemEditor
 
         private void txtPropCurrDur_Leave(object sender, EventArgs e)
         {
-            if (editor == null)
-            {
-                MessageBox.Show("No save file opened! Click OK to open a save file.");
-                tsmiOpen.PerformClick();
-            }
-            if (selectedItem is null)
-            {
-                return;
-            }
-
-            if (float.TryParse(txtPropCurrDur.Text, out var newValue)
-                && newValue > -1 && newValue < 100)
-            {
-                if (newValue != selectedItem.CurrentDurability)
-                {
-                    selectedItem.CurrentDurability = newValue;
-                    editor.WriteWeaponByte(selectedItem);
-                    CanSave();
-                }
-            }
-            else
-            {
-                MessageBox.Show($"Invalid value '{txtPropCurrDur.Text}'. Durability must be a number such that, 0 ≤ durability < 100.");
-                txtPropCurrDur.Text = selectedItem.CurrentDurability.ToString();
-                txtPropCurrDur.Focus();
-            }
+            this.OnDurabilityTextLeave(sender, info => info.CurrentDurability, (info, value) => info.CurrentDurability = value);
         }
 
         private void txtPropMaxDur_Leave(object sender, EventArgs e)
         {
-            if (editor == null)
-            {
-                MessageBox.Show("No save file opened! Click OK to open a save file.");
-                tsmiOpen.PerformClick();
-            }
-            if (selectedItem is null)
-            {
-                return;
-            }
-
-            if (float.TryParse(txtPropMaxDur.Text, out var newValue)
-                && newValue >= 0 && newValue < 100)
-            {
-                if (newValue != selectedItem.CurrentDurability)
-                {
-                    selectedItem.MaxDurability = newValue;
-                    editor.WriteWeaponByte(selectedItem);
-                    CanSave();
-                }
-            }
-            else
-            {
-                MessageBox.Show($"Invalid value '{txtPropMaxDur.Text}'. Durability must be a number such that, 0 ≤ durability < 100.");
-                txtPropMaxDur.Text = selectedItem.MaxDurability.ToString();
-                txtPropMaxDur.Focus();
-            }
+            this.OnDurabilityTextLeave(sender, info => info.MaxDurability, (info, value) => info.MaxDurability = value);
         }
 
         private void TxtSearch_TextChanged(object sender, EventArgs e)
