@@ -503,12 +503,22 @@ namespace KoARSaveItemEditor
             {
                 return;
             }
-            var newValue = float.Parse(txtPropCurrDur.Text);
-            if (newValue != selectedItem.CurrentDurability)
+
+            if (float.TryParse(txtPropCurrDur.Text, out var newValue)
+                && newValue > -1 && newValue < 100)
             {
-                selectedItem.CurrentDurability = newValue;
-                editor.WriteWeaponByte(selectedItem);
-                CanSave();
+                if (newValue != selectedItem.CurrentDurability)
+                {
+                    selectedItem.CurrentDurability = newValue;
+                    editor.WriteWeaponByte(selectedItem);
+                    CanSave();
+                }
+            }
+            else
+            {
+                MessageBox.Show($"Invalid value '{txtPropCurrDur.Text}'. Durability must be a number such that, 0 ≤ durability < 100.");
+                txtPropCurrDur.Text = selectedItem.CurrentDurability.ToString();
+                txtPropCurrDur.Focus();
             }
         }
 
@@ -523,12 +533,22 @@ namespace KoARSaveItemEditor
             {
                 return;
             }
-            var newValue = float.Parse(txtPropMaxDur.Text);
-            if (newValue != selectedItem.MaxDurability)
+
+            if (float.TryParse(txtPropMaxDur.Text, out var newValue)
+                && newValue >= 0 && newValue < 100)
             {
-                selectedItem.MaxDurability = newValue;
-                editor.WriteWeaponByte(selectedItem);
-                CanSave();
+                if (newValue != selectedItem.CurrentDurability)
+                {
+                    selectedItem.MaxDurability = newValue;
+                    editor.WriteWeaponByte(selectedItem);
+                    CanSave();
+                }
+            }
+            else
+            {
+                MessageBox.Show($"Invalid value '{txtPropMaxDur.Text}'. Durability must be a number such that, 0 ≤ durability < 100.");
+                txtPropMaxDur.Text = selectedItem.MaxDurability.ToString();
+                txtPropMaxDur.Focus();
             }
         }
     }
