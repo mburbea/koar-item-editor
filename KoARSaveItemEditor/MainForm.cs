@@ -290,21 +290,6 @@ namespace KoARSaveItemEditor
             }
         }
 
-        private void TslblFileLocal_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void TslblEditState_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Label6_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void TxtSearch_TextChanged(object sender, EventArgs e)
         {
             if (editor == null)
@@ -316,11 +301,6 @@ namespace KoARSaveItemEditor
             {
                 RefreshListOnFilterUpdate();
             }
-        }
-
-        private void GroupBox2_Enter(object sender, EventArgs e)
-        {
-
         }
 
         private void TxtCurrentDur_TextChanged(object sender, EventArgs e)

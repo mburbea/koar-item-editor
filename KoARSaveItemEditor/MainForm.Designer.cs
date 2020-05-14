@@ -286,7 +286,6 @@ namespace KoARSaveItemEditor
             this.tslblFileLocal.Size = new System.Drawing.Size(500, 17);
             this.tslblFileLocal.Text = "Open";
             this.tslblFileLocal.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.tslblFileLocal.Click += new System.EventHandler(this.TslblFileLocal_Click);
             // 
             // toolStripStatusLabel3
             // 
@@ -299,7 +298,6 @@ namespace KoARSaveItemEditor
             this.tslblEditState.Name = "tslblEditState";
             this.tslblEditState.Size = new System.Drawing.Size(70, 17);
             this.tslblEditState.Text = "Unmodified";
-            this.tslblEditState.Click += new System.EventHandler(this.TslblEditState_Click);
             // 
             // txtFilterCurrentDur
             // 
@@ -336,7 +334,6 @@ namespace KoARSaveItemEditor
             this.label6.TabIndex = 12;
             this.label6.Text = "Maximum";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label6.Click += new System.EventHandler(this.Label6_Click);
             // 
             // filterGroupBox
             // 
@@ -349,7 +346,6 @@ namespace KoARSaveItemEditor
             this.filterGroupBox.TabIndex = 14;
             this.filterGroupBox.TabStop = false;
             this.filterGroupBox.Text = "Filters";
-            this.filterGroupBox.Enter += new System.EventHandler(this.GroupBox2_Enter);
             // 
             // durabilityGroupBox
             // 
