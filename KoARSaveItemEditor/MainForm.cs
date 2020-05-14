@@ -44,32 +44,34 @@ namespace KoARSaveItemEditor
 
         private void RefreshListOnFilterUpdate()
         {
-            string itemName = txtFilterItemName.Text != "" ? txtFilterItemName.Text.ToUpper() : "";
-            float currDur = float.TryParse(txtFilterCurrentDur.Text, out currDur) ? currDur : 0;
-            float maxDur = float.TryParse(txtFilterMaxDur.Text, out maxDur) ? maxDur : 0;
+            string itemName = txtFilterItemName.Text.Length != 0 ? txtFilterItemName.Text : string.Empty;
+            float currDur = float.TryParse(txtFilterCurrentDur.Text, out currDur) ? currDur : default;
+            float maxDur = float.TryParse(txtFilterMaxDur.Text, out maxDur) ? maxDur : default;
 
             IEnumerable<ItemMemoryInfo> query = itemList;
-            if (itemName != "")
-                query = query.Where(w => w.ItemName.ToUpper().Contains(itemName));
+            if (itemName.Length != 0)
+                query = query.Where(info => info.ItemName.IndexOf(itemName, StringComparison.OrdinalIgnoreCase) != -1);
             if (currDur > 0)
-                query = query.Where(w => w.CurrentDurability == currDur);
+                query = query.Where(info => info.CurrentDurability == currDur);
             if (maxDur > 0)
-                query = query.Where(w => w.MaxDurability == maxDur);
+                query = query.Where(info => info.MaxDurability == maxDur);
 
             lvMain.Items.Clear();
             foreach (var element in query)
             {
-                ListViewItem item = new ListViewItem
+                lvMain.Items.Add(new ListViewItem
                 {
                     Name = element.ItemIndex.ToString(),
-                    Text = element.ItemIndex.ToString()
-                };
-                item.SubItems.Add(element.ItemName);
-                item.SubItems.Add(element.CurrentDurability.ToString());
-                item.SubItems.Add(element.MaxDurability.ToString());
-                item.SubItems.Add(element.AttCount.ToString());
-                item.Tag = element;
-                lvMain.Items.Add(item);
+                    Text = element.ItemIndex.ToString(),
+                    Tag = element,
+                    SubItems =
+                    {
+                        element.ItemName,
+                        element.CurrentDurability.ToString(),
+                        element.MaxDurability.ToString(),
+                        element.AttCount.ToString()
+                    }
+                });
             }
 
             lvMain.SelectedItems.Clear();
@@ -106,7 +108,7 @@ namespace KoARSaveItemEditor
         {
             ItemMemoryInfo itemInfo = (ItemMemoryInfo)lvMain.SelectedItems[0].Tag;
             List<EffectInfo> itemAttList = itemInfo.ItemAttList;
-            EffectInfo selectedAttribute = (EffectInfo) comboExistingAttList.SelectedItem;
+            EffectInfo selectedAttribute = (EffectInfo)comboExistingAttList.SelectedItem;
 
             foreach (EffectInfo att in itemAttList)
             {
@@ -216,7 +218,7 @@ namespace KoARSaveItemEditor
             if (lvMain.SelectedItems.Count > 0)
             {
                 LoadItemAttributesOnClick();
-            }            
+            }
         }
 
         private void BtnSave_Click(object sender, EventArgs e)
@@ -244,7 +246,7 @@ namespace KoARSaveItemEditor
             {
                 btnSave.Enabled = true;
             }
-        } 
+        }
 
         private void BtnEdit_Click(object sender, EventArgs e)
         {
@@ -290,7 +292,7 @@ namespace KoARSaveItemEditor
         {
             btnPrint.Enabled = false;
             btnDelete.Enabled = false;
-            ItemBytesForm form = new ItemBytesForm(editor,lvMain.SelectedItems[0].Tag as ItemMemoryInfo);
+            ItemBytesForm form = new ItemBytesForm(editor, lvMain.SelectedItems[0].Tag as ItemMemoryInfo);
             if (form.ShowDialog() == DialogResult.Yes)
             {
                 CanSave();
@@ -412,7 +414,7 @@ namespace KoARSaveItemEditor
             finally
             {
                 comboAddAttList.SelectedIndex = index;
-            }           
+            }
         }
 
         private void ButtonPropAddAttribute_Click(object sender, EventArgs e)
@@ -477,7 +479,7 @@ namespace KoARSaveItemEditor
         private void MakeAllItemsSellable_Click(object sender, EventArgs e)
         {
             int count = 0;
-            foreach(ItemMemoryInfo item in lvMain.Items.Cast<ListViewItem>().Select(x=> x.Tag as ItemMemoryInfo))
+            foreach (ItemMemoryInfo item in lvMain.Items.Cast<ListViewItem>().Select(x => x.Tag as ItemMemoryInfo))
             {
                 if (item.Unsellable)
                 {
@@ -486,7 +488,7 @@ namespace KoARSaveItemEditor
                     count++;
                 }
             }
-                MessageBox.Show($"Modified {count} items.");
+            MessageBox.Show($"Modified {count} items.");
             if (count > 0)
             {
                 CanSave();
