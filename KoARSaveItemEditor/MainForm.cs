@@ -470,7 +470,9 @@ namespace KoARSaveItemEditor
 
         private void buttonInvSizeLocate_Click(object sender, EventArgs e)
         {
-
+            var value = (int)inventorySizeText.Value;
+            editor.EditMaxBagCount(value);
+            CanSave();
         }
 
         private void MakeAllItemsSellable_Click(object sender, EventArgs e)

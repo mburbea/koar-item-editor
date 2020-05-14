@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using ByteManager;
 
 namespace KoARSaveItemEditor
@@ -12,10 +13,13 @@ namespace KoARSaveItemEditor
         /// <summary>
         /// The head of the equipment, property and indicate the number of attributes of the data relative to equipment data head offset
         /// </summary>
-        public const int ItemAttHeadOffSet = 21;
+        public const int EffectOffset = 21;
         public const int InventoryCapacityOffset = 36;
-        public const string InventoryLimit = "inventory_limit";
-        public const int AltOffset = InventoryCapacityOffset + 22;
+        //public const string InventoryLimit = "inventory_limit";
+        //public const string CurrentInventoryCount = "current_inventory_count";
+        private ReadOnlySpan<byte> InventoryLimit => new[]{(byte)'i',(byte)'n',(byte)'v',(byte)'e',(byte)'n',(byte)'t',(byte)'o',(byte)'r',(byte)'y',(byte)'_',(byte)'l',(byte)'i',(byte)'m',(byte)'i',(byte)'t'};
+        private ReadOnlySpan<byte> IncreaseAmount => new[] { (byte)'i', (byte)'n', (byte)'c', (byte)'r', (byte)'e', (byte)'a', (byte)'s', (byte)'e', (byte)'_', (byte)'a', (byte)'m', (byte)'o', (byte)'u', (byte)'n', (byte)'t' };
+        private ReadOnlySpan<byte> CurrentInventoryCount => new[] { (byte)'c', (byte)'u', (byte)'r', (byte)'r', (byte)'e', (byte)'n', (byte)'t', (byte)'_', (byte)'i', (byte)'n', (byte)'v', (byte)'e', (byte)'n', (byte)'t', (byte)'o', (byte)'r', (byte)'y', (byte)'_', (byte)'c', (byte)'o', (byte)'u', (byte)'n', (byte)'t' };
         private ByteEditor br = null;
 
         /// <summary>
@@ -42,7 +46,7 @@ namespace KoARSaveItemEditor
         /// <param name="path">save path</param>
         public void SaveFile(string path)
         {
-            if (br.BtList == null)
+            if (br.Bytes == null)
             {
                 throw new Exception("Save file not open.");
             }
@@ -57,29 +61,40 @@ namespace KoARSaveItemEditor
             }
         }
 
+
+        private int GetBagOffset()
+        {
+            ReadOnlySpan<byte> span = br.Bytes;
+            var curInvCountOffset = span.IndexOf(CurrentInventoryCount) + CurrentInventoryCount.Length;
+            var inventoryLimitOffset = span.IndexOf(InventoryLimit) + InventoryLimit.Length;
+            var increaseAmountOffset = span.IndexOf(IncreaseAmount) + IncreaseAmount.Length;
+            var finalOffset = Math.Max(Math.Max(curInvCountOffset, inventoryLimitOffset), increaseAmountOffset);
+            var inventoryLimitOrder = inventoryLimitOffset == finalOffset ? 3 : inventoryLimitOffset < Math.Min(curInvCountOffset, increaseAmountOffset) ? 1 : 2;
+            return finalOffset + (inventoryLimitOrder * 12);
+        }
         /// <summary>
         /// Get maximum backpack capacity.
         /// </summary>
         /// <returns></returns>
         public int GetMaxBagCount()
         {
-            if (br.BtList == null)
+            if (br.Bytes == null)
             {
                 throw new Exception("Save file not open.");
             }
-            var res = br.FindIndexByString(InventoryLimit);
-            uint val = uint.MaxValue;
-            var index = res[0] + InventoryCapacityOffset + InventoryLimit.Length;
-            var desired = br.FindFirstIndex(index, BitConverter.GetBytes(131091));
-            var firstStep = true;
-            while (val == 0 ||  val > 999_999)
-            {
-                
-                val = br.GetUInt32ByIndexAndLength(index);
-                index += firstStep ? InventoryLimit.Length : 7;
-                firstStep = false;
-            }
+
+            var ix = GetBagOffset();
+            var val = br.GetUInt32ByIndex(ix);
             return (int)val;
+            /* var firstStep = true;
+             while (val == 0 ||  val > 999_999)
+             {
+
+                 val = br.GetUInt32ByIndex(index);
+                 index += firstStep ? InventoryLimit.Length : 7;
+                 firstStep = false;
+             }
+             return (int)val;*/
         }
 
         /// <summary>
@@ -88,13 +103,12 @@ namespace KoARSaveItemEditor
         /// <param name="c"></param>
         public void EditMaxBagCount(int c)
         {
-            if (br.BtList == null)
+            if (br.Bytes == null)
             {
                 throw new Exception("Save file not open.");
             }
-            int index = br.FindIndexByString("inventory_limit")[0] + InventoryCapacityOffset;
-            byte[] bt = BitConverter.GetBytes(c);
-            br.EditByIndex(index, bt);
+            var ix = GetBagOffset();
+            MemoryMarshal.Write(br.Bytes.AsSpan(ix), ref c);
         }
 
         /// <summary>
@@ -105,7 +119,7 @@ namespace KoARSaveItemEditor
         /// <returns>List of Attributes</returns>
         public List<EffectInfo> GetAttList(ItemMemoryInfo weaponInfo, List<EffectInfo> attInfoList)
         {
-            if (br.BtList == null)
+            if (br.Bytes == null)
             {
                 throw new Exception("Save file not open.");
             }
@@ -142,7 +156,7 @@ namespace KoARSaveItemEditor
         /// <returns></returns>
         public bool IsWeapon(ItemMemoryInfo weapon)
         {
-            if (br.BtList == null)
+            if (br.Bytes == null)
             {
                 throw new Exception("Save file not open.");
             }
@@ -165,7 +179,7 @@ namespace KoARSaveItemEditor
         /// <returns></returns>
         public List<ItemMemoryInfo> GetAllWeapon()
         {
-            if (br.BtList == null)
+            if (br.Bytes == null)
             {
                 throw new Exception("Save file not open.");
             }
@@ -210,17 +224,17 @@ namespace KoARSaveItemEditor
                 }
                 else
                 {
-                    int attHeadIndex = weapon.ItemIndex + ItemAttHeadOffSet;
-                    int attCount = BitConverter.ToInt32(br.BtList, attHeadIndex);
+                    int attHeadIndex = weapon.ItemIndex + EffectOffset;
+                    int attCount = BitConverter.ToInt32(br.Bytes, attHeadIndex);
                     int endIndex = 0;
-                    if (br.BtList[attHeadIndex + 22 + attCount * 8] != 1)
+                    if (br.Bytes[attHeadIndex + 22 + attCount * 8] != 1)
                     {
                         endIndex = attHeadIndex + 22 + attCount * 8;
                     }
                     else
                     {
                         int nameLength = 0;
-                        nameLength = BitConverter.ToInt32(br.BtList, attHeadIndex + 22 + attCount * 8 + 1);
+                        nameLength = BitConverter.ToInt32(br.Bytes, attHeadIndex + 22 + attCount * 8 + 1);
                         endIndex = attHeadIndex + 22 + attCount * 8 + nameLength + 4;
                     }
                     weapon.ItemBytes = br.GetBytesByIndexAndLength(weapon.ItemIndex, endIndex - weapon.ItemIndex + 1);
@@ -244,7 +258,7 @@ namespace KoARSaveItemEditor
         /// <param name="weapon"></param>
         public void DeleteWeapon(ItemMemoryInfo weapon)
         {
-            if (br.BtList == null)
+            if (br.Bytes == null)
             {
                 throw new Exception("Save file not open.");
             }
@@ -259,7 +273,7 @@ namespace KoARSaveItemEditor
         /// <param name="weapon">Written Equipment</param>
         public void WriteWeaponByte(ItemMemoryInfo weapon)
         {
-            if (br.BtList == null)
+            if (br.Bytes == null)
             {
                 throw new Exception("Save file not open.");
             }

@@ -24,7 +24,7 @@ namespace KoARSaveItemEditor
         /// <summary>
         /// Equipment list of attributes of the head in the archive index (accounting for 4-byte, indicates that the equipment has a number of attributes)
         /// </summary>
-        public int AttHeadIndex => ItemIndex + AmalurSaveEditor.ItemAttHeadOffSet;
+        public int EffectHeadOffset => ItemIndex + AmalurSaveEditor.EffectOffset;
 
         /// <summary>
         /// Equipment data
@@ -38,50 +38,50 @@ namespace KoARSaveItemEditor
         {
             get
             {
-                if (ItemBytes[AmalurSaveEditor.ItemAttHeadOffSet + 22 + AttCount * 8] != 1)
+                if (ItemBytes[AmalurSaveEditor.EffectOffset + 22 + AttCount * 8] != 1)
                 {
                     return "Unknown";
                 }
                 else
                 {
-                    int count = BitConverter.ToInt32(ItemBytes,AmalurSaveEditor.ItemAttHeadOffSet+22+AttCount*8+1);
-                    return System.Text.Encoding.Default.GetString(ItemBytes, AmalurSaveEditor.ItemAttHeadOffSet + 27 + 8 * AttCount, count);
+                    int count = BitConverter.ToInt32(ItemBytes, AmalurSaveEditor.EffectOffset + 22 + AttCount * 8 + 1);
+                    return System.Text.Encoding.Default.GetString(ItemBytes, AmalurSaveEditor.EffectOffset + 27 + 8 * AttCount, count);
                 }
             }
             set
             {
                 ByteEditor byteEditor = new ByteEditor(ItemBytes);
-                byteEditor.DeleteToEnd(AmalurSaveEditor.ItemAttHeadOffSet + 22 + AttCount * 8+1);
+                byteEditor.DeleteToEnd(AmalurSaveEditor.EffectOffset + 22 + AttCount * 8 + 1);
                 if (value.Length != 0)
                 {
-                    byteEditor.EditByIndex(AmalurSaveEditor.ItemAttHeadOffSet + 22 + AttCount * 8, new byte[] { 1 });
+                    byteEditor.EditByIndex(AmalurSaveEditor.EffectOffset + 22 + AttCount * 8, new byte[] { 1 });
                     byteEditor.AddToEnd(BitConverter.GetBytes(value.Length));
                     byte[] nameList = System.Text.Encoding.Default.GetBytes(value);
                     byteEditor.AddToEnd(nameList);
                 }
                 else
                 {
-                    byteEditor.EditByIndex(AmalurSaveEditor.ItemAttHeadOffSet + 22 + AttCount * 8, new byte[] { 0 });
+                    byteEditor.EditByIndex(AmalurSaveEditor.EffectOffset + 22 + AttCount * 8, new byte[] { 0 });
                 }
-                ItemBytes = byteEditor.BtList;
+                ItemBytes = byteEditor.Bytes;
             }
         }
 
         /// <summary>
         /// Number of Attributes
         /// </summary>
-        public int AttCount => BitConverter.ToInt32(ItemBytes, AmalurSaveEditor.ItemAttHeadOffSet);
+        public int AttCount => BitConverter.ToInt32(ItemBytes, AmalurSaveEditor.EffectOffset);
 
         /// <summary>
         /// Current Durability
         /// </summary>
         public float CurrentDurability
         {
-            get => BitConverter.ToSingle(ItemBytes, AmalurSaveEditor.ItemAttHeadOffSet + 8 + 8 * AttCount);
+            get => BitConverter.ToSingle(ItemBytes, AmalurSaveEditor.EffectOffset + 8 + 8 * AttCount);
             set
             {
                 byte[] bt = BitConverter.GetBytes(value);
-                bt.CopyTo(ItemBytes.AsSpan(AmalurSaveEditor.ItemAttHeadOffSet + 8 + 8 * AttCount, 4));
+                bt.CopyTo(ItemBytes.AsSpan(AmalurSaveEditor.EffectOffset + 8 + 8 * AttCount, 4));
             }
         }
 
@@ -90,27 +90,27 @@ namespace KoARSaveItemEditor
         /// </summary>
         public float MaxDurability
         {
-            get => BitConverter.ToSingle(ItemBytes, AmalurSaveEditor.ItemAttHeadOffSet + 12 + 8 * AttCount);
+            get => BitConverter.ToSingle(ItemBytes, AmalurSaveEditor.EffectOffset + 12 + 8 * AttCount);
             set
             {
                 byte[] bt = BitConverter.GetBytes(value);
-                bt.CopyTo(ItemBytes.AsSpan(AmalurSaveEditor.ItemAttHeadOffSet + 12 + 8 * AttCount, 4));
+                bt.CopyTo(ItemBytes.AsSpan(AmalurSaveEditor.EffectOffset + 12 + 8 * AttCount, 4));
 
             }
         }
 
         public bool Unsellable
         {
-            get => (ItemBytes[AmalurSaveEditor.ItemAttHeadOffSet + 20 + 8 * AttCount] & 0x80) == 0x80;
+            get => (ItemBytes[AmalurSaveEditor.EffectOffset + 20 + 8 * AttCount] & 0x80) == 0x80;
             set
             {
                 if (value)
                 {
-                    ItemBytes[AmalurSaveEditor.ItemAttHeadOffSet + 20 + 8 * AttCount] |= 0x80;
+                    ItemBytes[AmalurSaveEditor.EffectOffset + 20 + 8 * AttCount] |= 0x80;
                 }
                 else
                 {
-                    ItemBytes[AmalurSaveEditor.ItemAttHeadOffSet + 20 + 8 * AttCount] &= 0x7F;
+                    ItemBytes[AmalurSaveEditor.EffectOffset + 20 + 8 * AttCount] &= 0x7F;
                 }
             }
 
@@ -127,12 +127,12 @@ namespace KoARSaveItemEditor
                 ByteEditor byteEditor = new ByteEditor(ItemBytes);
                 List<EffectInfo> attList = new List<EffectInfo>();
 
-                int attIndex = AmalurSaveEditor.ItemAttHeadOffSet + 4;
+                int attIndex = AmalurSaveEditor.EffectOffset + 4;
                 for (int i = 0; i < AttCount; i++)
                 {
                     EffectInfo att = new EffectInfo
                     {
-                        Code = byteEditor.GetUInt32ByIndexAndLength(attIndex).ToString("X6")
+                        Code = byteEditor.GetUInt32ByIndex(attIndex).ToString("X6")
                     };
 
                     attList.Add(att);
@@ -144,19 +144,18 @@ namespace KoARSaveItemEditor
             set
             {
                 ByteEditor byteEditor = new ByteEditor(ItemBytes);
-                byteEditor.DeleteIntsByIndexAndLength(AmalurSaveEditor.ItemAttHeadOffSet + 4, 8 * AttCount);
-                byteEditor.EditByIndex(AmalurSaveEditor.ItemAttHeadOffSet, BitConverter.GetBytes(value.Count));
-                
+                byteEditor.DeleteIntsByIndexAndLength(AmalurSaveEditor.EffectOffset + 4, 8 * AttCount);
+                byteEditor.EditByIndex(AmalurSaveEditor.EffectOffset, BitConverter.GetBytes(value.Count));
+
                 foreach (EffectInfo att in value)
                 {
                     Span<uint> uints = stackalloc uint[2];
                     uints[0] = uint.Parse(att.Code, NumberStyles.HexNumber);
                     uints[1] = uint.MaxValue;
-                    byte[] news = new byte[8];
-                    byteEditor.AddByIndex(AmalurSaveEditor.ItemAttHeadOffSet + 4, MemoryMarshal.AsBytes(uints).ToArray());
+                    byteEditor.AddByIndex(AmalurSaveEditor.EffectOffset + 4, MemoryMarshal.AsBytes(uints).ToArray());
                 }
 
-                ItemBytes = byteEditor.BtList;
+                ItemBytes = byteEditor.Bytes;
             }
         }
     }
