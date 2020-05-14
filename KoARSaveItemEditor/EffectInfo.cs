@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace KoARSaveItemEditor
+﻿namespace KoARSaveItemEditor
 {
     /// <summary>
     /// Attribute Information

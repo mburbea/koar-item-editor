@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace KoARSaveItemEditor
@@ -145,8 +141,8 @@ namespace KoARSaveItemEditor
 
         private void btnSaveAll_Click(object sender, EventArgs e)
         {
-            float curDur = 0;
-            float maxDur = 0;
+            float curDur;
+            float maxDur;
             try
             {
                 curDur = float.Parse(txtCurrentDurability.Text);

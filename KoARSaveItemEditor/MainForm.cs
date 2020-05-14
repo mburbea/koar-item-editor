@@ -4,7 +4,6 @@ using System.Windows.Forms;
 using System.Xml;
 using System.IO;
 using System.Linq;
-using System.Drawing;
 
 namespace KoARSaveItemEditor
 {
@@ -140,7 +139,7 @@ namespace KoARSaveItemEditor
             }
             else
             {
-                List<ItemMemoryInfo> weaponTemp = editor.GetAllWeapon();
+                List<ItemMemoryInfo> weaponTemp = editor.GetAllEquipment();
 
                 itemList = new List<ItemMemoryInfo>();
                 foreach (ItemMemoryInfo w in weaponTemp)

@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Xml;
 
 namespace ByteManager
 {
@@ -67,90 +63,23 @@ namespace ByteManager
         }
 
         /// <summary>
-        /// Find the address where the first character in the file index (does not support Chinese, and special symbols may be more than one record)
+        /// Get all occurences of a byte sequence.
         /// </summary>
-        /// <param name="name">String name</param>
-        /// <returns>Strings where binary array start index</returns>
-        public List<int> FindIndexByString(string name)
+        /// <param name="bytes"></param>
+        /// <returns></returns>
+        public List<int> GetAllIndices(ReadOnlySpan<byte> bytes)
         {
-            if (Bytes == null)
-            {
-                throw new Exception("File not open");
-            }
-            if (name == "")
-            {
-                throw new Exception("Empty string is not allowed");
-            }
-            if (Bytes.Length < name.Length)
-            {
-                throw new Exception("File is too short");
-            }
-            var bytes = Encoding.ASCII.GetBytes(name);
-
-            return FindIndexBySpan(bytes);
-        }
-
-        private List<int> FindIndexBySpan(Span<byte> bytes)
-        {
-            var array = Bytes;
-            var indexList = new List<int>();
-            int ix = array.AsSpan().IndexOf(bytes);
+            ReadOnlySpan<byte> data = Bytes;
+            var results = new List<int>();
+            int ix = data.IndexOf(bytes);
             int start = 0;
             while(ix != -1)
             {
-                indexList.Add(start + ix);
+                results.Add(start + ix);
                 start += ix + bytes.Length;
-                ix = array.AsSpan(start).IndexOf(bytes);
+                ix = data.Slice(start).IndexOf(bytes);
             }
-
-            return indexList;
-
-        }
-        /// <summary>
-        /// Find the address where the index by an array of byte in the file (possibly more than one record)
-        /// </summary>
-        /// <param name="bytes">To find an array of byte</param>
-        /// <returns>byte array where the position index list</returns>
-        public List<int> FindIndexList(byte[] bytes)
-        {
-            if (Bytes == null)
-            {
-                throw new Exception("The file is not open");
-            }
-            if (bytes == null || bytes.Length == 0)
-            {
-                throw new Exception("Find an empty array is not allowed");
-            }
-            if (Bytes.Length < bytes.Length)
-            {
-                throw new Exception("File is too short");
-            }
-
-            return FindIndexBySpan(bytes);
-        }
-
-        /// <summary>
-        /// Find an address byte array in the file where the first address index (finding out -1 is returned)
-        /// </summary>
-        /// <param name="startIndex">Start address</param>
-        /// <param name="bt">To find the byte array</param>
-        /// <returns>First index -1 is returned (no)</returns>
-        public int FindFirstIndex(int startIndex, byte[] bt)
-        {
-            if (Bytes == null)
-            {
-                throw new Exception("File is not open");
-            }
-            if (bt == null || bt.Length == 0)
-            {
-                throw new Exception("Find an empty array is not allowed");
-            }
-            if (Bytes.Length < bt.Length)
-            {
-                throw new Exception("The file is too short");
-            }
-            int ix = Bytes.AsSpan(startIndex).IndexOf(bt);
-            return ix == -1? -1 : startIndex + ix;
+            return results;
         }
 
         /// <summary>

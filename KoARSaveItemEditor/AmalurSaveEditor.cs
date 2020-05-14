@@ -20,7 +20,9 @@ namespace KoARSaveItemEditor
         private ReadOnlySpan<byte> InventoryLimit => new[]{(byte)'i',(byte)'n',(byte)'v',(byte)'e',(byte)'n',(byte)'t',(byte)'o',(byte)'r',(byte)'y',(byte)'_',(byte)'l',(byte)'i',(byte)'m',(byte)'i',(byte)'t'};
         private ReadOnlySpan<byte> IncreaseAmount => new[] { (byte)'i', (byte)'n', (byte)'c', (byte)'r', (byte)'e', (byte)'a', (byte)'s', (byte)'e', (byte)'_', (byte)'a', (byte)'m', (byte)'o', (byte)'u', (byte)'n', (byte)'t' };
         private ReadOnlySpan<byte> CurrentInventoryCount => new[] { (byte)'c', (byte)'u', (byte)'r', (byte)'r', (byte)'e', (byte)'n', (byte)'t', (byte)'_', (byte)'i', (byte)'n', (byte)'v', (byte)'e', (byte)'n', (byte)'t', (byte)'o', (byte)'r', (byte)'y', (byte)'_', (byte)'c', (byte)'o', (byte)'u', (byte)'n', (byte)'t' };
-        private ByteEditor br = null;
+
+        private ReadOnlySpan<byte> EquipmentSequence => new byte[] { 11, 0, 0, 0, 104, 213, 36, 0, 3 };
+    private ByteEditor br = null;
 
         /// <summary>
         /// Read save-file
@@ -86,15 +88,6 @@ namespace KoARSaveItemEditor
             var ix = GetBagOffset();
             var val = br.GetUInt32ByIndex(ix);
             return (int)val;
-            /* var firstStep = true;
-             while (val == 0 ||  val > 999_999)
-             {
-
-                 val = br.GetUInt32ByIndex(index);
-                 index += firstStep ? InventoryLimit.Length : 7;
-                 firstStep = false;
-             }
-             return (int)val;*/
         }
 
         /// <summary>
@@ -150,34 +143,10 @@ namespace KoARSaveItemEditor
         }
 
         /// <summary>
-        /// Check if equipment is Equipable
-        /// </summary>
-        /// <param name="weapon">Equipment Object</param>
-        /// <returns></returns>
-        public bool IsWeapon(ItemMemoryInfo weapon)
-        {
-            if (br.Bytes == null)
-            {
-                throw new Exception("Save file not open.");
-            }
-
-            byte[] bytes = new byte[9] { 11, 0, 0, 0, 104, 213, 36, 0, 3 };
-
-            try
-            {
-                return br.HasBytesByIndexAndLength(bytes, weapon.ItemIndex + 4, 17);
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
         /// Get all Equipment
         /// </summary>
         /// <returns></returns>
-        public List<ItemMemoryInfo> GetAllWeapon()
+        public List<ItemMemoryInfo> GetAllEquipment()
         {
             if (br.Bytes == null)
             {
@@ -186,8 +155,7 @@ namespace KoARSaveItemEditor
 
             List<ItemMemoryInfo> weaponList = new List<ItemMemoryInfo>();
 
-            byte[] bytes = new byte[9] { 11, 0, 0, 0, 104, 213, 36, 0, 3 };
-            List<int> indexList = br.FindIndexList(bytes);
+            var indexList = br.GetAllIndices(EquipmentSequence);
 
             for (int i = 0; i < indexList.Count; i++)
             {
@@ -226,15 +194,14 @@ namespace KoARSaveItemEditor
                 {
                     int attHeadIndex = weapon.ItemIndex + EffectOffset;
                     int attCount = BitConverter.ToInt32(br.Bytes, attHeadIndex);
-                    int endIndex = 0;
+                    int endIndex;
                     if (br.Bytes[attHeadIndex + 22 + attCount * 8] != 1)
                     {
                         endIndex = attHeadIndex + 22 + attCount * 8;
                     }
                     else
                     {
-                        int nameLength = 0;
-                        nameLength = BitConverter.ToInt32(br.Bytes, attHeadIndex + 22 + attCount * 8 + 1);
+                        int nameLength = BitConverter.ToInt32(br.Bytes, attHeadIndex + 22 + attCount * 8 + 1);
                         endIndex = attHeadIndex + 22 + attCount * 8 + nameLength + 4;
                     }
                     weapon.ItemBytes = br.GetBytesByIndexAndLength(weapon.ItemIndex, endIndex - weapon.ItemIndex + 1);
