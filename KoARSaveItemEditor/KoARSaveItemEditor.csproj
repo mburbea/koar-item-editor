@@ -59,9 +59,7 @@
     <Compile Update="HelpForm.Designer.cs">
       <DependentUpon>HelpForm.cs</DependentUpon>
     </Compile>
-    <Compile Update="ItemBytesForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Update="ItemBytesForm.cs" />
     <Compile Update="ItemBytesForm.Designer.cs">
       <DependentUpon>ItemBytesForm.cs</DependentUpon>
     </Compile>
