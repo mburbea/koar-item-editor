@@ -46,18 +46,6 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="BagEditForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="BagEditForm.Designer.cs">
-      <DependentUpon>BagEditForm.cs</DependentUpon>
-    </Compile>
-    <Compile Update="OptionForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="OptionForm.Designer.cs">
-      <DependentUpon>OptionForm.cs</DependentUpon>
-    </Compile>
     <Compile Update="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -76,12 +64,6 @@
     <Compile Update="ItemBytesForm.Designer.cs">
       <DependentUpon>ItemBytesForm.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Update="BagEditForm.resx">
-      <DependentUpon>BagEditForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="OptionForm.resx">
-      <DependentUpon>OptionForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Update="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

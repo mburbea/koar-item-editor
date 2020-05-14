@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
-using System.Xml;
 using System.IO;
 using System.Linq;
+using System.Windows.Forms;
+using System.Xml;
 
 namespace KoARSaveItemEditor
 {
@@ -239,15 +239,6 @@ namespace KoARSaveItemEditor
             form.ShowDialog();
         }
 
-        private void TsmiBag_Click(object sender, EventArgs e)
-        {
-            BagEditForm form = new BagEditForm(editor);
-            if (form.ShowDialog() == DialogResult.Yes)
-            {
-                btnSave.Enabled = true;
-            }
-        }
-
         private void BtnEdit_Click(object sender, EventArgs e)
         {
             ItemMemoryInfo weaponInfo = (ItemMemoryInfo)lvMain.SelectedItems[0].Tag;
@@ -299,26 +290,12 @@ namespace KoARSaveItemEditor
             }
         }
 
-        private void BtnBag_Click(object sender, EventArgs e)
-        {
-            BagEditForm form = new BagEditForm(editor);
-            if (form.ShowDialog() == DialogResult.Yes)
-            {
-                btnSave.Enabled = true;
-            }
-        }
-
         private void TslblFileLocal_Click(object sender, EventArgs e)
         {
 
         }
 
         private void TslblEditState_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Label2_Click(object sender, EventArgs e)
         {
 
         }
@@ -370,16 +347,6 @@ namespace KoARSaveItemEditor
             {
                 RefreshListOnFilterUpdate();
             }
-        }
-
-        private void Label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Label2_Click_1(object sender, EventArgs e)
-        {
-
         }
 
         private void ButtonPropDeleteAttribute_Click(object sender, EventArgs e)
