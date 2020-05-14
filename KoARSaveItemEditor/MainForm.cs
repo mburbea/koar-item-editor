@@ -67,7 +67,7 @@ namespace KoARSaveItemEditor
                 item.SubItems.Add(element.ItemName);
                 item.SubItems.Add(element.CurrentDurability.ToString());
                 item.SubItems.Add(element.MaxDurability.ToString());
-                item.SubItems.Add(element.AttCount.ToString());
+                item.SubItems.Add(element.EffectCount.ToString());
                 item.Tag = element;
                 lvMain.Items.Add(item);
             }
@@ -91,7 +91,7 @@ namespace KoARSaveItemEditor
             txtPropMaxDur.Text = itemInfo.MaxDurability.ToString();
             txtPropCurrDur.Enabled = true;
             txtPropMaxDur.Enabled = true;
-            txtPropAttCount.Text = itemInfo.AttCount.ToString();
+            txtPropAttCount.Text = itemInfo.EffectCount.ToString();
 
             comboExistingAttList.DisplayMember = nameof(EffectInfo.DisplayText);
             comboExistingAttList.DataSource = itemAttList;
@@ -166,7 +166,7 @@ namespace KoARSaveItemEditor
                             w.ItemName,
                             w.CurrentDurability.ToString(),
                             w.MaxDurability.ToString(),
-                            w.AttCount.ToString()
+                            w.EffectCount.ToString()
                         }
                     });
                 }

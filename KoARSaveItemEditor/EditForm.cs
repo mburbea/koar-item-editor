@@ -29,7 +29,7 @@ namespace KoARSaveItemEditor
             cboAddAttribute.DisplayMember = "AttributeText";
 
             txtName.Text = weaponInfo.ItemName;
-            lblAttCount.Text = weaponInfo.AttCount.ToString();
+            lblAttCount.Text = weaponInfo.EffectCount.ToString();
             txtCurrentDurability.Text = weaponInfo.CurrentDurability.ToString();
             txtMaxDurability.Text = weaponInfo.MaxDurability.ToString();
             btnAdd.Enabled = true;

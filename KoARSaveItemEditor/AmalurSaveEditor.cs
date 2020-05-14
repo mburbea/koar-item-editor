@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 using ByteManager;
 
 namespace KoARSaveItemEditor
@@ -85,9 +86,9 @@ namespace KoARSaveItemEditor
                 throw new Exception("Save file not open.");
             }
 
-            var ix = GetBagOffset();
-            var val = br.GetUInt32ByIndex(ix);
-            return (int)val;
+
+            return BitConverter.ToInt32(br.Bytes, GetBagOffset());
+            
         }
 
         /// <summary>
@@ -100,8 +101,7 @@ namespace KoARSaveItemEditor
             {
                 throw new Exception("Save file not open.");
             }
-            var ix = GetBagOffset();
-            MemoryMarshal.Write(br.Bytes.AsSpan(ix), ref c);
+            MemoryMarshal.Write(br.Bytes.AsSpan(GetBagOffset()), ref c);
         }
 
         /// <summary>
@@ -142,6 +142,7 @@ namespace KoARSaveItemEditor
             return attList;
         }
 
+        public bool IsValidDurability(float durability) => durability > 0 && durability < 100;
         /// <summary>
         /// Get all Equipment
         /// </summary>
@@ -179,15 +180,11 @@ namespace KoARSaveItemEditor
                 if (i != indexList.Count - 1)
                 {
                     weapon.NextItemIndex = indexList[i + 1];
-                    weapon.ItemBytes = br.GetBytesByIndexAndLength(indexList[i], indexList[i + 1] - indexList[i]);
+                    weapon.ItemBytes = br.Bytes.AsSpan(indexList[i], indexList[i + 1] - indexList[i]).ToArray();
 
-                    if (weapon.CurrentDurability != 100 && weapon.MaxDurability != -1 && weapon.MaxDurability != 100 && weapon.CurrentDurability != 0 && weapon.MaxDurability != 0)
+                    if (IsValidDurability(weapon.CurrentDurability) && IsValidDurability(weapon.MaxDurability))
                     {
                         weaponList.Add(weapon);
-                    }
-                    else
-                    {
-                        continue;
                     }
                 }
                 else
@@ -204,14 +201,11 @@ namespace KoARSaveItemEditor
                         int nameLength = BitConverter.ToInt32(br.Bytes, attHeadIndex + 22 + attCount * 8 + 1);
                         endIndex = attHeadIndex + 22 + attCount * 8 + nameLength + 4;
                     }
-                    weapon.ItemBytes = br.GetBytesByIndexAndLength(weapon.ItemIndex, endIndex - weapon.ItemIndex + 1);
-                    if (weapon.CurrentDurability != 100 && weapon.MaxDurability != -1 && weapon.MaxDurability != 100 && weapon.CurrentDurability != 0 && weapon.MaxDurability != 0)
+                    weapon.ItemBytes = br.Bytes.AsSpan(weapon.ItemIndex, endIndex - weapon.ItemIndex + 1).ToArray();
+                    
+                    if (IsValidDurability(weapon.CurrentDurability) && IsValidDurability(weapon.MaxDurability))
                     {
                         weaponList.Add(weapon);
-                    }
-                    else
-                    {
-                        continue;
                     }
                 }
             }
@@ -245,7 +239,7 @@ namespace KoARSaveItemEditor
                 throw new Exception("Save file not open.");
             }
 
-            br.DeleteIntsByStartAndEnd(weapon.ItemIndex, weapon.NextItemIndex - 1);
+            br.DeleteIntsByIndexAndLength(weapon.ItemIndex, weapon.NextItemIndex - weapon.ItemIndex);
             br.AddByIndex(weapon.ItemIndex, weapon.ItemBytes);
         }
     }
