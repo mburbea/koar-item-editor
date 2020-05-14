@@ -81,7 +81,6 @@ namespace KoARSaveItemEditor
             this.txtPropMaxDur = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.groupBoxPropName = new System.Windows.Forms.GroupBox();
-            this.checkBoxUnlockName = new System.Windows.Forms.CheckBox();
             this.txtPropName = new System.Windows.Forms.TextBox();
             this.invSizeGroupBox = new System.Windows.Forms.GroupBox();
             this.inventorySizeText = new System.Windows.Forms.NumericUpDown();
@@ -538,7 +537,7 @@ namespace KoARSaveItemEditor
             this.txtPropCurrDur.Name = "txtPropCurrDur";
             this.txtPropCurrDur.Size = new System.Drawing.Size(137, 22);
             this.txtPropCurrDur.TabIndex = 13;
-            this.txtPropCurrDur.Leave += new System.EventHandler(this.txtPropCurrDur_Leave);
+            this.txtPropCurrDur.Leave += new System.EventHandler(this.TextPropCurrDur_Leave);
             // 
             // label1
             // 
@@ -556,7 +555,7 @@ namespace KoARSaveItemEditor
             this.txtPropMaxDur.Name = "txtPropMaxDur";
             this.txtPropMaxDur.Size = new System.Drawing.Size(136, 22);
             this.txtPropMaxDur.TabIndex = 14;
-            this.txtPropMaxDur.Leave += new System.EventHandler(this.txtPropMaxDur_Leave);
+            this.txtPropMaxDur.Leave += new System.EventHandler(this.TextPropMaxDur_Leave);
             // 
             // label2
             // 
@@ -570,7 +569,6 @@ namespace KoARSaveItemEditor
             // 
             // groupBoxPropName
             // 
-            this.groupBoxPropName.Controls.Add(this.checkBoxUnlockName);
             this.groupBoxPropName.Controls.Add(this.txtPropName);
             this.groupBoxPropName.Location = new System.Drawing.Point(7, 21);
             this.groupBoxPropName.Name = "groupBoxPropName";
@@ -579,17 +577,6 @@ namespace KoARSaveItemEditor
             this.groupBoxPropName.TabStop = false;
             this.groupBoxPropName.Text = "Name";
             // 
-            // checkBoxUnlockName
-            // 
-            this.checkBoxUnlockName.AutoSize = true;
-            this.checkBoxUnlockName.Location = new System.Drawing.Point(6, 49);
-            this.checkBoxUnlockName.Name = "checkBoxUnlockName";
-            this.checkBoxUnlockName.Size = new System.Drawing.Size(178, 17);
-            this.checkBoxUnlockName.TabIndex = 3;
-            this.checkBoxUnlockName.Text = "Unlock (only if not Unknown)";
-            this.checkBoxUnlockName.UseVisualStyleBackColor = true;
-            this.checkBoxUnlockName.CheckedChanged += new System.EventHandler(this.CheckBoxUnlockName_CheckedChanged);
-            // 
             // txtPropName
             // 
             this.txtPropName.Location = new System.Drawing.Point(6, 21);
@@ -597,6 +584,7 @@ namespace KoARSaveItemEditor
             this.txtPropName.ReadOnly = true;
             this.txtPropName.Size = new System.Drawing.Size(204, 22);
             this.txtPropName.TabIndex = 2;
+            this.txtPropName.Leave += new System.EventHandler(this.TxtPropName_Leave);
             // 
             // invSizeGroupBox
             // 
@@ -745,7 +733,6 @@ namespace KoARSaveItemEditor
         private TextBox txtPropAddAttributeHexCode;
         private ComboBox comboAddAttList;
         private Button buttonPropAddAttribute;
-        private CheckBox checkBoxUnlockName;
         private Button buttonInvSizeLocate;
         private Label label8;
         private NumericUpDown inventorySizeText;

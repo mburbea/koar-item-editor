@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace KoARSaveItemEditor
 {
@@ -11,6 +12,10 @@ namespace KoARSaveItemEditor
     /// </summary>
     public class ItemMemoryInfo
     {
+        public ItemMemoryInfo()
+        {
+            Offset = new Offsets(this);
+        }
         /// <summary>
         /// Equipment head Index(XX XX XX XX 0B 00 00 00 68 D5 24 00 03)
         /// </summary>
@@ -26,6 +31,24 @@ namespace KoARSaveItemEditor
         /// </summary>
         public byte[] ItemBytes { get; set; }
 
+        private Offsets Offset {get;}
+        private readonly struct Offsets
+        {
+            private readonly ItemMemoryInfo _this;
+            public Offsets(ItemMemoryInfo @this) => _this  = @this;
+
+            public int EffectCount => AmalurSaveEditor.EffectOffset;
+            public int PostEffect => EffectCount + _this.EffectCount * 8;
+            public int CurrentDurability => PostEffect + 8;
+            public int MaxDurability => CurrentDurability + 4;
+
+            public int SellableFlag => MaxDurability + 8;
+            public int HasCustomName => SellableFlag + 2;
+            public int CustomNameLength => HasCustomName + 1;
+            public int CustomNameText => CustomNameLength + 4;
+
+        }
+
         /// <summary>
         /// Equipment Name
         /// </summary>
@@ -33,47 +56,54 @@ namespace KoARSaveItemEditor
         {
             get
             {
-                if (ItemBytes[AmalurSaveEditor.EffectOffset + 22 + EffectCount * 8] != 1)
+                if (!HasCustomName)
                 {
                     return "Unknown";
                 }
                 else
                 {
-                    int count = BitConverter.ToInt32(ItemBytes, AmalurSaveEditor.EffectOffset + 22 + EffectCount * 8 + 1);
-                    return System.Text.Encoding.Default.GetString(ItemBytes, AmalurSaveEditor.EffectOffset + 27 + 8 * EffectCount, count);
+                    int nameLength = BitConverter.ToInt32(ItemBytes, Offset.CustomNameLength);
+                    return Encoding.Default.GetString(ItemBytes, Offset.CustomNameText, nameLength);
                 }
             }
             set
             {
-                ByteEditor byteEditor = new ByteEditor(ItemBytes);
-                byteEditor.DeleteToEnd(AmalurSaveEditor.EffectOffset + 22 + EffectCount * 8 + 1);
-                if (value.Length != 0)
+                if (!HasCustomName)
                 {
-                    byteEditor.EditByIndex(AmalurSaveEditor.EffectOffset + 22 + EffectCount * 8, new byte[] { 1 });
-                    byteEditor.AddToEnd(BitConverter.GetBytes(value.Length));
-                    byte[] nameList = System.Text.Encoding.Default.GetBytes(value);
-                    byteEditor.AddToEnd(nameList);
+                    throw new Exception("Item's name is unmodifiable");
+                }
+                var currentLength = BitConverter.ToUInt32(ItemBytes, Offset.CustomNameLength);
+                var newBytes = Encoding.Default.GetBytes(value);
+                if(currentLength == value.Length)
+                {
+                    newBytes.CopyTo(ItemBytes, Offset.CustomNameText);
                 }
                 else
                 {
-                    byteEditor.EditByIndex(AmalurSaveEditor.EffectOffset + 22 + EffectCount * 8, new byte[] { 0 });
+                    var newLength = newBytes.Length;
+                    var buffer = new byte[Offset.CustomNameText + value.Length];
+                    ItemBytes.AsSpan(0, Offset.CustomNameLength);
+                    MemoryMarshal.Write(buffer.AsSpan(Offset.CustomNameLength), ref newLength);
+                    newBytes.CopyTo(buffer, Offset.CustomNameText);
+                    ItemBytes = buffer;
                 }
-                ItemBytes = byteEditor.Bytes;
             }
         }
+
+        public bool HasCustomName => ItemBytes[Offset.HasCustomName] != 0;
 
         /// <summary>
         /// Number of Effects
         /// </summary>
-        public int EffectCount => BitConverter.ToInt32(ItemBytes, AmalurSaveEditor.EffectOffset);
+        public int EffectCount => BitConverter.ToInt32(ItemBytes, Offset.EffectCount);
 
         /// <summary>
         /// Current Durability
         /// </summary>
         public float CurrentDurability
         {
-            get => BitConverter.ToSingle(ItemBytes, AmalurSaveEditor.EffectOffset + 8 + (8 * EffectCount));
-            set => MemoryMarshal.Write(ItemBytes.AsSpan(AmalurSaveEditor.EffectOffset + 8 + (8 * EffectCount)), ref value);
+            get => BitConverter.ToSingle(ItemBytes, Offset.CurrentDurability);
+            set => MemoryMarshal.Write(ItemBytes.AsSpan(Offset.CurrentDurability), ref value);
         }
 
         /// <summary>
@@ -81,67 +111,63 @@ namespace KoARSaveItemEditor
         /// </summary>
         public float MaxDurability
         {
-            get => BitConverter.ToSingle(ItemBytes, AmalurSaveEditor.EffectOffset + 12 + 8 * EffectCount);
-            set => MemoryMarshal.Write(ItemBytes.AsSpan(AmalurSaveEditor.EffectOffset + 12 + 8 * EffectCount), ref value);
+            get => BitConverter.ToSingle(ItemBytes, Offset.MaxDurability);
+            set => MemoryMarshal.Write(ItemBytes.AsSpan(Offset.MaxDurability), ref value);
         }
 
-        public bool Unsellable
+        public bool IsUnsellable
         {
-            get => (ItemBytes[AmalurSaveEditor.EffectOffset + 20 + 8 * EffectCount] & 0x80) == 0x80;
+            get => (ItemBytes[Offset.SellableFlag] & 0x80) == 0x80;
             set
             {
                 if (value)
                 {
-                    ItemBytes[AmalurSaveEditor.EffectOffset + 20 + 8 * EffectCount] |= 0x80;
+                    ItemBytes[Offset.SellableFlag] |= 0x80;
                 }
                 else
                 {
-                    ItemBytes[AmalurSaveEditor.EffectOffset + 20 + 8 * EffectCount] &= 0x7F;
+                    ItemBytes[Offset.SellableFlag] &= 0x7F;
                 }
             }
 
         }
 
 
-        /// <summary>
-        /// list of attributes on equipment
-        /// </summary>
-        public List<EffectInfo> ItemAttList
+        public List<EffectInfo> ReadEffects()
         {
-            get
+            List<EffectInfo> effects = new List<EffectInfo>();
+
+            for (int i = 0, offset = Offset.EffectCount + 4; i < EffectCount; i++,offset+=8)
             {
-                List<EffectInfo> attList = new List<EffectInfo>();
-
-                int attIndex = AmalurSaveEditor.EffectOffset + 4;
-                for (int i = 0; i < EffectCount; i++)
+                effects.Add(new EffectInfo
                 {
-                    EffectInfo att = new EffectInfo
-                    {
-                        Code = BitConverter.ToUInt32(ItemBytes, attIndex).ToString("X6")
-                    };
-
-                    attList.Add(att);
-
-                    attIndex += 8;
-                }
-                return attList;
+                    Code = BitConverter.ToUInt32(ItemBytes, offset).ToString("X6")
+                });
             }
-            set
-            {
-                ByteEditor byteEditor = new ByteEditor(ItemBytes);
-                byteEditor.DeleteIntsByIndexAndLength(AmalurSaveEditor.EffectOffset + 4, 8 * EffectCount);
-                byteEditor.EditByIndex(AmalurSaveEditor.EffectOffset, BitConverter.GetBytes(value.Count));
 
-                foreach (EffectInfo att in value)
-                {
-                    Span<uint> uints = stackalloc uint[2];
-                    uints[0] = uint.Parse(att.Code, NumberStyles.HexNumber);
-                    uints[1] = uint.MaxValue;
-                    byteEditor.AddByIndex(AmalurSaveEditor.EffectOffset + 4, MemoryMarshal.AsBytes(uints).ToArray());
-                }
-
-                ItemBytes = byteEditor.Bytes;
-            }
+            return effects;
         }
+
+        public void WriteEffects(List<EffectInfo> value)
+        {
+            int newCount = value.Count;
+            var buffer = new byte[ItemBytes.Length + (newCount - EffectCount) * 8];
+            ItemBytes.AsSpan(0, Offset.EffectCount).CopyTo(buffer);
+            MemoryMarshal.Write(buffer.AsSpan(Offset.EffectCount), ref newCount);
+            int offset = Offset.EffectCount + 4;
+            for (int i = 0; i < value.Count; i++)
+            {
+                ulong data = uint.Parse(value[i].Code, NumberStyles.HexNumber) | (ulong)uint.MaxValue << 32;
+                MemoryMarshal.Write(buffer.AsSpan(offset), ref data);
+                offset += 8;
+            }
+
+            var destination = buffer.AsSpan(offset);
+            var src = ItemBytes.AsSpan(Offset.PostEffect);
+            src.CopyTo(destination);
+
+            ItemBytes = buffer;
+        }
+ 
     }
 }

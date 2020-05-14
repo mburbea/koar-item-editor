@@ -22,13 +22,12 @@ namespace KoARSaveItemEditor
 
         private void AddAttribute(ItemMemoryInfo selectedItem, string attCode)
         {
-            List<EffectInfo> attList = selectedItem.ItemAttList;
-            EffectInfo attInfo = new EffectInfo
+            List<EffectInfo> effects = selectedItem.ReadEffects();
+            effects.Add(new EffectInfo
             {
                 Code = attCode
-            };
-            attList.Add(attInfo);
-            selectedItem.ItemAttList = attList;
+            });
+            selectedItem.WriteEffects(effects);
             editor.WriteWeaponByte(selectedItem);
             RebindAttrList(selectedItem);
         }
@@ -75,10 +74,10 @@ namespace KoARSaveItemEditor
                 tsmiOpen.PerformClick();
                 return;
             }
-            List<ItemMemoryInfo> equipment = editor.GetAllEquipment();
 
             itemList = new List<ItemMemoryInfo>();
-            foreach (ItemMemoryInfo info in equipment)
+
+            foreach (ItemMemoryInfo info in editor.GetAllEquipment())
             {
                 if (info.ItemName == "Unknown")
                 {
@@ -130,8 +129,7 @@ namespace KoARSaveItemEditor
                 return;
             }
 
-            bool isValidCode = long.TryParse(hexCode, NumberStyles.HexNumber, null, out long _);
-            if (isValidCode)
+            if (uint.TryParse(hexCode, NumberStyles.HexNumber, null, out _))
             {
                 AddAttribute(selectedItem, hexCode);
                 CanSave();
@@ -159,17 +157,6 @@ namespace KoARSaveItemEditor
             btnSave.Enabled = true;
         }
 
-        private void CheckBoxUnlockName_CheckedChanged(object sender, EventArgs e)
-        {
-            if (txtPropName.Text == "Unknown" && checkBoxUnlockName.Checked == true)
-            {
-                checkBoxUnlockName.Checked = false;
-                MessageBox.Show("Editing not allowed.");
-                return;
-            }
-            txtPropName.ReadOnly = !txtPropName.ReadOnly;
-        }
-
         private void ComboAddAttList_SelectedIndexChanged(object sender, EventArgs e)
         {
             ComboBox box = (ComboBox)sender;
@@ -189,21 +176,21 @@ namespace KoARSaveItemEditor
         private void DeleteItemAttribute()
         {
             ItemMemoryInfo itemInfo = (ItemMemoryInfo)lvMain.SelectedItems[0].Tag;
-            List<EffectInfo> itemAttList = itemInfo.ItemAttList;
+            List<EffectInfo> effects = itemInfo.ReadEffects();
             EffectInfo selectedAttribute = (EffectInfo)comboExistingAttList.SelectedItem;
 
-            foreach (EffectInfo att in itemAttList)
+            for (int i = 0; i < effects.Count; i++)
             {
-                if (att.Code.Equals(selectedAttribute.Code, StringComparison.OrdinalIgnoreCase))
+                if (effects[i].Code.Equals(selectedAttribute.Code, StringComparison.OrdinalIgnoreCase))
                 {
-                    itemAttList.Remove(att);
+                    effects.RemoveAt(i);
                     break;
                 }
             }
 
-            itemInfo.ItemAttList = itemAttList;
-            txtPropAttCount.Text = itemAttList.Count.ToString();
-            if (itemAttList.Count == 0)
+            itemInfo.WriteEffects(effects);
+            txtPropAttCount.Text = effects.Count.ToString();
+            if (effects.Count == 0)
             {
                 txtPropSelectedAttributeHexCode.Text = string.Empty;
             }
@@ -285,11 +272,11 @@ namespace KoARSaveItemEditor
             int count = 0;
             foreach (ItemMemoryInfo item in lvMain.Items.Cast<ListViewItem>().Select(x => x.Tag as ItemMemoryInfo))
             {
-                if (!item.Unsellable)
+                if (!item.IsUnsellable)
                 {
                     continue;
                 }
-                item.Unsellable = false;
+                item.IsUnsellable = false;
                 editor.WriteWeaponByte(item);
                 count++;
             }
@@ -314,9 +301,9 @@ namespace KoARSaveItemEditor
 
             TextBox textBox = (TextBox)sender;
             float currentValue = getDurability(selectedItem);
-            if (!float.TryParse(textBox.Text, out var newValue) || newValue < 0f || newValue >= 100f)
+            if (!float.TryParse(textBox.Text, out var newValue) || !editor.IsValidDurability(newValue))
             {
-                MessageBox.Show($"Invalid value '{textBox.Text}'. Durability must be a number such that, 0 ≤ durability < 100.");
+                MessageBox.Show($"Invalid value '{textBox.Text}'. Durability must be a number such that, 0 < durability < 100.");
                 textBox.Text = currentValue.ToString();
                 textBox.Focus();
                 textBox.SelectAll();
@@ -340,6 +327,7 @@ namespace KoARSaveItemEditor
             txtPropCurrDur.Enabled = true;
             txtPropMaxDur.Enabled = true;
             txtPropAttCount.Text = itemInfo.EffectCount.ToString();
+            txtPropName.ReadOnly = !itemInfo.HasCustomName;
 
             comboExistingAttList.DisplayMember = nameof(EffectInfo.DisplayText);
             comboExistingAttList.DataSource = itemAttList;
@@ -424,14 +412,14 @@ namespace KoARSaveItemEditor
             }
         }
 
-        private void txtPropCurrDur_Leave(object sender, EventArgs e)
+        private void TextPropCurrDur_Leave(object sender, EventArgs e)
         {
-            this.OnDurabilityTextLeave(sender, info => info.CurrentDurability, (info, value) => info.CurrentDurability = value);
+            OnDurabilityTextLeave(sender, info => info.CurrentDurability, (info, value) => info.CurrentDurability = value);
         }
 
-        private void txtPropMaxDur_Leave(object sender, EventArgs e)
+        private void TextPropMaxDur_Leave(object sender, EventArgs e)
         {
-            this.OnDurabilityTextLeave(sender, info => info.MaxDurability, (info, value) => info.MaxDurability = value);
+            OnDurabilityTextLeave(sender, info => info.MaxDurability, (info, value) => info.MaxDurability = value);
         }
 
         private void TxtSearch_TextChanged(object sender, EventArgs e)
@@ -444,6 +432,16 @@ namespace KoARSaveItemEditor
             else
             {
                 RefreshListOnFilterUpdate();
+            }
+        }
+
+        private void TxtPropName_Leave(object sender, EventArgs e)
+        {
+            if(selectedItem != null && selectedItem.HasCustomName && selectedItem.ItemName != txtPropName.Text)
+            {
+                selectedItem.ItemName = txtPropName.Text;
+                editor.WriteWeaponByte(selectedItem);
+                CanSave();
             }
         }
     }

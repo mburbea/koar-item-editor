@@ -14,13 +14,18 @@ namespace ByteManager
         /// </summary>
         public ByteEditor(byte[] bytes = null)
         {
-            Bytes = bytes;
+            _bytes = bytes;
         }
 
+
+        private byte[] _bytes;
         /// <summary>
         /// Binary array file
         /// </summary>
-        public byte[] Bytes { get; private set; }
+        public byte[] Bytes { 
+            get => _bytes ?? throw new Exception("Save file not open");
+            private set => _bytes = value;
+        }
 
         /// <summary>
         /// Read file
@@ -47,10 +52,6 @@ namespace ByteManager
         /// <param name="path">Save the file's absolute path</param>
         public void SaveFile(string path)
         {
-            if (Bytes == null)
-            {
-                throw new Exception("File not open");
-            }
             try
             {
                 using var fs = new FileStream(path, FileMode.Create);
@@ -89,10 +90,6 @@ namespace ByteManager
         /// <param name="length">要删除的长度</param>
         public void DeleteIntsByIndexAndLength(int index, int length)
         {
-            if (Bytes == null)
-            {
-                throw new Exception("File is not open");
-            }
             if (index < 0)
             {
                 throw new Exception("Index is invalid");
@@ -115,10 +112,6 @@ namespace ByteManager
         /// <param name="newBytes">要修改的数值</param>
         public void EditByIndex(int index, byte[] newBytes)
         {
-            if (Bytes == null)
-            {
-                throw new Exception("File is not open");
-            }
             if (index < 0)
             {
                 throw new Exception("Index is invalid");
@@ -138,10 +131,6 @@ namespace ByteManager
         /// <param name="newBytes">byte数组</param>
         public void AddByIndex(int index, byte[] newBytes)
         {
-            if (Bytes == null)
-            {
-                throw new Exception("File is not open");
-            }
             if (index < 0)
             {
                 throw new Exception("Index is invalid");
@@ -159,11 +148,6 @@ namespace ByteManager
         /// <param name="bt"></param>
         public void AddToEnd(byte[] bt)
         {
-            if (Bytes == null)
-            {
-                throw new Exception("File is not open");
-            }
-
             byte[] array = new byte[Bytes.Length + bt.Length];
             Bytes.CopyTo(array, 0);
             bt.CopyTo(array, Bytes.Length);

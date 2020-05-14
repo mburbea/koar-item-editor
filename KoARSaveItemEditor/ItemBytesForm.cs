@@ -8,8 +8,8 @@ namespace KoARSaveItemEditor
 {
     public partial class ItemBytesForm : Form
     {
-        private ItemMemoryInfo weapon;
-        private AmalurSaveEditor editor;
+        private readonly ItemMemoryInfo weapon;
+        private readonly AmalurSaveEditor editor;
 
         public ItemBytesForm(AmalurSaveEditor editor, ItemMemoryInfo weapon)
         {
