@@ -11,10 +11,6 @@ namespace KoAR.Core
     /// </summary>
     public class ItemMemoryInfo
     {
-        public ItemMemoryInfo()
-        {
-            Offset = new Offsets(this);
-        }
         /// <summary>
         /// Equipment head Index(XX XX XX XX 0B 00 00 00 68 D5 24 00 03)
         /// </summary>
@@ -30,23 +26,8 @@ namespace KoAR.Core
         /// </summary>
         public byte[] ItemBytes { get; set; }
 
-        private Offsets Offset {get;}
-        private readonly struct Offsets
-        {
-            private readonly ItemMemoryInfo _info;
-            public Offsets(ItemMemoryInfo info) => _info  = info;
-
-            public int EffectCount => AmalurSaveEditor.EffectOffset;
-            public int PostEffect => EffectCount + 4 + _info.EffectCount * 8;
-            public int CurrentDurability => PostEffect + 4;
-            public int MaxDurability => CurrentDurability + 4;
-
-            public int SellableFlag => MaxDurability + 8;
-            public int HasCustomName => SellableFlag + 2;
-            public int CustomNameLength => HasCustomName + 1;
-            public int CustomNameText => CustomNameLength + 4;
-        }
-
+        private Offsets? _offset;
+        private Offsets Offset => _offset ?? new Offsets(EffectCount);
         /// <summary>
         /// Equipment Name
         /// </summary>
@@ -88,12 +69,12 @@ namespace KoAR.Core
             }
         }
 
-        public bool HasCustomName => ItemBytes[Offset.HasCustomName] != 0;
+        public bool HasCustomName => ItemBytes[Offset.HasCustomName] == 1;
 
         /// <summary>
         /// Number of Effects
         /// </summary>
-        public int EffectCount => BitConverter.ToInt32(ItemBytes, Offset.EffectCount);
+        public int EffectCount => BitConverter.ToInt32(ItemBytes, Offsets.EffectCount);
 
         /// <summary>
         /// Current Durability
@@ -135,7 +116,7 @@ namespace KoAR.Core
         {
             List<EffectInfo> effects = new List<EffectInfo>();
 
-            for (int i = 0, offset = Offset.EffectCount + 4; i < EffectCount; i++,offset+=8)
+            for (int i = 0, offset = Offsets.EffectCount + 4; i < EffectCount; i++,offset+=8)
             {
                 effects.Add(new EffectInfo
                 {
@@ -150,9 +131,9 @@ namespace KoAR.Core
         {
             int newCount = newEffects.Count;
             var buffer = new byte[ItemBytes.Length + (newCount - EffectCount) * 8];
-            ItemBytes.AsSpan(0, Offset.EffectCount).CopyTo(buffer);
-            MemoryMarshal.Write(buffer.AsSpan(Offset.EffectCount), ref newCount);
-            int offset = Offset.EffectCount + 4;
+            ItemBytes.AsSpan(0, Offsets.EffectCount).CopyTo(buffer);
+            MemoryMarshal.Write(buffer.AsSpan(Offsets.EffectCount), ref newCount);
+            int offset = Offsets.EffectCount + 4;
             foreach (EffectInfo effect in newEffects)
             {
                 ulong data = uint.Parse(effect.Code, NumberStyles.HexNumber) | (ulong)uint.MaxValue << 32;

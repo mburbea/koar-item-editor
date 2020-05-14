@@ -14,7 +14,6 @@ namespace KoAR.Core
         /// <summary>
         /// The head of the equipment, property and indicate the number of attributes of the data relative to equipment data head offset
         /// </summary>
-        public const int EffectOffset = 21;
         private static ReadOnlySpan<byte> InventoryLimit => new[] { (byte)'i', (byte)'n', (byte)'v', (byte)'e', (byte)'n', (byte)'t', (byte)'o', (byte)'r', (byte)'y', (byte)'_', (byte)'l', (byte)'i', (byte)'m', (byte)'i', (byte)'t' };
         private static ReadOnlySpan<byte> IncreaseAmount => new[] { (byte)'i', (byte)'n', (byte)'c', (byte)'r', (byte)'e', (byte)'a', (byte)'s', (byte)'e', (byte)'_', (byte)'a', (byte)'m', (byte)'o', (byte)'u', (byte)'n', (byte)'t' };
         private static ReadOnlySpan<byte> CurrentInventoryCount => new[] { (byte)'c', (byte)'u', (byte)'r', (byte)'r', (byte)'e', (byte)'n', (byte)'t', (byte)'_', (byte)'i', (byte)'n', (byte)'v', (byte)'e', (byte)'n', (byte)'t', (byte)'o', (byte)'r', (byte)'y', (byte)'_', (byte)'c', (byte)'o', (byte)'u', (byte)'n', (byte)'t' };
@@ -138,36 +137,37 @@ namespace KoAR.Core
                     }
                 }
 
-                ItemMemoryInfo weapon = new ItemMemoryInfo { ItemIndex = indexList[i] };
+                ItemMemoryInfo equipment = new ItemMemoryInfo { ItemIndex = indexList[i] };
                 if (i != indexList.Count - 1)
                 {
-                    weapon.NextItemIndex = indexList[i + 1];
-                    weapon.ItemBytes = Bytes.AsSpan(indexList[i], indexList[i + 1] - indexList[i]).ToArray();
+                    equipment.NextItemIndex = indexList[i + 1];
+                    equipment.ItemBytes = Bytes.AsSpan(indexList[i], indexList[i + 1] - indexList[i]).ToArray();
 
-                    if (IsValidDurability(weapon.CurrentDurability) && IsValidDurability(weapon.MaxDurability))
+                    if (IsValidDurability(equipment.CurrentDurability) && IsValidDurability(equipment.MaxDurability))
                     {
-                        equipmentList.Add(weapon);
+                        equipmentList.Add(equipment);
                     }
                 }
                 else
                 {
-                    int attHeadIndex = weapon.ItemIndex + EffectOffset;
-                    int attCount = BitConverter.ToInt32(Bytes, attHeadIndex);
+                    var span = Bytes.AsSpan(equipment.ItemIndex);
+                    var offsets = new Offsets(MemoryMarshal.Read<int>(span.Slice(Offsets.EffectCount)));
+
                     int endIndex;
-                    if (Bytes[attHeadIndex + 22 + attCount * 8] != 1)
+                    if (span[offsets.HasCustomName] != 1)
                     {
-                        endIndex = attHeadIndex + 22 + attCount * 8;
+                        endIndex = offsets.CustomNameText;
                     }
                     else
                     {
-                        int nameLength = BitConverter.ToInt32(Bytes, attHeadIndex + 22 + attCount * 8 + 1);
-                        endIndex = attHeadIndex + 22 + attCount * 8 + nameLength + 4;
+                        var nameLength = MemoryMarshal.Read<int>(span.Slice(offsets.CustomNameLength));
+                        endIndex = offsets.CustomNameText + nameLength;
                     }
-                    weapon.ItemBytes = Bytes.AsSpan(weapon.ItemIndex, endIndex - weapon.ItemIndex + 1).ToArray();
+                    equipment.ItemBytes = Bytes.AsSpan(equipment.ItemIndex, endIndex).ToArray();
 
-                    if (IsValidDurability(weapon.CurrentDurability) && IsValidDurability(weapon.MaxDurability))
+                    if (IsValidDurability(equipment.CurrentDurability) && IsValidDurability(equipment.MaxDurability))
                     {
-                        equipmentList.Add(weapon);
+                        equipmentList.Add(equipment);
                     }
                 }
             }
