@@ -52,7 +52,7 @@ namespace KoARSaveItemEditor
 
         private void DataBinding()
         {
-            List<EffectInfo> attList = editor.GetAttList(weaponInfo, attributeList);
+            List<EffectInfo> attList = editor.GetEffectList(weaponInfo, attributeList);
             List<EffectInfo> temp = new List<EffectInfo>();
             
             foreach(EffectInfo att in attList)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using ByteManager;
@@ -18,12 +19,12 @@ namespace KoARSaveItemEditor
         public const int InventoryCapacityOffset = 36;
         //public const string InventoryLimit = "inventory_limit";
         //public const string CurrentInventoryCount = "current_inventory_count";
-        private ReadOnlySpan<byte> InventoryLimit => new[]{(byte)'i',(byte)'n',(byte)'v',(byte)'e',(byte)'n',(byte)'t',(byte)'o',(byte)'r',(byte)'y',(byte)'_',(byte)'l',(byte)'i',(byte)'m',(byte)'i',(byte)'t'};
+        private ReadOnlySpan<byte> InventoryLimit => new[] { (byte)'i', (byte)'n', (byte)'v', (byte)'e', (byte)'n', (byte)'t', (byte)'o', (byte)'r', (byte)'y', (byte)'_', (byte)'l', (byte)'i', (byte)'m', (byte)'i', (byte)'t' };
         private ReadOnlySpan<byte> IncreaseAmount => new[] { (byte)'i', (byte)'n', (byte)'c', (byte)'r', (byte)'e', (byte)'a', (byte)'s', (byte)'e', (byte)'_', (byte)'a', (byte)'m', (byte)'o', (byte)'u', (byte)'n', (byte)'t' };
         private ReadOnlySpan<byte> CurrentInventoryCount => new[] { (byte)'c', (byte)'u', (byte)'r', (byte)'r', (byte)'e', (byte)'n', (byte)'t', (byte)'_', (byte)'i', (byte)'n', (byte)'v', (byte)'e', (byte)'n', (byte)'t', (byte)'o', (byte)'r', (byte)'y', (byte)'_', (byte)'c', (byte)'o', (byte)'u', (byte)'n', (byte)'t' };
 
         private ReadOnlySpan<byte> EquipmentSequence => new byte[] { 11, 0, 0, 0, 104, 213, 36, 0, 3 };
-    private ByteEditor br = null;
+        private ByteEditor br = null;
 
         /// <summary>
         /// Read save-file
@@ -88,7 +89,7 @@ namespace KoARSaveItemEditor
 
 
             return BitConverter.ToInt32(br.Bytes, GetBagOffset());
-            
+
         }
 
         /// <summary>
@@ -104,49 +105,22 @@ namespace KoARSaveItemEditor
             MemoryMarshal.Write(br.Bytes.AsSpan(GetBagOffset()), ref c);
         }
 
-        /// <summary>
-        /// List of Attributes on Equipment(including descriptions)
-        /// </summary>
-        /// <param name="weaponInfo">Equipment Object</param>
-        /// <param name="attInfoList">Description of Properties</param>
-        /// <returns>List of Attributes</returns>
-        public List<EffectInfo> GetAttList(ItemMemoryInfo weaponInfo, List<EffectInfo> attInfoList)
+        public List<EffectInfo> GetEffectList(ItemMemoryInfo weaponInfo, IEnumerable<EffectInfo> effects)
         {
             if (br.Bytes == null)
             {
                 throw new Exception("Save file not open.");
             }
-            var byte41 = weaponInfo.Unsellable;
-            if(byte41)
+            List<EffectInfo> list = weaponInfo.ItemAttList;
+            foreach (EffectInfo attInfo in list)
             {
-                Console.WriteLine(byte41);
+                attInfo.DisplayText = effects.FirstOrDefault(x => x.Code == attInfo.Code)?.DisplayText ?? "Unknown";
             }
-
-            List<EffectInfo> attList = weaponInfo.ItemAttList;
-            foreach (EffectInfo attInfo in attList)
-            {
-                string text = "";
-                foreach (EffectInfo att in attInfoList)
-                {
-                    if (att.Code == attInfo.Code)
-                    {
-                        text = att.DisplayText;
-                    }
-                }
-                if (text == "")
-                {
-                    text = "Unknown";
-                }
-                attInfo.DisplayText = text;
-            }
-            return attList;
+            return list;
         }
 
-        public bool IsValidDurability(float durability) => durability > 0 && durability < 100;
-        /// <summary>
-        /// Get all Equipment
-        /// </summary>
-        /// <returns></returns>
+        public bool IsValidDurability(float durability) => durability > 0f && durability < 100f;
+
         public List<ItemMemoryInfo> GetAllEquipment()
         {
             if (br.Bytes == null)
@@ -173,10 +147,7 @@ namespace KoARSaveItemEditor
                     }
                 }
 
-                ItemMemoryInfo weapon = new ItemMemoryInfo
-                {
-                    ItemIndex = indexList[i]
-                };
+                ItemMemoryInfo weapon = new ItemMemoryInfo { ItemIndex = indexList[i] };
                 if (i != indexList.Count - 1)
                 {
                     weapon.NextItemIndex = indexList[i + 1];
@@ -202,7 +173,7 @@ namespace KoARSaveItemEditor
                         endIndex = attHeadIndex + 22 + attCount * 8 + nameLength + 4;
                     }
                     weapon.ItemBytes = br.Bytes.AsSpan(weapon.ItemIndex, endIndex - weapon.ItemIndex + 1).ToArray();
-                    
+
                     if (IsValidDurability(weapon.CurrentDurability) && IsValidDurability(weapon.MaxDurability))
                     {
                         weaponList.Add(weapon);

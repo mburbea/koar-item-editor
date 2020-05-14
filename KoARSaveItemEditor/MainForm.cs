@@ -85,7 +85,7 @@ namespace KoARSaveItemEditor
 
         private void RebindAttrList(ItemMemoryInfo itemInfo)
         {
-            List<EffectInfo> itemAttList = editor.GetAttList(itemInfo, attributeList);
+            List<EffectInfo> itemAttList = editor.GetEffectList(itemInfo, attributeList);
             selectedItem = itemInfo;
 
             txtPropName.Text = itemInfo.ItemName;
