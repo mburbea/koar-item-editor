@@ -190,7 +190,7 @@ namespace KoARSaveItemEditor
             this.lvMain.UseCompatibleStateImageBehavior = false;
             this.lvMain.View = System.Windows.Forms.View.Details;
             this.lvMain.SelectedIndexChanged += new System.EventHandler(this.lvMain_SelectedIndexChanged);
-            this.lvMain.DoubleClick += new System.EventHandler(this.BtnEdit_Click);
+            this.lvMain.DoubleClick += new System.EventHandler(this.BtnPrint_Click);
             // 
             // id
             // 
