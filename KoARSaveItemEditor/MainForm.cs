@@ -69,7 +69,7 @@ namespace KoARSaveItemEditor
                         element.ItemName,
                         element.CurrentDurability.ToString(),
                         element.MaxDurability.ToString(),
-                        element.AttCount.ToString()
+                        element.EffectCount.ToString()
                     }
                 });
             }
