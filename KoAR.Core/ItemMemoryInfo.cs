@@ -27,7 +27,7 @@ namespace KoAR.Core
         public byte[] ItemBytes { get; set; }
 
         private Offsets? _offset;
-        private Offsets Offset => _offset ?? new Offsets(EffectCount);
+        private Offsets Offset => _offset ??= new Offsets(EffectCount);
         /// <summary>
         /// Equipment Name
         /// </summary>
