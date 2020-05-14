@@ -44,7 +44,7 @@ namespace KoARSaveItemEditor
         {
             btnPrint.Enabled = false;
             btnDelete.Enabled = false;
-            ItemBytesForm form = new ItemBytesForm(editor, lvMain.SelectedItems[0].Tag as ItemMemoryInfo);
+            using ItemBytesForm form = new ItemBytesForm(editor, lvMain.SelectedItems[0].Tag as ItemMemoryInfo);
             if (form.ShowDialog() == DialogResult.Yes)
             {
                 CanSave();
@@ -136,8 +136,7 @@ namespace KoARSaveItemEditor
                 return;
             }
 
-            long validCode;
-            bool isValidCode = long.TryParse(hexCode, System.Globalization.NumberStyles.HexNumber, null, out validCode);
+            bool isValidCode = long.TryParse(hexCode, System.Globalization.NumberStyles.HexNumber, null, out long validCode);
             if (isValidCode)
             {
                 AddAttribute(selectedItem, hexCode);
@@ -359,7 +358,7 @@ namespace KoARSaveItemEditor
 
         private void TsmiHelp_Click(object sender, EventArgs e)
         {
-            HelpForm form = new HelpForm();
+            using HelpForm form = new HelpForm();
             form.ShowDialog();
         }
 
