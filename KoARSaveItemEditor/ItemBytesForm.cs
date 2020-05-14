@@ -50,7 +50,7 @@ namespace KoARSaveItemEditor
                 }
             }
             weapon.ItemBytes = btList.ToArray();
-            editor.WriteWeaponByte(weapon);
+            editor.WriteEquipmentBytes(weapon);
             DialogResult = DialogResult.Yes;
             btnSave.Enabled = false;
         }

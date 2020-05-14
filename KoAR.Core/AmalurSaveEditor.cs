@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 
@@ -18,7 +19,13 @@ namespace KoAR.Core
         private static ReadOnlySpan<byte> IncreaseAmount => new[] { (byte)'i', (byte)'n', (byte)'c', (byte)'r', (byte)'e', (byte)'a', (byte)'s', (byte)'e', (byte)'_', (byte)'a', (byte)'m', (byte)'o', (byte)'u', (byte)'n', (byte)'t' };
         private static ReadOnlySpan<byte> CurrentInventoryCount => new[] { (byte)'c', (byte)'u', (byte)'r', (byte)'r', (byte)'e', (byte)'n', (byte)'t', (byte)'_', (byte)'i', (byte)'n', (byte)'v', (byte)'e', (byte)'n', (byte)'t', (byte)'o', (byte)'r', (byte)'y', (byte)'_', (byte)'c', (byte)'o', (byte)'u', (byte)'n', (byte)'t' };
         private static ReadOnlySpan<byte> EquipmentSequence => new byte[] { 11, 0, 0, 0, 104, 213, 36, 0, 3 };
-        private ByteEditor br;
+        private byte[] _bytes;
+
+        public byte[] Bytes
+        {
+            get => _bytes ?? throw new Exception("Save file not open");
+            set => _bytes = value;
+        }
 
         /// <summary>
         /// Read save-file
@@ -26,15 +33,15 @@ namespace KoAR.Core
         /// <param name="path">archive path</param>
         public void ReadFile(string path)
         {
-            br = new ByteEditor();
             try
             {
-                br.ReadFile(path);
+                using FileStream fs = new FileStream(path, FileMode.Open);
+                _bytes = new byte[fs.Length];
+                fs.Read(_bytes, 0, (int)fs.Length);
             }
             catch
             {
-                br = null;
-                throw new Exception("Save file failed to open.");
+                throw new Exception("File cannot open!");
             }
         }
 
@@ -46,7 +53,8 @@ namespace KoAR.Core
         {
             try
             {
-                br.SaveFile(path);
+                using var fs = new FileStream(path, FileMode.Create);
+                fs.Write(Bytes, 0, Bytes.Length);
             }
             catch
             {
@@ -54,10 +62,9 @@ namespace KoAR.Core
             }
         }
 
-
         private int GetBagOffset()
         {
-            ReadOnlySpan<byte> span = br.Bytes;
+            ReadOnlySpan<byte> span = Bytes;
             var curInvCountOffset = span.IndexOf(CurrentInventoryCount) + CurrentInventoryCount.Length;
             var inventoryLimitOffset = span.IndexOf(InventoryLimit) + InventoryLimit.Length;
             var increaseAmountOffset = span.IndexOf(IncreaseAmount) + IncreaseAmount.Length;
@@ -74,7 +81,7 @@ namespace KoAR.Core
         /// <returns></returns>
         public int GetMaxBagCount()
         {
-            return BitConverter.ToInt32(br.Bytes, GetBagOffset());
+            return BitConverter.ToInt32(Bytes, GetBagOffset());
 
         }
 
@@ -84,12 +91,11 @@ namespace KoAR.Core
         /// <param name="c"></param>
         public void EditMaxBagCount(int c)
         {
-            MemoryMarshal.Write(br.Bytes.AsSpan(GetBagOffset()), ref c);
+            MemoryMarshal.Write(Bytes.AsSpan(GetBagOffset()), ref c);
         }
 
         public List<EffectInfo> GetEffectList(ItemMemoryInfo weaponInfo, IEnumerable<EffectInfo> effects)
         {
-            // NOT A CHEAP PROPERTY :(
             var itemEffects = weaponInfo.ReadEffects();
             foreach (EffectInfo attInfo in itemEffects)
             {
@@ -103,14 +109,24 @@ namespace KoAR.Core
 
         public List<ItemMemoryInfo> GetAllEquipment()
         {
-            List<ItemMemoryInfo> weaponList = new List<ItemMemoryInfo>();
-
-            var indexList = br.GetAllIndices(EquipmentSequence);
-
-            for (int i = 0; i < indexList.Count; i++)
+            static List<int> GetAllIndices(ReadOnlySpan<byte> data, ReadOnlySpan<byte> sequence)
             {
-                indexList[i] -= 4;
+                var results = new List<int>();
+                int ix = data.IndexOf(sequence);
+                int start = 0;
+
+                while (ix != -1)
+                {
+                    results.Add(start + ix - 4);
+                    start += ix + sequence.Length;
+                    ix = data.Slice(start).IndexOf(sequence);
+                }
+                return results;
             }
+
+            List<ItemMemoryInfo> equipmentList = new List<ItemMemoryInfo>();
+
+            var indexList = GetAllIndices(Bytes, EquipmentSequence);
 
             for (int i = 0; i < indexList.Count; i++)
             {
@@ -126,57 +142,58 @@ namespace KoAR.Core
                 if (i != indexList.Count - 1)
                 {
                     weapon.NextItemIndex = indexList[i + 1];
-                    weapon.ItemBytes = br.Bytes.AsSpan(indexList[i], indexList[i + 1] - indexList[i]).ToArray();
+                    weapon.ItemBytes = Bytes.AsSpan(indexList[i], indexList[i + 1] - indexList[i]).ToArray();
 
                     if (IsValidDurability(weapon.CurrentDurability) && IsValidDurability(weapon.MaxDurability))
                     {
-                        weaponList.Add(weapon);
+                        equipmentList.Add(weapon);
                     }
                 }
                 else
                 {
                     int attHeadIndex = weapon.ItemIndex + EffectOffset;
-                    int attCount = BitConverter.ToInt32(br.Bytes, attHeadIndex);
+                    int attCount = BitConverter.ToInt32(Bytes, attHeadIndex);
                     int endIndex;
-                    if (br.Bytes[attHeadIndex + 22 + attCount * 8] != 1)
+                    if (Bytes[attHeadIndex + 22 + attCount * 8] != 1)
                     {
                         endIndex = attHeadIndex + 22 + attCount * 8;
                     }
                     else
                     {
-                        int nameLength = BitConverter.ToInt32(br.Bytes, attHeadIndex + 22 + attCount * 8 + 1);
+                        int nameLength = BitConverter.ToInt32(Bytes, attHeadIndex + 22 + attCount * 8 + 1);
                         endIndex = attHeadIndex + 22 + attCount * 8 + nameLength + 4;
                     }
-                    weapon.ItemBytes = br.Bytes.AsSpan(weapon.ItemIndex, endIndex - weapon.ItemIndex + 1).ToArray();
+                    weapon.ItemBytes = Bytes.AsSpan(weapon.ItemIndex, endIndex - weapon.ItemIndex + 1).ToArray();
 
                     if (IsValidDurability(weapon.CurrentDurability) && IsValidDurability(weapon.MaxDurability))
                     {
-                        weaponList.Add(weapon);
+                        equipmentList.Add(weapon);
                     }
                 }
             }
 
-            return weaponList;
+            return equipmentList;
         }
 
         /// <summary>
         /// Delete Equipment
         /// </summary>
         /// <param name="weapon"></param>
-        public void DeleteWeapon(ItemMemoryInfo weapon)
+        public void DeleteEquipment(ItemMemoryInfo weapon)
         {
             weapon.ItemBytes = new byte[4];
-            WriteWeaponByte(weapon);
+            WriteEquipmentBytes(weapon);
         }
 
-        /// <summary>
-        /// Saveing Equipment
-        /// </summary>
-        /// <param name="weapon">Written Equipment</param>
-        public void WriteWeaponByte(ItemMemoryInfo weapon)
+        public void WriteEquipmentBytes(ItemMemoryInfo weapon)
         {
-            br.DeleteIntsByIndexAndLength(weapon.ItemIndex, weapon.NextItemIndex - weapon.ItemIndex);
-            br.AddByIndex(weapon.ItemIndex, weapon.ItemBytes);
+            var bytes = Bytes;
+            var delta = weapon.ItemBytes.Length + (weapon.NextItemIndex - weapon.ItemIndex);
+            var buffer = new byte[bytes.Length + delta];
+            bytes.AsSpan(0, weapon.ItemIndex).CopyTo(buffer);
+            weapon.ItemBytes.CopyTo(buffer, weapon.ItemIndex);
+            bytes.AsSpan(weapon.NextItemIndex).CopyTo(buffer.AsSpan(weapon.ItemIndex + weapon.ItemBytes.Length));
+            Bytes = buffer;
         }
     }
 }

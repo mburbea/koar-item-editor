@@ -29,7 +29,7 @@ namespace KoARSaveItemEditor
                 Code = attCode
             });
             selectedItem.WriteEffects(effects);
-            editor.WriteWeaponByte(selectedItem);
+            editor.WriteEquipmentBytes(selectedItem);
             RebindAttrList(selectedItem);
         }
 
@@ -37,7 +37,7 @@ namespace KoARSaveItemEditor
         {
             if (MessageBox.Show("Removing equipment forcefully may lead to bugs. Removing equipped items will lead to an invalid save. It is recommended not to use this feature.\n\nAre you sure you want to delete this item?", "Message", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
             {
-                editor.DeleteWeapon((ItemMemoryInfo)lvMain.SelectedItems[0].Tag);
+                editor.DeleteEquipment((ItemMemoryInfo)lvMain.SelectedItems[0].Tag);
             }
         }
 
@@ -195,7 +195,7 @@ namespace KoARSaveItemEditor
             {
                 txtPropSelectedAttributeHexCode.Text = string.Empty;
             }
-            editor.WriteWeaponByte(selectedItem);
+            editor.WriteEquipmentBytes(selectedItem);
             RebindAttrList(itemInfo);
             CanSave();
         }
@@ -278,7 +278,7 @@ namespace KoARSaveItemEditor
                     continue;
                 }
                 item.IsUnsellable = false;
-                editor.WriteWeaponByte(item);
+                editor.WriteEquipmentBytes(item);
                 count++;
             }
             MessageBox.Show($"Modified {count} items.");
@@ -312,7 +312,7 @@ namespace KoARSaveItemEditor
             else if (newValue != currentValue)
             {
                 setDurability(selectedItem, newValue);
-                editor.WriteWeaponByte(selectedItem);
+                editor.WriteEquipmentBytes(selectedItem);
                 CanSave();
             }
         }
@@ -441,7 +441,7 @@ namespace KoARSaveItemEditor
             if(selectedItem != null && selectedItem.HasCustomName && selectedItem.ItemName != txtPropName.Text)
             {
                 selectedItem.ItemName = txtPropName.Text;
-                editor.WriteWeaponByte(selectedItem);
+                editor.WriteEquipmentBytes(selectedItem);
                 CanSave();
             }
         }
