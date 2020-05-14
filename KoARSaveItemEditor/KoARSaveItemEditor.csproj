@@ -64,12 +64,6 @@
     <Compile Update="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Update="EditForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="EditForm.Designer.cs">
-      <DependentUpon>EditForm.cs</DependentUpon>
-    </Compile>
     <Compile Update="HelpForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -84,9 +78,6 @@
     </Compile>
     <EmbeddedResource Update="BagEditForm.resx">
       <DependentUpon>BagEditForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="EditForm.resx">
-      <DependentUpon>EditForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Update="OptionForm.resx">
       <DependentUpon>OptionForm.cs</DependentUpon>
