@@ -34,19 +34,18 @@ namespace KoARSaveItemEditor
         private Offsets Offset {get;}
         private readonly struct Offsets
         {
-            private readonly ItemMemoryInfo _this;
-            public Offsets(ItemMemoryInfo @this) => _this  = @this;
+            private readonly ItemMemoryInfo _info;
+            public Offsets(ItemMemoryInfo info) => _info  = info;
 
             public int EffectCount => AmalurSaveEditor.EffectOffset;
-            public int PostEffect => EffectCount + _this.EffectCount * 8;
-            public int CurrentDurability => PostEffect + 8;
+            public int PostEffect => EffectCount + 4 + _info.EffectCount * 8;
+            public int CurrentDurability => PostEffect + 4;
             public int MaxDurability => CurrentDurability + 4;
 
             public int SellableFlag => MaxDurability + 8;
             public int HasCustomName => SellableFlag + 2;
             public int CustomNameLength => HasCustomName + 1;
             public int CustomNameText => CustomNameLength + 4;
-
         }
 
         /// <summary>
@@ -148,23 +147,21 @@ namespace KoARSaveItemEditor
             return effects;
         }
 
-        public void WriteEffects(List<EffectInfo> value)
+        public void WriteEffects(List<EffectInfo> newEffects)
         {
-            int newCount = value.Count;
+            int newCount = newEffects.Count;
             var buffer = new byte[ItemBytes.Length + (newCount - EffectCount) * 8];
             ItemBytes.AsSpan(0, Offset.EffectCount).CopyTo(buffer);
             MemoryMarshal.Write(buffer.AsSpan(Offset.EffectCount), ref newCount);
             int offset = Offset.EffectCount + 4;
-            for (int i = 0; i < value.Count; i++)
+            foreach (EffectInfo effect in newEffects)
             {
-                ulong data = uint.Parse(value[i].Code, NumberStyles.HexNumber) | (ulong)uint.MaxValue << 32;
+                ulong data = uint.Parse(effect.Code, NumberStyles.HexNumber) | (ulong)uint.MaxValue << 32;
                 MemoryMarshal.Write(buffer.AsSpan(offset), ref data);
                 offset += 8;
             }
 
-            var destination = buffer.AsSpan(offset);
-            var src = ItemBytes.AsSpan(Offset.PostEffect);
-            src.CopyTo(destination);
+            ItemBytes.AsSpan(Offset.PostEffect).CopyTo(buffer.AsSpan(offset));
 
             ItemBytes = buffer;
         }
