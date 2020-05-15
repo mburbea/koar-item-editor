@@ -11,7 +11,7 @@
             <Setter Property="Title" Value="{Binding ItemName, StringFormat='Hex Editor - {0}'}" />
         </Style>
     </Window.Style>
-    <Grid FocusManager.FocusedElement="{Binding ElementName=PART_EditButton}">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition />
@@ -19,20 +19,7 @@
         </Grid.RowDefinitions>
         <TextBlock Text="WARNING: Edit the text below at your own risk!" TextAlignment="Center" FontWeight="SemiBold" Foreground="Red" Margin="4" />
         <TextBox Grid.Row="1" x:Name="PART_TextBox" AcceptsReturn="False" Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-            Margin="4" TextWrapping="Wrap" IsReadOnly="{Binding ReadOnly}">
-            <TextBox.Style>
-                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-                    <Style.Triggers>
-                        <Trigger Property="IsReadOnly" Value="True">
-                            <Setter Property="Background" Value="LightGray" />
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </TextBox.Style>
-        </TextBox>
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="Edit" Command="{Binding AllowEditCommand}" Margin="4" x:Name="PART_EditButton"/>
-            <Button Content="Save" Command="{Binding SaveCommand}" Margin="4" IsDefault="True" />
-        </StackPanel>
+            Margin="4" TextWrapping="Wrap" />
+        <Button HorizontalAlignment="Center" Grid.Row="2" Content="Save" Command="{Binding SaveCommand}" Margin="4" IsDefault="True" />
     </Grid>
 </Window>

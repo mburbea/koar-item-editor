@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Windows;
 using KoAR.Core;
@@ -14,7 +13,6 @@ namespace KoAR.SaveEditor.Views
         private readonly AmalurSaveEditor _editor;
         private readonly string _initialText;
         private readonly ItemMemoryInfo _item;
-        private bool _editable;
         private string _text;
 
         public ItemEditorViewModel(AmalurSaveEditor editor, ItemMemoryInfo item)
@@ -22,22 +20,10 @@ namespace KoAR.SaveEditor.Views
             this._editor = editor;
             this._item = item;
             this._initialText = this._text = string.Join(" ", Array.ConvertAll(item.ItemBytes, x => x.ToString("X2")));
-            this.AllowEditCommand = new DelegateCommand(this.AllowEdit);
             this.SaveCommand = new DelegateCommand(this.Save, this.CanSave);
         }
 
-        public DelegateCommand AllowEditCommand
-        {
-            get;
-        }
-
         public string ItemName => this._item.ItemName;
-
-        public bool ReadOnly
-        {
-            get => !this._editable;
-            private set => this.SetValue(ref this._editable, !value);
-        }
 
         public DelegateCommand SaveCommand
         {
@@ -50,31 +36,23 @@ namespace KoAR.SaveEditor.Views
             set => this.SetValue(ref this._text, value);
         }
 
-        private void AllowEdit() => this.ReadOnly = false;
-
-        private bool CanSave() => this._editable && this._text != this._initialText;
+        private bool CanSave() => this._text != this._initialText;
 
         private byte[]? GetTextBytes()
         {
             List<byte> list = new List<byte>();
-            using TextReader reader = new StringReader(this._text);
-            string line;
-            while ((line = reader.ReadLine()) != null)
+            foreach (string word in this.Text.Trim().Split(' '))
             {
-                string[] words = line.Trim().Split(' ');
-                foreach (string word in words)
+                string text = word.Trim();
+                if (text.Length == 0)
                 {
-                    string text = word.Trim();
-                    if (text.Length == 0)
-                    {
-                        continue;
-                    }
-                    if (text.Length != 2)
-                    {
-                        return default;
-                    }
-                    list.Add(byte.Parse(text, NumberStyles.HexNumber));
+                    continue;
                 }
+                if (text.Length != 2)
+                {
+                    return default;
+                }
+                list.Add(byte.Parse(text, NumberStyles.HexNumber));
             }
             return list.ToArray();
         }

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
 using System.Xml.Linq;
@@ -34,7 +34,8 @@ namespace KoAR.SaveEditor.Views
             this.MakeAllItemsSellableCommand = new DelegateCommand(this.MakeAllItemsSellable, this.CanMakeAllItemsSellable);
             this.ResetFiltersCommand = new DelegateCommand(this.ResetFilters);
             this.EditItemHexCommand = new DelegateCommand<ItemModel>(this.EditItemHex);
-            using Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream($"{typeof(App).Namespace}.properties.xml");
+            this.UpdateInventorySizeCommand = new DelegateCommand(this.UpdateInventorySize, this.CanUpdateInventorySize);
+            using Stream stream = File.OpenRead(Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "properties.xml"));
             this._attributes = XDocument.Load(stream).Root.Elements().Select(element => new EffectInfo
             {
                 Code = element.Attribute("id").Value.ToUpper(),
@@ -79,18 +80,6 @@ namespace KoAR.SaveEditor.Views
             get => this._inventorySize;
             set => this.SetValue(ref this._inventorySize, value);
         }
-
-        private void UpdateInventorySize()
-        {
-            if (this._editor == null)
-            {
-                return;
-            }
-            this._editor.EditMaxBagCount(this.InventorySize);
-            this.CanSave();
-        }
-
-        private bool CanUpdateInventorySize() => this._editor != null && this._editor.GetMaxBagCount() != this.InventorySize;
 
         public string? ItemNameFilter
         {
@@ -154,6 +143,11 @@ namespace KoAR.SaveEditor.Views
             private set => this.SetValue(ref this._unsavedChanges, value.GetValueOrDefault());
         }
 
+        public DelegateCommand UpdateInventorySizeCommand
+        {
+            get;
+        }
+
         private bool CanMakeAllItemsSellable()
         {
             return this._editor != null && this._fileName != null && this._items.Any(item => item.IsUnsellable);
@@ -170,6 +164,8 @@ namespace KoAR.SaveEditor.Views
             this.UnsavedChanges = true;
             CommandManager.InvalidateRequerySuggested();
         }
+
+        private bool CanUpdateInventorySize() => this._editor != null && this._editor.GetMaxBagCount() != this.InventorySize;
 
         private void EditItemHex(ItemModel item)
         {
@@ -277,6 +273,16 @@ namespace KoAR.SaveEditor.Views
         {
             this._itemNameFilter = this._currentDurabilityFilter = this._maxDurabilityFilter = string.Empty;
             this.OnFilterChange();
+        }
+
+        private void UpdateInventorySize()
+        {
+            if (this._editor == null)
+            {
+                return;
+            }
+            this._editor.EditMaxBagCount(this.InventorySize);
+            this.CanSave();
         }
     }
 }

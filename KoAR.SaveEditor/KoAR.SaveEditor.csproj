@@ -33,6 +33,8 @@
     <ProjectReference Include="..\KoAR.Core\KoAR.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="properties.xml" />
+    <None Update="properties.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>
