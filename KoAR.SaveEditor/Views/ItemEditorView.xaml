@@ -13,10 +13,12 @@
     </Window.Style>
     <Grid FocusManager.FocusedElement="{Binding ElementName=PART_EditButton}">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <TextBox x:Name="PART_TextBox" AcceptsReturn="False" Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+        <TextBlock Text="WARNING: Edit the text below at your own risk!" TextAlignment="Center" FontWeight="SemiBold" Foreground="Red" Margin="4" />
+        <TextBox Grid.Row="1" x:Name="PART_TextBox" AcceptsReturn="False" Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
             Margin="4" TextWrapping="Wrap" IsReadOnly="{Binding ReadOnly}">
             <TextBox.Style>
                 <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
@@ -28,7 +30,7 @@
                 </Style>
             </TextBox.Style>
         </TextBox>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1">
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Content="Edit" Command="{Binding AllowEditCommand}" Margin="4" x:Name="PART_EditButton"/>
             <Button Content="Save" Command="{Binding SaveCommand}" Margin="4" IsDefault="True" />
         </StackPanel>
