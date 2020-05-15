@@ -11,26 +11,51 @@ namespace KoAR.Core
     /// </summary>
     public class ItemMemoryInfo
     {
-        /// <summary>
-        /// Equipment head Index(XX XX XX XX 0B 00 00 00 68 D5 24 00 03)
-        /// </summary>
+        public static bool IsValidDurability(float durability) => durability > 0f && durability < 100f;
+
+        public static ItemMemoryInfo Create(int itemIndex, ReadOnlySpan<byte> span)
+        {
+            static T Read<T>(ReadOnlySpan<byte> span, int offset)
+                where T: struct
+            => MemoryMarshal.Read<T>(span.Slice(offset));
+
+            if(span.Length < 44)
+            {
+                return null;
+            }
+            var offsets = new Offsets(Read<int>(span,Offsets.EffectCount));
+            int itemLength;
+            if (span[offsets.HasCustomName] != 1)
+            {
+                itemLength = offsets.CustomNameText;
+            }
+            else
+            {
+                var nameLength = Read<int>(span, offsets.CustomNameLength);
+                itemLength = offsets.CustomNameText + nameLength;
+            }
+
+            if(!IsValidDurability(Read<float>(span, offsets.CurrentDurability))
+                && !IsValidDurability(Read<float>(span, offsets.MaxDurability)))
+            {
+                return null;
+            }
+
+            return new ItemMemoryInfo
+            {
+                ItemIndex = itemIndex,
+                ItemLength = itemLength,
+                ItemBytes = span.Slice(0, itemLength).ToArray()
+            };
+        }
+
         public int ItemIndex { get; set; }
-
-        /// <summary>
-        /// Next Equipment head Index
-        /// </summary>
-        public int NextItemIndex { get; set; }
-
-        /// <summary>
-        /// Equipment data
-        /// </summary>
+        public int ItemLength { get; set; }
         public byte[] ItemBytes { get; set; }
 
         private Offsets? _offset;
         private Offsets Offset => _offset ??= new Offsets(EffectCount);
-        /// <summary>
-        /// Equipment Name
-        /// </summary>
+
         public string ItemName
         {
             get

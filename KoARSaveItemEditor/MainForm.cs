@@ -293,7 +293,7 @@ namespace KoARSaveItemEditor
 
             TextBox textBox = (TextBox)sender;
             float currentValue = getDurability(selectedItem);
-            if (!float.TryParse(textBox.Text, out var newValue) || !editor.IsValidDurability(newValue))
+            if (!float.TryParse(textBox.Text, out var newValue) || !ItemMemoryInfo.IsValidDurability(newValue))
             {
                 MessageBox.Show($"Invalid value '{textBox.Text}'. Durability must be a number such that, 0 < durability < 100.");
                 textBox.Text = currentValue.ToString();

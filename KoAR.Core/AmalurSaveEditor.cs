@@ -104,8 +104,6 @@ namespace KoAR.Core
             return itemEffects;
         }
 
-        public bool IsValidDurability(float durability) => durability > 0f && durability < 100f;
-
         public List<ItemMemoryInfo> GetAllEquipment()
         {
             static List<int> GetAllIndices(ReadOnlySpan<byte> data, ReadOnlySpan<byte> sequence)
@@ -124,51 +122,16 @@ namespace KoAR.Core
             }
 
             List<ItemMemoryInfo> equipmentList = new List<ItemMemoryInfo>();
-
-            var indexList = GetAllIndices(Bytes, EquipmentSequence);
+            var bytes = Bytes;
+            var indexList = GetAllIndices(bytes, EquipmentSequence);
 
             for (int i = 0; i < indexList.Count; i++)
             {
-                if (i != indexList.Count - 1)
+                if(ItemMemoryInfo.Create(indexList[i], i == indexList.Count - 1 
+                    ? Bytes.AsSpan(indexList[i]) 
+                    : Bytes.AsSpan(indexList[i], indexList[i + 1])) is ItemMemoryInfo item)
                 {
-                    if (indexList[i + 1] - indexList[i] < 44)
-                    {
-                        continue;
-                    }
-                }
-
-                ItemMemoryInfo equipment = new ItemMemoryInfo { ItemIndex = indexList[i] };
-                if (i != indexList.Count - 1)
-                {
-                    equipment.NextItemIndex = indexList[i + 1];
-                    equipment.ItemBytes = Bytes.AsSpan(indexList[i], indexList[i + 1] - indexList[i]).ToArray();
-
-                    if (IsValidDurability(equipment.CurrentDurability) && IsValidDurability(equipment.MaxDurability))
-                    {
-                        equipmentList.Add(equipment);
-                    }
-                }
-                else
-                {
-                    var span = Bytes.AsSpan(equipment.ItemIndex);
-                    var offsets = new Offsets(MemoryMarshal.Read<int>(span.Slice(Offsets.EffectCount)));
-
-                    int endIndex;
-                    if (span[offsets.HasCustomName] != 1)
-                    {
-                        endIndex = offsets.CustomNameText;
-                    }
-                    else
-                    {
-                        var nameLength = MemoryMarshal.Read<int>(span.Slice(offsets.CustomNameLength));
-                        endIndex = offsets.CustomNameText + nameLength;
-                    }
-                    equipment.ItemBytes = Bytes.AsSpan(equipment.ItemIndex, endIndex).ToArray();
-
-                    if (IsValidDurability(equipment.CurrentDurability) && IsValidDurability(equipment.MaxDurability))
-                    {
-                        equipmentList.Add(equipment);
-                    }
+                    equipmentList.Add(item);
                 }
             }
 
@@ -185,15 +148,23 @@ namespace KoAR.Core
             WriteEquipmentBytes(weapon);
         }
 
-        public void WriteEquipmentBytes(ItemMemoryInfo weapon)
+        public void WriteEquipmentBytes(ItemMemoryInfo equipment)
         {
             var bytes = Bytes;
-            var delta = weapon.ItemBytes.Length + (weapon.NextItemIndex - weapon.ItemIndex);
-            var buffer = new byte[bytes.Length + delta];
-            bytes.AsSpan(0, weapon.ItemIndex).CopyTo(buffer);
-            weapon.ItemBytes.CopyTo(buffer, weapon.ItemIndex);
-            bytes.AsSpan(weapon.NextItemIndex).CopyTo(buffer.AsSpan(weapon.ItemIndex + weapon.ItemBytes.Length));
-            Bytes = buffer;
+            // in place change.
+            if (equipment.ItemLength == equipment.ItemBytes.Length)
+            {
+                equipment.ItemBytes.CopyTo(bytes, equipment.ItemIndex);
+            }
+            else
+            {
+                var delta = equipment.ItemBytes.Length - equipment.ItemLength;
+                var buffer = new byte[bytes.Length + delta];
+                bytes.AsSpan(0, equipment.ItemIndex).CopyTo(buffer);
+                equipment.ItemBytes.CopyTo(buffer, equipment.ItemIndex);
+                bytes.AsSpan(equipment.ItemLength).CopyTo(buffer.AsSpan(equipment.ItemIndex + equipment.ItemBytes.Length));
+                Bytes = buffer;
+            }
         }
     }
 }
