@@ -16,28 +16,18 @@ namespace KoAR.Core
 
         public static ItemMemoryInfo Create(int itemIndex, ReadOnlySpan<byte> span)
         {
-            if(span.Length < 44)
-            {
-                return null;
-            }
-            var offsets = new Offsets(MemoryUtilities.Read<int>(span,Offsets.EffectCount));
-            int itemLength;
-            if (span[offsets.HasCustomName] != 1)
-            {
-                itemLength = offsets.CustomNameLength;
-            }
-            else
-            {
-                var nameLength = MemoryUtilities.Read<int>(span, offsets.CustomNameLength);
-                itemLength = offsets.CustomNameText + nameLength;
-            }
+            var offsets = new Offsets(MemoryUtilities.Read<int>(span, Offsets.EffectCount));
 
-            if(!IsValidDurability(MemoryUtilities.Read<float>(span, offsets.CurrentDurability))
+            if (span.Length < 44 || !IsValidDurability(MemoryUtilities.Read<float>(span, offsets.CurrentDurability))
                 || !IsValidDurability(MemoryUtilities.Read<float>(span, offsets.MaxDurability)))
             {
                 return null;
             }
 
+            int itemLength = span[offsets.HasCustomName] != 1
+                ? offsets.CustomNameLength
+                : offsets.CustomNameText + MemoryUtilities.Read<int>(span, offsets.CustomNameLength);
+            
             return new ItemMemoryInfo
             {
                 ItemIndex = itemIndex,
