@@ -128,8 +128,8 @@ namespace KoAR.Core
             for (int i = 0; i < indexList.Count; i++)
             {
                 if(ItemMemoryInfo.Create(indexList[i], i == indexList.Count - 1 
-                    ? Bytes.AsSpan(indexList[i]) 
-                    : Bytes.AsSpan(indexList[i], indexList[i + 1] - indexList[i])) is ItemMemoryInfo item)
+                    ? bytes.AsSpan(indexList[i]) 
+                    : bytes.AsSpan(indexList[i], indexList[i + 1] - indexList[i])) is ItemMemoryInfo item)
                 {
                     equipmentList.Add(item);
                 }
@@ -162,7 +162,7 @@ namespace KoAR.Core
                 var buffer = new byte[bytes.Length + delta];
                 bytes.AsSpan(0, equipment.ItemIndex).CopyTo(buffer);
                 equipment.ItemBytes.CopyTo(buffer, equipment.ItemIndex);
-                bytes.AsSpan(equipment.ItemLength).CopyTo(buffer.AsSpan(equipment.ItemIndex + equipment.ItemBytes.Length));
+                bytes.AsSpan(equipment.ItemIndex + equipment.ItemLength).CopyTo(buffer.AsSpan(equipment.ItemIndex + equipment.ItemBytes.Length));
                 Bytes = buffer;
             }
         }
