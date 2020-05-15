@@ -27,7 +27,7 @@ namespace KoAR.Core
             int itemLength;
             if (span[offsets.HasCustomName] != 1)
             {
-                itemLength = offsets.CustomNameText;
+                itemLength = offsets.CustomNameLength;
             }
             else
             {

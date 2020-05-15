@@ -129,7 +129,7 @@ namespace KoAR.Core
             {
                 if(ItemMemoryInfo.Create(indexList[i], i == indexList.Count - 1 
                     ? Bytes.AsSpan(indexList[i]) 
-                    : Bytes.AsSpan(indexList[i], indexList[i + 1])) is ItemMemoryInfo item)
+                    : Bytes.AsSpan(indexList[i], indexList[i + 1] - indexList[i])) is ItemMemoryInfo item)
                 {
                     equipmentList.Add(item);
                 }
