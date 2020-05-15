@@ -21,6 +21,23 @@ namespace KoARSaveItemEditor
             InitializeComponent();
         }
 
+        protected override void OnLoad(EventArgs e)
+        {
+            try
+            {
+                this.attributeList = XDocument.Load(Application.StartupPath + @"\Data\properties.xml").Root.Elements().Select(element => new EffectInfo
+                {
+                    Code = element.Attribute("id").Value.ToUpper(),
+                    DisplayText = element.Value.ToUpper()
+                }).ToList();
+            }
+            catch
+            {
+                MessageBox.Show("Failed to load property list. Please check if \"Data\" folder is in the editor's directory and properties.xml is inside.");
+                Application.Exit();
+            }
+        }
+
         private void AddAttribute(ItemMemoryInfo selectedItem, string attCode)
         {
             List<EffectInfo> effects = selectedItem.ReadEffects();
@@ -213,23 +230,6 @@ namespace KoARSaveItemEditor
             }
         }
 
-        private void LoadAmalurEditor(object sender, EventArgs e)
-        {
-            try
-            {
-                this.attributeList = XDocument.Load(Application.StartupPath + @"\Data\properties.xml").Root.Elements().Select(element => new EffectInfo
-                {
-                    Code = element.Attribute("id").Value.ToUpper(),
-                    DisplayText = element.Value.ToUpper()
-                }).ToList();
-            }
-            catch
-            {
-                MessageBox.Show("Failed to load property list. Please check if \"Data\" folder is in the editor's directory and properties.xml is inside.");
-                Application.Exit();
-            }
-        }
-
         private void LoadItemAttributesOnClick()
         {
             ItemMemoryInfo itemInfo = (ItemMemoryInfo)lvMain.SelectedItems[0].Tag;
@@ -374,6 +374,16 @@ namespace KoARSaveItemEditor
             lvMain.SelectedItems.Clear();
         }
 
+        private void TextPropCurrDur_Leave(object sender, EventArgs e)
+        {
+            OnDurabilityTextLeave(sender, info => info.CurrentDurability, (info, value) => info.CurrentDurability = value);
+        }
+
+        private void TextPropMaxDur_Leave(object sender, EventArgs e)
+        {
+            OnDurabilityTextLeave(sender, info => info.MaxDurability, (info, value) => info.MaxDurability = value);
+        }
+
         private void TsmiHelp_Click(object sender, EventArgs e)
         {
             using HelpForm form = new HelpForm();
@@ -404,14 +414,14 @@ namespace KoARSaveItemEditor
             }
         }
 
-        private void TextPropCurrDur_Leave(object sender, EventArgs e)
+        private void TxtPropName_Leave(object sender, EventArgs e)
         {
-            OnDurabilityTextLeave(sender, info => info.CurrentDurability, (info, value) => info.CurrentDurability = value);
-        }
-
-        private void TextPropMaxDur_Leave(object sender, EventArgs e)
-        {
-            OnDurabilityTextLeave(sender, info => info.MaxDurability, (info, value) => info.MaxDurability = value);
+            if (selectedItem != null && selectedItem.HasCustomName && selectedItem.ItemName != txtPropName.Text)
+            {
+                selectedItem.ItemName = txtPropName.Text;
+                editor.WriteEquipmentBytes(selectedItem);
+                CanSave();
+            }
         }
 
         private void TxtSearch_TextChanged(object sender, EventArgs e)
@@ -424,16 +434,6 @@ namespace KoARSaveItemEditor
             else
             {
                 RefreshListOnFilterUpdate();
-            }
-        }
-
-        private void TxtPropName_Leave(object sender, EventArgs e)
-        {
-            if(selectedItem != null && selectedItem.HasCustomName && selectedItem.ItemName != txtPropName.Text)
-            {
-                selectedItem.ItemName = txtPropName.Text;
-                editor.WriteEquipmentBytes(selectedItem);
-                CanSave();
             }
         }
     }

@@ -650,7 +650,6 @@ namespace KoARSaveItemEditor
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Kingdoms of Amalur: Reckoning Save Item Editor";
-            this.Load += new System.EventHandler(this.LoadAmalurEditor);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.itemViewGroupBox.ResumeLayout(false);
