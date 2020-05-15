@@ -14,28 +14,28 @@ using Microsoft.Win32;
 
 namespace KoAR.SaveEditor.Views
 {
-    public sealed class MainWindowViewModel : NotifierBase
+    public sealed class MainViewModel : NotifierBase
     {
-        private readonly ObservableCollection<ItemContainer> _items;
+        private readonly ObservableCollection<ItemModel> _items;
         private readonly EffectInfo[] _attributes;
         private string? _currentDurabilityFilter = string.Empty;
         private AmalurSaveEditor? _editor;
         private string? _fileName;
-        private IReadOnlyList<ItemContainer> _filteredItems;
+        private IReadOnlyList<ItemModel> _filteredItems;
         private int _inventorySize;
         private string? _itemNameFilter = string.Empty;
         private string? _maxDurabilityFilter = string.Empty;
-        private ItemContainer? _selectedItem;
+        private ItemModel? _selectedItem;
         private bool _unsavedChanges;
 
-        public MainWindowViewModel()
+        public MainViewModel()
         {
             this.OpenFileCommand = new DelegateCommand(this.OpenFile);
-            this._filteredItems = this.Items = new ReadOnlyObservableCollection<ItemContainer>(this._items = new ObservableCollection<ItemContainer>());
+            this._filteredItems = this.Items = new ReadOnlyObservableCollection<ItemModel>(this._items = new ObservableCollection<ItemModel>());
             this.MakeAllItemsSellableCommand = new DelegateCommand(this.MakeAllItemsSellable, this.CanMakeAllItemsSellable);
             this.ResetFiltersCommand = new DelegateCommand(this.ResetFilters);
-            this.HelpCommand = new DelegateCommand(MainWindowViewModel.Help);
-            this.EditItemHexCommand = new DelegateCommand<ItemContainer>(this.EditItemHex);
+            this.HelpCommand = new DelegateCommand(MainViewModel.Help);
+            this.EditItemHexCommand = new DelegateCommand<ItemModel>(this.EditItemHex);
             using Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream($"{typeof(App).Namespace}.properties.xml");
             this._attributes = XDocument.Load(stream).Root.Elements().Select(element => new EffectInfo
             {
@@ -59,7 +59,7 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        public DelegateCommand<ItemContainer> EditItemHexCommand
+        public DelegateCommand<ItemModel> EditItemHexCommand
         {
             get;
         }
@@ -70,7 +70,7 @@ namespace KoAR.SaveEditor.Views
             private set => this.SetValue(ref this._fileName, value);
         }
 
-        public IReadOnlyList<ItemContainer> FilteredItems
+        public IReadOnlyList<ItemModel> FilteredItems
         {
             get => this._filteredItems;
             private set => this.SetValue(ref this._filteredItems, value);
@@ -102,7 +102,7 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        public ReadOnlyObservableCollection<ItemContainer> Items
+        public ReadOnlyObservableCollection<ItemModel> Items
         {
             get;
         }
@@ -137,7 +137,7 @@ namespace KoAR.SaveEditor.Views
             get;
         }
 
-        public ItemContainer? SelectedItem
+        public ItemModel? SelectedItem
         {
             get => this._selectedItem;
             set => this.SetValue(ref this._selectedItem, value);
@@ -171,7 +171,7 @@ namespace KoAR.SaveEditor.Views
             this.UnsavedChanges = true;
         }
 
-        private void EditItemHex(ItemContainer item)
+        private void EditItemHex(ItemModel item)
         {
             MessageBox.Show(item.ItemName);
         }
@@ -183,7 +183,7 @@ namespace KoAR.SaveEditor.Views
                 return;
             }
             int count = 0;
-            foreach (ItemContainer item in this.Items)
+            foreach (ItemModel item in this.Items)
             {
                 if (!item.IsUnsellable)
                 {
@@ -202,23 +202,23 @@ namespace KoAR.SaveEditor.Views
 
         private void OnFilterChange()
         {
-            IEnumerable<ItemContainer> items = this.Items;
+            IEnumerable<ItemModel> items = this.Items;
             if (!string.IsNullOrEmpty(this._currentDurabilityFilter) && float.TryParse(this._currentDurabilityFilter, out float single))
             {
                 double temp = Math.Round(single, 4);
-                items = items.Where(item => Math.Round(item.CurrentDurability, 4) == temp);
+                items = items.Where(model => Math.Round(model.CurrentDurability, 4) == temp);
             }
             if (!string.IsNullOrEmpty(this._maxDurabilityFilter) && float.TryParse(this._maxDurabilityFilter, out single))
             {
                 double temp = Math.Round(single, 4);
-                items = items.Where(item => Math.Round(item.MaxDurability, 4) == temp);
+                items = items.Where(model => Math.Round(model.MaxDurability, 4) == temp);
             }
             if (!string.IsNullOrEmpty(this._itemNameFilter))
             {
-                items = items.Where(item => item.ItemName.IndexOf(this._itemNameFilter, StringComparison.OrdinalIgnoreCase) != -1);
+                items = items.Where(model => model.ItemName.IndexOf(this._itemNameFilter, StringComparison.OrdinalIgnoreCase) != -1);
             }
             this.FilteredItems = object.ReferenceEquals(items, this.Items)
-                ? (IReadOnlyList<ItemContainer>)this.Items
+                ? (IReadOnlyList<ItemModel>)this.Items
                 : items.ToList();
             this.SelectedItem = null;
         }
@@ -227,7 +227,7 @@ namespace KoAR.SaveEditor.Views
         {
             OpenFileDialog dialog = new OpenFileDialog
             {
-                Title = "Load Save File",
+                Title = "Load Save File...",
                 DefaultExt = ".sav",
                 Filter = "Save Files (*.sav)|*.sav",
                 CheckFileExists = true

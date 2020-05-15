@@ -1,13 +1,19 @@
-﻿using KoAR.Core;
+﻿#nullable enable
+
+using System.ComponentModel;
+using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
 
 namespace KoAR.SaveEditor.Views
 {
-    public sealed class ItemContainer : NotifierBase
+    /// <summary>
+    /// A wrapper class for <see cref="ItemMemoryInfo"/> that implements <see cref="INotifyPropertyChanged"/>.
+    /// </summary>
+    public sealed class ItemModel : NotifierBase
     {
         private readonly ItemMemoryInfo _item;
 
-        public ItemContainer(ItemMemoryInfo item) => this._item = item;
+        public ItemModel(ItemMemoryInfo item) => this._item = item;
 
         public float CurrentDurability => this._item.CurrentDurability;
 
@@ -45,7 +51,7 @@ namespace KoAR.SaveEditor.Views
 
         public float MaxDurability => this._item.MaxDurability;
 
-        public static implicit operator ItemContainer(ItemMemoryInfo info) => new ItemContainer(info);
+        public static implicit operator ItemModel(ItemMemoryInfo info) => new ItemModel(info);
 
         public ItemMemoryInfo GetItem() => this._item;
     }

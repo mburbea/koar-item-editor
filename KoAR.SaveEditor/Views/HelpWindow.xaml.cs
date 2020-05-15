@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+
 using System.Windows.Input;
 
 namespace KoAR.SaveEditor.Views
