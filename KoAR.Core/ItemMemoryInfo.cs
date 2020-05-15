@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -25,20 +24,18 @@ namespace KoAR.Core
                 return null;
             }
 
-            int itemLength = span[offsets.HasCustomName] != 1
+            int dataLength = span[offsets.HasCustomName] != 1
                 ? offsets.CustomNameLength
                 : offsets.CustomNameText + MemoryUtilities.Read<int>(span, offsets.CustomNameLength);
-            
-            return new ItemMemoryInfo
-            {
-                ItemIndex = itemIndex,
-                ItemLength = itemLength,
-                ItemBytes = span.Slice(0, itemLength).ToArray()
-            };
+
+            return new ItemMemoryInfo(itemIndex, dataLength, span);            
         }
 
-        public int ItemIndex { get; set; }
-        public int ItemLength { get; set; }
+        private ItemMemoryInfo(int itemIndex, int dataLength, ReadOnlySpan<byte> span)
+            => (ItemIndex, DataLength, ItemBytes) = (itemIndex, dataLength, span.Slice(0, dataLength).ToArray());
+
+        public int ItemIndex { get; }
+        public int DataLength { get; }
         public byte[] ItemBytes { get; set; }
 
         private Offsets Offsets => new Offsets(EffectCount);
@@ -71,27 +68,18 @@ namespace KoAR.Core
 
         public bool HasCustomName => ItemBytes[Offsets.HasCustomName] == 1;
 
-        /// <summary>
-        /// Number of Effects
-        /// </summary>
         public int EffectCount
         {
             get => MemoryUtilities.Read<int>(ItemBytes, Offsets.EffectCount);
             set => MemoryUtilities.Write(ItemBytes, Offsets.EffectCount, value);
         }
 
-        /// <summary>
-        /// Current Durability
-        /// </summary>
         public float CurrentDurability
         {
             get => MemoryUtilities.Read<float>(ItemBytes, Offsets.CurrentDurability);
             set => MemoryUtilities.Write(ItemBytes, Offsets.CurrentDurability, value);
         }
 
-        /// <summary>
-        /// Maximum durability
-        /// </summary>
         public float MaxDurability
         {
             get => MemoryUtilities.Read<float>(ItemBytes, Offsets.MaxDurability);
@@ -112,9 +100,7 @@ namespace KoAR.Core
                     ItemBytes[Offsets.SellableFlag] &= 0x7F;
                 }
             }
-
         }
-
 
         public List<EffectInfo> ReadEffects()
         {
