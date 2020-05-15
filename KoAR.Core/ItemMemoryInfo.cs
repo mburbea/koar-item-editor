@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -15,15 +16,11 @@ namespace KoAR.Core
 
         public static ItemMemoryInfo Create(int itemIndex, ReadOnlySpan<byte> span)
         {
-            static T Read<T>(ReadOnlySpan<byte> span, int offset)
-                where T: struct
-            => MemoryMarshal.Read<T>(span.Slice(offset));
-
             if(span.Length < 44)
             {
                 return null;
             }
-            var offsets = new Offsets(Read<int>(span,Offsets.EffectCount));
+            var offsets = new Offsets(MemoryUtilities.Read<int>(span,Offsets.EffectCount));
             int itemLength;
             if (span[offsets.HasCustomName] != 1)
             {
@@ -31,12 +28,12 @@ namespace KoAR.Core
             }
             else
             {
-                var nameLength = Read<int>(span, offsets.CustomNameLength);
+                var nameLength = MemoryUtilities.Read<int>(span, offsets.CustomNameLength);
                 itemLength = offsets.CustomNameText + nameLength;
             }
 
-            if(!IsValidDurability(Read<float>(span, offsets.CurrentDurability))
-                && !IsValidDurability(Read<float>(span, offsets.MaxDurability)))
+            if(!IsValidDurability(MemoryUtilities.Read<float>(span, offsets.CurrentDurability))
+                && !IsValidDurability(MemoryUtilities.Read<float>(span, offsets.MaxDurability)))
             {
                 return null;
             }
@@ -53,8 +50,7 @@ namespace KoAR.Core
         public int ItemLength { get; set; }
         public byte[] ItemBytes { get; set; }
 
-        private Offsets? _offset;
-        private Offsets Offset => _offset ??= new Offsets(EffectCount);
+        private Offsets Offsets => new Offsets(EffectCount);
 
         public string ItemName
         {
@@ -66,8 +62,8 @@ namespace KoAR.Core
                 }
                 else
                 {
-                    int nameLength = BitConverter.ToInt32(ItemBytes, Offset.CustomNameLength);
-                    return Encoding.Default.GetString(ItemBytes, Offset.CustomNameText, nameLength);
+                    int nameLength = MemoryUtilities.Read<int>(ItemBytes, Offsets.CustomNameLength);
+                    return Encoding.Default.GetString(ItemBytes, Offsets.CustomNameText, nameLength);
                 }
             }
             set
@@ -76,38 +72,30 @@ namespace KoAR.Core
                 {
                     throw new Exception("Item's name is unmodifiable");
                 }
-                var currentLength = BitConverter.ToUInt32(ItemBytes, Offset.CustomNameLength);
+                var currentLength = MemoryUtilities.Read<int>(ItemBytes, Offsets.CustomNameLength);
                 var newBytes = Encoding.Default.GetBytes(value);
-                if(currentLength == value.Length)
-                {
-                    newBytes.CopyTo(ItemBytes, Offset.CustomNameText);
-                }
-                else
-                {
-                    var newLength = newBytes.Length;
-                    var buffer = new byte[Offset.CustomNameText + value.Length];
-                    ItemBytes.AsSpan(0, Offset.CustomNameLength).CopyTo(buffer);
-                    MemoryMarshal.Write(buffer.AsSpan(Offset.CustomNameLength), ref newLength);
-                    newBytes.CopyTo(buffer, Offset.CustomNameText);
-                    ItemBytes = buffer;
-                }
+                ItemBytes = MemoryUtilities.ReplaceBytes(ItemBytes, Offsets.CustomNameText, currentLength, newBytes);
             }
         }
 
-        public bool HasCustomName => ItemBytes[Offset.HasCustomName] == 1;
+        public bool HasCustomName => ItemBytes[Offsets.HasCustomName] == 1;
 
         /// <summary>
         /// Number of Effects
         /// </summary>
-        public int EffectCount => BitConverter.ToInt32(ItemBytes, Offsets.EffectCount);
+        public int EffectCount
+        {
+            get => MemoryUtilities.Read<int>(ItemBytes, Offsets.EffectCount);
+            set => MemoryUtilities.Write(ItemBytes, Offsets.EffectCount, value);
+        }
 
         /// <summary>
         /// Current Durability
         /// </summary>
         public float CurrentDurability
         {
-            get => BitConverter.ToSingle(ItemBytes, Offset.CurrentDurability);
-            set => MemoryMarshal.Write(ItemBytes.AsSpan(Offset.CurrentDurability), ref value);
+            get => MemoryUtilities.Read<float>(ItemBytes, Offsets.CurrentDurability);
+            set => MemoryUtilities.Write(ItemBytes, Offsets.CurrentDurability, value);
         }
 
         /// <summary>
@@ -115,22 +103,22 @@ namespace KoAR.Core
         /// </summary>
         public float MaxDurability
         {
-            get => BitConverter.ToSingle(ItemBytes, Offset.MaxDurability);
-            set => MemoryMarshal.Write(ItemBytes.AsSpan(Offset.MaxDurability), ref value);
+            get => MemoryUtilities.Read<float>(ItemBytes, Offsets.MaxDurability);
+            set => MemoryUtilities.Write(ItemBytes, Offsets.MaxDurability, value);
         }
 
         public bool IsUnsellable
         {
-            get => (ItemBytes[Offset.SellableFlag] & 0x80) == 0x80;
+            get => (ItemBytes[Offsets.SellableFlag] & 0x80) == 0x80;
             set
             {
                 if (value)
                 {
-                    ItemBytes[Offset.SellableFlag] |= 0x80;
+                    ItemBytes[Offsets.SellableFlag] |= 0x80;
                 }
                 else
                 {
-                    ItemBytes[Offset.SellableFlag] &= 0x7F;
+                    ItemBytes[Offsets.SellableFlag] &= 0x7F;
                 }
             }
 
@@ -145,30 +133,24 @@ namespace KoAR.Core
             {
                 effects.Add(new EffectInfo
                 {
-                    Code = BitConverter.ToUInt32(ItemBytes, offset).ToString("X6")
+                    Code = MemoryUtilities.Read<uint>(ItemBytes, offset).ToString("X6")
                 });
             }
-
             return effects;
         }
 
         public void WriteEffects(List<EffectInfo> newEffects)
         {
-            int newCount = newEffects.Count;
-            var buffer = new byte[ItemBytes.Length + (newCount - EffectCount) * 8];
-            ItemBytes.AsSpan(0, Offsets.EffectCount).CopyTo(buffer);
-            MemoryMarshal.Write(buffer.AsSpan(Offsets.EffectCount), ref newCount);
-            int offset = Offsets.EffectCount + 4;
-            foreach (EffectInfo effect in newEffects)
+            var currentCount = EffectCount;
+            EffectCount = newEffects.Count;
+            Span<ulong> effectData = stackalloc ulong[newEffects.Count];
+
+            for(int i = 0; i < effectData.Length; i++)
             {
-                ulong data = uint.Parse(effect.Code, NumberStyles.HexNumber) | (ulong)uint.MaxValue << 32;
-                MemoryMarshal.Write(buffer.AsSpan(offset), ref data);
-                offset += 8;
+                effectData[i] = uint.Parse(newEffects[i].Code, NumberStyles.HexNumber) | (ulong)uint.MaxValue << 32;
             }
 
-            ItemBytes.AsSpan(Offset.PostEffect).CopyTo(buffer.AsSpan(offset));
-
-            ItemBytes = buffer;
+            ItemBytes = MemoryUtilities.ReplaceBytes(ItemBytes, Offsets.EffectCount + 4, 8 * currentCount, MemoryMarshal.AsBytes(effectData));
         }
  
     }

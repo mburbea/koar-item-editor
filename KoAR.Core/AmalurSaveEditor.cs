@@ -80,17 +80,17 @@ namespace KoAR.Core
         /// <returns></returns>
         public int GetMaxBagCount()
         {
-            return BitConverter.ToInt32(Bytes, GetBagOffset());
+            return MemoryUtilities.Read<int>(Bytes, GetBagOffset());
 
         }
 
         /// <summary>
         /// Modify maximum backpack capacity.
         /// </summary>
-        /// <param name="c"></param>
-        public void EditMaxBagCount(int c)
+        /// <param name="count"></param>
+        public void EditMaxBagCount(int count)
         {
-            MemoryMarshal.Write(Bytes.AsSpan(GetBagOffset()), ref c);
+            MemoryUtilities.Write<int>(Bytes, GetBagOffset(), count);
         }
 
         public List<EffectInfo> GetEffectList(ItemMemoryInfo weaponInfo, IEnumerable<EffectInfo> effects)
@@ -150,21 +150,7 @@ namespace KoAR.Core
 
         public void WriteEquipmentBytes(ItemMemoryInfo equipment)
         {
-            var bytes = Bytes;
-            // in place change.
-            if (equipment.ItemLength == equipment.ItemBytes.Length)
-            {
-                equipment.ItemBytes.CopyTo(bytes, equipment.ItemIndex);
-            }
-            else
-            {
-                var delta = equipment.ItemBytes.Length - equipment.ItemLength;
-                var buffer = new byte[bytes.Length + delta];
-                bytes.AsSpan(0, equipment.ItemIndex).CopyTo(buffer);
-                equipment.ItemBytes.CopyTo(buffer, equipment.ItemIndex);
-                bytes.AsSpan(equipment.ItemIndex + equipment.ItemLength).CopyTo(buffer.AsSpan(equipment.ItemIndex + equipment.ItemBytes.Length));
-                Bytes = buffer;
-            }
+           Bytes = MemoryUtilities.ReplaceBytes(Bytes, equipment.ItemIndex, equipment.ItemLength, equipment.ItemBytes);
         }
     }
 }
