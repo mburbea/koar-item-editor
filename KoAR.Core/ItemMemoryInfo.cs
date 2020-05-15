@@ -129,11 +129,11 @@ namespace KoAR.Core
         {
             List<EffectInfo> effects = new List<EffectInfo>();
 
-            for (int i = 0, offset = Offsets.FirstEffect; i < EffectCount; i++,offset+=8)
+            for (int i = 0; i < EffectCount; i++)
             {
                 effects.Add(new EffectInfo
                 {
-                    Code = MemoryUtilities.Read<uint>(ItemBytes, offset).ToString("X6")
+                    Code = MemoryUtilities.Read<uint>(ItemBytes, Offsets.FirstEffect + i*8).ToString("X6")
                 });
             }
             return effects;
