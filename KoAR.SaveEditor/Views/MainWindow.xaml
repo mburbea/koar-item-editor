@@ -1,0 +1,168 @@
+﻿<Window x:Class="KoAR.SaveEditor.Views.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:KoAR.SaveEditor.Views"
+    mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type local:MainWindowViewModel}}"
+    Title="KoAR Save Item Editor" Width="1024" Height="768" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <ObjectDataProvider x:Key="ViewModel" ObjectType="{x:Type local:MainWindowViewModel}" />
+        <ControlTemplate x:Key="TextBoxValidationErrorTemplate">
+            <Border BorderBrush="Red" BorderThickness="1">
+                <Grid>
+                    <Polygon Fill="Red" Margin="0,2,2,0" Points="10,10 10,0 0,0" VerticalAlignment="Top" HorizontalAlignment="Right"
+                        Tag="{Binding AdornedElement.(Validation.Errors)/ErrorContent, ElementName=PART_Adorner}" Cursor="Hand">
+                        <Polygon.ToolTip>
+                            <ToolTip Content="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}" 
+                                BorderThickness="1" Foreground="White" Background="Red" />
+                        </Polygon.ToolTip>
+                    </Polygon>
+                    <AdornedElementPlaceholder x:Name="PART_Adorner" />
+                </Grid>
+            </Border>
+        </ControlTemplate>
+    </Window.Resources>
+    <Window.DataContext>
+        <Binding Source="{StaticResource ViewModel}" />
+    </Window.DataContext>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <Menu.Resources>
+                <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource {x:Type MenuItem}}">
+                    <Setter Property="Margin" Value="4" />
+                </Style>
+            </Menu.Resources>
+            <MenuItem Header="Open File..." Command="{Binding OpenFileCommand}" />
+            <MenuItem Header="Make All Items Sellable" Command="{Binding MakeAllItemsSellableCommand}" />
+            <MenuItem Header="Help" Command="{Binding HelpCommand}" />
+        </Menu>
+        <StatusBar DockPanel.Dock="Bottom">
+            <DockPanel MinHeight="24">
+                <TextBlock VerticalAlignment="Center" Margin="4" DockPanel.Dock="Right">
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding UnsavedChanges}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Hidden" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <TextBlock VerticalAlignment="Center" Margin="4" Text="{Binding FileName, StringFormat='FileName: {0}'}">
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding FileName}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Hidden" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </DockPanel>
+        </StatusBar>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <GroupBox Header="Filters" Margin="4">
+                <GroupBox.Style>
+                    <Style TargetType="{x:Type GroupBox}" BasedOn="{StaticResource {x:Type GroupBox}}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding FileName}" Value="{x:Null}">
+                                <Setter Property="IsEnabled" Value="False" />
+                                <Setter Property="Opacity" Value="0.5" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </GroupBox.Style>
+                <Grid>
+                    <Grid.Resources>
+                        <Style TargetType="FrameworkElement" x:Key="ElementStyle">
+                            <Setter Property="Margin" Value="2" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource ElementStyle}">
+                            <Setter Property="TextAlignment" Value="Right" />
+                        </Style>
+                        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+                            <Setter Property="Margin" Value="2" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                            <Setter Property="Validation.ErrorTemplate" Value="{StaticResource TextBoxValidationErrorTemplate}" />
+                        </Style>
+                    </Grid.Resources>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Name:" />
+                    <TextBox Grid.Column="1" Text="{Binding ItemNameFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBlock Grid.Column="2" Text="Cur. Durability:" />
+                    <TextBox Grid.Column="3">
+                        <TextBox.Text>
+                            <Binding Path="CurrentDurabilityFilter" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <local:RegexValidationRule Pattern="^\d+(\.\d+)?$" />
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                    <TextBlock Grid.Column="4" Text="Max. Durability:" />
+                    <TextBox Grid.Column="5">
+                        <TextBox.Text>
+                            <Binding Path="MaxDurabilityFilter" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <local:RegexValidationRule Pattern="^\d+(\.\d+)?$" />
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                    <Button Grid.Column="6" Style="{StaticResource ElementStyle}" Content="Reset" Command="{Binding ResetFiltersCommand}" />
+                </Grid>
+            </GroupBox>
+            <GroupBox Grid.Column="1" Header="Inventory Size">
+                
+            </GroupBox>
+            <ListView Grid.Row="1" ItemsSource="{Binding FilteredItems}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+                <ListView.Style>
+                    <Style TargetType="{x:Type ListView}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding FileName}" Value="{x:Null}">
+                                <Setter Property="IsEnabled" Value="False" />
+                                <Setter Property="Opacity" Value="0.5" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListView.Style>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <Setter Property="local:MouseDoubleClick.CommandParameter" Value="{Binding}" />
+                        <Setter Property="local:MouseDoubleClick.Command" Value="{Binding EditItemHexCommand, Source={StaticResource ViewModel}}" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.View>
+                    <GridView AllowsColumnReorder="True">
+                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ItemIndex}" />
+                        <GridViewColumn Header="Name" DisplayMemberBinding="{Binding ItemName}" />
+                        <GridViewColumn Header="Cur. Durability" DisplayMemberBinding="{Binding CurrentDurability, StringFormat='{}{0:#0.####}'}" />
+                        <GridViewColumn Header="Max. Durability" DisplayMemberBinding="{Binding MaxDurability, StringFormat='{}{0:#0.####}'}" />
+                        <GridViewColumn Header="# Properties" DisplayMemberBinding="{Binding EffectCount}" />
+                        <GridViewColumn Header="Unsellable?" DisplayMemberBinding="{Binding IsUnsellable}" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Grid>
+    </DockPanel>
+</Window>
