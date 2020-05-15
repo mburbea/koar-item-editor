@@ -22,22 +22,23 @@
                 </Grid>
             </Border>
         </ControlTemplate>
+
     </Window.Resources>
     <Window.DataContext>
         <Binding Source="{StaticResource ViewModel}" />
     </Window.DataContext>
     <DockPanel>
-        <Menu DockPanel.Dock="Top">
+        <Menu DockPanel.Dock="Top" Background="{x:Static SystemColors.ControlBrush}">
             <Menu.Resources>
                 <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource {x:Type MenuItem}}">
                     <Setter Property="Margin" Value="4" />
                 </Style>
             </Menu.Resources>
-            <MenuItem Header="Open File..." Command="{Binding OpenFileCommand}" />
-            <MenuItem Header="Make All Items Sellable" Command="{Binding MakeAllItemsSellableCommand}" />
-            <MenuItem Header="Help" Command="{Binding HelpCommand}" />
+            <MenuItem Header="_Open File..." Command="{Binding OpenFileCommand}" />
+            <MenuItem Header="_Make All Items Sellable" Command="{Binding MakeAllItemsSellableCommand}" />
+            <MenuItem Header="_Help" Command="Help" />
         </Menu>
-        <StatusBar DockPanel.Dock="Bottom">
+        <StatusBar DockPanel.Dock="Bottom" Background="{x:Static SystemColors.ControlBrush}">
             <DockPanel MinHeight="24">
                 <TextBlock VerticalAlignment="Center" Margin="4" DockPanel.Dock="Right">
                     <TextBlock.Style>
@@ -64,25 +65,26 @@
             </DockPanel>
         </StatusBar>
         <Grid>
+            <Grid.Style>
+                <Style TargetType="{x:Type Grid}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding FileName}" Value="{x:Null}">
+                            <Setter Property="IsEnabled" Value="False" />
+                            <Setter Property="Opacity" Value="0.5" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition />
+                <ColumnDefinition Width="3*" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition />
             </Grid.RowDefinitions>
             <GroupBox Header="Filters" Margin="4">
-                <GroupBox.Style>
-                    <Style TargetType="{x:Type GroupBox}" BasedOn="{StaticResource {x:Type GroupBox}}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding FileName}" Value="{x:Null}">
-                                <Setter Property="IsEnabled" Value="False" />
-                                <Setter Property="Opacity" Value="0.5" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </GroupBox.Style>
                 <Grid>
                     <Grid.Resources>
                         <Style TargetType="FrameworkElement" x:Key="ElementStyle">
@@ -132,20 +134,21 @@
                     <Button Grid.Column="6" Style="{StaticResource ElementStyle}" Content="Reset" Command="{Binding ResetFiltersCommand}" />
                 </Grid>
             </GroupBox>
-            <GroupBox Grid.Column="1" Header="Inventory Size">
-                
+            <GroupBox Grid.Column="2" Header="Inventory Size" Margin="4">
+                <Grid>
+                    <TextBlock Text="Size:" Margin="2" VerticalAlignment="Center" TextAlignment="Right"/>
+                    <TextBox Width="100" Margin="2" TextAlignment="Right" Validation.ErrorTemplate="{StaticResource TextBoxValidationErrorTemplate}">
+                        <TextBox.Text>
+                            <Binding Path="InventorySize" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <local:RegexValidationRule Pattern="^\d+$" />
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                </Grid>
             </GroupBox>
-            <ListView Grid.Row="1" ItemsSource="{Binding FilteredItems}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
-                <ListView.Style>
-                    <Style TargetType="{x:Type ListView}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding FileName}" Value="{x:Null}">
-                                <Setter Property="IsEnabled" Value="False" />
-                                <Setter Property="Opacity" Value="0.5" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </ListView.Style>
+            <ListView Grid.Row="1" ItemsSource="{Binding FilteredItems}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" FocusVisualStyle="{x:Null}" Margin="4" BorderBrush="LightGray">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="{x:Type ListViewItem}">
                         <Setter Property="local:MouseDoubleClick.CommandParameter" Value="{Binding}" />
@@ -163,6 +166,7 @@
                     </GridView>
                 </ListView.View>
             </ListView>
+            <GridSplitter Grid.Column="1" Grid.RowSpan="2" Width="2" HorizontalAlignment="Stretch" Background="{x:Static SystemColors.ControlBrush}" FocusVisualStyle="{x:Null}" />
         </Grid>
     </DockPanel>
 </Window>

@@ -5,8 +5,32 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:KoAR.SaveEditor.Views"
     mc:Ignorable="d" d:DataContext="{d:DesignInstance local:ItemEditorViewModel}"
-    Title="ItemEditorView" Height="450" Width="800">
-    <Grid>
-        
+    Height="400" Width="400" WindowStartupLocation="CenterOwner">
+    <Window.Style>
+        <Style TargetType="{x:Type Window}" BasedOn="{StaticResource {x:Type Window}}">
+            <Setter Property="Title" Value="{Binding ItemName, StringFormat='Hex Editor - {0}'}" />
+        </Style>
+    </Window.Style>
+    <Grid FocusManager.FocusedElement="{Binding ElementName=PART_EditButton}">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBox x:Name="PART_TextBox" AcceptsReturn="False" Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+            Margin="4" TextWrapping="Wrap" IsReadOnly="{Binding ReadOnly}">
+            <TextBox.Style>
+                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+                    <Style.Triggers>
+                        <Trigger Property="IsReadOnly" Value="True">
+                            <Setter Property="Background" Value="LightGray" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1">
+            <Button Content="Edit" Command="{Binding AllowEditCommand}" Margin="4" x:Name="PART_EditButton"/>
+            <Button Content="Save" Command="{Binding SaveCommand}" Margin="4" IsDefault="True" />
+        </StackPanel>
     </Grid>
 </Window>

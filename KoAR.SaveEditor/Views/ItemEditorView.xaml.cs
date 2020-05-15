@@ -1,27 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace KoAR.SaveEditor.Views
 {
-    /// <summary>
-    /// Interaction logic for ItemEditorView.xaml
-    /// </summary>
-    public partial class ItemEditorView : Window
+    partial class ItemEditorView
     {
         public ItemEditorView()
         {
-            InitializeComponent();
+            this.InitializeComponent();
+            this.Loaded += this.ItemEditorView_Loaded;
+        }
+
+        private void ItemEditorView_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.Loaded -= this.ItemEditorView_Loaded;
+            ItemEditorViewModel viewModel = (ItemEditorViewModel)this.DataContext;
+            PropertyChangedEventManager.AddHandler(viewModel, this.ViewModel_ReadOnlyPropertyChanged, nameof(viewModel.ReadOnly));
+        }
+
+        private void ViewModel_ReadOnlyPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            this.PART_TextBox.Focus();
+            this.PART_TextBox.SelectAll();
+            ItemEditorViewModel viewModel = (ItemEditorViewModel)this.DataContext;
+            PropertyChangedEventManager.RemoveHandler(viewModel, this.ViewModel_ReadOnlyPropertyChanged, nameof(viewModel.ReadOnly));
         }
     }
 }

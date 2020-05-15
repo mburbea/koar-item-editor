@@ -1,12 +1,11 @@
-﻿#nullable enable
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Input;
 using System.Xml.Linq;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
@@ -16,8 +15,8 @@ namespace KoAR.SaveEditor.Views
 {
     public sealed class MainViewModel : NotifierBase
     {
-        private readonly ObservableCollection<ItemModel> _items;
         private readonly EffectInfo[] _attributes;
+        private readonly ObservableCollection<ItemModel> _items;
         private string? _currentDurabilityFilter = string.Empty;
         private AmalurSaveEditor? _editor;
         private string? _fileName;
@@ -34,7 +33,6 @@ namespace KoAR.SaveEditor.Views
             this._filteredItems = this.Items = new ReadOnlyObservableCollection<ItemModel>(this._items = new ObservableCollection<ItemModel>());
             this.MakeAllItemsSellableCommand = new DelegateCommand(this.MakeAllItemsSellable, this.CanMakeAllItemsSellable);
             this.ResetFiltersCommand = new DelegateCommand(this.ResetFilters);
-            this.HelpCommand = new DelegateCommand(MainViewModel.Help);
             this.EditItemHexCommand = new DelegateCommand<ItemModel>(this.EditItemHex);
             using Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream($"{typeof(App).Namespace}.properties.xml");
             this._attributes = XDocument.Load(stream).Root.Elements().Select(element => new EffectInfo
@@ -76,16 +74,23 @@ namespace KoAR.SaveEditor.Views
             private set => this.SetValue(ref this._filteredItems, value);
         }
 
-        public DelegateCommand HelpCommand
-        {
-            get;
-        }
-
         public int InventorySize
         {
             get => this._inventorySize;
-            private set => this.SetValue(ref this._inventorySize, value);
+            set => this.SetValue(ref this._inventorySize, value);
         }
+
+        private void UpdateInventorySize()
+        {
+            if (this._editor == null)
+            {
+                return;
+            }
+            this._editor.EditMaxBagCount(this.InventorySize);
+            this.CanSave();
+        }
+
+        private bool CanUpdateInventorySize() => this._editor != null && this._editor.GetMaxBagCount() != this.InventorySize;
 
         public string? ItemNameFilter
         {
@@ -149,12 +154,6 @@ namespace KoAR.SaveEditor.Views
             private set => this.SetValue(ref this._unsavedChanges, value.GetValueOrDefault());
         }
 
-        private static void Help()
-        {
-            HelpWindow window = new HelpWindow { Owner = Application.Current.MainWindow };
-            window.ShowDialog();
-        }
-
         private bool CanMakeAllItemsSellable()
         {
             return this._editor != null && this._fileName != null && this._items.Any(item => item.IsUnsellable);
@@ -169,11 +168,24 @@ namespace KoAR.SaveEditor.Views
                 this.SelectedItem = this._items.FirstOrDefault(item => item.ItemIndex == selectedItemIndex.Value);
             }
             this.UnsavedChanges = true;
+            CommandManager.InvalidateRequerySuggested();
         }
 
         private void EditItemHex(ItemModel item)
         {
-            MessageBox.Show(item.ItemName);
+            if (this._editor == null)
+            {
+                return;
+            }
+            ItemEditorView view = new ItemEditorView
+            {
+                Owner = Application.Current.MainWindow,
+                DataContext = new ItemEditorViewModel(this._editor, item.GetItem())
+            };
+            if (view.ShowDialog() == true)
+            {
+                this.CanSave();
+            }
         }
 
         private void MakeAllItemsSellable()
@@ -205,13 +217,13 @@ namespace KoAR.SaveEditor.Views
             IEnumerable<ItemModel> items = this.Items;
             if (!string.IsNullOrEmpty(this._currentDurabilityFilter) && float.TryParse(this._currentDurabilityFilter, out float single))
             {
-                double temp = Math.Round(single, 4);
-                items = items.Where(model => Math.Round(model.CurrentDurability, 4) == temp);
+                int temp = (int)Math.Floor(single);
+                items = items.Where(model => (int)Math.Floor(model.CurrentDurability) == temp);
             }
             if (!string.IsNullOrEmpty(this._maxDurabilityFilter) && float.TryParse(this._maxDurabilityFilter, out single))
             {
-                double temp = Math.Round(single, 4);
-                items = items.Where(model => Math.Round(model.MaxDurability, 4) == temp);
+                int temp = (int)Math.Floor(single);
+                items = items.Where(model => (int)Math.Floor(model.MaxDurability) == temp);
             }
             if (!string.IsNullOrEmpty(this._itemNameFilter))
             {
@@ -243,12 +255,6 @@ namespace KoAR.SaveEditor.Views
             this.ResetFilters();
         }
 
-        private void ResetFilters()
-        {
-            this._itemNameFilter = this._currentDurabilityFilter = this._maxDurabilityFilter = string.Empty;
-            this.OnFilterChange();
-        }
-
         /// <summary>
         /// Formerly called ShowAll or btnShowAll_Click
         /// </summary>
@@ -265,6 +271,12 @@ namespace KoAR.SaveEditor.Views
             {
                 this._items.Insert(info.ItemName == "Unknown" ? this._items.Count : 0, info);
             }
+        }
+
+        private void ResetFilters()
+        {
+            this._itemNameFilter = this._currentDurabilityFilter = this._maxDurabilityFilter = string.Empty;
+            this.OnFilterChange();
         }
     }
 }

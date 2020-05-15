@@ -1,6 +1,4 @@
-﻿#nullable enable
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -15,14 +13,15 @@ namespace KoAR.SaveEditor.Constructs
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        protected void SetValue<T>(ref T field, T value, [CallerMemberName] string propertyName = "")
+        protected bool SetValue<T>(ref T field, T value, [CallerMemberName] string propertyName = "")
         {
             if (EqualityComparer<T>.Default.Equals(field, value))
             {
-                return;
+                return false;
             }
             field = value;
             this.OnPropertyChanged(propertyName);
+            return true;
         }
     }
 }

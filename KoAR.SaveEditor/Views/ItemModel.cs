@@ -1,6 +1,4 @@
-﻿#nullable enable
-
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
 
