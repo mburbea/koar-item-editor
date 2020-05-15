@@ -163,7 +163,7 @@ namespace KoAR.SaveEditor.Views
         private void CanSave()
         {
             int? selectedItemIndex = this._selectedItem?.ItemIndex;
-            this.ShowAll();
+            this.RepopulateItems();
             if (selectedItemIndex.HasValue)
             {
                 this.SelectedItem = this._items.FirstOrDefault(item => item.ItemIndex == selectedItemIndex.Value);
@@ -239,7 +239,7 @@ namespace KoAR.SaveEditor.Views
             this._editor = new AmalurSaveEditor();
             this._editor.ReadFile(this.FileName = dialog.FileName);
             this.InventorySize = this._editor.GetMaxBagCount();
-            this.ShowAll();
+            this.RepopulateItems();
             this.ResetFilters();
         }
 
@@ -249,7 +249,10 @@ namespace KoAR.SaveEditor.Views
             this.OnFilterChange();
         }
 
-        private void ShowAll()
+        /// <summary>
+        /// Formerly called ShowAll or btnShowAll_Click
+        /// </summary>
+        private void RepopulateItems()
         {
             if (this._editor == null)
             {
