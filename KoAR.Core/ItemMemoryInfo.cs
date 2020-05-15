@@ -12,13 +12,14 @@ namespace KoAR.Core
     /// </summary>
     public class ItemMemoryInfo
     {
+        const int MinEquipmentLength = 44;
         public static bool IsValidDurability(float durability) => durability > 0f && durability < 100f;
 
         public static ItemMemoryInfo Create(int itemIndex, ReadOnlySpan<byte> span)
         {
             var offsets = new Offsets(MemoryUtilities.Read<int>(span, Offsets.EffectCount));
 
-            if (span.Length < 44 || !IsValidDurability(MemoryUtilities.Read<float>(span, offsets.CurrentDurability))
+            if (span.Length < MinEquipmentLength || !IsValidDurability(MemoryUtilities.Read<float>(span, offsets.CurrentDurability))
                 || !IsValidDurability(MemoryUtilities.Read<float>(span, offsets.MaxDurability)))
             {
                 return null;
@@ -132,7 +133,7 @@ namespace KoAR.Core
 
         public void WriteEffects(List<EffectInfo> newEffects)
         {
-            var currentCount = EffectCount;
+            var currentLength = Offsets.PostEffect - Offsets.FirstEffect;
             EffectCount = newEffects.Count;
             Span<ulong> effectData = stackalloc ulong[newEffects.Count];
 
@@ -141,7 +142,7 @@ namespace KoAR.Core
                 effectData[i] = uint.Parse(newEffects[i].Code, NumberStyles.HexNumber) | (ulong)uint.MaxValue << 32;
             }
 
-            ItemBytes = MemoryUtilities.ReplaceBytes(ItemBytes, Offsets.FirstEffect, 8 * currentCount, MemoryMarshal.AsBytes(effectData));
+            ItemBytes = MemoryUtilities.ReplaceBytes(ItemBytes, Offsets.FirstEffect, currentLength, MemoryMarshal.AsBytes(effectData));
         }
  
     }
