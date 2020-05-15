@@ -12,15 +12,11 @@ namespace KoAR.Core
                 newData.CopyTo(bytes.AsSpan(offset));
                 return bytes;
             }
-
             var buffer = new byte[bytes.Length + (newData.Length - length)];
             bytes.AsSpan(0, offset).CopyTo(buffer);
-            newData.CopyTo(buffer.AsSpan(offset));
-            if(offset + length != bytes.Length)
-            {
-                bytes.AsSpan(offset + length).CopyTo(buffer.AsSpan(offset + newData.Length));
-            }
 
+            newData.CopyTo(buffer.AsSpan(offset));
+            bytes.AsSpan(offset + length).CopyTo(buffer.AsSpan(offset + newData.Length));
             return buffer;
         }
 
