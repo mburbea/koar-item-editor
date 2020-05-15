@@ -4,7 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using System.Xml;
+using System.Xml.Linq;
 using KoAR.Core;
 
 namespace KoARSaveItemEditor
@@ -217,20 +217,11 @@ namespace KoARSaveItemEditor
         {
             try
             {
-                List<EffectInfo> attributeList = new List<EffectInfo>();
-                XmlDocument doc = new XmlDocument();
-                doc.Load(Application.StartupPath + @"\Data\properties.xml");
-                XmlNodeList nodes = doc.DocumentElement.ChildNodes;
-                foreach (XmlNode n in nodes)
+                this.attributeList = XDocument.Load(Application.StartupPath + @"\Data\properties.xml").Root.Elements().Select(element => new EffectInfo
                 {
-                    EffectInfo att = new EffectInfo
-                    {
-                        Code = n.Attributes["id"].Value.ToUpper(),
-                        DisplayText = n.InnerText.ToUpper()
-                    };
-                    attributeList.Add(att);
-                }
-                this.attributeList = attributeList;
+                    Code = element.Attribute("id").Value.ToUpper(),
+                    DisplayText = element.Value.ToUpper()
+                }).ToList();
             }
             catch
             {
