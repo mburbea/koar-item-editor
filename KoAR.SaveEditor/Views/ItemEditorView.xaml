@@ -5,7 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:KoAR.SaveEditor.Views"
     mc:Ignorable="d" d:DataContext="{d:DesignInstance local:ItemEditorViewModel}"
-    Height="400" Width="400" WindowStartupLocation="CenterOwner">
+    Height="400" Width="400" WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
     <Window.Style>
         <Style TargetType="{x:Type Window}" BasedOn="{StaticResource {x:Type Window}}">
             <Setter Property="Title" Value="{Binding ItemName, StringFormat='Hex Editor - {0}'}" />
