@@ -33,7 +33,7 @@ namespace KoAR.Core
             }
 
             if(!IsValidDurability(MemoryUtilities.Read<float>(span, offsets.CurrentDurability))
-                && !IsValidDurability(MemoryUtilities.Read<float>(span, offsets.MaxDurability)))
+                || !IsValidDurability(MemoryUtilities.Read<float>(span, offsets.MaxDurability)))
             {
                 return null;
             }
@@ -133,9 +133,10 @@ namespace KoAR.Core
             {
                 effects.Add(new EffectInfo
                 {
-                    Code = MemoryUtilities.Read<uint>(ItemBytes, Offsets.FirstEffect + i*8).ToString("X6")
+                    Code = MemoryUtilities.Read<uint>(ItemBytes, Offsets.FirstEffect + i * 8).ToString("X6")
                 });
             }
+
             return effects;
         }
 
