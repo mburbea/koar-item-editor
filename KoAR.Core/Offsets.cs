@@ -5,8 +5,8 @@
         public const int EffectCount = 21;
         private readonly int _count;
         public Offsets(int count) => _count = count;
-
-        public int PostEffect => EffectCount + 4 + _count * 8;
+        public int FirstEffect => EffectCount + 4;
+        public int PostEffect => FirstEffect + _count * 8;
         public int CurrentDurability => PostEffect + 4;
         public int MaxDurability => CurrentDurability + 4;
 
