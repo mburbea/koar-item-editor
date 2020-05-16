@@ -37,6 +37,7 @@ namespace KoAR.Core
             (ItemIndex, DataLength, ItemBytes) = (itemIndex, dataLength, span.Slice(0, dataLength).ToArray());
         }
 
+        public CoreItemMemory CoreItemMemory { get; set; }
         public float CurrentDurability
         {
             get => MemoryUtilities.Read<float>(ItemBytes, Offsets.CurrentDurability);

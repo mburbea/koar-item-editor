@@ -110,31 +110,31 @@ namespace KoAR.Core
             List<ItemMemoryInfo> equipmentList = new List<ItemMemoryInfo>();
             var bytes = Bytes;
             var indexList = GetAllIndices(bytes, EquipmentSequence);
-            var coreIndices = GetAllIndices(bytes, CoreAttributeSequence);
-            int numberOfWs=0, numberOfLs=0;
             var bins = new Dictionary<string, int>();
-
+            var coreHeader = new byte[13];
+            MemoryUtilities.ReplaceBytes(coreHeader, 4, 9, CoreAttributeSequence);
             for (int i = 0; i < indexList.Count; i++)
             {
-                if(ItemMemoryInfo.Create(indexList[i], i == indexList.Count - 1 
-                    ? bytes.AsSpan(indexList[i]) 
+                if (ItemMemoryInfo.Create(indexList[i], i == indexList.Count - 1
+                    ? bytes.AsSpan(indexList[i])
                     : bytes.AsSpan(indexList[i], indexList[i + 1] - indexList[i])) is ItemMemoryInfo item)
                 {
+                    MemoryUtilities.Write(coreHeader, 0, item.ItemId);
+                    var span = bytes.AsSpan(indexList[i]);
+                    
+                    int coreOffset = span.IndexOf(coreHeader) + indexList[i];
+                    item.CoreItemMemory = CoreItemMemory.Create(coreOffset, bytes.AsSpan(coreOffset));
                     equipmentList.Add(item);
-                    var internalId = MemoryUtilities.Read<int>(bytes, item.ItemIndex);
-                    var ix = coreIndices.FindIndex(x => MemoryUtilities.Read<int>(bytes, x) == internalId);
-                    _ = ix == -1 ? numberOfLs++ : numberOfWs++;
-                        if (ix != -1)
-                        {
-                            var b13 = bytes[coreIndices[ix] + 13];
-                            var binStr = b13.ToString("X2");
-                            bins.TryGetValue(binStr, out var c);
-                            bins[binStr] = c + 1;
-                        }
+
+                    var b13 = item.CoreItemMemory.MysteryInteger;
+                    var itemName = item.ItemName;
+                    var binStr = b13.ToString("X2");
+                    bins.TryGetValue(binStr, out var c);
+                    bins[binStr] = c + 1;
+
                 }
             }
-            Console.WriteLine(numberOfWs);
-            Console.WriteLine(numberOfLs);
+
             Console.WriteLine(bins);
 
             return equipmentList;
@@ -147,7 +147,12 @@ namespace KoAR.Core
         public void DeleteEquipment(ItemMemoryInfo equipment) 
             => Bytes = MemoryUtilities.ReplaceBytes(Bytes, equipment.ItemIndex, equipment.DataLength, equipment.ItemBytes);
 
-        public void WriteEquipmentBytes(ItemMemoryInfo equipment) => 
-            Bytes = MemoryUtilities.ReplaceBytes(Bytes, equipment.ItemIndex, equipment.DataLength, equipment.ItemBytes);
+        public void WriteEquipmentBytes(ItemMemoryInfo equipment)
+        {
+            var bytes = Bytes;
+            var coreMemory = equipment.CoreItemMemory;
+            Bytes = MemoryUtilities.ReplaceBytes(bytes, coreMemory.ItemIndex, coreMemory.DataLength, coreMemory.ItemBytes);
+            Bytes = MemoryUtilities.ReplaceBytes(bytes, equipment.ItemIndex, equipment.DataLength, equipment.ItemBytes);
+        }
     }
 }

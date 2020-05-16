@@ -1,17 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KoAR.Core
 {
-    class CoreItemMemory
+    public enum Rarity
+    {
+        Common = 0x14,
+        Unique = 0x2C,
+        Uncommon = 0x44,
+        Rare = 0x5C,
+        Question = 0x24,
+        WhoKnows = 0x74
+    };
+
+    public class CoreItemMemory
     {
         private static ReadOnlySpan<uint> EffectPrefixes => new[] { 0x57_8E_73u, 0x58_6E_AAu, 0x4B_03_f9u, 0x4b_43_f4u };
-
 
         public static CoreItemMemory Create(int itemIndex, ReadOnlySpan<byte> span)
         {
