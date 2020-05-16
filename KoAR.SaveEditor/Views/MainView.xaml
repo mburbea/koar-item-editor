@@ -6,7 +6,8 @@
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views"
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs"
     mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type views:MainViewModel}}"
-    Title="KoAR Save Item Editor" Width="1024" Height="768" WindowStartupLocation="CenterScreen">
+    Width="1024" Height="768" WindowStartupLocation="CenterScreen" 
+    Icon="../app.ico" ResizeMode="CanResizeWithGrip">
     <Window.Resources>
         <ObjectDataProvider x:Key="ViewModel" ObjectType="{x:Type views:MainViewModel}" />
         <ControlTemplate x:Key="TextBoxValidationErrorTemplate">
@@ -24,10 +25,32 @@
             </Border>
         </ControlTemplate>
         <constructs:NegatedBooleanConverter x:Key="NegatedBooleanConverter" />
+        <constructs:StringIsNullOrEmptyConverter x:Key="StringIsNullOrEmptyConverter" />
     </Window.Resources>
     <Window.DataContext>
         <Binding Source="{StaticResource ViewModel}" />
     </Window.DataContext>
+    <Window.Style>
+        <Style TargetType="{x:Type Window}" BasedOn="{StaticResource {x:Type Window}}">
+            <Style.Triggers>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding FileName, Converter={StaticResource StringIsNullOrEmptyConverter}}" Value="False" />
+                        <Condition Binding="{Binding UnsavedChanges}" Value="False" />
+                    </MultiDataTrigger.Conditions>
+                    <Setter Property="Title" Value="{Binding FileName, StringFormat='{}{0} - KoAR Save Item Editor'}" />
+                </MultiDataTrigger>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding FileName, Converter={StaticResource StringIsNullOrEmptyConverter}}" Value="False" />
+                        <Condition Binding="{Binding UnsavedChanges}" Value="True" />
+                    </MultiDataTrigger.Conditions>
+                    <Setter Property="Title" Value="{Binding FileName, StringFormat='* {0} - KoAR Save Item Editor'}" />
+                </MultiDataTrigger>
+            </Style.Triggers>
+            <Setter Property="Title" Value="KoAR Save Item Editor" />
+        </Style>
+    </Window.Style>
     <DockPanel>
         <Menu DockPanel.Dock="Top" Background="{x:Static SystemColors.ControlBrush}">
             <Menu.Resources>
@@ -40,32 +63,7 @@
             <MenuItem Header="_Save" Command="{Binding SaveCommand}" IsEnabled="{Binding UnsavedChanges}" />
             <MenuItem Header="_Help" Command="Help" />
         </Menu>
-        <StatusBar DockPanel.Dock="Bottom" Background="{x:Static SystemColors.ControlBrush}">
-            <DockPanel MinHeight="24">
-                <TextBlock VerticalAlignment="Center" Margin="4" DockPanel.Dock="Right">
-                    <TextBlock.Style>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding UnsavedChanges}" Value="{x:Null}">
-                                    <Setter Property="Visibility" Value="Hidden" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBlock.Style>
-                </TextBlock>
-                <TextBlock VerticalAlignment="Center" Margin="4" Text="{Binding FileName, StringFormat='FileName: {0}'}">
-                    <TextBlock.Style>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding FileName}" Value="{x:Null}">
-                                    <Setter Property="Visibility" Value="Hidden" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBlock.Style>
-                </TextBlock>
-            </DockPanel>
-        </StatusBar>
+        <Border Background="{x:Static SystemColors.ControlBrush}" DockPanel.Dock="Bottom" Height="24" />
         <Grid>
             <Grid.Style>
                 <Style TargetType="{x:Type Grid}">
@@ -283,12 +281,12 @@
                     <TextBox Grid.Column="1" VerticalAlignment="Center" Margin="2" Text="{Binding SelectedItem.EffectCount, Mode=OneWay}" 
                         TextAlignment="Right" IsReadOnly="True" Background="{x:Static SystemColors.ControlBrush}" />
                     <views:AttributeControl Grid.Row="1" Grid.ColumnSpan="2" ProcessItemLabel="Delete" Header="Existing Attributes:" DataContext="{Binding SelectedItem}" Attributes="{Binding Effects}" 
-                        SelectedItem="{Binding SelectedEffect}" Command="{Binding DataContext.DeleteAttributeCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+                        SelectedAttribute="{Binding SelectedEffect}" Command="{Binding DataContext.DeleteAttributeCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
                     <views:AttributeControl Grid.Row="2" Grid.ColumnSpan="2" ProcessItemLabel="Add" Header="Add Attribute:" Attributes="{Binding Attributes}" 
-                        SelectedItem="{Binding SelectedAttribute}" Command="{Binding AddAttributeCommand}" />
+                        SelectedAttribute="{Binding SelectedAttribute}" Command="{Binding AddAttributeCommand}" />
                 </Grid>
             </GroupBox>
-            <ListView Grid.Row="1" Grid.RowSpan="2" ItemsSource="{Binding FilteredItems}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" FocusVisualStyle="{x:Null}" Margin="4" BorderBrush="LightGray">
+            <ListView Grid.Row="1" Grid.RowSpan="2" ItemsSource="{Binding FilteredItems}" SelectedItem="{Binding SelectedItem}" FocusVisualStyle="{x:Null}" Margin="4" BorderBrush="LightGray">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="{x:Type ListViewItem}">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch" />

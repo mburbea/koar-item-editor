@@ -106,13 +106,9 @@ namespace KoAR.SaveEditor.Views
             this.OnPropertyChanged(nameof(this.Effects));
         }
 
-        public void DeleteSelectedAttribute()
-        {
-            if (this._selectedEffect == null)
-            {
-                return;
-            }
-            string code = this._selectedEffect.Code;
+        public void DeleteAttribute(EffectInfo info)
+        {            
+            string code = info.Code;
             if (this._effects == null)
             {
                 this._effects = this._editor.GetEffectList(this._item, this._attributes);

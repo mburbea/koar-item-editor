@@ -34,7 +34,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <ComboBox Grid.ColumnSpan="3" ItemsSource="{Binding Attributes}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" FocusVisualStyle="{x:Null}" Margin="2">
+            <ComboBox Grid.ColumnSpan="3" ItemsSource="{Binding Attributes}" SelectedItem="{Binding SelectedAttribute}" FocusVisualStyle="{x:Null}" Margin="2">
                 <ComboBox.ItemContainerStyle>
                     <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
                         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
@@ -62,16 +62,17 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
             <TextBlock Grid.Row="1" TextAlignment="Right" Text="Hex Code:" Margin="2" VerticalAlignment="Center" />
-            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SelectedItem.Code, Mode=OneWay}" IsReadOnly="True" TextAlignment="Right" Background="{x:Static SystemColors.ControlBrush}" VerticalAlignment="Center" Margin="2" />
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SelectedAttribute.Code, Mode=OneWay}" IsReadOnly="True" TextAlignment="Right" Background="{x:Static SystemColors.ControlBrush}" 
+                VerticalAlignment="Center" Margin="2" />
             <Button Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" Margin="2" Content="{Binding ProcessItemLabel}" FocusVisualStyle="{x:Null}"
-                CommandParameter="{Binding SelectedItem}" Command="{Binding Command}" CommandTarget="{Binding CommandTarget}">
+                CommandParameter="{Binding SelectedAttribute}" Command="{Binding Command}" CommandTarget="{Binding CommandTarget}">
                 <Button.Style>
                     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding SelectedItem}" Value="{x:Null}">
+                            <DataTrigger Binding="{Binding SelectedAttribute}" Value="{x:Null}">
                                 <Setter Property="IsEnabled" Value="False" />
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding SelectedItem.Code, Converter={StaticResource StringIsNullOrEmptyConverter}}" Value="True">
+                            <DataTrigger Binding="{Binding SelectedAttribute.Code, Converter={StaticResource StringIsNullOrEmptyConverter}}" Value="True">
                                 <Setter Property="IsEnabled" Value="False" />
                             </DataTrigger>
                         </Style.Triggers>

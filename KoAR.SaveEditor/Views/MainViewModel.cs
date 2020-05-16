@@ -36,8 +36,8 @@ namespace KoAR.SaveEditor.Views
             this.ResetFiltersCommand = new DelegateCommand(this.ResetFilters);
             this.EditItemHexCommand = new DelegateCommand<ItemModel>(this.EditItemHex);
             this.UpdateInventorySizeCommand = new DelegateCommand(this.UpdateInventorySize, this.CanUpdateInventorySize);
-            this.AddAttributeCommand = new DelegateCommand(this.AddAttribute);
-            this.DeleteAttributeCommand = new DelegateCommand(this.DeleteAttribute);
+            this.AddAttributeCommand = new DelegateCommand<EffectInfo>(this.AddAttribute);
+            this.DeleteAttributeCommand = new DelegateCommand<EffectInfo>(this.DeleteAttribute);
             this.SaveCommand = new DelegateCommand(this.Save);
             if ((bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(Window)).DefaultValue)
             {
@@ -53,25 +53,7 @@ namespace KoAR.SaveEditor.Views
             this._selectedAttribute = this.Attributes[0];
         }
 
-        public DelegateCommand SaveCommand
-        {
-            get;
-        }
-
-        private void Save()
-        {
-            if (this._editor == null)
-            {
-                return;
-            }
-            File.Copy(this._fileName, $"{this._fileName}.bak", true);
-            this._editor.SaveFile(this._fileName);
-            this.UnsavedChanges = false;
-            this.RepopulateItems();
-            MessageBox.Show($"Save successful! Original save backed up as {this._fileName}.bak.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-
-        public DelegateCommand AddAttributeCommand
+        public DelegateCommand<EffectInfo> AddAttributeCommand
         {
             get;
         }
@@ -96,7 +78,7 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        public DelegateCommand DeleteAttributeCommand
+        public DelegateCommand<EffectInfo> DeleteAttributeCommand
         {
             get;
         }
@@ -174,6 +156,11 @@ namespace KoAR.SaveEditor.Views
             get;
         }
 
+        public DelegateCommand SaveCommand
+        {
+            get;
+        }
+
         public EffectInfo? SelectedAttribute
         {
             get => this._selectedAttribute;
@@ -216,13 +203,13 @@ namespace KoAR.SaveEditor.Views
             get;
         }
 
-        private void AddAttribute()
+        private void AddAttribute(EffectInfo info)
         {
-            if (this.SelectedAttribute == null || this.SelectedItem == null)
+            if (info == null || this.SelectedItem == null)
             {
                 return;
             }
-            this.SelectedItem.AddAttribute(this.SelectedAttribute.Clone());
+            this.SelectedItem.AddAttribute(info.Clone());
             this.SelectedAttribute = this.Attributes[0];
             this.CanSave();
         }
@@ -247,9 +234,9 @@ namespace KoAR.SaveEditor.Views
 
         private bool CanUpdateInventorySize() => this._editor != null && this._editor.GetMaxBagCount() != this.InventorySize;
 
-        private void DeleteAttribute()
+        private void DeleteAttribute(EffectInfo info)
         {
-            this.SelectedItem?.DeleteSelectedAttribute();
+            this.SelectedItem?.DeleteAttribute(info);
             this.CanSave();
         }
 
@@ -335,6 +322,8 @@ namespace KoAR.SaveEditor.Views
             this.InventorySize = this._editor.GetMaxBagCount();
             this.RepopulateItems();
             this.ResetFilters();
+            this._unsavedChanges = false;
+            this.OnPropertyChanged(nameof(this.UnsavedChanges));
         }
 
         /// <summary>
@@ -359,6 +348,19 @@ namespace KoAR.SaveEditor.Views
         {
             this._itemNameFilter = this._currentDurabilityFilter = this._maxDurabilityFilter = string.Empty;
             this.OnFilterChange();
+        }
+
+        private void Save()
+        {
+            if (this._editor == null)
+            {
+                return;
+            }
+            File.Copy(this._fileName, $"{this._fileName}.bak", true);
+            this._editor.SaveFile(this._fileName);
+            this.UnsavedChanges = false;
+            this.RepopulateItems();
+            MessageBox.Show($"Save successful! Original save backed up as {this._fileName}.bak.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void SelectedItem_MateriallyChanged(object sender, EventArgs e)

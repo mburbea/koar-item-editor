@@ -17,7 +17,7 @@ namespace KoAR.SaveEditor.Views
         
         public static readonly DependencyProperty ProcessItemLabelProperty = DependencyProperty.Register(nameof(AttributeControl.ProcessItemLabel), typeof(object), typeof(AttributeControl));
 
-        public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register(nameof(AttributeControl.SelectedItem), typeof(EffectInfo), typeof(AttributeControl),
+        public static readonly DependencyProperty SelectedAttributeProperty = DependencyProperty.Register(nameof(AttributeControl.SelectedAttribute), typeof(EffectInfo), typeof(AttributeControl),
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         public AttributeControl() => this.InitializeComponent();
@@ -52,10 +52,10 @@ namespace KoAR.SaveEditor.Views
             set => this.SetValue(AttributeControl.ProcessItemLabelProperty, value);
         }
 
-        public EffectInfo? SelectedItem
+        public EffectInfo? SelectedAttribute
         {
-            get => this.GetValue(AttributeControl.SelectedItemProperty) as EffectInfo;
-            set => this.SetValue(AttributeControl.SelectedItemProperty, value);
+            get => this.GetValue(AttributeControl.SelectedAttributeProperty) as EffectInfo;
+            set => this.SetValue(AttributeControl.SelectedAttributeProperty, value);
         }
     }
 }

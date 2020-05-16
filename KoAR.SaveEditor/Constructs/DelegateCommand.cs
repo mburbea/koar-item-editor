@@ -60,20 +60,8 @@ namespace KoAR.SaveEditor.Constructs
 
         event EventHandler ICommand.CanExecuteChanged
         {
-            add
-            {
-                if (this._canExecute != null)
-                {
-                    CommandManager.RequerySuggested += value;
-                }
-            }
-            remove
-            {
-                if (this._canExecute != null)
-                {
-                    CommandManager.RequerySuggested -= value;
-                }
-            }
+            add => CommandManager.RequerySuggested += value;
+            remove => CommandManager.RequerySuggested -= value;
         }
 
         bool ICommand.CanExecute(object parameter) => parameter is T converted && this.CanExecute(converted);

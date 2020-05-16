@@ -4,7 +4,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d" WindowStartupLocation="CenterOwner"
-    Title="Help" Height="450" Width="800">
+    Title="Help" Height="450" Width="800" Icon="../app.ico">
     <DockPanel Margin="5">
         <Button DockPanel.Dock="Bottom" HorizontalAlignment="Center" Content="OK" Command="Close" IsDefault="True" />
         <TextBlock x:Name="_textBox" TextWrapping="Wrap" Margin="0,0,0,5" />

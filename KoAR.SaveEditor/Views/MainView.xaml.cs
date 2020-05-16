@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -15,6 +16,16 @@ namespace KoAR.SaveEditor.Views
             HelpWindow window = new HelpWindow { Owner = (MainView)sender };
             window.ShowDialog();
             e.Handled = true;
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            MainViewModel viewModel = (MainViewModel)this.DataContext;
+            if (viewModel.UnsavedChanges == true && MessageBox.Show("There are unsaved changes.  Quit without saving?", "KoAR Save Item Editor", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.No)
+            {
+                e.Cancel = true;
+            }
+            base.OnClosing(e);
         }
 
         private void AutoSizeColumns_Click(object sender, RoutedEventArgs e)
