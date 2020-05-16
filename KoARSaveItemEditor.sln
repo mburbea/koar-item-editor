@@ -9,6 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KoAR.Core", "KoAR.Core\KoAR
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KoAR.SaveEditor", "KoAR.SaveEditor\KoAR.SaveEditor.csproj", "{F0B155CB-061D-4E8C-BEEC-F0BDCF1BF9E0}"
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItemTesting", "ItemTesting\ItemTesting.csproj", "{1423B2BF-9328-4260-8C81-10948928FE08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItemTesting", "ItemTesting\ItemTesting.csproj", "{1423B2BF-9328-4260-8C81-10948928FE08}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

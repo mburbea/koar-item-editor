@@ -18,7 +18,7 @@ namespace KoAR.Core
         private static ReadOnlySpan<byte> CurrentInventoryCount => new[] { (byte)'c', (byte)'u', (byte)'r', (byte)'r', (byte)'e', (byte)'n', (byte)'t', (byte)'_', (byte)'i', (byte)'n', (byte)'v', (byte)'e', (byte)'n', (byte)'t', (byte)'o', (byte)'r', (byte)'y', (byte)'_', (byte)'c', (byte)'o', (byte)'u', (byte)'n', (byte)'t' };
         private static ReadOnlySpan<byte> EquipmentSequence => new byte[]     { 0x0B, 00, 00, 00, 0x68, 0xD5, 0x24, 0x00, 0x03 };
         private static ReadOnlySpan<byte> CoreAttributeSequence => new byte[] { 0x0B, 00, 00, 00, 0x84, 0x60, 0x28, 0x00, 0x00};
-g        private byte[] _bytes;
+        private byte[] _bytes;
 
         public byte[] Bytes
         {
