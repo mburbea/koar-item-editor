@@ -76,9 +76,9 @@ namespace KoAR.Core
                 ulong effect = (ulong)uint.Parse(effects[i].Code, NumberStyles.HexNumber);
                 effectData[i * 2] = EffectPrefixes[i] | effect << 32;
                 effectData[(i * 2) + 1] = ulong.MaxValue;
-                effectData[effects.Count + 1 + i] = effect | (ulong)uint.MaxValue << 32;
+                effectData[(effects.Count * 2) + 1 + i] = effect | (ulong)uint.MaxValue << 32;
             }
-            effectData[effects.Count] = (ulong)effects.Count << 32;
+            effectData[effects.Count * 2] = (ulong)effects.Count << 32;
             ItemBytes = MemoryUtilities.ReplaceBytes(ItemBytes, Offsets.FirstEffect, currentLength, MemoryMarshal.AsBytes(effectData));
         }
     }
