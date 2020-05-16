@@ -20,7 +20,7 @@ namespace KoAR.Core
             return buffer;
         }
 
-        public static T Read<T>(ReadOnlySpan<byte> span, int offset)
+        public static T Read<T>(ReadOnlySpan<byte> span, int offset = 0)
             where T : struct
             => MemoryMarshal.Read<T>(span.Slice(offset));
 

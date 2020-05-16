@@ -12,6 +12,22 @@ namespace KoAR.Core
     {
         private static ReadOnlySpan<uint> EffectPrefixes => new[] { 0x57_8E_73u, 0x58_6E_AAu, 0x4B_03_f9u, 0x4b_43_f4u };
 
+
+        public static CoreItemMemory Create(int itemIndex, ReadOnlySpan<byte> span)
+        {
+            if (span.Length < 29)
+            {
+                return null;
+            }
+
+            var effectCount = MemoryUtilities.Read<int>(span, Offset.EffectCount);
+            var offsets = new Offset(effectCount);
+
+            int dataLength = offsets.FirstDisplayEffect + effectCount * 8;
+
+            return new CoreItemMemory(itemIndex, dataLength, span);
+        }
+
         private readonly struct Offset
         {
             public const int MysteryInteger = 13;
@@ -27,11 +43,14 @@ namespace KoAR.Core
             public int FirstDisplayEffect => DisplayEffectCount + 4;
         }
 
+        private CoreItemMemory(int itemIndex, int dataLength, ReadOnlySpan<byte> span)
+            => (ItemIndex, DataLength, ItemBytes) = (itemIndex, dataLength, span.Slice(0, dataLength).ToArray());
+
         public int ItemIndex { get; }
         public int DataLength { get; }
         public byte[] ItemBytes { get; set; }
 
-        public int ItemId => MemoryUtilities.Read<int>(ItemBytes, 0);
+        public int ItemId => MemoryUtilities.Read<int>(ItemBytes);
 
         private Offset Offsets => new Offset(EffectCount);
 

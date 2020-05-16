@@ -42,7 +42,9 @@ namespace ItemTesting
             //LikelyCandidates("T1", "5b 00 53 00 0B 00 00 00");
             //LikelyCandidates("Primal Dagggers", "04 05 DD 02 0B 00 00 00");
             //LikelyCandidates("Primal Bow", "2B 09 9E 0B 0B 00 00 00");
-            LikelyCandidates("PGW", "2F 09 32 01 0B 00 00 00");
+            //LikelyCandidates("PGW", "2F 09 32 01 0B 00 00 00");
+            LikelyCandidates("Poo", "4B 0A 2D 01 0B 00 00 00");
+
             int LikelyCandidates(string name, string text)
             {
                 text += " 84 60 28 00 00";
@@ -64,11 +66,18 @@ namespace ItemTesting
                 //        break;
                 //    }
                 //}
+
+                //bytes[ix + 25] = bytes[ix + 61] = 0x0A;
+                //bytes[ix + 26] = bytes[ix + 62] = 0x70;
+                //bytes[ix + 27] = bytes[ix + 63] = 0x20;
                 Console.WriteLine($"{name}: {length}");
                 Console.WriteLine(string.Join(' ', bytes[ix..(ix + length)].Select(x => x.ToString("X2"))));
                 Console.WriteLine("---");
+                //bytes[ix + 13] = 0x2C;
                 return 0;
             }
+            fs.Seek(0, SeekOrigin.Begin);
+            fs.Write(bytes);
 
             static List<int> GetAllIndices(ReadOnlySpan<byte> data, ReadOnlySpan<byte> sequence)
             {
