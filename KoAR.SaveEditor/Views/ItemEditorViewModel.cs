@@ -48,11 +48,11 @@ namespace KoAR.SaveEditor.Views
                 {
                     continue;
                 }
-                if (text.Length != 2)
+                if (text.Length != 2 || !byte.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out byte b))
                 {
                     return default;
                 }
-                list.Add(byte.Parse(text, NumberStyles.HexNumber));
+                list.Add(b);
             }
             return list.ToArray();
         }
@@ -62,7 +62,7 @@ namespace KoAR.SaveEditor.Views
             byte[]? bytes = this.GetTextBytes();
             if (bytes == null)
             {
-                MessageBox.Show("Invalid byte text");
+                MessageBox.Show("Invalid byte text, (all bytes must be expressed as two character hex).", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
             this._item.ItemBytes = bytes;

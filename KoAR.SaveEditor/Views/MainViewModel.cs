@@ -60,14 +60,15 @@ namespace KoAR.SaveEditor.Views
 
         private void Save()
         {
-            if (this._editor == null) {
+            if (this._editor == null)
+            {
                 return;
             }
             File.Copy(this._fileName, $"{this._fileName}.bak", true);
             this._editor.SaveFile(this._fileName);
             this.UnsavedChanges = false;
             this.RepopulateItems();
-            MessageBox.Show($"Save successful! Original save backed up as {this._fileName}.bak.");
+            MessageBox.Show($"Save successful! Original save backed up as {this._fileName}.bak.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         public DelegateCommand AddAttributeCommand
@@ -286,7 +287,7 @@ namespace KoAR.SaveEditor.Views
                 this._editor.WriteEquipmentBytes(item.GetItem());
                 count++;
             }
-            MessageBox.Show($"Modified {count} items.");
+            MessageBox.Show($"Modified {count} items.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
             if (count > 0)
             {
                 this.CanSave();
@@ -343,7 +344,7 @@ namespace KoAR.SaveEditor.Views
         {
             if (this._editor == null)
             {
-                MessageBox.Show("No save file opened!");
+                MessageBox.Show("No save file opened!", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Warning);
                 this.OpenFile();
                 return;
             }
