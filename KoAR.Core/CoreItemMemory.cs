@@ -10,15 +10,17 @@ namespace KoAR.Core
 {
     class CoreItemMemory
     {
-        private static ReadOnlySpan<uint> EffectPrefixes => new[] { 0x57_8E_73u, 0x58_6E_AAu, 0x4B_03_f9u };
+        private static ReadOnlySpan<uint> EffectPrefixes => new[] { 0x57_8E_73u, 0x58_6E_AAu, 0x4B_03_f9u, 0x4b_43_f4u };
 
         private readonly struct Offset
         {
+            public const int MysteryInteger = 13;
+            public const int EffectCount = MysteryInteger + 4;
+            public const int FirstEffect = EffectCount + 17;
+
             private readonly int _count;
             public Offset(int count) => _count = count;
-            public int MysteryInteger => 13;
-            public int EffectCount => MysteryInteger + 4;
-            public int FirstEffect => EffectCount + 17;
+
 
             public int PostEffect => FirstEffect + _count * 16;
             public int DisplayEffectCount => PostEffect + 4;
@@ -35,14 +37,14 @@ namespace KoAR.Core
 
         public int EffectCount
         {
-            get => MemoryUtilities.Read<int>(ItemBytes, Offsets.EffectCount);
-            set => MemoryUtilities.Write(ItemBytes, Offsets.EffectCount, value);
+            get => MemoryUtilities.Read<int>(ItemBytes, Offset.EffectCount);
+            set => MemoryUtilities.Write(ItemBytes, Offset.EffectCount, value);
         }
 
         public int MysteryInteger
         {
-            get => MemoryUtilities.Read<int>(ItemBytes, Offsets.MysteryInteger);
-            set => MemoryUtilities.Write(ItemBytes, Offsets.MysteryInteger, value);
+            get => MemoryUtilities.Read<int>(ItemBytes, Offset.MysteryInteger);
+            set => MemoryUtilities.Write(ItemBytes, Offset.MysteryInteger, value);
         }
 
         public int DisplayEffectCount
@@ -72,12 +74,12 @@ namespace KoAR.Core
             Span<ulong> effectData = stackalloc ulong[effects.Count * 3 + 1];
             for(int i = 0; i < effects.Count; i++)
             {
-                ulong effect = (ulong)uint.Parse(effects[i].Code, NumberStyles.HexNumber);
+                ulong effect = uint.Parse(effects[i].Code, NumberStyles.HexNumber);
                 effectData[i * 2] = EffectPrefixes[i] | effect << 32;
                 effectData[(i * 2) + 1] = ulong.MaxValue;
                 effectData[(effects.Count * 2) + 1 + i] = effect | (ulong)uint.MaxValue << 32;
             }
-            ItemBytes = MemoryUtilities.ReplaceBytes(ItemBytes, Offsets.FirstEffect, currentLength, MemoryMarshal.AsBytes(effectData));
+            ItemBytes = MemoryUtilities.ReplaceBytes(ItemBytes, Offset.FirstEffect, currentLength, MemoryMarshal.AsBytes(effectData));
             EffectCount = effects.Count;
             DisplayEffectCount = effects.Count;
         }

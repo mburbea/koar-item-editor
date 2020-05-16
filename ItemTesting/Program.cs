@@ -26,7 +26,7 @@ namespace ItemTesting
         static void Main(string[] args)
         {
 
-            var path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save84.sav";
+            var path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save92.sav";
             using var fs = new FileStream(path, FileMode.Open);
             var bytes = new byte[fs.Length];
             var memory = fs.Read(bytes, 0, bytes.Length);
@@ -40,8 +40,9 @@ namespace ItemTesting
             //LikelyCandidates("D3", "83 01 95 00 0B 00 00 00");
             //LikelyCandidates("T2", "70 00 5A 00 0B 00 00 00");
             //LikelyCandidates("T1", "5b 00 53 00 0B 00 00 00");
-            LikelyCandidates("Primal Dagggers", "04 05 DD 02 0B 00 00 00");
-            LikelyCandidates("Primal Bow", "2B 09 9E 0B 0B 00 00 00");
+            //LikelyCandidates("Primal Dagggers", "04 05 DD 02 0B 00 00 00");
+            //LikelyCandidates("Primal Bow", "2B 09 9E 0B 0B 00 00 00");
+            LikelyCandidates("PGW", "2F 09 32 01 0B 00 00 00");
             int LikelyCandidates(string name, string text)
             {
                 text += " 84 60 28 00 00";
