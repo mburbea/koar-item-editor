@@ -79,6 +79,7 @@ namespace KoAR.Core
                 var currentLength = MemoryUtilities.Read<int>(ItemBytes, Offsets.CustomNameLength);
                 var newBytes = Encoding.Default.GetBytes(value);
                 ItemBytes = MemoryUtilities.ReplaceBytes(ItemBytes, Offsets.CustomNameText, currentLength, newBytes);
+                MemoryUtilities.Write(ItemBytes, Offsets.CustomNameLength, newBytes.Length);
             }
         }
 
