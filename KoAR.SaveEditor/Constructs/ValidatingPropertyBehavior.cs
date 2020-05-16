@@ -55,12 +55,12 @@ namespace KoAR.SaveEditor.Constructs
         }
 
         /// <summary>
-		/// Validate a value against a collection of validation rules.
-		/// </summary>
-		/// <param name="value">The value to validate.</param>
-		/// <param name="validationRules">The validation rules collection.</param>
-		/// <param name="bindingExpression">The binding expression.</param>
-		private static void Validate(object value, IEnumerable<ValidationRule>? validationRules, BindingExpressionBase bindingExpression)
+        /// Validate a value against a collection of validation rules.
+        /// </summary>
+        /// <param name="value">The value to validate.</param>
+        /// <param name="validationRules">The validation rules collection.</param>
+        /// <param name="bindingExpression">The binding expression.</param>
+        private static void Validate(object value, IEnumerable<ValidationRule>? validationRules, BindingExpressionBase bindingExpression)
         {
             if (validationRules != null)
             {
@@ -78,11 +78,11 @@ namespace KoAR.SaveEditor.Constructs
         }
 
         /// <summary>
-		/// Validate that a value of a dependency object/property combination does not violate any binding validation rules.
-		/// </summary>
-		/// <param name="dependencyObject">The dependency object.</param>
-		/// <param name="dependencyProperty">The dependency property.</param>
-		private static void Validate(this DependencyObject dependencyObject, DependencyProperty dependencyProperty)
+        /// Validate that a value of a dependency object/property combination does not violate any binding validation rules.
+        /// </summary>
+        /// <param name="dependencyObject">The dependency object.</param>
+        /// <param name="dependencyProperty">The dependency property.</param>
+        private static void Validate(this DependencyObject dependencyObject, DependencyProperty dependencyProperty)
         {
             BindingExpressionBase bindingExpression = BindingOperations.GetBindingExpressionBase(dependencyObject, dependencyProperty);
             if (bindingExpression == null)
