@@ -24,6 +24,7 @@ namespace KoAR.SaveEditor.Views
         private int _inventorySize;
         private string? _itemNameFilter = string.Empty;
         private string? _maxDurabilityFilter = string.Empty;
+        private EffectInfo? _selectedAttribute;
         private ItemModel? _selectedItem;
         private bool _unsavedChanges;
 
@@ -35,20 +36,46 @@ namespace KoAR.SaveEditor.Views
             this.ResetFiltersCommand = new DelegateCommand(this.ResetFilters);
             this.EditItemHexCommand = new DelegateCommand<ItemModel>(this.EditItemHex);
             this.UpdateInventorySizeCommand = new DelegateCommand(this.UpdateInventorySize, this.CanUpdateInventorySize);
+            this.AddAttributeCommand = new DelegateCommand(this.AddAttribute);
+            this.DeleteAttributeCommand = new DelegateCommand(this.DeleteAttribute);
+            this.SaveCommand = new DelegateCommand(this.Save);
             if ((bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(Window)).DefaultValue)
             {
-                this.Attributes = Array.AsReadOnly(Array.Empty<EffectInfo>());
+                this.Attributes = Array.Empty<EffectInfo>();
                 return;
             }
             using Stream stream = File.OpenRead(Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "properties.xml"));
-            this.Attributes = Array.AsReadOnly(XDocument.Load(stream).Root.Elements().Select(element => new EffectInfo
+            this.Attributes = XDocument.Load(stream).Root.Elements().Select(element => new EffectInfo
             {
                 Code = element.Attribute("id").Value.ToUpper(),
                 DisplayText = element.Value.ToUpper()
-            }).ToArray());
+            }).ToArray();
+            this._selectedAttribute = this.Attributes[0];
         }
 
-        public ReadOnlyCollection<EffectInfo> Attributes
+        public DelegateCommand SaveCommand
+        {
+            get;
+        }
+
+        private void Save()
+        {
+            if (this._editor == null) {
+                return;
+            }
+            File.Copy(this._fileName, $"{this._fileName}.bak", true);
+            this._editor.SaveFile(this._fileName);
+            this.UnsavedChanges = false;
+            this.RepopulateItems();
+            MessageBox.Show($"Save successful! Original save backed up as {this._fileName}.bak.");
+        }
+
+        public DelegateCommand AddAttributeCommand
+        {
+            get;
+        }
+
+        public IReadOnlyList<EffectInfo> Attributes
         {
             get;
         }
@@ -66,6 +93,11 @@ namespace KoAR.SaveEditor.Views
                 this.OnPropertyChanged();
                 this.OnFilterChange();
             }
+        }
+
+        public DelegateCommand DeleteAttributeCommand
+        {
+            get;
         }
 
         public DelegateCommand<ItemModel> EditItemHexCommand
@@ -141,6 +173,12 @@ namespace KoAR.SaveEditor.Views
             get;
         }
 
+        public EffectInfo? SelectedAttribute
+        {
+            get => this._selectedAttribute;
+            set => this.SetValue(ref this._selectedAttribute, value);
+        }
+
         public ItemModel? SelectedItem
         {
             get => this._selectedItem;
@@ -166,17 +204,6 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        private void SelectedItem_MateriallyChanged(object sender, EventArgs e)
-        {
-            if (this._editor == null)
-            {
-                return;
-            }
-            ItemModel model = (ItemModel)sender;
-            this._editor.WriteEquipmentBytes(model.GetItem());
-            this.CanSave();
-        }
-
         public bool? UnsavedChanges
         {
             get => this._fileName == null ? default(bool?) : this._unsavedChanges;
@@ -186,6 +213,17 @@ namespace KoAR.SaveEditor.Views
         public DelegateCommand UpdateInventorySizeCommand
         {
             get;
+        }
+
+        private void AddAttribute()
+        {
+            if (this.SelectedAttribute == null || this.SelectedItem == null)
+            {
+                return;
+            }
+            this.SelectedItem.AddAttribute(this.SelectedAttribute.Clone());
+            this.SelectedAttribute = this.Attributes[0];
+            this.CanSave();
         }
 
         private bool CanMakeAllItemsSellable()
@@ -202,10 +240,17 @@ namespace KoAR.SaveEditor.Views
                 this.SelectedItem = this._items.FirstOrDefault(item => item.ItemIndex == selectedItemIndex.Value);
             }
             this.UnsavedChanges = true;
+            this.SelectedAttribute = this.Attributes[0];
             CommandManager.InvalidateRequerySuggested();
         }
 
         private bool CanUpdateInventorySize() => this._editor != null && this._editor.GetMaxBagCount() != this.InventorySize;
+
+        private void DeleteAttribute()
+        {
+            this.SelectedItem?.DeleteSelectedAttribute();
+            this.CanSave();
+        }
 
         private void EditItemHex(ItemModel item)
         {
@@ -305,7 +350,7 @@ namespace KoAR.SaveEditor.Views
             this._items.Clear();
             foreach (ItemMemoryInfo info in this._editor.GetAllEquipment())
             {
-                this._items.Insert(info.ItemName == "Unknown" ? this._items.Count : 0, new ItemModel(info));
+                this._items.Insert(info.ItemName == "Unknown" ? this._items.Count : 0, new ItemModel(this._editor, this.Attributes, info));
             }
         }
 
@@ -313,6 +358,17 @@ namespace KoAR.SaveEditor.Views
         {
             this._itemNameFilter = this._currentDurabilityFilter = this._maxDurabilityFilter = string.Empty;
             this.OnFilterChange();
+        }
+
+        private void SelectedItem_MateriallyChanged(object sender, EventArgs e)
+        {
+            if (this._editor == null)
+            {
+                return;
+            }
+            ItemModel model = (ItemModel)sender;
+            this._editor.WriteEquipmentBytes(model.GetItem());
+            this.CanSave();
         }
 
         private void UpdateInventorySize()
