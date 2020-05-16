@@ -1,0 +1,33 @@
+﻿using System.Globalization;
+using System.Windows.Controls;
+using KoAR.Core;
+
+namespace KoAR.SaveEditor.Views
+{
+    public sealed class DurabilityValidationRule : ValidationRule
+    {
+        public override ValidationResult Validate(object value, CultureInfo cultureInfo)
+        {
+            return value is string text
+                ? DurabilityValidationRule.Validate(text.Trim().TrimEnd('.'), cultureInfo)
+                : ValidationResult.ValidResult;
+        }
+
+        private static ValidationResult Validate(string text, CultureInfo culture)
+        {
+            if (text.Length == 0)
+            {
+                return new ValidationResult(false, "Value is required.");
+            }
+            if (!float.TryParse(text, NumberStyles.Float, culture, out float durability))
+            {
+                return new ValidationResult(false, "Durability must be a numeric value.");
+            }
+            if (!ItemMemoryInfo.IsValidDurability(durability))
+            {
+                return new ValidationResult(false, $"Durability must be greater than {ItemMemoryInfo.DurabilityLowerBound} and less than {ItemMemoryInfo.DurabilityUpperBound}.");
+            }
+            return ValidationResult.ValidResult;
+        }
+    }
+}

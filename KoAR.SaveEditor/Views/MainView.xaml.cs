@@ -1,4 +1,6 @@
-﻿using System.Windows.Input;
+﻿using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace KoAR.SaveEditor.Views
 {
@@ -13,6 +15,18 @@ namespace KoAR.SaveEditor.Views
             HelpWindow window = new HelpWindow { Owner = (MainView)sender };
             window.ShowDialog();
             e.Handled = true;
+        }
+
+        private void AutoSizeColumns_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (GridViewColumn column in this.PART_GridView.Columns)
+            {
+                if (double.IsNaN(column.Width))
+                {
+                    column.Width = column.ActualWidth;
+                }
+                column.Width = double.NaN;
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -15,7 +16,6 @@ namespace KoAR.SaveEditor.Views
 {
     public sealed class MainViewModel : NotifierBase
     {
-        private readonly EffectInfo[] _attributes;
         private readonly ObservableCollection<ItemModel> _items;
         private string? _currentDurabilityFilter = string.Empty;
         private AmalurSaveEditor? _editor;
@@ -35,12 +35,22 @@ namespace KoAR.SaveEditor.Views
             this.ResetFiltersCommand = new DelegateCommand(this.ResetFilters);
             this.EditItemHexCommand = new DelegateCommand<ItemModel>(this.EditItemHex);
             this.UpdateInventorySizeCommand = new DelegateCommand(this.UpdateInventorySize, this.CanUpdateInventorySize);
+            if ((bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(Window)).DefaultValue)
+            {
+                this.Attributes = Array.AsReadOnly(Array.Empty<EffectInfo>());
+                return;
+            }
             using Stream stream = File.OpenRead(Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "properties.xml"));
-            this._attributes = XDocument.Load(stream).Root.Elements().Select(element => new EffectInfo
+            this.Attributes = Array.AsReadOnly(XDocument.Load(stream).Root.Elements().Select(element => new EffectInfo
             {
                 Code = element.Attribute("id").Value.ToUpper(),
                 DisplayText = element.Value.ToUpper()
-            }).ToArray();
+            }).ToArray());
+        }
+
+        public ReadOnlyCollection<EffectInfo> Attributes
+        {
+            get;
         }
 
         public string? CurrentDurabilityFilter
@@ -134,7 +144,37 @@ namespace KoAR.SaveEditor.Views
         public ItemModel? SelectedItem
         {
             get => this._selectedItem;
-            set => this.SetValue(ref this._selectedItem, value);
+            set
+            {
+                if (value == this._selectedItem)
+                {
+                    return;
+                }
+                if (this._selectedItem != null)
+                {
+                    PropertyChangedEventManager.RemoveHandler(this._selectedItem, this.SelectedItem_MateriallyChanged, nameof(ItemModel.ItemName));
+                    PropertyChangedEventManager.RemoveHandler(this._selectedItem, this.SelectedItem_MateriallyChanged, nameof(ItemModel.CurrentDurability));
+                    PropertyChangedEventManager.RemoveHandler(this._selectedItem, this.SelectedItem_MateriallyChanged, nameof(ItemModel.MaxDurability));
+                }
+                if ((this._selectedItem = value) != null)
+                {
+                    PropertyChangedEventManager.AddHandler(this._selectedItem, this.SelectedItem_MateriallyChanged, nameof(ItemModel.ItemName));
+                    PropertyChangedEventManager.AddHandler(this._selectedItem, this.SelectedItem_MateriallyChanged, nameof(ItemModel.CurrentDurability));
+                    PropertyChangedEventManager.AddHandler(this._selectedItem, this.SelectedItem_MateriallyChanged, nameof(ItemModel.MaxDurability));
+                }
+                this.OnPropertyChanged();
+            }
+        }
+
+        private void SelectedItem_MateriallyChanged(object sender, EventArgs e)
+        {
+            if (this._editor == null)
+            {
+                return;
+            }
+            ItemModel model = (ItemModel)sender;
+            this._editor.WriteEquipmentBytes(model.GetItem());
+            this.CanSave();
         }
 
         public bool? UnsavedChanges
@@ -265,7 +305,7 @@ namespace KoAR.SaveEditor.Views
             this._items.Clear();
             foreach (ItemMemoryInfo info in this._editor.GetAllEquipment())
             {
-                this._items.Insert(info.ItemName == "Unknown" ? this._items.Count : 0, info);
+                this._items.Insert(info.ItemName == "Unknown" ? this._items.Count : 0, new ItemModel(info));
             }
         }
 

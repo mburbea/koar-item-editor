@@ -1,4 +1,7 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
 
@@ -13,22 +16,20 @@ namespace KoAR.SaveEditor.Views
 
         public ItemModel(ItemMemoryInfo item) => this._item = item;
 
-        public float CurrentDurability => this._item.CurrentDurability;
+        public float CurrentDurability
+        {
+            get => this._item.CurrentDurability;
+            set => this.SetItemValue(value, this._item.CurrentDurability, (item, value) => item.CurrentDurability = value);
+        }
 
         public int EffectCount => this._item.EffectCount;
+
+        public bool HasCustomName => this._item.HasCustomName;
 
         public bool IsUnsellable
         {
             get => this._item.IsUnsellable;
-            set
-            {
-                if (value == this._item.IsUnsellable)
-                {
-                    return;
-                }
-                this._item.IsUnsellable = value;
-                this.OnPropertyChanged();
-            }
+            set => this.SetItemValue(value, this._item.IsUnsellable, (item, value) => item.IsUnsellable = value);
         }
 
         public int ItemIndex => this._item.ItemIndex;
@@ -36,21 +37,25 @@ namespace KoAR.SaveEditor.Views
         public string ItemName
         {
             get => this._item.ItemName;
-            set
-            {
-                if (value == this._item.ItemName)
-                {
-                    return;
-                }
-                this._item.ItemName = value;
-                this.OnPropertyChanged();
-            }
+            set => this.SetItemValue(value, this._item.ItemName, (item, value) => item.ItemName = value);
         }
 
-        public float MaxDurability => this._item.MaxDurability;
-
-        public static implicit operator ItemModel(ItemMemoryInfo info) => new ItemModel(info);
+        public float MaxDurability
+        {
+            get => this._item.MaxDurability;
+            set => this.SetItemValue(value, this._item.MaxDurability, (item, value) => item.MaxDurability = value);
+        }
 
         public ItemMemoryInfo GetItem() => this._item;
+
+        private void SetItemValue<T>(T value, T currentValue, Action<ItemMemoryInfo, T> setValue, [CallerMemberName] string propertyName = "")
+        {
+            if (EqualityComparer<T>.Default.Equals(value, currentValue))
+            {
+                return;
+            }
+            setValue(this._item, value);
+            this.OnPropertyChanged(propertyName);
+        }
     }
 }
