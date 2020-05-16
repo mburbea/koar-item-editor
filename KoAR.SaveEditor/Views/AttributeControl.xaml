@@ -47,14 +47,18 @@
                 </ComboBox.ItemsPanel>
                 <ComboBox.ItemTemplate>
                     <DataTemplate DataType="{x:Type core:EffectInfo}">
-                        <TextBlock TextTrimming="CharacterEllipsis" Text="{Binding DisplayText}">
+                        <TextBlock TextTrimming="CharacterEllipsis">
                             <TextBlock.Style>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding Code, Converter={StaticResource StringIsNullOrEmptyConverter}}" Value="True">
                                             <Setter Property="FontStyle" Value="Italic" />
                                         </DataTrigger>
+                                        <DataTrigger Binding="{Binding DisplayText}" Value="Unknown">
+                                            <Setter Property="Text" Value="{Binding Code, StringFormat='Unknown ({0})'}" />
+                                        </DataTrigger>
                                     </Style.Triggers>
+                                    <Setter Property="Text" Value="{Binding DisplayText}" />
                                 </Style>
                             </TextBlock.Style>
                         </TextBlock>
