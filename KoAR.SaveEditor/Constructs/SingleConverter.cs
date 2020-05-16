@@ -13,7 +13,7 @@ namespace KoAR.SaveEditor.Constructs
 
         object? IValueConverter.ConvertBack(object? value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value == null ? default(float?) : Convert.ToSingle(value.ToString().Trim().TrimEnd('.'));
+            return value == null ? default(float?) : Convert.ToSingle(value.ToString().Trim().TrimEnd('.'), culture);
         }
     }
 }
