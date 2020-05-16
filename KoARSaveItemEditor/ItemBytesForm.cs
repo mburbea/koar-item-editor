@@ -25,6 +25,7 @@ namespace KoARSaveItemEditor
             txtByte.Select(txtByte.Text.Length, 0);
         }
 
+
         private void btnEdit_Click(object sender, EventArgs e)
         {
             btnSave.Enabled = true;

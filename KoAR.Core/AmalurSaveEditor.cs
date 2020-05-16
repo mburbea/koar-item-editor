@@ -16,8 +16,9 @@ namespace KoAR.Core
         private static ReadOnlySpan<byte> InventoryLimit => new[] { (byte)'i', (byte)'n', (byte)'v', (byte)'e', (byte)'n', (byte)'t', (byte)'o', (byte)'r', (byte)'y', (byte)'_', (byte)'l', (byte)'i', (byte)'m', (byte)'i', (byte)'t' };
         private static ReadOnlySpan<byte> IncreaseAmount => new[] { (byte)'i', (byte)'n', (byte)'c', (byte)'r', (byte)'e', (byte)'a', (byte)'s', (byte)'e', (byte)'_', (byte)'a', (byte)'m', (byte)'o', (byte)'u', (byte)'n', (byte)'t' };
         private static ReadOnlySpan<byte> CurrentInventoryCount => new[] { (byte)'c', (byte)'u', (byte)'r', (byte)'r', (byte)'e', (byte)'n', (byte)'t', (byte)'_', (byte)'i', (byte)'n', (byte)'v', (byte)'e', (byte)'n', (byte)'t', (byte)'o', (byte)'r', (byte)'y', (byte)'_', (byte)'c', (byte)'o', (byte)'u', (byte)'n', (byte)'t' };
-        private static ReadOnlySpan<byte> EquipmentSequence => new byte[] { 11, 0, 0, 0, 104, 213, 36, 0, 3 };
-        private byte[] _bytes;
+        private static ReadOnlySpan<byte> EquipmentSequence => new byte[]     { 0x0B, 00, 00, 00, 0x68, 0xD5, 0x24, 0x00, 0x03 };
+        private static ReadOnlySpan<byte> CoreAttributeSequence => new byte[] { 0x0B, 00, 00, 00, 0x84, 0x60, 0x28, 0x00, 0x00};
+g        private byte[] _bytes;
 
         public byte[] Bytes
         {
@@ -109,6 +110,9 @@ namespace KoAR.Core
             List<ItemMemoryInfo> equipmentList = new List<ItemMemoryInfo>();
             var bytes = Bytes;
             var indexList = GetAllIndices(bytes, EquipmentSequence);
+            var coreIndices = GetAllIndices(bytes, CoreAttributeSequence);
+            int numberOfWs=0, numberOfLs=0;
+            var bins = new Dictionary<string, int>();
 
             for (int i = 0; i < indexList.Count; i++)
             {
@@ -117,8 +121,21 @@ namespace KoAR.Core
                     : bytes.AsSpan(indexList[i], indexList[i + 1] - indexList[i])) is ItemMemoryInfo item)
                 {
                     equipmentList.Add(item);
+                    var internalId = MemoryUtilities.Read<int>(bytes, item.ItemIndex);
+                    var ix = coreIndices.FindIndex(x => MemoryUtilities.Read<int>(bytes, x) == internalId);
+                    _ = ix == -1 ? numberOfLs++ : numberOfWs++;
+                        if (ix != -1)
+                        {
+                            var b13 = bytes[coreIndices[ix] + 13];
+                            var binStr = b13.ToString("X2");
+                            bins.TryGetValue(binStr, out var c);
+                            bins[binStr] = c + 1;
+                        }
                 }
             }
+            Console.WriteLine(numberOfWs);
+            Console.WriteLine(numberOfLs);
+            Console.WriteLine(bins);
 
             return equipmentList;
         }
