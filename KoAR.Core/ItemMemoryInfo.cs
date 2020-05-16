@@ -11,34 +11,50 @@ namespace KoAR.Core
     /// </summary>
     public class ItemMemoryInfo
     {
-        const int MinEquipmentLength = 44;
-        public static bool IsValidDurability(float durability) => durability > 0f && durability < 100f;
-
-        public static ItemMemoryInfo Create(int itemIndex, ReadOnlySpan<byte> span)
-        {
-            var offsets = new Offsets(MemoryUtilities.Read<int>(span, Offsets.EffectCount));
-
-            if (span.Length < MinEquipmentLength || !IsValidDurability(MemoryUtilities.Read<float>(span, offsets.CurrentDurability))
-                || !IsValidDurability(MemoryUtilities.Read<float>(span, offsets.MaxDurability)))
-            {
-                return null;
-            }
-
-            int dataLength = span[offsets.HasCustomName] != 1
-                ? offsets.CustomNameLength
-                : offsets.CustomNameText + MemoryUtilities.Read<int>(span, offsets.CustomNameLength);
-
-            return new ItemMemoryInfo(itemIndex, dataLength, span);            
-        }
+        public const float DurabilityLowerBound = 0f;
+        public const float DurabilityUpperBound = 100f;
+        public const int MinEquipmentLength = 44;
 
         private ItemMemoryInfo(int itemIndex, int dataLength, ReadOnlySpan<byte> span)
-            => (ItemIndex, DataLength, ItemBytes) = (itemIndex, dataLength, span.Slice(0, dataLength).ToArray());
+        {
+            (ItemIndex, DataLength, ItemBytes) = (itemIndex, dataLength, span.Slice(0, dataLength).ToArray());
+        }
 
-        public int ItemIndex { get; }
+        public float CurrentDurability
+        {
+            get => MemoryUtilities.Read<float>(ItemBytes, Offsets.CurrentDurability);
+            set => MemoryUtilities.Write(ItemBytes, Offsets.CurrentDurability, value);
+        }
+
         public int DataLength { get; }
+
+        public int EffectCount
+        {
+            get => MemoryUtilities.Read<int>(ItemBytes, Offsets.EffectCount);
+            set => MemoryUtilities.Write(ItemBytes, Offsets.EffectCount, value);
+        }
+
+        public bool HasCustomName => ItemBytes[Offsets.HasCustomName] == 1;
+
+        public bool IsUnsellable
+        {
+            get => (ItemBytes[Offsets.SellableFlag] & 0x80) == 0x80;
+            set
+            {
+                if (value)
+                {
+                    ItemBytes[Offsets.SellableFlag] |= 0x80;
+                }
+                else
+                {
+                    ItemBytes[Offsets.SellableFlag] &= 0x7F;
+                }
+            }
+        }
+
         public byte[] ItemBytes { get; set; }
 
-        private Offsets Offsets => new Offsets(EffectCount);
+        public int ItemIndex { get; }
 
         public string ItemName
         {
@@ -63,21 +79,8 @@ namespace KoAR.Core
                 var currentLength = MemoryUtilities.Read<int>(ItemBytes, Offsets.CustomNameLength);
                 var newBytes = Encoding.Default.GetBytes(value);
                 ItemBytes = MemoryUtilities.ReplaceBytes(ItemBytes, Offsets.CustomNameText, currentLength, newBytes);
+                MemoryUtilities.Write(ItemBytes, Offsets.CustomNameLength, newBytes.Length);
             }
-        }
-
-        public bool HasCustomName => ItemBytes[Offsets.HasCustomName] == 1;
-
-        public int EffectCount
-        {
-            get => MemoryUtilities.Read<int>(ItemBytes, Offsets.EffectCount);
-            set => MemoryUtilities.Write(ItemBytes, Offsets.EffectCount, value);
-        }
-
-        public float CurrentDurability
-        {
-            get => MemoryUtilities.Read<float>(ItemBytes, Offsets.CurrentDurability);
-            set => MemoryUtilities.Write(ItemBytes, Offsets.CurrentDurability, value);
         }
 
         public float MaxDurability
@@ -86,21 +89,26 @@ namespace KoAR.Core
             set => MemoryUtilities.Write(ItemBytes, Offsets.MaxDurability, value);
         }
 
-        public bool IsUnsellable
+        private Offsets Offsets => new Offsets(EffectCount);
+
+        public static ItemMemoryInfo Create(int itemIndex, ReadOnlySpan<byte> span)
         {
-            get => (ItemBytes[Offsets.SellableFlag] & 0x80) == 0x80;
-            set
+            var offsets = new Offsets(MemoryUtilities.Read<int>(span, Offsets.EffectCount));
+
+            if (span.Length < MinEquipmentLength || !IsValidDurability(MemoryUtilities.Read<float>(span, offsets.CurrentDurability))
+                || !IsValidDurability(MemoryUtilities.Read<float>(span, offsets.MaxDurability)))
             {
-                if (value)
-                {
-                    ItemBytes[Offsets.SellableFlag] |= 0x80;
-                }
-                else
-                {
-                    ItemBytes[Offsets.SellableFlag] &= 0x7F;
-                }
+                return null;
             }
+
+            int dataLength = span[offsets.HasCustomName] != 1
+                ? offsets.CustomNameLength
+                : offsets.CustomNameText + MemoryUtilities.Read<int>(span, offsets.CustomNameLength);
+
+            return new ItemMemoryInfo(itemIndex, dataLength, span);
         }
+
+        public static bool IsValidDurability(float durability) => durability > DurabilityLowerBound && durability < DurabilityUpperBound;
 
         public List<EffectInfo> ReadEffects()
         {
@@ -123,13 +131,12 @@ namespace KoAR.Core
             EffectCount = newEffects.Count;
             Span<ulong> effectData = stackalloc ulong[newEffects.Count];
 
-            for(int i = 0; i < effectData.Length; i++)
+            for (int i = 0; i < effectData.Length; i++)
             {
                 effectData[i] = uint.Parse(newEffects[i].Code, NumberStyles.HexNumber) | (ulong)uint.MaxValue << 32;
             }
 
             ItemBytes = MemoryUtilities.ReplaceBytes(ItemBytes, Offsets.FirstEffect, currentLength, MemoryMarshal.AsBytes(effectData));
         }
- 
     }
 }

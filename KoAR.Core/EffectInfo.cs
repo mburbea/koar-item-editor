@@ -1,4 +1,6 @@
-﻿namespace KoAR.Core
+﻿using System;
+
+namespace KoAR.Core
 {
     /// <summary>
     /// Attribute Information
@@ -14,5 +16,7 @@
         /// Attribute Description
         /// </summary>
         public string DisplayText { get; set; }
+
+        public EffectInfo Clone() => (EffectInfo)this.MemberwiseClone();
     }
 }

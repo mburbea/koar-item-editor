@@ -1,0 +1,29 @@
+﻿<Window x:Class="KoAR.SaveEditor.Views.ItemEditorView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:KoAR.SaveEditor.Views"
+    mc:Ignorable="d" d:DataContext="{d:DesignInstance local:ItemEditorViewModel}"
+    Height="400" Width="400" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+    Icon="../app.ico">
+    <Window.Style>
+        <Style TargetType="{x:Type Window}" BasedOn="{StaticResource {x:Type Window}}">
+            <Setter Property="Title" Value="{Binding ItemName, StringFormat='Hex Editor - {0}'}" />
+        </Style>
+    </Window.Style>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBlock Text="WARNING: Edit the text below at your own risk!" TextAlignment="Center" FontWeight="SemiBold" Foreground="Red" Margin="4" />
+        <TextBox Grid.Row="1" x:Name="PART_TextBox" AcceptsReturn="False" Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+            Margin="4" TextWrapping="Wrap" />
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="2">
+            <Button Content="Cancel" Command="Close" Margin="4" />
+            <Button Content="Save" Command="{Binding SaveCommand}" Margin="4" IsDefault="True" />
+        </StackPanel>
+    </Grid>
+</Window>
