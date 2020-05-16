@@ -70,7 +70,6 @@ namespace KoAR.Core
         {
             var currentLength = EffectCount * 24 + 8;
             Span<ulong> effectData = stackalloc ulong[effects.Count * 3 + 1];
-            EffectCount = effects.Count;
             for(int i = 0; i < effects.Count; i++)
             {
                 ulong effect = (ulong)uint.Parse(effects[i].Code, NumberStyles.HexNumber);
@@ -78,8 +77,9 @@ namespace KoAR.Core
                 effectData[(i * 2) + 1] = ulong.MaxValue;
                 effectData[(effects.Count * 2) + 1 + i] = effect | (ulong)uint.MaxValue << 32;
             }
-            effectData[effects.Count * 2] = (ulong)effects.Count << 32;
             ItemBytes = MemoryUtilities.ReplaceBytes(ItemBytes, Offsets.FirstEffect, currentLength, MemoryMarshal.AsBytes(effectData));
+            EffectCount = effects.Count;
+            DisplayEffectCount = effects.Count;
         }
     }
 }
