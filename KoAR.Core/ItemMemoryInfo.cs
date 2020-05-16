@@ -11,6 +11,23 @@ namespace KoAR.Core
     /// </summary>
     public class ItemMemoryInfo
     {
+        public readonly struct Offset
+        {
+            public const int EffectCount = 21;
+            public const int FirstEffect = EffectCount + 4;
+
+            private readonly int _count;
+            public Offset(int count) => _count = count;
+            public int PostEffect => FirstEffect + _count * 8;
+            public int CurrentDurability => PostEffect + 4;
+            public int MaxDurability => CurrentDurability + 4;
+
+            public int SellableFlag => MaxDurability + 8;
+            public int HasCustomName => SellableFlag + 2;
+            public int CustomNameLength => HasCustomName + 1;
+            public int CustomNameText => CustomNameLength + 4;
+        }
+
         public const float DurabilityLowerBound = 0f;
         public const float DurabilityUpperBound = 100f;
         public const int MinEquipmentLength = 44;
@@ -30,8 +47,8 @@ namespace KoAR.Core
 
         public int EffectCount
         {
-            get => MemoryUtilities.Read<int>(ItemBytes, Offsets.EffectCount);
-            set => MemoryUtilities.Write(ItemBytes, Offsets.EffectCount, value);
+            get => MemoryUtilities.Read<int>(ItemBytes, Offset.EffectCount);
+            set => MemoryUtilities.Write(ItemBytes, Offset.EffectCount, value);
         }
 
         public bool HasCustomName => ItemBytes[Offsets.HasCustomName] == 1;
@@ -53,6 +70,8 @@ namespace KoAR.Core
         }
 
         public byte[] ItemBytes { get; set; }
+
+        public int ItemId => MemoryUtilities.Read<int>(ItemBytes);
 
         public int ItemIndex { get; }
 
@@ -89,11 +108,11 @@ namespace KoAR.Core
             set => MemoryUtilities.Write(ItemBytes, Offsets.MaxDurability, value);
         }
 
-        private Offsets Offsets => new Offsets(EffectCount);
+        private Offset Offsets => new Offset(EffectCount);
 
         public static ItemMemoryInfo Create(int itemIndex, ReadOnlySpan<byte> span)
         {
-            var offsets = new Offsets(MemoryUtilities.Read<int>(span, Offsets.EffectCount));
+            var offsets = new Offset(MemoryUtilities.Read<int>(span, Offset.EffectCount));
 
             if (span.Length < MinEquipmentLength || !IsValidDurability(MemoryUtilities.Read<float>(span, offsets.CurrentDurability))
                 || !IsValidDurability(MemoryUtilities.Read<float>(span, offsets.MaxDurability)))
@@ -118,7 +137,7 @@ namespace KoAR.Core
             {
                 effects.Add(new EffectInfo
                 {
-                    Code = MemoryUtilities.Read<uint>(ItemBytes, Offsets.FirstEffect + i * 8).ToString("X6")
+                    Code = MemoryUtilities.Read<uint>(ItemBytes, Offset.FirstEffect + i * 8).ToString("X6")
                 });
             }
 
@@ -127,7 +146,7 @@ namespace KoAR.Core
 
         public void WriteEffects(List<EffectInfo> newEffects)
         {
-            var currentLength = Offsets.PostEffect - Offsets.FirstEffect;
+            var currentLength = Offsets.PostEffect - Offset.FirstEffect;
             EffectCount = newEffects.Count;
             Span<ulong> effectData = stackalloc ulong[newEffects.Count];
 
@@ -136,7 +155,7 @@ namespace KoAR.Core
                 effectData[i] = uint.Parse(newEffects[i].Code, NumberStyles.HexNumber) | (ulong)uint.MaxValue << 32;
             }
 
-            ItemBytes = MemoryUtilities.ReplaceBytes(ItemBytes, Offsets.FirstEffect, currentLength, MemoryMarshal.AsBytes(effectData));
+            ItemBytes = MemoryUtilities.ReplaceBytes(ItemBytes, Offset.FirstEffect, currentLength, MemoryMarshal.AsBytes(effectData));
         }
     }
 }
