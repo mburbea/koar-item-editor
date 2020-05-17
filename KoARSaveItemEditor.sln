@@ -3,13 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29025.244
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KoARSaveItemEditor", "KoARSaveItemEditor\KoARSaveItemEditor.csproj", "{4BAF838E-FC53-4804-877C-5606846FEFF4}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KoAR.Core", "KoAR.Core\KoAR.Core.csproj", "{F204356A-6213-4B0C-A35C-03DA5CE5AC21}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KoAR.SaveEditor", "KoAR.SaveEditor\KoAR.SaveEditor.csproj", "{F0B155CB-061D-4E8C-BEEC-F0BDCF1BF9E0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItemTesting", "ItemTesting\ItemTesting.csproj", "{1423B2BF-9328-4260-8C81-10948928FE08}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D963AD8C-8F3A-4D38-9323-FDD9A5AE90FA}"
+	ProjectSection(SolutionItems) = preProject
+		9190114save84.sav = 9190114save84.sav
+		9190114save87.sav = 9190114save87.sav
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,18 +25,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4BAF838E-FC53-4804-877C-5606846FEFF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4BAF838E-FC53-4804-877C-5606846FEFF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4BAF838E-FC53-4804-877C-5606846FEFF4}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{4BAF838E-FC53-4804-877C-5606846FEFF4}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{4BAF838E-FC53-4804-877C-5606846FEFF4}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{4BAF838E-FC53-4804-877C-5606846FEFF4}.Debug|x86.Build.0 = Debug|Any CPU
-		{4BAF838E-FC53-4804-877C-5606846FEFF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4BAF838E-FC53-4804-877C-5606846FEFF4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4BAF838E-FC53-4804-877C-5606846FEFF4}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{4BAF838E-FC53-4804-877C-5606846FEFF4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{4BAF838E-FC53-4804-877C-5606846FEFF4}.Release|x86.ActiveCfg = Release|Any CPU
-		{4BAF838E-FC53-4804-877C-5606846FEFF4}.Release|x86.Build.0 = Release|Any CPU
 		{F204356A-6213-4B0C-A35C-03DA5CE5AC21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F204356A-6213-4B0C-A35C-03DA5CE5AC21}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F204356A-6213-4B0C-A35C-03DA5CE5AC21}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
