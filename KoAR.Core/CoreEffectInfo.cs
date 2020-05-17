@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KoAR.Core
 {
@@ -27,6 +23,7 @@ namespace KoAR.Core
         public float Tier { get; set; }
         public string DisplayText { get; set; }
 
+        public CoreEffectInfo Clone() => (CoreEffectInfo)MemberwiseClone();
         public bool Equals(EffectInfo other) => other?.Code.Equals(Code, StringComparison.OrdinalIgnoreCase) == true;
         public override bool Equals(object obj) => Equals(obj as EffectInfo);
         public override int GetHashCode() => Code?.GetHashCode() ?? 0;
