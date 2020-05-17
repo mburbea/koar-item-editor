@@ -3,6 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options" 
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views"
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs" 
     xmlns:componentmodel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
@@ -28,6 +29,16 @@
         <constructs:NegatedBooleanConverter x:Key="NegatedBooleanConverter" />
         <constructs:StringIsNullOrEmptyConverter x:Key="StringIsNullOrEmptyConverter" />
         <constructs:LittleEndianConverter x:Key="LittleEndianConverter" />
+        <BitmapImage x:Key="Bleeding" UriSource="/Resources/Bleeding.png" po:Freeze="true" />
+        <BitmapImage x:Key="Fire" UriSource="/Resources/Fire.png" po:Freeze="true" />
+        <BitmapImage x:Key="Ice" UriSource="/Resources/Ice.png" po:Freeze="true" />
+        <BitmapImage x:Key="Lightning" UriSource="/Resources/Lightning.png" po:Freeze="true" />
+        <BitmapImage x:Key="MasterCrafted" UriSource="/Resources/MasterCrafted.png" po:Freeze="true" />
+        <BitmapImage x:Key="Physical" UriSource="/Resources/Physical.png" po:Freeze="true" />
+        <BitmapImage x:Key="Piercing" UriSource="/Resources/Piercing.png" po:Freeze="true" />
+        <BitmapImage x:Key="Poison" UriSource="/Resources/Poison.png" po:Freeze="true" />
+        <BitmapImage x:Key="Primal" UriSource="/Resources/Primal.png" po:Freeze="true" />
+        <BitmapImage x:Key="Unknown" UriSource="/Resources/Unknown.png" po:Freeze="true" />
     </Window.Resources>
     <Window.DataContext>
         <Binding Source="{StaticResource ViewModel}" />
@@ -189,16 +200,6 @@
                                     <DataTemplate DataType="{x:Type views:ItemModel}">
                                         <StackPanel Orientation="Horizontal">
                                             <StackPanel.Resources>
-                                                <BitmapImage x:Key="Bleeding" UriSource="/Resources/Bleeding.png" />
-                                                <BitmapImage x:Key="Fire" UriSource="/Resources/Fire.png" />
-                                                <BitmapImage x:Key="Ice" UriSource="/Resources/Ice.png" />
-                                                <BitmapImage x:Key="Lightning" UriSource="/Resources/Lightning.png" />
-                                                <BitmapImage x:Key="MasterCrafted" UriSource="/Resources/MasterCrafted.png" />
-                                                <BitmapImage x:Key="Physical" UriSource="/Resources/Physical.png" />
-                                                <BitmapImage x:Key="Piercing" UriSource="/Resources/Piercing.png" />
-                                                <BitmapImage x:Key="Poison" UriSource="/Resources/Poison.png" />
-                                                <BitmapImage x:Key="Primal" UriSource="/Resources/Primal.png" />
-                                                <BitmapImage x:Key="Unknown" UriSource="/Resources/Unknown.png" />
                                                 <Style TargetType="{x:Type Image}">
                                                     <Style.Triggers>
                                                         <Trigger Property="Tag" Value="{x:Null}">
