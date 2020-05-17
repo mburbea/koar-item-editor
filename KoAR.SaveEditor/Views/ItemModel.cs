@@ -42,9 +42,9 @@ namespace KoAR.SaveEditor.Views
 
         public int EffectCount => this._item.EffectCount;
 
-        public IReadOnlyList<EffectInfo> Effects => this._effects ??= this._editor.GetEffectList(this._item, MainViewModel.Effects);
+        public List<EffectInfo> Effects => this._effects ??= this._editor.GetEffectList(this._item, MainViewModel.Effects);
 
-        public IReadOnlyList<EffectInfo> CoreEffects => this._coreEffects ??= this._item.CoreItemMemory.ReadEffects();
+        public List<EffectInfo> CoreEffects => this._coreEffects ??= this._item.CoreItemMemory.ReadEffects();
 
         public bool HasCustomName => this._item.HasCustomName;
 
@@ -80,20 +80,18 @@ namespace KoAR.SaveEditor.Views
 
         public void AddEffect(EffectInfo info)
         {
-            List<EffectInfo> effects = (List<EffectInfo>)this.Effects;
-            effects.Add(info);
-            this._item.WriteEffects(effects);
+            this.Effects.Add(info);
+            this._item.WriteEffects(this.Effects);
             this._editor.WriteEquipmentBytes(this._item, out _);
         }
 
         public void DeleteEffect(EffectInfo info)
         {
-            List<EffectInfo> effects = (List<EffectInfo>)this.Effects;
-            if (!effects.Remove(info))
+            if (!this.Effects.Remove(info))
             {
                 return;
             }
-            this._item.WriteEffects(effects);
+            this._item.WriteEffects(this.Effects);
             this._editor.WriteEquipmentBytes(this._item, out _);
         }
 
