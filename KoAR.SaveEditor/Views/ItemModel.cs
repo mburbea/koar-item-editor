@@ -66,6 +66,8 @@ namespace KoAR.SaveEditor.Views
             set => this.SetItemValue(value, this._item.IsUnsellable, value => this._item.IsUnsellable = value);
         }
 
+        public int ItemId => this._item.ItemId;
+
         public int ItemIndex => this._item.ItemIndex;
 
         public string ItemName
