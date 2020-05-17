@@ -94,14 +94,11 @@ namespace KoAR.SaveEditor.Views
 
         public void DeleteEffect(EffectInfo info)
         {
-            string code = info.Code;
             List<EffectInfo> effects = (List<EffectInfo>)this.Effects;
-            int index = effects.FindIndex(item => item.Code == code);
-            if (index == -1)
+            if (!effects.Remove(info))
             {
                 return;
             }
-            effects.RemoveAt(index);
             this._item.WriteEffects(effects);
             this._editor.WriteEquipmentBytes(this._item, out _);
         }
