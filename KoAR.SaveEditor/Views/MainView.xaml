@@ -166,21 +166,28 @@
                             <GridViewColumn Header="Cur Durability" Width="Auto">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate DataType="{x:Type views:ItemModel}">
-                                        <TextBlock Text="{Binding CurrentDurability, StringFormat='{}{0:#0.####}'}" TextAlignment="Right" />
+                                        <TextBlock Text="{Binding CurrentDurability, StringFormat='0.####'}" TextAlignment="Right" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <GridViewColumn Header="Max Durability" Width="Auto">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate DataType="{x:Type views:ItemModel}">
-                                        <TextBlock Text="{Binding MaxDurability, StringFormat='{}{0:#0.####}'}" TextAlignment="Right" />
+                                        <TextBlock Text="{Binding MaxDurability, StringFormat='0.####'}" TextAlignment="Right" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <GridViewColumn Header="# Effects" Width="Auto" >
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate DataType="{x:Type views:ItemModel}">
-                                        <TextBlock Text="{Binding EffectCount, StringFormat='{}{0:#,###0}'}" TextAlignment="Right" />
+                                        <TextBlock Text="{Binding EffectCount, StringFormat='#,##0'}" TextAlignment="Right" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="# Core Effects" Width="Auto">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate DataType="{x:Type views:ItemModel}">
+                                        <TextBlock Text="{Binding CoreEffects.Count, StringFormat='#,##0'}" TextAlignment="Right" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -189,13 +196,6 @@
                                     <DataTemplate DataType="{x:Type views:ItemModel}">
                                         <CheckBox IsChecked="{Binding IsUnsellable, Converter={StaticResource NegatedBooleanConverter}, Mode=TwoWay}" HorizontalAlignment="Center" 
                                         PreviewMouseLeftButtonDown="CheckBox_PreviewMouseLeftButtonDown"/>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="# Core Effects" Width="Auto">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate DataType="{x:Type views:ItemModel}">
-                                        <TextBlock Text="{Binding CoreEffectCount, StringFormat='{}{0:#,###0}'}" TextAlignment="Right" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
