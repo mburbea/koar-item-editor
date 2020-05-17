@@ -41,7 +41,7 @@ namespace ItemTesting
             //LikelyCandidates("Primal Dagggers", "04 05 DD 02 0B 00 00 00");
             //LikelyCandidates("Primal Bow", "2B 09 9E 0B 0B 00 00 00");
             //LikelyCandidates("PGW", "2F 09 32 01 0B 00 00 00");
-            LikelyCandidates("TEST", "47 0A 2C 01 0B 00 00 00");
+            LikelyCandidates("TEST", "42 09 EB 07 0B 00 00 00");
 
             int LikelyCandidates(string name, string text)
             {

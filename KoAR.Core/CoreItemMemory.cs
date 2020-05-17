@@ -38,7 +38,7 @@ namespace KoAR.Core
         {
             public const int MysteryInteger = 13;
             public const int EffectCount = MysteryInteger + 4;
-            public const int FirstEffect = EffectCount + 17;
+            public const int FirstEffect = EffectCount + 4;
 
             private readonly int _count;
             public Offset(int count) => _count = count;
