@@ -28,7 +28,9 @@ namespace KoAR.SaveEditor.Views
         public string? CoreEffect0 => this.CoreEffects.FirstOrDefault()?.Code;
 
         public string? CoreEffect1 => this.CoreEffects.Skip(1).FirstOrDefault()?.Code;
+
         public string? CoreEffect2 => this.CoreEffects.Skip(2).FirstOrDefault()?.Code;
+        
         public string? CoreEffect3 => this.CoreEffects.Skip(3).FirstOrDefault()?.Code;
 
         public int CoreEffectCount => this._item.CoreItemMemory.EffectCount;

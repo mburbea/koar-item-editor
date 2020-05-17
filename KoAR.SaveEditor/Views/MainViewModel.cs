@@ -192,6 +192,24 @@ namespace KoAR.SaveEditor.Views
             get;
         }
 
+        private static IReadOnlyDictionary<string, CoreEffectInfo> LoadAllCoreEffects()
+        {
+            if ((bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(Window)).DefaultValue)
+            {
+                return new Dictionary<string, CoreEffectInfo>();
+            }
+            return File.ReadLines(Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "CoreEffects.csv"))
+                .Skip(1)
+                .Select(row => row.Split(','))
+                .Select(parts => new CoreEffectInfo
+                {
+                    Code = parts[0],
+                    DamageType = Enum.TryParse(parts[1], true, out DamageType damageType) ? damageType : default,
+                    Tier = float.Parse(parts[2])
+                })
+                .ToDictionary(info => info.Code, StringComparer.OrdinalIgnoreCase);
+        }
+
         private static IReadOnlyList<EffectInfo> LoadAllEffects()
         {
             if ((bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(Window)).DefaultValue)
@@ -204,26 +222,6 @@ namespace KoAR.SaveEditor.Views
                 .Select(element => new EffectInfo { Code = element.Attribute("id").Value.ToUpper(), DisplayText = element.Value.ToUpper() })
                 .ToList(); // xaml will bind to `Count` property so keeping consistent with `ItemModel.Effects`.
         }
-
-        private static IReadOnlyDictionary<string, CoreEffectInfo> LoadAllCoreEffects()
-        {
-            if ((bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(Window)).DefaultValue)
-            {
-                return new Dictionary<string, CoreEffectInfo>();
-            }
-            return File.ReadLines(Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "CoreEffects.csv"))
-                .Skip(1)
-                .Select(row=> row.Split(','))
-                .Select(parts =>
-                    new CoreEffectInfo
-                    {
-                        Code = parts[0],
-                        DamageType = Enum.TryParse(parts[1], true, out DamageType res) ? res : res,
-                        Tier = float.Parse(parts[2])
-                    })
-                .ToDictionary(x => x.Code, StringComparer.OrdinalIgnoreCase);
-        }
-
 
         private void AddEffect(EffectInfo info)
         {
