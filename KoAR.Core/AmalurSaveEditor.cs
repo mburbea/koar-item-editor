@@ -79,7 +79,7 @@ namespace KoAR.Core
 
         public void EditMaxBagCount(int count) => MemoryUtilities.Write(Bytes, GetBagOffset(), count);
 
-        public List<CoreEffectInfo> GetCoreEffectInfos(CoreItemMemory coreItem, Dictionary<string, CoreEffectInfo> effects)
+        public List<CoreEffectInfo> GetCoreEffectInfos(CoreItemMemory coreItem, IReadOnlyDictionary<string, CoreEffectInfo> effects)
         {
             var itemEffects = coreItem.ReadEffects();
             for(int i = 0; i < itemEffects.Count; i++)

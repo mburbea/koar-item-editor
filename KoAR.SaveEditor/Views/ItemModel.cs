@@ -35,7 +35,7 @@ namespace KoAR.SaveEditor.Views
 
         public int CoreEffectCount => this._item.CoreItemMemory.EffectCount;
 
-        public List<CoreEffectInfo> CoreEffects => this._coreEffects ??= this._item.CoreItemMemory.ReadEffects();
+        public List<CoreEffectInfo> CoreEffects => this._coreEffects ??= this._editor.GetCoreEffectInfos(this._item.CoreItemMemory, MainViewModel.CoreEffects);
 
         public float CurrentDurability
         {
