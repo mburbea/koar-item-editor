@@ -48,7 +48,7 @@ namespace KoAR.SaveEditor.Views
                 {
                     continue;
                 }
-                if (text.Length != 2 || !byte.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out byte b))
+                if (text.Length != 2 || !byte.TryParse(text, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte b))
                 {
                     return default;
                 }
