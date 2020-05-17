@@ -230,6 +230,7 @@
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding SelectedItem}" Value="{x:Null}">
                                     <Setter Property="IsEnabled" Value="False" />
+                                    <Setter Property="Opacity" Value="0.66" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -332,6 +333,7 @@
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding SelectedItem}" Value="{x:Null}">
                                     <Setter Property="IsEnabled" Value="False" />
+                                    <Setter Property="Opacity" Value="0.66" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -361,6 +363,7 @@
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding SelectedItem}" Value="{x:Null}">
                                     <Setter Property="IsEnabled" Value="False" />
+                                    <Setter Property="Opacity" Value="0.66" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
