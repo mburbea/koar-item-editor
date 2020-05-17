@@ -192,6 +192,13 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
+                            <GridViewColumn Header="# Core Effects" Width="Auto">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate DataType="{x:Type views:ItemModel}">
+                                        <TextBlock Text="{Binding CoreEffectCount, StringFormat='{}{0:#,###0}'}" TextAlignment="Right" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
                         </GridView>
                     </ListView.View>
                 </ListView>
@@ -403,7 +410,7 @@
                         <TextBlock Grid.Row="3" Text="Effect 3:"/>
                         <TextBox Grid.Row="3" Text="{Binding SelectedItem.CoreEffect3, Mode=OneWay}" />
                         <TextBlock Grid.Row="4" Text="Mystery #:"/>
-                        <TextBox Grid.Row="4" Text="{Binding SelectedItem.MysteryInteger, Mode=OneWay}" />
+                        <TextBox Grid.Row="4" Text="{Binding SelectedItem.MysteryInteger, Mode=OneWay, StringFormat=X2}" />
                     </Grid>
                 </GroupBox>
             </Grid>

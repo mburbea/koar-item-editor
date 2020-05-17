@@ -134,7 +134,8 @@ namespace KoAR.Core
 
                 }
             }
-
+            var max = equipmentList.Max(x => x.CoreItemMemory.EffectCount);
+            Console.WriteLine(max);
             Console.WriteLine(bins);
 
             return equipmentList;

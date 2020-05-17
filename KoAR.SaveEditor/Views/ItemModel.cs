@@ -25,6 +25,8 @@ namespace KoAR.SaveEditor.Views
             this._item = item;
         }
 
+        public int CoreEffectCount => this._item.CoreItemMemory.EffectCount;
+
         public string? CoreEffect0 => this.GetCoreEffect(0)?.Code;
 
         public string? CoreEffect1 => this.GetCoreEffect(1)?.Code;
