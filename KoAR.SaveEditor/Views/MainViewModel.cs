@@ -277,7 +277,7 @@ namespace KoAR.SaveEditor.Views
             MessageBox.Show($"Modified {count} items.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
             if (count > 0)
             {
-                this.CanSave();
+                this.UnsavedChanges = true;
             }
         }
 
@@ -340,7 +340,7 @@ namespace KoAR.SaveEditor.Views
             this._items.Clear();
             foreach (ItemMemoryInfo info in this._editor.GetAllEquipment())
             {
-                this._items.Insert(info.ItemName == "Unknown" ? this._items.Count : 0, new ItemModel(this._editor, this.Attributes, info));
+                this._items.Insert(info.HasCustomName ? 0 : this._items.Count, new ItemModel(this._editor, this.Attributes, info));
             }
         }
 
@@ -370,8 +370,15 @@ namespace KoAR.SaveEditor.Views
                 return;
             }
             ItemModel model = (ItemModel)sender;
-            this._editor.WriteEquipmentBytes(model.GetItem(), out _);
-            this.CanSave();
+            this._editor.WriteEquipmentBytes(model.GetItem(), out bool lengthChanged);
+            if (lengthChanged)
+            {
+                this.CanSave();
+            }
+            else
+            {
+                this.UnsavedChanges = true;
+            }
         }
 
         private void UpdateInventorySize()
@@ -381,7 +388,7 @@ namespace KoAR.SaveEditor.Views
                 return;
             }
             this._editor.EditMaxBagCount(this.InventorySize);
-            this.CanSave();
+            this.UnsavedChanges = true;
         }
     }
 }
