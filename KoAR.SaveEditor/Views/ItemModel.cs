@@ -25,15 +25,13 @@ namespace KoAR.SaveEditor.Views
             this._item = item;
         }
 
-        public string? CoreEffect0 => this.CoreEffects.FirstOrDefault()?.Code;
+        public CoreEffectInfo? CoreEffect0 => this.CoreEffects.FirstOrDefault();
 
-        public string? CoreEffect1 => this.CoreEffects.Skip(1).FirstOrDefault()?.Code;
+        public CoreEffectInfo? CoreEffect1 => this.CoreEffects.Skip(1).FirstOrDefault();
 
-        public string? CoreEffect2 => this.CoreEffects.Skip(2).FirstOrDefault()?.Code;
+        public CoreEffectInfo? CoreEffect2 => this.CoreEffects.Skip(2).FirstOrDefault();
         
-        public string? CoreEffect3 => this.CoreEffects.Skip(3).FirstOrDefault()?.Code;
-
-        public int CoreEffectCount => this._item.CoreItemMemory.EffectCount;
+        public CoreEffectInfo? CoreEffect3 => this.CoreEffects.Skip(3).FirstOrDefault();
 
         public List<CoreEffectInfo> CoreEffects => this._coreEffects ??= this._editor.GetCoreEffectInfos(this._item.CoreItemMemory, MainViewModel.CoreEffects);
 

@@ -184,10 +184,63 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Header="# Core Effects" Width="Auto">
+                            <GridViewColumn Header="Core Effects" Width="Auto">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate DataType="{x:Type views:ItemModel}">
-                                        <TextBlock Text="{Binding CoreEffectCount, StringFormat='#,##0'}" TextAlignment="Right" />
+                                        <StackPanel Orientation="Horizontal">
+                                            <StackPanel.Resources>
+                                                <BitmapImage x:Key="Bleeding" UriSource="/Resources/Bleeding.png" />
+                                                <BitmapImage x:Key="Fire" UriSource="/Resources/Fire.png" />
+                                                <BitmapImage x:Key="Ice" UriSource="/Resources/Ice.png" />
+                                                <BitmapImage x:Key="Lightning" UriSource="/Resources/Lightning.png" />
+                                                <BitmapImage x:Key="MasterCrafted" UriSource="/Resources/MasterCrafted.png" />
+                                                <BitmapImage x:Key="Physical" UriSource="/Resources/Physical.png" />
+                                                <BitmapImage x:Key="Piercing" UriSource="/Resources/Piercing.png" />
+                                                <BitmapImage x:Key="Poison" UriSource="/Resources/Poison.png" />
+                                                <BitmapImage x:Key="Primal" UriSource="/Resources/Primal.png" />
+                                                <BitmapImage x:Key="Unknown" UriSource="/Resources/Unknown.png" />
+                                                <Style TargetType="{x:Type Image}">
+                                                    <Style.Triggers>
+                                                        <Trigger Property="Tag" Value="{x:Null}">
+                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                        </Trigger>
+                                                        <DataTrigger Binding="{Binding Tag.DamageType, RelativeSource={RelativeSource Self}}" Value="Bleeding">
+                                                            <Setter Property="Source" Value="{StaticResource Bleeding}" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Tag.DamageType, RelativeSource={RelativeSource Self}}" Value="Fire">
+                                                            <Setter Property="Source" Value="{StaticResource Fire}" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Tag.DamageType, RelativeSource={RelativeSource Self}}" Value="Ice">
+                                                            <Setter Property="Source" Value="{StaticResource Ice}" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Tag.DamageType, RelativeSource={RelativeSource Self}}" Value="Lightning">
+                                                            <Setter Property="Source" Value="{StaticResource Lightning}" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Tag.DamageType, RelativeSource={RelativeSource Self}}" Value="MasterCrafted">
+                                                            <Setter Property="Source" Value="{StaticResource MasterCrafted}" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Tag.DamageType, RelativeSource={RelativeSource Self}}" Value="Physical">
+                                                            <Setter Property="Source" Value="{StaticResource Physical}" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Tag.DamageType, RelativeSource={RelativeSource Self}}" Value="Piercing">
+                                                            <Setter Property="Source" Value="{StaticResource Piercing}" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Tag.DamageType, RelativeSource={RelativeSource Self}}" Value="Poison">
+                                                            <Setter Property="Source" Value="{StaticResource Poison}" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Tag.DamageType, RelativeSource={RelativeSource Self}}" Value="Primal">
+                                                            <Setter Property="Source" Value="{StaticResource Primal}" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                    <Setter Property="Source" Value="{StaticResource Unknown}" />
+                                                    <Setter Property="Width" Value="16" />
+                                                </Style>
+                                            </StackPanel.Resources>
+                                            <Image Tag="{Binding CoreEffect0}" />
+                                            <Image Tag="{Binding CoreEffect1}" />
+                                            <Image Tag="{Binding CoreEffect2}" />
+                                            <Image Tag="{Binding CoreEffect3}" />
+                                        </StackPanel>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -402,13 +455,13 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="Effect 0:"/>
-                        <TextBox Text="{Binding SelectedItem.CoreEffect0, Mode=OneWay}" />
+                        <TextBox Text="{Binding SelectedItem.CoreEffect0.Code, Mode=OneWay}" />
                         <TextBlock Grid.Row="1" Text="Effect 1:"/>
-                        <TextBox Grid.Row="1" Text="{Binding SelectedItem.CoreEffect1, Mode=OneWay}" />
+                        <TextBox Grid.Row="1" Text="{Binding SelectedItem.CoreEffect1.Code, Mode=OneWay}" />
                         <TextBlock Grid.Row="2" Text="Effect 2:"/>
-                        <TextBox Grid.Row="2" Text="{Binding SelectedItem.CoreEffect2, Mode=OneWay}" />
+                        <TextBox Grid.Row="2" Text="{Binding SelectedItem.CoreEffect2.Code, Mode=OneWay}" />
                         <TextBlock Grid.Row="3" Text="Effect 3:"/>
-                        <TextBox Grid.Row="3" Text="{Binding SelectedItem.CoreEffect3, Mode=OneWay}" />
+                        <TextBox Grid.Row="3" Text="{Binding SelectedItem.CoreEffect3.Code, Mode=OneWay}" />
                         <TextBlock Grid.Row="4" Text="Mystery #:"/>
                         <TextBox Grid.Row="4" Text="{Binding SelectedItem.MysteryInteger, Mode=OneWay, StringFormat=X2}" />
                     </Grid>
