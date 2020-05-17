@@ -212,7 +212,7 @@ namespace KoAR.SaveEditor.Views
             }
             this.SelectedItem.AddEffect(info.Clone());
             this.SelectedEffect = MainViewModel.Effects[0];
-            this.CanSave();
+            this.Refresh();
         }
 
         private bool CanMakeAllItemsSellable()
@@ -220,25 +220,12 @@ namespace KoAR.SaveEditor.Views
             return this._editor != null && this._fileName != null && this._items.Any(item => item.IsUnsellable);
         }
 
-        private void CanSave()
-        {
-            int? selectedItemIndex = this._selectedItem?.ItemIndex;
-            this.RepopulateItems();
-            if (selectedItemIndex.HasValue)
-            {
-                this.SelectedItem = this._items.FirstOrDefault(item => item.ItemIndex == selectedItemIndex.Value);
-            }
-            this.UnsavedChanges = true;
-            this.SelectedEffect = MainViewModel.Effects[0];
-            CommandManager.InvalidateRequerySuggested();
-        }
-
         private bool CanUpdateInventorySize() => this._editor != null && this._editor.GetMaxBagCount() != this.InventorySize;
 
         private void DeleteEffect(EffectInfo info)
         {
             this.SelectedItem?.DeleteEffect(info);
-            this.CanSave();
+            this.Refresh();
         }
 
         private void EditItemHex(ItemModel item)
@@ -254,7 +241,7 @@ namespace KoAR.SaveEditor.Views
             };
             if (view.ShowDialog() == true)
             {
-                this.CanSave();
+                this.Refresh();
             }
         }
 
@@ -334,6 +321,19 @@ namespace KoAR.SaveEditor.Views
             this.OnPropertyChanged(nameof(this.UnsavedChanges));
         }
 
+        private void Refresh()
+        {
+            int? selectedItemIndex = this._selectedItem?.ItemIndex;
+            this.RepopulateItems();
+            if (selectedItemIndex.HasValue)
+            {
+                this.SelectedItem = this._items.FirstOrDefault(item => item.ItemIndex == selectedItemIndex.Value);
+            }
+            this.UnsavedChanges = true;
+            this.SelectedEffect = MainViewModel.Effects[0];
+            CommandManager.InvalidateRequerySuggested();
+        }
+
         /// <summary>
         /// Formerly called ShowAll or btnShowAll_Click
         /// </summary>
@@ -381,7 +381,7 @@ namespace KoAR.SaveEditor.Views
             this._editor.WriteEquipmentBytes(model.GetItem(), out bool lengthChanged);
             if (lengthChanged)
             {
-                this.CanSave();
+                this.Refresh();
             }
             else
             {

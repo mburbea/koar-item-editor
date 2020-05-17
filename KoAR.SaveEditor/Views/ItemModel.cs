@@ -27,8 +27,11 @@ namespace KoAR.SaveEditor.Views
         }
 
         public string? CoreEffect0 => this.CoreEffects?[0].Code;
+
         public string? CoreEffect1 => this.CoreEffects?[1].Code;
+
         public string? CoreEffect2 => this.CoreEffects?[2].Code;
+
         public string? CoreEffect3 => this.CoreEffects?[3].Code;
 
         public float CurrentDurability
@@ -41,29 +44,13 @@ namespace KoAR.SaveEditor.Views
 
         public IReadOnlyList<EffectInfo> Effects
         {
-            get
-            {
-                if (this._effects != null)
-                {
-                    return this._effects;
-                }
-                try
-                {
-                    return this._effects = this._editor.GetEffectList(this._item, MainViewModel.Effects);
-                }
-                finally
-                {
-                    Dispatcher.CurrentDispatcher.InvokeAsync(() =>
-                    {
-                        this.OnPropertyChanged(nameof(this.SelectedEffect));
-                        this.OnPropertyChanged(nameof(this.EffectCount));
-                    });
-                }
-            }
+            get => this._effects ??= this._editor.GetEffectList(this._item, MainViewModel.Effects);
         }
 
         public IReadOnlyList<EffectInfo> CoreEffects
-            => this._coreEffects??= this._item.CoreItemMemory.ReadEffects();
+        {
+            get => this._coreEffects ??= this._item.CoreItemMemory.ReadEffects();
+        }
 
         public bool HasCustomName => this._item.HasCustomName;
 
@@ -93,51 +80,29 @@ namespace KoAR.SaveEditor.Views
 
         public EffectInfo? SelectedEffect
         {
-            get
-            {
-                if (this._effects == null || this._effects.Count == 0)
-                {
-                    return null;
-                }
-                return this._selectedEffect ??= this._effects.FirstOrDefault();
-            }
+            get => this._selectedEffect ??= this.Effects.FirstOrDefault();
             set => this.SetValue(ref this._selectedEffect, value ?? this.Effects.FirstOrDefault());
         }
 
         public void AddEffect(EffectInfo info)
         {
-            if (this._effects == null)
-            {
-                this._effects = this._editor.GetEffectList(this._item, MainViewModel.Effects);
-            }
-            this._effects.Add(info);
-            this._item.WriteEffects(this._effects);
+            List<EffectInfo> effects = (List<EffectInfo>)this.Effects;
+            effects.Add(info);
+            this._item.WriteEffects(effects);
             this._editor.WriteEquipmentBytes(this._item, out _);
         }
 
         public void DeleteEffect(EffectInfo info)
-        {            
+        {
             string code = info.Code;
-            if (this._effects == null)
-            {
-                this._effects = this._editor.GetEffectList(this._item, MainViewModel.Effects);
-            }
-            bool found = false;
-            for (int index = 0; index < this._effects.Count; index++)
-            {
-                EffectInfo current = this._effects[index];
-                if (current.Code == code)
-                {
-                    this._effects.RemoveAt(index);
-                    found = true;
-                    break;
-                }
-            }
-            if (!found)
+            List<EffectInfo> effects = (List<EffectInfo>)this.Effects;
+            int index = effects.FindIndex(item => item.Code == code);
+            if (index == -1)
             {
                 return;
             }
-            this._item.WriteEffects(this._effects);
+            effects.RemoveAt(index);
+            this._item.WriteEffects(effects);
             this._editor.WriteEquipmentBytes(this._item, out _);
         }
 
