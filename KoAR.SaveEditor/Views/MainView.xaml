@@ -187,7 +187,7 @@
                             <GridViewColumn Header="# Core Effects" Width="Auto">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate DataType="{x:Type views:ItemModel}">
-                                        <TextBlock Text="{Binding CoreEffects.Count, StringFormat='#,##0'}" TextAlignment="Right" />
+                                        <TextBlock Text="{Binding CoreEffectCount, StringFormat='#,##0'}" TextAlignment="Right" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
