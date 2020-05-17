@@ -7,7 +7,7 @@ namespace KoAR.Core
     {
         public static byte[] ReplaceBytes(byte[] bytes, int offset, int length, ReadOnlySpan<byte> newData)
         {
-            if(newData.Length == length)
+            if (newData.Length == length)
             {
                 newData.CopyTo(bytes.AsSpan(offset));
                 return bytes;
