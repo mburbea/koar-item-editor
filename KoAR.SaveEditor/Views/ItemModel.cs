@@ -15,7 +15,7 @@ namespace KoAR.SaveEditor.Views
     {
         private readonly AmalurSaveEditor _editor;
         private readonly ItemMemoryInfo _item;
-        private List<EffectInfo>? _coreEffects;
+        private List<CoreEffectInfo>? _coreEffects;
         private List<EffectInfo>? _effects;
         private EffectInfo? _selectedEffect;
 
@@ -25,15 +25,13 @@ namespace KoAR.SaveEditor.Views
             this._item = item;
         }
 
-        public string? CoreEffect0 => this.GetCoreEffect(0)?.Code;
+        public string? CoreEffect0 => this.CoreEffects.FirstOrDefault()?.Code;
 
-        public string? CoreEffect1 => this.GetCoreEffect(1)?.Code;
+        public string? CoreEffect1 => this.CoreEffects.Skip(1).FirstOrDefault()?.Code;
+        public string? CoreEffect2 => this.CoreEffects.Skip(2).FirstOrDefault()?.Code;
+        public string? CoreEffect3 => this.CoreEffects.Skip(3).FirstOrDefault()?.Code;
 
-        public string? CoreEffect2 => this.GetCoreEffect(2)?.Code;
-
-        public string? CoreEffect3 => this.GetCoreEffect(3)?.Code;
-
-        public List<EffectInfo> CoreEffects => this._coreEffects ??= this._item.CoreItemMemory.ReadEffects();
+        public List<CoreEffectInfo> CoreEffects => this._coreEffects ??= this._item.CoreItemMemory.ReadEffects();
 
         public float CurrentDurability
         {
@@ -95,8 +93,6 @@ namespace KoAR.SaveEditor.Views
         }
 
         public ItemMemoryInfo GetItem() => this._item;
-
-        private EffectInfo? GetCoreEffect(int index) => this.CoreEffects.Count > index ? this.CoreEffects[index] : null;
 
         private void SetItemValue<T>(T value, T currentValue, Action<T> setValue, [CallerMemberName] string propertyName = "")
         {

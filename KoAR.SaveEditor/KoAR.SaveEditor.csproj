@@ -44,6 +44,9 @@
     <ProjectReference Include="..\KoAR.Core\KoAR.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="CoreEffects.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="properties.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

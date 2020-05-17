@@ -78,13 +78,13 @@ namespace KoAR.Core
             set => MemoryUtilities.Write(ItemBytes, Offsets.DisplayEffectCount, value);
         }
 
-        public List<EffectInfo> ReadEffects()
+        public List<CoreEffectInfo> ReadEffects()
         {
-            var effects = new List<EffectInfo>();
+            var effects = new List<CoreEffectInfo>();
             // Currently assuming these have to be the same.
             for (int i = 0; i < EffectCount; i++)
             {
-                effects.Add(new EffectInfo
+                effects.Add(new CoreEffectInfo
                 {
                     Code = MemoryUtilities.Read<uint>(ItemBytes, Offsets.FirstDisplayEffect + i * 8).ToString("X6")
                 });
@@ -93,7 +93,7 @@ namespace KoAR.Core
             return effects;
         }
 
-        public void WriteEffects(List<EffectInfo> effects)
+        public void WriteEffects(List<CoreEffectInfo> effects)
         {
             var currentLength = EffectCount * 24 + 8;
             Span<ulong> effectData = stackalloc ulong[effects.Count * 3 + 1];
