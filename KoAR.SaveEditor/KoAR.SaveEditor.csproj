@@ -32,6 +32,7 @@
     <None Remove="Resources\Piercing.png" />
     <None Remove="Resources\Poison.png" />
     <None Remove="Resources\Primal.png" />
+    <None Remove="Resources\Unknown.png" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="WPFTaskDialog" Version="1.7.1" />
@@ -47,6 +48,7 @@
     <Resource Include="Resources\Piercing.png" />
     <Resource Include="Resources\Poison.png" />
     <Resource Include="Resources\Primal.png" />
+    <Resource Include="Resources\Unknown.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="PresentationFramework.Aero" />
