@@ -90,263 +90,320 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition />
-            </Grid.RowDefinitions>
-            <GroupBox Header="Filters" Margin="4">
-                <Grid>
-                    <Grid.Resources>
-                        <Style TargetType="FrameworkElement" x:Key="ElementStyle">
-                            <Setter Property="Margin" Value="2" />
-                            <Setter Property="VerticalAlignment" Value="Center" />
-                        </Style>
-                        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource ElementStyle}">
-                            <Setter Property="TextAlignment" Value="Right" />
-                        </Style>
-                        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-                            <Setter Property="Margin" Value="2" />
-                            <Setter Property="VerticalAlignment" Value="Center" />
-                            <Setter Property="Validation.ErrorTemplate" Value="{StaticResource TextBoxValidationErrorTemplate}" />
-                        </Style>
-                    </Grid.Resources>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="Name:" />
-                    <TextBox Grid.Column="1" Text="{Binding ItemNameFilter, UpdateSourceTrigger=PropertyChanged}" />
-                    <TextBlock Grid.Column="2" Text="Cur. Durability:" />
-                    <TextBox Grid.Column="3">
-                        <TextBox.Text>
-                            <Binding Path="CurrentDurabilityFilter" UpdateSourceTrigger="PropertyChanged">
-                                <Binding.ValidationRules>
-                                    <views:RegexValidationRule Pattern="^\d+(\.\d+)?$" />
-                                </Binding.ValidationRules>
-                            </Binding>
-                        </TextBox.Text>
-                    </TextBox>
-                    <TextBlock Grid.Column="4" Text="Max. Durability:" />
-                    <TextBox Grid.Column="5">
-                        <TextBox.Text>
-                            <Binding Path="MaxDurabilityFilter" UpdateSourceTrigger="PropertyChanged">
-                                <Binding.ValidationRules>
-                                    <views:RegexValidationRule Pattern="^\d+(\.\d+)?$" />
-                                </Binding.ValidationRules>
-                            </Binding>
-                        </TextBox.Text>
-                    </TextBox>
-                    <Button Grid.Column="6" Content="Reset" Command="{Binding ResetFiltersCommand}" Margin="2" VerticalAlignment="Center" />
-                </Grid>
-            </GroupBox>
-            <GroupBox Grid.Column="2" Header="Inventory Size" Margin="4">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="Size:" Margin="2" VerticalAlignment="Center" TextAlignment="Right"/>
-                    <TextBox Grid.Column="1" MinWidth="100" Margin="2" TextAlignment="Right" Validation.ErrorTemplate="{StaticResource TextBoxValidationErrorTemplate}">
-                        <TextBox.Text>
-                            <Binding Path="InventorySize" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
-                                <Binding.ValidationRules>
-                                    <views:RegexValidationRule Pattern="^\d+$" />
-                                </Binding.ValidationRules>
-                            </Binding>
-                        </TextBox.Text>
-                    </TextBox>
-                    <Button Grid.Column="2" Margin="2" Command="{Binding UpdateInventorySizeCommand}" Content="_Update" />
-                </Grid>
-            </GroupBox>
-            <GroupBox Grid.Column="2" Grid.Row="1" Margin="4" Header="Properties">
-                <GroupBox.Style>
-                    <Style TargetType="{x:Type GroupBox}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding SelectedItem}" Value="{x:Null}">
-                                <Setter Property="IsEnabled" Value="False" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </GroupBox.Style>
-                <Grid>
-                    <Grid.Resources>
-                        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-                            <Style.Triggers>
-                                <Trigger Property="IsVisible" Value="True">
-                                    <Setter Property="constructs:ValidatingPropertyBehavior.ValidatingProperty" Value="{x:Static TextBox.TextProperty}" />
-                                </Trigger>
-                                <Trigger Property="IsReadOnly" Value="True">
-                                    <Setter Property="Background" Value="{x:Static SystemColors.ControlBrush}" />
-                                </Trigger>
-                            </Style.Triggers>
-                            <Setter Property="Validation.ErrorTemplate" Value="{StaticResource TextBoxValidationErrorTemplate}" />
-                            <Setter Property="VerticalAlignment" Value="Center" />
-                            <Setter Property="Margin" Value="2" />
-                            <Setter Property="Grid.Column" Value="1" />
-                        </Style>
-                        <constructs:SingleConverter x:Key="FloatConverter" />
-                    </Grid.Resources>
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition />
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="Name:" TextAlignment="Right" Margin="2" VerticalAlignment="Center" />
-                    <TextBox IsReadOnly="{Binding SelectedItem.HasCustomName, Converter={StaticResource NegatedBooleanConverter}}">
-                        <TextBox.Style>
-                            <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding SelectedItem}" Value="{x:Null}">
-                                        <Setter Property="Text" Value="" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                                <Setter Property="Text">
-                                    <Setter.Value>
-                                        <Binding Path="SelectedItem.ItemName">
-                                            <Binding.ValidationRules>
-                                                <constructs:ValueRequiredValidationRule />
-                                            </Binding.ValidationRules>
-                                        </Binding>
-                                    </Setter.Value>
-                                </Setter>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" SharedSizeGroup="TopRow" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <GroupBox Header="Filters" Margin="4">
+                    <Grid>
+                        <Grid.Resources>
+                            <Style TargetType="FrameworkElement" x:Key="ElementStyle">
+                                <Setter Property="Margin" Value="2" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
                             </Style>
-                        </TextBox.Style>
-                    </TextBox>
-                    <TextBlock Text="Cur Durability:" Grid.Row="1" TextAlignment="Right" Margin="2" VerticalAlignment="Center" />
-                    <TextBox Grid.Row="1" TextAlignment="Right">
-                        <TextBox.Style>
-                            <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding SelectedItem}" Value="{x:Null}">
-                                        <Setter Property="Text" Value="" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                                <Setter Property="Text">
-                                    <Setter.Value>
-                                        <Binding Path="SelectedItem.CurrentDurability" Converter="{StaticResource FloatConverter}">
-                                            <Binding.ValidationRules>
-                                                <views:DurabilityValidationRule />
-                                            </Binding.ValidationRules>
-                                        </Binding>
-                                    </Setter.Value>
-                                </Setter>
+                            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource ElementStyle}">
+                                <Setter Property="TextAlignment" Value="Right" />
                             </Style>
-                        </TextBox.Style>
-                    </TextBox>
-                    <TextBlock Text="Max Durability:" Grid.Row="2" TextAlignment="Right" Margin="2" VerticalAlignment="Center" />
-                    <TextBox Grid.Row="2" TextAlignment="Right">
-                        <TextBox.Style>
                             <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding SelectedItem}" Value="{x:Null}">
-                                        <Setter Property="Text" Value="" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                                <Setter Property="Text">
-                                    <Setter.Value>
-                                        <Binding Path="SelectedItem.MaxDurability" Converter="{StaticResource FloatConverter}">
-                                            <Binding.ValidationRules>
-                                                <views:DurabilityValidationRule />
-                                            </Binding.ValidationRules>
-                                        </Binding>
-                                    </Setter.Value>
-                                </Setter>
+                                <Setter Property="Margin" Value="2" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                                <Setter Property="Validation.ErrorTemplate" Value="{StaticResource TextBoxValidationErrorTemplate}" />
                             </Style>
-                        </TextBox.Style>
-                    </TextBox>
-                </Grid>
-            </GroupBox>
-            <GroupBox Grid.Column="2" Grid.Row="2" Margin="4" VerticalAlignment="Top" Header="Effects">
-                <GroupBox.Style>
-                    <Style TargetType="{x:Type GroupBox}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding SelectedItem}" Value="{x:Null}">
-                                <Setter Property="IsEnabled" Value="False" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </GroupBox.Style>
-                <Grid x:Name="PART_Grid">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock VerticalAlignment="Center" Margin="2" TextAlignment="Right" Text="# Effects:"/>
-                    <TextBox Grid.Column="1" VerticalAlignment="Center" Margin="2" Text="{Binding SelectedItem.EffectCount, Mode=OneWay}" 
-                        TextAlignment="Right" IsReadOnly="True" Background="{x:Static SystemColors.ControlBrush}" />
-                    <views:EffectsControl Grid.Row="1" Grid.ColumnSpan="2" ProcessEffectLabel="Delete" Header="Existing Effects:" DataContext="{Binding SelectedItem}" Effects="{Binding Effects}" 
-                        SelectedEffect="{Binding SelectedEffect}" Command="{Binding DataContext.DeleteEffectCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
-                    <views:EffectsControl Grid.Row="2" Grid.ColumnSpan="2" ProcessEffectLabel="Add" Header="Add Effect:" Effects="{x:Static views:MainViewModel.Effects}" 
-                        SelectedEffect="{Binding SelectedEffect}" Command="{Binding AddEffectCommand}" />
-                </Grid>
-            </GroupBox>
-            <ListView x:Name="PART_ListView" Grid.Row="1" Grid.RowSpan="2" ItemsSource="{Binding Source={StaticResource FilteredItems}}" SelectedItem="{Binding SelectedItem}"
-                Margin="4" BorderBrush="LightGray" SelectionMode="Single" FocusVisualStyle="{x:Null}">
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="{x:Type ListViewItem}">
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                        <Setter Property="views:MouseDoubleClick.CommandParameter" Value="{Binding}" />
-                        <Setter Property="views:MouseDoubleClick.Command" Value="{Binding EditItemHexCommand, Source={StaticResource ViewModel}}" />
-                    </Style>
-                </ListView.ItemContainerStyle>
-                <ListView.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="AutoSize Columns" Click="AutoSizeColumns_Click"/>
-                    </ContextMenu>
-                </ListView.ContextMenu>
-                <ListView.View>
-                    <GridView AllowsColumnReorder="True">
-                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ItemId, Converter={StaticResource LittleEndianConverter}}" Width="Auto" />
-                        <GridViewColumn Header="Name" DisplayMemberBinding="{Binding ItemName}" Width="Auto" />
-                        <GridViewColumn Header="Cur Durability" Width="Auto">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate DataType="{x:Type views:ItemModel}">
-                                    <TextBlock Text="{Binding CurrentDurability, StringFormat='{}{0:#0.####}'}" TextAlignment="Right" />
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Max Durability" Width="Auto">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate DataType="{x:Type views:ItemModel}">
-                                    <TextBlock Text="{Binding MaxDurability, StringFormat='{}{0:#0.####}'}" TextAlignment="Right" />
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="# Effects" Width="Auto" >
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate DataType="{x:Type views:ItemModel}">
-                                    <TextBlock Text="{Binding EffectCount, StringFormat='{}{0:#,###0}'}" TextAlignment="Right" />
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Sellable?" Width="Auto">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate DataType="{x:Type views:ItemModel}">
-                                    <CheckBox IsChecked="{Binding IsUnsellable, Converter={StaticResource NegatedBooleanConverter}, Mode=TwoWay}" HorizontalAlignment="Center" 
+                        </Grid.Resources>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Name:" />
+                        <TextBox Grid.Column="1" Text="{Binding ItemNameFilter, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBlock Grid.Column="2" Text="Cur. Durability:" />
+                        <TextBox Grid.Column="3">
+                            <TextBox.Text>
+                                <Binding Path="CurrentDurabilityFilter" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <views:RegexValidationRule Pattern="^\d+(\.\d+)?$" />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+                        <TextBlock Grid.Column="4" Text="Max. Durability:" />
+                        <TextBox Grid.Column="5">
+                            <TextBox.Text>
+                                <Binding Path="MaxDurabilityFilter" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <views:RegexValidationRule Pattern="^\d+(\.\d+)?$" />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+                        <Button Grid.Column="6" Content="Reset" Command="{Binding ResetFiltersCommand}" Margin="2" VerticalAlignment="Center" />
+                    </Grid>
+                </GroupBox>
+                <ListView x:Name="PART_ListView" Grid.Row="1" ItemsSource="{Binding Source={StaticResource FilteredItems}}" SelectedItem="{Binding SelectedItem}"
+                    Margin="4" BorderBrush="LightGray" SelectionMode="Single" FocusVisualStyle="{x:Null}">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="{x:Type ListViewItem}">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            <Setter Property="views:MouseDoubleClick.CommandParameter" Value="{Binding}" />
+                            <Setter Property="views:MouseDoubleClick.Command" Value="{Binding EditItemHexCommand, Source={StaticResource ViewModel}}" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="AutoSize Columns" Click="AutoSizeColumns_Click"/>
+                        </ContextMenu>
+                    </ListView.ContextMenu>
+                    <ListView.View>
+                        <GridView AllowsColumnReorder="True">
+                            <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ItemId, Converter={StaticResource LittleEndianConverter}}" Width="Auto" />
+                            <GridViewColumn Header="Name" DisplayMemberBinding="{Binding ItemName}" Width="Auto" />
+                            <GridViewColumn Header="Cur Durability" Width="Auto">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate DataType="{x:Type views:ItemModel}">
+                                        <TextBlock Text="{Binding CurrentDurability, StringFormat='{}{0:#0.####}'}" TextAlignment="Right" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Max Durability" Width="Auto">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate DataType="{x:Type views:ItemModel}">
+                                        <TextBlock Text="{Binding MaxDurability, StringFormat='{}{0:#0.####}'}" TextAlignment="Right" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="# Effects" Width="Auto" >
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate DataType="{x:Type views:ItemModel}">
+                                        <TextBlock Text="{Binding EffectCount, StringFormat='{}{0:#,###0}'}" TextAlignment="Right" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Sellable?" Width="Auto">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate DataType="{x:Type views:ItemModel}">
+                                        <CheckBox IsChecked="{Binding IsUnsellable, Converter={StaticResource NegatedBooleanConverter}, Mode=TwoWay}" HorizontalAlignment="Center" 
                                         PreviewMouseLeftButtonDown="CheckBox_PreviewMouseLeftButtonDown"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-            <GridSplitter Grid.Column="1" Grid.RowSpan="3" Width="2" HorizontalAlignment="Stretch" Background="{x:Static SystemColors.ControlBrush}" FocusVisualStyle="{x:Null}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </Grid>            
+            <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Stretch" Background="{x:Static SystemColors.ControlBrush}" FocusVisualStyle="{x:Null}" />
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" SharedSizeGroup="TopRow"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <GroupBox Header="Inventory Size" Margin="4">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Size:" Margin="2" VerticalAlignment="Center" TextAlignment="Right"/>
+                        <TextBox Grid.Column="1" MinWidth="100" Margin="2" TextAlignment="Right" Validation.ErrorTemplate="{StaticResource TextBoxValidationErrorTemplate}">
+                            <TextBox.Text>
+                                <Binding Path="InventorySize" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <views:RegexValidationRule Pattern="^\d+$" />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+                        <Button Grid.Column="2" Margin="2" Command="{Binding UpdateInventorySizeCommand}" Content="_Update" />
+                    </Grid>
+                </GroupBox>
+                <GroupBox Grid.Row="1" Margin="4" Header="Properties">
+                    <GroupBox.Style>
+                        <Style TargetType="{x:Type GroupBox}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedItem}" Value="{x:Null}">
+                                    <Setter Property="IsEnabled" Value="False" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </GroupBox.Style>
+                    <Grid>
+                        <Grid.Resources>
+                            <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+                                <Style.Triggers>
+                                    <Trigger Property="IsVisible" Value="True">
+                                        <Setter Property="constructs:ValidatingPropertyBehavior.ValidatingProperty" Value="{x:Static TextBox.TextProperty}" />
+                                    </Trigger>
+                                    <Trigger Property="IsReadOnly" Value="True">
+                                        <Setter Property="Background" Value="{x:Static SystemColors.ControlBrush}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                                <Setter Property="Validation.ErrorTemplate" Value="{StaticResource TextBoxValidationErrorTemplate}" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                                <Setter Property="Margin" Value="2" />
+                                <Setter Property="Grid.Column" Value="1" />
+                            </Style>
+                            <constructs:SingleConverter x:Key="FloatConverter" />
+                        </Grid.Resources>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Name:" TextAlignment="Right" Margin="2" VerticalAlignment="Center" />
+                        <TextBox IsReadOnly="{Binding SelectedItem.HasCustomName, Converter={StaticResource NegatedBooleanConverter}}">
+                            <TextBox.Style>
+                                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SelectedItem}" Value="{x:Null}">
+                                            <Setter Property="Text" Value="" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                    <Setter Property="Text">
+                                        <Setter.Value>
+                                            <Binding Path="SelectedItem.ItemName">
+                                                <Binding.ValidationRules>
+                                                    <constructs:ValueRequiredValidationRule />
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
+                        <TextBlock Text="Cur Durability:" Grid.Row="1" TextAlignment="Right" Margin="2" VerticalAlignment="Center" />
+                        <TextBox Grid.Row="1" TextAlignment="Right">
+                            <TextBox.Style>
+                                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SelectedItem}" Value="{x:Null}">
+                                            <Setter Property="Text" Value="" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                    <Setter Property="Text">
+                                        <Setter.Value>
+                                            <Binding Path="SelectedItem.CurrentDurability" Converter="{StaticResource FloatConverter}">
+                                                <Binding.ValidationRules>
+                                                    <views:DurabilityValidationRule />
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
+                        <TextBlock Text="Max Durability:" Grid.Row="2" TextAlignment="Right" Margin="2" VerticalAlignment="Center" />
+                        <TextBox Grid.Row="2" TextAlignment="Right">
+                            <TextBox.Style>
+                                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SelectedItem}" Value="{x:Null}">
+                                            <Setter Property="Text" Value="" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                    <Setter Property="Text">
+                                        <Setter.Value>
+                                            <Binding Path="SelectedItem.MaxDurability" Converter="{StaticResource FloatConverter}">
+                                                <Binding.ValidationRules>
+                                                    <views:DurabilityValidationRule />
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Grid.Row="2" Margin="4" Header="Effects">
+                    <GroupBox.Style>
+                        <Style TargetType="{x:Type GroupBox}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedItem}" Value="{x:Null}">
+                                    <Setter Property="IsEnabled" Value="False" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </GroupBox.Style>
+                    <Grid x:Name="PART_Grid">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock VerticalAlignment="Center" Margin="2" TextAlignment="Right" Text="# Effects:"/>
+                        <TextBox Grid.Column="1" VerticalAlignment="Center" Margin="2" Text="{Binding SelectedItem.EffectCount, Mode=OneWay}" 
+                            TextAlignment="Right" IsReadOnly="True" Background="{x:Static SystemColors.ControlBrush}" />
+                        <views:EffectsControl Grid.Row="1" Grid.ColumnSpan="2" ProcessEffectLabel="Delete" Header="Existing Effects:" DataContext="{Binding SelectedItem}" Effects="{Binding Effects}" 
+                            SelectedEffect="{Binding SelectedEffect}" Command="{Binding DataContext.DeleteEffectCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+                        <views:EffectsControl Grid.Row="2" Grid.ColumnSpan="2" ProcessEffectLabel="Add" Header="Add Effect:" Effects="{x:Static views:MainViewModel.Effects}" 
+                            SelectedEffect="{Binding SelectedEffect}" Command="{Binding AddEffectCommand}" />
+                    </Grid>
+                </GroupBox>
+                <GroupBox Grid.Row="3" Margin="4" Header="Core Effects">
+                    <GroupBox.Style>
+                        <Style TargetType="{x:Type GroupBox}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedItem}" Value="{x:Null}">
+                                    <Setter Property="IsEnabled" Value="False" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </GroupBox.Style>
+                    <Grid>
+                        <Grid.Resources>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                                <Setter Property="Margin" Value="2" />
+                                <Setter Property="TextAlignment" Value="Right" />
+                            </Style>
+                            <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+                                <Setter Property="Grid.Column" Value="1" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                                <Setter Property="Margin" Value="2" />
+                                <Setter Property="IsReadOnly" Value="True" />
+                                <Setter Property="Background" Value="{x:Static SystemColors.ControlBrush}" />
+                            </Style>
+                        </Grid.Resources>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Effect 0:"/>
+                        <TextBox Text="{Binding SelectedItem.CoreEffect0, Mode=OneWay}" />
+                        <TextBlock Grid.Row="1" Text="Effect 1:"/>
+                        <TextBox Grid.Row="1" Text="{Binding SelectedItem.CoreEffect1, Mode=OneWay}" />
+                        <TextBlock Grid.Row="2" Text="Effect 2:"/>
+                        <TextBox Grid.Row="2" Text="{Binding SelectedItem.CoreEffect2, Mode=OneWay}" />
+                        <TextBlock Grid.Row="3" Text="Effect 3:"/>
+                        <TextBox Grid.Row="3" Text="{Binding SelectedItem.CoreEffect3, Mode=OneWay}" />
+                        <TextBlock Grid.Row="4" Text="Mystery #:"/>
+                        <TextBox Grid.Row="4" Text="{Binding SelectedItem.MysteryInteger, Mode=OneWay}" />
+                    </Grid>
+                </GroupBox>
+            </Grid>
         </Grid>
     </DockPanel>
 </Window>
