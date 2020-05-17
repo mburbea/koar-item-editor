@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 using TaskDialogInterop;
 
 namespace KoAR.SaveEditor.Views
@@ -103,7 +104,7 @@ namespace KoAR.SaveEditor.Views
         private void MainView_Loaded(object sender, RoutedEventArgs e)
         {
             this.Loaded -= this.MainView_Loaded;
-            ((MainViewModel)this.DataContext).OpenFileCommand.Execute();
+            this.Dispatcher.InvokeAsync(((MainViewModel)this.DataContext).OpenFileCommand.Execute, DispatcherPriority.Render);
         }
     }
 }
