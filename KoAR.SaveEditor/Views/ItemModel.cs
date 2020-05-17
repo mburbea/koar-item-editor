@@ -17,6 +17,7 @@ namespace KoAR.SaveEditor.Views
         private readonly AmalurSaveEditor _editor;
         private readonly ItemMemoryInfo _item;
         private List<EffectInfo>? _effects;
+        private List<EffectInfo>? _coreEffects;
         private EffectInfo? _selectedEffect;
 
         public ItemModel(AmalurSaveEditor editor, ItemMemoryInfo item)
@@ -24,6 +25,11 @@ namespace KoAR.SaveEditor.Views
             this._editor = editor;
             this._item = item;
         }
+
+        public string? CoreEffect0 => this.CoreEffects?[0].Code;
+        public string? CoreEffect1 => this.CoreEffects?[1].Code;
+        public string? CoreEffect2 => this.CoreEffects?[2].Code;
+        public string? CoreEffect3 => this.CoreEffects?[3].Code;
 
         public float CurrentDurability
         {
@@ -56,6 +62,9 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
+        public IReadOnlyList<EffectInfo> CoreEffects
+            => this._coreEffects??= this._item.CoreItemMemory.ReadEffects();
+
         public bool HasCustomName => this._item.HasCustomName;
 
         public bool IsUnsellable
@@ -79,6 +88,8 @@ namespace KoAR.SaveEditor.Views
             get => this._item.MaxDurability;
             set => this.SetItemValue(value, this._item.MaxDurability, value => this._item.MaxDurability = value);
         }
+
+        public int MysteryInteger => this._item.CoreItemMemory.MysteryInteger;
 
         public EffectInfo? SelectedEffect
         {
