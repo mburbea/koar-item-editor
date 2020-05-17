@@ -234,6 +234,7 @@
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                     <Setter Property="Source" Value="{StaticResource Unknown}" />
+                                                    <Setter Property="Margin" Value="1,0" />
                                                     <Setter Property="Width" Value="18" />
                                                 </Style>
                                             </StackPanel.Resources>
