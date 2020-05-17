@@ -16,12 +16,6 @@ namespace KoAR.SaveEditor.Views
             this.Loaded += this.MainView_Loaded;
         }
 
-        private void MainView_Loaded(object sender, RoutedEventArgs e)
-        {
-            this.Loaded -= this.MainView_Loaded;
-            ((MainViewModel)this.DataContext).OpenFileCommand.Execute();
-        }
-
         protected override void OnClosing(CancelEventArgs e)
         {
             MainViewModel viewModel = (MainViewModel)this.DataContext;
@@ -104,6 +98,12 @@ namespace KoAR.SaveEditor.Views
             ItemModel model = (ItemModel)((FrameworkElement)sender).DataContext;
             ListViewItem item = (ListViewItem)this.PART_ListView.ItemContainerGenerator.ContainerFromItem(model);
             item.IsSelected = true;
+        }
+
+        private void MainView_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.Loaded -= this.MainView_Loaded;
+            ((MainViewModel)this.DataContext).OpenFileCommand.Execute();
         }
     }
 }
