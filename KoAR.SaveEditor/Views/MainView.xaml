@@ -26,6 +26,7 @@
         </ControlTemplate>
         <constructs:NegatedBooleanConverter x:Key="NegatedBooleanConverter" />
         <constructs:StringIsNullOrEmptyConverter x:Key="StringIsNullOrEmptyConverter" />
+        <constructs:LittleEndianConverter x:Key="LittleEndianConverter" />
     </Window.Resources>
     <Window.DataContext>
         <Binding Source="{StaticResource ViewModel}" />
@@ -301,7 +302,7 @@
                 </ListView.ContextMenu>
                 <ListView.View>
                     <GridView AllowsColumnReorder="True" x:Name="PART_GridView">
-                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ItemId, StringFormat='{}{0:X8}'}" Width="Auto" />
+                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ItemId, Converter={StaticResource LittleEndianConverter}}" Width="Auto" />
                         <GridViewColumn Header="Name" DisplayMemberBinding="{Binding ItemName}" Width="Auto" />
                         <GridViewColumn Header="Cur. Durability" Width="Auto">
                             <GridViewColumn.CellTemplate>
