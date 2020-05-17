@@ -13,6 +13,7 @@
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>app.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -22,6 +23,9 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="app.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="WPFTaskDialog" Version="1.7.1" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="app.ico" />

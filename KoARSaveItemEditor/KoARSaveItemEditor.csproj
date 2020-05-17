@@ -4,7 +4,7 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <ProjectGuid>{4BAF838E-FC53-4804-877C-5606846FEFF4}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <AssemblyName>KoAR Save Item Editor</AssemblyName>
+    <AssemblyName>KoAR Save Editor</AssemblyName>
     <TargetFramework>net48</TargetFramework>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>

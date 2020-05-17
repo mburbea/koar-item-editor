@@ -11,11 +11,14 @@ using System.Xml.Linq;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
 using Microsoft.Win32;
+using TaskDialogInterop;
 
 namespace KoAR.SaveEditor.Views
 {
     public sealed class MainViewModel : NotifierBase
     {
+        public static IReadOnlyList<EffectInfo> Effects = MainViewModel.LoadAllEffects();
+
         private readonly ObservableCollection<ItemModel> _items;
         private string? _currentDurabilityFilter = string.Empty;
         private AmalurSaveEditor? _editor;
@@ -24,7 +27,7 @@ namespace KoAR.SaveEditor.Views
         private int _inventorySize;
         private string? _itemNameFilter = string.Empty;
         private string? _maxDurabilityFilter = string.Empty;
-        private EffectInfo? _selectedAttribute;
+        private EffectInfo? _selectedEffect = MainViewModel.Effects.FirstOrDefault();
         private ItemModel? _selectedItem;
         private bool _unsavedChanges;
 
@@ -36,29 +39,12 @@ namespace KoAR.SaveEditor.Views
             this.ResetFiltersCommand = new DelegateCommand(this.ResetFilters);
             this.EditItemHexCommand = new DelegateCommand<ItemModel>(this.EditItemHex);
             this.UpdateInventorySizeCommand = new DelegateCommand(this.UpdateInventorySize, this.CanUpdateInventorySize);
-            this.AddAttributeCommand = new DelegateCommand<EffectInfo>(this.AddAttribute);
-            this.DeleteAttributeCommand = new DelegateCommand<EffectInfo>(this.DeleteAttribute);
+            this.AddEffectCommand = new DelegateCommand<EffectInfo>(this.AddEffect);
+            this.DeleteEffectCommand = new DelegateCommand<EffectInfo>(this.DeleteEffect);
             this.SaveCommand = new DelegateCommand(this.Save);
-            if ((bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(Window)).DefaultValue)
-            {
-                this.Attributes = Array.Empty<EffectInfo>();
-                return;
-            }
-            using Stream stream = File.OpenRead(Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "properties.xml"));
-            this.Attributes = XDocument.Load(stream).Root.Elements().Select(element => new EffectInfo
-            {
-                Code = element.Attribute("id").Value.ToUpper(),
-                DisplayText = element.Value.ToUpper()
-            }).ToArray();
-            this._selectedAttribute = this.Attributes[0];
         }
 
-        public DelegateCommand<EffectInfo> AddAttributeCommand
-        {
-            get;
-        }
-
-        public IReadOnlyList<EffectInfo> Attributes
+        public DelegateCommand<EffectInfo> AddEffectCommand
         {
             get;
         }
@@ -78,7 +64,7 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        public DelegateCommand<EffectInfo> DeleteAttributeCommand
+        public DelegateCommand<EffectInfo> DeleteEffectCommand
         {
             get;
         }
@@ -161,10 +147,10 @@ namespace KoAR.SaveEditor.Views
             get;
         }
 
-        public EffectInfo? SelectedAttribute
+        public EffectInfo? SelectedEffect
         {
-            get => this._selectedAttribute;
-            set => this.SetValue(ref this._selectedAttribute, value);
+            get => this._selectedEffect;
+            set => this.SetValue(ref this._selectedEffect, value);
         }
 
         public ItemModel? SelectedItem
@@ -205,14 +191,27 @@ namespace KoAR.SaveEditor.Views
             get;
         }
 
-        private void AddAttribute(EffectInfo info)
+        private static IReadOnlyList<EffectInfo> LoadAllEffects()
+        {
+            if ((bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(Window)).DefaultValue)
+            {
+                return Array.Empty<EffectInfo>();
+            }
+            using Stream stream = File.OpenRead(Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "properties.xml"));
+            return XDocument.Load(stream).Root
+                .Elements()
+                .Select(element => new EffectInfo { Code = element.Attribute("id").Value.ToUpper(), DisplayText = element.Value.ToUpper() })
+                .ToList(); // xaml will bind to `Count` property so keeping consistent with `ItemModel.Effects`.
+        }
+
+        private void AddEffect(EffectInfo info)
         {
             if (info == null || this.SelectedItem == null)
             {
                 return;
             }
-            this.SelectedItem.AddAttribute(info.Clone());
-            this.SelectedAttribute = this.Attributes[0];
+            this.SelectedItem.AddEffect(info.Clone());
+            this.SelectedEffect = MainViewModel.Effects[0];
             this.CanSave();
         }
 
@@ -230,15 +229,15 @@ namespace KoAR.SaveEditor.Views
                 this.SelectedItem = this._items.FirstOrDefault(item => item.ItemIndex == selectedItemIndex.Value);
             }
             this.UnsavedChanges = true;
-            this.SelectedAttribute = this.Attributes[0];
+            this.SelectedEffect = MainViewModel.Effects[0];
             CommandManager.InvalidateRequerySuggested();
         }
 
         private bool CanUpdateInventorySize() => this._editor != null && this._editor.GetMaxBagCount() != this.InventorySize;
 
-        private void DeleteAttribute(EffectInfo info)
+        private void DeleteEffect(EffectInfo info)
         {
-            this.SelectedItem?.DeleteAttribute(info);
+            this.SelectedItem?.DeleteEffect(info);
             this.CanSave();
         }
 
@@ -276,7 +275,14 @@ namespace KoAR.SaveEditor.Views
                 this._editor.WriteEquipmentBytes(item.GetItem(), out _);
                 count++;
             }
-            MessageBox.Show($"Modified {count} items.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
+            TaskDialog.Show(new TaskDialogOptions
+            {
+                Title = "KoAR Save Editor",
+                Owner = Application.Current.MainWindow,
+                CommonButtons = TaskDialogCommonButtons.Close,
+                Content = $"Modified {count} items.",
+                MainIcon = VistaTaskDialogIcon.Information
+            });
             if (count > 0)
             {
                 this.UnsavedChanges = true;
@@ -342,7 +348,7 @@ namespace KoAR.SaveEditor.Views
             this._items.Clear();
             foreach (ItemMemoryInfo info in this._editor.GetAllEquipment())
             {
-                this._items.Insert(info.HasCustomName ? 0 : this._items.Count, new ItemModel(this._editor, this.Attributes, info));
+                this._items.Add(new ItemModel(this._editor, info));
             }
         }
 

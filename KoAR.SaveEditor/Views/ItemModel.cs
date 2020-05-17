@@ -14,16 +14,14 @@ namespace KoAR.SaveEditor.Views
     /// </summary>
     public sealed class ItemModel : NotifierBase
     {
-        private readonly IReadOnlyList<EffectInfo> _attributes;
         private readonly AmalurSaveEditor _editor;
         private readonly ItemMemoryInfo _item;
         private List<EffectInfo>? _effects;
         private EffectInfo? _selectedEffect;
 
-        public ItemModel(AmalurSaveEditor editor, IReadOnlyList<EffectInfo> attributes, ItemMemoryInfo item)
+        public ItemModel(AmalurSaveEditor editor, ItemMemoryInfo item)
         {
             this._editor = editor;
-            this._attributes = attributes;
             this._item = item;
         }
 
@@ -45,7 +43,7 @@ namespace KoAR.SaveEditor.Views
                 }
                 try
                 {
-                    return this._effects = this._editor.GetEffectList(this._item, this._attributes);
+                    return this._effects = this._editor.GetEffectList(this._item, MainViewModel.Effects);
                 }
                 finally
                 {
@@ -95,25 +93,23 @@ namespace KoAR.SaveEditor.Views
             set => this.SetValue(ref this._selectedEffect, value ?? this.Effects.FirstOrDefault());
         }
 
-        public void AddAttribute(EffectInfo info)
+        public void AddEffect(EffectInfo info)
         {
             if (this._effects == null)
             {
-                this._effects = this._editor.GetEffectList(this._item, this._attributes);
+                this._effects = this._editor.GetEffectList(this._item, MainViewModel.Effects);
             }
             this._effects.Add(info);
             this._item.WriteEffects(this._effects);
             this._editor.WriteEquipmentBytes(this._item, out _);
-            this._effects = null;
-            this.OnPropertyChanged(nameof(this.Effects));
         }
 
-        public void DeleteAttribute(EffectInfo info)
+        public void DeleteEffect(EffectInfo info)
         {            
             string code = info.Code;
             if (this._effects == null)
             {
-                this._effects = this._editor.GetEffectList(this._item, this._attributes);
+                this._effects = this._editor.GetEffectList(this._item, MainViewModel.Effects);
             }
             bool found = false;
             for (int index = 0; index < this._effects.Count; index++)
@@ -132,8 +128,6 @@ namespace KoAR.SaveEditor.Views
             }
             this._item.WriteEffects(this._effects);
             this._editor.WriteEquipmentBytes(this._item, out _);
-            this._effects = null;
-            this.OnPropertyChanged(nameof(this.Effects));
         }
 
         public ItemMemoryInfo GetItem() => this._item;
