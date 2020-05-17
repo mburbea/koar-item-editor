@@ -303,7 +303,7 @@ namespace KoAR.SaveEditor.Views
         {
             OpenFileDialog dialog = new OpenFileDialog
             {
-                Title = "Load Save File...",
+                Title = "Open Save File...",
                 DefaultExt = ".sav",
                 Filter = "Save Files (*.sav)|*.sav",
                 CheckFileExists = true

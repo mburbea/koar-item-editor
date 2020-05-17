@@ -10,7 +10,17 @@ namespace KoAR.SaveEditor.Views
     {
         static MainView() => CommandManager.RegisterClassCommandBinding(typeof(MainView), new CommandBinding(ApplicationCommands.Help, MainView.DisplayHelp));
 
-        public MainView() => this.InitializeComponent();
+        public MainView()
+        {
+            this.InitializeComponent();
+            this.Loaded += this.MainView_Loaded;
+        }
+
+        private void MainView_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.Loaded -= this.MainView_Loaded;
+            ((MainViewModel)this.DataContext).OpenFileCommand.Execute();
+        }
 
         protected override void OnClosing(CancelEventArgs e)
         {
