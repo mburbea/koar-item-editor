@@ -271,7 +271,7 @@ namespace KoAR.SaveEditor.Views
                     continue;
                 }
                 item.IsUnsellable = false;
-                this._editor.WriteEquipmentBytes(item.GetItem());
+                this._editor.WriteEquipmentBytes(item.GetItem(), out _);
                 count++;
             }
             MessageBox.Show($"Modified {count} items.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -370,7 +370,7 @@ namespace KoAR.SaveEditor.Views
                 return;
             }
             ItemModel model = (ItemModel)sender;
-            this._editor.WriteEquipmentBytes(model.GetItem());
+            this._editor.WriteEquipmentBytes(model.GetItem(), out _);
             this.CanSave();
         }
 

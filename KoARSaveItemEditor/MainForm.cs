@@ -46,7 +46,7 @@ namespace KoARSaveItemEditor
                 Code = attCode
             });
             selectedItem.WriteEffects(effects);
-            editor.WriteEquipmentBytes(selectedItem);
+            editor.WriteEquipmentBytes(selectedItem, out _);
             RebindAttrList(selectedItem);
         }
 
@@ -212,7 +212,7 @@ namespace KoARSaveItemEditor
             {
                 txtPropSelectedAttributeHexCode.Text = string.Empty;
             }
-            editor.WriteEquipmentBytes(selectedItem);
+            editor.WriteEquipmentBytes(selectedItem, out _);
             RebindAttrList(itemInfo);
             CanSave();
         }
@@ -269,7 +269,7 @@ namespace KoARSaveItemEditor
                     continue;
                 }
                 item.IsUnsellable = false;
-                editor.WriteEquipmentBytes(item);
+                editor.WriteEquipmentBytes(item, out _);
                 count++;
             }
             MessageBox.Show($"Modified {count} items.");
@@ -303,7 +303,7 @@ namespace KoARSaveItemEditor
             else if (newValue != currentValue)
             {
                 setDurability(selectedItem, newValue);
-                editor.WriteEquipmentBytes(selectedItem);
+                editor.WriteEquipmentBytes(selectedItem, out _);
                 CanSave();
             }
         }
@@ -419,7 +419,7 @@ namespace KoARSaveItemEditor
             if (selectedItem != null && selectedItem.HasCustomName && selectedItem.ItemName != txtPropName.Text)
             {
                 selectedItem.ItemName = txtPropName.Text;
-                editor.WriteEquipmentBytes(selectedItem);
+                editor.WriteEquipmentBytes(selectedItem, out _);
                 CanSave();
             }
         }

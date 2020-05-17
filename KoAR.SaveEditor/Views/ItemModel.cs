@@ -103,7 +103,7 @@ namespace KoAR.SaveEditor.Views
             }
             this._effects.Add(info);
             this._item.WriteEffects(this._effects);
-            this._editor.WriteEquipmentBytes(this._item);
+            this._editor.WriteEquipmentBytes(this._item, out _);
             this._effects = null;
             this.OnPropertyChanged(nameof(this.Effects));
         }
@@ -131,7 +131,7 @@ namespace KoAR.SaveEditor.Views
                 return;
             }
             this._item.WriteEffects(this._effects);
-            this._editor.WriteEquipmentBytes(this._item);
+            this._editor.WriteEquipmentBytes(this._item, out _);
             this._effects = null;
             this.OnPropertyChanged(nameof(this.Effects));
         }

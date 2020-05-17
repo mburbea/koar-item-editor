@@ -16,8 +16,8 @@ namespace KoAR.Core
         private static ReadOnlySpan<byte> InventoryLimit => new[] { (byte)'i', (byte)'n', (byte)'v', (byte)'e', (byte)'n', (byte)'t', (byte)'o', (byte)'r', (byte)'y', (byte)'_', (byte)'l', (byte)'i', (byte)'m', (byte)'i', (byte)'t' };
         private static ReadOnlySpan<byte> IncreaseAmount => new[] { (byte)'i', (byte)'n', (byte)'c', (byte)'r', (byte)'e', (byte)'a', (byte)'s', (byte)'e', (byte)'_', (byte)'a', (byte)'m', (byte)'o', (byte)'u', (byte)'n', (byte)'t' };
         private static ReadOnlySpan<byte> CurrentInventoryCount => new[] { (byte)'c', (byte)'u', (byte)'r', (byte)'r', (byte)'e', (byte)'n', (byte)'t', (byte)'_', (byte)'i', (byte)'n', (byte)'v', (byte)'e', (byte)'n', (byte)'t', (byte)'o', (byte)'r', (byte)'y', (byte)'_', (byte)'c', (byte)'o', (byte)'u', (byte)'n', (byte)'t' };
-        private static ReadOnlySpan<byte> EquipmentSequence => new byte[]     { 0x0B, 00, 00, 00, 0x68, 0xD5, 0x24, 0x00, 0x03 };
-        private static ReadOnlySpan<byte> CoreAttributeSequence => new byte[] { 0x0B, 00, 00, 00, 0x84, 0x60, 0x28, 0x00, 0x00};
+        private static ReadOnlySpan<byte> EquipmentSequence => new byte[] { 0x0B, 00, 00, 00, 0x68, 0xD5, 0x24, 0x00, 0x03 };
+        private static ReadOnlySpan<byte> CoreAttributeSequence => new byte[] { 0x0B, 00, 00, 00, 0x84, 0x60, 0x28, 0x00, 0x00 };
         private byte[] _bytes;
 
         public byte[] Bytes
@@ -68,10 +68,10 @@ namespace KoAR.Core
             var inventoryLimitOffset = span.IndexOf(InventoryLimit) + InventoryLimit.Length;
             var increaseAmountOffset = span.IndexOf(IncreaseAmount) + IncreaseAmount.Length;
             var finalOffset = Math.Max(Math.Max(curInvCountOffset, inventoryLimitOffset), increaseAmountOffset);
-            var inventoryLimitOrder = inventoryLimitOffset == finalOffset 
-                ? 3 
+            var inventoryLimitOrder = inventoryLimitOffset == finalOffset
+                ? 3
                 : inventoryLimitOffset < Math.Min(curInvCountOffset, increaseAmountOffset) ? 1 : 2;
-            
+
             return finalOffset + (inventoryLimitOrder * 12);
         }
 
@@ -121,7 +121,7 @@ namespace KoAR.Core
                 {
                     MemoryUtilities.Write(coreHeader, 0, item.ItemId);
                     var span = bytes.AsSpan(indexList[i]);
-                    
+
                     int coreOffset = span.IndexOf(coreHeader) + indexList[i];
                     item.CoreItemMemory = CoreItemMemory.Create(coreOffset, bytes.AsSpan(coreOffset));
                     equipmentList.Add(item);
@@ -144,15 +144,18 @@ namespace KoAR.Core
         /// Delete Equipment
         /// </summary>
         /// <param name="weapon"></param>
-        public void DeleteEquipment(ItemMemoryInfo equipment) 
+        public void DeleteEquipment(ItemMemoryInfo equipment)
             => Bytes = MemoryUtilities.ReplaceBytes(Bytes, equipment.ItemIndex, equipment.DataLength, equipment.ItemBytes);
 
-        public void WriteEquipmentBytes(ItemMemoryInfo equipment)
+        public void WriteEquipmentBytes(ItemMemoryInfo equipment, out bool lengthChanged)
         {
             var bytes = Bytes;
+            var oldLength = bytes.Length;
             var coreMemory = equipment.CoreItemMemory;
-            Bytes = MemoryUtilities.ReplaceBytes(bytes, coreMemory.ItemIndex, coreMemory.DataLength, coreMemory.ItemBytes);
-            Bytes = MemoryUtilities.ReplaceBytes(bytes, equipment.ItemIndex, equipment.DataLength, equipment.ItemBytes);
+            bytes = MemoryUtilities.ReplaceBytes(bytes, coreMemory.ItemIndex, coreMemory.DataLength, coreMemory.ItemBytes);
+            bytes = MemoryUtilities.ReplaceBytes(bytes, equipment.ItemIndex, equipment.DataLength, equipment.ItemBytes);
+            Bytes = bytes;
+            lengthChanged = Bytes.Length == oldLength;
         }
     }
 }

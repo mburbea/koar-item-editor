@@ -66,7 +66,7 @@ namespace KoAR.SaveEditor.Views
                 return;
             }
             this._item.ItemBytes = bytes;
-            this._editor.WriteEquipmentBytes(this._item);
+            this._editor.WriteEquipmentBytes(this._item, out _);
             ItemEditorView view = Application.Current.Windows.OfType<ItemEditorView>().Single();
             view.DialogResult = true;
             view.Close();
