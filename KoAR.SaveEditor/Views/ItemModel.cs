@@ -42,15 +42,9 @@ namespace KoAR.SaveEditor.Views
 
         public int EffectCount => this._item.EffectCount;
 
-        public IReadOnlyList<EffectInfo> Effects
-        {
-            get => this._effects ??= this._editor.GetEffectList(this._item, MainViewModel.Effects);
-        }
+        public IReadOnlyList<EffectInfo> Effects => this._effects ??= this._editor.GetEffectList(this._item, MainViewModel.Effects);
 
-        public IReadOnlyList<EffectInfo> CoreEffects
-        {
-            get => this._coreEffects ??= this._item.CoreItemMemory.ReadEffects();
-        }
+        public IReadOnlyList<EffectInfo> CoreEffects => this._coreEffects ??= this._item.CoreItemMemory.ReadEffects();
 
         public bool HasCustomName => this._item.HasCustomName;
 
