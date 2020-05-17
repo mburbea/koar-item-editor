@@ -12,6 +12,6 @@ namespace KoAR.Core
 
         public bool Equals(EffectInfo other) => other?.Code.Equals(Code, StringComparison.OrdinalIgnoreCase) == true;
         public override bool Equals(object obj) => Equals(obj as EffectInfo);
-        public override int GetHashCode() => Code.GetHashCode();
+        public override int GetHashCode() => Code?.GetHashCode() ?? 0;
     }
 }
