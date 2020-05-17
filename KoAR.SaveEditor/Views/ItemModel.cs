@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows.Threading;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
 
