@@ -155,7 +155,7 @@ namespace KoAR.Core
             bytes = MemoryUtilities.ReplaceBytes(bytes, coreMemory.ItemIndex, coreMemory.DataLength, coreMemory.ItemBytes);
             bytes = MemoryUtilities.ReplaceBytes(bytes, equipment.ItemIndex, equipment.DataLength, equipment.ItemBytes);
             Bytes = bytes;
-            lengthChanged = Bytes.Length == oldLength;
+            lengthChanged = Bytes.Length != oldLength;
         }
     }
 }
