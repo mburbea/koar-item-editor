@@ -48,7 +48,7 @@ namespace KoAR.SaveEditor.Views
                 {
                     continue;
                 }
-                if (text.Length != 2 || !byte.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out byte b))
+                if (text.Length != 2 || !byte.TryParse(text, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte b))
                 {
                     return default;
                 }
@@ -66,7 +66,7 @@ namespace KoAR.SaveEditor.Views
                 return;
             }
             this._item.ItemBytes = bytes;
-            this._editor.WriteEquipmentBytes(this._item);
+            this._editor.WriteEquipmentBytes(this._item, out _);
             ItemEditorView view = Application.Current.Windows.OfType<ItemEditorView>().Single();
             view.DialogResult = true;
             view.Close();

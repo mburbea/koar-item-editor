@@ -2,21 +2,16 @@
 
 namespace KoAR.Core
 {
-    /// <summary>
-    /// Attribute Information
-    /// </summary>
-    public class EffectInfo
+    public class EffectInfo : IEquatable<EffectInfo>
     {
-        /// <summary>
-        /// Attribute ID
-        /// </summary>
         public string Code { get; set; }
 
-        /// <summary>
-        /// Attribute Description
-        /// </summary>
         public string DisplayText { get; set; }
 
-        public EffectInfo Clone() => (EffectInfo)this.MemberwiseClone();
+        public EffectInfo Clone() => (EffectInfo)MemberwiseClone();
+
+        public bool Equals(EffectInfo other) => other?.Code.Equals(Code, StringComparison.OrdinalIgnoreCase) == true;
+        public override bool Equals(object obj) => Equals(obj as EffectInfo);
+        public override int GetHashCode() => Code?.GetHashCode() ?? 0;
     }
 }

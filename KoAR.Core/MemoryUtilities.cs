@@ -7,7 +7,7 @@ namespace KoAR.Core
     {
         public static byte[] ReplaceBytes(byte[] bytes, int offset, int length, ReadOnlySpan<byte> newData)
         {
-            if(newData.Length == length)
+            if (newData.Length == length)
             {
                 newData.CopyTo(bytes.AsSpan(offset));
                 return bytes;
@@ -20,7 +20,7 @@ namespace KoAR.Core
             return buffer;
         }
 
-        public static T Read<T>(ReadOnlySpan<byte> span, int offset)
+        public static T Read<T>(ReadOnlySpan<byte> span, int offset = 0)
             where T : struct
             => MemoryMarshal.Read<T>(span.Slice(offset));
 

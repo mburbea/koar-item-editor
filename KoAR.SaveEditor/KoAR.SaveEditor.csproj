@@ -13,6 +13,7 @@
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>app.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -22,9 +23,32 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="app.ico" />
+    <None Remove="Resources\Bleeding.png" />
+    <None Remove="Resources\Fire.png" />
+    <None Remove="Resources\Ice.png" />
+    <None Remove="Resources\Lightning.png" />
+    <None Remove="Resources\MasterCrafted.png" />
+    <None Remove="Resources\Physical.png" />
+    <None Remove="Resources\Piercing.png" />
+    <None Remove="Resources\Poison.png" />
+    <None Remove="Resources\Primal.png" />
+    <None Remove="Resources\Unknown.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="WPFTaskDialog" Version="1.7.1" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="app.ico" />
+    <Resource Include="Resources\Bleeding.png" />
+    <Resource Include="Resources\Fire.png" />
+    <Resource Include="Resources\Ice.png" />
+    <Resource Include="Resources\Lightning.png" />
+    <Resource Include="Resources\MasterCrafted.png" />
+    <Resource Include="Resources\Physical.png" />
+    <Resource Include="Resources\Piercing.png" />
+    <Resource Include="Resources\Poison.png" />
+    <Resource Include="Resources\Primal.png" />
+    <Resource Include="Resources\Unknown.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="PresentationFramework.Aero" />
@@ -40,6 +64,9 @@
     <ProjectReference Include="..\KoAR.Core\KoAR.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="CoreEffects.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="properties.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

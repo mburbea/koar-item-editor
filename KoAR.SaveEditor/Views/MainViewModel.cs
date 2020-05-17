@@ -11,11 +11,15 @@ using System.Xml.Linq;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
 using Microsoft.Win32;
+using TaskDialogInterop;
 
 namespace KoAR.SaveEditor.Views
 {
     public sealed class MainViewModel : NotifierBase
     {
+        public static readonly IReadOnlyDictionary<string, CoreEffectInfo> CoreEffects = MainViewModel.LoadAllCoreEffects();
+        public static readonly IReadOnlyList<EffectInfo> Effects = MainViewModel.LoadAllEffects();
+
         private readonly ObservableCollection<ItemModel> _items;
         private string? _currentDurabilityFilter = string.Empty;
         private AmalurSaveEditor? _editor;
@@ -24,7 +28,7 @@ namespace KoAR.SaveEditor.Views
         private int _inventorySize;
         private string? _itemNameFilter = string.Empty;
         private string? _maxDurabilityFilter = string.Empty;
-        private EffectInfo? _selectedAttribute;
+        private EffectInfo? _selectedEffect = MainViewModel.Effects.FirstOrDefault();
         private ItemModel? _selectedItem;
         private bool _unsavedChanges;
 
@@ -36,29 +40,12 @@ namespace KoAR.SaveEditor.Views
             this.ResetFiltersCommand = new DelegateCommand(this.ResetFilters);
             this.EditItemHexCommand = new DelegateCommand<ItemModel>(this.EditItemHex);
             this.UpdateInventorySizeCommand = new DelegateCommand(this.UpdateInventorySize, this.CanUpdateInventorySize);
-            this.AddAttributeCommand = new DelegateCommand<EffectInfo>(this.AddAttribute);
-            this.DeleteAttributeCommand = new DelegateCommand<EffectInfo>(this.DeleteAttribute);
+            this.AddEffectCommand = new DelegateCommand<EffectInfo>(this.AddEffect);
+            this.DeleteEffectCommand = new DelegateCommand<EffectInfo>(this.DeleteEffect);
             this.SaveCommand = new DelegateCommand(this.Save);
-            if ((bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(Window)).DefaultValue)
-            {
-                this.Attributes = Array.Empty<EffectInfo>();
-                return;
-            }
-            using Stream stream = File.OpenRead(Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "properties.xml"));
-            this.Attributes = XDocument.Load(stream).Root.Elements().Select(element => new EffectInfo
-            {
-                Code = element.Attribute("id").Value.ToUpper(),
-                DisplayText = element.Value.ToUpper()
-            }).ToArray();
-            this._selectedAttribute = this.Attributes[0];
         }
 
-        public DelegateCommand<EffectInfo> AddAttributeCommand
-        {
-            get;
-        }
-
-        public IReadOnlyList<EffectInfo> Attributes
+        public DelegateCommand<EffectInfo> AddEffectCommand
         {
             get;
         }
@@ -78,7 +65,7 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        public DelegateCommand<EffectInfo> DeleteAttributeCommand
+        public DelegateCommand<EffectInfo> DeleteEffectCommand
         {
             get;
         }
@@ -161,10 +148,10 @@ namespace KoAR.SaveEditor.Views
             get;
         }
 
-        public EffectInfo? SelectedAttribute
+        public EffectInfo? SelectedEffect
         {
-            get => this._selectedAttribute;
-            set => this.SetValue(ref this._selectedAttribute, value);
+            get => this._selectedEffect;
+            set => this.SetValue(ref this._selectedEffect, value);
         }
 
         public ItemModel? SelectedItem
@@ -181,12 +168,14 @@ namespace KoAR.SaveEditor.Views
                     PropertyChangedEventManager.RemoveHandler(this._selectedItem, this.SelectedItem_MateriallyChanged, nameof(ItemModel.ItemName));
                     PropertyChangedEventManager.RemoveHandler(this._selectedItem, this.SelectedItem_MateriallyChanged, nameof(ItemModel.CurrentDurability));
                     PropertyChangedEventManager.RemoveHandler(this._selectedItem, this.SelectedItem_MateriallyChanged, nameof(ItemModel.MaxDurability));
+                    PropertyChangedEventManager.RemoveHandler(this._selectedItem, this.SelectedItem_MateriallyChanged, nameof(ItemModel.IsUnsellable));
                 }
                 if ((this._selectedItem = value) != null)
                 {
                     PropertyChangedEventManager.AddHandler(this._selectedItem, this.SelectedItem_MateriallyChanged, nameof(ItemModel.ItemName));
                     PropertyChangedEventManager.AddHandler(this._selectedItem, this.SelectedItem_MateriallyChanged, nameof(ItemModel.CurrentDurability));
                     PropertyChangedEventManager.AddHandler(this._selectedItem, this.SelectedItem_MateriallyChanged, nameof(ItemModel.MaxDurability));
+                    PropertyChangedEventManager.AddHandler(this._selectedItem, this.SelectedItem_MateriallyChanged, nameof(ItemModel.IsUnsellable));
                 }
                 this.OnPropertyChanged();
             }
@@ -203,15 +192,46 @@ namespace KoAR.SaveEditor.Views
             get;
         }
 
-        private void AddAttribute(EffectInfo info)
+        private static IReadOnlyDictionary<string, CoreEffectInfo> LoadAllCoreEffects()
+        {
+            if ((bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(Window)).DefaultValue)
+            {
+                return new Dictionary<string, CoreEffectInfo>();
+            }
+            return File.ReadLines(Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "CoreEffects.csv"))
+                .Skip(1)
+                .Select(row => row.Split(','))
+                .Select(parts => new CoreEffectInfo
+                {
+                    Code = parts[0],
+                    DamageType = Enum.TryParse(parts[1], true, out DamageType damageType) ? damageType : default,
+                    Tier = float.Parse(parts[2])
+                })
+                .ToDictionary(info => info.Code, StringComparer.OrdinalIgnoreCase);
+        }
+
+        private static IReadOnlyList<EffectInfo> LoadAllEffects()
+        {
+            if ((bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(Window)).DefaultValue)
+            {
+                return Array.Empty<EffectInfo>();
+            }
+            using Stream stream = File.OpenRead(Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "properties.xml"));
+            return XDocument.Load(stream).Root
+                .Elements()
+                .Select(element => new EffectInfo { Code = element.Attribute("id").Value.ToUpper(), DisplayText = element.Value.ToUpper() })
+                .ToList(); // xaml will bind to `Count` property so keeping consistent with `ItemModel.Effects`.
+        }
+
+        private void AddEffect(EffectInfo info)
         {
             if (info == null || this.SelectedItem == null)
             {
                 return;
             }
-            this.SelectedItem.AddAttribute(info.Clone());
-            this.SelectedAttribute = this.Attributes[0];
-            this.CanSave();
+            this.SelectedItem.AddEffect(info.Clone());
+            this.SelectedEffect = MainViewModel.Effects[0];
+            this.Refresh();
         }
 
         private bool CanMakeAllItemsSellable()
@@ -219,25 +239,12 @@ namespace KoAR.SaveEditor.Views
             return this._editor != null && this._fileName != null && this._items.Any(item => item.IsUnsellable);
         }
 
-        private void CanSave()
-        {
-            int? selectedItemIndex = this._selectedItem?.ItemIndex;
-            this.RepopulateItems();
-            if (selectedItemIndex.HasValue)
-            {
-                this.SelectedItem = this._items.FirstOrDefault(item => item.ItemIndex == selectedItemIndex.Value);
-            }
-            this.UnsavedChanges = true;
-            this.SelectedAttribute = this.Attributes[0];
-            CommandManager.InvalidateRequerySuggested();
-        }
-
         private bool CanUpdateInventorySize() => this._editor != null && this._editor.GetMaxBagCount() != this.InventorySize;
 
-        private void DeleteAttribute(EffectInfo info)
+        private void DeleteEffect(EffectInfo info)
         {
-            this.SelectedItem?.DeleteAttribute(info);
-            this.CanSave();
+            this.SelectedItem?.DeleteEffect(info);
+            this.Refresh();
         }
 
         private void EditItemHex(ItemModel item)
@@ -253,7 +260,7 @@ namespace KoAR.SaveEditor.Views
             };
             if (view.ShowDialog() == true)
             {
-                this.CanSave();
+                this.Refresh();
             }
         }
 
@@ -271,13 +278,20 @@ namespace KoAR.SaveEditor.Views
                     continue;
                 }
                 item.IsUnsellable = false;
-                this._editor.WriteEquipmentBytes(item.GetItem());
+                this._editor.WriteEquipmentBytes(item.GetItem(), out _);
                 count++;
             }
-            MessageBox.Show($"Modified {count} items.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
+            TaskDialog.Show(new TaskDialogOptions
+            {
+                Title = "KoAR Save Editor",
+                Owner = Application.Current.MainWindow,
+                CommonButtons = TaskDialogCommonButtons.Close,
+                Content = $"Modified {count} items.",
+                MainIcon = VistaTaskDialogIcon.Information
+            });
             if (count > 0)
             {
-                this.CanSave();
+                this.UnsavedChanges = true;
             }
         }
 
@@ -308,7 +322,7 @@ namespace KoAR.SaveEditor.Views
         {
             OpenFileDialog dialog = new OpenFileDialog
             {
-                Title = "Load Save File...",
+                Title = "Open Save File...",
                 DefaultExt = ".sav",
                 Filter = "Save Files (*.sav)|*.sav",
                 CheckFileExists = true
@@ -326,6 +340,19 @@ namespace KoAR.SaveEditor.Views
             this.OnPropertyChanged(nameof(this.UnsavedChanges));
         }
 
+        private void Refresh()
+        {
+            int? selectedItemIndex = this._selectedItem?.ItemIndex;
+            this.RepopulateItems();
+            if (selectedItemIndex.HasValue)
+            {
+                this.SelectedItem = this._items.FirstOrDefault(item => item.ItemIndex == selectedItemIndex.Value);
+            }
+            this.UnsavedChanges = true;
+            this.SelectedEffect = MainViewModel.Effects[0];
+            CommandManager.InvalidateRequerySuggested();
+        }
+
         /// <summary>
         /// Formerly called ShowAll or btnShowAll_Click
         /// </summary>
@@ -340,7 +367,7 @@ namespace KoAR.SaveEditor.Views
             this._items.Clear();
             foreach (ItemMemoryInfo info in this._editor.GetAllEquipment())
             {
-                this._items.Insert(info.ItemName == "Unknown" ? this._items.Count : 0, new ItemModel(this._editor, this.Attributes, info));
+                this._items.Add(new ItemModel(this._editor, info));
             }
         }
 
@@ -370,8 +397,15 @@ namespace KoAR.SaveEditor.Views
                 return;
             }
             ItemModel model = (ItemModel)sender;
-            this._editor.WriteEquipmentBytes(model.GetItem());
-            this.CanSave();
+            this._editor.WriteEquipmentBytes(model.GetItem(), out bool lengthChanged);
+            if (lengthChanged)
+            {
+                this.Refresh();
+            }
+            else
+            {
+                this.UnsavedChanges = true;
+            }
         }
 
         private void UpdateInventorySize()
@@ -381,7 +415,7 @@ namespace KoAR.SaveEditor.Views
                 return;
             }
             this._editor.EditMaxBagCount(this.InventorySize);
-            this.CanSave();
+            this.UnsavedChanges = true;
         }
     }
 }
