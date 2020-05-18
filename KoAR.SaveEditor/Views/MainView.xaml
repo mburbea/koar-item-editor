@@ -6,6 +6,7 @@
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views"
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs" 
     xmlns:componentmodel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+    xmlns:core="clr-namespace:KoAR.Core;assembly=KoAR.Core"
     mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type views:MainViewModel}}"
     Width="1024" Height="768" WindowStartupLocation="CenterScreen" 
     Icon="../app.ico" ResizeMode="CanResizeWithGrip">
@@ -186,12 +187,18 @@
                             <GridViewColumn Header="Core Effects" Width="Auto">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate DataType="{x:Type views:ItemModel}">
-                                        <StackPanel Orientation="Horizontal">
-                                            <views:DamageTypeControl CoreEffect="{Binding CoreEffect0}" />
-                                            <views:DamageTypeControl CoreEffect="{Binding CoreEffect1}" />
-                                            <views:DamageTypeControl CoreEffect="{Binding CoreEffect2}" />
-                                            <views:DamageTypeControl CoreEffect="{Binding CoreEffect3}" />
-                                        </StackPanel>
+                                        <ItemsControl ItemsSource="{Binding CoreEffects}">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel Orientation="Horizontal" />
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate DataType="{x:Type core:CoreEffectInfo}">
+                                                    <views:DamageTypeControl CoreEffect="{Binding}" />
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>

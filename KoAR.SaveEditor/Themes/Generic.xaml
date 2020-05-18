@@ -17,12 +17,10 @@
     <BitmapImage x:Key="Magnifying" UriSource="pack://application:,,,/Resources/Magnifying.png" po:Freeze="true" />
     <BitmapImage x:Key="Unknown" UriSource="pack://application:,,,/Resources/Unknown.png" po:Freeze="true" />
     <Style TargetType="{x:Type views:DamageTypeControl}">
-        <Setter Property="Margin" Value="0,1" />
-        <Setter Property="Width" Value="18" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type views:DamageTypeControl}">
-                    <Image x:Name="PART_Image" Width="{TemplateBinding Width}" Source="{StaticResource Unknown}" />
+                    <Image Margin="1,0" x:Name="PART_Image" Width="18" Source="{StaticResource Unknown}" />
                     <ControlTemplate.Triggers>
                         <Trigger Property="CoreEffect" Value="{x:Null}">
                             <Setter Property="Visibility" Value="Collapsed" />
