@@ -44,6 +44,8 @@ namespace KoAR.SaveEditor.Views
 
         public List<EffectInfo> Effects => this._effects ??= this._editor.GetEffectList(this.Item, MainViewModel.Effects);
 
+        public EquipmentType EquipmentType => this.Item.EquipmentType;
+
         public bool HasCustomName => this.Item.HasCustomName;
 
         public bool IsUnsellable

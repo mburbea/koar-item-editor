@@ -16,8 +16,10 @@ namespace KoAR.Core
         private static ReadOnlySpan<byte> InventoryLimit => new[] { (byte)'i', (byte)'n', (byte)'v', (byte)'e', (byte)'n', (byte)'t', (byte)'o', (byte)'r', (byte)'y', (byte)'_', (byte)'l', (byte)'i', (byte)'m', (byte)'i', (byte)'t' };
         private static ReadOnlySpan<byte> IncreaseAmount => new[] { (byte)'i', (byte)'n', (byte)'c', (byte)'r', (byte)'e', (byte)'a', (byte)'s', (byte)'e', (byte)'_', (byte)'a', (byte)'m', (byte)'o', (byte)'u', (byte)'n', (byte)'t' };
         private static ReadOnlySpan<byte> CurrentInventoryCount => new[] { (byte)'c', (byte)'u', (byte)'r', (byte)'r', (byte)'e', (byte)'n', (byte)'t', (byte)'_', (byte)'i', (byte)'n', (byte)'v', (byte)'e', (byte)'n', (byte)'t', (byte)'o', (byte)'r', (byte)'y', (byte)'_', (byte)'c', (byte)'o', (byte)'u', (byte)'n', (byte)'t' };
-        private static ReadOnlySpan<byte> EquipmentSequence => new byte[] { 0x0B, 00, 00, 00, 0x68, 0xD5, 0x24, 0x00, 0x03 };
-        private static ReadOnlySpan<byte> CoreAttributeSequence => new byte[] { 0x0B, 00, 00, 00, 0x84, 0x60, 0x28, 0x00, 0x00 };
+        private static ReadOnlySpan<byte> EquipmentSequence => new byte[]     { 0x0B, 0x00, 0x00, 0x00, 0x68, 0xD5, 0x24, 0x00, 0x03 };
+        private static ReadOnlySpan<byte> CoreAttributeSequence => new byte[] { 0x0B, 0x00, 0x00, 0x00, 0x84, 0x60, 0x28, 0x00, 0x00 };
+        private static ReadOnlySpan<byte> EquipTypeSequence => new byte[]     { 0x0B, 0x00, 0x00, 0x00, 0xD4, 0x08, 0x46, 0x00, 0x01 };
+        private static ReadOnlySpan<byte> DifferentiatingSeq => new byte[]    { 0x0B, 0x00, 0x00, 0x00, 0x8D, 0xE3, 0x47, 0x00, 0x02 };
         private byte[] _bytes;
 
         public byte[] Bytes
@@ -121,6 +123,41 @@ namespace KoAR.Core
                 return results;
             }
 
+            static EquipmentType DetermineEquipmentType(ReadOnlySpan<byte> bytes, ReadOnlySpan<byte> itemId)
+            {
+                Span<byte> buffer = stackalloc byte[13];
+                itemId.CopyTo(buffer);
+                EquipTypeSequence.CopyTo(buffer.Slice(4));
+                var offset = bytes.IndexOf(buffer);
+                var differingByte = bytes[offset + 13];
+                switch (differingByte)
+                {
+                    case 0x18:
+                        return EquipmentType.LongBow;
+                    case 0x14:
+                        return EquipmentType.Sceptre;
+                    case 0x20:
+                        return bytes[offset + 21] == 0 ? EquipmentType.GreatSword : EquipmentType.LongSword;
+                    case 0x24:
+                    case 0x1C:
+                        break;
+                    default:
+                        return EquipmentType.Unknown;
+                }
+                DifferentiatingSeq.CopyTo(buffer.Slice(4));
+                offset = bytes.IndexOf(buffer);
+                var magicStrengthOrFinesse = MemoryUtilities.Read<int>(bytes,offset + 17);
+                return magicStrengthOrFinesse switch
+                {
+                    0x1D_5A_EA => EquipmentType.Chakrams,
+                    0x1D_5A_EB => EquipmentType.FaeBlades,
+                    0x1D_5A_EC => EquipmentType.Hammer,
+                    0 => differingByte == 0x24 ? EquipmentType.Daggers : EquipmentType.Staff,
+                    _=> EquipmentType.Unknown,
+                };
+
+            }
+
             List<ItemMemoryInfo> equipmentList = new List<ItemMemoryInfo>();
             var bytes = Bytes;
             var indexList = GetAllIndices(bytes, EquipmentSequence);
@@ -138,6 +175,7 @@ namespace KoAR.Core
 
                     int coreOffset = span.IndexOf(coreHeader) + indexList[i];
                     item.CoreItemMemory = CoreItemMemory.Create(coreOffset, bytes.AsSpan(coreOffset));
+                    item.EquipmentType = DetermineEquipmentType(bytes, bytes.AsSpan(indexList[i], 4));
                     equipmentList.Add(item);
 
                     var b13 = item.CoreItemMemory.MysteryInteger;
@@ -149,6 +187,7 @@ namespace KoAR.Core
                 }
             }
             var max = equipmentList.Max(x => x.CoreItemMemory.EffectCount);
+            
             Console.WriteLine(max);
             Console.WriteLine(bins);
 

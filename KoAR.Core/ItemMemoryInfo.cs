@@ -70,6 +70,8 @@ namespace KoAR.Core
             }
         }
 
+        public EquipmentType EquipmentType { get; set; }
+
         public byte[] ItemBytes { get; set; }
 
         public int ItemId => MemoryUtilities.Read<int>(ItemBytes);
@@ -82,7 +84,7 @@ namespace KoAR.Core
             {
                 if (!HasCustomName)
                 {
-                    return "Unknown";
+                    return "Unknown" + (EquipmentType != EquipmentType.Unknown ? $" ({EquipmentType})" : "");
                 }
                 else
                 {
