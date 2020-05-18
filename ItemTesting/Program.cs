@@ -25,7 +25,7 @@ namespace ItemTesting
         static void Main(string[] args)
         {
 
-            var path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save90.sav";
+            var path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save84.sav";
             //using var fs = new FileStream(path, FileMode.Open);
             //var bytes = new byte[fs.Length];
             //var memory = fs.Read(bytes, 0, bytes.Length);
@@ -48,7 +48,7 @@ namespace ItemTesting
             var bytes = editor.Bytes;
             var interest = new[] { "IC1", "M", "M2", "M3","St1","St2","FC1","F1","F2","D1","Mastercrafted Sylvanite Greatswo" };
             var items = editor.GetAllEquipment()
-                .Where(x=>  x.MaxDurability == 60 || x.MaxDurability == 80 || x.ItemName == "S1" || x.ItemName == "F1" ||x.MaxDurability == 25)
+                .Where(x=>  x.ItemId== 0x07EB0942)
                 .Select(x => (x.ItemName, ItemId:x.ItemBytes.AsSpan(0, 8).ToArray())).OrderBy(x=>x.ItemName).ToArray();
             
             //var items = new[] { "92 05 FC 00 0B 00 00 00", 

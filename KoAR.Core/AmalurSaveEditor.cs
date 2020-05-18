@@ -130,19 +130,15 @@ namespace KoAR.Core
                 EquipTypeSequence.CopyTo(buffer.Slice(4));
                 var offset = bytes.IndexOf(buffer);
                 var differingByte = bytes[offset + 13];
-                switch (differingByte)
+                if(differingByte != 0x24 && differingByte != 0x1C)
                 {
-                    case 0x18:
-                        return EquipmentType.LongBow;
-                    case 0x14:
-                        return EquipmentType.Sceptre;
-                    case 0x20:
-                        return bytes[offset + 21] == 0 ? EquipmentType.GreatSword : EquipmentType.LongSword;
-                    case 0x24:
-                    case 0x1C:
-                        break;
-                    default:
-                        return EquipmentType.Unknown;
+                    return differingByte switch
+                    {
+                        0x18 => EquipmentType.LongBow,
+                        0x14 => EquipmentType.Sceptre,
+                        0x20 => bytes[offset + 21] == 0 ? EquipmentType.GreatSword : EquipmentType.LongSword,
+                        _ => EquipmentType.Unknown,
+                    };
                 }
                 DifferentiatingSeq.CopyTo(buffer.Slice(4));
                 offset = bytes.IndexOf(buffer);
