@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using System.Xml.Linq;
@@ -40,7 +41,7 @@ namespace KoAR.SaveEditor.Views
             this.UpdateInventorySizeCommand = new DelegateCommand(this.UpdateInventorySize, this.CanUpdateInventorySize);
             this.AddEffectCommand = new DelegateCommand<EffectInfo>(this.AddEffect);
             this.DeleteEffectCommand = new DelegateCommand<EffectInfo>(this.DeleteEffect);
-            this.SaveCommand = new DelegateCommand(this.Save);
+            this.SaveCommand = new DelegateCommand(this.Save, this.CanSave);
         }
 
         public DelegateCommand<EffectInfo> AddEffectCommand
@@ -276,6 +277,8 @@ namespace KoAR.SaveEditor.Views
             this.Refresh();
         }
 
+        private bool CanSave() => this._unsavedChanges == true;
+
         private bool CanUpdateInventorySize() => this._editor != null && this._editor.GetMaxBagCount() != this.InventorySize;
 
         private void DeleteEffect(EffectInfo info)
@@ -381,7 +384,18 @@ namespace KoAR.SaveEditor.Views
 
         private void ResetFilters()
         {
-            this._itemNameFilter = this._currentDurabilityFilter = this._maxDurabilityFilter = string.Empty;
+            if (Interlocked.Exchange(ref this._itemNameFilter, string.Empty) != string.Empty)
+            {
+                this.OnPropertyChanged(nameof(this.ItemNameFilter));
+            }
+            if (Interlocked.Exchange(ref this._maxDurabilityFilter, string.Empty) != string.Empty)
+            {
+                this.OnPropertyChanged(nameof(this.MaxDurabilityFilter));
+            }
+            if (Interlocked.Exchange(ref this._currentDurabilityFilter, string.Empty) != string.Empty)
+            {
+                this.OnPropertyChanged(nameof(this.CurrentDurabilityFilter));
+            }
             this.OnFilterChange();
         }
 

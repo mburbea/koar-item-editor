@@ -3,6 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options" 
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views"
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs" 
     xmlns:componentmodel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
@@ -11,7 +12,7 @@
     Width="1024" Height="768" WindowStartupLocation="CenterScreen" 
     Icon="../app.ico" ResizeMode="CanResizeWithGrip">
     <Window.Resources>
-        <ObjectDataProvider x:Key="ViewModel" ObjectType="{x:Type views:MainViewModel}" />        
+        <ObjectDataProvider x:Key="ViewModel" ObjectType="{x:Type views:MainViewModel}" />
         <constructs:NegatedBooleanConverter x:Key="NegatedBooleanConverter" />
         <constructs:StringIsNullOrEmptyConverter x:Key="StringIsNullOrEmptyConverter" />
         <constructs:LittleEndianConverter x:Key="LittleEndianConverter" />
@@ -69,16 +70,47 @@
                 </CollectionViewSource.SortDescriptions>
             </CollectionViewSource>
         </DockPanel.Resources>
-        <Menu DockPanel.Dock="Top" Background="Transparent" BorderBrush="{x:Static SystemColors.ActiveBorderBrush}" BorderThickness="0,0,0,1">
-            <Menu.Resources>
-                <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource {x:Type MenuItem}}">
-                    <Setter Property="Margin" Value="4" />
+        <Border DockPanel.Dock="Top" Background="Transparent" BorderBrush="{x:Static SystemColors.ActiveBorderBrush}" BorderThickness="0,0,0,1">
+            <Border.Resources>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border x:Name="BD" BorderBrush="Transparent" BorderThickness="1" CornerRadius="2">
+                                    <Image Width="18" Source="{TemplateBinding Tag}" />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter Property="Opacity" Value="0.25" />
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="BD" Property="BorderBrush" Value="LightGray" />
+                                    </Trigger>
+                                    <Trigger Property="IsPressed" Value="True">
+                                        <Setter Property="RenderTransform">
+                                            <Setter.Value>
+                                                <ScaleTransform ScaleX="0.85" ScaleY="0.85" po:Freeze="True" />
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    <Setter Property="Margin" Value="2" />
                 </Style>
-            </Menu.Resources>
-            <MenuItem Header="_Open File..." Command="{Binding OpenFileCommand}" />
-            <MenuItem Header="_Save" Command="{Binding SaveCommand}" IsEnabled="{Binding UnsavedChanges}" />
-            <MenuItem Header="_Help" Command="Help" />
-        </Menu>
+                <BitmapImage UriSource="/Resources/Open.png" x:Key="Open" po:Freeze="True" />
+                <BitmapImage UriSource="/Resources/Save.png" x:Key="Save" po:Freeze="True" />
+                <BitmapImage UriSource="/Resources/Help.png" x:Key="Help" po:Freeze="True" />
+            </Border.Resources>
+            <StackPanel Orientation="Horizontal">
+                <Button ToolTip="Open File..." Command="{Binding OpenFileCommand}" Tag="{StaticResource Open}" />
+                <Button ToolTip="Save" Command="{Binding SaveCommand}" Tag="{StaticResource Save}" />
+                <Button ToolTip="Help" Command="Help" Tag="{StaticResource Help}" />
+            </StackPanel>
+        </Border>
         <Border Background="{x:Static SystemColors.ControlBrush}" DockPanel.Dock="Bottom" Height="24" />
         <Grid>
             <Grid.Style>
@@ -224,7 +256,7 @@
                         </GridView>
                     </ListView.View>
                 </ListView>
-            </Grid>            
+            </Grid>
             <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Stretch" Background="{x:Static SystemColors.ControlBrush}" FocusVisualStyle="{x:Null}" />
             <Grid Grid.Column="2">
                 <Grid.RowDefinitions>
