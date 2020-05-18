@@ -277,7 +277,7 @@ namespace KoAR.SaveEditor.Views
             this.Refresh();
         }
 
-        private bool CanSave() => this._unsavedChanges == true;
+        private bool CanSave() => this._unsavedChanges;
 
         private bool CanUpdateInventorySize() => this._editor != null && this._editor.GetMaxBagCount() != this.InventorySize;
 
