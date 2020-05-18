@@ -16,6 +16,7 @@
         <constructs:NegatedBooleanConverter x:Key="NegatedBooleanConverter" />
         <constructs:StringIsNullOrEmptyConverter x:Key="StringIsNullOrEmptyConverter" />
         <constructs:LittleEndianConverter x:Key="LittleEndianConverter" />
+        <SolidColorBrush x:Key="AlternateRowBrush" Color="#25BCBCBC" po:Freeze="True" />
         <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
             <Setter Property="Validation.ErrorTemplate">
                 <Setter.Value>
@@ -184,9 +185,19 @@
                 </GroupBox>
                 <ListView x:Name="PART_ListView" Grid.Row="1" ItemsSource="{Binding Source={StaticResource FilteredItems}}" SelectedItem="{Binding SelectedItem}"
                     Margin="4" BorderBrush="LightGray" SelectionMode="Single" FocusVisualStyle="{x:Null}" VirtualizingPanel.VirtualizationMode="Recycling"
-                    TextSearch.TextPath="ItemId">
+                    TextSearch.TextPath="ItemId" AlternationCount="2">
                     <ListView.ItemContainerStyle>
-                        <Style TargetType="{x:Type ListViewItem}">
+                        <Style TargetType="{x:Type ListViewItem}">                            
+                            <Style.Triggers>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="ItemsControl.AlternationIndex" Value="1" />
+                                        <Condition Property="IsSelected" Value="False" />
+                                        <Condition Property="IsMouseOver" Value="False" />
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Background" Value="{StaticResource AlternateRowBrush}" />
+                                </MultiTrigger>
+                            </Style.Triggers>
                             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                             <Setter Property="views:MouseDoubleClick.CommandParameter" Value="{Binding}" />
                             <Setter Property="views:MouseDoubleClick.Command" Value="{Binding EditItemHexCommand, Source={StaticResource ViewModel}}" />
