@@ -14,7 +14,6 @@ namespace KoAR.SaveEditor.Views
     public sealed class ItemModel : NotifierBase
     {
         private readonly AmalurSaveEditor _editor;
-        private readonly ItemMemoryInfo _item;
         private List<CoreEffectInfo>? _coreEffects;
         private List<EffectInfo>? _effects;
         private EffectInfo? _selectedEffect;
@@ -22,7 +21,7 @@ namespace KoAR.SaveEditor.Views
         public ItemModel(AmalurSaveEditor editor, ItemMemoryInfo item)
         {
             this._editor = editor;
-            this._item = item;
+            this.Item = item;
         }
 
         public CoreEffectInfo? CoreEffect0 => this.CoreEffects.FirstOrDefault();
@@ -30,46 +29,46 @@ namespace KoAR.SaveEditor.Views
         public CoreEffectInfo? CoreEffect1 => this.CoreEffects.Skip(1).FirstOrDefault();
 
         public CoreEffectInfo? CoreEffect2 => this.CoreEffects.Skip(2).FirstOrDefault();
-        
+
         public CoreEffectInfo? CoreEffect3 => this.CoreEffects.Skip(3).FirstOrDefault();
 
-        public List<CoreEffectInfo> CoreEffects => this._coreEffects ??= this._editor.GetCoreEffectInfos(this._item.CoreItemMemory, MainViewModel.CoreEffects);
+        public List<CoreEffectInfo> CoreEffects => this._coreEffects ??= this._editor.GetCoreEffectInfos(this.Item.CoreItemMemory, MainViewModel.CoreEffects);
 
         public float CurrentDurability
         {
-            get => this._item.CurrentDurability;
-            set => this.SetItemValue(value, this._item.CurrentDurability, value => this._item.CurrentDurability = value);
+            get => this.Item.CurrentDurability;
+            set => this.SetItemValue(value, this.Item.CurrentDurability, value => this.Item.CurrentDurability = value);
         }
-        
-        public int EffectCount => this._item.EffectCount;
 
-        public List<EffectInfo> Effects => this._effects ??= this._editor.GetEffectList(this._item, MainViewModel.Effects);
+        public int EffectCount => this.Item.EffectCount;
 
-        public bool HasCustomName => this._item.HasCustomName;
+        public List<EffectInfo> Effects => this._effects ??= this._editor.GetEffectList(this.Item, MainViewModel.Effects);
+
+        public bool HasCustomName => this.Item.HasCustomName;
 
         public bool IsUnsellable
         {
-            get => this._item.IsUnsellable;
-            set => this.SetItemValue(value, this._item.IsUnsellable, value => this._item.IsUnsellable = value);
+            get => this.Item.IsUnsellable;
+            set => this.SetItemValue(value, this.Item.IsUnsellable, value => this.Item.IsUnsellable = value);
         }
 
-        public int ItemId => this._item.ItemId;
+        public int ItemId => this.Item.ItemId;
 
-        public int ItemIndex => this._item.ItemIndex;
+        public int ItemIndex => this.Item.ItemIndex;
 
         public string ItemName
         {
-            get => this._item.ItemName;
-            set => this.SetItemValue(value, this._item.ItemName, value => this._item.ItemName = value);
+            get => this.Item.ItemName;
+            set => this.SetItemValue(value, this.Item.ItemName, value => this.Item.ItemName = value);
         }
 
         public float MaxDurability
         {
-            get => this._item.MaxDurability;
-            set => this.SetItemValue(value, this._item.MaxDurability, value => this._item.MaxDurability = value);
+            get => this.Item.MaxDurability;
+            set => this.SetItemValue(value, this.Item.MaxDurability, value => this.Item.MaxDurability = value);
         }
 
-        public int MysteryInteger => this._item.CoreItemMemory.MysteryInteger;
+        public int MysteryInteger => this.Item.CoreItemMemory.MysteryInteger;
 
         public EffectInfo? SelectedEffect
         {
@@ -77,11 +76,16 @@ namespace KoAR.SaveEditor.Views
             set => this.SetValue(ref this._selectedEffect, value ?? this.Effects.FirstOrDefault());
         }
 
+        internal ItemMemoryInfo Item
+        {
+            get;
+        }
+
         public void AddEffect(EffectInfo info)
         {
             this.Effects.Add(info);
-            this._item.WriteEffects(this.Effects);
-            this._editor.WriteEquipmentBytes(this._item, out _);
+            this.Item.WriteEffects(this.Effects);
+            this._editor.WriteEquipmentBytes(this.Item, out _);
         }
 
         public void DeleteEffect(EffectInfo info)
@@ -90,11 +94,9 @@ namespace KoAR.SaveEditor.Views
             {
                 return;
             }
-            this._item.WriteEffects(this.Effects);
-            this._editor.WriteEquipmentBytes(this._item, out _);
+            this.Item.WriteEffects(this.Effects);
+            this._editor.WriteEquipmentBytes(this.Item, out _);
         }
-
-        public ItemMemoryInfo GetItem() => this._item;
 
         private void SetItemValue<T>(T value, T currentValue, Action<T> setValue, [CallerMemberName] string propertyName = "")
         {

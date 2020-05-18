@@ -86,7 +86,7 @@ namespace KoAR.SaveEditor.Views
                         PropertyChangedEventManager.RemoveHandler(model, this.SelectedItem_IsUnsellableChanged, nameof(model.IsUnsellable));
                     }
                     model.IsUnsellable = newValue;
-                    this._editor.WriteEquipmentBytes(model.GetItem(), out _);
+                    this._editor.WriteEquipmentBytes(model.Item, out _);
                     this.UnsavedChanges = true;
                     if (model.Equals(this.SelectedItem))
                     {
@@ -284,7 +284,7 @@ namespace KoAR.SaveEditor.Views
             this.Refresh();
         }
 
-        private void EditItemHex(ItemModel item)
+        private void EditItemHex(ItemModel model)
         {
             if (this._editor == null)
             {
@@ -293,7 +293,7 @@ namespace KoAR.SaveEditor.Views
             ItemEditorView view = new ItemEditorView
             {
                 Owner = Application.Current.MainWindow,
-                DataContext = new ItemEditorViewModel(this._editor, item.GetItem())
+                DataContext = new ItemEditorViewModel(this._editor, model.Item)
             };
             if (view.ShowDialog() == true)
             {
@@ -405,7 +405,7 @@ namespace KoAR.SaveEditor.Views
                 return;
             }
             ItemModel model = (ItemModel)sender;
-            this._editor.WriteEquipmentBytes(model.GetItem(), out _);
+            this._editor.WriteEquipmentBytes(model.Item, out _);
             this.UnsavedChanges = true;
             this.OnPropertyChanged(nameof(this.AllItemsUnsellable));
         }
@@ -417,7 +417,7 @@ namespace KoAR.SaveEditor.Views
                 return;
             }
             ItemModel model = (ItemModel)sender;
-            this._editor.WriteEquipmentBytes(model.GetItem(), out bool lengthChanged);
+            this._editor.WriteEquipmentBytes(model.Item, out bool lengthChanged);
             if (lengthChanged)
             {
                 this.Refresh();
