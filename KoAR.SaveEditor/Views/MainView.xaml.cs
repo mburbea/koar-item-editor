@@ -37,7 +37,7 @@ namespace KoAR.SaveEditor.Views
                     Title = "KoAR Save Editor",
                     MainIcon = VistaTaskDialogIcon.Warning,
                     AllowDialogCancellation = true,
-                    FooterText = " "
+                    FooterText = " " // Dialog looks a bit weird without a footer.
                 });
                 switch (result.CommandButtonResult)
                 {
@@ -46,7 +46,7 @@ namespace KoAR.SaveEditor.Views
                         e.Cancel = true;
                         break;
                     case 1:
-                        viewModel.SaveCommand.Execute();
+                        viewModel.Save();
                         break;
                 }
             }
@@ -77,8 +77,8 @@ namespace KoAR.SaveEditor.Views
 7.Editing unique items or adding properties beyond the maximum detected will cause your file to not load.
 
 8.The provided property.xml file is exhaustive but not complete. You can play around with in-game properties and make educated guesses on which attributes the unknown properties are by way of deleting and tracking.",
-                FooterText = "While tricky, using the Hex Code edit can hypothetically give you any item with any property. It's unknown if this can bypass the unique item rule or the save corruption in 7.",
-                FooterIcon = VistaTaskDialogIcon.Warning
+                ExpandedInfo = "While tricky, using the Hex Code edit can hypothetically give you any item with any property. It's unknown if this can bypass the unique item rule or the save corruption in 7.",
+                ExpandToFooter = true
             });
         }
 
@@ -104,7 +104,7 @@ namespace KoAR.SaveEditor.Views
         private void MainView_Loaded(object sender, RoutedEventArgs e)
         {
             this.Loaded -= this.MainView_Loaded;
-            this.Dispatcher.InvokeAsync(((MainViewModel)this.DataContext).OpenFileCommand.Execute, DispatcherPriority.Render);
+            this.Dispatcher.InvokeAsync(((MainViewModel)this.DataContext).OpenFile, DispatcherPriority.Render);
         }
     }
 }

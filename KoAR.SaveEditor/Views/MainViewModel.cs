@@ -235,6 +235,41 @@ namespace KoAR.SaveEditor.Views
             get;
         }
 
+        internal void OpenFile()
+        {
+            OpenFileDialog dialog = new OpenFileDialog
+            {
+                Title = "Open Save File...",
+                DefaultExt = ".sav",
+                Filter = "Save Files (*.sav)|*.sav",
+                CheckFileExists = true
+            };
+            if (dialog.ShowDialog() != true)
+            {
+                return;
+            }
+            this._editor = new AmalurSaveEditor();
+            this._editor.ReadFile(this.FileName = dialog.FileName);
+            this.InventorySize = this._editor.GetMaxBagCount();
+            this.RepopulateItems();
+            this.ResetFilters();
+            this._unsavedChanges = false;
+            this.OnPropertyChanged(nameof(this.UnsavedChanges));
+        }
+
+        internal void Save()
+        {
+            if (this._editor == null)
+            {
+                return;
+            }
+            File.Copy(this._fileName, $"{this._fileName}.bak", true);
+            this._editor.SaveFile(this._fileName);
+            this.UnsavedChanges = false;
+            this.RepopulateItems();
+            MessageBox.Show($"Save successful! Original save backed up as {this._fileName}.bak.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
         private static IReadOnlyDictionary<string, CoreEffectInfo> LoadAllCoreEffects()
         {
             if ((bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(Window)).DefaultValue)
@@ -328,28 +363,6 @@ namespace KoAR.SaveEditor.Views
             this.OnPropertyChanged(nameof(this.AllItemsUnsellable));
         }
 
-        private void OpenFile()
-        {
-            OpenFileDialog dialog = new OpenFileDialog
-            {
-                Title = "Open Save File...",
-                DefaultExt = ".sav",
-                Filter = "Save Files (*.sav)|*.sav",
-                CheckFileExists = true
-            };
-            if (dialog.ShowDialog() != true)
-            {
-                return;
-            }
-            this._editor = new AmalurSaveEditor();
-            this._editor.ReadFile(this.FileName = dialog.FileName);
-            this.InventorySize = this._editor.GetMaxBagCount();
-            this.RepopulateItems();
-            this.ResetFilters();
-            this._unsavedChanges = false;
-            this.OnPropertyChanged(nameof(this.UnsavedChanges));
-        }
-
         private void Refresh()
         {
             int? selectedItemIndex = this._selectedItem?.ItemIndex;
@@ -397,19 +410,6 @@ namespace KoAR.SaveEditor.Views
                 this.OnPropertyChanged(nameof(this.CurrentDurabilityFilter));
             }
             this.OnFilterChange();
-        }
-
-        private void Save()
-        {
-            if (this._editor == null)
-            {
-                return;
-            }
-            File.Copy(this._fileName, $"{this._fileName}.bak", true);
-            this._editor.SaveFile(this._fileName);
-            this.UnsavedChanges = false;
-            this.RepopulateItems();
-            MessageBox.Show($"Save successful! Original save backed up as {this._fileName}.bak.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void SelectedItem_IsUnsellableChanged(object sender, EventArgs e)
