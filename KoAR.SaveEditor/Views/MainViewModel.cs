@@ -261,7 +261,7 @@ namespace KoAR.SaveEditor.Views
             using Stream stream = File.OpenRead(Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "properties.xml"));
             return XDocument.Load(stream).Root
                 .Elements()
-                .Select(element => new EffectInfo { Code = element.Attribute("id").Value.ToUpper(), DisplayText = element.Value.ToUpper() })
+                .Select(element => new EffectInfo { Code = element.Attribute("id").Value.ToUpper(), DisplayText = element.Value.Trim() })
                 .ToList(); // xaml will bind to `Count` property so keeping consistent with `ItemModel.Effects`.
         }
 
