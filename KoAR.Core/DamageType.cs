@@ -11,6 +11,10 @@
         Piercing,
         Poison,
         Primal,
-        MasterCrafted
+        MasterCrafted,
+        BloodSeeker,
+        Magnifying,
+        Ravenous,
+        Sharpening,
     }
 }

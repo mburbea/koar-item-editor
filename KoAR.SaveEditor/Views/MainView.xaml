@@ -38,6 +38,11 @@
         <BitmapImage x:Key="Piercing" UriSource="/Resources/Piercing.png" po:Freeze="true" />
         <BitmapImage x:Key="Poison" UriSource="/Resources/Poison.png" po:Freeze="true" />
         <BitmapImage x:Key="Primal" UriSource="/Resources/Primal.png" po:Freeze="true" />
+        <BitmapImage x:Key="BloodSeeker" UriSource="/Resources/BloodSeeker.png" po:Freeze="true" />
+        <BitmapImage x:Key="Sharpening" UriSource="/Resources/Sharpening.png" po:Freeze="true" />
+        <BitmapImage x:Key="Ravenous" UriSource="/Resources/Ravenous.png" po:Freeze="true" />
+        <BitmapImage x:Key="Magnifying" UriSource="/Resources/Magnifying.png" po:Freeze="true" />
+
         <BitmapImage x:Key="Unknown" UriSource="/Resources/Unknown.png" po:Freeze="true" />
     </Window.Resources>
     <Window.DataContext>
@@ -232,6 +237,19 @@
                                                         <DataTrigger Binding="{Binding Tag.DamageType, RelativeSource={RelativeSource Self}}" Value="Primal">
                                                             <Setter Property="Source" Value="{StaticResource Primal}" />
                                                         </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Tag.DamageType, RelativeSource={RelativeSource Self}}" Value="BloodSeeker">
+                                                            <Setter Property="Source" Value="{StaticResource BloodSeeker}" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Tag.DamageType, RelativeSource={RelativeSource Self}}" Value="Ravenous">
+                                                            <Setter Property="Source" Value="{StaticResource Ravenous}" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Tag.DamageType, RelativeSource={RelativeSource Self}}" Value="Magnifying">
+                                                            <Setter Property="Source" Value="{StaticResource Magnifying}" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Tag.DamageType, RelativeSource={RelativeSource Self}}" Value="Sharpening">
+                                                            <Setter Property="Source" Value="{StaticResource Sharpening}" />
+                                                        </DataTrigger>
+
                                                     </Style.Triggers>
                                                     <Setter Property="Source" Value="{StaticResource Unknown}" />
                                                     <Setter Property="Margin" Value="1,0" />

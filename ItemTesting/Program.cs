@@ -65,9 +65,9 @@ namespace ItemTesting
                 //    }
                 //}
 
-                bytes[ix + 25] = bytes[ix + 61] = 0xD8; ;
-                bytes[ix + 26] = bytes[ix + 62] = 0x78;
-                bytes[ix + 27] = bytes[ix + 63] = 0x1F;
+                bytes[ix + 25] = bytes[ix + 61] = 0x33; ;
+                bytes[ix + 26] = bytes[ix + 62] = 0xFE;
+                bytes[ix + 27] = bytes[ix + 63] = 0x1D;
                 Console.WriteLine($"{name}: {length}");
                 Console.WriteLine(string.Join(' ', bytes[ix..(ix + length)].Select(x => x.ToString("X2"))));
                 Console.WriteLine("---");
