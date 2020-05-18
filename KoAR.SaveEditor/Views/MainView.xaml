@@ -183,7 +183,8 @@
                     </Grid>
                 </GroupBox>
                 <ListView x:Name="PART_ListView" Grid.Row="1" ItemsSource="{Binding Source={StaticResource FilteredItems}}" SelectedItem="{Binding SelectedItem}"
-                    Margin="4" BorderBrush="LightGray" SelectionMode="Single" FocusVisualStyle="{x:Null}" VirtualizingPanel.VirtualizationMode="Recycling">
+                    Margin="4" BorderBrush="LightGray" SelectionMode="Single" FocusVisualStyle="{x:Null}" VirtualizingPanel.VirtualizationMode="Recycling"
+                    TextSearch.TextPath="ItemId">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="{x:Type ListViewItem}">
                             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -198,7 +199,7 @@
                     </ListView.ContextMenu>
                     <ListView.View>
                         <GridView AllowsColumnReorder="True">
-                            <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ItemId, Converter={StaticResource LittleEndianConverter}}" Width="Auto" />
+                            <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ItemId}" Width="Auto" />
                             <GridViewColumn Header="Type" DisplayMemberBinding="{Binding EquipmentType}" Width="Auto" />
                             <GridViewColumn Header="Name" DisplayMemberBinding="{Binding ItemName}" Width="Auto" />
                             <GridViewColumn Header="Cur Durability" Width="Auto">

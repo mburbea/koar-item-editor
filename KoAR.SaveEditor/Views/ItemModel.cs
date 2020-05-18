@@ -54,7 +54,7 @@ namespace KoAR.SaveEditor.Views
             set => this.SetItemValue(value, this.Item.IsUnsellable, value => this.Item.IsUnsellable = value);
         }
 
-        public int ItemId => this.Item.ItemId;
+        public string ItemId => LittleEndianConverter.Convert(this.Item.ItemId);
 
         public int ItemIndex => this.Item.ItemIndex;
 
