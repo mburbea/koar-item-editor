@@ -41,7 +41,7 @@ namespace ItemTesting
             //LikelyCandidates("Primal Dagggers", "04 05 DD 02 0B 00 00 00");
             //LikelyCandidates("Primal Bow", "2B 09 9E 0B 0B 00 00 00");
             //LikelyCandidates("PGW", "2F 09 32 01 0B 00 00 00");
-            LikelyCandidates("TEST", "42 09 EB 07 0B 00 00 00");
+            LikelyCandidates("TEST", "57 0A 2E 01 0B 00 00 00");
 
             int LikelyCandidates(string name, string text)
             {
@@ -65,9 +65,9 @@ namespace ItemTesting
                 //    }
                 //}
 
-                //bytes[ix + 25] = bytes[ix + 61] = 0x0A;
-                //bytes[ix + 26] = bytes[ix + 62] = 0x70;
-                //bytes[ix + 27] = bytes[ix + 63] = 0x20;
+                bytes[ix + 25] = bytes[ix + 61] = 0xD8; ;
+                bytes[ix + 26] = bytes[ix + 62] = 0x78;
+                bytes[ix + 27] = bytes[ix + 63] = 0x1F;
                 Console.WriteLine($"{name}: {length}");
                 Console.WriteLine(string.Join(' ', bytes[ix..(ix + length)].Select(x => x.ToString("X2"))));
                 Console.WriteLine("---");
@@ -91,6 +91,7 @@ namespace ItemTesting
                 }
                 return results;
             }
-        }
+        
+}
     }
 }
