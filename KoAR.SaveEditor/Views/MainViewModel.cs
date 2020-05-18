@@ -11,7 +11,6 @@ using System.Xml.Linq;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
 using Microsoft.Win32;
-using TaskDialogInterop;
 
 namespace KoAR.SaveEditor.Views
 {
@@ -36,7 +35,6 @@ namespace KoAR.SaveEditor.Views
         {
             this.OpenFileCommand = new DelegateCommand(this.OpenFile);
             this._filteredItems = this.Items = new ReadOnlyObservableCollection<ItemModel>(this._items = new ObservableCollection<ItemModel>());
-            this.MakeAllItemsSellableCommand = new DelegateCommand(this.MakeAllItemsSellable, this.CanMakeAllItemsSellable);
             this.ResetFiltersCommand = new DelegateCommand(this.ResetFilters);
             this.EditItemHexCommand = new DelegateCommand<ItemModel>(this.EditItemHex);
             this.UpdateInventorySizeCommand = new DelegateCommand(this.UpdateInventorySize, this.CanUpdateInventorySize);
@@ -48,6 +46,55 @@ namespace KoAR.SaveEditor.Views
         public DelegateCommand<EffectInfo> AddEffectCommand
         {
             get;
+        }
+
+        public bool? AllItemsUnsellable
+        {
+            get
+            {
+                if (this.FilteredItems.Count == 0)
+                {
+                    return true;
+                }
+                bool first = this.FilteredItems[0].IsUnsellable;
+                for (int index = 1; index < this.FilteredItems.Count; index++)
+                {
+                    bool current = this.FilteredItems[index].IsUnsellable;
+                    if (current != first)
+                    {
+                        return null;
+                    }
+                }
+                return first;
+            }
+            set
+            {
+                if (this._editor == null)
+                {
+                    return;
+                }
+                bool newValue = value.GetValueOrDefault();
+                foreach (ItemModel model in this.FilteredItems)
+                {
+                    bool current = model.IsUnsellable;
+                    if (current == newValue)
+                    {
+                        continue;
+                    }
+                    if (model.Equals(this.SelectedItem))
+                    {
+                        PropertyChangedEventManager.RemoveHandler(model, this.SelectedItem_IsUnsellableChanged, nameof(model.IsUnsellable));
+                    }
+                    model.IsUnsellable = newValue;
+                    this._editor.WriteEquipmentBytes(model.GetItem(), out _);
+                    this.UnsavedChanges = true;
+                    if (model.Equals(this.SelectedItem))
+                    {
+                        PropertyChangedEventManager.AddHandler(model, this.SelectedItem_IsUnsellableChanged, nameof(model.IsUnsellable));
+                    }
+                }
+                this.OnPropertyChanged();
+            }
         }
 
         public string? CurrentDurabilityFilter
@@ -113,11 +160,6 @@ namespace KoAR.SaveEditor.Views
             get;
         }
 
-        public DelegateCommand MakeAllItemsSellableCommand
-        {
-            get;
-        }
-
         public string? MaxDurabilityFilter
         {
             get => this._maxDurabilityFilter;
@@ -168,14 +210,14 @@ namespace KoAR.SaveEditor.Views
                     PropertyChangedEventManager.RemoveHandler(this._selectedItem, this.SelectedItem_MateriallyChanged, nameof(ItemModel.ItemName));
                     PropertyChangedEventManager.RemoveHandler(this._selectedItem, this.SelectedItem_MateriallyChanged, nameof(ItemModel.CurrentDurability));
                     PropertyChangedEventManager.RemoveHandler(this._selectedItem, this.SelectedItem_MateriallyChanged, nameof(ItemModel.MaxDurability));
-                    PropertyChangedEventManager.RemoveHandler(this._selectedItem, this.SelectedItem_MateriallyChanged, nameof(ItemModel.IsUnsellable));
+                    PropertyChangedEventManager.RemoveHandler(this._selectedItem, this.SelectedItem_IsUnsellableChanged, nameof(ItemModel.IsUnsellable));
                 }
                 if ((this._selectedItem = value) != null)
                 {
                     PropertyChangedEventManager.AddHandler(this._selectedItem, this.SelectedItem_MateriallyChanged, nameof(ItemModel.ItemName));
                     PropertyChangedEventManager.AddHandler(this._selectedItem, this.SelectedItem_MateriallyChanged, nameof(ItemModel.CurrentDurability));
                     PropertyChangedEventManager.AddHandler(this._selectedItem, this.SelectedItem_MateriallyChanged, nameof(ItemModel.MaxDurability));
-                    PropertyChangedEventManager.AddHandler(this._selectedItem, this.SelectedItem_MateriallyChanged, nameof(ItemModel.IsUnsellable));
+                    PropertyChangedEventManager.AddHandler(this._selectedItem, this.SelectedItem_IsUnsellableChanged, nameof(ItemModel.IsUnsellable));
                 }
                 this.OnPropertyChanged();
             }
@@ -234,11 +276,6 @@ namespace KoAR.SaveEditor.Views
             this.Refresh();
         }
 
-        private bool CanMakeAllItemsSellable()
-        {
-            return this._editor != null && this._fileName != null && this._items.Any(item => item.IsUnsellable);
-        }
-
         private bool CanUpdateInventorySize() => this._editor != null && this._editor.GetMaxBagCount() != this.InventorySize;
 
         private void DeleteEffect(EffectInfo info)
@@ -264,37 +301,6 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        private void MakeAllItemsSellable()
-        {
-            if (this._editor == null)
-            {
-                return;
-            }
-            int count = 0;
-            foreach (ItemModel item in this.Items)
-            {
-                if (!item.IsUnsellable)
-                {
-                    continue;
-                }
-                item.IsUnsellable = false;
-                this._editor.WriteEquipmentBytes(item.GetItem(), out _);
-                count++;
-            }
-            TaskDialog.Show(new TaskDialogOptions
-            {
-                Title = "KoAR Save Editor",
-                Owner = Application.Current.MainWindow,
-                CommonButtons = TaskDialogCommonButtons.Close,
-                Content = $"Modified {count} items.",
-                MainIcon = VistaTaskDialogIcon.Information
-            });
-            if (count > 0)
-            {
-                this.UnsavedChanges = true;
-            }
-        }
-
         private void OnFilterChange()
         {
             IEnumerable<ItemModel> items = this.Items;
@@ -316,6 +322,7 @@ namespace KoAR.SaveEditor.Views
                 ? (IReadOnlyList<ItemModel>)this.Items
                 : items.ToList();
             this.SelectedItem = null;
+            this.OnPropertyChanged(nameof(this.AllItemsUnsellable));
         }
 
         private void OpenFile()
@@ -369,6 +376,7 @@ namespace KoAR.SaveEditor.Views
             {
                 this._items.Add(new ItemModel(this._editor, info));
             }
+            this.OnFilterChange();
         }
 
         private void ResetFilters()
@@ -388,6 +396,18 @@ namespace KoAR.SaveEditor.Views
             this.UnsavedChanges = false;
             this.RepopulateItems();
             MessageBox.Show($"Save successful! Original save backed up as {this._fileName}.bak.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void SelectedItem_IsUnsellableChanged(object sender, EventArgs e)
+        {
+            if (this._editor == null)
+            {
+                return;
+            }
+            ItemModel model = (ItemModel)sender;
+            this._editor.WriteEquipmentBytes(model.GetItem(), out _);
+            this.UnsavedChanges = true;
+            this.OnPropertyChanged(nameof(this.AllItemsUnsellable));
         }
 
         private void SelectedItem_MateriallyChanged(object sender, EventArgs e)

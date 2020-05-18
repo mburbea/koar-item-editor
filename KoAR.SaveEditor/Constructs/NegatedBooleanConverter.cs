@@ -10,17 +10,19 @@ namespace KoAR.SaveEditor.Constructs
         private static readonly object _false = false;
         private static readonly object _true = true;
 
-        object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture) => NegatedBooleanConverter.Convert(value);
+        object? IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture) => NegatedBooleanConverter.Convert(value);
 
-        object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => NegatedBooleanConverter.Convert(value);
+        object? IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => NegatedBooleanConverter.Convert(value);
 
-        private static object Convert(object value)
+        private static object? Convert(object value)
         {
-            if (value is bool boolean)
+            return value switch
             {
-                return boolean ? NegatedBooleanConverter._false : NegatedBooleanConverter._true;
-            }
-            return DependencyProperty.UnsetValue;
+                null => null,
+                true => NegatedBooleanConverter._false,
+                false => NegatedBooleanConverter._true,
+                _ => DependencyProperty.UnsetValue,
+            };
         }
     }
 }

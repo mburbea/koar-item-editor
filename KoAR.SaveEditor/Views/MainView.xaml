@@ -3,7 +3,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options" 
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views"
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs" 
     xmlns:componentmodel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
@@ -29,21 +28,6 @@
         <constructs:NegatedBooleanConverter x:Key="NegatedBooleanConverter" />
         <constructs:StringIsNullOrEmptyConverter x:Key="StringIsNullOrEmptyConverter" />
         <constructs:LittleEndianConverter x:Key="LittleEndianConverter" />
-        <BitmapImage x:Key="Bleeding" UriSource="/Resources/Bleeding.png" po:Freeze="true" />
-        <BitmapImage x:Key="Fire" UriSource="/Resources/Fire.png" po:Freeze="true" />
-        <BitmapImage x:Key="Ice" UriSource="/Resources/Ice.png" po:Freeze="true" />
-        <BitmapImage x:Key="Lightning" UriSource="/Resources/Lightning.png" po:Freeze="true" />
-        <BitmapImage x:Key="MasterCrafted" UriSource="/Resources/MasterCrafted.png" po:Freeze="true" />
-        <BitmapImage x:Key="Physical" UriSource="/Resources/Physical.png" po:Freeze="true" />
-        <BitmapImage x:Key="Piercing" UriSource="/Resources/Piercing.png" po:Freeze="true" />
-        <BitmapImage x:Key="Poison" UriSource="/Resources/Poison.png" po:Freeze="true" />
-        <BitmapImage x:Key="Primal" UriSource="/Resources/Primal.png" po:Freeze="true" />
-        <BitmapImage x:Key="BloodSeeker" UriSource="/Resources/BloodSeeker.png" po:Freeze="true" />
-        <BitmapImage x:Key="Sharpening" UriSource="/Resources/Sharpening.png" po:Freeze="true" />
-        <BitmapImage x:Key="Ravenous" UriSource="/Resources/Ravenous.png" po:Freeze="true" />
-        <BitmapImage x:Key="Magnifying" UriSource="/Resources/Magnifying.png" po:Freeze="true" />
-
-        <BitmapImage x:Key="Unknown" UriSource="/Resources/Unknown.png" po:Freeze="true" />
     </Window.Resources>
     <Window.DataContext>
         <Binding Source="{StaticResource ViewModel}" />
@@ -85,7 +69,6 @@
                 </Style>
             </Menu.Resources>
             <MenuItem Header="_Open File..." Command="{Binding OpenFileCommand}" />
-            <MenuItem Header="_Make All Items Sellable" Command="{Binding MakeAllItemsSellableCommand}" />
             <MenuItem Header="_Save" Command="{Binding SaveCommand}" IsEnabled="{Binding UnsavedChanges}" />
             <MenuItem Header="_Help" Command="Help" />
         </Menu>
@@ -162,7 +145,7 @@
                     </Grid>
                 </GroupBox>
                 <ListView x:Name="PART_ListView" Grid.Row="1" ItemsSource="{Binding Source={StaticResource FilteredItems}}" SelectedItem="{Binding SelectedItem}"
-                    Margin="4" BorderBrush="LightGray" SelectionMode="Single" FocusVisualStyle="{x:Null}">
+                    Margin="4" BorderBrush="LightGray" SelectionMode="Single" FocusVisualStyle="{x:Null}" VirtualizingPanel.VirtualizationMode="Recycling">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="{x:Type ListViewItem}">
                             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -204,71 +187,25 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate DataType="{x:Type views:ItemModel}">
                                         <StackPanel Orientation="Horizontal">
-                                            <StackPanel.Resources>
-                                                <Style TargetType="{x:Type Image}">
-                                                    <Style.Triggers>
-                                                        <Trigger Property="Tag" Value="{x:Null}">
-                                                            <Setter Property="Visibility" Value="Collapsed" />
-                                                        </Trigger>
-                                                        <DataTrigger Binding="{Binding Tag.DamageType, RelativeSource={RelativeSource Self}}" Value="Bleeding">
-                                                            <Setter Property="Source" Value="{StaticResource Bleeding}" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Tag.DamageType, RelativeSource={RelativeSource Self}}" Value="Fire">
-                                                            <Setter Property="Source" Value="{StaticResource Fire}" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Tag.DamageType, RelativeSource={RelativeSource Self}}" Value="Ice">
-                                                            <Setter Property="Source" Value="{StaticResource Ice}" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Tag.DamageType, RelativeSource={RelativeSource Self}}" Value="Lightning">
-                                                            <Setter Property="Source" Value="{StaticResource Lightning}" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Tag.DamageType, RelativeSource={RelativeSource Self}}" Value="MasterCrafted">
-                                                            <Setter Property="Source" Value="{StaticResource MasterCrafted}" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Tag.DamageType, RelativeSource={RelativeSource Self}}" Value="Physical">
-                                                            <Setter Property="Source" Value="{StaticResource Physical}" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Tag.DamageType, RelativeSource={RelativeSource Self}}" Value="Piercing">
-                                                            <Setter Property="Source" Value="{StaticResource Piercing}" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Tag.DamageType, RelativeSource={RelativeSource Self}}" Value="Poison">
-                                                            <Setter Property="Source" Value="{StaticResource Poison}" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Tag.DamageType, RelativeSource={RelativeSource Self}}" Value="Primal">
-                                                            <Setter Property="Source" Value="{StaticResource Primal}" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Tag.DamageType, RelativeSource={RelativeSource Self}}" Value="BloodSeeker">
-                                                            <Setter Property="Source" Value="{StaticResource BloodSeeker}" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Tag.DamageType, RelativeSource={RelativeSource Self}}" Value="Ravenous">
-                                                            <Setter Property="Source" Value="{StaticResource Ravenous}" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Tag.DamageType, RelativeSource={RelativeSource Self}}" Value="Magnifying">
-                                                            <Setter Property="Source" Value="{StaticResource Magnifying}" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Tag.DamageType, RelativeSource={RelativeSource Self}}" Value="Sharpening">
-                                                            <Setter Property="Source" Value="{StaticResource Sharpening}" />
-                                                        </DataTrigger>
-
-                                                    </Style.Triggers>
-                                                    <Setter Property="Source" Value="{StaticResource Unknown}" />
-                                                    <Setter Property="Margin" Value="1,0" />
-                                                    <Setter Property="Width" Value="18" />
-                                                </Style>
-                                            </StackPanel.Resources>
-                                            <Image Tag="{Binding CoreEffect0}" />
-                                            <Image Tag="{Binding CoreEffect1}" />
-                                            <Image Tag="{Binding CoreEffect2}" />
-                                            <Image Tag="{Binding CoreEffect3}" />
+                                            <views:DamageTypeControl CoreEffect="{Binding CoreEffect0}" />
+                                            <views:DamageTypeControl CoreEffect="{Binding CoreEffect1}" />
+                                            <views:DamageTypeControl CoreEffect="{Binding CoreEffect2}" />
+                                            <views:DamageTypeControl CoreEffect="{Binding CoreEffect3}" />
                                         </StackPanel>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Header="Sellable?" Width="Auto">
+                            <GridViewColumn Header="{Binding}" Width="Auto">
+                                <GridViewColumn.HeaderTemplate>
+                                    <DataTemplate DataType="{x:Type views:MainViewModel}">
+                                        <CheckBox DockPanel.Dock="Right" Margin="2" Content="Sellable?" FocusVisualStyle="{x:Null}"
+                                            IsChecked="{Binding AllItemsUnsellable, Converter={StaticResource NegatedBooleanConverter}, Mode=TwoWay}" />
+                                    </DataTemplate>
+                                </GridViewColumn.HeaderTemplate>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate DataType="{x:Type views:ItemModel}">
                                         <CheckBox IsChecked="{Binding IsUnsellable, Converter={StaticResource NegatedBooleanConverter}, Mode=TwoWay}" HorizontalAlignment="Center" 
-                                        PreviewMouseLeftButtonDown="CheckBox_PreviewMouseLeftButtonDown"/>
+                                            PreviewMouseLeftButtonDown="CheckBox_PreviewMouseLeftButtonDown"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
