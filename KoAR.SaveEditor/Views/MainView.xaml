@@ -200,7 +200,7 @@
                                             </ItemsControl.ItemsPanel>
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate DataType="{x:Type core:CoreEffectInfo}">
-                                                    <views:DamageTypeControl CoreEffect="{Binding}" />
+                                                    <views:DamageTypeIndicator CoreEffect="{Binding}" />
                                                 </DataTemplate>
                                             </ItemsControl.ItemTemplate>
                                         </ItemsControl>
