@@ -25,10 +25,17 @@
     <None Remove="app.ico" />
     <None Remove="Resources\Bleeding.png" />
     <None Remove="Resources\Bloodseeker.png" />
+    <None Remove="Resources\Chakrams.png" />
+    <None Remove="Resources\Daggers.png" />
+    <None Remove="Resources\FaeBlades.png" />
     <None Remove="Resources\Fire.png" />
+    <None Remove="Resources\GreatSword.png" />
+    <None Remove="Resources\Hammer.png" />
     <None Remove="Resources\Help.png" />
     <None Remove="Resources\Ice.png" />
     <None Remove="Resources\Lightning.png" />
+    <None Remove="Resources\LongBow.png" />
+    <None Remove="Resources\LongSword.png" />
     <None Remove="Resources\Magnifying.png" />
     <None Remove="Resources\MasterCrafted.png" />
     <None Remove="Resources\Open.png" />
@@ -38,7 +45,9 @@
     <None Remove="Resources\Primal.png" />
     <None Remove="Resources\Ravenous.png" />
     <None Remove="Resources\Save.png" />
+    <None Remove="Resources\Sceptre.png" />
     <None Remove="Resources\Sharpening.png" />
+    <None Remove="Resources\Staff.png" />
     <None Remove="Resources\Unknown.png" />
   </ItemGroup>
   <ItemGroup>
@@ -48,10 +57,17 @@
     <Resource Include="app.ico" />
     <Resource Include="Resources\Bleeding.png" />
     <Resource Include="Resources\BloodSeeker.png" />
+    <Resource Include="Resources\Chakrams.png" />
+    <Resource Include="Resources\Daggers.png" />
+    <Resource Include="Resources\FaeBlades.png" />
     <Resource Include="Resources\Fire.png" />
+    <Resource Include="Resources\GreatSword.png" />
+    <Resource Include="Resources\Hammer.png" />
     <Resource Include="Resources\Help.png" />
     <Resource Include="Resources\Ice.png" />
     <Resource Include="Resources\Lightning.png" />
+    <Resource Include="Resources\LongBow.png" />
+    <Resource Include="Resources\LongSword.png" />
     <Resource Include="Resources\Magnifying.png" />
     <Resource Include="Resources\MasterCrafted.png" />
     <Resource Include="Resources\Open.png" />
@@ -61,7 +77,9 @@
     <Resource Include="Resources\Primal.png" />
     <Resource Include="Resources\Ravenous.png" />
     <Resource Include="Resources\Save.png" />
+    <Resource Include="Resources\Sceptre.png" />
     <Resource Include="Resources\Sharpening.png" />
+    <Resource Include="Resources\Staff.png" />
     <Resource Include="Resources\Unknown.png" />
   </ItemGroup>
   <ItemGroup>
