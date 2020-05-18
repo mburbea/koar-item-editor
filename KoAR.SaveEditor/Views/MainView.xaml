@@ -11,24 +11,30 @@
     Width="1024" Height="768" WindowStartupLocation="CenterScreen" 
     Icon="../app.ico" ResizeMode="CanResizeWithGrip">
     <Window.Resources>
-        <ObjectDataProvider x:Key="ViewModel" ObjectType="{x:Type views:MainViewModel}" />
-        <ControlTemplate x:Key="TextBoxValidationErrorTemplate">
-            <Border BorderBrush="Red" BorderThickness="1">
-                <Grid>
-                    <Polygon Fill="Red" Margin="0,2,2,0" Points="10,10 10,0 0,0" VerticalAlignment="Top" HorizontalAlignment="Right"
-                        Tag="{Binding AdornedElement.(Validation.Errors)/ErrorContent, ElementName=PART_Adorner}" Cursor="Hand">
-                        <Polygon.ToolTip>
-                            <ToolTip Content="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}" 
-                                BorderThickness="1" Foreground="White" Background="Red" />
-                        </Polygon.ToolTip>
-                    </Polygon>
-                    <AdornedElementPlaceholder x:Name="PART_Adorner" />
-                </Grid>
-            </Border>
-        </ControlTemplate>
+        <ObjectDataProvider x:Key="ViewModel" ObjectType="{x:Type views:MainViewModel}" />        
         <constructs:NegatedBooleanConverter x:Key="NegatedBooleanConverter" />
         <constructs:StringIsNullOrEmptyConverter x:Key="StringIsNullOrEmptyConverter" />
         <constructs:LittleEndianConverter x:Key="LittleEndianConverter" />
+        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+            <Setter Property="Validation.ErrorTemplate">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Border BorderBrush="Red" BorderThickness="1">
+                            <Grid>
+                                <Polygon Fill="Red" Margin="0,2,2,0" Points="10,10 10,0 0,0" VerticalAlignment="Top" HorizontalAlignment="Right"
+                                        Tag="{Binding AdornedElement.(Validation.Errors)/ErrorContent, ElementName=PART_Adorner}" Cursor="Hand">
+                                    <Polygon.ToolTip>
+                                        <ToolTip Content="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}" 
+                                            BorderThickness="1" Foreground="White" Background="Red" />
+                                    </Polygon.ToolTip>
+                                </Polygon>
+                                <AdornedElementPlaceholder x:Name="PART_Adorner" />
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
     <Window.DataContext>
         <Binding Source="{StaticResource ViewModel}" />
@@ -108,7 +114,6 @@
                             <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
                                 <Setter Property="Margin" Value="2" />
                                 <Setter Property="VerticalAlignment" Value="Center" />
-                                <Setter Property="Validation.ErrorTemplate" Value="{StaticResource TextBoxValidationErrorTemplate}" />
                             </Style>
                         </Grid.Resources>
                         <Grid.ColumnDefinitions>
@@ -236,7 +241,7 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="Size:" Margin="2" VerticalAlignment="Center" TextAlignment="Right"/>
-                        <TextBox Grid.Column="1" MinWidth="100" Margin="2" TextAlignment="Right" Validation.ErrorTemplate="{StaticResource TextBoxValidationErrorTemplate}">
+                        <TextBox Grid.Column="1" MinWidth="100" Margin="2" TextAlignment="Right">
                             <TextBox.Text>
                                 <Binding Path="InventorySize" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                                     <Binding.ValidationRules>
@@ -270,7 +275,6 @@
                                         <Setter Property="Background" Value="{x:Static SystemColors.ControlBrush}" />
                                     </Trigger>
                                 </Style.Triggers>
-                                <Setter Property="Validation.ErrorTemplate" Value="{StaticResource TextBoxValidationErrorTemplate}" />
                                 <Setter Property="VerticalAlignment" Value="Center" />
                                 <Setter Property="Margin" Value="2" />
                                 <Setter Property="Grid.Column" Value="1" />
