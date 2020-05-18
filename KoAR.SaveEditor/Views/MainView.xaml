@@ -216,7 +216,7 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Header="# Effects" Width="Auto" >
+                            <GridViewColumn Header="# Effects" Width="Auto">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate DataType="{x:Type views:ItemModel}">
                                         <TextBlock Text="{Binding EffectCount, StringFormat='#,##0'}" TextAlignment="Right" />
@@ -226,7 +226,7 @@
                             <GridViewColumn Header="Core Effects" Width="Auto">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate DataType="{x:Type views:ItemModel}">
-                                        <ItemsControl ItemsSource="{Binding CoreEffects}">
+                                        <ItemsControl ItemsSource="{Binding CoreEffects}" MinWidth="80">
                                             <ItemsControl.ItemsPanel>
                                                 <ItemsPanelTemplate>
                                                     <StackPanel Orientation="Horizontal" />
