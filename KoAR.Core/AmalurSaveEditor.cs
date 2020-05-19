@@ -138,7 +138,7 @@ namespace KoAR.Core
                 AdditionalInfoSequence.CopyTo(buffer.Slice(8));
                 var aisOffset = bytes.IndexOf(buffer);
                 var demystifyer = bytes[aisOffset + 17];
-                
+
                 return equipTypeByte switch
                 {
                     0x10 => EquipmentType.Shield,
@@ -162,9 +162,9 @@ namespace KoAR.Core
                         0x2B => EquipmentType.FlameTalisman,// Shock talisman's are here too :(
                         0x23 => EquipmentType.FrostTalisman,
                         0x3F => EquipmentType.ShockTalisman,// might only be crafted shock talisman.
-                        _ => EquipmentType.Unknown,
+                        _ => EquipmentType.Unknown
                     },
-                    _ => throw null,//                    EquipmentType.Unknown,
+                    _ => EquipmentType.Unknown
                 };
             }
 
