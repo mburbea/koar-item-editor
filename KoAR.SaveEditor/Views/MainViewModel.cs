@@ -23,6 +23,7 @@ namespace KoAR.SaveEditor.Views
         private readonly ObservableCollection<ItemModel> _items;
         private string? _currentDurabilityFilter = string.Empty;
         private AmalurSaveEditor? _editor;
+        private EquipmentType? _equipmentTypeFilter;
         private string? _fileName;
         private IReadOnlyList<ItemModel> _filteredItems;
         private int _inventorySize;
@@ -123,6 +124,18 @@ namespace KoAR.SaveEditor.Views
             get;
         }
 
+        public EquipmentType? EquipmentTypeFilter
+        {
+            get => this._equipmentTypeFilter;
+            set
+            {
+                if (this.SetValue(ref this._equipmentTypeFilter, value))
+                {
+                    this.OnFilterChange();
+                }
+            }
+        }
+
         public string? FileName
         {
             get => this._fileName;
@@ -146,13 +159,10 @@ namespace KoAR.SaveEditor.Views
             get => this._itemNameFilter;
             set
             {
-                if (this._itemNameFilter == value)
+                if (this.SetValue(ref this._itemNameFilter, value))
                 {
-                    return;
+                    this.OnFilterChange();
                 }
-                this._itemNameFilter = value;
-                this.OnPropertyChanged();
-                this.OnFilterChange();
             }
         }
 
@@ -356,6 +366,10 @@ namespace KoAR.SaveEditor.Views
             {
                 items = items.Where(model => model.ItemName.IndexOf(this._itemNameFilter, StringComparison.OrdinalIgnoreCase) != -1);
             }
+            if (this._equipmentTypeFilter.HasValue)
+            {
+                items = items.Where(model => model.EquipmentType == this._equipmentTypeFilter);
+            }
             this.FilteredItems = object.ReferenceEquals(items, this.Items)
                 ? (IReadOnlyList<ItemModel>)this.Items
                 : items.ToList();
@@ -395,6 +409,7 @@ namespace KoAR.SaveEditor.Views
             this.OnFilterChange();
         }
 
+
         private void ResetFilters()
         {
             if (Interlocked.Exchange(ref this._itemNameFilter, string.Empty) != string.Empty)
@@ -408,6 +423,11 @@ namespace KoAR.SaveEditor.Views
             if (Interlocked.Exchange(ref this._currentDurabilityFilter, string.Empty) != string.Empty)
             {
                 this.OnPropertyChanged(nameof(this.CurrentDurabilityFilter));
+            }
+            if (this._equipmentTypeFilter.HasValue)
+            {
+                this._equipmentTypeFilter = default;
+                this.OnPropertyChanged(nameof(this.EquipmentTypeFilter));
             }
             this.OnFilterChange();
         }

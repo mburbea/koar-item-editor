@@ -4,6 +4,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options" 
+    xmlns:s="clr-namespace:System;assembly=mscorlib"
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views"
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs" 
     xmlns:componentmodel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
@@ -137,6 +138,11 @@
                 <GroupBox Header="Filters" Margin="4">
                     <Grid>
                         <Grid.Resources>
+                            <ObjectDataProvider x:Key="EquipmentTypes" MethodName="GetValues" ObjectType="{x:Type s:Enum}">
+                                <ObjectDataProvider.MethodParameters>
+                                    <x:Type TypeName="core:EquipmentType" />
+                                </ObjectDataProvider.MethodParameters>
+                            </ObjectDataProvider>
                             <Style TargetType="FrameworkElement" x:Key="ElementStyle">
                                 <Setter Property="Margin" Value="2" />
                                 <Setter Property="VerticalAlignment" Value="Center" />
@@ -157,11 +163,19 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition />
                             <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="Name:" />
                         <TextBox Grid.Column="1" Text="{Binding ItemNameFilter, UpdateSourceTrigger=PropertyChanged}" />
-                        <TextBlock Grid.Column="2" Text="Cur. Durability:" />
-                        <TextBox Grid.Column="3">
+
+                        <TextBlock Grid.Column="2" Text="Type:" />
+                        <ComboBox Grid.Column="3" ItemsSource="{Binding Source={StaticResource EquipmentTypes}}"
+                            FocusVisualStyle="{x:Null}" SelectedItem="{Binding EquipmentTypeFilter}" />
+
+
+                        <TextBlock Grid.Column="4" Text="Cur. Durability:" />
+                        <TextBox Grid.Column="5">
                             <TextBox.Text>
                                 <Binding Path="CurrentDurabilityFilter" UpdateSourceTrigger="PropertyChanged">
                                     <Binding.ValidationRules>
@@ -170,8 +184,8 @@
                                 </Binding>
                             </TextBox.Text>
                         </TextBox>
-                        <TextBlock Grid.Column="4" Text="Max. Durability:" />
-                        <TextBox Grid.Column="5">
+                        <TextBlock Grid.Column="6" Text="Max. Durability:" />
+                        <TextBox Grid.Column="7">
                             <TextBox.Text>
                                 <Binding Path="MaxDurabilityFilter" UpdateSourceTrigger="PropertyChanged">
                                     <Binding.ValidationRules>
@@ -180,7 +194,7 @@
                                 </Binding>
                             </TextBox.Text>
                         </TextBox>
-                        <Button Grid.Column="6" Content="Reset" Command="{Binding ResetFiltersCommand}" Margin="2" VerticalAlignment="Center" />
+                        <Button Grid.Column="8" Content="Reset" Command="{Binding ResetFiltersCommand}" Margin="2" VerticalAlignment="Center" />
                     </Grid>
                 </GroupBox>
                 <ListView x:Name="PART_ListView" Grid.Row="1" ItemsSource="{Binding Source={StaticResource FilteredItems}}" SelectedItem="{Binding SelectedItem}"
@@ -211,8 +225,16 @@
                     <ListView.View>
                         <GridView AllowsColumnReorder="True">
                             <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ItemId}" Width="Auto" />
-                            <GridViewColumn Header="Type" DisplayMemberBinding="{Binding EquipmentType}" Width="Auto" />
-                            <GridViewColumn Header="Name" DisplayMemberBinding="{Binding ItemName}" Width="Auto" />
+                            <GridViewColumn Header="Name" Width="Auto">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate DataType="{x:Type views:ItemModel}">
+                                        <DockPanel>
+                                            <views:EquipmentTypeIndicator EquipmentType="{Binding EquipmentType}" VerticalAlignment="Center" />
+                                            <TextBlock Text="{Binding ItemName}" VerticalAlignment="Center" Margin="1,0" />
+                                        </DockPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
                             <GridViewColumn Header="Cur Durability" Width="Auto">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate DataType="{x:Type views:ItemModel}">
