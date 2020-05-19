@@ -21,14 +21,14 @@ namespace KoAR.SaveEditor.Views
         public static readonly IReadOnlyList<EffectInfo> Effects = MainViewModel.LoadAllEffects();
 
         private readonly ObservableCollection<ItemModel> _items;
-        private string? _currentDurabilityFilter = string.Empty;
+        private string _currentDurabilityFilter = string.Empty;
         private AmalurSaveEditor? _editor;
         private EquipmentType? _equipmentTypeFilter;
         private string? _fileName;
         private IReadOnlyList<ItemModel> _filteredItems;
         private int _inventorySize;
-        private string? _itemNameFilter = string.Empty;
-        private string? _maxDurabilityFilter = string.Empty;
+        private string _itemNameFilter = string.Empty;
+        private string _maxDurabilityFilter = string.Empty;
         private EffectInfo? _selectedEffect = MainViewModel.Effects.FirstOrDefault();
         private ItemModel? _selectedItem;
         private bool _unsavedChanges;
@@ -99,18 +99,15 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        public string? CurrentDurabilityFilter
+        public string CurrentDurabilityFilter
         {
             get => this._currentDurabilityFilter;
             set
             {
-                if (this._currentDurabilityFilter == value)
+                if (this.SetValue(ref this._currentDurabilityFilter, value))
                 {
-                    return;
+                    this.OnFilterChange();
                 }
-                this._currentDurabilityFilter = value;
-                this.OnPropertyChanged();
-                this.OnFilterChange();
             }
         }
 
@@ -154,7 +151,7 @@ namespace KoAR.SaveEditor.Views
             set => this.SetValue(ref this._inventorySize, value);
         }
 
-        public string? ItemNameFilter
+        public string ItemNameFilter
         {
             get => this._itemNameFilter;
             set
@@ -171,18 +168,15 @@ namespace KoAR.SaveEditor.Views
             get;
         }
 
-        public string? MaxDurabilityFilter
+        public string MaxDurabilityFilter
         {
             get => this._maxDurabilityFilter;
             set
             {
-                if (this._maxDurabilityFilter == value)
+                if (this.SetValue(ref this._maxDurabilityFilter, value))
                 {
-                    return;
+                    this.OnFilterChange();
                 }
-                this._maxDurabilityFilter = value;
-                this.OnPropertyChanged();
-                this.OnFilterChange();
             }
         }
 
@@ -307,7 +301,11 @@ namespace KoAR.SaveEditor.Views
             using Stream stream = File.OpenRead(Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "properties.xml"));
             return XDocument.Load(stream).Root
                 .Elements()
-                .Select(element => new EffectInfo { Code = element.Attribute("id").Value.ToUpper(), DisplayText = element.Value.Trim() })
+                .Select(element => new EffectInfo
+                {
+                    Code = element.Attribute("id").Value.ToUpperInvariant(),
+                    DisplayText = element.Value.Trim()
+                })
                 .ToList(); // xaml will bind to `Count` property so keeping consistent with `ItemModel.Effects`.
         }
 
@@ -352,17 +350,17 @@ namespace KoAR.SaveEditor.Views
         private void OnFilterChange()
         {
             IEnumerable<ItemModel> items = this.Items;
-            if (!string.IsNullOrEmpty(this._currentDurabilityFilter) && float.TryParse(this._currentDurabilityFilter, out float single))
+            if (this._currentDurabilityFilter.Length != 0 && float.TryParse(this._currentDurabilityFilter, out float single))
             {
                 int temp = (int)Math.Floor(single);
                 items = items.Where(model => (int)Math.Floor(model.CurrentDurability) == temp);
             }
-            if (!string.IsNullOrEmpty(this._maxDurabilityFilter) && float.TryParse(this._maxDurabilityFilter, out single))
+            if (this._maxDurabilityFilter.Length != 0 && float.TryParse(this._maxDurabilityFilter, out single))
             {
                 int temp = (int)Math.Floor(single);
                 items = items.Where(model => (int)Math.Floor(model.MaxDurability) == temp);
             }
-            if (!string.IsNullOrEmpty(this._itemNameFilter))
+            if (this._itemNameFilter.Length != 0)
             {
                 items = items.Where(model => model.ItemName.IndexOf(this._itemNameFilter, StringComparison.OrdinalIgnoreCase) != -1);
             }
@@ -412,15 +410,15 @@ namespace KoAR.SaveEditor.Views
 
         private void ResetFilters()
         {
-            if (Interlocked.Exchange(ref this._itemNameFilter, string.Empty) != string.Empty)
+            if (Interlocked.Exchange(ref this._itemNameFilter, string.Empty).Length != 0)
             {
                 this.OnPropertyChanged(nameof(this.ItemNameFilter));
             }
-            if (Interlocked.Exchange(ref this._maxDurabilityFilter, string.Empty) != string.Empty)
+            if (Interlocked.Exchange(ref this._maxDurabilityFilter, string.Empty).Length != 0)
             {
                 this.OnPropertyChanged(nameof(this.MaxDurabilityFilter));
             }
-            if (Interlocked.Exchange(ref this._currentDurabilityFilter, string.Empty) != string.Empty)
+            if (Interlocked.Exchange(ref this._currentDurabilityFilter, string.Empty).Length != 0)
             {
                 this.OnPropertyChanged(nameof(this.CurrentDurabilityFilter));
             }

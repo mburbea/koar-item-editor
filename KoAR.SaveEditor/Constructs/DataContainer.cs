@@ -13,6 +13,10 @@ namespace KoAR.SaveEditor.Constructs
             get;
         }
 
+        public static bool operator !=(DataContainer left, DataContainer right) => !left.Equals(right);
+
+        public static bool operator ==(DataContainer left, DataContainer right) => left.Equals(right);
+
         public override bool Equals(object obj) => obj is DataContainer other && this.Equals(other);
 
         public bool Equals(DataContainer other) => Object.Equals(this.Data, other.Data);
