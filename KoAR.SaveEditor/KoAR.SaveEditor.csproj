@@ -23,12 +23,16 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="app.ico" />
+    <None Remove="Resources\Armor.png" />
     <None Remove="Resources\Bleeding.png" />
     <None Remove="Resources\Bloodseeker.png" />
+    <None Remove="Resources\Buckler.png" />
     <None Remove="Resources\Chakrams.png" />
     <None Remove="Resources\Daggers.png" />
     <None Remove="Resources\FaeBlades.png" />
     <None Remove="Resources\Fire.png" />
+    <None Remove="Resources\FlameTalisman.png" />
+    <None Remove="Resources\FrostTalisman.png" />
     <None Remove="Resources\GreatSword.png" />
     <None Remove="Resources\Hammer.png" />
     <None Remove="Resources\Help.png" />
@@ -47,6 +51,8 @@
     <None Remove="Resources\Save.png" />
     <None Remove="Resources\Sceptre.png" />
     <None Remove="Resources\Sharpening.png" />
+    <None Remove="Resources\Shield.png" />
+    <None Remove="Resources\ShockTalisman.png" />
     <None Remove="Resources\Staff.png" />
     <None Remove="Resources\Unknown.png" />
   </ItemGroup>
@@ -55,12 +61,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="app.ico" />
+    <Resource Include="Resources\Armor.png" />
     <Resource Include="Resources\Bleeding.png" />
     <Resource Include="Resources\BloodSeeker.png" />
+    <Resource Include="Resources\Buckler.png" />
     <Resource Include="Resources\Chakrams.png" />
     <Resource Include="Resources\Daggers.png" />
     <Resource Include="Resources\FaeBlades.png" />
     <Resource Include="Resources\Fire.png" />
+    <Resource Include="Resources\FlameTalisman.png" />
     <Resource Include="Resources\GreatSword.png" />
     <Resource Include="Resources\Hammer.png" />
     <Resource Include="Resources\Help.png" />
@@ -79,7 +88,10 @@
     <Resource Include="Resources\Save.png" />
     <Resource Include="Resources\Sceptre.png" />
     <Resource Include="Resources\Sharpening.png" />
+    <Resource Include="Resources\Shield.png" />
+    <Resource Include="Resources\ShockTalisman.png" />
     <Resource Include="Resources\Staff.png" />
+    <Resource Include="Resources\FrostTalisman.png" />
     <Resource Include="Resources\Unknown.png" />
   </ItemGroup>
   <ItemGroup>

@@ -12,5 +12,11 @@
         LongSword,
         Sceptre,
         Staff,
+        Armor,
+        FlameTalisman,
+        FrostTalisman,
+        ShockTalisman,
+        Buckler,
+        Shield,
     }
 }

@@ -2,6 +2,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views">
+    <BitmapImage x:Key="Armor" UriSource="/KoAR.SaveEditor;component/Resources/Armor.png" po:Freeze="true" />
+    <BitmapImage x:Key="Buckler" UriSource="/KoAR.SaveEditor;component/Resources/Buckler.png" po:Freeze="true" />
     <BitmapImage x:Key="Chakrams" UriSource="/KoAR.SaveEditor;component/Resources/Chakrams.png" po:Freeze="true" />
     <BitmapImage x:Key="Daggers" UriSource="/KoAR.SaveEditor;component/Resources/Daggers.png" po:Freeze="true" />
     <BitmapImage x:Key="FaeBlades" UriSource="/KoAR.SaveEditor;component/Resources/FaeBlades.png" po:Freeze="true" />
@@ -10,7 +12,11 @@
     <BitmapImage x:Key="LongBow" UriSource="/KoAR.SaveEditor;component/Resources/LongBow.png" po:Freeze="true" />
     <BitmapImage x:Key="LongSword" UriSource="/KoAR.SaveEditor;component/Resources/LongSword.png" po:Freeze="true" />
     <BitmapImage x:Key="Sceptre" UriSource="/KoAR.SaveEditor;component/Resources/Sceptre.png" po:Freeze="true" />
+    <BitmapImage x:Key="Shield" UriSource="/KoAR.SaveEditor;component/Resources/Shield.png" po:Freeze="true" />
     <BitmapImage x:Key="Staff" UriSource="/KoAR.SaveEditor;component/Resources/Staff.png" po:Freeze="true" />
+    <BitmapImage x:Key="FrostTalisman" UriSource="/KoAR.SaveEditor;component/Resources/FrostTalisman.png" po:Freeze="true" />
+    <BitmapImage x:Key="FlameTalisman" UriSource="/KoAR.SaveEditor;component/Resources/FlameTalisman.png" po:Freeze="true" />
+    <BitmapImage x:Key="ShockTalisman" UriSource="/KoAR.SaveEditor;component/Resources/ShockTalisman.png" po:Freeze="true" />
     <BitmapImage x:Key="Unknown" UriSource="/KoAR.SaveEditor;component/Resources/Unknown.png" po:Freeze="true" />
     <Style TargetType="{x:Type views:EquipmentTypeIndicator}">        
         <Setter Property="Template">
@@ -20,6 +26,12 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="EquipmentType" Value="{x:Null}">
                             <Setter Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                        <Trigger Property="EquipmentType" Value="Armor">
+                            <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource Armor}" />
+                        </Trigger>
+                        <Trigger Property="EquipmentType" Value="Buckler">
+                            <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource Buckler}" />
                         </Trigger>
                         <Trigger Property="EquipmentType" Value="Chakrams">
                             <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource Chakrams}" />
@@ -45,9 +57,22 @@
                         <Trigger Property="EquipmentType" Value="Sceptre">
                             <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource Sceptre}" />
                         </Trigger>
+                        <Trigger Property="EquipmentType" Value="Shield">
+                            <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource Shield}" />
+                        </Trigger>
                         <Trigger Property="EquipmentType" Value="Staff">
                             <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource Staff}" />
                         </Trigger>
+                        <Trigger Property="EquipmentType" Value="FlameTalisman">
+                            <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource FlameTalisman}" />
+                        </Trigger>
+                        <Trigger Property="EquipmentType" Value="FrostTalisman">
+                            <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource FrostTalisman}" />
+                        </Trigger>
+                        <Trigger Property="EquipmentType" Value="ShockTalisman">
+                            <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource ShockTalisman}" />
+                        </Trigger>
+
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

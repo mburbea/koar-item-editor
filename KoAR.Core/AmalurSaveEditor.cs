@@ -17,9 +17,9 @@ namespace KoAR.Core
         private static ReadOnlySpan<byte> IncreaseAmount => new[] { (byte)'i', (byte)'n', (byte)'c', (byte)'r', (byte)'e', (byte)'a', (byte)'s', (byte)'e', (byte)'_', (byte)'a', (byte)'m', (byte)'o', (byte)'u', (byte)'n', (byte)'t' };
         private static ReadOnlySpan<byte> CurrentInventoryCount => new[] { (byte)'c', (byte)'u', (byte)'r', (byte)'r', (byte)'e', (byte)'n', (byte)'t', (byte)'_', (byte)'i', (byte)'n', (byte)'v', (byte)'e', (byte)'n', (byte)'t', (byte)'o', (byte)'r', (byte)'y', (byte)'_', (byte)'c', (byte)'o', (byte)'u', (byte)'n', (byte)'t' };
         private static ReadOnlySpan<byte> EquipmentSequence => new byte[]     { 0x0B, 0x00, 0x00, 0x00, 0x68, 0xD5, 0x24, 0x00, 0x03 };
-        private static ReadOnlySpan<byte> CoreAttributeSequence => new byte[] { 0x0B, 0x00, 0x00, 0x00, 0x84, 0x60, 0x28, 0x00, 0x00 };
-        private static ReadOnlySpan<byte> EquipTypeSequence => new byte[]     { 0x0B, 0x00, 0x00, 0x00, 0xD4, 0x08, 0x46, 0x00, 0x01 };
-        private static ReadOnlySpan<byte> DifferentiatingSeq => new byte[]    { 0x0B, 0x00, 0x00, 0x00, 0x8D, 0xE3, 0x47, 0x00, 0x02 };
+        private static ReadOnlySpan<byte> CoreAttributeSequence => new byte[] { 0x84, 0x60, 0x28, 0x00, 0x00 };
+        private static ReadOnlySpan<byte> EquipTypeSequence => new byte[]     { 0xD4, 0x08, 0x46, 0x00, 0x01 };
+        private static ReadOnlySpan<byte> DifferentiatingSeq => new byte[]    { 0x8D, 0xE3, 0x47, 0x00, 0x02 };
         private byte[] _bytes;
 
         public byte[] Bytes
@@ -123,24 +123,39 @@ namespace KoAR.Core
                 return results;
             }
 
-            static EquipmentType DetermineEquipmentType(ReadOnlySpan<byte> bytes, ReadOnlySpan<byte> itemId)
+            static EquipmentType DetermineEquipmentType(ReadOnlySpan<byte> bytes, ReadOnlySpan<byte> itemId, byte b13)
             {
                 Span<byte> buffer = stackalloc byte[13];
                 itemId.CopyTo(buffer);
-                EquipTypeSequence.CopyTo(buffer.Slice(4));
+                EquipTypeSequence.CopyTo(buffer.Slice(8));
                 var offset = bytes.IndexOf(buffer);
+                if (offset == -1)
+                {
+                    // Armor doesn't have this section.
+                    return EquipmentType.Armor;
+                }
                 var differingByte = bytes[offset + 13];
                 if(differingByte != 0x24 && differingByte != 0x1C)
                 {
                     return differingByte switch
                     {
+                        0x10 => EquipmentType.Shield,
                         0x18 => EquipmentType.LongBow,
-                        0x14 => EquipmentType.Sceptre,
+                        0x14 => b13 switch
+                        {
+                            0x22 => EquipmentType.Sceptre,//there might be 3 sceptre codes?
+                            0x33 => EquipmentType.Buckler,//why are there two buckler codes?
+                            0x3E => EquipmentType.Buckler,
+                            0x2B => EquipmentType.FlameTalisman,// Shock talisman's are here too :(
+                            0x23 => EquipmentType.FrostTalisman,
+                            0x3F => EquipmentType.ShockTalisman,// might only be crafted shock talisman.
+                            _=> EquipmentType.Unknown,
+                        },
                         0x20 => bytes[offset + 21] == 0 ? EquipmentType.GreatSword : EquipmentType.LongSword,
                         _ => EquipmentType.Unknown,
                     };
                 }
-                DifferentiatingSeq.CopyTo(buffer.Slice(4));
+                DifferentiatingSeq.CopyTo(buffer.Slice(8));
                 offset = bytes.IndexOf(buffer);
                 var magicStrengthOrFinesse = MemoryUtilities.Read<int>(bytes,offset + 17);
                 return magicStrengthOrFinesse switch
@@ -159,19 +174,22 @@ namespace KoAR.Core
             var indexList = GetAllIndices(bytes, EquipmentSequence);
             var bins = new Dictionary<string, int>();
             var coreHeader = new byte[13];
-            MemoryUtilities.ReplaceBytes(coreHeader, 4, 9, CoreAttributeSequence);
+            var seqs = new Dictionary<ulong, int>();
+            CoreAttributeSequence.CopyTo(coreHeader.AsSpan(8));
             for (int i = 0; i < indexList.Count; i++)
             {
                 if (ItemMemoryInfo.Create(indexList[i], i == indexList.Count - 1
                     ? bytes.AsSpan(indexList[i])
                     : bytes.AsSpan(indexList[i], indexList[i + 1] - indexList[i])) is ItemMemoryInfo item)
                 {
-                    MemoryUtilities.Write(coreHeader, 0, item.ItemId);
+                    var wtf = BitConverter.ToUInt64(item.ItemBytes, 13);
+                    seqs.TryGetValue(wtf, out var c2);
+                    seqs[wtf] = c2 + 1;
+                    item.ItemBytes.AsSpan(0, 8).CopyTo(coreHeader);
                     var span = bytes.AsSpan(indexList[i]);
-
                     int coreOffset = span.IndexOf(coreHeader) + indexList[i];
                     item.CoreItemMemory = CoreItemMemory.Create(coreOffset, bytes.AsSpan(coreOffset));
-                    item.EquipmentType = DetermineEquipmentType(bytes, bytes.AsSpan(indexList[i], 4));
+                    item.EquipmentType = DetermineEquipmentType(bytes, coreHeader.AsSpan(0, 8), item.ItemBytes[13]);
                     equipmentList.Add(item);
 
                     var b13 = item.CoreItemMemory.MysteryInteger;
@@ -186,7 +204,9 @@ namespace KoAR.Core
             
             Console.WriteLine(max);
             Console.WriteLine(bins);
-
+            Console.WriteLine(seqs);
+            var dict2 = seqs.ToDictionary(x => string.Join(" ", BitConverter.GetBytes(x.Key).Select(x => x.ToString("X2"))));
+            
             return equipmentList;
         }
 

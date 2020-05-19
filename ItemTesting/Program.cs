@@ -25,7 +25,7 @@ namespace ItemTesting
         static void Main(string[] args)
         {
 
-            var path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save84.sav";
+            var path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save96.sav";
             //using var fs = new FileStream(path, FileMode.Open);
             //var bytes = new byte[fs.Length];
             //var memory = fs.Read(bytes, 0, bytes.Length);
@@ -46,9 +46,9 @@ namespace ItemTesting
             var editor = new AmalurSaveEditor();
             editor.ReadFile(path);
             var bytes = editor.Bytes;
-            var interest = new[] { "IC1", "M", "M2", "M3","St1","St2","FC1","F1","F2","D1","Mastercrafted Sylvanite Greatswo" };
+            var interest = new[] { "Talisman","Buckler","Sceptre"};
             var items = editor.GetAllEquipment()
-                .Where(x=>  x.ItemId== 0x07EB0942)
+                .Where(x=>  interest.Contains(x.ItemName))
                 .Select(x => (x.ItemName, ItemId:x.ItemBytes.AsSpan(0, 8).ToArray())).OrderBy(x=>x.ItemName).ToArray();
             
             //var items = new[] { "92 05 FC 00 0B 00 00 00", 
@@ -56,7 +56,6 @@ namespace ItemTesting
             //    "91 05 EF 00 0B 00 00 00" }.Select(GetBytesFromText).ToArray();
             var offsets = items.Select(x => GetAllIndices(bytes, x.ItemId)).ToArray();
 
-            var poo = GetBytesFromText("0B 00 00 00");
             var core = GetBytesFromText("84 60 28 00 00");
             var equipSeq = new byte[] { 0x68, 0xD5, 0x24, 0x00, 0x03 };
 
@@ -65,38 +64,42 @@ namespace ItemTesting
 
             for (int i= 0; i < offsets[0].Count; i++)
             {
-                Console.WriteLine("-----------------------------------------------------------");
+                Console.WriteLine(new string('-', 120));
                 var output = new byte[items.Length][];
-                if(i == 3)
-                {
-                    Console.WriteLine($"***Section {i} Support item Sequence***");
-                    Console.WriteLine("---");
-                    continue;
-                }
-                if(i == 5)
-                {
-                    Console.WriteLine($"****Section {i} Core item Sequence***");
-                    Console.WriteLine("---");
-                    continue;
-                }
+                Console.WriteLine(new string('*', 120));
+                Console.WriteLine($"Section {i}");
+                Console.WriteLine(new string('*', 120));
+                Console.WriteLine(string.Join(' ', Enumerable.Range(0, 40).Select(x => x.ToString("D2"))));
+                Console.WriteLine(new string('-', 120));
 
+                var buffer = new byte[9];
                 for (int j = 0; j < offsets.Length; j++)
                 {
                     int ix = offsets[j][i];
-                    PrintSection();
-                    void PrintSection()
-                    {
-                        Console.WriteLine($"--- Item {j}: {items[j].ItemName} Section {i} offset {ix} ---");
+                    bytes[(ix + 4)..(ix + 13)].CopyTo(buffer, 0);
+                    ReadOnlySpan<byte> supportSeq = new byte[] { 0x68, 0xD5, 0x24, 0x00, 0x03 };
+                    ReadOnlySpan<byte> coreSeq = new byte[] { 0x84, 0x60, 0x28, 0x00, 0x00 };
+                    var val = 0;
 
-                        var nextPos = bytes.AsSpan(ix + 8).IndexOf(poo) - 4;
-                        output[j] = bytes[ix..(ix + nextPos)];
-                        Console.WriteLine(string.Join(' ', Enumerable.Range(0, 40).Select(x => x.ToString("D2"))));
-                        Console.WriteLine(new string('-', 120));
-                        Console.WriteLine(string.Join(' ', output[j].Select(x => x.ToString("X2"))));
-                        
+                    if (bytes.AsSpan(ix + 8, 5).SequenceEqual(supportSeq))
+                    {
+                        Console.WriteLine($"--- Item {j}: {items[j].ItemName} Support component sequence");
+                        Console.WriteLine(string.Join(' ', bytes[(ix + 13)..(ix + 21)].Select(x => x.ToString("X2"))));
+                        continue;
                     }
+                    else if (bytes.AsSpan(ix + 8, 5).SequenceEqual(coreSeq))
+                    {
+                        Console.WriteLine($"--- Item {j}: {items[j].ItemName} Core component sequence");
+                        continue;
+                    }
+                    var nextPos = bytes.AsSpan(ix + 13).IndexOf(buffer);
+                    
+
+                    output[j] = bytes[ix..(ix + 13 + nextPos - 4)];
+                    Console.WriteLine($"--- Item {j}: {items[j].ItemName} offset {ix} ---");
+                    Console.WriteLine(string.Join(' ', output[j].Select(x => x.ToString("X2"))));
                 }
-                if (output.Any(x => x is null)) continue;
+                if (output.Any(x => x is null || x.Length == 0)) continue;
                 var smallest = output.FirstOrDefault(x => x.Length == output.Min(y => y.Length));
                 if (output.All(x => x.AsSpan(8, smallest.Length - 8).SequenceEqual(smallest.AsSpan(8, smallest.Length - 8))))
                 {
