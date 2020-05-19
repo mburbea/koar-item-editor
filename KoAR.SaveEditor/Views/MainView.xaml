@@ -388,6 +388,7 @@
                             <RowDefinition />
                             <RowDefinition />
                             <RowDefinition />
+                            <RowDefinition />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
@@ -414,8 +415,20 @@
                                 </Style>
                             </TextBox.Style>
                         </TextBox>
-                        <TextBlock Text="Cur Durability:" Grid.Row="1" TextAlignment="Right" Margin="2" VerticalAlignment="Center" />
-                        <TextBox Grid.Row="1" TextAlignment="Right">
+                        <TextBlock Grid.Row="1" Text="Type:" TextAlignment="Right" Margin="2" VerticalAlignment="Center" />
+                        <RichTextBox Grid.Row="1" Grid.Column="1" IsReadOnly="True" Background="{x:Static SystemColors.ControlBrush}" 
+                            VerticalAlignment="Center" Margin="2">
+                            <FlowDocument>
+                                <BlockUIContainer>
+                                    <StackPanel Orientation="Horizontal">
+                                        <views:EquipmentTypeIndicator EquipmentType="{Binding SelectedItem.EquipmentType}" />
+                                        <TextBlock VerticalAlignment="Center" Margin="2" Text="{Binding SelectedItem.EquipmentType}" />
+                                    </StackPanel>
+                                </BlockUIContainer>
+                            </FlowDocument>
+                        </RichTextBox>
+                        <TextBlock Text="Cur Durability:" Grid.Row="2" TextAlignment="Right" Margin="2" VerticalAlignment="Center" />
+                        <TextBox Grid.Row="2" TextAlignment="Right">
                             <TextBox.Style>
                                 <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
                                     <Style.Triggers>
@@ -435,8 +448,8 @@
                                 </Style>
                             </TextBox.Style>
                         </TextBox>
-                        <TextBlock Text="Max Durability:" Grid.Row="2" TextAlignment="Right" Margin="2" VerticalAlignment="Center" />
-                        <TextBox Grid.Row="2" TextAlignment="Right">
+                        <TextBlock Text="Max Durability:" Grid.Row="3" TextAlignment="Right" Margin="2" VerticalAlignment="Center" />
+                        <TextBox Grid.Row="3" TextAlignment="Right">
                             <TextBox.Style>
                                 <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
                                     <Style.Triggers>
