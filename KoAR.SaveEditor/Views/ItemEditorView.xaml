@@ -19,8 +19,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <TextBlock Text="WARNING: Edit the text below at your own risk!" TextAlignment="Center" FontWeight="SemiBold" Foreground="Red" Margin="4" />
-        <TextBox Grid.Row="1" x:Name="PART_TextBox" AcceptsReturn="False" Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-            Margin="4" TextWrapping="Wrap" />
+        <TextBox Grid.Row="1" x:Name="PART_TextBox" AcceptsReturn="False" Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}" Margin="4" TextWrapping="Wrap" />
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="2">
             <Button Content="Cancel" Command="Close" Margin="4" />
             <Button Content="Save" Command="{Binding SaveCommand}" Margin="4" IsDefault="True" />
