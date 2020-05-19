@@ -143,16 +143,16 @@
                                     <x:Type TypeName="core:EquipmentType" />
                                 </ObjectDataProvider.MethodParameters>
                             </ObjectDataProvider>
-                            <constructs:ObjectContainerConverter x:Key="ObjectContainerConverter" />
+                            <constructs:DataContainerConverter x:Key="DataContainerConverter" />
                             <CompositeCollection x:Key="EquipmentTypesComposite">
                                 <CollectionContainer>
                                     <CollectionContainer.Collection>
-                                        <x:Array Type="{x:Type constructs:ObjectContainer}">
-                                            <x:Static Member="constructs:ObjectContainer.Empty" />
+                                        <x:Array Type="{x:Type constructs:DataContainer}">
+                                            <x:Static Member="constructs:DataContainer.Empty" />
                                         </x:Array>
                                     </CollectionContainer.Collection>
                                 </CollectionContainer>
-                                <CollectionContainer Collection="{Binding Source={StaticResource EquipmentTypes}, Converter={StaticResource ObjectContainerConverter}}" />
+                                <CollectionContainer Collection="{Binding Source={StaticResource EquipmentTypes}, Converter={StaticResource DataContainerConverter}}" />
                             </CompositeCollection>
                             <Style TargetType="FrameworkElement" x:Key="ElementStyle">
                                 <Setter Property="Margin" Value="2" />
@@ -181,21 +181,21 @@
                         <TextBox Grid.Column="1" Text="{Binding ItemNameFilter, UpdateSourceTrigger=PropertyChanged}" />
                         <TextBlock Grid.Column="2" Text="Type:" />
                         <ComboBox Grid.Column="3" Margin="2" VerticalAlignment="Center" ItemsSource="{Binding Source={StaticResource EquipmentTypesComposite}}"
-                            FocusVisualStyle="{x:Null}" SelectedValuePath="Item" SelectedValue="{Binding EquipmentTypeFilter}" Height="24">
+                            FocusVisualStyle="{x:Null}" SelectedValuePath="Data" SelectedValue="{Binding EquipmentTypeFilter}" Height="24">
                             <ComboBox.ItemContainerStyle>
                                 <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
                                     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                                 </Style>
                             </ComboBox.ItemContainerStyle>
                             <ComboBox.ItemTemplate>
-                                <DataTemplate DataType="{x:Type constructs:ObjectContainer}">
+                                <DataTemplate DataType="{x:Type constructs:DataContainer}">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition />
                                         </Grid.ColumnDefinitions>
-                                        <views:EquipmentTypeIndicator EquipmentType="{Binding Item}" />
-                                        <TextBlock Grid.Column="1" Text="{Binding Item}" VerticalAlignment="Center" Margin="2">
+                                        <views:EquipmentTypeIndicator EquipmentType="{Binding Data}" />
+                                        <TextBlock Grid.Column="1" Text="{Binding Data}" VerticalAlignment="Center" Margin="2">
                                             <TextBlock.Style>
                                                 <Style TargetType="{x:Type TextBlock}">
                                                     <Style.Triggers>
