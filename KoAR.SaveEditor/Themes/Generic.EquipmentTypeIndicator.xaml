@@ -72,7 +72,6 @@
                         <Trigger Property="EquipmentType" Value="ShockTalisman">
                             <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource ShockTalisman}" />
                         </Trigger>
-
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
