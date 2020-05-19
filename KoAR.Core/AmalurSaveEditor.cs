@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -18,8 +19,8 @@ namespace KoAR.Core
         private static ReadOnlySpan<byte> CurrentInventoryCount => new[] { (byte)'c', (byte)'u', (byte)'r', (byte)'r', (byte)'e', (byte)'n', (byte)'t', (byte)'_', (byte)'i', (byte)'n', (byte)'v', (byte)'e', (byte)'n', (byte)'t', (byte)'o', (byte)'r', (byte)'y', (byte)'_', (byte)'c', (byte)'o', (byte)'u', (byte)'n', (byte)'t' };
         private static ReadOnlySpan<byte> EquipmentSequence => new byte[]     { 0x0B, 0x00, 0x00, 0x00, 0x68, 0xD5, 0x24, 0x00, 0x03 };
         private static ReadOnlySpan<byte> CoreAttributeSequence => new byte[] { 0x84, 0x60, 0x28, 0x00, 0x00 };
-        private static ReadOnlySpan<byte> EquipTypeSequence => new byte[]     { 0xD4, 0x08, 0x46, 0x00, 0x01 };
-        private static ReadOnlySpan<byte> DifferentiatingSeq => new byte[]    { 0x8D, 0xE3, 0x47, 0x00, 0x02 };
+        private static ReadOnlySpan<byte> WeaponTypeSequence => new byte[]     { 0xD4, 0x08, 0x46, 0x00, 0x01 };
+        private static ReadOnlySpan<byte> AdditionalInfoSequence => new byte[]    { 0x8D, 0xE3, 0x47, 0x00, 0x02 };
         private byte[] _bytes;
 
         public byte[] Bytes
@@ -123,50 +124,48 @@ namespace KoAR.Core
                 return results;
             }
 
-            static EquipmentType DetermineEquipmentType(ReadOnlySpan<byte> bytes, ReadOnlySpan<byte> itemId, byte b13)
+            static EquipmentType DetermineEquipmentType(ReadOnlySpan<byte> bytes, ItemMemoryInfo item)
             {
                 Span<byte> buffer = stackalloc byte[13];
-                itemId.CopyTo(buffer);
-                EquipTypeSequence.CopyTo(buffer.Slice(8));
+                item.ItemBytes.AsSpan(0, 8).CopyTo(buffer);
+                WeaponTypeSequence.CopyTo(buffer.Slice(8));
                 var offset = bytes.IndexOf(buffer);
                 if (offset == -1)
                 {
-                    // Armor doesn't have this section.
-                    return EquipmentType.Armor;
+                    return EquipmentType.Armor; // Armor doesn't have this section.
                 }
-                var differingByte = bytes[offset + 13];
-                if(differingByte != 0x24 && differingByte != 0x1C)
+                var equipTypeByte = bytes[offset + 13];
+                AdditionalInfoSequence.CopyTo(buffer.Slice(8));
+                var aisOffset = bytes.IndexOf(buffer);
+                var demystifyer = bytes[aisOffset + 17];
+                
+                return equipTypeByte switch
                 {
-                    return differingByte switch
+                    0x10 => EquipmentType.Shield,
+                    0x18 => EquipmentType.LongBow,
+                    0x20 => demystifyer == 0 ? EquipmentType.LongSword : EquipmentType.GreatSword,
+                    0x24 => demystifyer == 0 ? EquipmentType.Daggers : EquipmentType.FaeBlades,
+                    0x1C => demystifyer switch
                     {
-                        0x10 => EquipmentType.Shield,
-                        0x18 => EquipmentType.LongBow,
-                        0x14 => b13 switch
-                        {
-                            0x22 => EquipmentType.Sceptre,//there might be 3 sceptre codes?
-                            0x33 => EquipmentType.Buckler,//why are there two buckler codes?
-                            0x3E => EquipmentType.Buckler,
-                            0x2B => EquipmentType.FlameTalisman,// Shock talisman's are here too :(
-                            0x23 => EquipmentType.FrostTalisman,
-                            0x3F => EquipmentType.ShockTalisman,// might only be crafted shock talisman.
-                            _=> EquipmentType.Unknown,
-                        },
-                        0x20 => bytes[offset + 21] == 0 ? EquipmentType.GreatSword : EquipmentType.LongSword,
+                        0xEA => EquipmentType.Chakrams,
+                        0xEB => EquipmentType.FaeBlades,
+                        0xEC => EquipmentType.Hammer,
+                        0x53 => EquipmentType.Hammer,
+                        0x00 => EquipmentType.Staff,
+                        _ => EquipmentType.Unknown
+                    },
+                    0x14 => item.ItemBytes[13] switch
+                    {
+                        0x22 => EquipmentType.Sceptre,//there might be 3 sceptre codes?
+                        0x33 => EquipmentType.Buckler,//why are there two buckler codes?
+                        0x3E => EquipmentType.Buckler,
+                        0x2B => EquipmentType.FlameTalisman,// Shock talisman's are here too :(
+                        0x23 => EquipmentType.FrostTalisman,
+                        0x3F => EquipmentType.ShockTalisman,// might only be crafted shock talisman.
                         _ => EquipmentType.Unknown,
-                    };
-                }
-                DifferentiatingSeq.CopyTo(buffer.Slice(8));
-                offset = bytes.IndexOf(buffer);
-                var magicStrengthOrFinesse = MemoryUtilities.Read<int>(bytes,offset + 17);
-                return magicStrengthOrFinesse switch
-                {
-                    0x1D_5A_EA => EquipmentType.Chakrams,
-                    0x1D_5A_EB => EquipmentType.FaeBlades,
-                    0x1D_5A_EC => EquipmentType.Hammer,
-                    0 => differingByte == 0x24 ? EquipmentType.Daggers : EquipmentType.Staff,
-                    _=> EquipmentType.Unknown,
+                    },
+                    _ => throw null,//                    EquipmentType.Unknown,
                 };
-
             }
 
             List<ItemMemoryInfo> equipmentList = new List<ItemMemoryInfo>();
@@ -189,7 +188,7 @@ namespace KoAR.Core
                     var span = bytes.AsSpan(indexList[i]);
                     int coreOffset = span.IndexOf(coreHeader) + indexList[i];
                     item.CoreItemMemory = CoreItemMemory.Create(coreOffset, bytes.AsSpan(coreOffset));
-                    item.EquipmentType = DetermineEquipmentType(bytes, coreHeader.AsSpan(0, 8), item.ItemBytes[13]);
+                    item.EquipmentType = DetermineEquipmentType(bytes, item);
                     equipmentList.Add(item);
 
                     var b13 = item.CoreItemMemory.MysteryInteger;
@@ -206,7 +205,7 @@ namespace KoAR.Core
             Console.WriteLine(bins);
             Console.WriteLine(seqs);
             var dict2 = seqs.ToDictionary(x => string.Join(" ", BitConverter.GetBytes(x.Key).Select(x => x.ToString("X2"))));
-            
+
             return equipmentList;
         }
 

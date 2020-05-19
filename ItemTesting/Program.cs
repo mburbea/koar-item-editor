@@ -46,9 +46,13 @@ namespace ItemTesting
             var editor = new AmalurSaveEditor();
             editor.ReadFile(path);
             var bytes = editor.Bytes;
-            var interest = new[] { "Talisman","Buckler","Sceptre"};
-            var items = editor.GetAllEquipment()
-                .Where(x=>  interest.Contains(x.ItemName))
+            var interest = new[] { "PLS","PGW","ABC","Primal Chakrams", "Garbage"};
+            var mems = editor.GetAllEquipment()
+                .Where(x => interest.Contains(x.ItemName)
+                || x.ItemBytes.AsSpan(0,4).SequenceEqual(new byte[] { 0x42, 0x09, 0xEB, 0x07  })
+                || x.ItemBytes.AsSpan(0,4).SequenceEqual(new byte[] { 0x0D, 0x09, 0x01, 0x03, })
+                ).ToArray();
+            var items = mems
                 .Select(x => (x.ItemName, ItemId:x.ItemBytes.AsSpan(0, 8).ToArray())).OrderBy(x=>x.ItemName).ToArray();
             
             //var items = new[] { "92 05 FC 00 0B 00 00 00", 
@@ -60,6 +64,7 @@ namespace ItemTesting
             var equipSeq = new byte[] { 0x68, 0xD5, 0x24, 0x00, 0x03 };
 
             const int magicNumber = 0x00FF00FF;
+            static string GetBytesString(byte[] b) => string.Join(' ', b.Select(x => x.ToString("X2")));
             static string Converter(int x)=> ((x = x >> 16 | x << 16) >> 8 & magicNumber | (x & magicNumber) << 8).ToString("X8");
 
             for (int i= 0; i < offsets[0].Count; i++)
@@ -75,16 +80,23 @@ namespace ItemTesting
                 var buffer = new byte[9];
                 for (int j = 0; j < offsets.Length; j++)
                 {
+                    if (offsets[j].Count <= i) continue;
                     int ix = offsets[j][i];
                     bytes[(ix + 4)..(ix + 13)].CopyTo(buffer, 0);
                     ReadOnlySpan<byte> supportSeq = new byte[] { 0x68, 0xD5, 0x24, 0x00, 0x03 };
                     ReadOnlySpan<byte> coreSeq = new byte[] { 0x84, 0x60, 0x28, 0x00, 0x00 };
-                    var val = 0;
 
                     if (bytes.AsSpan(ix + 8, 5).SequenceEqual(supportSeq))
                     {
+                        var itemMemory = mems[j];
+                        var offset = new ItemMemoryInfo.Offset(itemMemory.EffectCount);
+
                         Console.WriteLine($"--- Item {j}: {items[j].ItemName} Support component sequence");
-                        Console.WriteLine(string.Join(' ', bytes[(ix + 13)..(ix + 21)].Select(x => x.ToString("X2"))));
+                        Console.WriteLine($"byte13:{bytes[ix + 13]:X2}");
+                        Console.WriteLine($"Post Effect bytes:{GetBytesString(bytes[(ix + offset.PostEffect)..(ix + offset.CurrentDurability)])}");
+                        Console.WriteLine($"After Max Durability:{GetBytesString(bytes[(ix + offset.MaxDurability + 4)..(ix + offset.MaxDurability + 8)])}");
+                        Console.WriteLine($"byte before customName:{bytes[ix+offset.HasCustomName - 1]:X2}");
+
                         continue;
                     }
                     else if (bytes.AsSpan(ix + 8, 5).SequenceEqual(coreSeq))
@@ -109,40 +121,7 @@ namespace ItemTesting
                  
             }
             return;
-            
-            int LikelyCandidates(string name, string text)
-            {
-                text += " 84 60 28 00 00";
-                var indices = GetAllIndices(bytes, GetBytesFromText(text));
-                Debug.Assert(indices.Count == 1);
-                var ix = indices[0];
-                var count = bytes[ix + 17];
-                int always_zero = bytes[ix + 17 + 4 +  count * 16];
-                var count2 = bytes[ix + 17 + 4 +  count * 16 + 4];
-                Debug.Assert(count == count2);
-                var length = 17 +  12 + (count * 24);
-                //int ohSnap=0;
-                //for(int i = 0; i < patternLocation.Count -1; i++)
-                //{
-                //    var p = patternLocation[i];
-                //    if(p-indices[0] > 0 && p-indices[0] < 100)
-                //    {
-                //        ohSnap = patternLocation[i + 1];
-                //        break;
-                //    }
-                //}
 
-                //bytes[ix + 25] = bytes[ix + 61] = 0x33; ;
-                //bytes[ix + 26] = bytes[ix + 62] = 0xFE;
-                //bytes[ix + 27] = bytes[ix + 63] = 0x1D;
-                Console.WriteLine($"{name}: {length}");
-                Console.WriteLine(string.Join(' ', bytes[ix..(ix + length + 100)].Select(x => x.ToString("X2"))));
-                Console.WriteLine("---");
-                //bytes[ix + 13] = 0x2C;
-                return 0;
-            }
-            //fs.Seek(0, SeekOrigin.Begin);
-            //fs.Write(bytes);
 
             static List<int> GetAllIndices(ReadOnlySpan<byte> data, ReadOnlySpan<byte> sequence)
             {

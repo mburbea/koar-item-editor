@@ -3,20 +3,20 @@
     public enum EquipmentType
     {
         Unknown = 0,
+        Armor,
+        Buckler,
         Chakrams,
         Daggers,
         FaeBlades,
+        FlameTalisman,
+        FrostTalisman,
         GreatSword,
         Hammer,
         LongBow,
         LongSword,
         Sceptre,
-        Staff,
-        Armor,
-        FlameTalisman,
-        FrostTalisman,
         ShockTalisman,
-        Buckler,
         Shield,
+        Staff,
     }
 }
