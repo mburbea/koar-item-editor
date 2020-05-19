@@ -10,12 +10,13 @@
     <BitmapImage x:Key="LongBow" UriSource="/KoAR.SaveEditor;component/Resources/LongBow.png" po:Freeze="true" />
     <BitmapImage x:Key="LongSword" UriSource="/KoAR.SaveEditor;component/Resources/LongSword.png" po:Freeze="true" />
     <BitmapImage x:Key="Sceptre" UriSource="/KoAR.SaveEditor;component/Resources/Sceptre.png" po:Freeze="true" />
+    <BitmapImage x:Key="Staff" UriSource="/KoAR.SaveEditor;component/Resources/Staff.png" po:Freeze="true" />
     <BitmapImage x:Key="Unknown" UriSource="/KoAR.SaveEditor;component/Resources/Unknown.png" po:Freeze="true" />
     <Style TargetType="{x:Type views:EquipmentTypeIndicator}">        
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type views:EquipmentTypeIndicator}">
-                    <Image Margin="1,0" x:Name="PART_Image" Width="18" Source="{StaticResource Unknown}" ToolTip="{TemplateBinding EquipmentType}" />
+                    <Image Margin="1,0" x:Name="PART_Image" Width="20" Source="{StaticResource Unknown}" ToolTip="{TemplateBinding EquipmentType}" />
                     <ControlTemplate.Triggers>
                         <Trigger Property="EquipmentType" Value="{x:Null}">
                             <Setter Property="Visibility" Value="Collapsed" />
@@ -43,7 +44,10 @@
                         </Trigger>
                         <Trigger Property="EquipmentType" Value="Sceptre">
                             <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource Sceptre}" />
-                        </Trigger>                        
+                        </Trigger>
+                        <Trigger Property="EquipmentType" Value="Staff">
+                            <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource Staff}" />
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

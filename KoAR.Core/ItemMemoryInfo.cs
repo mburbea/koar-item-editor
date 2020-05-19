@@ -84,13 +84,10 @@ namespace KoAR.Core
             {
                 if (!HasCustomName)
                 {
-                    return "Unknown" + (EquipmentType != EquipmentType.Unknown ? $" ({EquipmentType})" : "");
+                    return "Unknown";
                 }
-                else
-                {
-                    int nameLength = MemoryUtilities.Read<int>(ItemBytes, Offsets.CustomNameLength);
-                    return Encoding.Default.GetString(ItemBytes, Offsets.CustomNameText, nameLength);
-                }
+                int nameLength = MemoryUtilities.Read<int>(ItemBytes, Offsets.CustomNameLength);
+                return Encoding.Default.GetString(ItemBytes, Offsets.CustomNameText, nameLength);
             }
             set
             {

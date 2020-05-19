@@ -20,7 +20,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type views:DamageTypeIndicator}">
-                    <Image Margin="1,0" x:Name="PART_Image" Width="18" Source="{StaticResource Unknown}" />
+                    <Image Margin="1,0" x:Name="PART_Image" Width="20" Source="{StaticResource Unknown}" />
                     <ControlTemplate.Triggers>
                         <Trigger Property="CoreEffect" Value="{x:Null}">
                             <Setter Property="Visibility" Value="Collapsed" />
