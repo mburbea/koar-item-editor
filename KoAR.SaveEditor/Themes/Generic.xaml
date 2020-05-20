@@ -2,5 +2,6 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.DamageTypeIndicator.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.EquipmentTypeIndicator.xaml" />
+        <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.ItemsView.xaml" />
     </ResourceDictionary.MergedDictionaries>    
 </ResourceDictionary>

@@ -1,20 +1,19 @@
 ﻿using System.ComponentModel;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
 using TaskDialogInterop;
 
 namespace KoAR.SaveEditor.Views
 {
-    partial class MainView
+    partial class MainWindow
     {
-        static MainView() => CommandManager.RegisterClassCommandBinding(typeof(MainView), new CommandBinding(ApplicationCommands.Help, MainView.DisplayHelp));
+        static MainWindow() => CommandManager.RegisterClassCommandBinding(typeof(MainWindow), new CommandBinding(ApplicationCommands.Help, MainWindow.DisplayHelp));
 
-        public MainView()
+        public MainWindow()
         {
             this.InitializeComponent();
-            this.Loaded += this.MainView_Loaded;
+            this.Loaded += this.Window_Loaded;
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -82,28 +81,9 @@ namespace KoAR.SaveEditor.Views
             });
         }
 
-        private void AutoSizeColumns_Click(object sender, RoutedEventArgs e)
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            foreach (GridViewColumn column in ((GridView)this.PART_ListView.View).Columns)
-            {
-                if (double.IsNaN(column.Width))
-                {
-                    column.Width = column.ActualWidth;
-                }
-                column.Width = double.NaN;
-            }
-        }
-
-        private void CheckBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            ItemModel model = (ItemModel)((FrameworkElement)sender).DataContext;
-            ListViewItem item = (ListViewItem)this.PART_ListView.ItemContainerGenerator.ContainerFromItem(model);
-            item.IsSelected = true;
-        }
-
-        private void MainView_Loaded(object sender, RoutedEventArgs e)
-        {
-            this.Loaded -= this.MainView_Loaded;
+            this.Loaded -= this.Window_Loaded;
             this.Dispatcher.InvokeAsync(((MainViewModel)this.DataContext).OpenFile, DispatcherPriority.Render);
         }
     }

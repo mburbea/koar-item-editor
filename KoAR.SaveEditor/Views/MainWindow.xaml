@@ -1,4 +1,4 @@
-﻿<Window x:Class="KoAR.SaveEditor.Views.MainView"
+﻿<Window x:Class="KoAR.SaveEditor.Views.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -17,7 +17,7 @@
         <constructs:NegatedBooleanConverter x:Key="NegatedBooleanConverter" />
         <constructs:StringIsNullOrEmptyConverter x:Key="StringIsNullOrEmptyConverter" />
         <constructs:LittleEndianConverter x:Key="LittleEndianConverter" />
-        <SolidColorBrush x:Key="AlternateRowBrush" Color="#25BCBCBC" po:Freeze="True" />
+        
         <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
             <Setter Property="Validation.ErrorTemplate">
                 <Setter.Value>
@@ -233,100 +233,8 @@
                         <Button Grid.Column="8" Content="Reset" Command="{Binding ResetFiltersCommand}" Margin="2" VerticalAlignment="Center" />
                     </Grid>
                 </GroupBox>
-                <ListView x:Name="PART_ListView" Grid.Row="1" ItemsSource="{Binding Source={StaticResource FilteredItems}}" SelectedItem="{Binding SelectedItem}"
-                    Margin="4" BorderBrush="LightGray" SelectionMode="Single" FocusVisualStyle="{x:Null}" VirtualizingPanel.VirtualizationMode="Recycling"
-                    TextSearch.TextPath="ItemId" AlternationCount="2">
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="{x:Type ListViewItem}">
-                            <Style.Triggers>
-                                <MultiTrigger>
-                                    <MultiTrigger.Conditions>
-                                        <Condition Property="ItemsControl.AlternationIndex" Value="1" />
-                                        <Condition Property="IsSelected" Value="False" />
-                                        <Condition Property="IsMouseOver" Value="False" />
-                                    </MultiTrigger.Conditions>
-                                    <Setter Property="Background" Value="{StaticResource AlternateRowBrush}" />
-                                </MultiTrigger>
-                            </Style.Triggers>
-                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                            <Setter Property="views:MouseDoubleClick.CommandParameter" Value="{Binding}" />
-                            <Setter Property="views:MouseDoubleClick.Command" Value="{Binding EditItemHexCommand, Source={StaticResource ViewModel}}" />
-                        </Style>
-                    </ListView.ItemContainerStyle>
-                    <ListView.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Header="AutoSize Columns" Click="AutoSizeColumns_Click"/>
-                        </ContextMenu>
-                    </ListView.ContextMenu>
-                    <ListView.View>
-                        <GridView AllowsColumnReorder="True">
-                            <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ItemId}" Width="Auto" />
-                            <GridViewColumn Header="Name" Width="Auto">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate DataType="{x:Type views:ItemModel}">
-                                        <DockPanel>
-                                            <views:EquipmentTypeIndicator EquipmentType="{Binding EquipmentType}" VerticalAlignment="Center" />
-                                            <TextBlock Text="{Binding ItemName}" VerticalAlignment="Center" Margin="1,0" />
-                                        </DockPanel>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="Cur Durability" Width="Auto">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate DataType="{x:Type views:ItemModel}">
-                                        <TextBlock Text="{Binding CurrentDurability, StringFormat='0.####'}" TextAlignment="Right" />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="Max Durability" Width="Auto">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate DataType="{x:Type views:ItemModel}">
-                                        <TextBlock Text="{Binding MaxDurability, StringFormat='0.####'}" TextAlignment="Right" />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="# Effects" Width="Auto">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate DataType="{x:Type views:ItemModel}">
-                                        <TextBlock Text="{Binding EffectCount, StringFormat='#,##0'}" TextAlignment="Right" />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="Core Effects" Width="Auto">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate DataType="{x:Type views:ItemModel}">
-                                        <ItemsControl ItemsSource="{Binding CoreEffects}" MinWidth="88">
-                                            <ItemsControl.ItemsPanel>
-                                                <ItemsPanelTemplate>
-                                                    <StackPanel Orientation="Horizontal" />
-                                                </ItemsPanelTemplate>
-                                            </ItemsControl.ItemsPanel>
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate DataType="{x:Type core:CoreEffectInfo}">
-                                                    <views:DamageTypeIndicator CoreEffect="{Binding}" />
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
-                                        </ItemsControl>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="{Binding}" Width="Auto">
-                                <GridViewColumn.HeaderTemplate>
-                                    <DataTemplate DataType="{x:Type views:MainViewModel}">
-                                        <CheckBox DockPanel.Dock="Right" Margin="2" Content="Sellable?" FocusVisualStyle="{x:Null}"
-                                            IsChecked="{Binding AllItemsUnsellable, Converter={StaticResource NegatedBooleanConverter}, Mode=TwoWay}" />
-                                    </DataTemplate>
-                                </GridViewColumn.HeaderTemplate>
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate DataType="{x:Type views:ItemModel}">
-                                        <CheckBox IsChecked="{Binding IsUnsellable, Converter={StaticResource NegatedBooleanConverter}, Mode=TwoWay}" HorizontalAlignment="Center" 
-                                            PreviewMouseLeftButtonDown="CheckBox_PreviewMouseLeftButtonDown"/>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
+                <views:ItemsView Grid.Row="1" Items="{Binding FilteredItems}" SelectedItem="{Binding SelectedItem}" 
+                    EditItemHexCommand="{Binding EditItemHexCommand}" AllItemsUnsellable="{Binding AllItemsUnsellable}" />
             </Grid>
             <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Stretch" Background="{x:Static SystemColors.ControlBrush}" FocusVisualStyle="{x:Null}" />
             <Grid Grid.Column="2">

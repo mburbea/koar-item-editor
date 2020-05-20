@@ -336,7 +336,7 @@ namespace KoAR.SaveEditor.Views
             {
                 return;
             }
-            ItemEditorView view = new ItemEditorView
+            ItemEditorWindow view = new ItemEditorWindow
             {
                 Owner = Application.Current.MainWindow,
                 DataContext = new ItemEditorViewModel(this._editor, model.Item)

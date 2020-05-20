@@ -19,7 +19,7 @@ namespace KoAR.SaveEditor.Views
         {
             this._editor = editor;
             this._item = item;
-            this._initialText = this._text = string.Join(" ", Array.ConvertAll(item.ItemBytes, x => x.ToString("X2")));
+            this._initialText = this._text = string.Join(" ", item.ItemBytes.Select(x => x.ToString("X2")));
             this.SaveCommand = new DelegateCommand(this.Save, this.CanSave);
         }
 
@@ -67,7 +67,7 @@ namespace KoAR.SaveEditor.Views
             }
             this._item.ItemBytes = bytes;
             this._editor.WriteEquipmentBytes(this._item, out _);
-            ItemEditorView view = Application.Current.Windows.OfType<ItemEditorView>().Single();
+            ItemEditorWindow view = Application.Current.Windows.OfType<ItemEditorWindow>().Single();
             view.DialogResult = true;
             view.Close();
         }
