@@ -64,14 +64,6 @@
         </Style>
     </Window.Style>
     <DockPanel>
-        <DockPanel.Resources>
-            <CollectionViewSource x:Key="FilteredItems" Source="{Binding FilteredItems}">
-                <CollectionViewSource.SortDescriptions>
-                    <componentmodel:SortDescription PropertyName="HasCustomName" Direction="Descending" />
-                    <componentmodel:SortDescription PropertyName="ItemIndex" Direction="Ascending" />
-                </CollectionViewSource.SortDescriptions>
-            </CollectionViewSource>
-        </DockPanel.Resources>
         <Border DockPanel.Dock="Top" Background="Transparent" BorderBrush="{x:Static SystemColors.ActiveBorderBrush}" BorderThickness="0,0,0,1">
             <Border.Resources>
                 <Style TargetType="{x:Type Button}">

@@ -3,7 +3,8 @@
     xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs"
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views"
-    xmlns:core="clr-namespace:KoAR.Core;assembly=KoAR.Core">
+    xmlns:core="clr-namespace:KoAR.Core;assembly=KoAR.Core"
+    xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase">
     <Style TargetType="{x:Type views:ItemsView}">
         <Setter Property="Template">
             <Setter.Value>
@@ -12,98 +13,129 @@
                         <constructs:NegatedBooleanConverter x:Key="NegatedBooleanConverter" />
                         <SolidColorBrush x:Key="AlternateRowBrush" Color="#25BCBCBC" po:Freeze="True" />
                     </ControlTemplate.Resources>
-                    <ListView x:Name="PART_ListView" ItemsSource="{TemplateBinding Items}" SelectedItem="{Binding SelectedItem, RelativeSource={RelativeSource TemplatedParent}}"
-                        Margin="4" BorderBrush="LightGray" SelectionMode="Single" FocusVisualStyle="{x:Null}" VirtualizingPanel.VirtualizationMode="Recycling"
-                        TextSearch.TextPath="ItemId" AlternationCount="2">
-                        <ListView.ItemContainerStyle>
-                            <Style TargetType="{x:Type ListViewItem}">
-                                <Style.Triggers>
-                                    <MultiTrigger>
-                                        <MultiTrigger.Conditions>
-                                            <Condition Property="ItemsControl.AlternationIndex" Value="1" />
-                                            <Condition Property="IsSelected" Value="False" />
-                                            <Condition Property="IsMouseOver" Value="False" />
-                                        </MultiTrigger.Conditions>
-                                        <Setter Property="Background" Value="{StaticResource AlternateRowBrush}" />
-                                    </MultiTrigger>
-                                </Style.Triggers>
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                <Setter Property="views:MouseDoubleClick.CommandParameter" Value="{Binding}" />
-                                <Setter Property="views:MouseDoubleClick.Command" Value="{Binding EditItemHexCommand, RelativeSource={RelativeSource AncestorType={x:Type views:ItemsView}}}" />
-                            </Style>
-                        </ListView.ItemContainerStyle>
-                        <ListView.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Header="AutoSize Columns" Command="{x:Static views:ItemsView.AutoSizeColumnsCommand}" />
-                            </ContextMenu>
-                        </ListView.ContextMenu>
-                        <ListView.View>
-                            <GridView AllowsColumnReorder="True">
-                                <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ItemId}" Width="Auto" />
-                                <GridViewColumn Header="Name" Width="Auto">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate DataType="{x:Type views:ItemModel}">
-                                            <DockPanel>
-                                                <views:EquipmentTypeIndicator EquipmentType="{Binding EquipmentType}" VerticalAlignment="Center" />
-                                                <TextBlock Text="{Binding ItemName}" VerticalAlignment="Center" Margin="1,0" />
-                                            </DockPanel>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                <GridViewColumn Header="Cur Durability" Width="Auto">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate DataType="{x:Type views:ItemModel}">
-                                            <TextBlock Text="{Binding CurrentDurability, StringFormat='0.####'}" TextAlignment="Right" />
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                <GridViewColumn Header="Max Durability" Width="Auto">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate DataType="{x:Type views:ItemModel}">
-                                            <TextBlock Text="{Binding MaxDurability, StringFormat='0.####'}" TextAlignment="Right" />
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                <GridViewColumn Header="# Effects" Width="Auto">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate DataType="{x:Type views:ItemModel}">
-                                            <TextBlock Text="{Binding EffectCount, StringFormat='#,##0'}" TextAlignment="Right" />
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                <GridViewColumn Header="Core Effects" Width="Auto">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate DataType="{x:Type views:ItemModel}">
-                                            <ItemsControl ItemsSource="{Binding CoreEffects}" MinWidth="88">
-                                                <ItemsControl.ItemsPanel>
-                                                    <ItemsPanelTemplate>
-                                                        <StackPanel Orientation="Horizontal" />
-                                                    </ItemsPanelTemplate>
-                                                </ItemsControl.ItemsPanel>
-                                                <ItemsControl.ItemTemplate>
-                                                    <DataTemplate DataType="{x:Type core:CoreEffectInfo}">
-                                                        <views:DamageTypeIndicator CoreEffect="{Binding}" />
-                                                    </DataTemplate>
-                                                </ItemsControl.ItemTemplate>
-                                            </ItemsControl>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                <GridViewColumn Width="Auto">
-                                    <GridViewColumn.Header>
-                                        <CheckBox Margin="2" Content="Sellable?" FocusVisualStyle="{x:Null}"
+                    <Border>
+                        <Border.Resources>
+                            <CollectionViewSource x:Key="FilteredItems" Source="{Binding Items,RelativeSource={RelativeSource TemplatedParent}}">
+                                <CollectionViewSource.SortDescriptions>
+                                    <componentModel:SortDescription PropertyName="EquipmentType" Direction="Ascending" />
+                                    <componentModel:SortDescription PropertyName="HasCustomName" Direction="Descending" />
+                                    <componentModel:SortDescription PropertyName="ItemIndex" Direction="Ascending" />
+                                </CollectionViewSource.SortDescriptions>
+                                <CollectionViewSource.GroupDescriptions>
+                                    <PropertyGroupDescription PropertyName="EquipmentType" />
+                                </CollectionViewSource.GroupDescriptions>
+                            </CollectionViewSource>
+                        </Border.Resources>
+                        <ListView x:Name="PART_ListView" ItemsSource="{Binding Source={StaticResource FilteredItems}}" SelectedItem="{Binding SelectedItem, RelativeSource={RelativeSource TemplatedParent}}"
+                            Margin="4" BorderBrush="LightGray" SelectionMode="Single" FocusVisualStyle="{x:Null}" VirtualizingPanel.VirtualizationMode="Recycling"
+                            TextSearch.TextPath="ItemId" AlternationCount="2" VirtualizingPanel.IsVirtualizingWhenGrouping="True">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="{x:Type ListViewItem}">
+                                    <Style.Triggers>
+                                        <MultiTrigger>
+                                            <MultiTrigger.Conditions>
+                                                <Condition Property="ItemsControl.AlternationIndex" Value="1" />
+                                                <Condition Property="IsSelected" Value="False" />
+                                                <Condition Property="IsMouseOver" Value="False" />
+                                            </MultiTrigger.Conditions>
+                                            <Setter Property="Background" Value="{StaticResource AlternateRowBrush}" />
+                                        </MultiTrigger>
+                                    </Style.Triggers>
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                    <Setter Property="views:MouseDoubleClick.CommandParameter" Value="{Binding}" />
+                                    <Setter Property="views:MouseDoubleClick.Command" Value="{Binding EditItemHexCommand, RelativeSource={RelativeSource AncestorType={x:Type views:ItemsView}}}" />
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.GroupStyle>
+                                <GroupStyle>
+                                    <GroupStyle.ContainerStyle>
+                                        <Style TargetType="{x:Type GroupItem}">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate>
+                                                        <Expander Header="{Binding Name}" IsExpanded="True" FocusVisualStyle="{x:Null}">
+                                                            <ItemsPresenter />
+                                                        </Expander>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </GroupStyle.ContainerStyle>
+                                </GroupStyle>
+                            </ListView.GroupStyle>
+                            <ListView.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="AutoSize Columns" Command="{x:Static views:ItemsView.AutoSizeColumnsCommand}" />
+                                </ContextMenu>
+                            </ListView.ContextMenu>
+                            <ListView.View>
+                                <GridView AllowsColumnReorder="True">
+                                    <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ItemId}" Width="Auto" />
+                                    <GridViewColumn Header="Name" Width="Auto">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate DataType="{x:Type views:ItemModel}">
+                                                <DockPanel>
+                                                    <views:EquipmentTypeIndicator EquipmentType="{Binding EquipmentType}" VerticalAlignment="Center" />
+                                                    <TextBlock Text="{Binding ItemName}" VerticalAlignment="Center" Margin="1,0" />
+                                                </DockPanel>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Cur Durability" Width="Auto">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate DataType="{x:Type views:ItemModel}">
+                                                <TextBlock Text="{Binding CurrentDurability, StringFormat='0.####'}" TextAlignment="Right" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Max Durability" Width="Auto">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate DataType="{x:Type views:ItemModel}">
+                                                <TextBlock Text="{Binding MaxDurability, StringFormat='0.####'}" TextAlignment="Right" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="# Effects" Width="Auto">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate DataType="{x:Type views:ItemModel}">
+                                                <TextBlock Text="{Binding EffectCount, StringFormat='#,##0'}" TextAlignment="Right" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Core Effects" Width="Auto">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate DataType="{x:Type views:ItemModel}">
+                                                <ItemsControl ItemsSource="{Binding CoreEffects}" MinWidth="88">
+                                                    <ItemsControl.ItemsPanel>
+                                                        <ItemsPanelTemplate>
+                                                            <StackPanel Orientation="Horizontal" />
+                                                        </ItemsPanelTemplate>
+                                                    </ItemsControl.ItemsPanel>
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate DataType="{x:Type core:CoreEffectInfo}">
+                                                            <views:DamageTypeIndicator CoreEffect="{Binding}" />
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Width="Auto">
+                                        <GridViewColumn.Header>
+                                            <CheckBox Margin="2" Content="Sellable?" FocusVisualStyle="{x:Null}"
                                             IsChecked="{Binding AllItemsUnsellable, Converter={StaticResource NegatedBooleanConverter}, RelativeSource={RelativeSource TemplatedParent}}" />
-                                    </GridViewColumn.Header>
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate DataType="{x:Type views:ItemModel}">
-                                            <CheckBox IsChecked="{Binding IsUnsellable, Converter={StaticResource NegatedBooleanConverter}, Mode=TwoWay}" HorizontalAlignment="Center" 
+                                        </GridViewColumn.Header>
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate DataType="{x:Type views:ItemModel}">
+                                                <CheckBox IsChecked="{Binding IsUnsellable, Converter={StaticResource NegatedBooleanConverter}, Mode=TwoWay}" HorizontalAlignment="Center" 
                                                 views:ItemsView.SelectRowOnClick="{Binding IsVisible, RelativeSource={RelativeSource Self}}"/>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

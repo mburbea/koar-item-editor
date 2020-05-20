@@ -105,7 +105,6 @@
     <Resource Include="Resources\Unknown.png" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Net.Http" />
