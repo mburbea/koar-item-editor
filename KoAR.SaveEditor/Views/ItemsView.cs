@@ -22,7 +22,7 @@ namespace KoAR.SaveEditor.Views
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         public static readonly DependencyProperty SelectRowOnClickProperty = DependencyProperty.RegisterAttached("SelectRowOnClick", typeof(bool), typeof(ItemsView),
-            new PropertyMetadata(ItemsView.SelectRowOnClickProperty_ValueChanged));
+            new PropertyMetadata(BooleanBoxes.False, ItemsView.SelectRowOnClickProperty_ValueChanged));
 
         private ListView? _listView;
 
