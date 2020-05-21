@@ -41,13 +41,9 @@
     <Window.Style>
         <Style TargetType="{x:Type Window}" BasedOn="{StaticResource {x:Type Window}}">
             <Style.Triggers>
-                <MultiDataTrigger>
-                    <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding FileName, Converter={StaticResource StringIsNullOrEmptyConverter}}" Value="False" />
-                        <Condition Binding="{Binding UnsavedChanges}" Value="False" />
-                    </MultiDataTrigger.Conditions>
+                <DataTrigger Binding="{Binding FileName, Converter={StaticResource StringIsNullOrEmptyConverter}}" Value="False">
                     <Setter Property="Title" Value="{Binding FileName, StringFormat='{}{0} - KoAR Save Editor'}" />
-                </MultiDataTrigger>
+                </DataTrigger>
                 <MultiDataTrigger>
                     <MultiDataTrigger.Conditions>
                         <Condition Binding="{Binding FileName, Converter={StaticResource StringIsNullOrEmptyConverter}}" Value="False" />
@@ -251,11 +247,11 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock VerticalAlignment="Center" Margin="2" TextAlignment="Right" Text="# Effects:"/>
                             <TextBox Grid.Column="1" VerticalAlignment="Center" Margin="2" Text="{Binding SelectedItem.EffectCount, Mode=OneWay}" 
-                            TextAlignment="Right" IsReadOnly="True" Background="{x:Static SystemColors.ControlBrush}" />
+                                TextAlignment="Right" IsReadOnly="True" Background="{x:Static SystemColors.ControlBrush}" />
                             <views:EffectsControl Grid.Row="1" Grid.ColumnSpan="2" ProcessEffectLabel="Delete" Header="Existing Effects:" DataContext="{Binding SelectedItem}" Effects="{Binding Effects}" 
-                            SelectedEffect="{Binding SelectedEffect}" Command="{Binding DataContext.DeleteEffectCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+                                SelectedEffect="{Binding SelectedEffect}" Command="{Binding DataContext.DeleteEffectCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
                             <views:EffectsControl Grid.Row="2" Grid.ColumnSpan="2" ProcessEffectLabel="Add" Header="Add Effect:" Effects="{x:Static core:Amalur.Effects}" 
-                            SelectedEffect="{Binding SelectedEffect}" Command="{Binding AddEffectCommand}" />
+                                SelectedEffect="{Binding SelectedEffect}" Command="{Binding AddEffectCommand}" />
                         </Grid>
                     </GroupBox>
                     <GroupBox Margin="4" Header="Core Effects">
@@ -307,9 +303,6 @@
                             <TextBox Grid.Row="4" Text="{Binding SelectedItem.MysteryInteger, Mode=OneWay, StringFormat=X2}" />
                         </Grid>
                     </GroupBox>
-
-
-
                     <views:EffectListControl Margin="4" Header="Effects:" Effects="{Binding SelectedItem.Effects}" AvailableEffects="{x:Static core:Amalur.Effects}" />
                     <views:EffectListControl Margin="4" Header="{Binding SelectedItem}" Effects="{Binding SelectedItem.CoreEffects}" AvailableEffects="{Binding Values, Source={x:Static core:Amalur.CoreEffects}}">
                         <views:EffectListControl.HeaderTemplate>

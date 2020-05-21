@@ -186,10 +186,10 @@ namespace KoAR.SaveEditor.Views
             set => this.SetValue(ref this._selectedItem, value);
         }
 
-        public bool? UnsavedChanges
+        public bool UnsavedChanges
         {
-            get => this._fileName == null ? default(bool?) : this._unsavedChanges;
-            private set => this.SetValue(ref this._unsavedChanges, value.GetValueOrDefault());
+            get => this._unsavedChanges;
+            private set => this.SetValue(ref this._unsavedChanges, value);
         }
 
         public DelegateCommand UpdateInventorySizeCommand

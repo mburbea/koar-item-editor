@@ -27,7 +27,7 @@ namespace KoAR.SaveEditor.Views
         protected override void OnClosing(CancelEventArgs e)
         {
             MainViewModel viewModel = (MainViewModel)this.DataContext;
-            if (viewModel.UnsavedChanges == true)
+            if (viewModel.UnsavedChanges)
             {
                 TaskDialogResult result = TaskDialog.Show(new TaskDialogOptions
                 {
