@@ -63,7 +63,7 @@ namespace KoAR.Core
             }
         }
 
-        public static bool IsInitialized => Bytes != null;
+        public static bool IsInitialized => _bytes != null;
 
         private static int GetBagOffset()
         {
