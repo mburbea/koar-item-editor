@@ -359,8 +359,9 @@ namespace KoAR.SaveEditor.Views
                 PropertyChangedEventManager.RemoveHandler(item, this.Item_IsUnsellableChanged, nameof(ItemModel.IsUnsellable));
             }
             this._items.Clear();
-            foreach (ItemModel item in Amalur.GetAllEquipment().ConvertAll(info => new ItemModel(info)))
+            foreach (ItemMemoryInfo info in Amalur.GetAllEquipment())
             {
+                ItemModel item = new ItemModel(info);
                 PropertyChangedEventManager.AddHandler(item, this.Item_MateriallyChanged, nameof(ItemModel.ItemName));
                 PropertyChangedEventManager.AddHandler(item, this.Item_MateriallyChanged, nameof(ItemModel.CurrentDurability));
                 PropertyChangedEventManager.AddHandler(item, this.Item_MateriallyChanged, nameof(ItemModel.MaxDurability));
