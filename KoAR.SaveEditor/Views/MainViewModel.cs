@@ -22,7 +22,6 @@ namespace KoAR.SaveEditor.Views
 
         private readonly ObservableCollection<ItemModel> _items;
         private string _currentDurabilityFilter = string.Empty;
-        private AmalurSaveEditor? _editor;
         private EquipmentType? _equipmentTypeFilter;
         private string? _fileName;
         private IReadOnlyList<ItemModel> _filteredItems;
@@ -71,7 +70,7 @@ namespace KoAR.SaveEditor.Views
             }
             set
             {
-                if (this._editor == null)
+                if (!AmalurSaveEditor.IsInitialized)
                 {
                     return;
                 }
@@ -88,7 +87,7 @@ namespace KoAR.SaveEditor.Views
                         PropertyChangedEventManager.RemoveHandler(model, this.SelectedItem_IsUnsellableChanged, nameof(model.IsUnsellable));
                     }
                     model.IsUnsellable = newValue;
-                    this._editor.WriteEquipmentBytes(model.Item, out _);
+                    AmalurSaveEditor.WriteEquipmentBytes(model.Item, out _);
                     this.UnsavedChanges = true;
                     if (model.Equals(this.SelectedItem))
                     {
@@ -252,9 +251,8 @@ namespace KoAR.SaveEditor.Views
             {
                 return;
             }
-            this._editor = new AmalurSaveEditor();
-            this._editor.ReadFile(this.FileName = dialog.FileName);
-            this.InventorySize = this._editor.GetMaxBagCount();
+            AmalurSaveEditor.ReadFile(this.FileName = dialog.FileName);
+            this.InventorySize = AmalurSaveEditor.GetMaxBagCount();
             this.RepopulateItems();
             this.ResetFilters();
             this._unsavedChanges = false;
@@ -263,12 +261,12 @@ namespace KoAR.SaveEditor.Views
 
         internal void Save()
         {
-            if (this._editor == null)
+            if (!AmalurSaveEditor.IsInitialized)
             {
                 return;
             }
             File.Copy(this._fileName, $"{this._fileName}.bak", true);
-            this._editor.SaveFile(this._fileName);
+            AmalurSaveEditor.SaveFile(this._fileName);
             this.UnsavedChanges = false;
             this.RepopulateItems();
             MessageBox.Show($"Save successful! Original save backed up as {this._fileName}.bak.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -322,7 +320,7 @@ namespace KoAR.SaveEditor.Views
 
         private bool CanSave() => this._unsavedChanges;
 
-        private bool CanUpdateInventorySize() => this._editor != null && this._editor.GetMaxBagCount() != this.InventorySize;
+        private bool CanUpdateInventorySize() => AmalurSaveEditor.IsInitialized && AmalurSaveEditor.GetMaxBagCount() != this.InventorySize;
 
         private void DeleteEffect(EffectInfo info)
         {
@@ -332,14 +330,14 @@ namespace KoAR.SaveEditor.Views
 
         private void EditItemHex(ItemModel model)
         {
-            if (this._editor == null)
+            if (!AmalurSaveEditor.IsInitialized)
             {
                 return;
             }
             ItemEditorWindow view = new ItemEditorWindow
             {
                 Owner = Application.Current.MainWindow,
-                DataContext = new ItemEditorViewModel(this._editor, model.Item)
+                DataContext = new ItemEditorViewModel(model.Item)
             };
             if (view.ShowDialog() == true)
             {
@@ -393,16 +391,16 @@ namespace KoAR.SaveEditor.Views
         /// </summary>
         private void RepopulateItems()
         {
-            if (this._editor == null)
+            if (!AmalurSaveEditor.IsInitialized)
             {
                 MessageBox.Show("No save file opened!", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Warning);
                 this.OpenFile();
                 return;
             }
             this._items.Clear();
-            foreach (ItemMemoryInfo info in this._editor.GetAllEquipment())
+            foreach (ItemMemoryInfo info in AmalurSaveEditor.GetAllEquipment())
             {
-                this._items.Add(new ItemModel(this._editor, info));
+                this._items.Add(new ItemModel(info));
             }
             this.OnFilterChange();
         }
@@ -432,24 +430,24 @@ namespace KoAR.SaveEditor.Views
 
         private void SelectedItem_IsUnsellableChanged(object sender, EventArgs e)
         {
-            if (this._editor == null)
+            if (!AmalurSaveEditor.IsInitialized)
             {
                 return;
             }
             ItemModel model = (ItemModel)sender;
-            this._editor.WriteEquipmentBytes(model.Item, out _);
+            AmalurSaveEditor.WriteEquipmentBytes(model.Item, out _);
             this.UnsavedChanges = true;
             this.OnPropertyChanged(nameof(this.AllItemsUnsellable));
         }
 
         private void SelectedItem_MateriallyChanged(object sender, EventArgs e)
         {
-            if (this._editor == null)
+            if (!AmalurSaveEditor.IsInitialized)
             {
                 return;
             }
             ItemModel model = (ItemModel)sender;
-            this._editor.WriteEquipmentBytes(model.Item, out bool lengthChanged);
+            AmalurSaveEditor.WriteEquipmentBytes(model.Item, out bool lengthChanged);
             if (lengthChanged)
             {
                 this.Refresh();
@@ -462,11 +460,11 @@ namespace KoAR.SaveEditor.Views
 
         private void UpdateInventorySize()
         {
-            if (this._editor == null)
+            if (!AmalurSaveEditor.IsInitialized)
             {
                 return;
             }
-            this._editor.EditMaxBagCount(this.InventorySize);
+            AmalurSaveEditor.EditMaxBagCount(this.InventorySize);
             this.UnsavedChanges = true;
         }
     }

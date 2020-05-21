@@ -10,14 +10,12 @@ namespace KoAR.SaveEditor.Views
 {
     public sealed class ItemEditorViewModel : NotifierBase
     {
-        private readonly AmalurSaveEditor _editor;
         private readonly string _initialText;
         private readonly ItemMemoryInfo _item;
         private string _text;
 
-        public ItemEditorViewModel(AmalurSaveEditor editor, ItemMemoryInfo item)
+        public ItemEditorViewModel(ItemMemoryInfo item)
         {
-            this._editor = editor;
             this._item = item;
             this._initialText = this._text = string.Join(" ", item.ItemBytes.Select(x => x.ToString("X2")));
             this.SaveCommand = new DelegateCommand(this.Save, this.CanSave);
@@ -66,7 +64,7 @@ namespace KoAR.SaveEditor.Views
                 return;
             }
             this._item.ItemBytes = bytes;
-            this._editor.WriteEquipmentBytes(this._item, out _);
+            AmalurSaveEditor.WriteEquipmentBytes(this._item, out _);
             ItemEditorWindow view = Application.Current.Windows.OfType<ItemEditorWindow>().Single();
             view.DialogResult = true;
             view.Close();

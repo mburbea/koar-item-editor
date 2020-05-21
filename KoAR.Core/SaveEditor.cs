@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 namespace KoAR.Core
 {
     /// <summary>
-    /// Archive Operation for Kingdosm of Amalur(supports 1.0.0.2)
+    /// Archive Operation for Kingdoms of Amalur(supports 1.0.0.2)
     /// </summary>
-    public class AmalurSaveEditor
+    public static class SaveEditor
     {
         /// <summary>
         /// The head of the equipment, property and indicate the number of attributes of the data relative to equipment data head offset
@@ -22,9 +22,9 @@ namespace KoAR.Core
         private static ReadOnlySpan<byte> CoreAttributeSequence => new byte[] { 0x84, 0x60, 0x28, 0x00, 0x00 };
         private static ReadOnlySpan<byte> WeaponTypeSequence => new byte[]     { 0xD4, 0x08, 0x46, 0x00, 0x01 };
         private static ReadOnlySpan<byte> AdditionalInfoSequence => new byte[]    { 0x8D, 0xE3, 0x47, 0x00, 0x02 };
-        private byte[] _bytes;
+        private static byte[] _bytes;
 
-        public byte[] Bytes
+        public static byte[] Bytes
         {
             get => _bytes ?? throw new Exception("Save file not open");
             set => _bytes = value;
@@ -34,7 +34,7 @@ namespace KoAR.Core
         /// Read save-file
         /// </summary>
         /// <param name="path">archive path</param>
-        public void ReadFile(string path)
+        public static void ReadFile(string path)
         {
             try
             {
@@ -52,7 +52,7 @@ namespace KoAR.Core
         /// Save save-file
         /// </summary>
         /// <param name="path">save path</param>
-        public void SaveFile(string path)
+        public static void SaveFile(string path)
         {
             try
             {
@@ -65,7 +65,9 @@ namespace KoAR.Core
             }
         }
 
-        private int GetBagOffset()
+        public static bool IsInitialized => Bytes != null;
+
+        private static int GetBagOffset()
         {
             ReadOnlySpan<byte> span = Bytes;
             var curInvCountOffset = span.IndexOf(CurrentInventoryCount) + CurrentInventoryCount.Length;
@@ -79,11 +81,11 @@ namespace KoAR.Core
             return finalOffset + (inventoryLimitOrder * 12);
         }
 
-        public int GetMaxBagCount() => MemoryUtilities.Read<int>(Bytes, GetBagOffset());
+        public static int GetMaxBagCount() => MemoryUtilities.Read<int>(Bytes, GetBagOffset());
 
-        public void EditMaxBagCount(int count) => MemoryUtilities.Write(Bytes, GetBagOffset(), count);
+        public static void EditMaxBagCount(int count) => MemoryUtilities.Write(Bytes, GetBagOffset(), count);
 
-        public List<CoreEffectInfo> GetCoreEffectInfos(CoreItemMemory coreItem, IReadOnlyDictionary<string, CoreEffectInfo> effects)
+        public static List<CoreEffectInfo> GetCoreEffectInfos(CoreItemMemory coreItem, IReadOnlyDictionary<string, CoreEffectInfo> effects)
         {
             var itemEffects = coreItem.ReadEffects();
             for(int i = 0; i < itemEffects.Count; i++)
@@ -96,7 +98,7 @@ namespace KoAR.Core
             return itemEffects;
         }
 
-        public List<EffectInfo> GetEffectList(ItemMemoryInfo weaponInfo, IEnumerable<EffectInfo> effects)
+        public static List<EffectInfo> GetEffectList(ItemMemoryInfo weaponInfo, IEnumerable<EffectInfo> effects)
         {
             var itemEffects = weaponInfo.ReadEffects();
             foreach (EffectInfo attInfo in itemEffects)
@@ -108,7 +110,7 @@ namespace KoAR.Core
         }
 
 
-        public List<ItemMemoryInfo> GetAllEquipment()
+        public static List<ItemMemoryInfo> GetAllEquipment()
         {
             static List<int> GetAllIndices(ReadOnlySpan<byte> data, ReadOnlySpan<byte> sequence)
             {
@@ -204,6 +206,7 @@ namespace KoAR.Core
                             0x2B => EquipmentType.Buckler,
                             0x3b => EquipmentType.FrostTalisman,
                             0x00 => EquipmentType.Buckler,
+                            _ => throw null,
                         },
 
                         //0x33 => EquipmentType.Buckler,//why are there two buckler codes?
@@ -264,10 +267,10 @@ namespace KoAR.Core
         /// Delete Equipment
         /// </summary>
         /// <param name="weapon"></param>
-        public void DeleteEquipment(ItemMemoryInfo equipment)
+        public static void DeleteEquipment(ItemMemoryInfo equipment)
             => Bytes = MemoryUtilities.ReplaceBytes(Bytes, equipment.ItemIndex, equipment.DataLength, equipment.ItemBytes);
 
-        public void WriteEquipmentBytes(ItemMemoryInfo equipment, out bool lengthChanged)
+        public static void WriteEquipmentBytes(ItemMemoryInfo equipment, out bool lengthChanged)
         {
             var bytes = Bytes;
             var oldLength = bytes.Length;

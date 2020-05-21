@@ -42,11 +42,10 @@ namespace ItemTesting
             //LikelyCandidates("Primal Bow", "2B 09 9E 0B 0B 00 00 00");
             //LikelyCandidates("PGW", "2F 09 32 01 0B 00 00 00");
             //LikelyCandidates("TEST", "70 00 1B 01 0B 00 00 00");
-            var editor = new AmalurSaveEditor();
-            editor.ReadFile(path);
-            var bytes = editor.Bytes;
+            AmalurSaveEditor.ReadFile(path);
+            var bytes = AmalurSaveEditor.Bytes;
             var interest = new[] { "PLS","PGW","ABC","Primal Chakrams", "Garbage"};
-            var mems = editor.GetAllEquipment()
+            var mems = AmalurSaveEditor.GetAllEquipment()
                 .Where(x => interest.Contains(x.ItemName) || x.EquipmentType == EquipmentType.Buckler
                 ).ToArray();
             var items = mems

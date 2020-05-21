@@ -13,14 +13,12 @@ namespace KoAR.SaveEditor.Views
     /// </summary>
     public sealed class ItemModel : NotifierBase
     {
-        private readonly AmalurSaveEditor _editor;
         private List<CoreEffectInfo>? _coreEffects;
         private List<EffectInfo>? _effects;
         private EffectInfo? _selectedEffect;
 
-        public ItemModel(AmalurSaveEditor editor, ItemMemoryInfo item)
+        public ItemModel(ItemMemoryInfo item)
         {
-            this._editor = editor;
             this.Item = item;
         }
 
@@ -32,7 +30,7 @@ namespace KoAR.SaveEditor.Views
 
         public CoreEffectInfo? CoreEffect3 => this.CoreEffects.Skip(3).FirstOrDefault();
 
-        public List<CoreEffectInfo> CoreEffects => this._coreEffects ??= this._editor.GetCoreEffectInfos(this.Item.CoreItemMemory, MainViewModel.CoreEffects);
+        public List<CoreEffectInfo> CoreEffects => this._coreEffects ??= AmalurSaveEditor.GetCoreEffectInfos(this.Item.CoreItemMemory, MainViewModel.CoreEffects);
 
         public float CurrentDurability
         {
@@ -42,7 +40,7 @@ namespace KoAR.SaveEditor.Views
 
         public int EffectCount => this.Item.EffectCount;
 
-        public List<EffectInfo> Effects => this._effects ??= this._editor.GetEffectList(this.Item, MainViewModel.Effects);
+        public List<EffectInfo> Effects => this._effects ??= AmalurSaveEditor.GetEffectList(this.Item, MainViewModel.Effects);
 
         public EquipmentType EquipmentType => this.Item.EquipmentType;
 
@@ -87,7 +85,7 @@ namespace KoAR.SaveEditor.Views
         {
             this.Effects.Add(info);
             this.Item.WriteEffects(this.Effects);
-            this._editor.WriteEquipmentBytes(this.Item, out _);
+            AmalurSaveEditor.WriteEquipmentBytes(this.Item, out _);
         }
 
         public void DeleteEffect(EffectInfo info)
@@ -97,7 +95,7 @@ namespace KoAR.SaveEditor.Views
                 return;
             }
             this.Item.WriteEffects(this.Effects);
-            this._editor.WriteEquipmentBytes(this.Item, out _);
+            AmalurSaveEditor.WriteEquipmentBytes(this.Item, out _);
         }
 
         private void SetItemValue<T>(T value, T currentValue, Action<T> setValue, [CallerMemberName] string propertyName = "")
