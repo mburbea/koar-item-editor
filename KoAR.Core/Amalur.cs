@@ -67,7 +67,7 @@ namespace KoAR.Core
             }
         }
 
-        public static bool IsInitialized => _bytes != null;
+        public static bool IsFileOpen => _bytes != null;
         public static void Initialize(string path = null)
         {
             path ??= Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);

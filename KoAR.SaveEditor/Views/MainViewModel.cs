@@ -65,7 +65,7 @@ namespace KoAR.SaveEditor.Views
             }
             set
             {
-                if (!Amalur.IsInitialized)
+                if (!Amalur.IsFileOpen)
                 {
                     return;
                 }
@@ -256,7 +256,7 @@ namespace KoAR.SaveEditor.Views
 
         internal void Save()
         {
-            if (!Amalur.IsInitialized)
+            if (!Amalur.IsFileOpen)
             {
                 return;
             }
@@ -280,7 +280,7 @@ namespace KoAR.SaveEditor.Views
 
         private bool CanSave() => this._unsavedChanges;
 
-        private bool CanUpdateInventorySize() => Amalur.IsInitialized && Amalur.GetMaxBagCount() != this.InventorySize;
+        private bool CanUpdateInventorySize() => Amalur.IsFileOpen && Amalur.GetMaxBagCount() != this.InventorySize;
 
         private void DeleteEffect(EffectInfo info)
         {
@@ -290,7 +290,7 @@ namespace KoAR.SaveEditor.Views
 
         private void EditItemHex(ItemModel model)
         {
-            if (!Amalur.IsInitialized)
+            if (!Amalur.IsFileOpen)
             {
                 return;
             }
@@ -351,7 +351,7 @@ namespace KoAR.SaveEditor.Views
         /// </summary>
         private void RepopulateItems()
         {
-            if (!Amalur.IsInitialized)
+            if (!Amalur.IsFileOpen)
             {
                 MessageBox.Show("No save file opened!", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Warning);
                 this.OpenFile();
@@ -389,7 +389,7 @@ namespace KoAR.SaveEditor.Views
 
         private void SelectedItem_IsUnsellableChanged(object sender, EventArgs e)
         {
-            if (!Amalur.IsInitialized)
+            if (!Amalur.IsFileOpen)
             {
                 return;
             }
@@ -401,7 +401,7 @@ namespace KoAR.SaveEditor.Views
 
         private void SelectedItem_MateriallyChanged(object sender, EventArgs e)
         {
-            if (!Amalur.IsInitialized)
+            if (!Amalur.IsFileOpen)
             {
                 return;
             }
@@ -419,7 +419,7 @@ namespace KoAR.SaveEditor.Views
 
         private void UpdateInventorySize()
         {
-            if (!Amalur.IsInitialized)
+            if (!Amalur.IsFileOpen)
             {
                 return;
             }
