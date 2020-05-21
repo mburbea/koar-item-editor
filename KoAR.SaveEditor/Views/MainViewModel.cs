@@ -17,9 +17,6 @@ namespace KoAR.SaveEditor.Views
 {
     public sealed class MainViewModel : NotifierBase
     {
-        public static readonly IReadOnlyDictionary<string, CoreEffectInfo> CoreEffects = MainViewModel.LoadAllCoreEffects();
-        public static readonly IReadOnlyList<EffectInfo> Effects = MainViewModel.LoadAllEffects();
-
         private readonly ObservableCollection<ItemModel> _items;
         private string _currentDurabilityFilter = string.Empty;
         private EquipmentType? _equipmentTypeFilter;
@@ -28,12 +25,18 @@ namespace KoAR.SaveEditor.Views
         private int _inventorySize;
         private string _itemNameFilter = string.Empty;
         private string _maxDurabilityFilter = string.Empty;
-        private EffectInfo? _selectedEffect = MainViewModel.Effects.FirstOrDefault();
+        private EffectInfo? _selectedEffect;
         private ItemModel? _selectedItem;
         private bool _unsavedChanges;
 
         public MainViewModel()
         {
+            if (!(bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(Window)).DefaultValue)
+            {
+                Amalur.Initialize();
+            }
+            _selectedEffect = Amalur.Effects.FirstOrDefault();
+
             this.OpenFileCommand = new DelegateCommand(this.OpenFile);
             this._filteredItems = this.Items = new ReadOnlyObservableCollection<ItemModel>(this._items = new ObservableCollection<ItemModel>());
             this.ResetFiltersCommand = new DelegateCommand(this.ResetFilters);
@@ -272,41 +275,6 @@ namespace KoAR.SaveEditor.Views
             MessageBox.Show($"Save successful! Original save backed up as {this._fileName}.bak.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private static IReadOnlyDictionary<string, CoreEffectInfo> LoadAllCoreEffects()
-        {
-            if ((bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(Window)).DefaultValue)
-            {
-                return new Dictionary<string, CoreEffectInfo>();
-            }
-            return File.ReadLines(Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "CoreEffects.csv"))
-                .Skip(1)
-                .Select(row => row.Split(','))
-                .Select(parts => new CoreEffectInfo
-                {
-                    Code = parts[0],
-                    DamageType = Enum.TryParse(parts[1], true, out DamageType damageType) ? damageType : default,
-                    Tier = float.Parse(parts[2])
-                })
-                .ToDictionary(info => info.Code, StringComparer.OrdinalIgnoreCase);
-        }
-
-        private static IReadOnlyList<EffectInfo> LoadAllEffects()
-        {
-            if ((bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(Window)).DefaultValue)
-            {
-                return Array.Empty<EffectInfo>();
-            }
-            using Stream stream = File.OpenRead(Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "properties.xml"));
-            return XDocument.Load(stream).Root
-                .Elements()
-                .Select(element => new EffectInfo
-                {
-                    Code = element.Attribute("id").Value.ToUpperInvariant(),
-                    DisplayText = element.Value.Trim()
-                })
-                .ToList(); // xaml will bind to `Count` property so keeping consistent with `ItemModel.Effects`.
-        }
-
         private void AddEffect(EffectInfo info)
         {
             if (info == null || this.SelectedItem == null)
@@ -314,7 +282,7 @@ namespace KoAR.SaveEditor.Views
                 return;
             }
             this.SelectedItem.AddEffect(info.Clone());
-            this.SelectedEffect = MainViewModel.Effects[0];
+            this.SelectedEffect = Amalur.Effects[0];
             this.Refresh();
         }
 
@@ -382,7 +350,7 @@ namespace KoAR.SaveEditor.Views
                 this.SelectedItem = this._items.FirstOrDefault(item => item.ItemIndex == selectedItemIndex.Value);
             }
             this.UnsavedChanges = true;
-            this.SelectedEffect = MainViewModel.Effects[0];
+            this.SelectedEffect = Amalur.Effects[0];
             CommandManager.InvalidateRequerySuggested();
         }
 

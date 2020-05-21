@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace KoAR.Core
 {
@@ -13,6 +15,8 @@ namespace KoAR.Core
         /// <summary>
         /// The head of the equipment, property and indicate the number of attributes of the data relative to equipment data head offset
         /// </summary>
+        public static List<EffectInfo> Effects { get; } = new List<EffectInfo>();
+        public static Dictionary<string, CoreEffectInfo> CoreEffects { get; } = new Dictionary<string, CoreEffectInfo>(StringComparer.OrdinalIgnoreCase);
         private static ReadOnlySpan<byte> InventoryLimit => new[] { (byte)'i', (byte)'n', (byte)'v', (byte)'e', (byte)'n', (byte)'t', (byte)'o', (byte)'r', (byte)'y', (byte)'_', (byte)'l', (byte)'i', (byte)'m', (byte)'i', (byte)'t' };
         private static ReadOnlySpan<byte> IncreaseAmount => new[] { (byte)'i', (byte)'n', (byte)'c', (byte)'r', (byte)'e', (byte)'a', (byte)'s', (byte)'e', (byte)'_', (byte)'a', (byte)'m', (byte)'o', (byte)'u', (byte)'n', (byte)'t' };
         private static ReadOnlySpan<byte> CurrentInventoryCount => new[] { (byte)'c', (byte)'u', (byte)'r', (byte)'r', (byte)'e', (byte)'n', (byte)'t', (byte)'_', (byte)'i', (byte)'n', (byte)'v', (byte)'e', (byte)'n', (byte)'t', (byte)'o', (byte)'r', (byte)'y', (byte)'_', (byte)'c', (byte)'o', (byte)'u', (byte)'n', (byte)'t' };
@@ -64,6 +68,41 @@ namespace KoAR.Core
         }
 
         public static bool IsInitialized => _bytes != null;
+        public static void Initialize(string path = null)
+        {
+            path ??= Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
+            var effectCsv = Path.Combine(path, "CoreEffects.csv");
+            if (!File.Exists(effectCsv))
+            {
+                throw new InvalidOperationException("Cannot find CoreEffects.csv");
+            }
+
+            foreach (var row in File.ReadLines(effectCsv).Skip(1))
+            {
+                var parts = row.Split(',');
+                CoreEffects[parts[0]] = new CoreEffectInfo
+                {
+                    Code = parts[0],
+                    DamageType = Enum.TryParse(parts[1], true, out DamageType damageType) ? damageType : default,
+                    Tier = float.Parse(parts[2])
+                };
+            }
+
+            var propertiesXml = Path.Combine(path, "properties.xml");
+            if (!File.Exists(propertiesXml))
+            {
+                throw new InvalidOperationException("Cannot find properties.xml");
+            }
+            using var stream = File.OpenRead(propertiesXml);
+
+            Effects.AddRange(XDocument.Load(stream).Root
+                .Elements()
+                .Select(element => new EffectInfo
+                {
+                    Code = element.Attribute("id").Value.ToUpperInvariant(),
+                    DisplayText = element.Value.Trim()
+                }));
+        }
 
         private static int GetBagOffset()
         {
@@ -83,12 +122,12 @@ namespace KoAR.Core
 
         public static void EditMaxBagCount(int count) => MemoryUtilities.Write(Bytes, GetBagOffset(), count);
 
-        public static List<CoreEffectInfo> GetCoreEffectInfos(CoreItemMemory coreItem, IReadOnlyDictionary<string, CoreEffectInfo> effects)
+        public static List<CoreEffectInfo> GetCoreEffectInfos(CoreItemMemory coreItem)
         {
             var itemEffects = coreItem.ReadEffects();
             for(int i = 0; i < itemEffects.Count; i++)
             {
-                if(effects.TryGetValue(itemEffects[i].Code, out var definition)){
+                if(CoreEffects.TryGetValue(itemEffects[i].Code, out var definition)){
                     itemEffects[i] = definition.Clone();
                 }
             }
@@ -96,12 +135,12 @@ namespace KoAR.Core
             return itemEffects;
         }
 
-        public static List<EffectInfo> GetEffectList(ItemMemoryInfo weaponInfo, IEnumerable<EffectInfo> effects)
+        public static List<EffectInfo> GetEffectList(ItemMemoryInfo item)
         {
-            var itemEffects = weaponInfo.ReadEffects();
+            var itemEffects = item.ReadEffects();
             foreach (EffectInfo attInfo in itemEffects)
             {
-                attInfo.DisplayText = effects.FirstOrDefault(x => x.Code == attInfo.Code)?.DisplayText ?? "Unknown";
+                attInfo.DisplayText = Effects.FirstOrDefault(x => x.Code == attInfo.Code)?.DisplayText ?? "Unknown";
             }
 
             return itemEffects;

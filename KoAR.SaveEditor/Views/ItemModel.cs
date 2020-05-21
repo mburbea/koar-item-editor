@@ -30,7 +30,7 @@ namespace KoAR.SaveEditor.Views
 
         public CoreEffectInfo? CoreEffect3 => this.CoreEffects.Skip(3).FirstOrDefault();
 
-        public List<CoreEffectInfo> CoreEffects => this._coreEffects ??= Amalur.GetCoreEffectInfos(this.Item.CoreItemMemory, MainViewModel.CoreEffects);
+        public List<CoreEffectInfo> CoreEffects => this._coreEffects ??= Amalur.GetCoreEffectInfos(this.Item.CoreItemMemory);
 
         public float CurrentDurability
         {
@@ -40,7 +40,7 @@ namespace KoAR.SaveEditor.Views
 
         public int EffectCount => this.Item.EffectCount;
 
-        public List<EffectInfo> Effects => this._effects ??= Amalur.GetEffectList(this.Item, MainViewModel.Effects);
+        public List<EffectInfo> Effects => this._effects ??= Amalur.GetEffectList(this.Item);
 
         public EquipmentType EquipmentType => this.Item.EquipmentType;
 
