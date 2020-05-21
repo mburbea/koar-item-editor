@@ -2,9 +2,9 @@
 
 namespace KoAR.Core
 {
-    public class CoreEffectInfo : IEquatable<CoreEffectInfo>
+    public class CoreEffectInfo : IEffectInfo, IEquatable<CoreEffectInfo>
     {
-        private static readonly CoreEffectInfo Empty = new CoreEffectInfo();
+        public static readonly CoreEffectInfo Empty = new CoreEffectInfo();
         private string _code;
 
         public string Code

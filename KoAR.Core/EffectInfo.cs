@@ -2,7 +2,7 @@
 
 namespace KoAR.Core
 {
-    public class EffectInfo : IEquatable<EffectInfo>
+    public class EffectInfo : IEffectInfo, IEquatable<EffectInfo>
     {
         public string Code { get; set; }
 
