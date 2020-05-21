@@ -16,12 +16,13 @@
                                 <RowDefinition />
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="Prompt" />
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="Count:" TextAlignment="Right" Margin="2" VerticalAlignment="Center" />
-                            <TextBox Grid.Row="1" VerticalContentAlignment="Center" Margin="2" IsReadOnly="True" TextAlignment="Right" 
-                                Text="{Binding Effects.Count, RelativeSource={RelativeSource TemplatedParent}}" />
+                            <TextBox Grid.Column="1" VerticalContentAlignment="Center" Margin="2" IsReadOnly="True" TextAlignment="Right" 
+                                Text="{Binding Effects.Count, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}" 
+                                Background="{x:Static SystemColors.ControlBrush}" />
                             
                         </Grid>
                     </GroupBox>
