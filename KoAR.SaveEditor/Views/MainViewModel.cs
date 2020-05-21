@@ -70,7 +70,7 @@ namespace KoAR.SaveEditor.Views
             }
             set
             {
-                if (!AmalurSaveEditor.IsInitialized)
+                if (!Amalur.IsInitialized)
                 {
                     return;
                 }
@@ -87,7 +87,7 @@ namespace KoAR.SaveEditor.Views
                         PropertyChangedEventManager.RemoveHandler(model, this.SelectedItem_IsUnsellableChanged, nameof(model.IsUnsellable));
                     }
                     model.IsUnsellable = newValue;
-                    AmalurSaveEditor.WriteEquipmentBytes(model.Item, out _);
+                    Amalur.WriteEquipmentBytes(model.Item, out _);
                     this.UnsavedChanges = true;
                     if (model.Equals(this.SelectedItem))
                     {
@@ -251,8 +251,8 @@ namespace KoAR.SaveEditor.Views
             {
                 return;
             }
-            AmalurSaveEditor.ReadFile(this.FileName = dialog.FileName);
-            this.InventorySize = AmalurSaveEditor.GetMaxBagCount();
+            Amalur.ReadFile(this.FileName = dialog.FileName);
+            this.InventorySize = Amalur.GetMaxBagCount();
             this.RepopulateItems();
             this.ResetFilters();
             this._unsavedChanges = false;
@@ -261,12 +261,12 @@ namespace KoAR.SaveEditor.Views
 
         internal void Save()
         {
-            if (!AmalurSaveEditor.IsInitialized)
+            if (!Amalur.IsInitialized)
             {
                 return;
             }
             File.Copy(this._fileName, $"{this._fileName}.bak", true);
-            AmalurSaveEditor.SaveFile(this._fileName);
+            Amalur.SaveFile(this._fileName);
             this.UnsavedChanges = false;
             this.RepopulateItems();
             MessageBox.Show($"Save successful! Original save backed up as {this._fileName}.bak.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -320,7 +320,7 @@ namespace KoAR.SaveEditor.Views
 
         private bool CanSave() => this._unsavedChanges;
 
-        private bool CanUpdateInventorySize() => AmalurSaveEditor.IsInitialized && AmalurSaveEditor.GetMaxBagCount() != this.InventorySize;
+        private bool CanUpdateInventorySize() => Amalur.IsInitialized && Amalur.GetMaxBagCount() != this.InventorySize;
 
         private void DeleteEffect(EffectInfo info)
         {
@@ -330,7 +330,7 @@ namespace KoAR.SaveEditor.Views
 
         private void EditItemHex(ItemModel model)
         {
-            if (!AmalurSaveEditor.IsInitialized)
+            if (!Amalur.IsInitialized)
             {
                 return;
             }
@@ -391,14 +391,14 @@ namespace KoAR.SaveEditor.Views
         /// </summary>
         private void RepopulateItems()
         {
-            if (!AmalurSaveEditor.IsInitialized)
+            if (!Amalur.IsInitialized)
             {
                 MessageBox.Show("No save file opened!", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Warning);
                 this.OpenFile();
                 return;
             }
             this._items.Clear();
-            foreach (ItemMemoryInfo info in AmalurSaveEditor.GetAllEquipment())
+            foreach (ItemMemoryInfo info in Amalur.GetAllEquipment())
             {
                 this._items.Add(new ItemModel(info));
             }
@@ -430,24 +430,24 @@ namespace KoAR.SaveEditor.Views
 
         private void SelectedItem_IsUnsellableChanged(object sender, EventArgs e)
         {
-            if (!AmalurSaveEditor.IsInitialized)
+            if (!Amalur.IsInitialized)
             {
                 return;
             }
             ItemModel model = (ItemModel)sender;
-            AmalurSaveEditor.WriteEquipmentBytes(model.Item, out _);
+            Amalur.WriteEquipmentBytes(model.Item, out _);
             this.UnsavedChanges = true;
             this.OnPropertyChanged(nameof(this.AllItemsUnsellable));
         }
 
         private void SelectedItem_MateriallyChanged(object sender, EventArgs e)
         {
-            if (!AmalurSaveEditor.IsInitialized)
+            if (!Amalur.IsInitialized)
             {
                 return;
             }
             ItemModel model = (ItemModel)sender;
-            AmalurSaveEditor.WriteEquipmentBytes(model.Item, out bool lengthChanged);
+            Amalur.WriteEquipmentBytes(model.Item, out bool lengthChanged);
             if (lengthChanged)
             {
                 this.Refresh();
@@ -460,11 +460,11 @@ namespace KoAR.SaveEditor.Views
 
         private void UpdateInventorySize()
         {
-            if (!AmalurSaveEditor.IsInitialized)
+            if (!Amalur.IsInitialized)
             {
                 return;
             }
-            AmalurSaveEditor.EditMaxBagCount(this.InventorySize);
+            Amalur.EditMaxBagCount(this.InventorySize);
             this.UnsavedChanges = true;
         }
     }

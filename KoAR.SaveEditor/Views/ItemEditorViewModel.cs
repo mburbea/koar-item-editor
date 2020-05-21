@@ -64,7 +64,7 @@ namespace KoAR.SaveEditor.Views
                 return;
             }
             this._item.ItemBytes = bytes;
-            AmalurSaveEditor.WriteEquipmentBytes(this._item, out _);
+            Amalur.WriteEquipmentBytes(this._item, out _);
             ItemEditorWindow view = Application.Current.Windows.OfType<ItemEditorWindow>().Single();
             view.DialogResult = true;
             view.Close();

@@ -8,7 +8,7 @@ namespace KoAR.Core
     /// <summary>
     /// Archive Operation for Kingdoms of Amalur(supports 1.0.0.2)
     /// </summary>
-    public static class AmalurSaveEditor
+    public static class Amalur
     {
         /// <summary>
         /// The head of the equipment, property and indicate the number of attributes of the data relative to equipment data head offset
