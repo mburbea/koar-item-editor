@@ -16,14 +16,13 @@ namespace KoAR.Core
                 definition ??= Empty;
                 DamageType = definition.DamageType;
                 Tier = definition.Tier;
-                DisplayText = definition.DisplayText;
                 _code = value;
             }
         }
 
         public DamageType DamageType { get; set; }
         public float Tier { get; set; }
-        public string DisplayText { get; set; }
+        public string DisplayText => this.DamageType == DamageType.Unknown ? "Unknown" : $"{this.DamageType} ({this.Tier})";
 
         public CoreEffectInfo Clone() => (CoreEffectInfo)MemberwiseClone();
         public bool Equals(CoreEffectInfo other) => other?.Code.Equals(Code, StringComparison.OrdinalIgnoreCase) == true;

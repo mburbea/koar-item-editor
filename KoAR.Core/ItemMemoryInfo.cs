@@ -37,7 +37,7 @@ namespace KoAR.Core
             (ItemIndex, DataLength, ItemBytes) = (itemIndex, dataLength, span.Slice(0, dataLength).ToArray());
         }
 
-        public CoreEffectList CoreEffects { get; set; }
+        public CoreEffectList CoreEffects { get; internal set; }
         public float CurrentDurability
         {
             get => MemoryUtilities.Read<float>(ItemBytes, Offsets.CurrentDurability);
@@ -70,7 +70,7 @@ namespace KoAR.Core
             }
         }
 
-        public EquipmentType EquipmentType { get; set; }
+        public EquipmentType EquipmentType { get; internal set; }
 
         public byte[] ItemBytes { get; set; }
 
