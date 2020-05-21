@@ -132,8 +132,9 @@
                                 <ObjectDataProvider.MethodParameters>
                                     <x:Type TypeName="core:EquipmentType" />
                                 </ObjectDataProvider.MethodParameters>
-                            </ObjectDataProvider>
+                            </ObjectDataProvider>                            
                             <constructs:DataContainerConverter x:Key="DataContainerConverter" />
+                            <views:EquipmentTypeCountConverter x:Key="EquipmentTypeCountConverter" />
                             <CompositeCollection x:Key="EquipmentTypesComposite">
                                 <CollectionContainer>
                                     <CollectionContainer.Collection>
@@ -186,7 +187,7 @@
                                             <ColumnDefinition />
                                         </Grid.ColumnDefinitions>
                                         <views:EquipmentTypeIndicator EquipmentType="{Binding Data}" />
-                                        <TextBlock Grid.Column="1" Text="{Binding Data}" VerticalAlignment="Center" Margin="2">
+                                        <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="2">                                            
                                             <TextBlock.Style>
                                                 <Style TargetType="{x:Type TextBlock}">
                                                     <Style.Triggers>
@@ -196,6 +197,16 @@
                                                     </Style.Triggers>
                                                 </Style>
                                             </TextBlock.Style>
+                                            <Run Text="{Binding Data, Mode=OneTime}" />
+                                            <Run>
+                                                <Run.Text>
+                                                    <MultiBinding Converter="{StaticResource EquipmentTypeCountConverter}" StringFormat="({0})" Mode="OneWay">
+                                                        <Binding Path="Data" />
+                                                        <Binding Path="FilteredItems" Source="{StaticResource ViewModel}" />
+                                                        <Binding Path="FilteredItems.Count" Source="{StaticResource ViewModel}" />
+                                                    </MultiBinding>
+                                                </Run.Text>
+                                            </Run>
                                         </TextBlock>
                                     </Grid>
                                 </DataTemplate>

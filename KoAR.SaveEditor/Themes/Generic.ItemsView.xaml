@@ -48,7 +48,7 @@
                     </ControlTemplate.Resources>
                     <Border>
                         <Border.Resources>
-                            <CollectionViewSource x:Key="FilteredItems" Source="{Binding Items,RelativeSource={RelativeSource TemplatedParent}}">
+                            <CollectionViewSource x:Key="FilteredItems" Source="{Binding Items, RelativeSource={RelativeSource TemplatedParent}}">
                                 <CollectionViewSource.SortDescriptions>
                                     <componentModel:SortDescription PropertyName="EquipmentType" Direction="Ascending" />
                                     <componentModel:SortDescription PropertyName="HasCustomName" Direction="Descending" />
