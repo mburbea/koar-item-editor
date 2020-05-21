@@ -36,36 +36,13 @@ namespace KoAR.Core
         /// Read save-file
         /// </summary>
         /// <param name="path">archive path</param>
-        public static void ReadFile(string path)
-        {
-            try
-            {
-                using FileStream fs = new FileStream(path, FileMode.Open);
-                _bytes = new byte[fs.Length];
-                fs.Read(_bytes, 0, (int)fs.Length);
-            }
-            catch
-            {
-                throw new Exception("File cannot open!");
-            }
-        }
+        public static void ReadFile(string path) => _bytes = File.ReadAllBytes(path);
 
         /// <summary>
         /// Save save-file
         /// </summary>
         /// <param name="path">save path</param>
-        public static void SaveFile(string path)
-        {
-            try
-            {
-                using var fs = new FileStream(path, FileMode.Create);
-                fs.Write(Bytes, 0, Bytes.Length);
-            }
-            catch
-            {
-                throw new Exception("Saving failed!");
-            }
-        }
+        public static void SaveFile(string path) => File.WriteAllBytes(path, Bytes);
 
         public static bool IsFileOpen => _bytes != null;
         public static void Initialize(string path = null)
