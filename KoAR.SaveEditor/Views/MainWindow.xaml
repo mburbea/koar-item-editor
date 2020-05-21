@@ -202,8 +202,8 @@
                                                 <Run.Text>
                                                     <MultiBinding Converter="{StaticResource EquipmentTypeCountConverter}" StringFormat="({0})" Mode="OneWay">
                                                         <Binding Path="Data" />
-                                                        <Binding Path="FilteredItems" Source="{StaticResource ViewModel}" />
-                                                        <Binding Path="FilteredItems.Count" Source="{StaticResource ViewModel}" />
+                                                        <Binding Path="Items" Source="{StaticResource ViewModel}" />
+                                                        <Binding Path="Items.Count" Source="{StaticResource ViewModel}" />
                                                     </MultiBinding>
                                                 </Run.Text>
                                             </Run>
