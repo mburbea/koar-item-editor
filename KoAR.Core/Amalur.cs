@@ -142,82 +142,27 @@ namespace KoAR.Core
                 var equipTypeByte = bytes[offset + 13];
                 AdditionalInfoSequence.CopyTo(buffer.Slice(8));
                 var aisOffset = bytes.IndexOf(buffer);
-                var demystifyer = bytes[aisOffset + 17];
+                var d = bytes[aisOffset + 17];
                 var word = MemoryUtilities.Read<int>(bytes, aisOffset + 17);
                 var word2 = MemoryUtilities.Read<int>(item.ItemBytes, 13);
-                if (equipTypeByte == 0x14)
-                {
-                    if (demystifyer == 0)
-                    {
-                        Console.WriteLine("a");
-                    }
-                }
 
                 return equipTypeByte switch
                 {
                     0x10 => EquipmentType.Shield,
                     0x18 => EquipmentType.LongBow,
-                    0x20 => demystifyer switch
-                    {
-                        0x00 => EquipmentType.LongSword,
-                        0xBC => EquipmentType.LongSword,
-                        0x55 => EquipmentType.LongSword,
-                        0x56 => EquipmentType.LongSword,
-                        0x18 => EquipmentType.LongSword,
-                        _ => EquipmentType.GreatSword,
-                    },
-                    0x24 => demystifyer switch
-                    {
-                        0x00 => EquipmentType.Daggers,
-                        0x40 => EquipmentType.Daggers,
-                        0x41 => EquipmentType.Daggers,
-                        0x2C => EquipmentType.Daggers,
-                        0xE8 => EquipmentType.Daggers,
-                        _ => EquipmentType.FaeBlades
-                    },
-                    0x1C => demystifyer switch
-                    {
-                        0x3E => EquipmentType.Chakrams,
-                        0x3F => EquipmentType.Chakrams,
-                        0xEA => EquipmentType.Chakrams,
-                        0xEB => EquipmentType.Chakrams,
-                        0xEC => EquipmentType.Hammer,
-                        0x43 => EquipmentType.Hammer,
-                        0x7E => EquipmentType.Hammer,
-                        0x18 => EquipmentType.Staff,
-                        0x53 => EquipmentType.Staff,
-                        0x54 => EquipmentType.Staff,
-                        0x00 => EquipmentType.Staff,
-                        _ => EquipmentType.Unknown
-                    },
-                    0x14 => demystifyer switch
-                    {
-                        0x1D => EquipmentType.Talisman,
-                        0x4A => EquipmentType.Sceptre,
-                        0x47 => EquipmentType.Sceptre,
-                        0x48 => EquipmentType.Sceptre,
-                        0x1B => EquipmentType.Buckler,
-                        0xCA => EquipmentType.Buckler,
-                        0x18 => EquipmentType.Talisman,
-                        0xC9 => EquipmentType.Talisman,
-                        0xAF => EquipmentType.Talisman,
-                        0x00 => item.ItemBytes[13] switch
-                        {
-                            0x33 => EquipmentType.Buckler,
-                            0x23 => EquipmentType.Buckler,
-                            0x2B => EquipmentType.Buckler,
-                            0x3b => EquipmentType.Talisman,
-                            0x00 => EquipmentType.Buckler,
-                            _ => throw null,
-                        },
-
-                        //0x33 => EquipmentType.Buckler,//why are there two buckler codes?
-                        // 0x3E => EquipmentType.Buckler,
-                        // 0x2B => EquipmentType.FlameTalisman,// Shock talisman's are here too :(
-                        // 0x23 => EquipmentType.FrostTalisman,
-                        // 0x3F => EquipmentType.ShockTalisman,// might only be crafted shock talisman.*/
-                        _ => EquipmentType.Unknown
-                    },
+                    0x20 when d == 0x00 || d == 0xBC || d == 0x55 || d == 0x56 || d == 0x18 => EquipmentType.LongSword,
+                    0x20 => EquipmentType.GreatSword,
+                    0x24 when d == 0x00 || d == 0x40 || d == 0x41 || d == 0x2C || d == 0xE8 => EquipmentType.Daggers,
+                    0x24 => EquipmentType.FaeBlades,
+                    0x1C when d == 0x00 || d == 0x18 || d == 0x53 || d == 0x54 => EquipmentType.Staff,
+                    0x1C when d == 0x3E || d == 0x3F || d == 0xEA || d == 0xEB => EquipmentType.Chakrams,
+                    0x1C when d == 0xEC || d == 0x43 || d == 0x7E => EquipmentType.Hammer,
+                    0x1C => EquipmentType.Unknown,
+                    0x14 when d == 0x1D || d == 0x18 || d == 0xC9 || d == 0xAF => EquipmentType.Talisman,
+                    0x14 when d == 0x4A || d == 0x47 || d == 0x48 => EquipmentType.Sceptre,
+                    0x14 when d == 0x1B || d == 0xCA => EquipmentType.Buckler,
+                    0x14 when d == 0x00 && item.ItemBytes[13] == 0x3B => EquipmentType.Talisman,
+                    0x14 when d == 0x00 =>  EquipmentType.Buckler, /* 0x33 0x23 0x2B 0x00 */
                     _ => throw null,
                 };
             }
