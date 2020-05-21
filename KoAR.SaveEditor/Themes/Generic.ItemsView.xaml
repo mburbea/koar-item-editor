@@ -79,7 +79,7 @@
                             </ListView.ItemContainerStyle>
                             <ListView.ContextMenu>
                                 <ContextMenu>
-                                    <MenuItem Header="AutoSize Columns" Command="{x:Static views:ItemsView.AutoSizeColumnsCommand}" />
+                                    <MenuItem Command="{x:Static views:ItemsView.AutoSizeColumnsCommand}" />
                                 </ContextMenu>
                             </ListView.ContextMenu>
                             <ListView.View>

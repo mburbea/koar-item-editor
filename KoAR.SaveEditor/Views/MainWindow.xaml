@@ -7,7 +7,6 @@
     xmlns:s="clr-namespace:System;assembly=mscorlib"
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views"
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs" 
-    xmlns:componentmodel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
     xmlns:core="clr-namespace:KoAR.Core;assembly=KoAR.Core"
     mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type views:MainViewModel}}"
     Width="1024" Height="768" WindowStartupLocation="CenterScreen" 
@@ -61,8 +60,13 @@
             <Setter Property="Title" Value="KoAR Save Editor" />
         </Style>
     </Window.Style>
-    <DockPanel>
-        <Border DockPanel.Dock="Top" Background="Transparent" BorderBrush="{x:Static SystemColors.ActiveBorderBrush}" BorderThickness="0,0,0,1">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Border Background="Transparent" BorderBrush="{x:Static SystemColors.ActiveBorderBrush}" BorderThickness="0,0,0,1">
             <Border.Resources>
                 <Style TargetType="{x:Type Button}">
                     <Setter Property="Template">
@@ -102,21 +106,8 @@
                 <Button ToolTip="Save" Command="{Binding SaveCommand}" Tag="{StaticResource Save}" />
                 <Button ToolTip="Help" Command="Help" Tag="{StaticResource Help}" />
             </StackPanel>
-        </Border>
-        <Border Background="{x:Static SystemColors.ControlBrush}" DockPanel.Dock="Bottom" Padding="4">
-            <TextBlock Text="{Binding FilteredItems.Count, StringFormat='Count: {0}'}">
-                <TextBlock.Style>
-                    <Style TargetType="{x:Type TextBlock}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding FileName}" Value="{x:Null}">
-                                <Setter Property="Visibility" Value="Hidden" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBlock.Style>
-            </TextBlock>
-        </Border>
-        <Grid>
+        </Border>        
+        <Grid Grid.Row="1" Grid.IsSharedSizeScope="True">
             <Grid.Style>
                 <Style TargetType="{x:Type Grid}">
                     <Style.Triggers>
@@ -183,9 +174,9 @@
                         <TextBlock Text="Name:" />
                         <TextBox Grid.Column="1" Text="{Binding ItemNameFilter, UpdateSourceTrigger=PropertyChanged}" />
                         <TextBlock Grid.Column="2" Text="Type:" />
-                        <ComboBox Grid.Column="3" Margin="2" VerticalAlignment="Center" ItemsSource="{Binding Source={StaticResource EquipmentTypesComposite}}"
+                        <ComboBox x:Name="PART_FilterCombo" Grid.Column="3" Margin="2" VerticalAlignment="Center" ItemsSource="{Binding Source={StaticResource EquipmentTypesComposite}}"
                             FocusVisualStyle="{x:Null}" SelectedValuePath="Data" SelectedValue="{Binding EquipmentTypeFilter}" Height="24"
-                            TextSearch.TextPath="Data">
+                            TextSearch.TextPath="Data" ToolTip="{Binding EquipmentTypeFilter}">
                             <ComboBox.ItemContainerStyle>
                                 <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
                                     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
@@ -244,7 +235,7 @@
                                 </Binding>
                             </TextBox.Text>
                         </TextBox>
-                        <Button Grid.Column="8" Content="Reset" Command="{Binding ResetFiltersCommand}" Margin="2" VerticalAlignment="Center" />
+                        <Button Grid.Column="8" Content="Reset" Command="{Binding ResetFiltersCommand}" Margin="2" VerticalAlignment="Center" Height="{Binding ActualHeight, ElementName=PART_FilterCombo}" />
                     </Grid>
                 </GroupBox>
                 <views:ItemsView Grid.Row="1" Items="{Binding FilteredItems}" SelectedItem="{Binding SelectedItem}" 
@@ -358,5 +349,18 @@
                 </GroupBox>
             </Grid>
         </Grid>
-    </DockPanel>
+        <Border Grid.Row="2" Background="{x:Static SystemColors.ControlBrush}" Padding="4">
+            <TextBlock Text="{Binding FilteredItems.Count, StringFormat='Count: {0}'}">
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding FileName}" Value="{x:Null}">
+                                <Setter Property="Visibility" Value="Hidden" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+        </Border>
+    </Grid>
 </Window>

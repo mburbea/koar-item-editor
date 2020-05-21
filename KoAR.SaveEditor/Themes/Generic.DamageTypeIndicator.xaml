@@ -3,20 +3,20 @@
     xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     xmlns:core="clr-namespace:KoAR.Core;assembly=KoAR.Core"
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views">
-    <BitmapImage x:Key="Bleeding" UriSource="/KoAR.SaveEditor;component/Resources/Bleeding.png" po:Freeze="true" />
-    <BitmapImage x:Key="Fire" UriSource="/KoAR.SaveEditor;component/Resources/Fire.png" po:Freeze="true" />
-    <BitmapImage x:Key="Ice" UriSource="/KoAR.SaveEditor;component/Resources/Ice.png" po:Freeze="true" />
-    <BitmapImage x:Key="Lightning" UriSource="/KoAR.SaveEditor;component/Resources/Lightning.png" po:Freeze="true" />
-    <BitmapImage x:Key="MasterCrafted" UriSource="/KoAR.SaveEditor;component/Resources/MasterCrafted.png" po:Freeze="true" />
-    <BitmapImage x:Key="Physical" UriSource="/KoAR.SaveEditor;component/Resources/Physical.png" po:Freeze="true" />
-    <BitmapImage x:Key="Piercing" UriSource="/KoAR.SaveEditor;component/Resources/Piercing.png" po:Freeze="true" />
-    <BitmapImage x:Key="Poison" UriSource="/KoAR.SaveEditor;component/Resources/Poison.png" po:Freeze="true" />
-    <BitmapImage x:Key="Primal" UriSource="/KoAR.SaveEditor;component/Resources/Primal.png" po:Freeze="true" />
-    <BitmapImage x:Key="BloodSeeker" UriSource="/KoAR.SaveEditor;component/Resources/BloodSeeker.png" po:Freeze="true" />
-    <BitmapImage x:Key="Sharpening" UriSource="/KoAR.SaveEditor;component/Resources/Sharpening.png" po:Freeze="true" />
-    <BitmapImage x:Key="Ravenous" UriSource="/KoAR.SaveEditor;component/Resources/Ravenous.png" po:Freeze="true" />
-    <BitmapImage x:Key="Magnifying" UriSource="/KoAR.SaveEditor;component/Resources/Magnifying.png" po:Freeze="true" />
-    <BitmapImage x:Key="Unknown" UriSource="/KoAR.SaveEditor;component/Resources/Unknown.png" po:Freeze="true" />
+    <BitmapImage x:Key="Bleeding" UriSource="/KoAR.SaveEditor;component/Resources/Bleeding.png" po:Freeze="True" />
+    <BitmapImage x:Key="Fire" UriSource="/KoAR.SaveEditor;component/Resources/Fire.png" po:Freeze="True" />
+    <BitmapImage x:Key="Ice" UriSource="/KoAR.SaveEditor;component/Resources/Ice.png" po:Freeze="True" />
+    <BitmapImage x:Key="Lightning" UriSource="/KoAR.SaveEditor;component/Resources/Lightning.png" po:Freeze="True" />
+    <BitmapImage x:Key="MasterCrafted" UriSource="/KoAR.SaveEditor;component/Resources/MasterCrafted.png" po:Freeze="True" />
+    <BitmapImage x:Key="Physical" UriSource="/KoAR.SaveEditor;component/Resources/Physical.png" po:Freeze="True" />
+    <BitmapImage x:Key="Piercing" UriSource="/KoAR.SaveEditor;component/Resources/Piercing.png" po:Freeze="True" />
+    <BitmapImage x:Key="Poison" UriSource="/KoAR.SaveEditor;component/Resources/Poison.png" po:Freeze="True" />
+    <BitmapImage x:Key="Primal" UriSource="/KoAR.SaveEditor;component/Resources/Primal.png" po:Freeze="True" />
+    <BitmapImage x:Key="BloodSeeker" UriSource="/KoAR.SaveEditor;component/Resources/BloodSeeker.png" po:Freeze="True" />
+    <BitmapImage x:Key="Sharpening" UriSource="/KoAR.SaveEditor;component/Resources/Sharpening.png" po:Freeze="True" />
+    <BitmapImage x:Key="Ravenous" UriSource="/KoAR.SaveEditor;component/Resources/Ravenous.png" po:Freeze="True" />
+    <BitmapImage x:Key="Magnifying" UriSource="/KoAR.SaveEditor;component/Resources/Magnifying.png" po:Freeze="True" />
+    <BitmapImage x:Key="Unknown" UriSource="/KoAR.SaveEditor;component/Resources/Unknown.png" po:Freeze="True" />
     <Style TargetType="{x:Type views:DamageTypeIndicator}">
         <Setter Property="Template">
             <Setter.Value>

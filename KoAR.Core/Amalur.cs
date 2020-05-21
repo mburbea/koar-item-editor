@@ -214,21 +214,21 @@ namespace KoAR.Core
                     },
                     0x14 => demystifyer switch
                     {
-                        0x1D => EquipmentType.FrostTalisman,
+                        0x1D => EquipmentType.Talisman,
                         0x4A => EquipmentType.Sceptre,
                         0x47 => EquipmentType.Sceptre,
                         0x48 => EquipmentType.Sceptre,
                         0x1B => EquipmentType.Buckler,
                         0xCA => EquipmentType.Buckler,
-                        0x18 => EquipmentType.FrostTalisman,
-                        0xC9 => EquipmentType.FrostTalisman,
-                        0xAF => EquipmentType.FrostTalisman,
+                        0x18 => EquipmentType.Talisman,
+                        0xC9 => EquipmentType.Talisman,
+                        0xAF => EquipmentType.Talisman,
                         0x00 => item.ItemBytes[13] switch
                         {
                             0x33 => EquipmentType.Buckler,
                             0x23 => EquipmentType.Buckler,
                             0x2B => EquipmentType.Buckler,
-                            0x3b => EquipmentType.FrostTalisman,
+                            0x3b => EquipmentType.Talisman,
                             0x00 => EquipmentType.Buckler,
                             _ => throw null,
                         },

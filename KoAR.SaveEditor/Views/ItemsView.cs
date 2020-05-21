@@ -12,7 +12,7 @@ namespace KoAR.SaveEditor.Views
         public static readonly DependencyProperty AllItemsUnsellableProperty = DependencyProperty.Register(nameof(ItemsView.AllItemsUnsellable), typeof(bool?), typeof(ItemsView),
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
-        public static readonly RoutedCommand AutoSizeColumnsCommand = new RoutedCommand();
+        public static readonly RoutedCommand AutoSizeColumnsCommand = new RoutedUICommand("AutoSize Columns", nameof(ItemsView.AutoSizeColumnsCommand), typeof(ItemsView));
 
         public static readonly DependencyProperty EditItemHexCommandProperty = DependencyProperty.Register(nameof(ItemsView.EditItemHexCommand), typeof(ICommand), typeof(ItemsView));
 

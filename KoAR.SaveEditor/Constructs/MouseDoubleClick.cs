@@ -50,26 +50,9 @@ namespace KoAR.SaveEditor.Constructs
         {
             Control control = (Control)sender;
             ICommand? command = MouseDoubleClick.GetCommand(control);
-            if (command == null)
+            if (command != null)
             {
-                return;
-            }
-            object? parameter = MouseDoubleClick.GetCommandParameter(control);
-            switch (command)
-            {
-                case RoutedCommand routedCommand:
-                    IInputElement target = MouseDoubleClick.GetCommandTarget(control) ?? control;
-                    if (routedCommand.CanExecute(parameter, target))
-                    {
-                        routedCommand.Execute(parameter, target);
-                    }
-                    break;
-                default:
-                    if (command.CanExecute(parameter))
-                    {
-                        command.Execute(parameter);
-                    }
-                    break;
+                command.TryExecute(MouseDoubleClick.GetCommandParameter(control), MouseDoubleClick.GetCommandTarget(control) ?? control);
             }
         }
 
