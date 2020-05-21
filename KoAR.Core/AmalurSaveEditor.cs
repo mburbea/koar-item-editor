@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 
 namespace KoAR.Core
 {
     /// <summary>
     /// Archive Operation for Kingdoms of Amalur(supports 1.0.0.2)
     /// </summary>
-    public static class SaveEditor
+    public static class AmalurSaveEditor
     {
         /// <summary>
         /// The head of the equipment, property and indicate the number of attributes of the data relative to equipment data head offset
