@@ -13,7 +13,6 @@ namespace KoAR.SaveEditor.Views
     /// </summary>
     public sealed class ItemModel : NotifierBase
     {
-        private List<CoreEffectInfo>? _coreEffects;
         private List<EffectInfo>? _effects;
         private EffectInfo? _selectedEffect;
 
@@ -30,7 +29,7 @@ namespace KoAR.SaveEditor.Views
 
         public CoreEffectInfo? CoreEffect3 => this.CoreEffects.Skip(3).FirstOrDefault();
 
-        public List<CoreEffectInfo> CoreEffects => this._coreEffects ??= Amalur.GetCoreEffectInfos(this.Item.CoreItemMemory);
+        public CoreEffectList CoreEffects => this.Item.CoreEffects;
 
         public float CurrentDurability
         {
@@ -68,7 +67,7 @@ namespace KoAR.SaveEditor.Views
             set => this.SetItemValue(value, this.Item.MaxDurability, value => this.Item.MaxDurability = value);
         }
 
-        public int MysteryInteger => this.Item.CoreItemMemory.MysteryInteger;
+        public byte MysteryInteger => this.CoreEffects.MysteryInteger;
 
         public EffectInfo? SelectedEffect
         {

@@ -122,19 +122,6 @@ namespace KoAR.Core
 
         public static void EditMaxBagCount(int count) => MemoryUtilities.Write(Bytes, GetBagOffset(), count);
 
-        public static List<CoreEffectInfo> GetCoreEffectInfos(CoreItemMemory coreItem)
-        {
-            var itemEffects = coreItem.ReadEffects();
-            for(int i = 0; i < itemEffects.Count; i++)
-            {
-                if(CoreEffects.TryGetValue(itemEffects[i].Code, out var definition)){
-                    itemEffects[i] = definition.Clone();
-                }
-            }
-
-            return itemEffects;
-        }
-
         public static List<EffectInfo> GetEffectList(ItemMemoryInfo item)
         {
             var itemEffects = item.ReadEffects();
@@ -276,22 +263,22 @@ namespace KoAR.Core
                     item.ItemBytes.AsSpan(0, 8).CopyTo(coreHeader);
                     var span = bytes.AsSpan(indexList[i]);
                     int coreOffset = span.IndexOf(coreHeader) + indexList[i];
-                    item.CoreItemMemory = CoreItemMemory.Create(coreOffset, bytes.AsSpan(coreOffset));
+                    item.CoreEffects = new CoreEffectList(coreOffset, bytes.AsSpan(coreOffset));
                     item.EquipmentType = DetermineEquipmentType(bytes, item);
                     equipmentList.Add(item);
 
-                    var b13 = item.CoreItemMemory.MysteryInteger;
+                    var b13 = item.CoreEffects.MysteryInteger;
                     var itemName = item.ItemName;
                     var binStr = b13.ToString("X2");
                     bins.TryGetValue(binStr, out var c);
                     bins[binStr] = c + 1;
-                    if (item.CoreItemMemory.MysteryInteger == 0x40)
+                    if (item.CoreEffects.MysteryInteger == 0x40)
                     {
                         Console.WriteLine("WTF");
                     }
                 }
             }
-            var max = equipmentList.Max(x => x.CoreItemMemory.EffectCount);
+            var max = equipmentList.Max(x => x.CoreEffects.Count);
             
             Console.WriteLine(max);
             Console.WriteLine(bins);
@@ -311,8 +298,8 @@ namespace KoAR.Core
         {
             var bytes = Bytes;
             var oldLength = bytes.Length;
-            var coreMemory = equipment.CoreItemMemory;
-            bytes = MemoryUtilities.ReplaceBytes(bytes, coreMemory.ItemIndex, coreMemory.DataLength, coreMemory.ItemBytes);
+            var coreMemory = equipment.CoreEffects;
+            bytes = MemoryUtilities.ReplaceBytes(bytes, coreMemory.ItemIndex, coreMemory.DataLength, coreMemory.Bytes);
             bytes = MemoryUtilities.ReplaceBytes(bytes, equipment.ItemIndex, equipment.DataLength, equipment.ItemBytes);
             Bytes = bytes;
             lengthChanged = Bytes.Length != oldLength;
