@@ -29,7 +29,7 @@ namespace KoAR.SaveEditor.Views
 
         public MainViewModel()
         {
-            this._items = new ItemModelCollection(this);
+            this._items = new ObservableCollection<ItemModel>();
             this._filteredItems = this.Items = new ReadOnlyObservableCollection<ItemModel>(this._items);
             this.OpenFileCommand = new DelegateCommand(this.OpenFile);
             this.ResetFiltersCommand = new DelegateCommand(this.ResetFilters);
@@ -351,10 +351,21 @@ namespace KoAR.SaveEditor.Views
                 this.OpenFile();
                 return;
             }
-            this._items.Clear();
-            foreach (ItemMemoryInfo info in Amalur.GetAllEquipment())
+            foreach (ItemModel item in this._items)
             {
-                this._items.Add(new ItemModel(info));
+                PropertyChangedEventManager.RemoveHandler(item, this.Item_MateriallyChanged, nameof(ItemModel.ItemName));
+                PropertyChangedEventManager.RemoveHandler(item, this.Item_MateriallyChanged, nameof(ItemModel.CurrentDurability));
+                PropertyChangedEventManager.RemoveHandler(item, this.Item_MateriallyChanged, nameof(ItemModel.MaxDurability));
+                PropertyChangedEventManager.RemoveHandler(item, this.Item_IsUnsellableChanged, nameof(ItemModel.IsUnsellable));
+            }
+            this._items.Clear();
+            foreach (ItemModel item in Amalur.GetAllEquipment().ConvertAll(info => new ItemModel(info)))
+            {
+                PropertyChangedEventManager.AddHandler(item, this.Item_MateriallyChanged, nameof(ItemModel.ItemName));
+                PropertyChangedEventManager.AddHandler(item, this.Item_MateriallyChanged, nameof(ItemModel.CurrentDurability));
+                PropertyChangedEventManager.AddHandler(item, this.Item_MateriallyChanged, nameof(ItemModel.MaxDurability));
+                PropertyChangedEventManager.AddHandler(item, this.Item_IsUnsellableChanged, nameof(ItemModel.IsUnsellable));
+                this._items.Add(item);
             }
             this.OnFilterChange();
         }
@@ -389,68 +400,6 @@ namespace KoAR.SaveEditor.Views
             }
             Amalur.EditMaxBagCount(this.InventorySize);
             this.UnsavedChanges = true;
-        }
-
-        private sealed class ItemModelCollection : ObservableCollection<ItemModel>
-        {
-            public ItemModelCollection(MainViewModel viewModel) => this.ViewModel = viewModel;
-
-            public MainViewModel ViewModel
-            {
-                get;
-            }
-
-            protected override void ClearItems()
-            {
-                foreach (ItemModel item in this.Items)
-                {
-                    this.DetachEvents(item);
-                }
-                base.ClearItems();
-            }
-
-            protected override void InsertItem(int index, ItemModel item)
-            {
-                this.AttachEvents(item);
-                base.InsertItem(index, item);
-            }
-
-            protected override void RemoveItem(int index)
-            {
-                if (index < 0 || index >= this.Items.Count)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(index));
-                }
-                this.DetachEvents(this.Items[index]);
-                base.RemoveItem(index);
-            }
-
-            protected override void SetItem(int index, ItemModel item)
-            {
-                if (index < 0 || index >= this.Items.Count)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(index));
-                }
-                this.DetachEvents(this.Items[index]);
-                this.AttachEvents(item);
-                base.SetItem(index, item);
-            }
-
-            private void AttachEvents(ItemModel item)
-            {
-                PropertyChangedEventManager.AddHandler(item, this.ViewModel.Item_MateriallyChanged, nameof(ItemModel.ItemName));
-                PropertyChangedEventManager.AddHandler(item, this.ViewModel.Item_MateriallyChanged, nameof(ItemModel.CurrentDurability));
-                PropertyChangedEventManager.AddHandler(item, this.ViewModel.Item_MateriallyChanged, nameof(ItemModel.MaxDurability));
-                PropertyChangedEventManager.AddHandler(item, this.ViewModel.Item_IsUnsellableChanged, nameof(ItemModel.IsUnsellable));
-            }
-
-            private void DetachEvents(ItemModel item)
-            {
-                PropertyChangedEventManager.RemoveHandler(item, this.ViewModel.Item_MateriallyChanged, nameof(ItemModel.ItemName));
-                PropertyChangedEventManager.RemoveHandler(item, this.ViewModel.Item_MateriallyChanged, nameof(ItemModel.CurrentDurability));
-                PropertyChangedEventManager.RemoveHandler(item, this.ViewModel.Item_MateriallyChanged, nameof(ItemModel.MaxDurability));
-                PropertyChangedEventManager.RemoveHandler(item, this.ViewModel.Item_IsUnsellableChanged, nameof(ItemModel.IsUnsellable));
-            }
         }
     }
 }
