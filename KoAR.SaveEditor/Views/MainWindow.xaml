@@ -291,7 +291,7 @@
                             TextAlignment="Right" IsReadOnly="True" Background="{x:Static SystemColors.ControlBrush}" />
                         <views:EffectsControl Grid.Row="1" Grid.ColumnSpan="2" ProcessEffectLabel="Delete" Header="Existing Effects:" DataContext="{Binding SelectedItem}" Effects="{Binding Effects}" 
                             SelectedEffect="{Binding SelectedEffect}" Command="{Binding DataContext.DeleteEffectCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
-                        <views:EffectsControl Grid.Row="2" Grid.ColumnSpan="2" ProcessEffectLabel="Add" Header="Add Effect:" Effects="{x:Static views:MainViewModel.Effects}" 
+                        <views:EffectsControl Grid.Row="2" Grid.ColumnSpan="2" ProcessEffectLabel="Add" Header="Add Effect:" Effects="{x:Static core:Amalur.Effects}" 
                             SelectedEffect="{Binding SelectedEffect}" Command="{Binding AddEffectCommand}" />
                     </Grid>
                 </GroupBox>

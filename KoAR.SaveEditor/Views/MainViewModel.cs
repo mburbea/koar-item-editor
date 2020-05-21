@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Input;
-using System.Xml.Linq;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
 using Microsoft.Win32;
@@ -25,18 +23,12 @@ namespace KoAR.SaveEditor.Views
         private int _inventorySize;
         private string _itemNameFilter = string.Empty;
         private string _maxDurabilityFilter = string.Empty;
-        private EffectInfo? _selectedEffect;
+        private EffectInfo? _selectedEffect = Amalur.Effects.FirstOrDefault();
         private ItemModel? _selectedItem;
         private bool _unsavedChanges;
 
         public MainViewModel()
         {
-            if (!(bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(Window)).DefaultValue)
-            {
-                Amalur.Initialize();
-            }
-            _selectedEffect = Amalur.Effects.FirstOrDefault();
-
             this.OpenFileCommand = new DelegateCommand(this.OpenFile);
             this._filteredItems = this.Items = new ReadOnlyObservableCollection<ItemModel>(this._items = new ObservableCollection<ItemModel>());
             this.ResetFiltersCommand = new DelegateCommand(this.ResetFilters);
@@ -372,7 +364,6 @@ namespace KoAR.SaveEditor.Views
             }
             this.OnFilterChange();
         }
-
 
         private void ResetFilters()
         {

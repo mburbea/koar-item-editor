@@ -2,16 +2,24 @@
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
+using KoAR.Core;
 using TaskDialogInterop;
 
 namespace KoAR.SaveEditor.Views
 {
     partial class MainWindow
     {
-        static MainWindow() => CommandManager.RegisterClassCommandBinding(typeof(MainWindow), new CommandBinding(ApplicationCommands.Help, MainWindow.DisplayHelp));
+        static MainWindow()
+        {
+            CommandManager.RegisterClassCommandBinding(typeof(MainWindow), new CommandBinding(ApplicationCommands.Help, MainWindow.DisplayHelp));
+            if (!(bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(Window)).DefaultValue)
+            {
+                Amalur.Initialize();
+            }
+        }
 
         public MainWindow()
-        {
+        {            
             this.InitializeComponent();
             this.Loaded += this.Window_Loaded;
         }
