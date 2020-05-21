@@ -16,10 +16,10 @@
     <BitmapImage x:Key="Ravenous" UriSource="/KoAR.SaveEditor;component/Resources/Ravenous.png" po:Freeze="True" />
     <BitmapImage x:Key="Magnifying" UriSource="/KoAR.SaveEditor;component/Resources/Magnifying.png" po:Freeze="True" />
     <BitmapImage x:Key="Unknown" UriSource="/KoAR.SaveEditor;component/Resources/Unknown.png" po:Freeze="True" />
-    <Style TargetType="{x:Type views:CoreEffectIndicator}">
+    <Style TargetType="{x:Type views:CoreEffectIcon}">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type views:CoreEffectIndicator}">
+                <ControlTemplate TargetType="{x:Type views:CoreEffectIcon}">
                     <Image Margin="1,0" x:Name="PART_Image" Width="20" Source="{StaticResource Unknown}" 
                         ToolTip="{Binding CoreEffect.DisplayText, RelativeSource={RelativeSource TemplatedParent}}" />
                     <ControlTemplate.Triggers>

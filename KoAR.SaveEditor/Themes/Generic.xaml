@@ -1,8 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.CoreEffectIndicator.xaml" />
+        <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.CoreEffectIcon.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.EffectListControl.xaml" />
-        <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.EquipmentTypeIndicator.xaml" />
+        <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.EquipmentTypeIcon.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.EquipmentTypeSelector.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.ItemsView.xaml" />
     </ResourceDictionary.MergedDictionaries>    

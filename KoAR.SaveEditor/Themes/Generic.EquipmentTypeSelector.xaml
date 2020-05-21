@@ -35,7 +35,7 @@
                                             <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition />
                                         </Grid.ColumnDefinitions>
-                                        <views:EquipmentTypeIndicator EquipmentType="{Binding Data}" />
+                                        <views:EquipmentTypeIcon EquipmentType="{Binding Data}" />
                                         <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="2">
                                             <TextBlock.Style>
                                                 <Style TargetType="{x:Type TextBlock}">

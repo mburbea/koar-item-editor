@@ -16,10 +16,10 @@
     <BitmapImage x:Key="Staff" UriSource="/KoAR.SaveEditor;component/Resources/Staff.png" po:Freeze="True" />
     <BitmapImage x:Key="Talisman" UriSource="/KoAR.SaveEditor;component/Resources/Talisman.png" po:Freeze="True" />
     <BitmapImage x:Key="Unknown" UriSource="/KoAR.SaveEditor;component/Resources/Unknown.png" po:Freeze="True" />
-    <Style TargetType="{x:Type views:EquipmentTypeIndicator}">        
+    <Style TargetType="{x:Type views:EquipmentTypeIcon}">        
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type views:EquipmentTypeIndicator}">
+                <ControlTemplate TargetType="{x:Type views:EquipmentTypeIcon}">
                     <Image Margin="1,0" x:Name="PART_Image" Width="20" Source="{StaticResource Unknown}" ToolTip="{TemplateBinding EquipmentType}" />
                     <ControlTemplate.Triggers>
                         <Trigger Property="EquipmentType" Value="{x:Null}">
