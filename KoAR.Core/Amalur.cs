@@ -57,9 +57,10 @@ namespace KoAR.Core
             foreach (var row in File.ReadLines(effectCsv).Skip(1))
             {
                 var parts = row.Split(',');
-                CoreEffects[parts[0]] = new CoreEffectInfo
+                var code = parts[0];
+                CoreEffects[code] = new CoreEffectInfo
                 {
-                    Code = parts[0],
+                    Code = code,
                     DamageType = Enum.TryParse(parts[1], true, out DamageType damageType) ? damageType : default,
                     Tier = float.Parse(parts[2])
                 };
