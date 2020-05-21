@@ -17,7 +17,6 @@
         <constructs:NegatedBooleanConverter x:Key="NegatedBooleanConverter" />
         <constructs:StringIsNullOrEmptyConverter x:Key="StringIsNullOrEmptyConverter" />
         <constructs:LittleEndianConverter x:Key="LittleEndianConverter" />
-        
         <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
             <Setter Property="Validation.ErrorTemplate">
                 <Setter.Value>
@@ -25,10 +24,9 @@
                         <Border BorderBrush="Red" BorderThickness="1">
                             <Grid>
                                 <Polygon Fill="Red" Margin="0,2,2,0" Points="10,10 10,0 0,0" VerticalAlignment="Top" HorizontalAlignment="Right"
-                                        Tag="{Binding AdornedElement.(Validation.Errors)/ErrorContent, ElementName=PART_Adorner}" Cursor="Hand">
+                                    Tag="{Binding AdornedElement.(Validation.Errors)/ErrorContent, ElementName=PART_Adorner}" Cursor="Hand">
                                     <Polygon.ToolTip>
-                                        <ToolTip Content="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}" 
-                                            BorderThickness="1" Foreground="White" Background="Red" />
+                                        <ToolTip Content="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}" BorderThickness="1" Foreground="White" Background="Red" />
                                     </Polygon.ToolTip>
                                 </Polygon>
                                 <AdornedElementPlaceholder x:Name="PART_Adorner" />
@@ -173,7 +171,8 @@
                         <TextBox Grid.Column="1" Text="{Binding ItemNameFilter, UpdateSourceTrigger=PropertyChanged}" />
                         <TextBlock Grid.Column="2" Text="Type:" />
                         <ComboBox Grid.Column="3" Margin="2" VerticalAlignment="Center" ItemsSource="{Binding Source={StaticResource EquipmentTypesComposite}}"
-                            FocusVisualStyle="{x:Null}" SelectedValuePath="Data" SelectedValue="{Binding EquipmentTypeFilter}" Height="24">
+                            FocusVisualStyle="{x:Null}" SelectedValuePath="Data" SelectedValue="{Binding EquipmentTypeFilter}" Height="24"
+                            TextSearch.TextPath="Data">
                             <ComboBox.ItemContainerStyle>
                                 <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
                                     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
@@ -207,7 +206,7 @@
                             <TextBox.Text>
                                 <Binding Path="CurrentDurabilityFilter" UpdateSourceTrigger="PropertyChanged">
                                     <Binding.ValidationRules>
-                                        <views:RegexValidationRule Pattern="^\d+(\.\d+)?$" />
+                                        <constructs:RegexValidationRule Pattern="^\d+(\.\d+)?$" />
                                     </Binding.ValidationRules>
                                 </Binding>
                             </TextBox.Text>
@@ -217,7 +216,7 @@
                             <TextBox.Text>
                                 <Binding Path="MaxDurabilityFilter" UpdateSourceTrigger="PropertyChanged">
                                     <Binding.ValidationRules>
-                                        <views:RegexValidationRule Pattern="^\d+(\.\d+)?$" />
+                                        <constructs:RegexValidationRule Pattern="^\d+(\.\d+)?$" />
                                     </Binding.ValidationRules>
                                 </Binding>
                             </TextBox.Text>
@@ -234,7 +233,6 @@
                     <RowDefinition Height="Auto" SharedSizeGroup="TopRow"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <GroupBox Header="Inventory Size" Margin="4">
                     <Grid>
@@ -248,7 +246,7 @@
                             <TextBox.Text>
                                 <Binding Path="InventorySize" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                                     <Binding.ValidationRules>
-                                        <views:RegexValidationRule Pattern="^\d+$" />
+                                        <constructs:RegexValidationRule Pattern="^\d+$" />
                                     </Binding.ValidationRules>
                                 </Binding>
                             </TextBox.Text>
@@ -256,122 +254,7 @@
                         <Button Grid.Column="2" Margin="2" Command="{Binding UpdateInventorySizeCommand}" Content="_Update" />
                     </Grid>
                 </GroupBox>
-                <GroupBox Grid.Row="1" Margin="4" Header="Properties">
-                    <GroupBox.Style>
-                        <Style TargetType="{x:Type GroupBox}">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding SelectedItem}" Value="{x:Null}">
-                                    <Setter Property="IsEnabled" Value="False" />
-                                    <Setter Property="Opacity" Value="0.66" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </GroupBox.Style>
-                    <Grid>
-                        <Grid.Resources>
-                            <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-                                <Style.Triggers>
-                                    <Trigger Property="IsVisible" Value="True">
-                                        <Setter Property="constructs:ValidatingPropertyBehavior.ValidatingProperty" Value="{x:Static TextBox.TextProperty}" />
-                                    </Trigger>
-                                    <Trigger Property="IsReadOnly" Value="True">
-                                        <Setter Property="Background" Value="{x:Static SystemColors.ControlBrush}" />
-                                    </Trigger>
-                                </Style.Triggers>
-                                <Setter Property="VerticalAlignment" Value="Center" />
-                                <Setter Property="Margin" Value="2" />
-                                <Setter Property="Grid.Column" Value="1" />
-                            </Style>
-                            <constructs:SingleConverter x:Key="FloatConverter" />
-                        </Grid.Resources>
-                        <Grid.RowDefinitions>
-                            <RowDefinition />
-                            <RowDefinition />
-                            <RowDefinition />
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="Name:" TextAlignment="Right" Margin="2" VerticalAlignment="Center" />
-                        <TextBox IsReadOnly="{Binding SelectedItem.HasCustomName, Converter={StaticResource NegatedBooleanConverter}}">
-                            <TextBox.Style>
-                                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding SelectedItem}" Value="{x:Null}">
-                                            <Setter Property="Text" Value="" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                    <Setter Property="Text">
-                                        <Setter.Value>
-                                            <Binding Path="SelectedItem.ItemName">
-                                                <Binding.ValidationRules>
-                                                    <constructs:ValueRequiredValidationRule />
-                                                </Binding.ValidationRules>
-                                            </Binding>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </TextBox.Style>
-                        </TextBox>
-                        <TextBlock Grid.Row="1" Text="Type:" TextAlignment="Right" Margin="2" VerticalAlignment="Center" />
-                        <RichTextBox Grid.Row="1" Grid.Column="1" IsReadOnly="True" Background="{x:Static SystemColors.ControlBrush}" 
-                            VerticalAlignment="Center" Margin="2">
-                            <FlowDocument>
-                                <BlockUIContainer>
-                                    <StackPanel Orientation="Horizontal">
-                                        <views:EquipmentTypeIndicator EquipmentType="{Binding SelectedItem.EquipmentType}" />
-                                        <TextBlock VerticalAlignment="Center" Margin="2" Text="{Binding SelectedItem.EquipmentType}" />
-                                    </StackPanel>
-                                </BlockUIContainer>
-                            </FlowDocument>
-                        </RichTextBox>
-                        <TextBlock Text="Cur Durability:" Grid.Row="2" TextAlignment="Right" Margin="2" VerticalAlignment="Center" />
-                        <TextBox Grid.Row="2" TextAlignment="Right">
-                            <TextBox.Style>
-                                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding SelectedItem}" Value="{x:Null}">
-                                            <Setter Property="Text" Value="" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                    <Setter Property="Text">
-                                        <Setter.Value>
-                                            <Binding Path="SelectedItem.CurrentDurability" Converter="{StaticResource FloatConverter}">
-                                                <Binding.ValidationRules>
-                                                    <views:DurabilityValidationRule />
-                                                </Binding.ValidationRules>
-                                            </Binding>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </TextBox.Style>
-                        </TextBox>
-                        <TextBlock Text="Max Durability:" Grid.Row="3" TextAlignment="Right" Margin="2" VerticalAlignment="Center" />
-                        <TextBox Grid.Row="3" TextAlignment="Right">
-                            <TextBox.Style>
-                                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding SelectedItem}" Value="{x:Null}">
-                                            <Setter Property="Text" Value="" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                    <Setter Property="Text">
-                                        <Setter.Value>
-                                            <Binding Path="SelectedItem.MaxDurability" Converter="{StaticResource FloatConverter}">
-                                                <Binding.ValidationRules>
-                                                    <views:DurabilityValidationRule />
-                                                </Binding.ValidationRules>
-                                            </Binding>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </TextBox.Style>
-                        </TextBox>
-                    </Grid>
-                </GroupBox>
-                <GroupBox Grid.Row="2" Margin="4" Header="Effects">
+                <GroupBox Grid.Row="1" Margin="4" Header="Effects">
                     <GroupBox.Style>
                         <Style TargetType="{x:Type GroupBox}">
                             <Style.Triggers>
@@ -401,7 +284,7 @@
                             SelectedEffect="{Binding SelectedEffect}" Command="{Binding AddEffectCommand}" />
                     </Grid>
                 </GroupBox>
-                <GroupBox Grid.Row="3" Margin="4" Header="Core Effects">
+                <GroupBox Grid.Row="2" Margin="4" Header="Core Effects">
                     <GroupBox.Style>
                         <Style TargetType="{x:Type GroupBox}">
                             <Style.Triggers>

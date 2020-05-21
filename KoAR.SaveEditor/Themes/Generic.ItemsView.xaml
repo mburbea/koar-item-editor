@@ -5,13 +5,46 @@
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views"
     xmlns:core="clr-namespace:KoAR.Core;assembly=KoAR.Core"
     xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/PresentationFramework.Aero,Version=4.0.0.0,PublicKeyToken=31bf3856ad364e35;component/Themes/Aero.NormalColor.xaml" />
+    </ResourceDictionary.MergedDictionaries>
     <Style TargetType="{x:Type views:ItemsView}">
+        <Style.Resources>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        </Style.Resources>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type views:ItemsView}">
                     <ControlTemplate.Resources>
                         <constructs:NegatedBooleanConverter x:Key="NegatedBooleanConverter" />
                         <SolidColorBrush x:Key="AlternateRowBrush" Color="#25BCBCBC" po:Freeze="True" />
+                        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+                            <Style.Triggers>
+                                <Trigger Property="IsVisible" Value="True">
+                                    <Setter Property="constructs:ValidatingPropertyBehavior.ValidatingProperty" Value="{x:Static TextBox.TextProperty}" />                                    
+                                </Trigger>
+                            </Style.Triggers>
+                            <Setter Property="Validation.ErrorTemplate">
+                                <Setter.Value>
+                                    <ControlTemplate>
+                                        <Border BorderBrush="Red" BorderThickness="1">
+                                            <Grid>
+                                                <Polygon Fill="Red" Margin="0,2,2,0" Points="10,10 10,0 0,0" VerticalAlignment="Top" HorizontalAlignment="Right"
+                                                    Tag="{Binding AdornedElement.(Validation.Errors)/ErrorContent, ElementName=PART_Adorner}" Cursor="Hand">
+                                                    <Polygon.ToolTip>
+                                                        <ToolTip Content="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}" 
+                                                            BorderThickness="1" Foreground="White" Background="Red" />
+                                                    </Polygon.ToolTip>
+                                                </Polygon>
+                                                <AdornedElementPlaceholder x:Name="PART_Adorner" />
+                                            </Grid>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Setter Property="constructs:TextBoxUpdateSource.UpdateOnEnter" Value="{Binding IsVisible, RelativeSource={RelativeSource Self}}" />
+                        </Style>
                     </ControlTemplate.Resources>
                     <Border>
                         <Border.Resources>
@@ -39,8 +72,9 @@
                                         </MultiTrigger>
                                     </Style.Triggers>
                                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                    <Setter Property="views:MouseDoubleClick.CommandParameter" Value="{Binding}" />
-                                    <Setter Property="views:MouseDoubleClick.Command" Value="{Binding EditItemHexCommand, RelativeSource={RelativeSource AncestorType={x:Type views:ItemsView}}}" />
+                                    <Setter Property="constructs:MouseDoubleClick.CommandParameter" Value="{Binding}" />
+                                    <Setter Property="constructs:MouseDoubleClick.Command" Value="{Binding EditItemHexCommand, RelativeSource={RelativeSource AncestorType={x:Type views:ItemsView}}}" />
+                                    <Setter Property="views:ItemsView.SelectRowOnClick" Value="{Binding IsVisible, RelativeSource={RelativeSource Self}}" />
                                 </Style>
                             </ListView.ItemContainerStyle>
                             <ListView.ContextMenu>
@@ -54,24 +88,106 @@
                                     <GridViewColumn Header="Name" Width="Auto">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate DataType="{x:Type views:ItemModel}">
-                                                <DockPanel>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition />
+                                                    </Grid.ColumnDefinitions>
                                                     <views:EquipmentTypeIndicator EquipmentType="{Binding EquipmentType}" VerticalAlignment="Center" />
-                                                    <TextBlock Text="{Binding ItemName}" VerticalAlignment="Center" Margin="1,0" />
-                                                </DockPanel>
+                                                    <TextBlock Grid.Column="1" Text="{Binding ItemName}" VerticalAlignment="Center" Margin="1,0">
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="{x:Type TextBlock}">
+                                                                <Style.Triggers>
+                                                                    <MultiDataTrigger>
+                                                                        <MultiDataTrigger.Conditions>
+                                                                            <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True" />
+                                                                            <Condition Binding="{Binding HasCustomName}" Value="True" />
+                                                                        </MultiDataTrigger.Conditions>
+                                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                                    </MultiDataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
+                                                    <TextBox Grid.Column="1" VerticalAlignment="Center" Margin="1,0">
+                                                        <TextBox.Style>
+                                                            <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+                                                                <Style.Triggers>
+                                                                    <MultiDataTrigger>
+                                                                        <MultiDataTrigger.Conditions>
+                                                                            <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True" />
+                                                                            <Condition Binding="{Binding HasCustomName}" Value="True" />
+                                                                        </MultiDataTrigger.Conditions>
+                                                                        <Setter Property="Visibility" Value="Visible" />
+                                                                    </MultiDataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBox.Style>
+                                                        <TextBox.Text>
+                                                            <Binding Path="ItemName">
+                                                                <Binding.ValidationRules>
+                                                                    <constructs:ValueRequiredValidationRule />
+                                                                </Binding.ValidationRules>
+                                                            </Binding>
+                                                        </TextBox.Text>
+                                                    </TextBox>
+                                                </Grid>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
                                     <GridViewColumn Header="Cur Durability" Width="Auto">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate DataType="{x:Type views:ItemModel}">
-                                                <TextBlock Text="{Binding CurrentDurability, StringFormat='0.####'}" TextAlignment="Right" />
+                                                <Grid>
+                                                    <TextBlock Text="{Binding CurrentDurability, StringFormat='0.####'}" TextAlignment="Right">
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="{x:Type TextBlock}">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True">
+                                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
+                                                    <TextBox TextAlignment="Right" Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                        <TextBox.Text>
+                                                            <Binding Path="CurrentDurability">
+                                                                <Binding.ValidationRules>
+                                                                    <views:DurabilityValidationRule />
+                                                                </Binding.ValidationRules>
+                                                            </Binding>
+                                                        </TextBox.Text>
+                                                    </TextBox>
+                                                </Grid>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
                                     <GridViewColumn Header="Max Durability" Width="Auto">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate DataType="{x:Type views:ItemModel}">
-                                                <TextBlock Text="{Binding MaxDurability, StringFormat='0.####'}" TextAlignment="Right" />
+                                                <Grid>
+                                                    <TextBlock Text="{Binding MaxDurability, StringFormat='0.####'}" TextAlignment="Right">
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="{x:Type TextBlock}">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True">
+                                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
+                                                    <TextBox TextAlignment="Right" Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                        <TextBox.Text>
+                                                            <Binding Path="MaxDurability">
+                                                                <Binding.ValidationRules>
+                                                                    <views:DurabilityValidationRule />
+                                                                </Binding.ValidationRules>
+                                                            </Binding>
+                                                        </TextBox.Text>
+                                                    </TextBox>
+                                                </Grid>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
@@ -107,8 +223,7 @@
                                         </GridViewColumn.Header>
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate DataType="{x:Type views:ItemModel}">
-                                                <CheckBox IsChecked="{Binding IsUnsellable, Converter={StaticResource NegatedBooleanConverter}, Mode=TwoWay}" HorizontalAlignment="Center" 
-                                                views:ItemsView.SelectRowOnClick="{Binding IsVisible, RelativeSource={RelativeSource Self}}"/>
+                                                <CheckBox IsChecked="{Binding IsUnsellable, Converter={StaticResource NegatedBooleanConverter}, Mode=TwoWay}" HorizontalAlignment="Center" />
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>

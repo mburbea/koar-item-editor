@@ -56,14 +56,14 @@ namespace KoAR.SaveEditor.Views
             set => this.SetValue(ItemsView.SelectedItemProperty, value);
         }
 
-        public static bool GetSelectRowOnClick(CheckBox? checkBox)
+        public static bool GetSelectRowOnClick(FrameworkElement? element)
         {
-            return checkBox != null && (bool)checkBox.GetValue(ItemsView.SelectRowOnClickProperty);
+            return element != null && (bool)element.GetValue(ItemsView.SelectRowOnClickProperty);
         }
 
-        public static void SetSelectRowOnClick(CheckBox? checkBox, bool value)
+        public static void SetSelectRowOnClick(FrameworkElement? element, bool value)
         {
-            checkBox?.SetValue(ItemsView.SelectRowOnClickProperty, BooleanBoxes.GetBox(value));
+            element?.SetValue(ItemsView.SelectRowOnClickProperty, BooleanBoxes.GetBox(value));
         }
 
         public override void OnApplyTemplate()
@@ -81,16 +81,21 @@ namespace KoAR.SaveEditor.Views
             e.Handled = true;
         }
 
-        private static void CheckBox_PreviewMouseLeftButtonDown(object sender, RoutedEventArgs e)
+        private static void Element_PreviewMouseLeftButtonDown(object sender, RoutedEventArgs e)
         {
-            CheckBox checkBox = (CheckBox)sender;
+            FrameworkElement element = (FrameworkElement)sender;
+            if (element is ListViewItem listViewItem)
+            {
+                listViewItem.IsSelected = true;
+                return;
+            }
             ItemsView? view = default;
-            DependencyObject? d = checkBox;
+            DependencyObject? d = element;
             while (d != null && (view = d as ItemsView) == null)
             {
                 d = VisualTreeHelper.GetParent(d);
             }
-            if (view?._listView?.ItemContainerGenerator.ContainerFromItem(checkBox.DataContext) is ListViewItem item)
+            if (view?._listView?.ItemContainerGenerator.ContainerFromItem(element.DataContext) is ListViewItem item)
             {
                 item.IsSelected = true;
             }
@@ -98,14 +103,16 @@ namespace KoAR.SaveEditor.Views
 
         private static void SelectRowOnClickProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            CheckBox checkBox = (CheckBox)d;
-            if ((bool)e.OldValue)
+            if (d is FrameworkElement checkBox)
             {
-                WeakEventManager<CheckBox, RoutedEventArgs>.RemoveHandler(checkBox, nameof(CheckBox.PreviewMouseLeftButtonDown), ItemsView.CheckBox_PreviewMouseLeftButtonDown);
-            }
-            if ((bool)e.NewValue)
-            {
-                WeakEventManager<CheckBox, RoutedEventArgs>.AddHandler(checkBox, nameof(CheckBox.PreviewMouseLeftButtonDown), ItemsView.CheckBox_PreviewMouseLeftButtonDown);
+                if ((bool)e.OldValue)
+                {
+                    WeakEventManager<FrameworkElement, RoutedEventArgs>.RemoveHandler(checkBox, nameof(FrameworkElement.PreviewMouseLeftButtonDown), ItemsView.Element_PreviewMouseLeftButtonDown);
+                }
+                if ((bool)e.NewValue)
+                {
+                    WeakEventManager<FrameworkElement, RoutedEventArgs>.AddHandler(checkBox, nameof(FrameworkElement.PreviewMouseLeftButtonDown), ItemsView.Element_PreviewMouseLeftButtonDown);
+                }
             }
         }
 

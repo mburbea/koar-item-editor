@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace KoAR.SaveEditor.Views
+namespace KoAR.SaveEditor.Constructs
 {
     public static class MouseDoubleClick
     {

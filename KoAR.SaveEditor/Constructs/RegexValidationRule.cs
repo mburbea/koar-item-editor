@@ -2,7 +2,7 @@
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
 
-namespace KoAR.SaveEditor.Views
+namespace KoAR.SaveEditor.Constructs
 {
     public sealed class RegexValidationRule : ValidationRule
     {
