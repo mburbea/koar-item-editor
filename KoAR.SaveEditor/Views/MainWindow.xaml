@@ -103,7 +103,19 @@
                 <Button ToolTip="Help" Command="Help" Tag="{StaticResource Help}" />
             </StackPanel>
         </Border>
-        <Border Background="{x:Static SystemColors.ControlBrush}" DockPanel.Dock="Bottom" Height="24" />
+        <Border Background="{x:Static SystemColors.ControlBrush}" DockPanel.Dock="Bottom" Padding="4">
+            <TextBlock Text="{Binding FilteredItems.Count, StringFormat='Count: {0}'}">
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding FileName}" Value="{x:Null}">
+                                <Setter Property="Visibility" Value="Hidden" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+        </Border>
         <Grid>
             <Grid.Style>
                 <Style TargetType="{x:Type Grid}">
