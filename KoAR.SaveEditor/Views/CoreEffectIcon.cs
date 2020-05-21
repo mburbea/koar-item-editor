@@ -9,10 +9,7 @@ namespace KoAR.SaveEditor.Views
         public static readonly DependencyProperty CoreEffectProperty = DependencyProperty.Register(nameof(CoreEffectIcon.CoreEffect), typeof(CoreEffectInfo), typeof(CoreEffectIcon),
             new PropertyMetadata());
 
-        static CoreEffectIcon()
-        {
-            FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(CoreEffectIcon), new FrameworkPropertyMetadata(typeof(CoreEffectIcon)));
-        }
+        static CoreEffectIcon() => FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(CoreEffectIcon), new FrameworkPropertyMetadata(typeof(CoreEffectIcon)));
 
         public CoreEffectInfo? CoreEffect
         {

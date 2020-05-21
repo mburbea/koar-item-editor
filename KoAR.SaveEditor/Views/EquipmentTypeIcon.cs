@@ -8,10 +8,7 @@ namespace KoAR.SaveEditor.Views
     {
         public static readonly DependencyProperty EquipmentTypeProperty = DependencyProperty.Register(nameof(EquipmentTypeIcon.EquipmentType), typeof(EquipmentType?), typeof(EquipmentTypeIcon));
 
-        static EquipmentTypeIcon()
-        {
-            FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(EquipmentTypeIcon), new FrameworkPropertyMetadata(typeof(EquipmentTypeIcon)));
-        }
+        static EquipmentTypeIcon() => FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(EquipmentTypeIcon), new FrameworkPropertyMetadata(typeof(EquipmentTypeIcon)));
 
         public EquipmentType? EquipmentType
         {
