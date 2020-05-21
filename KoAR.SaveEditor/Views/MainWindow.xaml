@@ -3,8 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options" 
-    xmlns:s="clr-namespace:System;assembly=mscorlib"
+    xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views"
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs" 
     xmlns:core="clr-namespace:KoAR.Core;assembly=KoAR.Core"
@@ -60,13 +59,8 @@
             <Setter Property="Title" Value="KoAR Save Editor" />
         </Style>
     </Window.Style>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <Border Background="Transparent" BorderBrush="{x:Static SystemColors.ActiveBorderBrush}" BorderThickness="0,0,0,1">
+    <DockPanel>
+        <Border DockPanel.Dock="Top" Background="Transparent" BorderBrush="{x:Static SystemColors.ActiveBorderBrush}" BorderThickness="0,0,0,1">
             <Border.Resources>
                 <Style TargetType="{x:Type Button}">
                     <Setter Property="Template">
@@ -106,8 +100,21 @@
                 <Button ToolTip="Save" Command="{Binding SaveCommand}" Tag="{StaticResource Save}" />
                 <Button ToolTip="Help" Command="Help" Tag="{StaticResource Help}" />
             </StackPanel>
+        </Border>
+        <Border DockPanel.Dock="Bottom"  Background="{x:Static SystemColors.ControlBrush}" Padding="4">
+            <TextBlock Text="{Binding FilteredItems.Count, StringFormat='Count: {0}'}">
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding FileName}" Value="{x:Null}">
+                                <Setter Property="Visibility" Value="Hidden" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
         </Border>        
-        <Grid Grid.Row="1" Grid.IsSharedSizeScope="True">
+        <Grid Grid.IsSharedSizeScope="True">
             <Grid.Style>
                 <Style TargetType="{x:Type Grid}">
                     <Style.Triggers>
@@ -131,23 +138,6 @@
                 <GroupBox Header="Filters" Margin="4">
                     <Grid>
                         <Grid.Resources>
-                            <ObjectDataProvider x:Key="EquipmentTypes" MethodName="GetValues" ObjectType="{x:Type s:Enum}">
-                                <ObjectDataProvider.MethodParameters>
-                                    <x:Type TypeName="core:EquipmentType" />
-                                </ObjectDataProvider.MethodParameters>
-                            </ObjectDataProvider>                            
-                            <constructs:DataContainerConverter x:Key="DataContainerConverter" />
-                            <views:EquipmentTypeCountConverter x:Key="EquipmentTypeCountConverter" />
-                            <CompositeCollection x:Key="EquipmentTypesComposite">
-                                <CollectionContainer>
-                                    <CollectionContainer.Collection>
-                                        <x:Array Type="{x:Type constructs:DataContainer}">
-                                            <x:Static Member="constructs:DataContainer.Empty" />
-                                        </x:Array>
-                                    </CollectionContainer.Collection>
-                                </CollectionContainer>
-                                <CollectionContainer Collection="{Binding Source={StaticResource EquipmentTypes}, Converter={StaticResource DataContainerConverter}}" />
-                            </CompositeCollection>
                             <Style TargetType="FrameworkElement" x:Key="ElementStyle">
                                 <Setter Property="Margin" Value="2" />
                                 <Setter Property="VerticalAlignment" Value="Center" />
@@ -174,47 +164,7 @@
                         <TextBlock Text="Name:" />
                         <TextBox Grid.Column="1" Text="{Binding ItemNameFilter, UpdateSourceTrigger=PropertyChanged}" />
                         <TextBlock Grid.Column="2" Text="Type:" />
-                        <ComboBox x:Name="PART_FilterCombo" Grid.Column="3" Margin="2" VerticalAlignment="Center" ItemsSource="{Binding Source={StaticResource EquipmentTypesComposite}}"
-                            FocusVisualStyle="{x:Null}" SelectedValuePath="Data" SelectedValue="{Binding EquipmentTypeFilter}" Height="24"
-                            TextSearch.TextPath="Data" ToolTip="{Binding EquipmentTypeFilter}">
-                            <ComboBox.ItemContainerStyle>
-                                <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                                </Style>
-                            </ComboBox.ItemContainerStyle>
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate DataType="{x:Type constructs:DataContainer}">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition />
-                                        </Grid.ColumnDefinitions>
-                                        <views:EquipmentTypeIndicator EquipmentType="{Binding Data}" />
-                                        <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="2">                                            
-                                            <TextBlock.Style>
-                                                <Style TargetType="{x:Type TextBlock}">
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ComboBoxItem}}}" Value="{x:Null}">
-                                                            <Setter Property="Visibility" Value="Collapsed" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </TextBlock.Style>
-                                            <Run Text="{Binding Data, Mode=OneTime}" />
-                                            <Run>
-                                                <Run.Text>
-                                                    <MultiBinding Converter="{StaticResource EquipmentTypeCountConverter}" StringFormat="({0})" Mode="OneWay">
-                                                        <Binding Path="Data" />
-                                                        <Binding Path="Items" Source="{StaticResource ViewModel}" />
-                                                        <Binding Path="Items.Count" Source="{StaticResource ViewModel}" />
-                                                    </MultiBinding>
-                                                </Run.Text>
-                                            </Run>
-                                        </TextBlock>
-                                    </Grid>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
+                        <views:EquipmentTypeSelector Grid.Column="3" EquipmentType="{Binding EquipmentTypeFilter}" Items="{Binding Items}" />
                         <TextBlock Grid.Column="4" Text="Cur. Durability:" />
                         <TextBox Grid.Column="5">
                             <TextBox.Text>
@@ -349,18 +299,5 @@
                 </GroupBox>
             </Grid>
         </Grid>
-        <Border Grid.Row="2" Background="{x:Static SystemColors.ControlBrush}" Padding="4">
-            <TextBlock Text="{Binding FilteredItems.Count, StringFormat='Count: {0}'}">
-                <TextBlock.Style>
-                    <Style TargetType="{x:Type TextBlock}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding FileName}" Value="{x:Null}">
-                                <Setter Property="Visibility" Value="Hidden" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBlock.Style>
-            </TextBlock>
-        </Border>
-    </Grid>
+    </DockPanel>
 </Window>

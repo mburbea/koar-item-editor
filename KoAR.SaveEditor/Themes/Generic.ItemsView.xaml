@@ -209,7 +209,7 @@
                                                     </ItemsControl.ItemsPanel>
                                                     <ItemsControl.ItemTemplate>
                                                         <DataTemplate DataType="{x:Type core:CoreEffectInfo}">
-                                                            <views:DamageTypeIndicator CoreEffect="{Binding}" />
+                                                            <views:CoreEffectIndicator CoreEffect="{Binding}" />
                                                         </DataTemplate>
                                                     </ItemsControl.ItemTemplate>
                                                 </ItemsControl>

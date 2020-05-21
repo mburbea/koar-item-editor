@@ -20,10 +20,26 @@ namespace KoAR.SaveEditor.Views
         public static readonly DependencyProperty EffectsProperty = DependencyProperty.Register(nameof(EffectListControl.Effects), typeof(IEnumerable<IEffectInfo>), typeof(EffectListControl),
             new FrameworkPropertyMetadata(EffectListControl.EffectsProperty_ValueChanged));
 
+        public static readonly DependencyProperty HeaderProperty = DependencyProperty.Register(nameof(EffectListControl.Header), typeof(object), typeof(EffectListControl));
+
+        public static readonly DependencyProperty HeaderTemplateProperty = DependencyProperty.Register(nameof(EffectListControl.HeaderTemplate), typeof(DataTemplate), typeof(EffectListControl));
+
         public static readonly DependencyProperty SelectedEffectProperty = DependencyProperty.Register(nameof(EffectListControl.SelectedEffect), typeof(IEffectInfo), typeof(EffectListControl),
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         static EffectListControl() => FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(EffectListControl), new FrameworkPropertyMetadata(typeof(EffectListControl)));
+
+        public object? Header
+        {
+            get => this.GetValue(EffectListControl.HeaderProperty);
+            set => this.SetValue(EffectListControl.HeaderProperty, value);
+        }
+
+        public DataTemplate? HeaderTemplate
+        {
+            get => (DataTemplate?)this.GetValue(EffectListControl.HeaderTemplateProperty);
+            set => this.SetValue(EffectListControl.HeaderTemplateProperty, value);
+        }
 
         public ICommand? AddEffectCommand
         {
