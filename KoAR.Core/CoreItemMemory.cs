@@ -18,7 +18,7 @@ namespace KoAR.Core
         WhoKnows = 0x74
     };
 
-    public class CoreEffectList : IList<CoreEffectInfo>
+    public class CoreEffectList : IList<CoreEffectInfo>, IReadOnlyList<CoreEffectInfo>
     {
         private readonly struct Offset
         {
