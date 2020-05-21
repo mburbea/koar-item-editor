@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Diagnostics;
 using KoAR.Core;
+using System.Collections;
 
 namespace ItemTesting
 {
@@ -21,11 +22,9 @@ namespace ItemTesting
             return list.ToArray();
         }
 
-
         static void Main(string[] args)
         {
-
-            var path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save96.sav";
+            var path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save97.sav";
             //using var fs = new FileStream(path, FileMode.Open);
             //var bytes = new byte[fs.Length];
             //var memory = fs.Read(bytes, 0, bytes.Length);
@@ -48,9 +47,7 @@ namespace ItemTesting
             var bytes = editor.Bytes;
             var interest = new[] { "PLS","PGW","ABC","Primal Chakrams", "Garbage"};
             var mems = editor.GetAllEquipment()
-                .Where(x => interest.Contains(x.ItemName)
-                || x.ItemBytes.AsSpan(0,4).SequenceEqual(new byte[] { 0x42, 0x09, 0xEB, 0x07  })
-                || x.ItemBytes.AsSpan(0,4).SequenceEqual(new byte[] { 0x0D, 0x09, 0x01, 0x03, })
+                .Where(x => interest.Contains(x.ItemName) || x.EquipmentType == EquipmentType.Buckler
                 ).ToArray();
             var items = mems
                 .Select(x => (x.ItemName, ItemId:x.ItemBytes.AsSpan(0, 8).ToArray())).OrderBy(x=>x.ItemName).ToArray();

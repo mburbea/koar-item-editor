@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace KoAR.Core
 {
@@ -138,33 +139,81 @@ namespace KoAR.Core
                 AdditionalInfoSequence.CopyTo(buffer.Slice(8));
                 var aisOffset = bytes.IndexOf(buffer);
                 var demystifyer = bytes[aisOffset + 17];
+                var word = MemoryUtilities.Read<int>(bytes, aisOffset + 17);
+                var word2 = MemoryUtilities.Read<int>(item.ItemBytes, 13);
+                if (equipTypeByte == 0x14)
+                {
+                    if (demystifyer == 0)
+                    {
+                        Console.WriteLine("a");
+                    }
+                }
 
                 return equipTypeByte switch
                 {
                     0x10 => EquipmentType.Shield,
                     0x18 => EquipmentType.LongBow,
-                    0x20 => demystifyer == 0 ? EquipmentType.LongSword : EquipmentType.GreatSword,
-                    0x24 => demystifyer == 0 ? EquipmentType.Daggers : EquipmentType.FaeBlades,
+                    0x20 => demystifyer switch
+                    {
+                        0x00 => EquipmentType.LongSword,
+                        0xBC => EquipmentType.LongSword,
+                        0x55 => EquipmentType.LongSword,
+                        0x56 => EquipmentType.LongSword,
+                        0x18 => EquipmentType.LongSword,
+                        _ => EquipmentType.GreatSword,
+                    },
+                    0x24 => demystifyer switch
+                    {
+                        0x00 => EquipmentType.Daggers,
+                        0x40 => EquipmentType.Daggers,
+                        0x41 => EquipmentType.Daggers,
+                        0x2C => EquipmentType.Daggers,
+                        0xE8 => EquipmentType.Daggers,
+                        _ => EquipmentType.FaeBlades
+                    },
                     0x1C => demystifyer switch
                     {
+                        0x3E => EquipmentType.Chakrams,
+                        0x3F => EquipmentType.Chakrams,
                         0xEA => EquipmentType.Chakrams,
-                        0xEB => EquipmentType.FaeBlades,
+                        0xEB => EquipmentType.Chakrams,
                         0xEC => EquipmentType.Hammer,
-                        0x53 => EquipmentType.Hammer,
+                        0x43 => EquipmentType.Hammer,
+                        0x7E => EquipmentType.Hammer,
+                        0x18 => EquipmentType.Staff,
+                        0x53 => EquipmentType.Staff,
+                        0x54 => EquipmentType.Staff,
                         0x00 => EquipmentType.Staff,
                         _ => EquipmentType.Unknown
                     },
-                    0x14 => item.ItemBytes[13] switch
+                    0x14 => demystifyer switch
                     {
-                        0x22 => EquipmentType.Sceptre,//there might be 3 sceptre codes?
-                        0x33 => EquipmentType.Buckler,//why are there two buckler codes?
-                        0x3E => EquipmentType.Buckler,
-                        0x2B => EquipmentType.FlameTalisman,// Shock talisman's are here too :(
-                        0x23 => EquipmentType.FrostTalisman,
-                        0x3F => EquipmentType.ShockTalisman,// might only be crafted shock talisman.
+                        0x1D => EquipmentType.FrostTalisman,
+                        0x4A => EquipmentType.Sceptre,
+                        0x47 => EquipmentType.Sceptre,
+                        0x48 => EquipmentType.Sceptre,
+                        0x1B => EquipmentType.Buckler,
+                        0xCA => EquipmentType.Buckler,
+                        0x18 => EquipmentType.FrostTalisman,
+                        0xC9 => EquipmentType.FrostTalisman,
+                        0xAF => EquipmentType.FrostTalisman,
+                        0x00 => item.ItemBytes[13] switch
+                        {
+                            0x33 => EquipmentType.Buckler,
+                            0x23 => EquipmentType.Buckler,
+                            0x2B => EquipmentType.Buckler,
+                            0x3b => EquipmentType.FrostTalisman,
+                            0x00 => EquipmentType.Buckler,
+                        },
+
+                        //0x33 => EquipmentType.Buckler,//why are there two buckler codes?
+                        // 0x3E => EquipmentType.Buckler,
+                        // 0x2B => EquipmentType.FlameTalisman,// Shock talisman's are here too :(
+                        // 0x23 => EquipmentType.FrostTalisman,
+                        // 0x3F => EquipmentType.ShockTalisman,// might only be crafted shock talisman.*/
                         _ => EquipmentType.Unknown
                     },
-                    _ => EquipmentType.Unknown
+                    _ => throw null,
                 };
             }
 
@@ -196,7 +245,10 @@ namespace KoAR.Core
                     var binStr = b13.ToString("X2");
                     bins.TryGetValue(binStr, out var c);
                     bins[binStr] = c + 1;
-
+                    if (item.CoreItemMemory.MysteryInteger == 0x40)
+                    {
+                        Console.WriteLine("WTF");
+                    }
                 }
             }
             var max = equipmentList.Max(x => x.CoreItemMemory.EffectCount);
@@ -205,7 +257,6 @@ namespace KoAR.Core
             Console.WriteLine(bins);
             Console.WriteLine(seqs);
             var dict2 = seqs.ToDictionary(x => string.Join(" ", BitConverter.GetBytes(x.Key).Select(x => x.ToString("X2"))));
-
             return equipmentList;
         }
 
