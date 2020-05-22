@@ -160,7 +160,7 @@
                         <TextBlock Text="Name:" />
                         <TextBox Grid.Column="1" Text="{Binding ItemNameFilter, UpdateSourceTrigger=PropertyChanged}" />
                         <TextBlock Grid.Column="2" Text="Type:" />
-                        <views:EquipmentTypeSelector Grid.Column="3" EquipmentType="{Binding EquipmentTypeFilter}" Items="{Binding Items}" />
+                        <views:EquipmentCategorySelector Grid.Column="3" Category="{Binding CategoryFilter}" Items="{Binding Items}" />
                         <TextBlock Grid.Column="4" Text="Cur. Durability:" />
                         <TextBox Grid.Column="5">
                             <TextBox.Text>

@@ -16,8 +16,8 @@ namespace KoAR.SaveEditor.Views
     public sealed class MainViewModel : NotifierBase
     {
         private readonly ObservableCollection<ItemModel> _items;
+        private EquipmentCategory? _categoryFilter;
         private string _currentDurabilityFilter = string.Empty;
-        private EquipmentCategory? _equipmentTypeFilter;
         private string? _fileName;
         private IReadOnlyList<ItemModel> _filteredItems;
         private int _inventorySize;
@@ -79,6 +79,18 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
+        public EquipmentCategory? CategoryFilter
+        {
+            get => this._categoryFilter;
+            set
+            {
+                if (this.SetValue(ref this._categoryFilter, value))
+                {
+                    this.OnFilterChange();
+                }
+            }
+        }
+
         public string CurrentDurabilityFilter
         {
             get => this._currentDurabilityFilter;
@@ -104,18 +116,6 @@ namespace KoAR.SaveEditor.Views
         public DelegateCommand<ItemModel> EditItemHexCommand
         {
             get;
-        }
-
-        public EquipmentCategory? EquipmentTypeFilter
-        {
-            get => this._equipmentTypeFilter;
-            set
-            {
-                if (this.SetValue(ref this._equipmentTypeFilter, value))
-                {
-                    this.OnFilterChange();
-                }
-            }
         }
 
         public string? FileName
@@ -328,9 +328,9 @@ namespace KoAR.SaveEditor.Views
             {
                 items = items.Where(model => model.ItemName.IndexOf(this._itemNameFilter, StringComparison.OrdinalIgnoreCase) != -1);
             }
-            if (this._equipmentTypeFilter.HasValue)
+            if (this._categoryFilter.HasValue)
             {
-                items = items.Where(model => model.Category == this._equipmentTypeFilter);
+                items = items.Where(model => model.Category == this._categoryFilter);
             }
             this.FilteredItems = object.ReferenceEquals(items, this.Items)
                 ? (IReadOnlyList<ItemModel>)this.Items
@@ -397,10 +397,10 @@ namespace KoAR.SaveEditor.Views
             {
                 this.OnPropertyChanged(nameof(this.CurrentDurabilityFilter));
             }
-            if (this._equipmentTypeFilter.HasValue)
+            if (this._categoryFilter.HasValue)
             {
-                this._equipmentTypeFilter = default;
-                this.OnPropertyChanged(nameof(this.EquipmentTypeFilter));
+                this._categoryFilter = default;
+                this.OnPropertyChanged(nameof(this.CategoryFilter));
             }
             this.OnFilterChange();
         }

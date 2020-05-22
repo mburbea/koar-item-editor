@@ -51,7 +51,7 @@
                         <Border.Resources>
                             <CollectionViewSource x:Key="FilteredItems" Source="{Binding Items, RelativeSource={RelativeSource TemplatedParent}}">
                                 <CollectionViewSource.SortDescriptions>
-                                    <componentModel:SortDescription PropertyName="EquipmentType" Direction="Ascending" />
+                                    <componentModel:SortDescription PropertyName="Category" Direction="Ascending" />
                                     <componentModel:SortDescription PropertyName="HasCustomName" Direction="Descending" />
                                     <componentModel:SortDescription PropertyName="ItemIndex" Direction="Ascending" />
                                 </CollectionViewSource.SortDescriptions>
@@ -94,7 +94,7 @@
                                                         <ColumnDefinition Width="Auto" />
                                                         <ColumnDefinition />
                                                     </Grid.ColumnDefinitions>
-                                                    <views:EquipmentTypeIcon EquipmentType="{Binding EquipmentType}" VerticalAlignment="Center" />
+                                                    <views:EquipmentCategoryIcon Category="{Binding Category}" VerticalAlignment="Center" />
                                                     <TextBlock Grid.Column="1" Text="{Binding ItemName}" VerticalAlignment="Center" Margin="1,0">
                                                         <TextBlock.Style>
                                                             <Style TargetType="{x:Type TextBlock}">

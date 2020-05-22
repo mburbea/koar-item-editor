@@ -4,10 +4,10 @@
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs"
     xmlns:core="clr-namespace:KoAR.Core;assembly=KoAR.Core"
     xmlns:s="clr-namespace:System;assembly=mscorlib">
-    <Style TargetType="{x:Type views:EquipmentTypeSelector}">
+    <Style TargetType="{x:Type views:EquipmentCategorySelector}">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type views:EquipmentTypeSelector}">
+                <ControlTemplate TargetType="{x:Type views:EquipmentCategorySelector}">
                     <Border>
                         <Border.Resources>
                             <ObjectDataProvider x:Key="EquipmentTypes" MethodName="GetValues" ObjectType="{x:Type s:Enum}">
@@ -21,7 +21,7 @@
                             </CompositeCollection>
                         </Border.Resources>
                         <ComboBox Margin="2" VerticalAlignment="Center" ItemsSource="{Binding Source={StaticResource EquipmentTypesComposite}}"
-                            FocusVisualStyle="{x:Null}" SelectedValuePath="Data" SelectedValue="{Binding EquipmentType, RelativeSource={RelativeSource TemplatedParent}}" Height="24"
+                            FocusVisualStyle="{x:Null}" SelectedValuePath="Data" SelectedValue="{Binding Category, RelativeSource={RelativeSource TemplatedParent}}" Height="24"
                             TextSearch.TextPath="Data" ToolTip="{Binding SelectedValue, RelativeSource={RelativeSource Self}}">
                             <ComboBox.ItemContainerStyle>
                                 <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
@@ -35,7 +35,7 @@
                                             <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition />
                                         </Grid.ColumnDefinitions>
-                                        <views:EquipmentTypeIcon EquipmentType="{Binding Data}" />
+                                        <views:EquipmentCategoryIcon Category="{Binding Data}" />
                                         <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="2">
                                             <TextBlock.Style>
                                                 <Style TargetType="{x:Type TextBlock}">
@@ -49,10 +49,10 @@
                                             <Run Text="{Binding Data, Mode=OneTime}" />
                                             <Run>
                                                 <Run.Text>
-                                                    <MultiBinding Converter="{x:Static views:EquipmentTypeSelector.CountConverter}" StringFormat="({0})" Mode="OneWay">
+                                                    <MultiBinding Converter="{x:Static views:EquipmentCategorySelector.CountConverter}" StringFormat="({0})" Mode="OneWay">
                                                         <Binding Path="Data" Mode="OneTime" />
-                                                        <Binding Path="Items" RelativeSource="{RelativeSource AncestorType={x:Type views:EquipmentTypeSelector}}" />
-                                                        <Binding Path="Items.Count" RelativeSource="{RelativeSource AncestorType={x:Type views:EquipmentTypeSelector}}" />
+                                                        <Binding Path="Items" RelativeSource="{RelativeSource AncestorType={x:Type views:EquipmentCategorySelector}}" />
+                                                        <Binding Path="Items.Count" RelativeSource="{RelativeSource AncestorType={x:Type views:EquipmentCategorySelector}}" />
                                                     </MultiBinding>
                                                 </Run.Text>
                                             </Run>
