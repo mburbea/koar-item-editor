@@ -2,7 +2,6 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using KoAR.SaveEditor.Constructs;
 
 namespace KoAR.SaveEditor.Views
@@ -11,8 +10,6 @@ namespace KoAR.SaveEditor.Views
     {
         public static readonly DependencyProperty AllItemsUnsellableProperty = DependencyProperty.Register(nameof(ItemsView.AllItemsUnsellable), typeof(bool?), typeof(ItemsView),
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
-
-        public static readonly RoutedCommand AutoSizeColumnsCommand = new RoutedCommand();
 
         public static readonly DependencyProperty EditItemHexCommandProperty = DependencyProperty.Register(nameof(ItemsView.EditItemHexCommand), typeof(ICommand), typeof(ItemsView));
 
@@ -26,11 +23,7 @@ namespace KoAR.SaveEditor.Views
 
         private ListView? _listView;
 
-        static ItemsView()
-        {
-            FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(ItemsView), new FrameworkPropertyMetadata(typeof(ItemsView)));
-            CommandManager.RegisterClassCommandBinding(typeof(ItemsView), new CommandBinding(ItemsView.AutoSizeColumnsCommand, ItemsView.AutoSizeColumns_Executed));
-        }
+        static ItemsView() => FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(ItemsView), new FrameworkPropertyMetadata(typeof(ItemsView)));
 
         public bool? AllItemsUnsellable
         {
@@ -75,12 +68,6 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        private static void AutoSizeColumns_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            ((ItemsView)sender).AutoSizeAllColumns();
-            e.Handled = true;
-        }
-
         private static void Element_PreviewMouseLeftButtonDown(object sender, RoutedEventArgs e)
         {
             FrameworkElement element = (FrameworkElement)sender;
@@ -104,22 +91,6 @@ namespace KoAR.SaveEditor.Views
             if ((bool)e.NewValue)
             {
                 WeakEventManager<FrameworkElement, RoutedEventArgs>.AddHandler(element, nameof(FrameworkElement.PreviewMouseLeftButtonDown), ItemsView.Element_PreviewMouseLeftButtonDown);
-            }
-        }
-
-        private void AutoSizeAllColumns()
-        {
-            if (!(this._listView?.View is GridView view))
-            {
-                return;
-            }
-            foreach (GridViewColumn column in view.Columns)
-            {
-                if (double.IsNaN(column.Width))
-                {
-                    column.Width = column.ActualWidth;
-                }
-                column.Width = double.NaN;
             }
         }
     }

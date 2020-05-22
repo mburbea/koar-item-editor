@@ -52,11 +52,16 @@
                             <TextBox Grid.Column="1" VerticalContentAlignment="Center" Margin="2" IsReadOnly="True" TextAlignment="Right" 
                                 Text="{Binding Effects.Count, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}" 
                                 Background="{x:Static SystemColors.ControlBrush}" />
-                            <ItemsControl ItemsSource="{TemplateBinding Effects}" Grid.Row="1" Grid.ColumnSpan="2" AlternationCount="2">
-                                <ItemsControl.ItemTemplate>
+                            <ListView ItemsSource="{TemplateBinding Effects}" Grid.Row="1" Grid.ColumnSpan="2" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="{x:Type ListViewItem}">
+                                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                                <ListView.ItemTemplate>
                                     <DataTemplate DataType="{x:Type core:IEffectInfo}">
-                                        <Border Margin="1" CornerRadius="2" BorderThickness="1" BorderBrush="{x:Static SystemColors.ControlDarkBrush}">
-                                            <Border.ToolTip>
+                                        <DockPanel>
+                                            <DockPanel.ToolTip>
                                                 <ToolTip Content="{Binding}">
                                                     <ToolTip.ContentTemplate>
                                                         <DataTemplate DataType="{x:Type core:IEffectInfo}">
@@ -71,16 +76,14 @@
                                                         </DataTemplate>
                                                     </ToolTip.ContentTemplate>
                                                 </ToolTip>
-                                            </Border.ToolTip>
-                                            <DockPanel>
-                                                <Button DockPanel.Dock="Right" Style="{StaticResource DeleteButtonStyle}" Margin="2" VerticalAlignment="Center" FocusVisualStyle="{x:Null}" 
+                                            </DockPanel.ToolTip>
+                                            <Button DockPanel.Dock="Right" Style="{StaticResource DeleteButtonStyle}" Margin="2" VerticalAlignment="Center" FocusVisualStyle="{x:Null}" 
                                                     CommandParameter="{Binding}" Command="{Binding DeleteEffectCommand, RelativeSource={RelativeSource AncestorType={x:Type views:EffectListControl}}}" />
-                                                <TextBlock Text="{Binding DisplayText}" TextTrimming="CharacterEllipsis" Margin="4,2" VerticalAlignment="Center" />
-                                            </DockPanel>
-                                        </Border>
+                                            <TextBlock Text="{Binding DisplayText}" TextTrimming="CharacterEllipsis" Margin="4,2" VerticalAlignment="Center" />
+                                        </DockPanel>
                                     </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
+                                </ListView.ItemTemplate>
+                            </ListView>
                         </Grid>
                     </GroupBox>
                 </ControlTemplate>
