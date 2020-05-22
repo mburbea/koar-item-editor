@@ -17,7 +17,7 @@ namespace KoAR.SaveEditor.Views
     {
         private readonly ObservableCollection<ItemModel> _items;
         private string _currentDurabilityFilter = string.Empty;
-        private EquipmentType? _equipmentTypeFilter;
+        private EquipmentCategory? _equipmentTypeFilter;
         private string? _fileName;
         private IReadOnlyList<ItemModel> _filteredItems;
         private int _inventorySize;
@@ -106,7 +106,7 @@ namespace KoAR.SaveEditor.Views
             get;
         }
 
-        public EquipmentType? EquipmentTypeFilter
+        public EquipmentCategory? EquipmentTypeFilter
         {
             get => this._equipmentTypeFilter;
             set
@@ -330,7 +330,7 @@ namespace KoAR.SaveEditor.Views
             }
             if (this._equipmentTypeFilter.HasValue)
             {
-                items = items.Where(model => model.EquipmentType == this._equipmentTypeFilter);
+                items = items.Where(model => model.Category == this._equipmentTypeFilter);
             }
             this.FilteredItems = object.ReferenceEquals(items, this.Items)
                 ? (IReadOnlyList<ItemModel>)this.Items

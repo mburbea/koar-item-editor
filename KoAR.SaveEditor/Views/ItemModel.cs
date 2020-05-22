@@ -41,7 +41,9 @@ namespace KoAR.SaveEditor.Views
 
         public List<EffectInfo> Effects => this._effects ??= this.Item.ReadEffects();
 
-        public EquipmentType EquipmentType => this.Item.EquipmentType;
+        public int TypeId => this.Item.TypeId;
+
+        public EquipmentCategory Category => this.Item.Category;
 
         public bool HasCustomName => this.Item.HasCustomName;
 

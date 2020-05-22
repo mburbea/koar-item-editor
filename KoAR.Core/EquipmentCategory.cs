@@ -1,6 +1,6 @@
 ﻿namespace KoAR.Core
 {
-    public enum EquipmentType
+    public enum EquipmentCategory
     {
         Unknown = 0,
         Armor,

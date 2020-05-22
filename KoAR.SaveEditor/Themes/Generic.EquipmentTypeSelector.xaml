@@ -12,7 +12,7 @@
                         <Border.Resources>
                             <ObjectDataProvider x:Key="EquipmentTypes" MethodName="GetValues" ObjectType="{x:Type s:Enum}">
                                 <ObjectDataProvider.MethodParameters>
-                                    <x:Type TypeName="core:EquipmentType" />
+                                    <x:Type TypeName="core:EquipmentCategory" />
                                 </ObjectDataProvider.MethodParameters>
                             </ObjectDataProvider>
                             <CompositeCollection x:Key="EquipmentTypesComposite">

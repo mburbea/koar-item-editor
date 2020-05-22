@@ -13,16 +13,16 @@ namespace KoAR.SaveEditor.Views
     {
         public static readonly IMultiValueConverter CountConverter = new EquipmentTypeCountConverter();
 
-        public static readonly DependencyProperty EquipmentTypeProperty = DependencyProperty.Register(nameof(EquipmentTypeSelector.EquipmentType), typeof(EquipmentType?), typeof(EquipmentTypeSelector),
+        public static readonly DependencyProperty EquipmentTypeProperty = DependencyProperty.Register(nameof(EquipmentTypeSelector.EquipmentType), typeof(EquipmentCategory?), typeof(EquipmentTypeSelector),
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         public static readonly DependencyProperty ItemsProperty = DependencyProperty.Register(nameof(EquipmentTypeSelector.Items), typeof(IEnumerable<ItemModel>), typeof(EquipmentTypeSelector));
 
         static EquipmentTypeSelector() => FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(EquipmentTypeSelector), new FrameworkPropertyMetadata(typeof(EquipmentTypeSelector)));
 
-        public EquipmentType? EquipmentType
+        public EquipmentCategory? EquipmentType
         {
-            get => (EquipmentType?)this.GetValue(EquipmentTypeSelector.EquipmentTypeProperty);
+            get => (EquipmentCategory?)this.GetValue(EquipmentTypeSelector.EquipmentTypeProperty);
             set => this.SetValue(EquipmentTypeSelector.EquipmentTypeProperty, value);
         }
 
@@ -36,8 +36,8 @@ namespace KoAR.SaveEditor.Views
         {
             object IMultiValueConverter.Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
             {
-                return values.Length >= 2 && values[0] is EquipmentType equipmentType && values[1] is IEnumerable<ItemModel> models
-                    ? models.Count(model => model.EquipmentType == equipmentType)
+                return values.Length >= 2 && values[0] is EquipmentCategory equipmentType && values[1] is IEnumerable<ItemModel> models
+                    ? models.Count(model => model.Category == equipmentType)
                     : DependencyProperty.UnsetValue;
             }
 
