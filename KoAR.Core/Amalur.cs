@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 
 
@@ -22,7 +21,15 @@ namespace KoAR.Core
 
         public static void ReadFile(string path) => Bytes = File.ReadAllBytes(path);
 
-        public static void SaveFile(string path) => File.WriteAllBytes(path, Bytes);
+        public static void SaveFile(string path)
+        {
+            if (!IsFileOpen)
+            {
+                return;
+            }
+            File.Copy(path, path + ".bak", true);
+            File.WriteAllBytes(path, Bytes);
+        }
 
         public static bool IsFileOpen => Bytes != null;
         public static void Initialize(string path = null)

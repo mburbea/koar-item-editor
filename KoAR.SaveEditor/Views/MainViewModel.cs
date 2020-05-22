@@ -230,7 +230,6 @@ namespace KoAR.SaveEditor.Views
             {
                 return;
             }
-            File.Copy(this._fileName, $"{this._fileName}.bak", true);
             Amalur.SaveFile(this._fileName);
             this.UnsavedChanges = false;
             this.RepopulateItems();
