@@ -12,7 +12,7 @@ namespace KoAR.SaveEditor.Views
         public static readonly DependencyProperty AllItemsUnsellableProperty = DependencyProperty.Register(nameof(ItemsView.AllItemsUnsellable), typeof(bool?), typeof(ItemsView),
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
-        public static readonly RoutedCommand AutoSizeColumnsCommand = new RoutedUICommand("AutoSize Columns", nameof(ItemsView.AutoSizeColumnsCommand), typeof(ItemsView));
+        public static readonly RoutedCommand AutoSizeColumnsCommand = new RoutedCommand();
 
         public static readonly DependencyProperty EditItemHexCommandProperty = DependencyProperty.Register(nameof(ItemsView.EditItemHexCommand), typeof(ICommand), typeof(ItemsView));
 
@@ -84,18 +84,8 @@ namespace KoAR.SaveEditor.Views
         private static void Element_PreviewMouseLeftButtonDown(object sender, RoutedEventArgs e)
         {
             FrameworkElement element = (FrameworkElement)sender;
-            if (element is ListViewItem listViewItem)
-            {
-                listViewItem.IsSelected = true;
-                return;
-            }
-            ItemsView? view = default;
-            DependencyObject? d = element;
-            while (d != null && (view = d as ItemsView) == null)
-            {
-                d = VisualTreeHelper.GetParent(d);
-            }
-            if (view?._listView?.ItemContainerGenerator.ContainerFromItem(element.DataContext) is ListViewItem item)
+            ListViewItem? item = element as ListViewItem ?? element.FindVisualTreeAncestor<ListViewItem>();
+            if (item != null)
             {
                 item.IsSelected = true;
             }
@@ -103,16 +93,17 @@ namespace KoAR.SaveEditor.Views
 
         private static void SelectRowOnClickProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is FrameworkElement checkBox)
+            if (!(d is FrameworkElement element))
             {
-                if ((bool)e.OldValue)
-                {
-                    WeakEventManager<FrameworkElement, RoutedEventArgs>.RemoveHandler(checkBox, nameof(FrameworkElement.PreviewMouseLeftButtonDown), ItemsView.Element_PreviewMouseLeftButtonDown);
-                }
-                if ((bool)e.NewValue)
-                {
-                    WeakEventManager<FrameworkElement, RoutedEventArgs>.AddHandler(checkBox, nameof(FrameworkElement.PreviewMouseLeftButtonDown), ItemsView.Element_PreviewMouseLeftButtonDown);
-                }
+                return;
+            }
+            if ((bool)e.OldValue)
+            {
+                WeakEventManager<FrameworkElement, RoutedEventArgs>.RemoveHandler(element, nameof(FrameworkElement.PreviewMouseLeftButtonDown), ItemsView.Element_PreviewMouseLeftButtonDown);
+            }
+            if ((bool)e.NewValue)
+            {
+                WeakEventManager<FrameworkElement, RoutedEventArgs>.AddHandler(element, nameof(FrameworkElement.PreviewMouseLeftButtonDown), ItemsView.Element_PreviewMouseLeftButtonDown);
             }
         }
 
