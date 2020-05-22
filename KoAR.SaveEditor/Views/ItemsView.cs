@@ -64,7 +64,7 @@ namespace KoAR.SaveEditor.Views
             base.OnApplyTemplate();
             if ((this._listView = this.Template.FindName("PART_ListView", this) as ListView) != null)
             {
-                this.AutoSizeAllColumns();
+                ListViewAutoSize.AutoSizeColumns(this._listView);
             }
         }
 

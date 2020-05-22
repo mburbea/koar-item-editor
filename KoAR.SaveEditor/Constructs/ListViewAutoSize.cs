@@ -17,6 +17,14 @@ namespace KoAR.SaveEditor.Constructs
 
         public static void SetSkipAutoSize(GridViewColumn column, bool value) => column?.SetValue(ListViewAutoSize.SkipAutoSizeProperty, BooleanBoxes.GetBox(value));
 
+        public static void AutoSizeColumns(ListView listView)
+        {
+            if (listView?.View is GridView view)
+            {
+                ListViewAutoSize.AutoSizeColumns(view);
+            }
+        }
+
         private static void AutoSizeColumns(GridView view)
         {
             foreach (GridViewColumn column in view.Columns)
@@ -33,12 +41,6 @@ namespace KoAR.SaveEditor.Constructs
             }
         }
 
-        private static void AutoSizeCommand_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            if (((ListView)sender).View is GridView view)
-            {
-                ListViewAutoSize.AutoSizeColumns(view);
-            }
-        }
+        private static void AutoSizeCommand_Executed(object sender, ExecutedRoutedEventArgs e) => ListViewAutoSize.AutoSizeColumns((ListView)sender);
     }
 }
