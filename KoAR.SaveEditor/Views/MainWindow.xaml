@@ -304,8 +304,6 @@
                                 <TextBox Grid.Row="4" Text="{Binding SelectedItem.MysteryInteger, Mode=OneWay, StringFormat=X2}" />
                             </Grid>
                         </GroupBox>
-                        <views:EffectListControl Margin="4" Header="Effects:" Effects="{Binding SelectedItem.Effects}" AvailableEffects="{x:Static core:Amalur.Effects}"
-                            DeleteEffectCommand="{Binding DeleteEffectCommand}" />
                         <views:EffectListControl Margin="4" Header="{Binding SelectedItem}" Effects="{Binding SelectedItem.CoreEffects}" AvailableEffects="{Binding Values, Source={x:Static core:Amalur.CoreEffects}}"
                             DeleteEffectCommand="{Binding DeleteCoreEffectCommand}">
                             <views:EffectListControl.HeaderTemplate>
@@ -325,6 +323,8 @@
                                 </DataTemplate>
                             </views:EffectListControl.HeaderTemplate>
                         </views:EffectListControl>
+                        <views:EffectListControl Margin="4" Header="Effects:" Effects="{Binding SelectedItem.Effects}" AvailableEffects="{x:Static core:Amalur.Effects}"
+                            DeleteEffectCommand="{Binding DeleteEffectCommand}" />
                     </StackPanel>
                 </ScrollViewer>
             </Grid>
