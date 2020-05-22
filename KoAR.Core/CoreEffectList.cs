@@ -15,7 +15,7 @@ namespace KoAR.Core
             public const int FirstEffect = EffectCount + 4;
         }
 
-        private static ReadOnlySpan<uint> Prefixes => new[] { 0x57_8E_73u, 0x58_6E_AAu, 0x4B_03_f9u, 0x4b_43_f4u };
+        private static ReadOnlySpan<uint> Prefixes => new uint[] { 0x57_8E_73, 0x58_6E_AA, 0x4B_03_F9, 0x4B_43_F4 };
         private readonly List<CoreEffectInfo> _list = new List<CoreEffectInfo>();
 
         internal CoreEffectList(Span<byte> buffer)
