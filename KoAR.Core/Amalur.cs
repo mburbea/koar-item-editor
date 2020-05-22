@@ -16,7 +16,7 @@ namespace KoAR.Core
     {
         public static List<EffectInfo> Effects { get; } = new List<EffectInfo>();
         public static Dictionary<string, CoreEffectInfo> CoreEffects { get; } = new Dictionary<string, CoreEffectInfo>(StringComparer.OrdinalIgnoreCase);
-        internal static Dictionary<string, EffectInfo> DedupedEffects;
+        internal static Dictionary<string, EffectInfo> DedupedEffects = new Dictionary<string, EffectInfo>();
 
         internal static byte[] Bytes { get; set; }
 
