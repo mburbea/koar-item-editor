@@ -58,7 +58,7 @@ namespace KoAR.Core
             bytes.Slice(itemIndex, 8).CopyTo(buffer);
             CoreEffects = new CoreEffectList(buffer);
             EquipmentType = DetermineEquipmentType(bytes, buffer, ItemBytes[13]);
-            _itemTemplateMemory = new Memory<byte>(Amalur.Bytes, bytes.IndexOf(buffer.Slice(4)) + 4, 4);
+            _itemTemplateMemory = new Memory<byte>(Amalur.Bytes, bytes.IndexOf(buffer.Slice(0, 4)) + 4, 4);
         }
 
         public CoreEffectList CoreEffects { get; internal set; }
