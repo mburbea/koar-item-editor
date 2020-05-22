@@ -33,7 +33,7 @@ namespace KoAR.SaveEditor.Constructs
                 {
                     continue;
                 }
-                if (!double.IsNaN(column.Width))
+                if (double.IsNaN(column.Width))
                 {
                     column.Width = column.ActualWidth;
                 }
