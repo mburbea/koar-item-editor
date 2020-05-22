@@ -11,8 +11,8 @@
     <Style TargetType="{x:Type views:ItemsView}">
         <Style.Resources>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-            <constructs:SingleConverter x:Key="SingleConverter" />
-            <constructs:Int32HexConverter x:Key="Int32HexConverter" />
+            <constructs:FloatConverter x:Key="SingleConverter" />
+            <constructs:HexConverter x:Key="Int32HexConverter" />
 
         </Style.Resources>
         <Setter Property="Template">

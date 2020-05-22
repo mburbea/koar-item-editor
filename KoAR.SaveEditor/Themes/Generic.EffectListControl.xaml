@@ -36,6 +36,9 @@
         <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
     </Style>
     <Style TargetType="{x:Type views:EffectListControl}">
+        <Style.Resources>
+            <constructs:PlusOneConverter x:Key="PlusOneConverter" />
+        </Style.Resources>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type views:EffectListControl}">
@@ -157,7 +160,7 @@
                                             <ColumnDefinition />
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
-                                        <TextBlock Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}, StringFormat='{}{0})'}"
+                                        <TextBlock Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}, Converter={StaticResource PlusOneConverter}, StringFormat='{}{0})'}"
                                             VerticalAlignment="Center" Margin="2" />
                                         <TextBlock Grid.Column="1" Text="{Binding DisplayText}" TextTrimming="CharacterEllipsis"
                                             VerticalAlignment="Center" Margin="2" />
