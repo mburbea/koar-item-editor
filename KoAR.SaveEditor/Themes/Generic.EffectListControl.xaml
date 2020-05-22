@@ -2,17 +2,18 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     xmlns:core="clr-namespace:KoAR.Core;assembly=KoAR.Core"
+    xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs"
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/PresentationFramework.Aero,Version=4.0.0.0,PublicKeyToken=31bf3856ad364e35;component/Themes/Aero.NormalColor.xaml" />
     </ResourceDictionary.MergedDictionaries>
-    <BitmapImage UriSource="/KoAR.SaveEditor;component/Resources/Delete.png" x:Key="Delete" />
+    <BitmapImage x:Key="Delete" UriSource="/KoAR.SaveEditor;component/Resources/Delete.png" po:Freeze="True" />
     <Style TargetType="{x:Type Button}" x:Key="DeleteButtonStyle">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Border x:Name="BD" BorderBrush="Transparent" BorderThickness="1" CornerRadius="2">
-                        <Image Width="18" Source="{StaticResource Delete}" />
+                        <Image Width="16" Source="{StaticResource Delete}" />
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsEnabled" Value="False">
@@ -39,52 +40,134 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type views:EffectListControl}">
                     <GroupBox Header="{TemplateBinding Header}" HeaderTemplate="{TemplateBinding HeaderTemplate}">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" SharedSizeGroup="Prompt" />
-                                <ColumnDefinition />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Count:" TextAlignment="Right" Margin="2" VerticalAlignment="Center" />
-                            <TextBox Grid.Column="1" VerticalContentAlignment="Center" Margin="2" IsReadOnly="True" TextAlignment="Right" 
-                                Text="{Binding Effects.Count, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}" 
-                                Background="{x:Static SystemColors.ControlBrush}" />
-                            <ListView ItemsSource="{TemplateBinding Effects}" Grid.Row="1" Grid.ColumnSpan="2" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                                <ListView.ItemContainerStyle>
-                                    <Style TargetType="{x:Type ListViewItem}">
-                                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                                    </Style>
-                                </ListView.ItemContainerStyle>
-                                <ListView.ItemTemplate>
-                                    <DataTemplate DataType="{x:Type core:IEffectInfo}">
-                                        <DockPanel>
-                                            <DockPanel.ToolTip>
-                                                <ToolTip Content="{Binding}">
-                                                    <ToolTip.ContentTemplate>
-                                                        <DataTemplate DataType="{x:Type core:IEffectInfo}">
-                                                            <TextBlock>
-                                                                <TextBlock.Text>
-                                                                    <MultiBinding StringFormat="{}{0} ({1})" Mode="OneTime">
-                                                                        <Binding Path="DisplayText" />
-                                                                        <Binding Path="Code" />
-                                                                    </MultiBinding>
-                                                                </TextBlock.Text>
-                                                            </TextBlock>
-                                                        </DataTemplate>
-                                                    </ToolTip.ContentTemplate>
-                                                </ToolTip>
-                                            </DockPanel.ToolTip>
-                                            <Button DockPanel.Dock="Right" Style="{StaticResource DeleteButtonStyle}" Margin="2" VerticalAlignment="Center" FocusVisualStyle="{x:Null}" 
-                                                    CommandParameter="{Binding}" Command="{Binding DeleteEffectCommand, RelativeSource={RelativeSource AncestorType={x:Type views:EffectListControl}}}" />
-                                            <TextBlock Text="{Binding DisplayText}" TextTrimming="CharacterEllipsis" Margin="4,2" VerticalAlignment="Center" />
-                                        </DockPanel>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
-                        </Grid>
+                        <ListBox Grid.ColumnSpan="2" BorderBrush="LightGray" ScrollViewer.HorizontalScrollBarVisibility="Disabled" FocusVisualStyle="{x:Null}"
+                            ItemsSource="{TemplateBinding Effects}" AlternationCount="{Binding Effects.Count, RelativeSource={RelativeSource TemplatedParent}}">
+                            <ListBox.Style>
+                                <Style TargetType="{x:Type ListBox}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Effects, RelativeSource={RelativeSource TemplatedParent}}" Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Effects.Count, RelativeSource={RelativeSource TemplatedParent}}" Value="0">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListBox.Style>
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="{x:Type ListBoxItem}">
+                                    <Style.Resources>
+                                        <LinearGradientBrush x:Key="ListItemHoverFill" EndPoint="0,1" po:Freeze="True">
+                                            <LinearGradientBrush.GradientStops>
+                                                <GradientStop Color="#FFF1FBFF" />
+                                                <GradientStop Color="#FFD5F1FE" Offset="1"/>
+                                            </LinearGradientBrush.GradientStops>
+                                        </LinearGradientBrush>
+                                        <LinearGradientBrush x:Key="ListItemSelectedFill" EndPoint="0,1" po:Freeze="True">
+                                            <LinearGradientBrush.GradientStops>
+                                                <GradientStop Color="#FFD9F4FF" />
+                                                <GradientStop Color="#FF9BDDFB" Offset="1"/>
+                                            </LinearGradientBrush.GradientStops>
+                                        </LinearGradientBrush>
+                                        <LinearGradientBrush x:Key="ListItemSelectedHoverFill" EndPoint="0,1" po:Freeze="True">
+                                            <LinearGradientBrush.GradientStops>
+                                                <GradientStop Color="#FFEAF9FF" />
+                                                <GradientStop Color="#FFC9EDFD" Offset="1"/>
+                                            </LinearGradientBrush.GradientStops>
+                                        </LinearGradientBrush>
+                                        <SolidColorBrush x:Key="AlternateRowBrush" Color="#25BCBCBC" po:Freeze="True" />
+                                        <constructs:IntegerIsEvenConverter x:Key="IsEvenConverter" />
+                                    </Style.Resources>
+                                    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Setter Property="BorderBrush" Value="Transparent"/>
+                                    <Setter Property="BorderThickness" Value="1"/>
+                                    <Setter Property="Margin" Value="0,0,0,1"/>
+                                    <Setter Property="Padding" Value="5,2"/>
+                                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                                <Border BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" CornerRadius="2" SnapsToDevicePixels="True">
+                                                    <Border Name="InnerBorder" CornerRadius="1" BorderThickness="1">
+                                                        <Grid>
+                                                            <Grid.RowDefinitions>
+                                                                <RowDefinition MaxHeight="11"/>
+                                                                <RowDefinition/>
+                                                            </Grid.RowDefinitions>
+                                                            <Rectangle Name="UpperHighlight" Visibility="Collapsed" Fill="#75FFFFFF"/>
+                                                            <ContentPresenter Grid.RowSpan="2" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                                        </Grid>
+                                                    </Border>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <DataTrigger Binding="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource Self}, Converter={StaticResource IsEvenConverter}}" Value="False">
+                                                        <Setter Property="Background" Value="{StaticResource AlternateRowBrush}"/>
+                                                    </DataTrigger>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="{StaticResource ListItemHoverFill}"/>
+                                                        <Setter Property="BorderBrush" Value="#FFCCF0FF"/>
+                                                        <Setter TargetName="UpperHighlight" Property="Visibility" Value="Visible"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsSelected" Value="True">
+                                                        <Setter Property="Background" Value="{StaticResource ListItemSelectedFill}"/>
+                                                        <Setter Property="BorderBrush" Value="#FF98DDFB"/>
+                                                        <Setter TargetName="InnerBorder" Property="BorderBrush" Value="#80FFFFFF"/>
+                                                        <Setter TargetName="UpperHighlight" Property="Visibility" Value="Visible"/>
+                                                        <Setter TargetName="UpperHighlight" Property="Fill" Value="#40FFFFFF"/>
+                                                    </Trigger>
+                                                    <MultiTrigger>
+                                                        <MultiTrigger.Conditions>
+                                                            <Condition Property="IsSelected" Value="True"/>
+                                                            <Condition Property="IsMouseOver" Value="True"/>
+                                                        </MultiTrigger.Conditions>
+                                                        <Setter Property="Background" Value="{StaticResource ListItemSelectedHoverFill}"/>
+                                                        <Setter Property="BorderBrush" Value="#FF98DDFB"/>
+                                                    </MultiTrigger>
+                                                    <Trigger Property="IsEnabled" Value="False">
+                                                        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate DataType="{x:Type core:IEffectInfo}">
+                                    <Grid>
+                                        <Grid.ToolTip>
+                                            <ToolTip Content="{Binding}">
+                                                <ToolTip.ContentTemplate>
+                                                    <DataTemplate DataType="{x:Type core:IEffectInfo}">
+                                                        <TextBlock>
+                                                            <TextBlock.Text>
+                                                                <MultiBinding StringFormat="{}{0} ({1})" Mode="OneTime">
+                                                                    <Binding Path="DisplayText" />
+                                                                    <Binding Path="Code" />
+                                                                </MultiBinding>
+                                                            </TextBlock.Text>
+                                                        </TextBlock>
+                                                    </DataTemplate>
+                                                </ToolTip.ContentTemplate>
+                                            </ToolTip>
+                                        </Grid.ToolTip>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}, StringFormat='{}{0})'}"
+                                            VerticalAlignment="Center" Margin="2" />
+                                        <TextBlock Grid.Column="1" Text="{Binding DisplayText}" TextTrimming="CharacterEllipsis"
+                                            VerticalAlignment="Center" Margin="2" />
+                                        <Button Grid.Column="2" Style="{StaticResource DeleteButtonStyle}" FocusVisualStyle="{x:Null}" 
+                                            CommandParameter="{Binding}" Command="{Binding DeleteEffectCommand, RelativeSource={RelativeSource AncestorType={x:Type views:EffectListControl}}}"                                                 
+                                            VerticalAlignment="Center" Margin="2" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
                     </GroupBox>
                 </ControlTemplate>
             </Setter.Value>

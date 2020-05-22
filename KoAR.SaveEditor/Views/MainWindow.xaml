@@ -8,7 +8,7 @@
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs" 
     xmlns:core="clr-namespace:KoAR.Core;assembly=KoAR.Core"
     mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type views:MainViewModel}}"
-    Width="1024" Height="768" WindowStartupLocation="CenterScreen" 
+    Width="1366" Height="768" WindowStartupLocation="CenterScreen" 
     Icon="/app.ico" ResizeMode="CanResizeWithGrip">
     <Window.Resources>
         <ObjectDataProvider x:Key="ViewModel" ObjectType="{x:Type views:MainViewModel}" />
