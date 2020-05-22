@@ -26,7 +26,7 @@ namespace KoAR.Core
             ItemIndex = bytes.IndexOf(buffer);
             ReadOnlySpan<byte> span = bytes.Slice(ItemIndex);
             int count = span[Offsets.EffectCount];
-            DataLength = Offsets.EffectCount + (count * 24) + 8;
+            DataLength = Offsets.EffectCount + (count * 24) + 12;
             Bytes = span.Slice(0, DataLength).ToArray();
             var firstDisplayEffect = Offsets.FirstEffect + (count * 16) + 8;
             for (int i = 0; i < count; i++)
@@ -114,10 +114,10 @@ namespace KoAR.Core
                 ulong effect = uint.Parse(_list[i].Code, NumberStyles.HexNumber);
                 effectData[i * 2] = Prefixes[i] | effect << 32;
                 effectData[(i * 2) + 1] = ulong.MaxValue;
-                effectData[(newCount * 2) + i] = effect | (ulong)uint.MaxValue << 32;
+                effectData[(newCount * 2) + 1+ i] = effect | (ulong)uint.MaxValue << 32;
             }
             Bytes = MemoryUtilities.ReplaceBytes(Bytes, Offsets.FirstEffect, currentLength, MemoryMarshal.AsBytes(effectData));
-            Bytes[Offsets.EffectCount + 4 + (16 * newCount)] = Bytes[Offsets.EffectCount] = (byte)newCount;
+            Bytes[Offsets.FirstEffect + (16 * newCount)] = Bytes[Offsets.EffectCount] = (byte)newCount;
         }
 
         public bool Contains(CoreEffectInfo item) => _list.Contains(item);
