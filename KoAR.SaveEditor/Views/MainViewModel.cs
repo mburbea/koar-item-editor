@@ -365,6 +365,7 @@ namespace KoAR.SaveEditor.Views
             }
             foreach (ItemModel item in this._items)
             {
+                PropertyChangedEventManager.RemoveHandler(item, this.Item_MateriallyChanged, nameof(ItemModel.TypeId));
                 PropertyChangedEventManager.RemoveHandler(item, this.Item_MateriallyChanged, nameof(ItemModel.ItemName));
                 PropertyChangedEventManager.RemoveHandler(item, this.Item_MateriallyChanged, nameof(ItemModel.CurrentDurability));
                 PropertyChangedEventManager.RemoveHandler(item, this.Item_MateriallyChanged, nameof(ItemModel.MaxDurability));
@@ -374,6 +375,7 @@ namespace KoAR.SaveEditor.Views
             foreach (ItemMemoryInfo info in Amalur.GetAllEquipment())
             {
                 ItemModel item = new ItemModel(info);
+                PropertyChangedEventManager.AddHandler(item, this.Item_MateriallyChanged, nameof(ItemModel.TypeId));
                 PropertyChangedEventManager.AddHandler(item, this.Item_MateriallyChanged, nameof(ItemModel.ItemName));
                 PropertyChangedEventManager.AddHandler(item, this.Item_MateriallyChanged, nameof(ItemModel.CurrentDurability));
                 PropertyChangedEventManager.AddHandler(item, this.Item_MateriallyChanged, nameof(ItemModel.MaxDurability));

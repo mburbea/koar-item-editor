@@ -12,6 +12,8 @@
         <Style.Resources>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <constructs:SingleConverter x:Key="SingleConverter" />
+            <constructs:Int32HexConverter x:Key="Int32HexConverter" />
+
         </Style.Resources>
         <Setter Property="Template">
             <Setter.Value>
@@ -86,6 +88,30 @@
                             <ListView.View>
                                 <GridView AllowsColumnReorder="True">
                                     <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ItemId}" Width="Auto" />
+                                    <GridViewColumn Header="Type Id" Width="Auto">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate DataType="{x:Type views:ItemModel}">
+                                                <Grid>
+                                                    <TextBlock Text="{Binding TypeId, StringFormat='X6'}" TextAlignment="Right">
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="{x:Type TextBlock}">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True">
+                                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
+                                                    <TextBox TextAlignment="Right" Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                        <TextBox.Text>
+                                                            <Binding Path="TypeId" Converter="{StaticResource Int32HexConverter}"/>
+                                                        </TextBox.Text>
+                                                    </TextBox>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
                                     <GridViewColumn Header="Name" Width="Auto">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate DataType="{x:Type views:ItemModel}">
