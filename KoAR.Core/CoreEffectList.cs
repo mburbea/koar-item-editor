@@ -13,16 +13,16 @@ namespace KoAR.Core
             public const int MysteryInteger = 13;
             public const int EffectCount = MysteryInteger + 4;
             public const int FirstEffect = EffectCount + 4;
-
         }
 
         private static ReadOnlySpan<uint> Prefixes => new[] { 0x57_8E_73u, 0x58_6E_AAu, 0x4B_03_f9u, 0x4b_43_f4u };
         private readonly List<CoreEffectInfo> _list = new List<CoreEffectInfo>();
 
-        internal CoreEffectList(ReadOnlySpan<byte> bytes, Span<byte> buffer)
+        internal CoreEffectList(Span<byte> buffer)
         {
-            ReadOnlySpan<byte> CoreEffectSequence = new byte[] { 0x84, 0x60, 0x28, 0x00, 0x00 };
-            CoreEffectSequence.CopyTo(buffer.Slice(8));
+            ReadOnlySpan<byte> bytes = Amalur.Bytes;
+            ReadOnlySpan<byte> coreEffectSequence = new byte[] { 0x84, 0x60, 0x28, 0x00, 0x00 };
+            coreEffectSequence.CopyTo(buffer.Slice(8));
             ItemIndex = bytes.IndexOf(buffer);
             ReadOnlySpan<byte> span = bytes.Slice(ItemIndex);
             int count = span[Offsets.EffectCount];

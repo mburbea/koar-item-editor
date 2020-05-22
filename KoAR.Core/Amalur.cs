@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Xml.Linq;
+
 
 namespace KoAR.Core
 {
@@ -15,19 +17,14 @@ namespace KoAR.Core
         public static List<EffectInfo> Effects { get; } = new List<EffectInfo>();
         public static Dictionary<string, CoreEffectInfo> CoreEffects { get; } = new Dictionary<string, CoreEffectInfo>(StringComparer.OrdinalIgnoreCase);
         internal static Dictionary<string, EffectInfo> DedupedEffects;
-        private static byte[] _bytes;
 
-        public static byte[] Bytes
-        {
-            get => _bytes ?? throw new Exception("Save file not open");
-            private set => _bytes = value;
-        }
+        internal static byte[] Bytes { get; set; }
 
-        public static void ReadFile(string path) => _bytes = File.ReadAllBytes(path);
+        public static void ReadFile(string path) => Bytes = File.ReadAllBytes(path);
 
         public static void SaveFile(string path) => File.WriteAllBytes(path, Bytes);
 
-        public static bool IsFileOpen => _bytes != null;
+        public static bool IsFileOpen => Bytes != null;
         public static void Initialize(string path = null)
         {
             path ??= Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
@@ -68,13 +65,13 @@ namespace KoAR.Core
 
         private static int GetBagOffset()
         {
-            ReadOnlySpan<byte> InventoryLimit = new[] { (byte)'i', (byte)'n', (byte)'v', (byte)'e', (byte)'n', (byte)'t', (byte)'o', (byte)'r', (byte)'y', (byte)'_', (byte)'l', (byte)'i', (byte)'m', (byte)'i', (byte)'t' };
-            ReadOnlySpan<byte> IncreaseAmount = new[] { (byte)'i', (byte)'n', (byte)'c', (byte)'r', (byte)'e', (byte)'a', (byte)'s', (byte)'e', (byte)'_', (byte)'a', (byte)'m', (byte)'o', (byte)'u', (byte)'n', (byte)'t' };
-            ReadOnlySpan<byte> CurrentInventoryCount = new[] { (byte)'c', (byte)'u', (byte)'r', (byte)'r', (byte)'e', (byte)'n', (byte)'t', (byte)'_', (byte)'i', (byte)'n', (byte)'v', (byte)'e', (byte)'n', (byte)'t', (byte)'o', (byte)'r', (byte)'y', (byte)'_', (byte)'c', (byte)'o', (byte)'u', (byte)'n', (byte)'t' };
+            ReadOnlySpan<byte> inventoryLimit = new[] { (byte)'i', (byte)'n', (byte)'v', (byte)'e', (byte)'n', (byte)'t', (byte)'o', (byte)'r', (byte)'y', (byte)'_', (byte)'l', (byte)'i', (byte)'m', (byte)'i', (byte)'t' };
+            ReadOnlySpan<byte> increaseAmount = new[] { (byte)'i', (byte)'n', (byte)'c', (byte)'r', (byte)'e', (byte)'a', (byte)'s', (byte)'e', (byte)'_', (byte)'a', (byte)'m', (byte)'o', (byte)'u', (byte)'n', (byte)'t' };
+            ReadOnlySpan<byte> currentInventoryCount = new[] { (byte)'c', (byte)'u', (byte)'r', (byte)'r', (byte)'e', (byte)'n', (byte)'t', (byte)'_', (byte)'i', (byte)'n', (byte)'v', (byte)'e', (byte)'n', (byte)'t', (byte)'o', (byte)'r', (byte)'y', (byte)'_', (byte)'c', (byte)'o', (byte)'u', (byte)'n', (byte)'t' };
             ReadOnlySpan<byte> span = Bytes;
-            var curInvCountOffset = span.IndexOf(CurrentInventoryCount) + CurrentInventoryCount.Length;
-            var inventoryLimitOffset = span.IndexOf(InventoryLimit) + InventoryLimit.Length;
-            var increaseAmountOffset = span.IndexOf(IncreaseAmount) + IncreaseAmount.Length;
+            var curInvCountOffset = span.IndexOf(currentInventoryCount) + currentInventoryCount.Length;
+            var inventoryLimitOffset = span.IndexOf(inventoryLimit) + inventoryLimit.Length;
+            var increaseAmountOffset = span.IndexOf(increaseAmount) + increaseAmount.Length;
             var finalOffset = Math.Max(Math.Max(curInvCountOffset, inventoryLimitOffset), increaseAmountOffset);
             var inventoryLimitOrder = inventoryLimitOffset == finalOffset
                 ? 3
@@ -89,10 +86,10 @@ namespace KoAR.Core
 
         public static List<ItemMemoryInfo> GetAllEquipment()
         {
-            ReadOnlySpan<byte> EquipmentSequence = new byte[] { 0x0B, 0x00, 0x00, 0x00, 0x68, 0xD5, 0x24, 0x00, 0x03 };
-
-            static List<int> GetAllIndices(ReadOnlySpan<byte> data, ReadOnlySpan<byte> sequence)
+            static List<int> FindAllCandidates()
             {
+                ReadOnlySpan<byte> sequence = new byte[] { 0x0B, 0x00, 0x00, 0x00, 0x68, 0xD5, 0x24, 0x00, 0x03 };
+                ReadOnlySpan<byte> data = Bytes;
                 var results = new List<int>();
                 int ix = data.IndexOf(sequence);
                 int start = 0;
@@ -107,12 +104,11 @@ namespace KoAR.Core
             }
 
             List<ItemMemoryInfo> equipmentList = new List<ItemMemoryInfo>();
-            var bytes = Bytes;
-            var indexList = GetAllIndices(bytes, EquipmentSequence);
-            indexList.Add(bytes.Length);
-            for (int i = 0; i < indexList.Count - 1; i++)
+            var candidates = FindAllCandidates();
+            candidates.Add(Bytes.Length);
+            for (int i = 0; i < candidates.Count - 1; i++)
             {
-                if (ItemMemoryInfo.Create(bytes, indexList[i], indexList[i + 1]) is ItemMemoryInfo item)
+                if (ItemMemoryInfo.Create(candidates[i], candidates[i + 1]) is ItemMemoryInfo item)
                 {
                     equipmentList.Add(item);
                 }

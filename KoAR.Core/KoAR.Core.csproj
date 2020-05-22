@@ -6,12 +6,7 @@
     <AssemblyTitle>KoAR Item Editor</AssemblyTitle>
     <NeutralLanguage>en-US</NeutralLanguage>
     <Description>Allows editing of items in KoAR saves.</Description>
-    <Copyright>Copyright © 2019 Jerome Montino</Copyright>
-    <AssemblyTitle>KoAR Item Editor</AssemblyTitle>
-    <NeutralLanguage>en-US</NeutralLanguage>
     <LangVersion>8.0</LangVersion>
-    <Description>Allows editing of items in KoAR saves.</Description>
-    <Copyright>Copyright © 2019 Jerome Montino</Copyright>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

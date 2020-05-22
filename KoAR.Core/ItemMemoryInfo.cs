@@ -19,17 +19,16 @@ namespace KoAR.Core
         {
             static EquipmentType DetermineEquipmentType(ReadOnlySpan<byte> bytes, Span<byte> buffer, byte byte13)
             {
-                ReadOnlySpan<byte> WeaponTypeSequence = new byte[] { 0xD4, 0x08, 0x46, 0x00, 0x01 };
-                ReadOnlySpan<byte> AdditionalInfoSequence = new byte[] { 0x8D, 0xE3, 0x47, 0x00, 0x02 };
-
-                WeaponTypeSequence.CopyTo(buffer.Slice(8));
+                ReadOnlySpan<byte> weaponTypeSequence = new byte[] { 0xD4, 0x08, 0x46, 0x00, 0x01 };
+                ReadOnlySpan<byte> additionalInfoSequence = new byte[] { 0x8D, 0xE3, 0x47, 0x00, 0x02 };
+                weaponTypeSequence.CopyTo(buffer.Slice(8));
                 var offset = bytes.IndexOf(buffer);
                 if (offset == -1)
                 {
                     return EquipmentType.Armor; // Armor doesn't have this section.
                 }
                 var equipTypeByte = bytes[offset + 13];
-                AdditionalInfoSequence.CopyTo(buffer.Slice(8));
+                additionalInfoSequence.CopyTo(buffer.Slice(8));
                 var aisOffset = bytes.IndexOf(buffer);
                 var d = bytes[aisOffset + 17];
                 return equipTypeByte switch
@@ -56,10 +55,10 @@ namespace KoAR.Core
             ItemIndex = itemIndex;
             DataLength = dataLength;
             ItemBytes = bytes.Slice(itemIndex, dataLength).ToArray();
-            ItemBytes.AsSpan(0, 8).CopyTo(buffer);
-            CoreEffects = new CoreEffectList(bytes, buffer);
+            bytes.Slice(itemIndex, itemIndex + 8).CopyTo(buffer);
+            CoreEffects = new CoreEffectList(buffer);
             EquipmentType = DetermineEquipmentType(bytes, buffer, ItemBytes[13]);
-            _itemTemplateOffset = bytes.IndexOf(buffer.Slice(4)) + 4;
+            _itemTemplateMemory = new Memory<byte>(Amalur.Bytes, bytes.IndexOf(buffer.Slice(4)) + 4, 4);
         }
 
         public CoreEffectList CoreEffects { get; internal set; }
@@ -97,11 +96,14 @@ namespace KoAR.Core
 
         public EquipmentType EquipmentType { get; }
 
-        private int _itemTemplateOffset; 
+        // this holds a pointer to the current instance of the item template.
+        // any material change will blow away the backing array.
+        private readonly Memory<byte> _itemTemplateMemory; 
+
         public int ItemTemplate
         {
-            get => MemoryUtilities.Read<int>(Amalur.Bytes, _itemTemplateOffset);
-            set => MemoryUtilities.Write(Amalur.Bytes, _itemTemplateOffset, value);
+            get => MemoryMarshal.Read<int>(_itemTemplateMemory.Span);
+            set => MemoryMarshal.Write(_itemTemplateMemory.Span, ref value);
         }
 
         public byte[] ItemBytes { get; set; }
@@ -142,8 +144,9 @@ namespace KoAR.Core
 
         private Offset Offsets => new Offset(EffectCount);
 
-        public static ItemMemoryInfo Create(ReadOnlySpan<byte> bytes, int itemIndex, int nextOffset)
+        public static ItemMemoryInfo Create(int itemIndex, int nextOffset)
         {
+            var bytes = Amalur.Bytes;
             if (nextOffset - itemIndex < MinEquipmentLength)
             {
                 return null;
