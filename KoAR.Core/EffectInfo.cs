@@ -4,7 +4,17 @@ namespace KoAR.Core
 {
     public class EffectInfo : IEffectInfo, IEquatable<EffectInfo>
     {
-        public string Code { get; set; }
+        private string _code;
+        public string Code
+        {
+            get => _code;
+            set
+            {
+                Amalur.DedupedEffects.TryGetValue(value ??= "", out var definition);
+                DisplayText = definition?.DisplayText ?? "Unknown";
+                _code = value;
+            }
+        }
 
         public string DisplayText { get; set; }
 

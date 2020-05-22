@@ -12,30 +12,19 @@ namespace KoAR.Core
     /// </summary>
     public static class Amalur
     {
-        /// <summary>
-        /// The head of the equipment, property and indicate the number of attributes of the data relative to equipment data head offset
-        /// </summary>
         public static List<EffectInfo> Effects { get; } = new List<EffectInfo>();
         public static Dictionary<string, CoreEffectInfo> CoreEffects { get; } = new Dictionary<string, CoreEffectInfo>(StringComparer.OrdinalIgnoreCase);
-        private static ReadOnlySpan<byte> EquipmentSequence => new byte[]     { 0x0B, 0x00, 0x00, 0x00, 0x68, 0xD5, 0x24, 0x00, 0x03 };
+        internal static Dictionary<string, EffectInfo> DedupedEffects;
         private static byte[] _bytes;
 
         public static byte[] Bytes
         {
             get => _bytes ?? throw new Exception("Save file not open");
-            set => _bytes = value;
+            private set => _bytes = value;
         }
 
-        /// <summary>
-        /// Read save-file
-        /// </summary>
-        /// <param name="path">archive path</param>
         public static void ReadFile(string path) => _bytes = File.ReadAllBytes(path);
 
-        /// <summary>
-        /// Save save-file
-        /// </summary>
-        /// <param name="path">save path</param>
         public static void SaveFile(string path) => File.WriteAllBytes(path, Bytes);
 
         public static bool IsFileOpen => _bytes != null;
@@ -74,6 +63,7 @@ namespace KoAR.Core
                     Code = element.Attribute("id").Value.ToUpperInvariant(),
                     DisplayText = element.Value.Trim()
                 }));
+            DedupedEffects = Effects.Where(x=> x.Code != "").GroupBy(x => x.Code).ToDictionary(x => x.Key, x => x.First());
         }
 
         private static int GetBagOffset()
@@ -97,19 +87,10 @@ namespace KoAR.Core
 
         public static void EditMaxBagCount(int count) => MemoryUtilities.Write(Bytes, GetBagOffset(), count);
 
-        public static List<EffectInfo> GetEffectList(ItemMemoryInfo item)
-        {
-            var itemEffects = item.ReadEffects();
-            foreach (EffectInfo attInfo in itemEffects)
-            {
-                attInfo.DisplayText = Effects.FirstOrDefault(x => x.Code == attInfo.Code)?.DisplayText ?? "Unknown";
-            }
-
-            return itemEffects;
-        }
-
         public static List<ItemMemoryInfo> GetAllEquipment()
         {
+            ReadOnlySpan<byte> EquipmentSequence = new byte[] { 0x0B, 0x00, 0x00, 0x00, 0x68, 0xD5, 0x24, 0x00, 0x03 };
+
             static List<int> GetAllIndices(ReadOnlySpan<byte> data, ReadOnlySpan<byte> sequence)
             {
                 var results = new List<int>();

@@ -39,7 +39,7 @@ namespace KoAR.SaveEditor.Views
 
         public int EffectCount => this.Item.EffectCount;
 
-        public List<EffectInfo> Effects => this._effects ??= Amalur.GetEffectList(this.Item);
+        public List<EffectInfo> Effects => this._effects ??= this.Item.ReadEffects();
 
         public EquipmentType EquipmentType => this.Item.EquipmentType;
 
