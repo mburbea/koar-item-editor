@@ -26,7 +26,7 @@ namespace KoAR.Core
             ItemIndex = bytes.IndexOf(buffer);
             ReadOnlySpan<byte> span = bytes.Slice(ItemIndex);
             int count = span[Offsets.EffectCount];
-            DataLength = Offsets.EffectCount + (count * 24) + 12;
+            DataLength = Offsets.FirstEffect + (count * 24) + 8;
             Bytes = span.Slice(0, DataLength).ToArray();
             var firstDisplayEffect = Offsets.FirstEffect + (count * 16) + 8;
             for (int i = 0; i < count; i++)
