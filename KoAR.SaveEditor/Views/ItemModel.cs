@@ -87,6 +87,14 @@ namespace KoAR.SaveEditor.Views
             Amalur.WriteEquipmentBytes(this.Item, out _);
         }
 
+        public void DeleteCoreEffect(CoreEffectInfo info)
+        {
+            if (this.CoreEffects.Remove(info))
+            {
+                Amalur.WriteEquipmentBytes(this.Item, out _);
+            }
+        }
+
         public void DeleteEffect(EffectInfo info)
         {
             if (!this.Effects.Remove(info))

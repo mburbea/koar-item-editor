@@ -36,6 +36,7 @@ namespace KoAR.SaveEditor.Views
             this.EditItemHexCommand = new DelegateCommand<ItemModel>(this.EditItemHex);
             this.UpdateInventorySizeCommand = new DelegateCommand(this.UpdateInventorySize, this.CanUpdateInventorySize);
             this.AddEffectCommand = new DelegateCommand<EffectInfo>(this.AddEffect);
+            this.DeleteCoreEffectCommand = new DelegateCommand<CoreEffectInfo>(this.DeleteCoreEffect);
             this.DeleteEffectCommand = new DelegateCommand<EffectInfo>(this.DeleteEffect);
             this.SaveCommand = new DelegateCommand(this.Save, this.CanSave);
         }
@@ -88,6 +89,11 @@ namespace KoAR.SaveEditor.Views
                     this.OnFilterChange();
                 }
             }
+        }
+
+        public DelegateCommand<CoreEffectInfo> DeleteCoreEffectCommand
+        {
+            get;
         }
 
         public DelegateCommand<EffectInfo> DeleteEffectCommand
@@ -245,6 +251,12 @@ namespace KoAR.SaveEditor.Views
         private bool CanSave() => this._unsavedChanges;
 
         private bool CanUpdateInventorySize() => Amalur.IsFileOpen && Amalur.GetMaxBagCount() != this.InventorySize;
+
+        private void DeleteCoreEffect(CoreEffectInfo info)
+        {
+            this.SelectedItem?.DeleteCoreEffect(info);
+            this.Refresh();
+        }
 
         private void DeleteEffect(EffectInfo info)
         {

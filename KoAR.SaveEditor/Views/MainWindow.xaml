@@ -307,7 +307,7 @@
                         <views:EffectListControl Margin="4" Header="Effects:" Effects="{Binding SelectedItem.Effects}" AvailableEffects="{x:Static core:Amalur.Effects}"
                             DeleteEffectCommand="{Binding DeleteEffectCommand}" />
                         <views:EffectListControl Margin="4" Header="{Binding SelectedItem}" Effects="{Binding SelectedItem.CoreEffects}" AvailableEffects="{Binding Values, Source={x:Static core:Amalur.CoreEffects}}"
-                            DeleteEffectCommand="{Binding DeleteEffectCommand}">
+                            DeleteEffectCommand="{Binding DeleteCoreEffectCommand}">
                             <views:EffectListControl.HeaderTemplate>
                                 <DataTemplate DataType="{x:Type views:ItemModel}">
                                     <TextBlock>
