@@ -19,20 +19,13 @@ namespace KoAR.Core
         private static ReadOnlySpan<uint> Prefixes => new[] { 0x57_8E_73u, 0x58_6E_AAu, 0x4B_03_f9u, 0x4b_43_f4u };
         private readonly List<CoreEffectInfo> _list = new List<CoreEffectInfo>();
 
-        public CoreEffectInfo this[int index]
+        internal CoreEffectList(ReadOnlySpan<byte> bytes, Span<byte> buffer)
         {
-            get => _list[index];
-            set
-            {
-                _list[index] = value;// this'll throw an exception if out of bound so who cares.
-                Serialize();
-            }
-        }
-
-        public CoreEffectList(int itemIndex, ReadOnlySpan<byte> span)
-        {
-            ItemIndex = itemIndex;
-            var count = (int)span[Offsets.EffectCount];
+            ReadOnlySpan<byte> CoreEffectSequence = new byte[] { 0x84, 0x60, 0x28, 0x00, 0x00 };
+            CoreEffectSequence.CopyTo(buffer.Slice(8));
+            ItemIndex = bytes.IndexOf(buffer);
+            ReadOnlySpan<byte> span = bytes.Slice(ItemIndex);
+            int count = span[Offsets.EffectCount];
             DataLength = Offsets.EffectCount + (count * 24) + 8;
             Bytes = span.Slice(0, DataLength).ToArray();
             var firstDisplayEffect = Offsets.FirstEffect + (count * 16) + 8;
@@ -45,9 +38,20 @@ namespace KoAR.Core
             }
         }
 
+        public CoreEffectInfo this[int index]
+        {
+            get => _list[index];
+            set
+            {
+                _list[index] = value;// this'll throw an exception if out of bound so who cares.
+                Serialize();
+            }
+        }
+
         public byte[] Bytes { get; private set; }
         public int ItemIndex { get; }
         public int DataLength { get; set; }
+
         public byte MysteryInteger
         {
             get => Bytes[Offsets.MysteryInteger];

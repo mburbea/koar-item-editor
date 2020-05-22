@@ -6,6 +6,7 @@ using System.Linq;
 using System.Diagnostics;
 using KoAR.Core;
 using System.Collections;
+using System.Drawing;
 
 namespace ItemTesting
 {
@@ -24,7 +25,7 @@ namespace ItemTesting
 
         static void Main(string[] args)
         {
-            var path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save97.sav";
+            var path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save91.sav";
             //using var fs = new FileStream(path, FileMode.Open);
             //var bytes = new byte[fs.Length];
             //var memory = fs.Read(bytes, 0, bytes.Length);
@@ -44,18 +45,43 @@ namespace ItemTesting
             //LikelyCandidates("TEST", "70 00 1B 01 0B 00 00 00");
             Amalur.ReadFile(path);
             var bytes = Amalur.Bytes;
-            var interest = new[] { "PLS","PGW","ABC","Primal Chakrams", "Garbage"};
+            var interest = new[] { "D", "Primal Daggers"};
             var mems = Amalur.GetAllEquipment()
-                .Where(x => interest.Contains(x.ItemName) || x.EquipmentType == EquipmentType.Buckler
+                .Where(x => interest.Contains(x.ItemName)
                 ).ToArray();
             var items = mems
-                .Select(x => (x.ItemName, ItemId:x.ItemBytes.AsSpan(0, 8).ToArray())).OrderBy(x=>x.ItemName).ToArray();
-            
+                .Select(x => (x.ItemName, ItemId:x.ItemBytes.AsSpan(0, 4).ToArray())).OrderBy(x=>x.ItemName).ToArray();
+
             //var items = new[] { "92 05 FC 00 0B 00 00 00", 
             //    "A2 05 FB 00 0B 00 00 00", 
             //    "91 05 EF 00 0B 00 00 00" }.Select(GetBytesFromText).ToArray();
             var offsets = items.Select(x => GetAllIndices(bytes, x.ItemId)).ToArray();
-
+            var poop = bytes.AsSpan(offsets[0][0] + 8, 5);
+            for (int i = 0; i < offsets.Length; i++)
+            {
+                List<int> offset = (List<int>)offsets[i];
+                Debug.Assert(bytes.AsSpan(offset[0] + 8, 5).SequenceEqual(poop),items[i].ItemName);
+            }
+            bytes[offsets[0][0] + 4] = 0xF1;
+            bytes[offsets[0][0] + 5] = 0x1D;
+            bytes[offsets[0][0] + 6] = 0x20;
+            bytes[offsets[0][0] + 7] = 0x00;
+            //offsets[0] = offsets[0].Except( new[]{
+            //    144844
+            //    ,156940
+            //    ,214472
+            //    ,233348
+            //    ,243325
+            //    ,253623
+            //    ,266855
+            //    ,270662 }).ToList();
+            bytes[offsets[0][0] + 18] = 0x2a;
+            //bytes[offsets[0][0] + 34] = 0xf1;
+            //bytes[offsets[0][0] + 35] = 0x1d;
+            //bytes[offsets[0][0] + 36] = 0x20;
+            //bytes[offsets[0][0] + 37] = 0x00;
+            Amalur.SaveFile(path);
+            return;
             var core = GetBytesFromText("84 60 28 00 00");
             var equipSeq = new byte[] { 0x68, 0xD5, 0x24, 0x00, 0x03 };
 
@@ -63,7 +89,7 @@ namespace ItemTesting
             static string GetBytesString(byte[] b) => string.Join(' ', b.Select(x => x.ToString("X2")));
             static string Converter(int x)=> ((x = x >> 16 | x << 16) >> 8 & magicNumber | (x & magicNumber) << 8).ToString("X8");
 
-            for (int i= 0; i < offsets[0].Count; i++)
+            for (int i= 0; i <1; i++)
             {
                 Console.WriteLine(new string('-', 120));
                 var output = new byte[items.Length][];
@@ -103,7 +129,7 @@ namespace ItemTesting
                     var nextPos = bytes.AsSpan(ix + 13).IndexOf(buffer);
                     
 
-                    output[j] = bytes[ix..(ix + 13 + nextPos - 4)];
+                    output[j] = bytes[ix..(ix + 113 + nextPos - 4)];
                     Console.WriteLine($"--- Item {j}: {items[j].ItemName} offset {ix} ---");
                     Console.WriteLine(string.Join(' ', output[j].Select(x => x.ToString("X2"))));
                 }

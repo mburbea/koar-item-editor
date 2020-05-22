@@ -9,32 +9,57 @@ namespace KoAR.Core
     /// <summary>
     /// Equipment Memory Information
     /// </summary>
-    public class ItemMemoryInfo
+    public partial class ItemMemoryInfo
     {
-        public readonly struct Offset
-        {
-            public const int EffectCount = 21;
-            public const int FirstEffect = EffectCount + 4;
-
-            private readonly int _count;
-            public Offset(int count) => _count = count;
-            public int PostEffect => FirstEffect + _count * 8;
-            public int CurrentDurability => PostEffect + 4;
-            public int MaxDurability => CurrentDurability + 4;
-
-            public int SellableFlag => MaxDurability + 8;
-            public int HasCustomName => SellableFlag + 2;
-            public int CustomNameLength => HasCustomName + 1;
-            public int CustomNameText => CustomNameLength + 4;
-        }
-
         public const float DurabilityLowerBound = 0f;
         public const float DurabilityUpperBound = 100f;
         public const int MinEquipmentLength = 44;
 
-        private ItemMemoryInfo(int itemIndex, int dataLength, ReadOnlySpan<byte> span)
+        private ItemMemoryInfo(ReadOnlySpan<byte> bytes, int itemIndex, int dataLength)
         {
-            (ItemIndex, DataLength, ItemBytes) = (itemIndex, dataLength, span.Slice(0, dataLength).ToArray());
+            static EquipmentType DetermineEquipmentType(ReadOnlySpan<byte> bytes, Span<byte> buffer, byte byte13)
+            {
+                ReadOnlySpan<byte> WeaponTypeSequence = new byte[] { 0xD4, 0x08, 0x46, 0x00, 0x01 };
+                ReadOnlySpan<byte> AdditionalInfoSequence = new byte[] { 0x8D, 0xE3, 0x47, 0x00, 0x02 };
+
+                WeaponTypeSequence.CopyTo(buffer.Slice(8));
+                var offset = bytes.IndexOf(buffer);
+                if (offset == -1)
+                {
+                    return EquipmentType.Armor; // Armor doesn't have this section.
+                }
+                var equipTypeByte = bytes[offset + 13];
+                AdditionalInfoSequence.CopyTo(buffer.Slice(8));
+                var aisOffset = bytes.IndexOf(buffer);
+                var d = bytes[aisOffset + 17];
+                return equipTypeByte switch
+                {
+                    0x10 => EquipmentType.Shield,
+                    0x18 => EquipmentType.LongBow,
+                    0x20 when d == 0x00 || d == 0xBC || d == 0x55 || d == 0x56 || d == 0x18 => EquipmentType.LongSword,
+                    0x20 => EquipmentType.GreatSword,
+                    0x24 when d == 0x00 || d == 0x40 || d == 0x41 || d == 0x2C || d == 0xE8 => EquipmentType.Daggers,
+                    0x24 => EquipmentType.FaeBlades,
+                    0x1C when d == 0x00 || d == 0x18 || d == 0x53 || d == 0x54 => EquipmentType.Staff,
+                    0x1C when d == 0x3E || d == 0x3F || d == 0xEA || d == 0xEB => EquipmentType.Chakrams,
+                    0x1C when d == 0xEC || d == 0x43 || d == 0x7E => EquipmentType.Hammer,
+                    0x14 when d == 0x1D || d == 0x18 || d == 0xC9 || d == 0xAF => EquipmentType.Talisman,
+                    0x14 when d == 0x4A || d == 0x47 || d == 0x48 => EquipmentType.Sceptre,
+                    0x14 when d == 0x1B || d == 0xCA => EquipmentType.Buckler,
+                    0x14 when d == 0x00 && byte13 == 0x3B => EquipmentType.Talisman,
+                    0x14 when d == 0x00 => EquipmentType.Buckler, /* 0x33 0x23 0x2B 0x00 */
+                    _ => EquipmentType.Unknown,
+                };
+            }
+
+            Span<byte> buffer = stackalloc byte[13];
+            ItemIndex = itemIndex;
+            DataLength = dataLength;
+            ItemBytes = bytes.Slice(itemIndex, dataLength).ToArray();
+            ItemBytes.AsSpan(0, 8).CopyTo(buffer);
+            CoreEffects = new CoreEffectList(bytes, buffer);
+            EquipmentType = DetermineEquipmentType(bytes, buffer, ItemBytes[13]);
+            _itemTemplateOffset = bytes.IndexOf(buffer.Slice(4)) + 4;
         }
 
         public CoreEffectList CoreEffects { get; internal set; }
@@ -70,7 +95,14 @@ namespace KoAR.Core
             }
         }
 
-        public EquipmentType EquipmentType { get; internal set; }
+        public EquipmentType EquipmentType { get; }
+
+        private int _itemTemplateOffset; 
+        public int ItemTemplate
+        {
+            get => MemoryUtilities.Read<int>(Amalur.Bytes, _itemTemplateOffset);
+            set => MemoryUtilities.Write(Amalur.Bytes, _itemTemplateOffset, value);
+        }
 
         public byte[] ItemBytes { get; set; }
 
@@ -110,21 +142,23 @@ namespace KoAR.Core
 
         private Offset Offsets => new Offset(EffectCount);
 
-        public static ItemMemoryInfo Create(int itemIndex, ReadOnlySpan<byte> span)
+        public static ItemMemoryInfo Create(ReadOnlySpan<byte> bytes, int itemIndex, int nextOffset)
         {
-            var offsets = new Offset(MemoryUtilities.Read<int>(span, Offset.EffectCount));
-
-            if (span.Length < MinEquipmentLength || !IsValidDurability(MemoryUtilities.Read<float>(span, offsets.CurrentDurability))
-                || !IsValidDurability(MemoryUtilities.Read<float>(span, offsets.MaxDurability)))
+            if (nextOffset - itemIndex < MinEquipmentLength)
+            {
+                return null;
+            }
+            var offsets = new Offset(MemoryUtilities.Read<int>(bytes, itemIndex + Offset.EffectCount));
+            if (!IsValidDurability(MemoryUtilities.Read<float>(bytes, itemIndex + offsets.CurrentDurability))
+                || !IsValidDurability(MemoryUtilities.Read<float>(bytes, itemIndex + offsets.MaxDurability)))
             {
                 return null;
             }
 
-            int dataLength = span[offsets.HasCustomName] != 1
+            int dataLength = bytes[itemIndex + offsets.HasCustomName] != 1
                 ? offsets.CustomNameLength
-                : offsets.CustomNameText + MemoryUtilities.Read<int>(span, offsets.CustomNameLength);
-
-            return new ItemMemoryInfo(itemIndex, dataLength, span);
+                : offsets.CustomNameText + MemoryUtilities.Read<int>(bytes, itemIndex + offsets.CustomNameLength);
+            return new ItemMemoryInfo(bytes, itemIndex, dataLength);
         }
 
         public static bool IsValidDurability(float durability) => durability > DurabilityLowerBound && durability < DurabilityUpperBound;
