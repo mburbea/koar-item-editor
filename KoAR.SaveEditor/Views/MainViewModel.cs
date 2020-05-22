@@ -280,19 +280,7 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        private void Item_IsUnsellableChanged(object sender, EventArgs e)
-        {
-            if (!Amalur.IsFileOpen)
-            {
-                return;
-            }
-            ItemModel model = (ItemModel)sender;
-            Amalur.WriteEquipmentBytes(model.Item, out _);
-            this.UnsavedChanges = true;
-            this.OnPropertyChanged(nameof(this.AllItemsUnsellable));
-        }
-
-        private void Item_MateriallyChanged(object sender, EventArgs e)
+        private void Item_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (!Amalur.IsFileOpen)
             {
@@ -307,6 +295,10 @@ namespace KoAR.SaveEditor.Views
             else
             {
                 this.UnsavedChanges = true;
+            }
+            if (e.PropertyName == nameof(ItemModel.IsUnsellable))
+            {
+                this.OnPropertyChanged(nameof(this.AllItemsUnsellable));
             }
         }
 
@@ -364,21 +356,12 @@ namespace KoAR.SaveEditor.Views
             }
             foreach (ItemModel item in this._items)
             {
-                PropertyChangedEventManager.RemoveHandler(item, this.Item_MateriallyChanged, nameof(ItemModel.TypeId));
-                PropertyChangedEventManager.RemoveHandler(item, this.Item_MateriallyChanged, nameof(ItemModel.ItemName));
-                PropertyChangedEventManager.RemoveHandler(item, this.Item_MateriallyChanged, nameof(ItemModel.CurrentDurability));
-                PropertyChangedEventManager.RemoveHandler(item, this.Item_MateriallyChanged, nameof(ItemModel.MaxDurability));
-                PropertyChangedEventManager.RemoveHandler(item, this.Item_IsUnsellableChanged, nameof(ItemModel.IsUnsellable));
+                PropertyChangedEventManager.RemoveHandler(item, this.Item_PropertyChanged, string.Empty);
             }
             this._items.Clear();
-            foreach (ItemMemoryInfo info in Amalur.GetAllEquipment())
+            foreach (ItemModel item in Amalur.GetAllEquipment().Select(info => new ItemModel(info)))
             {
-                ItemModel item = new ItemModel(info);
-                PropertyChangedEventManager.AddHandler(item, this.Item_MateriallyChanged, nameof(ItemModel.TypeId));
-                PropertyChangedEventManager.AddHandler(item, this.Item_MateriallyChanged, nameof(ItemModel.ItemName));
-                PropertyChangedEventManager.AddHandler(item, this.Item_MateriallyChanged, nameof(ItemModel.CurrentDurability));
-                PropertyChangedEventManager.AddHandler(item, this.Item_MateriallyChanged, nameof(ItemModel.MaxDurability));
-                PropertyChangedEventManager.AddHandler(item, this.Item_IsUnsellableChanged, nameof(ItemModel.IsUnsellable));
+                PropertyChangedEventManager.AddHandler(item, this.Item_PropertyChanged, string.Empty);
                 this._items.Add(item);
             }
             this.OnFilterChange();
