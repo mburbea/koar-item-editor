@@ -33,10 +33,10 @@ namespace KoAR.SaveEditor.Views
             this.ResetFiltersCommand = new DelegateCommand(this.ResetFilters);
             this.EditItemHexCommand = new DelegateCommand<ItemModel>(this.EditItemHex);
             this.UpdateInventorySizeCommand = new DelegateCommand(this.UpdateInventorySize, this.CanUpdateInventorySize);
-            this.AddCoreEffectCommand = new DelegateCommand<uint>(this.AddCoreEffect);
-            this.AddEffectCommand = new DelegateCommand<uint>(this.AddEffect);
-            this.DeleteCoreEffectCommand = new DelegateCommand<uint>(this.DeleteCoreEffect);
-            this.DeleteEffectCommand = new DelegateCommand<uint>(this.DeleteEffect);
+            this.AddCoreEffectCommand = new DelegateCommand<uint>(this.AddCoreEffect, this.CanAddCoreEffect);
+            this.AddEffectCommand = new DelegateCommand<uint>(this.AddEffect, this.CanAddEffect);
+            this.DeleteCoreEffectCommand = new DelegateCommand<uint>(this.DeleteCoreEffect, this.CanDeleteCoreEffect);
+            this.DeleteEffectCommand = new DelegateCommand<uint>(this.DeleteEffect, this.CanDeleteEffect);
             this.SaveCommand = new DelegateCommand(this.Save, this.CanSave);
         }
 

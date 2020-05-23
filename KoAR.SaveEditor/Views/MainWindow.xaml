@@ -216,7 +216,7 @@
                 <ScrollViewer Grid.Row="1" FocusVisualStyle="{x:Null}" Margin="0,0,4,4" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                     <StackPanel Grid.IsSharedSizeScope="True">
                         <StackPanel.Resources>
-                            <Style TargetType="{x:Type views:EffectListControl}">
+                            <Style TargetType="{x:Type views:EffectsControl}">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding SelectedItem}" Value="{x:Null}">
                                         <Setter Property="IsEnabled" Value="False" />
@@ -225,9 +225,10 @@
                                 </Style.Triggers>
                             </Style>
                         </StackPanel.Resources>
-                        <views:EffectListControl Margin="4" Header="{Binding SelectedItem}" Effects="{Binding SelectedItem.CoreEffects}" EffectDefinitions="{Binding Values, Source={x:Static core:Amalur.CoreEffects}}"
-                            AddEffectCommand="{Binding AddCoreEffectCommand}" DeleteEffectCommand="{Binding DeleteCoreEffectCommand}" Capacity="4">
-                            <views:EffectListControl.HeaderTemplate>
+                        <views:EffectsControl Margin="4" Capacity="4" Header="{Binding SelectedItem}" Effects="{Binding SelectedItem.CoreEffects}" 
+                            EffectTranslations="{x:Static core:Amalur.CoreEffects}" EffectDefinitions="{Binding Values, Source={x:Static core:Amalur.CoreEffects}}"
+                            AddEffectCommand="{Binding AddCoreEffectCommand}" DeleteEffectCommand="{Binding DeleteCoreEffectCommand}">
+                            <views:EffectsControl.HeaderTemplate>
                                 <DataTemplate DataType="{x:Type views:ItemModel}">
                                     <TextBlock>
                                         <TextBlock.Style>
@@ -242,25 +243,11 @@
                                         </TextBlock.Style>
                                     </TextBlock>
                                 </DataTemplate>
-                            </views:EffectListControl.HeaderTemplate>
-                        </views:EffectListControl>
-                        <views:EffectListControl Margin="4" Header="Effects:" Effects="{Binding SelectedItem.Effects}" EffectDefinitions="{x:Static core:Amalur.Effects}"
-                            AddEffectCommand="{Binding AddEffectCommand}" DeleteEffectCommand="{Binding DeleteEffectCommand}" />
-                        
-                        
-                        <views:EffectsControl ProcessEffectLabel="Add" Header="Add Effect:" Effects="{x:Static core:Amalur.Effects}" 
-                            SelectedEffect="{Binding SelectedEffect}" Command="{Binding AddEffectCommand}" Margin="4">
-                            <views:EffectsControl.Style>
-                                <Style TargetType="{x:Type views:EffectsControl}">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding SelectedItem}" Value="{x:Null}">
-                                            <Setter Property="IsEnabled" Value="False" />
-                                            <Setter Property="Opacity" Value="0.66" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </views:EffectsControl.Style>
+                            </views:EffectsControl.HeaderTemplate>
                         </views:EffectsControl>
+                        <views:EffectsControl Margin="4" Header="Effects:" Effects="{Binding SelectedItem.Effects}" 
+                            EffectTranslations="{x:Static core:Amalur.DedupedEffects}" EffectDefinitions="{x:Static core:Amalur.Effects}"
+                            AddEffectCommand="{Binding AddEffectCommand}" DeleteEffectCommand="{Binding DeleteEffectCommand}" />
                     </StackPanel>
                 </ScrollViewer>
             </Grid>
