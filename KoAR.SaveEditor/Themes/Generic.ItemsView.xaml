@@ -3,7 +3,7 @@
     xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs"
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views"
-    xmlns:core="clr-namespace:KoAR.Core;assembly=KoAR.Core"
+    xmlns:s="clr-namespace:System;assembly=mscorlib"
     xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/PresentationFramework.Aero,Version=4.0.0.0,PublicKeyToken=31bf3856ad364e35;component/Themes/Aero.NormalColor.xaml" />
@@ -238,8 +238,8 @@
                                                         </ItemsPanelTemplate>
                                                     </ItemsControl.ItemsPanel>
                                                     <ItemsControl.ItemTemplate>
-                                                        <DataTemplate DataType="{x:Type core:CoreEffectInfo}">
-                                                            <views:CoreEffectIcon CoreEffect="{Binding}" />
+                                                        <DataTemplate DataType="{x:Type s:UInt32}">
+                                                            <views:CoreEffectIcon Code="{Binding}" />
                                                         </DataTemplate>
                                                     </ItemsControl.ItemTemplate>
                                                 </ItemsControl>

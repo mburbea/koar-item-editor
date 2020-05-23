@@ -22,7 +22,6 @@ namespace KoAR.SaveEditor.Views
         private int _inventorySize;
         private string _itemNameFilter = string.Empty;
         private string _maxDurabilityFilter = string.Empty;
-        private EffectInfo? _selectedEffect = Amalur.Effects.FirstOrDefault();
         private ItemModel? _selectedItem;
         private bool _unsavedChanges;
 
@@ -34,13 +33,19 @@ namespace KoAR.SaveEditor.Views
             this.ResetFiltersCommand = new DelegateCommand(this.ResetFilters);
             this.EditItemHexCommand = new DelegateCommand<ItemModel>(this.EditItemHex);
             this.UpdateInventorySizeCommand = new DelegateCommand(this.UpdateInventorySize, this.CanUpdateInventorySize);
-            this.AddEffectCommand = new DelegateCommand<EffectInfo>(this.AddEffect);
-            this.DeleteCoreEffectCommand = new DelegateCommand<CoreEffectInfo>(this.DeleteCoreEffect);
-            this.DeleteEffectCommand = new DelegateCommand<EffectInfo>(this.DeleteEffect);
+            this.AddCoreEffectCommand = new DelegateCommand<uint>(this.AddCoreEffect);
+            this.AddEffectCommand = new DelegateCommand<uint>(this.AddEffect);
+            this.DeleteCoreEffectCommand = new DelegateCommand<uint>(this.DeleteCoreEffect);
+            this.DeleteEffectCommand = new DelegateCommand<uint>(this.DeleteEffect);
             this.SaveCommand = new DelegateCommand(this.Save, this.CanSave);
         }
 
-        public DelegateCommand<EffectInfo> AddEffectCommand
+        public DelegateCommand<uint> AddCoreEffectCommand
+        {
+            get;
+        }
+
+        public DelegateCommand<uint> AddEffectCommand
         {
             get;
         }
@@ -102,12 +107,12 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        public DelegateCommand<CoreEffectInfo> DeleteCoreEffectCommand
+        public DelegateCommand<uint> DeleteCoreEffectCommand
         {
             get;
         }
 
-        public DelegateCommand<EffectInfo> DeleteEffectCommand
+        public DelegateCommand<uint> DeleteEffectCommand
         {
             get;
         }
@@ -179,12 +184,6 @@ namespace KoAR.SaveEditor.Views
             get;
         }
 
-        public EffectInfo? SelectedEffect
-        {
-            get => this._selectedEffect;
-            set => this.SetValue(ref this._selectedEffect, value);
-        }
-
         public ItemModel? SelectedItem
         {
             get => this._selectedItem;
@@ -235,30 +234,55 @@ namespace KoAR.SaveEditor.Views
             MessageBox.Show($"Save successful! Original save backed up as {this._fileName}.bak.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private void AddEffect(EffectInfo info)
+        private void AddCoreEffect(uint code)
         {
-            if (info == null || this.SelectedItem == null)
+            if (this.SelectedItem == null)
             {
                 return;
             }
-            this.SelectedItem.AddEffect(info.Clone());
-            this.SelectedEffect = Amalur.Effects[0];
+            this.SelectedItem.AddCoreEffect(code);
             this.Refresh();
         }
+
+        private void AddEffect(uint code)
+        {
+            if (this.SelectedItem == null)
+            {
+                return;
+            }
+            this.SelectedItem.AddEffect(code);
+            this.Refresh();
+        }
+
+        private bool CanAddCoreEffect(uint code) => this.SelectedItem != null && code != 0u;
+
+        private bool CanAddEffect(uint code) => this.SelectedItem != null && code != 0u;
+
+        private bool CanDeleteCoreEffect(uint code) => this.SelectedItem != null && code != 0u;
+
+        private bool CanDeleteEffect(uint code) => this.SelectedItem != null && code != 0u;
 
         private bool CanSave() => this._unsavedChanges;
 
         private bool CanUpdateInventorySize() => Amalur.IsFileOpen && Amalur.InventorySize != this.InventorySize;
 
-        private void DeleteCoreEffect(CoreEffectInfo info)
+        private void DeleteCoreEffect(uint code)
         {
-            this.SelectedItem?.DeleteCoreEffect(info);
+            if (this.SelectedItem == null)
+            {
+                return;
+            }
+            this.SelectedItem.DeleteCoreEffect(code);
             this.Refresh();
         }
 
-        private void DeleteEffect(EffectInfo info)
+        private void DeleteEffect(uint code)
         {
-            this.SelectedItem?.DeleteEffect(info);
+            if (this.SelectedItem == null)
+            {
+                return;
+            }
+            this.SelectedItem.DeleteEffect(code);
             this.Refresh();
         }
 
@@ -338,7 +362,6 @@ namespace KoAR.SaveEditor.Views
                 this.SelectedItem = this._items.FirstOrDefault(item => item.ItemIndex == selectedItemIndex.Value);
             }
             this.UnsavedChanges = true;
-            this.SelectedEffect = Amalur.Effects[0];
             CommandManager.InvalidateRequerySuggested();
         }
 

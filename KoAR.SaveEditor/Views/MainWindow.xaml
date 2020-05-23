@@ -225,8 +225,8 @@
                                 </Style.Triggers>
                             </Style>
                         </StackPanel.Resources>
-                        <views:EffectListControl Margin="4" Header="{Binding SelectedItem}" Effects="{Binding SelectedItem.CoreEffects}" AvailableEffects="{Binding Values, Source={x:Static core:Amalur.CoreEffects}}"
-                            DeleteEffectCommand="{Binding DeleteCoreEffectCommand}">
+                        <views:EffectListControl Margin="4" Header="{Binding SelectedItem}" Effects="{Binding SelectedItem.CoreEffects}" EffectDefinitions="{Binding Values, Source={x:Static core:Amalur.CoreEffects}}"
+                            AddEffectCommand="{Binding AddCoreEffectCommand}" DeleteEffectCommand="{Binding DeleteCoreEffectCommand}" Capacity="4">
                             <views:EffectListControl.HeaderTemplate>
                                 <DataTemplate DataType="{x:Type views:ItemModel}">
                                     <TextBlock>
@@ -244,8 +244,10 @@
                                 </DataTemplate>
                             </views:EffectListControl.HeaderTemplate>
                         </views:EffectListControl>
-                        <views:EffectListControl Margin="4" Header="Effects:" Effects="{Binding SelectedItem.Effects}" AvailableEffects="{x:Static core:Amalur.Effects}"
-                            DeleteEffectCommand="{Binding DeleteEffectCommand}" />
+                        <views:EffectListControl Margin="4" Header="Effects:" Effects="{Binding SelectedItem.Effects}" EffectDefinitions="{x:Static core:Amalur.Effects}"
+                            AddEffectCommand="{Binding AddEffectCommand}" DeleteEffectCommand="{Binding DeleteEffectCommand}" />
+                        
+                        
                         <views:EffectsControl ProcessEffectLabel="Add" Header="Add Effect:" Effects="{x:Static core:Amalur.Effects}" 
                             SelectedEffect="{Binding SelectedEffect}" Command="{Binding AddEffectCommand}" Margin="4">
                             <views:EffectsControl.Style>
