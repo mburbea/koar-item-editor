@@ -18,7 +18,7 @@ namespace KoAR.SaveEditor.Views
 
         public ItemModel(ItemMemoryInfo item) => this.Item = item;
 
-        public CoreEffectList CoreEffects => this.Item.CoreEffects;
+        public List<CoreEffectInfo> CoreEffects => this.Item.CoreEffects.List;
 
         public float CurrentDurability
         {
@@ -62,7 +62,7 @@ namespace KoAR.SaveEditor.Views
             set => this.SetItemValue(value, this.Item.MaxDurability, value => this.Item.MaxDurability = value);
         }
 
-        public byte MysteryInteger => this.CoreEffects.MysteryInteger;
+        public byte MysteryInteger => this.Item.CoreEffects.MysteryInteger;
 
         public EffectInfo? SelectedEffect
         {

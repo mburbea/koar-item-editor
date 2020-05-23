@@ -55,12 +55,12 @@ namespace KoAR.Core
             DataLength = dataLength;
             ItemBytes = bytes.Slice(itemIndex, dataLength).ToArray();
             bytes.Slice(itemIndex, 8).CopyTo(buffer);
-            CoreEffects = new CoreEffectList(buffer);
+            CoreEffects = new CoreEffectMemory(buffer);
             Category = DetermineEquipmentType(bytes, buffer, ItemBytes[13]);
             _typeIdMemory = new Memory<byte>(Amalur.Bytes, bytes.IndexOf(buffer.Slice(0, 4)) + 4, 4);
         }
 
-        public CoreEffectList CoreEffects { get; internal set; }
+        public CoreEffectMemory CoreEffects { get; internal set; }
         public float CurrentDurability
         {
             get => MemoryUtilities.Read<float>(ItemBytes, Offsets.CurrentDurability);
