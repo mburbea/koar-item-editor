@@ -237,7 +237,7 @@
                                                         <Setter Property="Text" Value="Core Effects:" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
-                                                <Setter Property="Text" Value="{Binding CoreEffects.MysteryInteger, Mode=OneWay, StringFormat='Core Effects: (Mystery Byte: {0:X2})'}" />
+                                                <Setter Property="Text" Value="{Binding MysteryInteger, Mode=OneWay, StringFormat='Core Effects: (Mystery Byte: {0:X2})'}" />
                                             </Style>
                                         </TextBlock.Style>
                                     </TextBlock>

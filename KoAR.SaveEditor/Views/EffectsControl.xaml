@@ -7,9 +7,6 @@
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views"
     xmlns:core="clr-namespace:KoAR.Core;assembly=KoAR.Core"
     mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
-    <UserControl.Resources>
-        <constructs:StringIsNullOrEmptyConverter x:Key="StringIsNullOrEmptyConverter" />
-    </UserControl.Resources>
     <GroupBox Margin="4" DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type views:EffectsControl}}}" Header="{Binding Header}">
         <Grid>
             <Grid.Style>
@@ -50,7 +47,7 @@
                             <TextBlock.Style>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Code, Converter={StaticResource StringIsNullOrEmptyConverter}}" Value="True">
+                                        <DataTrigger Binding="{Binding Code}" Value="0">
                                             <Setter Property="FontStyle" Value="Italic" />
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding DisplayText}" Value="Unknown">
@@ -65,7 +62,7 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
             <TextBlock Grid.Row="1" TextAlignment="Right" Text="Hex Code:" Margin="2" VerticalAlignment="Center" />
-            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SelectedEffect.Code, Mode=OneWay}" IsReadOnly="True" TextAlignment="Right" Background="{x:Static SystemColors.ControlBrush}" 
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SelectedEffect.Code, Mode=OneWay, StringFormat='X6'}" IsReadOnly="True" TextAlignment="Right" Background="{x:Static SystemColors.ControlBrush}" 
                 VerticalAlignment="Center" Margin="2" />
             <Button Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" Margin="2" Content="{Binding ProcessEffectLabel}" FocusVisualStyle="{x:Null}"
                 CommandParameter="{Binding SelectedEffect}" Command="{Binding Command}" CommandTarget="{Binding CommandTarget}">
@@ -75,7 +72,7 @@
                             <DataTrigger Binding="{Binding SelectedEffect}" Value="{x:Null}">
                                 <Setter Property="IsEnabled" Value="False" />
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding SelectedEffect.Code, Converter={StaticResource StringIsNullOrEmptyConverter}}" Value="True">
+                            <DataTrigger Binding="{Binding SelectedEffect.Code}" Value="0">
                                 <Setter Property="IsEnabled" Value="False" />
                             </DataTrigger>
                         </Style.Triggers>
