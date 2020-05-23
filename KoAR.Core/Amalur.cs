@@ -17,11 +17,15 @@ namespace KoAR.Core
         public static List<EffectInfo> Effects { get; } = new List<EffectInfo>();
         public static Dictionary<uint, CoreEffectInfo> CoreEffects { get; } = new Dictionary<uint, CoreEffectInfo>();
         internal static Dictionary<uint, EffectInfo> DedupedEffects = new Dictionary<uint, EffectInfo>();
+        private static int? _bagOffset = null;
 
         internal static byte[] Bytes { get; set; }
 
-        public static void ReadFile(string path) => Bytes = File.ReadAllBytes(path);
-
+        public static void ReadFile(string path)
+        {
+            _bagOffset = null;
+            Bytes = File.ReadAllBytes(path);
+        }
         public static void SaveFile(string path)
         {
             if (!IsFileOpen)
@@ -88,9 +92,9 @@ namespace KoAR.Core
             return finalOffset + (inventoryLimitOrder * 12);
         }
 
-        public static int GetMaxBagCount() => MemoryUtilities.Read<int>(Bytes, GetBagOffset());
+        public static int GetMaxBagCount() => MemoryUtilities.Read<int>(Bytes, _bagOffset??= GetBagOffset());
 
-        public static void EditMaxBagCount(int count) => MemoryUtilities.Write(Bytes, GetBagOffset(), count);
+        public static void EditMaxBagCount(int count) => MemoryUtilities.Write(Bytes, _bagOffset??= GetBagOffset(), count);
 
         public static List<ItemMemoryInfo> GetAllEquipment()
         {
