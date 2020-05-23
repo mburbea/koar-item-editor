@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -16,10 +17,11 @@ namespace KoAR.SaveEditor.Views
 
         public static readonly DependencyProperty DeleteEffectCommandProperty = DependencyProperty.Register(nameof(EffectsControl.DeleteEffectCommand), typeof(ICommand), typeof(EffectsControl));
 
-        public static readonly DependencyProperty EffectDefinitionsProperty = DependencyProperty.Register(nameof(EffectsControl.EffectDefinitions), typeof(IEnumerable<IEffectInfo>), typeof(EffectsControl));
+        public static readonly DependencyProperty EffectDefinitionsProperty = DependencyProperty.Register(nameof(EffectsControl.EffectDefinitions), typeof(IEnumerable<IEffectInfo>), typeof(EffectsControl),
+            new PropertyMetadata(EffectsControl.EffectDefinitionsProperty_ValueChanged));
 
         public static readonly DependencyProperty EffectsProperty = DependencyProperty.Register(nameof(EffectsControl.Effects), typeof(IEnumerable<uint>), typeof(EffectsControl),
-            new FrameworkPropertyMetadata(EffectsControl.EffectsProperty_ValueChanged));
+            new PropertyMetadata(EffectsControl.EffectsProperty_ValueChanged));
 
         public static readonly DependencyProperty EffectTranslationsProperty = DependencyProperty.Register(nameof(EffectsControl.EffectTranslations), typeof(IDictionary), typeof(EffectsControl));
 
@@ -27,10 +29,10 @@ namespace KoAR.SaveEditor.Views
 
         public static readonly DependencyProperty HeaderTemplateProperty = DependencyProperty.Register(nameof(EffectsControl.HeaderTemplate), typeof(DataTemplate), typeof(EffectsControl));
 
-        public static readonly DependencyProperty PendingEffectCodeProperty = DependencyProperty.Register(nameof(EffectsControl.PendingEffectCode), typeof(int?), typeof(EffectsControl));
+        public static readonly DependencyProperty PendingEffectCodeProperty = DependencyProperty.Register(nameof(EffectsControl.PendingEffectCode), typeof(uint?), typeof(EffectsControl));
 
         public static readonly DependencyProperty PendingEffectProperty = DependencyProperty.Register(nameof(EffectsControl.PendingEffect), typeof(IEffectInfo), typeof(EffectsControl),
-            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+            new PropertyMetadata(EffectsControl.PendingEffectProperty_ValueChanged));
 
         static EffectsControl() => FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(EffectsControl), new FrameworkPropertyMetadata(typeof(EffectsControl)));
 
@@ -88,20 +90,26 @@ namespace KoAR.SaveEditor.Views
             set => this.SetValue(EffectsControl.PendingEffectProperty, value);
         }
 
-        public int? PendingEffectCode
+        public uint? PendingEffectCode
         {
-            get => (int?)this.GetValue(EffectsControl.PendingEffectCodeProperty);
+            get => (uint?)this.GetValue(EffectsControl.PendingEffectCodeProperty);
             set => this.SetValue(EffectsControl.PendingEffectCodeProperty, value);
         }
 
-        public override void OnApplyTemplate()
+        private static void EffectDefinitionsProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            base.OnApplyTemplate();
+            ((EffectsControl)d).PendingEffect = ((IEnumerable<IEffectInfo>?)e.NewValue)?.FirstOrDefault();
         }
 
         private static void EffectsProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            //    ((EffectListControl)d).PendingEffect = ((IEnumerable<IEffectInfo>?)e.NewValue)?.FirstOrDefault();
+            //EffectsControl control = (EffectsControl)d;
+            //control.PendingEffect = control.EffectDefinitions?.FirstOrDefault();
+        }
+
+        private static void PendingEffectProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((EffectsControl)d).PendingEffectCode = ((IEffectInfo?)e.NewValue)?.Code;
         }
     }
 }
