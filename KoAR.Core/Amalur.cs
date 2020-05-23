@@ -14,9 +14,9 @@ namespace KoAR.Core
     /// </summary>
     public static class Amalur
     {
-        private static void AddRange<TKey,TValue>(this Dictionary<TKey, TValue> dictionary, IEnumerable<(TKey, TValue)> data)
+        private static void AddRange<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, IEnumerable<(TKey, TValue)> data)
         {
-            foreach(var (k,v) in data)
+            foreach (var (k, v) in data)
             {
                 dictionary.Add(k, v);
             }
@@ -56,16 +56,16 @@ namespace KoAR.Core
             }
 
             CoreEffects.AddRange(File.ReadLines(effectCsv).Skip(1).Select(row =>
+            {
+                var parts = row.Split(',');
+                var code = uint.Parse(parts[0], NumberStyles.HexNumber);
+                return (code, new CoreEffectInfo
                 {
-                    var parts = row.Split(',');
-                    var code = uint.Parse(parts[0], NumberStyles.HexNumber);
-                    return (code, new CoreEffectInfo
-                    {
-                        Code = code,
-                        DamageType = Enum.TryParse(parts[1], true, out DamageType damageType) ? damageType : default,
-                        Tier = float.Parse(parts[2])
-                    });
-                }));
+                    Code = code,
+                    DamageType = Enum.TryParse(parts[1], true, out DamageType damageType) ? damageType : default,
+                    Tier = float.Parse(parts[2])
+                });
+            }));
             var propertiesXml = Path.Combine(path, "properties.xml");
             if (!File.Exists(propertiesXml))
             {
@@ -106,9 +106,9 @@ namespace KoAR.Core
         public static int InventorySize
         {
             get => MemoryUtilities.Read<int>(Bytes, _bagOffset ??= GetBagOffset());
-            set => MemoryUtilities.Write(Bytes, _bagOffset??= GetBagOffset(), value);
+            set => MemoryUtilities.Write(Bytes, _bagOffset ??= GetBagOffset(), value);
         }
-        
+
         public static List<ItemMemoryInfo> GetAllEquipment()
         {
             static List<int> FindAllCandidates()
