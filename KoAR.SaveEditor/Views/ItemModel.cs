@@ -16,18 +16,7 @@ namespace KoAR.SaveEditor.Views
         private List<EffectInfo>? _effects;
         private EffectInfo? _selectedEffect;
 
-        public ItemModel(ItemMemoryInfo item)
-        {
-            this.Item = item;
-        }
-
-        public CoreEffectInfo? CoreEffect0 => this.CoreEffects.FirstOrDefault();
-
-        public CoreEffectInfo? CoreEffect1 => this.CoreEffects.Skip(1).FirstOrDefault();
-
-        public CoreEffectInfo? CoreEffect2 => this.CoreEffects.Skip(2).FirstOrDefault();
-
-        public CoreEffectInfo? CoreEffect3 => this.CoreEffects.Skip(3).FirstOrDefault();
+        public ItemModel(ItemMemoryInfo item) => this.Item = item;
 
         public CoreEffectList CoreEffects => this.Item.CoreEffects;
 
@@ -109,6 +98,19 @@ namespace KoAR.SaveEditor.Views
             }
             this.Item.WriteEffects(this.Effects);
             Amalur.WriteEquipmentBytes(this.Item, out _);
+        }
+
+        internal void OnEffectChanged(IEffectInfo info)
+        {
+            if (info is EffectInfo)
+            {
+                this.Item.WriteEffects(this.Effects);
+                this.OnPropertyChanged(nameof(this.Effects));
+            }
+            else
+            {
+                this.OnPropertyChanged(nameof(this.CoreEffects));
+            }
         }
 
         private void SetItemValue<T>(T value, T currentValue, Action<T> setValue, [CallerMemberName] string propertyName = "")
