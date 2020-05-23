@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 
 
@@ -14,15 +14,36 @@ namespace KoAR.Core
     /// </summary>
     public static class Amalur
     {
+        private static void AddRange<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, IEnumerable<(TKey, TValue)> data)
+        {
+            foreach (var (k, v) in data)
+            {
+                dictionary.Add(k, v);
+            }
+        }
+
         public static List<EffectInfo> Effects { get; } = new List<EffectInfo>();
-        public static Dictionary<string, CoreEffectInfo> CoreEffects { get; } = new Dictionary<string, CoreEffectInfo>(StringComparer.OrdinalIgnoreCase);
-        internal static Dictionary<string, EffectInfo> DedupedEffects = new Dictionary<string, EffectInfo>();
+        public static Dictionary<uint, CoreEffectInfo> CoreEffects { get; } = new Dictionary<uint, CoreEffectInfo>();
+        public static Dictionary<uint, EffectInfo> DedupedEffects { get; } = new Dictionary<uint, EffectInfo>();
+        private static int? _bagOffset;
 
         internal static byte[] Bytes { get; set; }
 
-        public static void ReadFile(string path) => Bytes = File.ReadAllBytes(path);
+        public static void ReadFile(string path)
+        {
+            _bagOffset = null;
+            Bytes = File.ReadAllBytes(path);
+        }
 
-        public static void SaveFile(string path) => File.WriteAllBytes(path, Bytes);
+        public static void SaveFile(string path)
+        {
+            if (!IsFileOpen)
+            {
+                return;
+            }
+            File.Copy(path, path + ".bak", true);
+            File.WriteAllBytes(path, Bytes);
+        }
 
         public static bool IsFileOpen => Bytes != null;
         public static void Initialize(string path = null)
@@ -34,18 +55,17 @@ namespace KoAR.Core
                 throw new InvalidOperationException("Cannot find CoreEffects.csv");
             }
 
-            foreach (var row in File.ReadLines(effectCsv).Skip(1))
+            CoreEffects.AddRange(File.ReadLines(effectCsv).Skip(1).Select(row =>
             {
                 var parts = row.Split(',');
-                var code = parts[0];
-                CoreEffects[code] = new CoreEffectInfo
+                var code = uint.Parse(parts[0], NumberStyles.HexNumber);
+                return (code, new CoreEffectInfo
                 {
                     Code = code,
                     DamageType = Enum.TryParse(parts[1], true, out DamageType damageType) ? damageType : default,
                     Tier = float.Parse(parts[2])
-                };
-            }
-
+                });
+            }));
             var propertiesXml = Path.Combine(path, "properties.xml");
             if (!File.Exists(propertiesXml))
             {
@@ -57,10 +77,13 @@ namespace KoAR.Core
                 .Elements()
                 .Select(element => new EffectInfo
                 {
-                    Code = element.Attribute("id").Value.ToUpperInvariant(),
+                    Code = uint.TryParse(element.Attribute("id").Value, NumberStyles.HexNumber, null, out var parsed) ? parsed : 0u,
                     DisplayText = element.Value.Trim()
                 }));
-            DedupedEffects = Effects.Where(x=> x.Code != "").GroupBy(x => x.Code).ToDictionary(x => x.Key, x => x.First());
+            DedupedEffects.AddRange(Effects
+                .Where(x => x.Code != 0)
+                .GroupBy(x => x.Code)
+                .Select(x => (x.Key, x.First())));
         }
 
         private static int GetBagOffset()
@@ -80,9 +103,11 @@ namespace KoAR.Core
             return finalOffset + (inventoryLimitOrder * 12);
         }
 
-        public static int GetMaxBagCount() => MemoryUtilities.Read<int>(Bytes, GetBagOffset());
-
-        public static void EditMaxBagCount(int count) => MemoryUtilities.Write(Bytes, GetBagOffset(), count);
+        public static int InventorySize
+        {
+            get => MemoryUtilities.Read<int>(Bytes, _bagOffset ??= GetBagOffset());
+            set => MemoryUtilities.Write(Bytes, _bagOffset ??= GetBagOffset(), value);
+        }
 
         public static List<ItemMemoryInfo> GetAllEquipment()
         {
@@ -121,6 +146,7 @@ namespace KoAR.Core
             var bytes = Bytes;
             var oldLength = bytes.Length;
             var coreMemory = equipment.CoreEffects;
+            coreMemory.Serialize();
             bytes = MemoryUtilities.ReplaceBytes(bytes, coreMemory.ItemIndex, coreMemory.DataLength, coreMemory.Bytes);
             bytes = MemoryUtilities.ReplaceBytes(bytes, equipment.ItemIndex, equipment.DataLength, equipment.ItemBytes);
             Bytes = bytes;

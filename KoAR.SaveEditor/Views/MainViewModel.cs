@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows;
@@ -16,14 +15,13 @@ namespace KoAR.SaveEditor.Views
     public sealed class MainViewModel : NotifierBase
     {
         private readonly ObservableCollection<ItemModel> _items;
+        private EquipmentCategory? _categoryFilter;
         private string _currentDurabilityFilter = string.Empty;
-        private EquipmentType? _equipmentTypeFilter;
         private string? _fileName;
         private IReadOnlyList<ItemModel> _filteredItems;
         private int _inventorySize;
         private string _itemNameFilter = string.Empty;
         private string _maxDurabilityFilter = string.Empty;
-        private EffectInfo? _selectedEffect = Amalur.Effects.FirstOrDefault();
         private ItemModel? _selectedItem;
         private bool _unsavedChanges;
 
@@ -35,12 +33,19 @@ namespace KoAR.SaveEditor.Views
             this.ResetFiltersCommand = new DelegateCommand(this.ResetFilters);
             this.EditItemHexCommand = new DelegateCommand<ItemModel>(this.EditItemHex);
             this.UpdateInventorySizeCommand = new DelegateCommand(this.UpdateInventorySize, this.CanUpdateInventorySize);
-            this.AddEffectCommand = new DelegateCommand<EffectInfo>(this.AddEffect);
-            this.DeleteEffectCommand = new DelegateCommand<EffectInfo>(this.DeleteEffect);
+            this.AddCoreEffectCommand = new DelegateCommand<uint>(this.AddCoreEffect, this.CanAddCoreEffect);
+            this.AddEffectCommand = new DelegateCommand<uint>(this.AddEffect, this.CanAddEffect);
+            this.DeleteCoreEffectCommand = new DelegateCommand<uint>(this.DeleteCoreEffect, this.CanDeleteCoreEffect);
+            this.DeleteEffectCommand = new DelegateCommand<uint>(this.DeleteEffect, this.CanDeleteEffect);
             this.SaveCommand = new DelegateCommand(this.Save, this.CanSave);
         }
 
-        public DelegateCommand<EffectInfo> AddEffectCommand
+        public DelegateCommand<uint> AddCoreEffectCommand
+        {
+            get;
+        }
+
+        public DelegateCommand<uint> AddEffectCommand
         {
             get;
         }
@@ -78,6 +83,18 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
+        public EquipmentCategory? CategoryFilter
+        {
+            get => this._categoryFilter;
+            set
+            {
+                if (this.SetValue(ref this._categoryFilter, value))
+                {
+                    this.OnFilterChange();
+                }
+            }
+        }
+
         public string CurrentDurabilityFilter
         {
             get => this._currentDurabilityFilter;
@@ -90,7 +107,12 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        public DelegateCommand<EffectInfo> DeleteEffectCommand
+        public DelegateCommand<uint> DeleteCoreEffectCommand
+        {
+            get;
+        }
+
+        public DelegateCommand<uint> DeleteEffectCommand
         {
             get;
         }
@@ -98,18 +120,6 @@ namespace KoAR.SaveEditor.Views
         public DelegateCommand<ItemModel> EditItemHexCommand
         {
             get;
-        }
-
-        public EquipmentType? EquipmentTypeFilter
-        {
-            get => this._equipmentTypeFilter;
-            set
-            {
-                if (this.SetValue(ref this._equipmentTypeFilter, value))
-                {
-                    this.OnFilterChange();
-                }
-            }
         }
 
         public string? FileName
@@ -174,12 +184,6 @@ namespace KoAR.SaveEditor.Views
             get;
         }
 
-        public EffectInfo? SelectedEffect
-        {
-            get => this._selectedEffect;
-            set => this.SetValue(ref this._selectedEffect, value);
-        }
-
         public ItemModel? SelectedItem
         {
             get => this._selectedItem;
@@ -211,7 +215,7 @@ namespace KoAR.SaveEditor.Views
                 return;
             }
             Amalur.ReadFile(this.FileName = dialog.FileName);
-            this.InventorySize = Amalur.GetMaxBagCount();
+            this.InventorySize = Amalur.InventorySize;
             this.RepopulateItems();
             this.ResetFilters();
             this._unsavedChanges = false;
@@ -224,31 +228,61 @@ namespace KoAR.SaveEditor.Views
             {
                 return;
             }
-            File.Copy(this._fileName, $"{this._fileName}.bak", true);
             Amalur.SaveFile(this._fileName);
             this.UnsavedChanges = false;
             this.RepopulateItems();
             MessageBox.Show($"Save successful! Original save backed up as {this._fileName}.bak.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private void AddEffect(EffectInfo info)
+        private void AddCoreEffect(uint code)
         {
-            if (info == null || this.SelectedItem == null)
+            if (this.SelectedItem == null)
             {
                 return;
             }
-            this.SelectedItem.AddEffect(info.Clone());
-            this.SelectedEffect = Amalur.Effects[0];
+            this.SelectedItem.AddCoreEffect(code);
             this.Refresh();
         }
 
+        private void AddEffect(uint code)
+        {
+            if (this.SelectedItem == null)
+            {
+                return;
+            }
+            this.SelectedItem.AddEffect(code);
+            this.Refresh();
+        }
+
+        private bool CanAddCoreEffect(uint code) => this.SelectedItem != null && code != 0u;
+
+        private bool CanAddEffect(uint code) => this.SelectedItem != null && code != 0u;
+
+        private bool CanDeleteCoreEffect(uint code) => this.SelectedItem != null && code != 0u;
+
+        private bool CanDeleteEffect(uint code) => this.SelectedItem != null && code != 0u;
+
         private bool CanSave() => this._unsavedChanges;
 
-        private bool CanUpdateInventorySize() => Amalur.IsFileOpen && Amalur.GetMaxBagCount() != this.InventorySize;
+        private bool CanUpdateInventorySize() => Amalur.IsFileOpen && Amalur.InventorySize != this.InventorySize;
 
-        private void DeleteEffect(EffectInfo info)
+        private void DeleteCoreEffect(uint code)
         {
-            this.SelectedItem?.DeleteEffect(info);
+            if (this.SelectedItem == null)
+            {
+                return;
+            }
+            this.SelectedItem.DeleteCoreEffect(code);
+            this.Refresh();
+        }
+
+        private void DeleteEffect(uint code)
+        {
+            if (this.SelectedItem == null)
+            {
+                return;
+            }
+            this.SelectedItem.DeleteEffect(code);
             this.Refresh();
         }
 
@@ -269,19 +303,7 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        private void Item_IsUnsellableChanged(object sender, EventArgs e)
-        {
-            if (!Amalur.IsFileOpen)
-            {
-                return;
-            }
-            ItemModel model = (ItemModel)sender;
-            Amalur.WriteEquipmentBytes(model.Item, out _);
-            this.UnsavedChanges = true;
-            this.OnPropertyChanged(nameof(this.AllItemsUnsellable));
-        }
-
-        private void Item_MateriallyChanged(object sender, EventArgs e)
+        private void Item_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (!Amalur.IsFileOpen)
             {
@@ -296,6 +318,10 @@ namespace KoAR.SaveEditor.Views
             else
             {
                 this.UnsavedChanges = true;
+            }
+            if (e.PropertyName == nameof(ItemModel.IsUnsellable))
+            {
+                this.OnPropertyChanged(nameof(this.AllItemsUnsellable));
             }
         }
 
@@ -316,9 +342,9 @@ namespace KoAR.SaveEditor.Views
             {
                 items = items.Where(model => model.ItemName.IndexOf(this._itemNameFilter, StringComparison.OrdinalIgnoreCase) != -1);
             }
-            if (this._equipmentTypeFilter.HasValue)
+            if (this._categoryFilter.HasValue)
             {
-                items = items.Where(model => model.EquipmentType == this._equipmentTypeFilter);
+                items = items.Where(model => model.Category == this._categoryFilter);
             }
             this.FilteredItems = object.ReferenceEquals(items, this.Items)
                 ? (IReadOnlyList<ItemModel>)this.Items
@@ -336,7 +362,6 @@ namespace KoAR.SaveEditor.Views
                 this.SelectedItem = this._items.FirstOrDefault(item => item.ItemIndex == selectedItemIndex.Value);
             }
             this.UnsavedChanges = true;
-            this.SelectedEffect = Amalur.Effects[0];
             CommandManager.InvalidateRequerySuggested();
         }
 
@@ -353,19 +378,12 @@ namespace KoAR.SaveEditor.Views
             }
             foreach (ItemModel item in this._items)
             {
-                PropertyChangedEventManager.RemoveHandler(item, this.Item_MateriallyChanged, nameof(ItemModel.ItemName));
-                PropertyChangedEventManager.RemoveHandler(item, this.Item_MateriallyChanged, nameof(ItemModel.CurrentDurability));
-                PropertyChangedEventManager.RemoveHandler(item, this.Item_MateriallyChanged, nameof(ItemModel.MaxDurability));
-                PropertyChangedEventManager.RemoveHandler(item, this.Item_IsUnsellableChanged, nameof(ItemModel.IsUnsellable));
+                PropertyChangedEventManager.RemoveHandler(item, this.Item_PropertyChanged, string.Empty);
             }
             this._items.Clear();
-            foreach (ItemMemoryInfo info in Amalur.GetAllEquipment())
+            foreach (ItemModel item in Amalur.GetAllEquipment().Select(info => new ItemModel(info)))
             {
-                ItemModel item = new ItemModel(info);
-                PropertyChangedEventManager.AddHandler(item, this.Item_MateriallyChanged, nameof(ItemModel.ItemName));
-                PropertyChangedEventManager.AddHandler(item, this.Item_MateriallyChanged, nameof(ItemModel.CurrentDurability));
-                PropertyChangedEventManager.AddHandler(item, this.Item_MateriallyChanged, nameof(ItemModel.MaxDurability));
-                PropertyChangedEventManager.AddHandler(item, this.Item_IsUnsellableChanged, nameof(ItemModel.IsUnsellable));
+                PropertyChangedEventManager.AddHandler(item, this.Item_PropertyChanged, string.Empty);
                 this._items.Add(item);
             }
             this.OnFilterChange();
@@ -385,10 +403,10 @@ namespace KoAR.SaveEditor.Views
             {
                 this.OnPropertyChanged(nameof(this.CurrentDurabilityFilter));
             }
-            if (this._equipmentTypeFilter.HasValue)
+            if (this._categoryFilter.HasValue)
             {
-                this._equipmentTypeFilter = default;
-                this.OnPropertyChanged(nameof(this.EquipmentTypeFilter));
+                this._categoryFilter = default;
+                this.OnPropertyChanged(nameof(this.CategoryFilter));
             }
             this.OnFilterChange();
         }
@@ -399,7 +417,7 @@ namespace KoAR.SaveEditor.Views
             {
                 return;
             }
-            Amalur.EditMaxBagCount(this.InventorySize);
+            Amalur.InventorySize = this.InventorySize;
             this.UnsavedChanges = true;
         }
     }

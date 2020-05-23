@@ -16,52 +16,52 @@
     <BitmapImage x:Key="Staff" UriSource="/KoAR.SaveEditor;component/Resources/Staff.png" po:Freeze="True" />
     <BitmapImage x:Key="Talisman" UriSource="/KoAR.SaveEditor;component/Resources/Talisman.png" po:Freeze="True" />
     <BitmapImage x:Key="Unknown" UriSource="/KoAR.SaveEditor;component/Resources/Unknown.png" po:Freeze="True" />
-    <Style TargetType="{x:Type views:EquipmentTypeIcon}">        
+    <Style TargetType="{x:Type views:EquipmentCategoryIcon}">        
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type views:EquipmentTypeIcon}">
-                    <Image Margin="1,0" x:Name="PART_Image" Width="20" Source="{StaticResource Unknown}" ToolTip="{TemplateBinding EquipmentType}" />
+                <ControlTemplate TargetType="{x:Type views:EquipmentCategoryIcon}">
+                    <Image Margin="1,0" x:Name="PART_Image" Width="20" Source="{StaticResource Unknown}" ToolTip="{TemplateBinding Category}" />
                     <ControlTemplate.Triggers>
-                        <Trigger Property="EquipmentType" Value="{x:Null}">
+                        <Trigger Property="Category" Value="{x:Null}">
                             <Setter Property="Visibility" Value="Collapsed" />
                         </Trigger>
-                        <Trigger Property="EquipmentType" Value="Armor">
+                        <Trigger Property="Category" Value="Armor">
                             <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource Armor}" />
                         </Trigger>
-                        <Trigger Property="EquipmentType" Value="Buckler">
+                        <Trigger Property="Category" Value="Buckler">
                             <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource Buckler}" />
                         </Trigger>
-                        <Trigger Property="EquipmentType" Value="Chakrams">
+                        <Trigger Property="Category" Value="Chakrams">
                             <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource Chakrams}" />
                         </Trigger>
-                        <Trigger Property="EquipmentType" Value="Daggers">
+                        <Trigger Property="Category" Value="Daggers">
                             <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource Daggers}" />
                         </Trigger>
-                        <Trigger Property="EquipmentType" Value="FaeBlades">
+                        <Trigger Property="Category" Value="FaeBlades">
                             <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource FaeBlades}" />
                         </Trigger>
-                        <Trigger Property="EquipmentType" Value="GreatSword">
+                        <Trigger Property="Category" Value="GreatSword">
                             <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource GreatSword}" />
                         </Trigger>
-                        <Trigger Property="EquipmentType" Value="Hammer">
+                        <Trigger Property="Category" Value="Hammer">
                             <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource Hammer}" />
                         </Trigger>
-                        <Trigger Property="EquipmentType" Value="LongBow">
+                        <Trigger Property="Category" Value="LongBow">
                             <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource LongBow}" />
                         </Trigger>
-                        <Trigger Property="EquipmentType" Value="LongSword">
+                        <Trigger Property="Category" Value="LongSword">
                             <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource LongSword}" />
                         </Trigger>
-                        <Trigger Property="EquipmentType" Value="Sceptre">
+                        <Trigger Property="Category" Value="Sceptre">
                             <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource Sceptre}" />
                         </Trigger>
-                        <Trigger Property="EquipmentType" Value="Shield">
+                        <Trigger Property="Category" Value="Shield">
                             <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource Shield}" />
                         </Trigger>
-                        <Trigger Property="EquipmentType" Value="Staff">
+                        <Trigger Property="Category" Value="Staff">
                             <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource Staff}" />
                         </Trigger>
-                        <Trigger Property="EquipmentType" Value="Talisman">
+                        <Trigger Property="Category" Value="Talisman">
                             <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource Talisman}" />
                         </Trigger>
                     </ControlTemplate.Triggers>

@@ -3,7 +3,7 @@
     xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs"
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views"
-    xmlns:core="clr-namespace:KoAR.Core;assembly=KoAR.Core"
+    xmlns:s="clr-namespace:System;assembly=mscorlib"
     xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/PresentationFramework.Aero,Version=4.0.0.0,PublicKeyToken=31bf3856ad364e35;component/Themes/Aero.NormalColor.xaml" />
@@ -11,7 +11,9 @@
     <Style TargetType="{x:Type views:ItemsView}">
         <Style.Resources>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-            <constructs:SingleConverter x:Key="SingleConverter" />
+            <constructs:FloatConverter x:Key="SingleConverter" />
+            <constructs:HexConverter x:Key="Int32HexConverter" />
+
         </Style.Resources>
         <Setter Property="Template">
             <Setter.Value>
@@ -51,7 +53,7 @@
                         <Border.Resources>
                             <CollectionViewSource x:Key="FilteredItems" Source="{Binding Items, RelativeSource={RelativeSource TemplatedParent}}">
                                 <CollectionViewSource.SortDescriptions>
-                                    <componentModel:SortDescription PropertyName="EquipmentType" Direction="Ascending" />
+                                    <componentModel:SortDescription PropertyName="Category" Direction="Ascending" />
                                     <componentModel:SortDescription PropertyName="HasCustomName" Direction="Descending" />
                                     <componentModel:SortDescription PropertyName="ItemIndex" Direction="Ascending" />
                                 </CollectionViewSource.SortDescriptions>
@@ -80,12 +82,37 @@
                             </ListView.ItemContainerStyle>
                             <ListView.ContextMenu>
                                 <ContextMenu>
-                                    <MenuItem Command="{x:Static views:ItemsView.AutoSizeColumnsCommand}" />
+                                    <MenuItem Command="{x:Static constructs:ListViewAutoSize.AutoSizeCommand}" />
                                 </ContextMenu>
                             </ListView.ContextMenu>
                             <ListView.View>
                                 <GridView AllowsColumnReorder="True">
                                     <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ItemId}" Width="Auto" />
+                                    <GridViewColumn Header="Type Id" Width="Auto">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate DataType="{x:Type views:ItemModel}">
+                                                <Grid>
+                                                    <TextBlock Text="{Binding TypeId, StringFormat='X6'}" TextAlignment="Right">
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="{x:Type TextBlock}">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True">
+                                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
+                                                    <TextBox TextAlignment="Right" Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                        constructs:TextBoxSelect.SelectOnFocus="{Binding IsVisible, RelativeSource={RelativeSource Self}}">
+                                                        <TextBox.Text>
+                                                            <Binding Path="TypeId" Converter="{StaticResource Int32HexConverter}"/>
+                                                        </TextBox.Text>
+                                                    </TextBox>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
                                     <GridViewColumn Header="Name" Width="Auto">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate DataType="{x:Type views:ItemModel}">
@@ -94,7 +121,7 @@
                                                         <ColumnDefinition Width="Auto" />
                                                         <ColumnDefinition />
                                                     </Grid.ColumnDefinitions>
-                                                    <views:EquipmentTypeIcon EquipmentType="{Binding EquipmentType}" VerticalAlignment="Center" />
+                                                    <views:EquipmentCategoryIcon Category="{Binding Category}" VerticalAlignment="Center" />
                                                     <TextBlock Grid.Column="1" Text="{Binding ItemName}" VerticalAlignment="Center" Margin="1,0">
                                                         <TextBlock.Style>
                                                             <Style TargetType="{x:Type TextBlock}">
@@ -110,7 +137,7 @@
                                                             </Style>
                                                         </TextBlock.Style>
                                                     </TextBlock>
-                                                    <TextBox Grid.Column="1" VerticalAlignment="Center" Margin="1,0">
+                                                    <TextBox Grid.Column="1" VerticalAlignment="Center" Margin="1,0" constructs:TextBoxSelect.SelectOnFocus="{Binding IsVisible, RelativeSource={RelativeSource Self}}">
                                                         <TextBox.Style>
                                                             <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
                                                                 <Style.Triggers>
@@ -151,7 +178,8 @@
                                                             </Style>
                                                         </TextBlock.Style>
                                                     </TextBlock>
-                                                    <TextBox TextAlignment="Right" Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                    <TextBox TextAlignment="Right" Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                        constructs:TextBoxSelect.SelectOnFocus="{Binding IsVisible, RelativeSource={RelativeSource Self}}">
                                                         <TextBox.Text>
                                                             <Binding Path="CurrentDurability" Converter="{StaticResource SingleConverter}">
                                                                 <Binding.ValidationRules>
@@ -179,7 +207,8 @@
                                                             </Style>
                                                         </TextBlock.Style>
                                                     </TextBlock>
-                                                    <TextBox TextAlignment="Right" Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                    <TextBox TextAlignment="Right" Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                        constructs:TextBoxSelect.SelectOnFocus="{Binding IsVisible, RelativeSource={RelativeSource Self}}">
                                                         <TextBox.Text>
                                                             <Binding Path="MaxDurability" Converter="{StaticResource SingleConverter}">
                                                                 <Binding.ValidationRules>
@@ -209,8 +238,8 @@
                                                         </ItemsPanelTemplate>
                                                     </ItemsControl.ItemsPanel>
                                                     <ItemsControl.ItemTemplate>
-                                                        <DataTemplate DataType="{x:Type core:CoreEffectInfo}">
-                                                            <views:CoreEffectIcon CoreEffect="{Binding}" />
+                                                        <DataTemplate DataType="{x:Type s:UInt32}">
+                                                            <views:CoreEffectIcon Code="{Binding}" />
                                                         </DataTemplate>
                                                     </ItemsControl.ItemTemplate>
                                                 </ItemsControl>

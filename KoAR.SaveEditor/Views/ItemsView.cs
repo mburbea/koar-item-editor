@@ -2,7 +2,6 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using KoAR.SaveEditor.Constructs;
 
 namespace KoAR.SaveEditor.Views
@@ -11,8 +10,6 @@ namespace KoAR.SaveEditor.Views
     {
         public static readonly DependencyProperty AllItemsUnsellableProperty = DependencyProperty.Register(nameof(ItemsView.AllItemsUnsellable), typeof(bool?), typeof(ItemsView),
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
-
-        public static readonly RoutedCommand AutoSizeColumnsCommand = new RoutedUICommand("AutoSize Columns", nameof(ItemsView.AutoSizeColumnsCommand), typeof(ItemsView));
 
         public static readonly DependencyProperty EditItemHexCommandProperty = DependencyProperty.Register(nameof(ItemsView.EditItemHexCommand), typeof(ICommand), typeof(ItemsView));
 
@@ -26,11 +23,7 @@ namespace KoAR.SaveEditor.Views
 
         private ListView? _listView;
 
-        static ItemsView()
-        {
-            FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(ItemsView), new FrameworkPropertyMetadata(typeof(ItemsView)));
-            CommandManager.RegisterClassCommandBinding(typeof(ItemsView), new CommandBinding(ItemsView.AutoSizeColumnsCommand, ItemsView.AutoSizeColumns_Executed));
-        }
+        static ItemsView() => FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(ItemsView), new FrameworkPropertyMetadata(typeof(ItemsView)));
 
         public bool? AllItemsUnsellable
         {
@@ -71,31 +64,15 @@ namespace KoAR.SaveEditor.Views
             base.OnApplyTemplate();
             if ((this._listView = this.Template.FindName("PART_ListView", this) as ListView) != null)
             {
-                this.AutoSizeAllColumns();
+                ListViewAutoSize.AutoSizeColumns(this._listView);
             }
-        }
-
-        private static void AutoSizeColumns_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            ((ItemsView)sender).AutoSizeAllColumns();
-            e.Handled = true;
         }
 
         private static void Element_PreviewMouseLeftButtonDown(object sender, RoutedEventArgs e)
         {
             FrameworkElement element = (FrameworkElement)sender;
-            if (element is ListViewItem listViewItem)
-            {
-                listViewItem.IsSelected = true;
-                return;
-            }
-            ItemsView? view = default;
-            DependencyObject? d = element;
-            while (d != null && (view = d as ItemsView) == null)
-            {
-                d = VisualTreeHelper.GetParent(d);
-            }
-            if (view?._listView?.ItemContainerGenerator.ContainerFromItem(element.DataContext) is ListViewItem item)
+            ListViewItem? item = element as ListViewItem ?? element.FindVisualTreeAncestor<ListViewItem>();
+            if (item != null)
             {
                 item.IsSelected = true;
             }
@@ -103,32 +80,17 @@ namespace KoAR.SaveEditor.Views
 
         private static void SelectRowOnClickProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is FrameworkElement checkBox)
-            {
-                if ((bool)e.OldValue)
-                {
-                    WeakEventManager<FrameworkElement, RoutedEventArgs>.RemoveHandler(checkBox, nameof(FrameworkElement.PreviewMouseLeftButtonDown), ItemsView.Element_PreviewMouseLeftButtonDown);
-                }
-                if ((bool)e.NewValue)
-                {
-                    WeakEventManager<FrameworkElement, RoutedEventArgs>.AddHandler(checkBox, nameof(FrameworkElement.PreviewMouseLeftButtonDown), ItemsView.Element_PreviewMouseLeftButtonDown);
-                }
-            }
-        }
-
-        private void AutoSizeAllColumns()
-        {
-            if (!(this._listView?.View is GridView view))
+            if (!(d is FrameworkElement element))
             {
                 return;
             }
-            foreach (GridViewColumn column in view.Columns)
+            if ((bool)e.OldValue)
             {
-                if (double.IsNaN(column.Width))
-                {
-                    column.Width = column.ActualWidth;
-                }
-                column.Width = double.NaN;
+                WeakEventManager<FrameworkElement, RoutedEventArgs>.RemoveHandler(element, nameof(FrameworkElement.PreviewMouseLeftButtonDown), ItemsView.Element_PreviewMouseLeftButtonDown);
+            }
+            if ((bool)e.NewValue)
+            {
+                WeakEventManager<FrameworkElement, RoutedEventArgs>.AddHandler(element, nameof(FrameworkElement.PreviewMouseLeftButtonDown), ItemsView.Element_PreviewMouseLeftButtonDown);
             }
         }
     }

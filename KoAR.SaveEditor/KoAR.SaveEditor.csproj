@@ -39,6 +39,7 @@
     <None Remove="Resources\Buckler.png" />
     <None Remove="Resources\Chakrams.png" />
     <None Remove="Resources\Daggers.png" />
+    <None Remove="Resources\Delete.png" />
     <None Remove="Resources\FaeBlades.png" />
     <None Remove="Resources\Fire.png" />
     <None Remove="Resources\GreatSword.png" />
@@ -75,6 +76,7 @@
     <Resource Include="Resources\Buckler.png" />
     <Resource Include="Resources\Chakrams.png" />
     <Resource Include="Resources\Daggers.png" />
+    <Resource Include="Resources\Delete.png" />
     <Resource Include="Resources\FaeBlades.png" />
     <Resource Include="Resources\Fire.png" />
     <Resource Include="Resources\GreatSword.png" />

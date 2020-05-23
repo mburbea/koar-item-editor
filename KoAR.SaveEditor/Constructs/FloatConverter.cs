@@ -4,7 +4,7 @@ using System.Windows.Data;
 
 namespace KoAR.SaveEditor.Constructs
 {
-    public sealed class SingleConverter : IValueConverter
+    public sealed class FloatConverter : IValueConverter
     {
         object IValueConverter.Convert(object? value, Type targetType, object parameter, CultureInfo culture)
         {

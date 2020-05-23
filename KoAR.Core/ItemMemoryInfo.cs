@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -17,7 +16,7 @@ namespace KoAR.Core
 
         private ItemMemoryInfo(ReadOnlySpan<byte> bytes, int itemIndex, int dataLength)
         {
-            static EquipmentType DetermineEquipmentType(ReadOnlySpan<byte> bytes, Span<byte> buffer, byte byte13)
+            static EquipmentCategory DetermineEquipmentType(ReadOnlySpan<byte> bytes, Span<byte> buffer, byte byte13)
             {
                 ReadOnlySpan<byte> weaponTypeSequence = new byte[] { 0xD4, 0x08, 0x46, 0x00, 0x01 };
                 ReadOnlySpan<byte> additionalInfoSequence = new byte[] { 0x8D, 0xE3, 0x47, 0x00, 0x02 };
@@ -25,7 +24,7 @@ namespace KoAR.Core
                 var offset = bytes.IndexOf(buffer);
                 if (offset == -1)
                 {
-                    return EquipmentType.Armor; // Armor doesn't have this section.
+                    return EquipmentCategory.Armor; // Armor doesn't have this section.
                 }
                 var equipTypeByte = bytes[offset + 13];
                 additionalInfoSequence.CopyTo(buffer.Slice(8));
@@ -33,21 +32,21 @@ namespace KoAR.Core
                 var d = bytes[aisOffset + 17];
                 return equipTypeByte switch
                 {
-                    0x10 => EquipmentType.Shield,
-                    0x18 => EquipmentType.LongBow,
-                    0x20 when d == 0x00 || d == 0xBC || d == 0x55 || d == 0x56 || d == 0x18 => EquipmentType.LongSword,
-                    0x20 => EquipmentType.GreatSword,
-                    0x24 when d == 0x00 || d == 0x40 || d == 0x41 || d == 0x2C || d == 0xE8 => EquipmentType.Daggers,
-                    0x24 => EquipmentType.FaeBlades,
-                    0x1C when d == 0x00 || d == 0x18 || d == 0x53 || d == 0x54 => EquipmentType.Staff,
-                    0x1C when d == 0x3E || d == 0x3F || d == 0xEA || d == 0xEB => EquipmentType.Chakrams,
-                    0x1C when d == 0xEC || d == 0x43 || d == 0x7E => EquipmentType.Hammer,
-                    0x14 when d == 0x1D || d == 0x18 || d == 0xC9 || d == 0xAF => EquipmentType.Talisman,
-                    0x14 when d == 0x4A || d == 0x47 || d == 0x48 => EquipmentType.Sceptre,
-                    0x14 when d == 0x1B || d == 0xCA => EquipmentType.Buckler,
-                    0x14 when d == 0x00 && byte13 == 0x3B => EquipmentType.Talisman,
-                    0x14 when d == 0x00 => EquipmentType.Buckler, /* 0x33 0x23 0x2B 0x00 */
-                    _ => EquipmentType.Unknown,
+                    0x10 => EquipmentCategory.Shield,
+                    0x18 => EquipmentCategory.LongBow,
+                    0x20 when d == 0x00 || d == 0xBC || d == 0x55 || d == 0x56 || d == 0x18 => EquipmentCategory.LongSword,
+                    0x20 => EquipmentCategory.GreatSword,
+                    0x24 when d == 0x00 || d == 0x40 || d == 0x41 || d == 0x2C || d == 0xE8 => EquipmentCategory.Daggers,
+                    0x24 => EquipmentCategory.FaeBlades,
+                    0x1C when d == 0x00 || d == 0x18 || d == 0x53 || d == 0x54 => EquipmentCategory.Staff,
+                    0x1C when d == 0x3E || d == 0x3F || d == 0xEA || d == 0xEB => EquipmentCategory.Chakrams,
+                    0x1C when d == 0xEC || d == 0x43 || d == 0x7E => EquipmentCategory.Hammer,
+                    0x14 when d == 0x1D || d == 0x18 || d == 0xC9 || d == 0xAF => EquipmentCategory.Talisman,
+                    0x14 when d == 0x4A || d == 0x47 || d == 0x48 => EquipmentCategory.Sceptre,
+                    0x14 when d == 0x1B || d == 0xCA => EquipmentCategory.Buckler,
+                    0x14 when d == 0x00 && byte13 == 0x3B => EquipmentCategory.Talisman,
+                    0x14 when d == 0x00 => EquipmentCategory.Buckler, /* 0x33 0x23 0x2B 0x00 */
+                    _ => EquipmentCategory.Unknown,
                 };
             }
 
@@ -56,12 +55,12 @@ namespace KoAR.Core
             DataLength = dataLength;
             ItemBytes = bytes.Slice(itemIndex, dataLength).ToArray();
             bytes.Slice(itemIndex, 8).CopyTo(buffer);
-            CoreEffects = new CoreEffectList(buffer);
-            EquipmentType = DetermineEquipmentType(bytes, buffer, ItemBytes[13]);
-            _itemTemplateMemory = new Memory<byte>(Amalur.Bytes, bytes.IndexOf(buffer.Slice(0, 4)) + 4, 4);
+            CoreEffects = new CoreEffectMemory(buffer);
+            Category = DetermineEquipmentType(bytes, buffer, ItemBytes[13]);
+            _typeIdMemory = new Memory<byte>(Amalur.Bytes, bytes.IndexOf(buffer.Slice(0, 4)) + 4, 4);
         }
 
-        public CoreEffectList CoreEffects { get; internal set; }
+        public CoreEffectMemory CoreEffects { get; internal set; }
         public float CurrentDurability
         {
             get => MemoryUtilities.Read<float>(ItemBytes, Offsets.CurrentDurability);
@@ -94,21 +93,21 @@ namespace KoAR.Core
             }
         }
 
-        public EquipmentType EquipmentType { get; }
+        public EquipmentCategory Category { get; }
 
         // this holds a pointer to the current instance of the item template.
         // any material change will blow away the backing array.
-        private readonly Memory<byte> _itemTemplateMemory; 
+        private readonly Memory<byte> _typeIdMemory; 
 
-        public int ItemTemplate
+        public uint TypeId
         {
-            get => MemoryMarshal.Read<int>(_itemTemplateMemory.Span);
-            set => MemoryMarshal.Write(_itemTemplateMemory.Span, ref value);
+            get => MemoryMarshal.Read<uint>(_typeIdMemory.Span);
+            set => MemoryMarshal.Write(_typeIdMemory.Span, ref value);
         }
 
         public byte[] ItemBytes { get; set; }
 
-        public int ItemId => MemoryUtilities.Read<int>(ItemBytes);
+        public uint ItemId => MemoryUtilities.Read<uint>(ItemBytes);
 
         public int ItemIndex { get; }
 
@@ -166,22 +165,19 @@ namespace KoAR.Core
 
         public static bool IsValidDurability(float durability) => durability > DurabilityLowerBound && durability < DurabilityUpperBound;
 
-        public List<EffectInfo> ReadEffects()
+        public List<uint> ReadEffects()
         {
-            List<EffectInfo> effects = new List<EffectInfo>();
+            List<uint> effects = new List<uint>();
 
             for (int i = 0; i < EffectCount; i++)
             {
-                effects.Add(new EffectInfo
-                {
-                    Code = MemoryUtilities.Read<uint>(ItemBytes, Offset.FirstEffect + i * 8).ToString("X6")
-                });
+                effects.Add(MemoryUtilities.Read<uint>(ItemBytes, Offset.FirstEffect + i * 8));
             }
 
             return effects;
         }
 
-        public void WriteEffects(List<EffectInfo> newEffects)
+        public void WriteEffects(List<uint> newEffects)
         {
             var currentLength = Offsets.PostEffect - Offset.FirstEffect;
             EffectCount = newEffects.Count;
@@ -189,7 +185,7 @@ namespace KoAR.Core
 
             for (int i = 0; i < effectData.Length; i++)
             {
-                effectData[i] = uint.Parse(newEffects[i].Code, NumberStyles.HexNumber) | (ulong)uint.MaxValue << 32;
+                effectData[i] = newEffects[i] | (ulong)uint.MaxValue << 32;
             }
 
             ItemBytes = MemoryUtilities.ReplaceBytes(ItemBytes, Offset.FirstEffect, currentLength, MemoryMarshal.AsBytes(effectData));

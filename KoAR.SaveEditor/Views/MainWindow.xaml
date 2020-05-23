@@ -8,7 +8,7 @@
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs" 
     xmlns:core="clr-namespace:KoAR.Core;assembly=KoAR.Core"
     mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type views:MainViewModel}}"
-    Width="1024" Height="768" WindowStartupLocation="CenterScreen" 
+    Width="1366" Height="768" WindowStartupLocation="CenterScreen" 
     Icon="/app.ico" ResizeMode="CanResizeWithGrip">
     <Window.Resources>
         <ObjectDataProvider x:Key="ViewModel" ObjectType="{x:Type views:MainViewModel}" />
@@ -160,7 +160,7 @@
                         <TextBlock Text="Name:" />
                         <TextBox Grid.Column="1" Text="{Binding ItemNameFilter, UpdateSourceTrigger=PropertyChanged}" />
                         <TextBlock Grid.Column="2" Text="Type:" />
-                        <views:EquipmentTypeSelector Grid.Column="3" EquipmentType="{Binding EquipmentTypeFilter}" Items="{Binding Items}" />
+                        <views:EquipmentCategorySelector Grid.Column="3" Category="{Binding CategoryFilter}" Items="{Binding Items}" />
                         <TextBlock Grid.Column="4" Text="Cur. Durability:" />
                         <TextBox Grid.Column="5">
                             <TextBox.Text>
@@ -213,20 +213,10 @@
                         <Button Grid.Column="2" Margin="2" Command="{Binding UpdateInventorySizeCommand}" Content="_Update" />
                     </Grid>
                 </GroupBox>
-                <StackPanel Grid.Row="1" Grid.IsSharedSizeScope="True">
-                    <StackPanel.Resources>
-                        <Style TargetType="{x:Type views:EffectListControl}">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding SelectedItem}" Value="{x:Null}">
-                                    <Setter Property="IsEnabled" Value="False" />
-                                    <Setter Property="Opacity" Value="0.66" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </StackPanel.Resources>
-                    <GroupBox Margin="4" Header="Effects">
-                        <GroupBox.Style>
-                            <Style TargetType="{x:Type GroupBox}">
+                <ScrollViewer Grid.Row="1" FocusVisualStyle="{x:Null}" Margin="0,0,4,4" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                    <StackPanel Grid.IsSharedSizeScope="True">
+                        <StackPanel.Resources>
+                            <Style TargetType="{x:Type views:EffectsControl}">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding SelectedItem}" Value="{x:Null}">
                                         <Setter Property="IsEnabled" Value="False" />
@@ -234,98 +224,32 @@
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
-                        </GroupBox.Style>
-                        <Grid x:Name="PART_Grid">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock VerticalAlignment="Center" Margin="2" TextAlignment="Right" Text="# Effects:"/>
-                            <TextBox Grid.Column="1" VerticalAlignment="Center" Margin="2" Text="{Binding SelectedItem.EffectCount, Mode=OneWay}" 
-                                TextAlignment="Right" IsReadOnly="True" Background="{x:Static SystemColors.ControlBrush}" />
-                            <views:EffectsControl Grid.Row="1" Grid.ColumnSpan="2" ProcessEffectLabel="Delete" Header="Existing Effects:" DataContext="{Binding SelectedItem}" Effects="{Binding Effects}" 
-                                SelectedEffect="{Binding SelectedEffect}" Command="{Binding DataContext.DeleteEffectCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
-                            <views:EffectsControl Grid.Row="2" Grid.ColumnSpan="2" ProcessEffectLabel="Add" Header="Add Effect:" Effects="{x:Static core:Amalur.Effects}" 
-                                SelectedEffect="{Binding SelectedEffect}" Command="{Binding AddEffectCommand}" />
-                        </Grid>
-                    </GroupBox>
-                    <GroupBox Margin="4" Header="Core Effects">
-                        <GroupBox.Style>
-                            <Style TargetType="{x:Type GroupBox}">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding SelectedItem}" Value="{x:Null}">
-                                        <Setter Property="IsEnabled" Value="False" />
-                                        <Setter Property="Opacity" Value="0.66" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </GroupBox.Style>
-                        <Grid>
-                            <Grid.Resources>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="VerticalAlignment" Value="Center" />
-                                    <Setter Property="Margin" Value="2" />
-                                    <Setter Property="TextAlignment" Value="Right" />
-                                </Style>
-                                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-                                    <Setter Property="Grid.Column" Value="1" />
-                                    <Setter Property="VerticalAlignment" Value="Center" />
-                                    <Setter Property="Margin" Value="2" />
-                                    <Setter Property="IsReadOnly" Value="True" />
-                                    <Setter Property="Background" Value="{x:Static SystemColors.ControlBrush}" />
-                                </Style>
-                            </Grid.Resources>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Effect 0:"/>
-                            <TextBox Text="{Binding SelectedItem.CoreEffect0.Code, Mode=OneWay}" />
-                            <TextBlock Grid.Row="1" Text="Effect 1:"/>
-                            <TextBox Grid.Row="1" Text="{Binding SelectedItem.CoreEffect1.Code, Mode=OneWay}" />
-                            <TextBlock Grid.Row="2" Text="Effect 2:"/>
-                            <TextBox Grid.Row="2" Text="{Binding SelectedItem.CoreEffect2.Code, Mode=OneWay}" />
-                            <TextBlock Grid.Row="3" Text="Effect 3:"/>
-                            <TextBox Grid.Row="3" Text="{Binding SelectedItem.CoreEffect3.Code, Mode=OneWay}" />
-                            <TextBlock Grid.Row="4" Text="Mystery #:"/>
-                            <TextBox Grid.Row="4" Text="{Binding SelectedItem.MysteryInteger, Mode=OneWay, StringFormat=X2}" />
-                        </Grid>
-                    </GroupBox>
-                    <views:EffectListControl Margin="4" Header="Effects:" Effects="{Binding SelectedItem.Effects}" AvailableEffects="{x:Static core:Amalur.Effects}" />
-                    <views:EffectListControl Margin="4" Header="{Binding SelectedItem}" Effects="{Binding SelectedItem.CoreEffects}" AvailableEffects="{Binding Values, Source={x:Static core:Amalur.CoreEffects}}">
-                        <views:EffectListControl.HeaderTemplate>
-                            <DataTemplate DataType="{x:Type views:ItemModel}">
-                                <TextBlock>
-                                    <Run Text="Core Effects:" />
-                                    <Run>
-                                        <Run.Style>
-                                            <Style TargetType="{x:Type Run}">
+                        </StackPanel.Resources>
+                        <views:EffectsControl Margin="4" Capacity="4" Header="{Binding SelectedItem}" Effects="{Binding SelectedItem.CoreEffects}" 
+                            EffectTranslations="{x:Static core:Amalur.CoreEffects}" EffectDefinitions="{Binding Values, Source={x:Static core:Amalur.CoreEffects}}"
+                            AddEffectCommand="{Binding AddCoreEffectCommand}" DeleteEffectCommand="{Binding DeleteCoreEffectCommand}">
+                            <views:EffectsControl.HeaderTemplate>
+                                <DataTemplate DataType="{x:Type views:ItemModel}">
+                                    <TextBlock>
+                                        <TextBlock.Style>
+                                            <Style TargetType="{x:Type TextBlock}">
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding}" Value="{x:Null}">
-                                                        <Setter Property="Text" Value="" />
+                                                        <Setter Property="Text" Value="Core Effects:" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
-                                                <Setter Property="Text" Value="{Binding CoreEffects.MysteryInteger, Mode=OneWay, StringFormat='(Mystery Byte: {0:X2})'}" />
+                                                <Setter Property="Text" Value="{Binding MysteryInteger, Mode=OneWay, StringFormat='Core Effects: (Mystery Byte: {0:X2})'}" />
                                             </Style>
-                                        </Run.Style>
-                                    </Run>
-                                </TextBlock>
-                            </DataTemplate>
-                        </views:EffectListControl.HeaderTemplate>
-                    </views:EffectListControl>
-                </StackPanel>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </views:EffectsControl.HeaderTemplate>
+                        </views:EffectsControl>
+                        <views:EffectsControl Margin="4" Header="Effects:" Effects="{Binding SelectedItem.Effects}" 
+                            EffectTranslations="{x:Static core:Amalur.DedupedEffects}" EffectDefinitions="{x:Static core:Amalur.Effects}"
+                            AddEffectCommand="{Binding AddEffectCommand}" DeleteEffectCommand="{Binding DeleteEffectCommand}" />
+                    </StackPanel>
+                </ScrollViewer>
             </Grid>
         </Grid>
     </DockPanel>
