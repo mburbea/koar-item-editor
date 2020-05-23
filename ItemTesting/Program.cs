@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Diagnostics;
 using KoAR.Core;
-using System.Collections;
-using System.Drawing;
 
 namespace ItemTesting
 {

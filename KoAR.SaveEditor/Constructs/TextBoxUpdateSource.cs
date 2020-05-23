@@ -2,7 +2,6 @@
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using KoAR.SaveEditor.Constructs;
 
 namespace KoAR.SaveEditor.Constructs
 {
