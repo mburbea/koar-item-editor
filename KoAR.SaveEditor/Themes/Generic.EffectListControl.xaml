@@ -145,7 +145,7 @@
                                                     <DataTemplate DataType="{x:Type core:IEffectInfo}">
                                                         <TextBlock>
                                                             <TextBlock.Text>
-                                                                <MultiBinding StringFormat="{}{0} ({1})" Mode="OneTime">
+                                                                <MultiBinding StringFormat="{}{0} ({1:X6})" Mode="OneTime">
                                                                     <Binding Path="DisplayText" />
                                                                     <Binding Path="Code" />
                                                                 </MultiBinding>

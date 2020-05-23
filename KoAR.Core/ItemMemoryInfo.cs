@@ -100,15 +100,15 @@ namespace KoAR.Core
         // any material change will blow away the backing array.
         private readonly Memory<byte> _typeIdMemory; 
 
-        public int TypeId
+        public uint TypeId
         {
-            get => MemoryMarshal.Read<int>(_typeIdMemory.Span);
+            get => MemoryMarshal.Read<uint>(_typeIdMemory.Span);
             set => MemoryMarshal.Write(_typeIdMemory.Span, ref value);
         }
 
         public byte[] ItemBytes { get; set; }
 
-        public int ItemId => MemoryUtilities.Read<int>(ItemBytes);
+        public uint ItemId => MemoryUtilities.Read<uint>(ItemBytes);
 
         public int ItemIndex { get; }
 

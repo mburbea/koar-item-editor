@@ -41,7 +41,7 @@ namespace KoAR.SaveEditor.Views
 
         public List<EffectInfo> Effects => this._effects ??= this.Item.ReadEffects();
 
-        public int TypeId
+        public uint TypeId
         {
             get => this.Item.TypeId;
             set => this.SetItemValue(value, this.Item.TypeId, value => this.Item.TypeId = value);

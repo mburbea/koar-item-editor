@@ -8,12 +8,12 @@ namespace KoAR.SaveEditor.Constructs
     {
         object IValueConverter.Convert(object? value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value is int number ? number.ToString("X6", culture) : string.Empty;
+            return value is uint number ? number.ToString("X6", culture) : string.Empty;
         }
 
         object? IValueConverter.ConvertBack(object? value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value is string text ? int.Parse(text, NumberStyles.HexNumber, culture) : default(int?);
+            return value is string text ? uint.Parse(text, NumberStyles.HexNumber, culture) : default(uint?);
         }
     }
 }
