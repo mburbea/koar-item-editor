@@ -14,10 +14,18 @@ namespace KoAR.Core
     /// </summary>
     public static class Amalur
     {
+        private static void AddRange<TKey,TValue>(this Dictionary<TKey, TValue> dictionary, IEnumerable<(TKey, TValue)> data)
+        {
+            foreach(var (k,v) in data)
+            {
+                dictionary.Add(k, v);
+            }
+        }
+
         public static List<EffectInfo> Effects { get; } = new List<EffectInfo>();
         public static Dictionary<uint, CoreEffectInfo> CoreEffects { get; } = new Dictionary<uint, CoreEffectInfo>();
-        internal static Dictionary<uint, EffectInfo> DedupedEffects { get; private set; } = new Dictionary<uint, EffectInfo>();
-        private static int? _bagOffset = null;
+        internal static Dictionary<uint, EffectInfo> DedupedEffects { get; } = new Dictionary<uint, EffectInfo>();
+        private static int? _bagOffset;
 
         internal static byte[] Bytes { get; set; }
 
@@ -47,18 +55,17 @@ namespace KoAR.Core
                 throw new InvalidOperationException("Cannot find CoreEffects.csv");
             }
 
-            foreach (var row in File.ReadLines(effectCsv).Skip(1))
-            {
-                var parts = row.Split(',');
-                var code = uint.Parse(parts[0], NumberStyles.HexNumber);
-                CoreEffects[code] = new CoreEffectInfo
+            CoreEffects.AddRange(File.ReadLines(effectCsv).Skip(1).Select(row =>
                 {
-                    Code = code,
-                    DamageType = Enum.TryParse(parts[1], true, out DamageType damageType) ? damageType : default,
-                    Tier = float.Parse(parts[2])
-                };
-            }
-
+                    var parts = row.Split(',');
+                    var code = uint.Parse(parts[0], NumberStyles.HexNumber);
+                    return (code, new CoreEffectInfo
+                    {
+                        Code = code,
+                        DamageType = Enum.TryParse(parts[1], true, out DamageType damageType) ? damageType : default,
+                        Tier = float.Parse(parts[2])
+                    });
+                }));
             var propertiesXml = Path.Combine(path, "properties.xml");
             if (!File.Exists(propertiesXml))
             {
@@ -73,7 +80,10 @@ namespace KoAR.Core
                     Code = uint.TryParse(element.Attribute("id").Value, NumberStyles.HexNumber, null, out var parsed) ? parsed : 0u,
                     DisplayText = element.Value.Trim()
                 }));
-            DedupedEffects = Effects.Where(x=> x.Code != 0).GroupBy(x => x.Code).ToDictionary(x => x.Key, x => x.First());
+            DedupedEffects.AddRange(Effects
+                .Where(x => x.Code != 0)
+                .GroupBy(x => x.Code)
+                .Select(x => (x.Key, x.First())));
         }
 
         private static int GetBagOffset()
