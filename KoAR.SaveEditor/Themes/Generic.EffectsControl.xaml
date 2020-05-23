@@ -225,13 +225,6 @@
                                         <Setter Property="Grid.Row" Value="1" />
                                     </Style>
                                 </Border.Style>
-                                <Border.Resources>
-                                    <CollectionViewSource x:Key="AvailableEffects" Source="{Binding AvailableEffects, RelativeSource={RelativeSource TemplatedParent}}">
-                                        <CollectionViewSource.SortDescriptions>
-                                            <componentModel:SortDescription PropertyName="DisplayText" />
-                                        </CollectionViewSource.SortDescriptions>
-                                    </CollectionViewSource>
-                                </Border.Resources>
                             </Border>
                         </Grid>
                     </GroupBox>
