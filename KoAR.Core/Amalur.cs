@@ -26,6 +26,7 @@ namespace KoAR.Core
             _bagOffset = null;
             Bytes = File.ReadAllBytes(path);
         }
+
         public static void SaveFile(string path)
         {
             if (!IsFileOpen)
@@ -92,10 +93,12 @@ namespace KoAR.Core
             return finalOffset + (inventoryLimitOrder * 12);
         }
 
-        public static int GetMaxBagCount() => MemoryUtilities.Read<int>(Bytes, _bagOffset??= GetBagOffset());
-
-        public static void EditMaxBagCount(int count) => MemoryUtilities.Write(Bytes, _bagOffset??= GetBagOffset(), count);
-
+        public static int InventorySize
+        {
+            get => MemoryUtilities.Read<int>(Bytes, _bagOffset ??= GetBagOffset());
+            set => MemoryUtilities.Write(Bytes, _bagOffset??= GetBagOffset(), value);
+        }
+        
         public static List<ItemMemoryInfo> GetAllEquipment()
         {
             static List<int> FindAllCandidates()

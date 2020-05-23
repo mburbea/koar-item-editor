@@ -217,7 +217,7 @@ namespace KoAR.SaveEditor.Views
                 return;
             }
             Amalur.ReadFile(this.FileName = dialog.FileName);
-            this.InventorySize = Amalur.GetMaxBagCount();
+            this.InventorySize = Amalur.InventorySize;
             this.RepopulateItems();
             this.ResetFilters();
             this._unsavedChanges = false;
@@ -249,7 +249,7 @@ namespace KoAR.SaveEditor.Views
 
         private bool CanSave() => this._unsavedChanges;
 
-        private bool CanUpdateInventorySize() => Amalur.IsFileOpen && Amalur.GetMaxBagCount() != this.InventorySize;
+        private bool CanUpdateInventorySize() => Amalur.IsFileOpen && Amalur.InventorySize != this.InventorySize;
 
         private void DeleteCoreEffect(CoreEffectInfo info)
         {
@@ -395,7 +395,7 @@ namespace KoAR.SaveEditor.Views
             {
                 return;
             }
-            Amalur.EditMaxBagCount(this.InventorySize);
+            Amalur.InventorySize = this.InventorySize;
             this.UnsavedChanges = true;
         }
     }
