@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
@@ -14,8 +15,8 @@ namespace KoAR.Core
     public static class Amalur
     {
         public static List<EffectInfo> Effects { get; } = new List<EffectInfo>();
-        public static Dictionary<string, CoreEffectInfo> CoreEffects { get; } = new Dictionary<string, CoreEffectInfo>(StringComparer.OrdinalIgnoreCase);
-        internal static Dictionary<string, EffectInfo> DedupedEffects = new Dictionary<string, EffectInfo>();
+        public static Dictionary<uint, CoreEffectInfo> CoreEffects { get; } = new Dictionary<uint, CoreEffectInfo>();
+        internal static Dictionary<uint, EffectInfo> DedupedEffects = new Dictionary<uint, EffectInfo>();
 
         internal static byte[] Bytes { get; set; }
 
@@ -44,7 +45,7 @@ namespace KoAR.Core
             foreach (var row in File.ReadLines(effectCsv).Skip(1))
             {
                 var parts = row.Split(',');
-                var code = parts[0];
+                var code = uint.Parse(parts[0], NumberStyles.HexNumber);
                 CoreEffects[code] = new CoreEffectInfo
                 {
                     Code = code,
@@ -64,10 +65,10 @@ namespace KoAR.Core
                 .Elements()
                 .Select(element => new EffectInfo
                 {
-                    Code = element.Attribute("id").Value.ToUpperInvariant(),
+                    Code = uint.TryParse(element.Attribute("id").Value, NumberStyles.HexNumber, null, out var parsed) ? parsed : 0u,
                     DisplayText = element.Value.Trim()
                 }));
-            DedupedEffects = Effects.Where(x=> x.Code != "").GroupBy(x => x.Code).ToDictionary(x => x.Key, x => x.First());
+            DedupedEffects = Effects.Where(x=> x.Code != 0).GroupBy(x => x.Code).ToDictionary(x => x.Key, x => x.First());
         }
 
         private static int GetBagOffset()

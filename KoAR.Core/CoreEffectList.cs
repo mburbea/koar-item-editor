@@ -33,7 +33,7 @@ namespace KoAR.Core
             {
                 _list.Add(new CoreEffectInfo
                 {
-                    Code = MemoryUtilities.Read<uint>(span, firstDisplayEffect + i * 8).ToString("X6")
+                    Code = MemoryUtilities.Read<uint>(span, firstDisplayEffect + i * 8)
                 });
             }
         }
@@ -111,7 +111,7 @@ namespace KoAR.Core
             Span<ulong> effectData = stackalloc ulong[newCount * 3 + 1];
             for (int i = 0; i < newCount; i++)
             {
-                ulong effect = uint.Parse(_list[i].Code, NumberStyles.HexNumber);
+                ulong effect = _list[i].Code;
                 effectData[i * 2] = Prefixes[i] | effect << 32;
                 effectData[(i * 2) + 1] = ulong.MaxValue;
                 effectData[(newCount * 2) + 1+ i] = effect | (ulong)uint.MaxValue << 32;

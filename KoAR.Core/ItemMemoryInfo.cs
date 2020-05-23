@@ -174,7 +174,7 @@ namespace KoAR.Core
             {
                 effects.Add(new EffectInfo
                 {
-                    Code = MemoryUtilities.Read<uint>(ItemBytes, Offset.FirstEffect + i * 8).ToString("X6")
+                    Code = MemoryUtilities.Read<uint>(ItemBytes, Offset.FirstEffect + i * 8)
                 });
             }
 
@@ -189,7 +189,7 @@ namespace KoAR.Core
 
             for (int i = 0; i < effectData.Length; i++)
             {
-                effectData[i] = uint.Parse(newEffects[i].Code, NumberStyles.HexNumber) | (ulong)uint.MaxValue << 32;
+                effectData[i] = newEffects[i].Code | (ulong)uint.MaxValue << 32;
             }
 
             ItemBytes = MemoryUtilities.ReplaceBytes(ItemBytes, Offset.FirstEffect, currentLength, MemoryMarshal.AsBytes(effectData));
