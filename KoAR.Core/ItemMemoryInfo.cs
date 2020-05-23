@@ -165,22 +165,19 @@ namespace KoAR.Core
 
         public static bool IsValidDurability(float durability) => durability > DurabilityLowerBound && durability < DurabilityUpperBound;
 
-        public List<EffectInfo> ReadEffects()
+        public List<uint> ReadEffects()
         {
-            List<EffectInfo> effects = new List<EffectInfo>();
+            List<uint> effects = new List<uint>();
 
             for (int i = 0; i < EffectCount; i++)
             {
-                effects.Add(new EffectInfo
-                {
-                    Code = MemoryUtilities.Read<uint>(ItemBytes, Offset.FirstEffect + i * 8)
-                });
+                effects.Add(MemoryUtilities.Read<uint>(ItemBytes, Offset.FirstEffect + i * 8));
             }
 
             return effects;
         }
 
-        public void WriteEffects(List<EffectInfo> newEffects)
+        public void WriteEffects(List<uint> newEffects)
         {
             var currentLength = Offsets.PostEffect - Offset.FirstEffect;
             EffectCount = newEffects.Count;
@@ -188,7 +185,7 @@ namespace KoAR.Core
 
             for (int i = 0; i < effectData.Length; i++)
             {
-                effectData[i] = newEffects[i].Code | (ulong)uint.MaxValue << 32;
+                effectData[i] = newEffects[i] | (ulong)uint.MaxValue << 32;
             }
 
             ItemBytes = MemoryUtilities.ReplaceBytes(ItemBytes, Offset.FirstEffect, currentLength, MemoryMarshal.AsBytes(effectData));

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
@@ -14,8 +13,7 @@ namespace KoAR.Core
             public const int FirstEffect = EffectCount + 4;
         }
 
-        private static ReadOnlySpan<uint> Prefixes => new uint[] { 0x57_8E_73, 0x58_6E_AA, 0x4B_03_F9, 0x4B_43_F4 };
-
+        private static ReadOnlySpan<byte> Prefixes2 => new byte[] { 0x73, 0x8E, 0x57, 0x00, 0xAA, 0x6E, 0x58, 0x00, 0xF9, 0x03, 0x4B, 0x00, 0xF4, 0x43, 0x4B, 0x00 };
         internal CoreEffectMemory(Span<byte> buffer)
         {
             ReadOnlySpan<byte> bytes = Amalur.Bytes;
@@ -29,10 +27,7 @@ namespace KoAR.Core
             var firstDisplayEffect = Offsets.FirstEffect + (count * 16) + 8;
             for (int i = 0; i < count; i++)
             {
-                List.Add(new CoreEffectInfo
-                {
-                    Code = MemoryUtilities.Read<uint>(span, firstDisplayEffect + i * 8)
-                });
+                List.Add(MemoryUtilities.Read<uint>(span, firstDisplayEffect + i * 8));
             }
         }
 
@@ -50,20 +45,21 @@ namespace KoAR.Core
             get => List.Count;
         }
 
-        public List<CoreEffectInfo> List { get; } = new List<CoreEffectInfo>();
+        public List<uint> List { get; } = new List<uint>();
 
         public void Serialize()
         {
             byte currentCount = Bytes[Offsets.EffectCount];
             var currentLength = currentCount * 24 + 8;
             var newCount = List.Count;
+            var prefixes = MemoryMarshal.Cast<byte, uint>(Prefixes2);
             Span<ulong> effectData = stackalloc ulong[newCount * 3 + 1];
             for (int i = 0; i < newCount; i++)
             {
-                ulong effect = List[i].Code;
-                effectData[i * 2] = Prefixes[i] | effect << 32;
+                ulong effect = List[i];
+                effectData[i * 2] = prefixes[i] | effect << 32;
                 effectData[(i * 2) + 1] = ulong.MaxValue;
-                effectData[(newCount * 2) + 1+ i] = effect | (ulong)uint.MaxValue << 32;
+                effectData[(newCount * 2) + 1 + i] = effect | (ulong)uint.MaxValue << 32;
             }
             Bytes = MemoryUtilities.ReplaceBytes(Bytes, Offsets.FirstEffect, currentLength, MemoryMarshal.AsBytes(effectData));
             Bytes[Offsets.FirstEffect + (16 * newCount)] = Bytes[Offsets.EffectCount] = (byte)newCount;
