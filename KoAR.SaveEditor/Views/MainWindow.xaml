@@ -225,33 +225,6 @@
                                 </Style.Triggers>
                             </Style>
                         </StackPanel.Resources>
-                        <GroupBox Margin="4" Header="Effects">
-                            <GroupBox.Style>
-                                <Style TargetType="{x:Type GroupBox}">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding SelectedItem}" Value="{x:Null}">
-                                            <Setter Property="IsEnabled" Value="False" />
-                                            <Setter Property="Opacity" Value="0.66" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </GroupBox.Style>
-                            <Grid x:Name="PART_Grid">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock VerticalAlignment="Center" Margin="2" TextAlignment="Right" Text="# Effects:"/>
-                                <TextBox Grid.Column="1" VerticalAlignment="Center" Margin="2" Text="{Binding SelectedItem.EffectCount, Mode=OneWay}" 
-                                    TextAlignment="Right" IsReadOnly="True" Background="{x:Static SystemColors.ControlBrush}" />
-                                <views:EffectsControl Grid.Row="1" Grid.ColumnSpan="2" ProcessEffectLabel="Add" Header="Add Effect:" Effects="{x:Static core:Amalur.Effects}" 
-                                    SelectedEffect="{Binding SelectedEffect}" Command="{Binding AddEffectCommand}" />
-                            </Grid>
-                        </GroupBox>
                         <views:EffectListControl Margin="4" Header="{Binding SelectedItem}" Effects="{Binding SelectedItem.CoreEffects}" AvailableEffects="{Binding Values, Source={x:Static core:Amalur.CoreEffects}}"
                             DeleteEffectCommand="{Binding DeleteCoreEffectCommand}">
                             <views:EffectListControl.HeaderTemplate>
@@ -273,6 +246,19 @@
                         </views:EffectListControl>
                         <views:EffectListControl Margin="4" Header="Effects:" Effects="{Binding SelectedItem.Effects}" AvailableEffects="{x:Static core:Amalur.Effects}"
                             DeleteEffectCommand="{Binding DeleteEffectCommand}" />
+                        <views:EffectsControl ProcessEffectLabel="Add" Header="Add Effect:" Effects="{x:Static core:Amalur.Effects}" 
+                            SelectedEffect="{Binding SelectedEffect}" Command="{Binding AddEffectCommand}" Margin="4">
+                            <views:EffectsControl.Style>
+                                <Style TargetType="{x:Type views:EffectsControl}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SelectedItem}" Value="{x:Null}">
+                                            <Setter Property="IsEnabled" Value="False" />
+                                            <Setter Property="Opacity" Value="0.66" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </views:EffectsControl.Style>
+                        </views:EffectsControl>
                     </StackPanel>
                 </ScrollViewer>
             </Grid>
