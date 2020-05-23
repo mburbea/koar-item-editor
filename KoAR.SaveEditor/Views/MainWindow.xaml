@@ -240,7 +240,6 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
@@ -249,59 +248,8 @@
                                 <TextBlock VerticalAlignment="Center" Margin="2" TextAlignment="Right" Text="# Effects:"/>
                                 <TextBox Grid.Column="1" VerticalAlignment="Center" Margin="2" Text="{Binding SelectedItem.EffectCount, Mode=OneWay}" 
                                     TextAlignment="Right" IsReadOnly="True" Background="{x:Static SystemColors.ControlBrush}" />
-                                <views:EffectsControl Grid.Row="1" Grid.ColumnSpan="2" ProcessEffectLabel="Delete" Header="Existing Effects:" DataContext="{Binding SelectedItem}" Effects="{Binding Effects}" 
-                                    SelectedEffect="{Binding SelectedEffect}" Command="{Binding DataContext.DeleteEffectCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
-                                <views:EffectsControl Grid.Row="2" Grid.ColumnSpan="2" ProcessEffectLabel="Add" Header="Add Effect:" Effects="{x:Static core:Amalur.Effects}" 
+                                <views:EffectsControl Grid.Row="1" Grid.ColumnSpan="2" ProcessEffectLabel="Add" Header="Add Effect:" Effects="{x:Static core:Amalur.Effects}" 
                                     SelectedEffect="{Binding SelectedEffect}" Command="{Binding AddEffectCommand}" />
-                            </Grid>
-                        </GroupBox>
-                        <GroupBox Margin="4" Header="Core Effects">
-                            <GroupBox.Style>
-                                <Style TargetType="{x:Type GroupBox}">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding SelectedItem}" Value="{x:Null}">
-                                            <Setter Property="IsEnabled" Value="False" />
-                                            <Setter Property="Opacity" Value="0.66" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </GroupBox.Style>
-                            <Grid>
-                                <Grid.Resources>
-                                    <Style TargetType="{x:Type TextBlock}">
-                                        <Setter Property="VerticalAlignment" Value="Center" />
-                                        <Setter Property="Margin" Value="2" />
-                                        <Setter Property="TextAlignment" Value="Right" />
-                                    </Style>
-                                    <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-                                        <Setter Property="Grid.Column" Value="1" />
-                                        <Setter Property="VerticalAlignment" Value="Center" />
-                                        <Setter Property="Margin" Value="2" />
-                                        <Setter Property="IsReadOnly" Value="True" />
-                                        <Setter Property="Background" Value="{x:Static SystemColors.ControlBrush}" />
-                                    </Style>
-                                </Grid.Resources>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Effect 0:"/>
-                                <TextBox Text="{Binding SelectedItem.CoreEffect0.Code, Mode=OneWay}" />
-                                <TextBlock Grid.Row="1" Text="Effect 1:"/>
-                                <TextBox Grid.Row="1" Text="{Binding SelectedItem.CoreEffect1.Code, Mode=OneWay}" />
-                                <TextBlock Grid.Row="2" Text="Effect 2:"/>
-                                <TextBox Grid.Row="2" Text="{Binding SelectedItem.CoreEffect2.Code, Mode=OneWay}" />
-                                <TextBlock Grid.Row="3" Text="Effect 3:"/>
-                                <TextBox Grid.Row="3" Text="{Binding SelectedItem.CoreEffect3.Code, Mode=OneWay}" />
-                                <TextBlock Grid.Row="4" Text="Mystery #:"/>
-                                <TextBox Grid.Row="4" Text="{Binding SelectedItem.MysteryInteger, Mode=OneWay, StringFormat=X2}" />
                             </Grid>
                         </GroupBox>
                         <views:EffectListControl Margin="4" Header="{Binding SelectedItem}" Effects="{Binding SelectedItem.CoreEffects}" AvailableEffects="{Binding Values, Source={x:Static core:Amalur.CoreEffects}}"
