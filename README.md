@@ -43,7 +43,7 @@ This is heavily updated editor, rewritten in WPF and modern C#8 paradigms. A pro
 
 #### Thanks
 - My brother for his massive assistance in creating the wpf gui. 
-- [This steam guide which listed the struct of the support component segment] (https://steamcommunity.com/sharedfiles/filedetails/?id=1072394368)
+- [This steam guide which listed the struct of the support component segment](https://steamcommunity.com/sharedfiles/filedetails/?id=1072394368)
 #### HISTORY
 
 Fork of a really obscure Chinese item editor developed by RenYue for the game [Kingdoms of Amalur: Reckoning on PC](https://store.steampowered.com/agecheck/app/102500/) and subsequently translated by [Raziel23x](https://github.com/raziel23x) to English. Appeared on the [CheatHappens forum](https://www.cheathappens.com/show_board2.asp?headID=111841&titleID=17461).
