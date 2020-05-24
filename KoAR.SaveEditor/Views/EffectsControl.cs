@@ -103,7 +103,7 @@ namespace KoAR.SaveEditor.Views
             base.OnApplyTemplate();
             if ((this._listBox = this.Template.FindName("PART_ListBox", this) as ListBox) != null)
             {
-                this._listBox.PreviewMouseDown += this.ListBox_PreviewMouseRightButtonDown;
+                this._listBox.PreviewMouseRightButtonDown += this.ListBox_PreviewMouseRightButtonDown;
             }
         }
 
