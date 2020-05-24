@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Input;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
+using KoAR.SaveEditor.Properties;
 using Microsoft.Win32;
 
 namespace KoAR.SaveEditor.Views
@@ -24,7 +25,6 @@ namespace KoAR.SaveEditor.Views
         private string _maxDurabilityFilter = string.Empty;
         private ItemModel? _selectedItem;
         private bool _unsavedChanges;
-        private double _zoomScale = 1d;
 
         public MainViewModel()
         {
@@ -210,8 +210,16 @@ namespace KoAR.SaveEditor.Views
 
         public double ZoomScale
         {
-            get => this._zoomScale;
-            set => this.SetValue(ref this._zoomScale, value);
+            get => Settings.Default.ZoomScale;
+            set
+            {
+                if (EqualityComparer<double>.Default.Equals(value, Settings.Default.ZoomScale))
+                {
+                    return;
+                }
+                Settings.Default.ZoomScale = value;
+                this.OnPropertyChanged();
+            }
         }
 
         internal void OpenFile()

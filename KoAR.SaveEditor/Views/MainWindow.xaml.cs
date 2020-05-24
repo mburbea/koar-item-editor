@@ -1,8 +1,10 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using KoAR.Core;
+using KoAR.SaveEditor.Properties;
 using TaskDialogInterop;
 
 namespace KoAR.SaveEditor.Views
@@ -22,6 +24,12 @@ namespace KoAR.SaveEditor.Views
         {            
             this.InitializeComponent();
             this.Loaded += this.Window_Loaded;
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            Settings.Default.Save();
+            base.OnClosed(e);
         }
 
         protected override void OnClosing(CancelEventArgs e)
