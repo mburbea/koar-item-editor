@@ -333,7 +333,7 @@ namespace KoAR.SaveEditor.Views
 
         private void MakeAllItemsDistinct()
         {
-            MessageBoxResult result = MessageBox.Show("Warning: This operation is irreversible!", "KoAR Save Editor", MessageBoxButton.OKCancel, MessageBoxImage.Warning, MessageBoxResult.Cancel);
+            MessageBoxResult result = MessageBox.Show("This operation will assign a unique combination of current and max durability to your inventory and is irreversible.", "KoAR Save Editor", MessageBoxButton.OKCancel, MessageBoxImage.Warning, MessageBoxResult.Cancel);
             if (result != MessageBoxResult.OK)
             {
                 return;
