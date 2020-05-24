@@ -63,12 +63,12 @@
                                                     <DataTemplate>
                                                         <StackPanel Orientation="Horizontal">
                                                             <TextBlock Text="{Binding}" />
-                                                            <TextBlock>
+                                                            <TextBlock FontFamily="Segoe UI Symbol">
                                                                 <TextBlock.Style>
                                                                     <Style TargetType="{x:Type TextBlock}">
                                                                         <Style.Triggers>
                                                                             <DataTrigger Binding="{Binding SortDirection, RelativeSource={RelativeSource AncestorType={x:Type views:ItemsView}}}" Value="Descending">
-                                                                                <Setter Property="Text" Value="▼" />
+                                                                                <Setter Property="Text" Value="▾" />
                                                                             </DataTrigger>
                                                                             <DataTrigger Value="True">
                                                                                 <DataTrigger.Binding>
@@ -80,7 +80,7 @@
                                                                                 <Setter Property="Visibility" Value="Visible" />
                                                                             </DataTrigger>
                                                                         </Style.Triggers>
-                                                                        <Setter Property="Text" Value="▲" />
+                                                                        <Setter Property="Text" Value="▴" />
                                                                         <Setter Property="Visibility" Value="Hidden" />
                                                                     </Style>
                                                                 </TextBlock.Style>
