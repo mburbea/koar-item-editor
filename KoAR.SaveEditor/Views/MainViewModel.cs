@@ -333,6 +333,11 @@ namespace KoAR.SaveEditor.Views
 
         private void MakeAllItemsDistinct()
         {
+            MessageBoxResult result = MessageBox.Show("Warning: This operation is not reversable. Proceed?", "KoAR Save Editor", MessageBoxButton.OKCancel, MessageBoxImage.Warning, MessageBoxResult.Cancel);
+            if (result != MessageBoxResult.Yes)
+            {
+                return;
+            }
         }
 
         private void OnFilterChange()
