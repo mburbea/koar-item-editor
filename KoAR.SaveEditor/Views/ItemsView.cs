@@ -15,6 +15,8 @@ namespace KoAR.SaveEditor.Views
 
         public static readonly DependencyProperty ItemsProperty = DependencyProperty.Register(nameof(ItemsView.Items), typeof(IEnumerable<ItemModel>), typeof(ItemsView));
 
+        public static readonly DependencyProperty MakeAllItemsDistinctCommandProperty = DependencyProperty.Register(nameof(ItemsView.MakeAllItemsDistinctCommand), typeof(ICommand), typeof(ItemsView));
+
         public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register(nameof(ItemsView.SelectedItem), typeof(ItemModel), typeof(ItemsView),
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
@@ -41,6 +43,12 @@ namespace KoAR.SaveEditor.Views
         {
             get => (IEnumerable<ItemModel>?)this.GetValue(ItemsView.ItemsProperty);
             set => this.SetValue(ItemsView.ItemsProperty, value);
+        }
+
+        public ICommand? MakeAllItemsDistinctCommand
+        {
+            get => (ICommand?)this.GetValue(ItemsView.MakeAllItemsDistinctCommandProperty);
+            set => this.SetValue(ItemsView.MakeAllItemsDistinctCommandProperty, value);
         }
 
         public ItemModel? SelectedItem

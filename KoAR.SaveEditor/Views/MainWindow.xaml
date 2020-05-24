@@ -185,7 +185,8 @@
                     </Grid>
                 </GroupBox>
                 <views:ItemsView Grid.Row="1" Items="{Binding FilteredItems}" SelectedItem="{Binding SelectedItem}" 
-                    EditItemHexCommand="{Binding EditItemHexCommand}" AllItemsUnsellable="{Binding AllItemsUnsellable}" />
+                    EditItemHexCommand="{Binding EditItemHexCommand}" AllItemsUnsellable="{Binding AllItemsUnsellable}" 
+                    MakeAllItemsDistinctCommand="{Binding MakeAllItemsDistinctCommand}" />
             </Grid>
             <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Stretch" Background="{x:Static SystemColors.ControlBrush}" FocusVisualStyle="{x:Null}" />
             <Grid Grid.Column="2">
