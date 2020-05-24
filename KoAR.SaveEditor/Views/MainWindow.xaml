@@ -114,8 +114,8 @@
                     <ColumnDefinition Width="120" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="{Binding FilteredItems.Count, StringFormat='Count: {0}'}" VerticalAlignment="Center" />
-                <TextBlock Grid.Column="1" Text="{Binding ZoomScale, StringFormat='##0%'}" VerticalAlignment="Center" Margin="2,0" TextAlignment="Right" />
-                <Slider Grid.Column="2" Value="{Binding ZoomScale}" Width="120" FocusVisualStyle="{x:Null}" Margin="2,0" VerticalAlignment="Center" Minimum="0.25" Maximum="1.75">
+                <TextBlock Grid.Column="1" Text="{Binding ZoomScale, StringFormat='##0%'}" VerticalAlignment="Center" TextAlignment="Right" />
+                <Slider Grid.Column="2" Value="{Binding ZoomScale}" FocusVisualStyle="{x:Null}" Margin="4,0,8,0" VerticalAlignment="Center" Minimum="0.25" Maximum="1.75">
                     <Slider.Resources>
                         <Style TargetType="{x:Type Thumb}" BasedOn="{StaticResource {x:Type Thumb}}">
                             <Setter Property="FocusVisualStyle" Value="{x:Null}" />
