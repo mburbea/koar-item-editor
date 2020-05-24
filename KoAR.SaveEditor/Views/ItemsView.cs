@@ -150,12 +150,20 @@ namespace KoAR.SaveEditor.Views
 
         private static void ItemsProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((ItemsView)d).ItemsCollectionView = e.NewValue == null ? null : new ListCollectionView((IList)e.NewValue)
+            ItemsView view = (ItemsView)d;
+            if (e.NewValue == null)
             {
-                SortDescriptions =
+                view.ItemsCollectionView = null;
+                return;
+            }
+            view.ItemsCollectionView = new ListCollectionView((IList)e.NewValue)
+            {
+                SortDescriptions = 
                 {
                     new SortDescription(nameof(ItemModel.Category), ListSortDirection.Ascending),
-                    new SortDescription(nameof(ItemModel.HasCustomName), ListSortDirection.Descending)
+                    view.SortProperty == null
+                        ? new SortDescription(nameof(ItemModel.HasCustomName), ListSortDirection.Descending)
+                        : new SortDescription(view.SortProperty, view.SortDirection)
                 }
             };
         }
