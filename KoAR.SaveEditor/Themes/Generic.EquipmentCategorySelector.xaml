@@ -4,6 +4,9 @@
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs"
     xmlns:core="clr-namespace:KoAR.Core;assembly=KoAR.Core"
     xmlns:s="clr-namespace:System;assembly=mscorlib">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/PresentationFramework.Aero,Version=4.0.0.0,PublicKeyToken=31bf3856ad364e35;component/Themes/Aero.NormalColor.xaml" />
+    </ResourceDictionary.MergedDictionaries>
     <Style TargetType="{x:Type views:EquipmentCategorySelector}">
         <Setter Property="Template">
             <Setter.Value>
