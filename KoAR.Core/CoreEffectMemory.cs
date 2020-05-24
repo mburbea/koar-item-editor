@@ -49,9 +49,13 @@ namespace KoAR.Core
 
         public List<uint> List { get; } = new List<uint>();
 
-        public void Serialize()
+        internal void Serialize()
         {
             byte currentCount = Bytes[Offsets.EffectCount];
+            if(currentCount == Count)
+            {
+                return;
+            }
             var currentLength = currentCount * 24 + 8;
             var newCount = List.Count;
             var prefixes = MemoryMarshal.Cast<byte, uint>(Prefixes);
@@ -64,7 +68,6 @@ namespace KoAR.Core
                 effectData[newCount * 2 + 1 + i] = effect | (ulong)uint.MaxValue << 32;
             }
             effectData[newCount * 2] = (ulong)(uint)newCount << 32;
-
             Bytes = MemoryUtilities.ReplaceBytes(Bytes, Offsets.FirstEffect, currentLength, MemoryMarshal.AsBytes(effectData));
             Bytes[Offsets.MysteryInteger] = Mystery[newCount];
             Bytes[Offsets.EffectCount] = (byte)newCount;
