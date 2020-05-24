@@ -38,6 +38,7 @@ namespace KoAR.SaveEditor.Views
             this.DeleteCoreEffectCommand = new DelegateCommand<uint>(this.DeleteCoreEffect, this.CanDeleteCoreEffect);
             this.DeleteEffectCommand = new DelegateCommand<uint>(this.DeleteEffect, this.CanDeleteEffect);
             this.SaveCommand = new DelegateCommand(this.Save, this.CanSave);
+            this.MakeAllItemsDistinctCommand = new DelegateCommand(this.MakeAllItemsDistinct);
         }
 
         public DelegateCommand<uint> AddCoreEffectCommand
@@ -153,6 +154,11 @@ namespace KoAR.SaveEditor.Views
         }
 
         public ReadOnlyObservableCollection<ItemModel> Items
+        {
+            get;
+        }
+
+        public DelegateCommand MakeAllItemsDistinctCommand
         {
             get;
         }
@@ -323,6 +329,10 @@ namespace KoAR.SaveEditor.Views
             {
                 this.OnPropertyChanged(nameof(this.AllItemsUnsellable));
             }
+        }
+
+        private void MakeAllItemsDistinct()
+        {
         }
 
         private void OnFilterChange()
