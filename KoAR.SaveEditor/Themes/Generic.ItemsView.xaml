@@ -87,7 +87,6 @@
                             </ListView.ContextMenu>
                             <ListView.View>
                                 <GridView AllowsColumnReorder="True">
-                                    <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ItemId}" Width="Auto" />
                                     <GridViewColumn Header="Type Id" Width="Auto">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate DataType="{x:Type views:ItemModel}">

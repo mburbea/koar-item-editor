@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -117,7 +118,7 @@ namespace KoAR.Core
             {
                 if (!HasCustomName)
                 {
-                    return "Unknown";
+                    return $"Unknown ({BinaryPrimitives.ReadUInt32BigEndian(ItemBytes):X8})";
                 }
                 int nameLength = MemoryUtilities.Read<int>(ItemBytes, Offsets.CustomNameLength);
                 return Encoding.Default.GetString(ItemBytes, Offsets.CustomNameText, nameLength);

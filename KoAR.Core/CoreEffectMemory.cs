@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace KoAR.Core
@@ -13,7 +14,8 @@ namespace KoAR.Core
             public const int FirstEffect = EffectCount + 4;
         }
 
-        private static ReadOnlySpan<byte> Prefixes2 => new byte[] { 0x73, 0x8E, 0x57, 0x00, 0xAA, 0x6E, 0x58, 0x00, 0xF9, 0x03, 0x4B, 0x00, 0xF4, 0x43, 0x4B, 0x00 };
+        private static ReadOnlySpan<byte> Prefixes => new byte[] { 0x73, 0x8E, 0x57, 0x00, 0xAA, 0x6E, 0x58, 0x00, 0xF9, 0x03, 0x4B, 0x00, 0xF4, 0x43, 0x4B, 0x00 };
+        private static ReadOnlySpan<byte> Mystery => new byte[] { 0x14, 0x2C, 0x44, 0x5C, 0x74 };
         internal CoreEffectMemory(Span<byte> buffer)
         {
             ReadOnlySpan<byte> bytes = Amalur.Bytes;
@@ -52,17 +54,20 @@ namespace KoAR.Core
             byte currentCount = Bytes[Offsets.EffectCount];
             var currentLength = currentCount * 24 + 8;
             var newCount = List.Count;
-            var prefixes = MemoryMarshal.Cast<byte, uint>(Prefixes2);
+            var prefixes = MemoryMarshal.Cast<byte, uint>(Prefixes);
             Span<ulong> effectData = stackalloc ulong[newCount * 3 + 1];
             for (int i = 0; i < newCount; i++)
             {
                 ulong effect = List[i];
                 effectData[i * 2] = prefixes[i] | effect << 32;
-                effectData[(i * 2) + 1] = ulong.MaxValue;
-                effectData[(newCount * 2) + 1 + i] = effect | (ulong)uint.MaxValue << 32;
+                effectData[i * 2 + 1] = ulong.MaxValue;
+                effectData[newCount * 2 + 1 + i] = effect | (ulong)uint.MaxValue << 32;
             }
+            effectData[newCount * 2] = (ulong)(uint)newCount << 32;
+
             Bytes = MemoryUtilities.ReplaceBytes(Bytes, Offsets.FirstEffect, currentLength, MemoryMarshal.AsBytes(effectData));
-            Bytes[Offsets.FirstEffect + (16 * newCount)] = Bytes[Offsets.EffectCount] = (byte)newCount;
+            Bytes[Offsets.MysteryInteger] = Mystery[newCount];
+            Bytes[Offsets.EffectCount] = (byte)newCount;
         }
     }
 }

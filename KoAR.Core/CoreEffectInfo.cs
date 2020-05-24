@@ -22,7 +22,7 @@ namespace KoAR.Core
 
         public DamageType DamageType { get; set; }
         public float Tier { get; set; }
-        public string DisplayText => DamageType == DamageType.Unknown ? "Unknown" : $"{this.DamageType} ({this.Tier})";
+        public string DisplayText => DamageType == DamageType.Unknown ? "Unknown" : $"{this.DamageType} (Tier: {this.Tier})";
 
         public CoreEffectInfo Clone() => (CoreEffectInfo)MemberwiseClone();
         public bool Equals(CoreEffectInfo other) => other?.Code == Code;
