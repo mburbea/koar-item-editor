@@ -20,8 +20,7 @@ namespace KoAR.SaveEditor.Views
         public static readonly DependencyProperty EffectDefinitionsProperty = DependencyProperty.Register(nameof(EffectsControl.EffectDefinitions), typeof(IEnumerable<IEffectInfo>), typeof(EffectsControl),
             new PropertyMetadata(EffectsControl.EffectDefinitionsProperty_ValueChanged));
 
-        public static readonly DependencyProperty EffectsProperty = DependencyProperty.Register(nameof(EffectsControl.Effects), typeof(IEnumerable<uint>), typeof(EffectsControl),
-            new PropertyMetadata(EffectsControl.EffectsProperty_ValueChanged));
+        public static readonly DependencyProperty EffectsProperty = DependencyProperty.Register(nameof(EffectsControl.Effects), typeof(IEnumerable<uint>), typeof(EffectsControl));
 
         public static readonly DependencyProperty EffectTranslationsProperty = DependencyProperty.Register(nameof(EffectsControl.EffectTranslations), typeof(IDictionary), typeof(EffectsControl));
 
@@ -99,12 +98,6 @@ namespace KoAR.SaveEditor.Views
         private static void EffectDefinitionsProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             ((EffectsControl)d).PendingEffect = ((IEnumerable<IEffectInfo>?)e.NewValue)?.FirstOrDefault();
-        }
-
-        private static void EffectsProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            //EffectsControl control = (EffectsControl)d;
-            //control.PendingEffect = control.EffectDefinitions?.FirstOrDefault();
         }
 
         private static void PendingEffectProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

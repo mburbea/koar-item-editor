@@ -1,6 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using KoAR.SaveEditor.Constructs;
 
@@ -13,9 +17,13 @@ namespace KoAR.SaveEditor.Views
 
         public static readonly DependencyProperty EditItemHexCommandProperty = DependencyProperty.Register(nameof(ItemsView.EditItemHexCommand), typeof(ICommand), typeof(ItemsView));
 
-        public static readonly DependencyProperty ItemsProperty = DependencyProperty.Register(nameof(ItemsView.Items), typeof(IEnumerable<ItemModel>), typeof(ItemsView));
+        public static readonly DependencyProperty ItemsProperty = DependencyProperty.Register(nameof(ItemsView.Items), typeof(IList), typeof(ItemsView),
+            new PropertyMetadata(ItemsView.ItemsProperty_ValueChanged));
 
         public static readonly DependencyProperty MakeAllItemsDistinctCommandProperty = DependencyProperty.Register(nameof(ItemsView.MakeAllItemsDistinctCommand), typeof(ICommand), typeof(ItemsView));
+
+        public static readonly DependencyProperty PropertyNameProperty = DependencyProperty.RegisterAttached("PropertyName", typeof(string), typeof(ItemsView),
+            new PropertyMetadata());
 
         public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register(nameof(ItemsView.SelectedItem), typeof(ItemModel), typeof(ItemsView),
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
@@ -23,9 +31,20 @@ namespace KoAR.SaveEditor.Views
         public static readonly DependencyProperty SelectRowOnClickProperty = DependencyProperty.RegisterAttached("SelectRowOnClick", typeof(bool), typeof(ItemsView),
             new PropertyMetadata(BooleanBoxes.False, ItemsView.SelectRowOnClickProperty_ValueChanged));
 
+        public static readonly DependencyProperty SortDirectionProperty = DependencyProperty.RegisterAttached(nameof(ItemsView.SortDirection), typeof(ListSortDirection), typeof(ItemsView),
+            new PropertyMetadata());
+
+        public static readonly DependencyProperty SortPropertyProperty = DependencyProperty.RegisterAttached(nameof(ItemsView.SortProperty), typeof(string), typeof(ItemsView),
+            new PropertyMetadata());
+
+        private static readonly DependencyPropertyKey _itemsCollectionViewProperty = DependencyProperty.RegisterReadOnly(nameof(ItemsView.ItemsCollectionView), typeof(CollectionView), typeof(ItemsView),
+            new PropertyMetadata());
+
         private ListView? _listView;
 
         static ItemsView() => FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(ItemsView), new FrameworkPropertyMetadata(typeof(ItemsView)));
+
+        public static DependencyProperty ItemsCollectionViewProperty => ItemsView._itemsCollectionViewProperty.DependencyProperty;
 
         public bool? AllItemsUnsellable
         {
@@ -45,6 +64,12 @@ namespace KoAR.SaveEditor.Views
             set => this.SetValue(ItemsView.ItemsProperty, value);
         }
 
+        public ListCollectionView? ItemsCollectionView
+        {
+            get => (ListCollectionView?)this.GetValue(ItemsView.ItemsCollectionViewProperty);
+            private set => this.SetValue(ItemsView._itemsCollectionViewProperty, value);
+        }
+
         public ICommand? MakeAllItemsDistinctCommand
         {
             get => (ICommand?)this.GetValue(ItemsView.MakeAllItemsDistinctCommandProperty);
@@ -57,10 +82,26 @@ namespace KoAR.SaveEditor.Views
             set => this.SetValue(ItemsView.SelectedItemProperty, value);
         }
 
+        public ListSortDirection SortDirection
+        {
+            get => (ListSortDirection)this.GetValue(ItemsView.SortDirectionProperty);
+            set => this.SetValue(ItemsView.SortDirectionProperty, value);
+        }
+
+        public string? SortProperty
+        {
+            get => (string?)this.GetValue(ItemsView.SortPropertyProperty);
+            set => this.SetValue(ItemsView.SortPropertyProperty, value);
+        }
+
+        public static string? GetPropertyName(GridViewColumn column) => (string?)column?.GetValue(ItemsView.PropertyNameProperty);
+
         public static bool GetSelectRowOnClick(FrameworkElement? element)
         {
             return element != null && (bool)element.GetValue(ItemsView.SelectRowOnClickProperty);
         }
+
+        public static void SetPropertyName(GridViewColumn column, string? value) => column?.SetValue(ItemsView.PropertyNameProperty, value);
 
         public static void SetSelectRowOnClick(FrameworkElement? element, bool value)
         {
@@ -70,10 +111,31 @@ namespace KoAR.SaveEditor.Views
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            if ((this._listView = this.Template.FindName("PART_ListView", this) as ListView) != null)
+            if ((this._listView = this.Template.FindName("PART_ListView", this) as ListView) == null)
             {
-                ListViewAutoSize.AutoSizeColumns(this._listView);
+                return;
             }
+            ListViewAutoSize.AutoSizeColumns(this._listView);
+            this._listView.AddHandler(GridViewColumnHeader.ClickEvent, new RoutedEventHandler(this.GridViewColumn_Click));
+        }
+
+        private void GridViewColumn_Click(object sender, RoutedEventArgs e)
+        {
+            ListCollectionView? view;
+            if (!(e.OriginalSource is GridViewColumnHeader header) || (view = this.ItemsCollectionView) == null || view.SortDescriptions == null)
+            {
+                return;
+            }
+            string? propertyName = ItemsView.GetPropertyName(header.Column);
+            if (propertyName == null)
+            {
+                return;
+            }
+            SortDescription sort = view.SortDescriptions[1];
+            view.SortDescriptions[1] = new SortDescription(
+                this.SortProperty = propertyName,
+                this.SortDirection = propertyName == sort.PropertyName ? (ListSortDirection)((int)sort.Direction ^ 1) : ListSortDirection.Ascending
+            );
         }
 
         private static void Element_PreviewMouseLeftButtonDown(object sender, RoutedEventArgs e)
@@ -84,6 +146,18 @@ namespace KoAR.SaveEditor.Views
             {
                 item.IsSelected = true;
             }
+        }
+
+        private static void ItemsProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((ItemsView)d).ItemsCollectionView = e.NewValue == null ? null : new ListCollectionView((IList)e.NewValue)
+            {
+                SortDescriptions =
+                {
+                    new SortDescription(nameof(ItemModel.Category), ListSortDirection.Ascending),
+                    new SortDescription(nameof(ItemModel.HasCustomName), ListSortDirection.Descending)
+                }
+            };
         }
 
         private static void SelectRowOnClickProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

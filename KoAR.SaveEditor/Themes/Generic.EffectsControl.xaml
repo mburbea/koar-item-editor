@@ -46,7 +46,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type views:EffectsControl}">
-                    <GroupBox Header="{TemplateBinding Header}" HeaderTemplate="{TemplateBinding HeaderTemplate}">
+                    <GroupBox Header="{TemplateBinding Header}" HeaderTemplate="{TemplateBinding HeaderTemplate}" FocusVisualStyle="{x:Null}">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition />
@@ -207,7 +207,7 @@
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                             </ListBox>
-                            <GroupBox Header="Add Effect:" BorderThickness="1" BorderBrush="LightGray">
+                            <GroupBox Header="Add Effect:" BorderThickness="1" BorderBrush="LightGray" FocusVisualStyle="{x:Null}">
                                 <GroupBox.Style>
                                     <Style TargetType="{x:Type GroupBox}">
                                         <Style.Triggers>

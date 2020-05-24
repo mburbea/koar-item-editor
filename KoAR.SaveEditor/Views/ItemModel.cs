@@ -22,6 +22,8 @@ namespace KoAR.SaveEditor.Views
 
         public EquipmentCategory Category => this.Item.Category;
 
+        public int CoreEffectCount => this.CoreEffects.Count;
+
         public List<uint> CoreEffects => this.Item.CoreEffects.List;
 
         public float CurrentDurability

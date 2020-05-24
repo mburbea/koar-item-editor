@@ -49,18 +49,50 @@
                         </Style>
                     </ControlTemplate.Resources>
                     <Border>
-                        <Border.Resources>
-                            <CollectionViewSource x:Key="FilteredItems" Source="{Binding Items, RelativeSource={RelativeSource TemplatedParent}}">
-                                <CollectionViewSource.SortDescriptions>
-                                    <componentModel:SortDescription PropertyName="Category" Direction="Ascending" />
-                                    <componentModel:SortDescription PropertyName="HasCustomName" Direction="Descending" />
-                                    <componentModel:SortDescription PropertyName="ItemIndex" Direction="Ascending" />
-                                </CollectionViewSource.SortDescriptions>
-                            </CollectionViewSource>
-                        </Border.Resources>
-                        <ListView x:Name="PART_ListView" ItemsSource="{Binding Source={StaticResource FilteredItems}}" SelectedItem="{Binding SelectedItem, RelativeSource={RelativeSource TemplatedParent}}"
+                        <ListView x:Name="PART_ListView" ItemsSource="{Binding ItemsCollectionView, RelativeSource={RelativeSource TemplatedParent}}" SelectedItem="{Binding SelectedItem, RelativeSource={RelativeSource TemplatedParent}}"
                             Margin="4" BorderBrush="LightGray" SelectionMode="Single" FocusVisualStyle="{x:Null}" VirtualizingPanel.VirtualizationMode="Recycling"
                             TextSearch.TextPath="ItemId" AlternationCount="2">
+                            <ListView.Resources>
+                                <constructs:EqualityConverter x:Key="EqualityConverter" />
+                                <constructs:StringIsNullOrEmptyConverter x:Key="StringIsNullOrEmptyConverter" />
+                                <Style TargetType="{x:Type GridViewColumnHeader}" BasedOn="{StaticResource {x:Type GridViewColumnHeader}}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Column.(views:ItemsView.PropertyName), Converter={StaticResource StringIsNullOrEmptyConverter}, RelativeSource={RelativeSource Self}}" Value="False">
+                                            <Setter Property="ContentTemplate">
+                                                <Setter.Value>
+                                                    <DataTemplate>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock Text="{Binding}" />
+                                                            <TextBlock>
+                                                                <TextBlock.Style>
+                                                                    <Style TargetType="{x:Type TextBlock}">
+                                                                        <Style.Triggers>
+                                                                            <DataTrigger Binding="{Binding SortDirection, RelativeSource={RelativeSource AncestorType={x:Type views:ItemsView}}}" Value="Descending">
+                                                                                <Setter Property="Text" Value="▼" />
+                                                                            </DataTrigger>
+                                                                            <DataTrigger Value="True">
+                                                                                <DataTrigger.Binding>
+                                                                                    <MultiBinding Converter="{StaticResource EqualityConverter}">
+                                                                                        <Binding Path="SortProperty" RelativeSource="{RelativeSource AncestorType={x:Type views:ItemsView}}" />
+                                                                                        <Binding Path="Column.(views:ItemsView.PropertyName)" RelativeSource="{RelativeSource AncestorType={x:Type GridViewColumnHeader}}" />
+                                                                                    </MultiBinding>
+                                                                                </DataTrigger.Binding>
+                                                                                <Setter Property="Visibility" Value="Visible" />
+                                                                            </DataTrigger>
+                                                                        </Style.Triggers>
+                                                                        <Setter Property="Text" Value="▲" />
+                                                                        <Setter Property="Visibility" Value="Hidden" />
+                                                                    </Style>
+                                                                </TextBlock.Style>
+                                                            </TextBlock>
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListView.Resources>
                             <ListView.ItemContainerStyle>
                                 <Style TargetType="{x:Type ListViewItem}">
                                     <Style.Triggers>
@@ -87,7 +119,7 @@
                             </ListView.ContextMenu>
                             <ListView.View>
                                 <GridView AllowsColumnReorder="True">
-                                    <GridViewColumn Header="Type Id" Width="Auto">
+                                    <GridViewColumn Header="Type Id" Width="Auto" views:ItemsView.PropertyName="TypeId">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate DataType="{x:Type views:ItemModel}">
                                                 <Grid>
@@ -112,7 +144,7 @@
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
-                                    <GridViewColumn Header="Name" Width="Auto">
+                                    <GridViewColumn Header="Name" Width="Auto" views:ItemsView.PropertyName="ItemName">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate DataType="{x:Type views:ItemModel}">
                                                 <Grid>
@@ -162,7 +194,7 @@
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
-                                    <GridViewColumn Header="Cur Durability" Width="Auto">
+                                    <GridViewColumn Header="Cur Durability" Width="Auto" views:ItemsView.PropertyName="CurrentDurability">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate DataType="{x:Type views:ItemModel}">
                                                 <Grid>
@@ -191,7 +223,7 @@
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
-                                    <GridViewColumn Header="Max Durability" Width="Auto">
+                                    <GridViewColumn Header="Max Durability" Width="Auto" views:ItemsView.PropertyName="MaxDurability">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate DataType="{x:Type views:ItemModel}">
                                                 <Grid>
@@ -220,14 +252,14 @@
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
-                                    <GridViewColumn Header="# Effects" Width="Auto">
+                                    <GridViewColumn Header="# Effects" Width="Auto" views:ItemsView.PropertyName="EffectCount">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate DataType="{x:Type views:ItemModel}">
                                                 <TextBlock Text="{Binding EffectCount, StringFormat='#,##0'}" TextAlignment="Right" />
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
-                                    <GridViewColumn Header="Core Effects" Width="Auto">
+                                    <GridViewColumn Header="Core Effects" Width="Auto" views:ItemsView.PropertyName="CoreEffectCount">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate DataType="{x:Type views:ItemModel}">
                                                 <ItemsControl ItemsSource="{Binding CoreEffects}" MinWidth="88">
