@@ -8,7 +8,6 @@ using System.Windows;
 using System.Windows.Input;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
-using KoAR.SaveEditor.Properties;
 using Microsoft.Win32;
 
 namespace KoAR.SaveEditor.Views
@@ -206,20 +205,6 @@ namespace KoAR.SaveEditor.Views
         public DelegateCommand UpdateInventorySizeCommand
         {
             get;
-        }
-
-        public double ZoomScale
-        {
-            get => Settings.Default.ZoomScale;
-            set
-            {
-                if (EqualityComparer<double>.Default.Equals(value, Settings.Default.ZoomScale))
-                {
-                    return;
-                }
-                Settings.Default.ZoomScale = value;
-                this.OnPropertyChanged();
-            }
         }
 
         internal void OpenFile()

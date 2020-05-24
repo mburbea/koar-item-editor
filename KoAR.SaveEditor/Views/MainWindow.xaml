@@ -7,6 +7,7 @@
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views"
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs" 
     xmlns:core="clr-namespace:KoAR.Core;assembly=KoAR.Core"
+    xmlns:props="clr-namespace:KoAR.SaveEditor.Properties"
     mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type views:MainViewModel}}"
     Width="1366" Height="768" WindowStartupLocation="CenterScreen" 
     Icon="/app.ico" ResizeMode="CanResizeWithGrip">
@@ -114,8 +115,8 @@
                     <ColumnDefinition Width="120" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="{Binding FilteredItems.Count, StringFormat='Count: {0}'}" VerticalAlignment="Center" />
-                <TextBlock Grid.Column="1" Text="{Binding ZoomScale, StringFormat='##0%'}" VerticalAlignment="Center" TextAlignment="Right" />
-                <Slider Grid.Column="2" Value="{Binding ZoomScale}" FocusVisualStyle="{x:Null}" Margin="4,0,8,0" VerticalAlignment="Center" Minimum="0.25" Maximum="1.75">
+                <TextBlock Grid.Column="1" Text="{Binding ZoomScale, Source={x:Static props:Settings.Default}, StringFormat='##0%'}" VerticalAlignment="Center" TextAlignment="Right" />
+                <Slider Grid.Column="2" Value="{Binding ZoomScale, Source={x:Static props:Settings.Default}}" FocusVisualStyle="{x:Null}" Margin="4,0,8,0" VerticalAlignment="Center" Minimum="0.25" Maximum="1.75">
                     <Slider.Resources>
                         <Style TargetType="{x:Type Thumb}" BasedOn="{StaticResource {x:Type Thumb}}">
                             <Setter Property="FocusVisualStyle" Value="{x:Null}" />
@@ -136,7 +137,7 @@
                 </Style>
             </Grid.Style>
             <Grid.LayoutTransform>
-                <ScaleTransform ScaleX="{Binding ZoomScale}" ScaleY="{Binding ZoomScale}" />
+                <ScaleTransform ScaleX="{Binding ZoomScale, Source={x:Static props:Settings.Default}}" ScaleY="{Binding ZoomScale, Source={x:Static props:Settings.Default}}" />
             </Grid.LayoutTransform>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*" />
