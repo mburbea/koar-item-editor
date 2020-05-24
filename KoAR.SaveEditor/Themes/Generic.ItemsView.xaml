@@ -12,8 +12,7 @@
         <Style.Resources>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <constructs:FloatConverter x:Key="SingleConverter" />
-            <constructs:HexConverter x:Key="Int32HexConverter" />
-
+            <constructs:HexConverter x:Key="HexConverter" />
         </Style.Resources>
         <Setter Property="Template">
             <Setter.Value>
@@ -106,7 +105,7 @@
                                                     <TextBox TextAlignment="Right" Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                         constructs:TextBoxSelect.SelectOnFocus="{Binding IsVisible, RelativeSource={RelativeSource Self}}">
                                                         <TextBox.Text>
-                                                            <Binding Path="TypeId" Converter="{StaticResource Int32HexConverter}"/>
+                                                            <Binding Path="TypeId" Converter="{StaticResource HexConverter}"/>
                                                         </TextBox.Text>
                                                     </TextBox>
                                                 </Grid>

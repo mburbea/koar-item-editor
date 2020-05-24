@@ -333,10 +333,24 @@ namespace KoAR.SaveEditor.Views
 
         private void MakeAllItemsDistinct()
         {
-            MessageBoxResult result = MessageBox.Show("Warning: This operation is not reversable. Proceed?", "KoAR Save Editor", MessageBoxButton.OKCancel, MessageBoxImage.Warning, MessageBoxResult.Cancel);
-            if (result != MessageBoxResult.Yes)
+            MessageBoxResult result = MessageBox.Show("Warning: This operation is irreversible!", "KoAR Save Editor", MessageBoxButton.OKCancel, MessageBoxImage.Warning, MessageBoxResult.Cancel);
+            if (result != MessageBoxResult.OK)
             {
                 return;
+            }
+            float maxDurability = 100;
+            foreach (IGrouping<EquipmentCategory, ItemModel> grouping in this.Items.Where(model => !model.HasCustomName).GroupBy(model => model.Category))
+            {
+                float currentDurability = --maxDurability;
+                foreach (ItemModel model in grouping)
+                {
+                    if (currentDurability == 0)
+                    {
+                        currentDurability = --maxDurability;
+                    }
+                    model.MaxDurability = maxDurability;
+                    model.CurrentDurability = currentDurability--;
+                }
             }
         }
 
