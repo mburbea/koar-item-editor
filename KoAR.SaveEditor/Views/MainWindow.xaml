@@ -97,18 +97,32 @@
                 <Button ToolTip="Help" Command="Help" Tag="{StaticResource Help}" />
             </StackPanel>
         </Border>
-        <Border DockPanel.Dock="Bottom"  Background="{x:Static SystemColors.ControlBrush}" Padding="4">
-            <TextBlock Text="{Binding FilteredItems.Count, StringFormat='Count: {0}'}">
-                <TextBlock.Style>
-                    <Style TargetType="{x:Type TextBlock}">
+        <Border DockPanel.Dock="Bottom" Background="{x:Static SystemColors.ControlBrush}" Padding="4">
+            <Grid>
+                <Grid.Style>
+                    <Style TargetType="{x:Type Grid}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding FileName}" Value="{x:Null}">
                                 <Setter Property="Visibility" Value="Hidden" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </TextBlock.Style>
-            </TextBlock>
+                </Grid.Style>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="120" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{Binding FilteredItems.Count, StringFormat='Count: {0}'}" VerticalAlignment="Center" />
+                <TextBlock Grid.Column="1" Text="{Binding ZoomScale, StringFormat='##0%'}" VerticalAlignment="Center" Margin="2,0" TextAlignment="Right" />
+                <Slider Grid.Column="2" Value="{Binding ZoomScale}" Width="120" FocusVisualStyle="{x:Null}" Margin="2,0" VerticalAlignment="Center" Minimum="0.25" Maximum="1.75">
+                    <Slider.Resources>
+                        <Style TargetType="{x:Type Thumb}" BasedOn="{StaticResource {x:Type Thumb}}">
+                            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                        </Style>
+                    </Slider.Resources>
+                </Slider>
+            </Grid>
         </Border>
         <Grid Grid.IsSharedSizeScope="True">
             <Grid.Style>
@@ -121,6 +135,9 @@
                     </Style.Triggers>
                 </Style>
             </Grid.Style>
+            <Grid.LayoutTransform>
+                <ScaleTransform ScaleX="{Binding ZoomScale}" ScaleY="{Binding ZoomScale}" />
+            </Grid.LayoutTransform>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*" />
                 <ColumnDefinition Width="Auto" />

@@ -24,6 +24,7 @@ namespace KoAR.SaveEditor.Views
         private string _maxDurabilityFilter = string.Empty;
         private ItemModel? _selectedItem;
         private bool _unsavedChanges;
+        private double _zoomScale = 1d;
 
         public MainViewModel()
         {
@@ -205,6 +206,12 @@ namespace KoAR.SaveEditor.Views
         public DelegateCommand UpdateInventorySizeCommand
         {
             get;
+        }
+
+        public double ZoomScale
+        {
+            get => this._zoomScale;
+            set => this.SetValue(ref this._zoomScale, value);
         }
 
         internal void OpenFile()
