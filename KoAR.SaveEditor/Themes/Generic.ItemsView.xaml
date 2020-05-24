@@ -11,13 +11,15 @@
         <Style.Resources>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <constructs:FloatConverter x:Key="SingleConverter" />
+            <constructs:EqualityConverter x:Key="EqualityConverter" />
+            <constructs:StringIsNullOrEmptyConverter x:Key="StringIsNullOrEmptyConverter" />
+            <constructs:NegatedBooleanConverter x:Key="NegatedBooleanConverter" />
             <constructs:HexConverter x:Key="HexConverter" />
         </Style.Resources>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type views:ItemsView}">
                     <ControlTemplate.Resources>
-                        <constructs:NegatedBooleanConverter x:Key="NegatedBooleanConverter" />
                         <SolidColorBrush x:Key="AlternateRowBrush" Color="#25BCBCBC" po:Freeze="True" />
                         <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
                             <Style.Triggers>
@@ -52,8 +54,6 @@
                             Margin="4" BorderBrush="LightGray" SelectionMode="Single" FocusVisualStyle="{x:Null}" VirtualizingPanel.VirtualizationMode="Recycling"
                             TextSearch.TextPath="ItemId" AlternationCount="2">
                             <ListView.Resources>
-                                <constructs:EqualityConverter x:Key="EqualityConverter" />
-                                <constructs:StringIsNullOrEmptyConverter x:Key="StringIsNullOrEmptyConverter" />
                                 <Style TargetType="{x:Type GridViewColumnHeader}" BasedOn="{StaticResource {x:Type GridViewColumnHeader}}">
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding Column.(views:ItemsView.PropertyName), Converter={StaticResource StringIsNullOrEmptyConverter}, RelativeSource={RelativeSource Self}}" Value="False">
