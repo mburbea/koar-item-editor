@@ -12,12 +12,9 @@ namespace KoAR.SaveEditor.Views
     /// </summary>
     public sealed class ItemModel : NotifierBase
     {
-        private readonly Lazy<List<uint>> _effects;
-
         public ItemModel(ItemMemoryInfo item)
         {
             this.Item = item;
-            this._effects = new Lazy<List<uint>>(item.ReadEffects);
         }
 
         public EquipmentCategory Category => this.Item.Category;
@@ -32,9 +29,9 @@ namespace KoAR.SaveEditor.Views
             set => this.SetItemValue(value, this.Item.CurrentDurability, value => this.Item.CurrentDurability = value);
         }
 
-        public int EffectCount => this.Item.EffectCount;
+        public int EffectCount => this.Item.Effects.Count;
 
-        public List<uint> Effects => this._effects.Value;
+        public List<uint> Effects => this.Item.Effects;
 
         public bool HasCustomName => this.Item.HasCustomName;
 
@@ -82,7 +79,6 @@ namespace KoAR.SaveEditor.Views
         internal void AddEffect(uint code)
         {
             this.Effects.Add(code);
-            this.Item.WriteEffects(this.Effects);
             Amalur.WriteEquipmentBytes(this.Item, out _);
         }
 
@@ -96,12 +92,10 @@ namespace KoAR.SaveEditor.Views
 
         internal void DeleteEffect(uint code)
         {
-            if (!this.Effects.Remove(code))
+            if (this.Effects.Remove(code))
             {
-                return;
+                Amalur.WriteEquipmentBytes(this.Item, out _);
             }
-            this.Item.WriteEffects(this.Effects);
-            Amalur.WriteEquipmentBytes(this.Item, out _);
         }
 
         private void SetItemValue<T>(T value, T currentValue, Action<T> setValue, [CallerMemberName] string propertyName = "")

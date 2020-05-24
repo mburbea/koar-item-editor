@@ -59,6 +59,12 @@ namespace KoAR.Core
             CoreEffects = new CoreEffectMemory(buffer);
             Category = DetermineEquipmentType(bytes, buffer, ItemBytes[13]);
             _typeIdMemory = new Memory<byte>(Amalur.Bytes, bytes.IndexOf(buffer.Slice(0, 4)) + 4, 4);
+            Effects = new List<uint>(ItemBytes[Offset.EffectCount]);
+            for (int i = 0; i < Effects.Capacity; i++)
+            {
+                Effects.Add(MemoryUtilities.Read<uint>(ItemBytes, Offset.FirstEffect + i * 8));
+            }
+
         }
 
         public CoreEffectMemory CoreEffects { get; internal set; }
@@ -70,11 +76,7 @@ namespace KoAR.Core
 
         public int DataLength { get; }
 
-        public int EffectCount
-        {
-            get => MemoryUtilities.Read<int>(ItemBytes, Offset.EffectCount);
-            set => MemoryUtilities.Write(ItemBytes, Offset.EffectCount, value);
-        }
+        public List<uint> Effects { get; }
 
         public bool HasCustomName => ItemBytes[Offsets.HasCustomName] == 1;
 
@@ -142,7 +144,7 @@ namespace KoAR.Core
             set => MemoryUtilities.Write(ItemBytes, Offsets.MaxDurability, value);
         }
 
-        private Offset Offsets => new Offset(EffectCount);
+        private Offset Offsets => new Offset(Effects.Count);
 
         public static ItemMemoryInfo Create(int itemIndex, int nextOffset)
         {
@@ -166,27 +168,21 @@ namespace KoAR.Core
 
         public static bool IsValidDurability(float durability) => durability > DurabilityLowerBound && durability < DurabilityUpperBound;
 
-        public List<uint> ReadEffects()
+        public void Serialize()
         {
-            List<uint> effects = new List<uint>();
-
-            for (int i = 0; i < EffectCount; i++)
+            int currentCount = ItemBytes[Offset.EffectCount];
+            if (currentCount == Effects.Count)
             {
-                effects.Add(MemoryUtilities.Read<uint>(ItemBytes, Offset.FirstEffect + i * 8));
+                return;
             }
-
-            return effects;
-        }
-
-        public void WriteEffects(List<uint> newEffects)
-        {
-            var currentLength = Offsets.PostEffect - Offset.FirstEffect;
-            EffectCount = newEffects.Count;
-            Span<ulong> effectData = stackalloc ulong[newEffects.Count];
+            var offsets = new Offset(currentCount);
+            var currentLength = offsets.PostEffect - Offset.FirstEffect;
+            ItemBytes[Offset.EffectCount] = (byte)Effects.Count;
+            Span<ulong> effectData = stackalloc ulong[Effects.Count];
 
             for (int i = 0; i < effectData.Length; i++)
             {
-                effectData[i] = newEffects[i] | (ulong)uint.MaxValue << 32;
+                effectData[i] = Effects[i] | (ulong)uint.MaxValue << 32;
             }
 
             ItemBytes = MemoryUtilities.ReplaceBytes(ItemBytes, Offset.FirstEffect, currentLength, MemoryMarshal.AsBytes(effectData));

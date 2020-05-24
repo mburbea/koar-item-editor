@@ -148,6 +148,7 @@ namespace KoAR.Core
             var coreMemory = equipment.CoreEffects;
             coreMemory.Serialize();
             bytes = MemoryUtilities.ReplaceBytes(bytes, coreMemory.ItemIndex, coreMemory.DataLength, coreMemory.Bytes);
+            equipment.Serialize();
             bytes = MemoryUtilities.ReplaceBytes(bytes, equipment.ItemIndex, equipment.DataLength, equipment.ItemBytes);
             Bytes = bytes;
             lengthChanged = Bytes.Length != oldLength;
