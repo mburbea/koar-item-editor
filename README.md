@@ -15,13 +15,13 @@ This is heavily updated editor, rewritten in WPF and modern C#8 paradigms. A pro
    - There are **many** of Core effects, and only so many you can get from crafting.
    - What's worse is there are half tier effects that when you salvage will go up a tier (e.g. Poison 3.5 will salvage to Master Infected Hilt.) Most are not easy to find.
    Nearly every unique has a different effect code. Possibly more than one.
-* Adding and removing of Core Effect #1
+* [Adding and removing of Core Effects](https://github.com/mburbea/koar-item-editor/issues/1)
    - Core effects are effects added by usually the second component in a crafted items, or being mastercrafted.
    - They confer a visual effect (like the hilt being on fire or the lightning on `Lightning Cage`), as well as a damage effect.
    - Adding a code from a unique weapon usually will turn your weapon Unique. 
    - Inexplicably, the item card display effect can actually be different than the applied effect. So your sword can say it deals frost damage but will be on fire and light enemies aflame. The editor currently couples the two together (like the game does).
    - You can use right click to copy a listed core effect.
-* Change the Item's TypeId #6
+* [Change the Item's TypeId](https://github.com/mburbea/koar-item-editor/issues/6)
    - The typeId defines the equipment model it uses and also changes the item's description in game.
    - It also defines stats (I believe) There is a struct that follows after the typeId, but modifying it doesn't seem to do anything.
    - If your holding the item, it probably will not update the base stats of the item.
