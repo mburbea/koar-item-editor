@@ -13,7 +13,9 @@ namespace KoAR.SaveEditor.Constructs
 
         object? IValueConverter.ConvertBack(object? value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value is string text ? uint.Parse(text, NumberStyles.HexNumber, culture) : default(uint?);
+            return value is string text  && uint.TryParse(text, NumberStyles.HexNumber, culture, out uint res)
+                ? res
+                : default(uint?);
         }
     }
 }

@@ -4,22 +4,7 @@ namespace KoAR.Core
 {
     public class CoreEffectInfo : IEffectInfo, IEquatable<CoreEffectInfo>
     {
-        public static readonly CoreEffectInfo Empty = new CoreEffectInfo();
-        private uint _code;
-
-        public uint Code
-        {
-            get => _code;
-            set
-            {
-                Amalur.CoreEffects.TryGetValue(value, out var definition);
-                definition ??= Empty;
-                DamageType = definition.DamageType;
-                Tier = definition.Tier;
-                _code = value;
-            }
-        }
-
+        public uint Code { get; set; }
         public DamageType DamageType { get; set; }
         public float Tier { get; set; }
         public string DisplayText => DamageType == DamageType.Unknown ? "Unknown" : $"{this.DamageType} (Tier: {this.Tier})";
