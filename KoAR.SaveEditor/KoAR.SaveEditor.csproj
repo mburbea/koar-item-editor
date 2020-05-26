@@ -38,6 +38,7 @@
     <None Remove="Resources\Bloodseeker.png" />
     <None Remove="Resources\Buckler.png" />
     <None Remove="Resources\Chakrams.png" />
+    <None Remove="Resources\Copy.png" />
     <None Remove="Resources\Daggers.png" />
     <None Remove="Resources\Delete.png" />
     <None Remove="Resources\FaeBlades.png" />
@@ -75,6 +76,7 @@
     <Resource Include="Resources\BloodSeeker.png" />
     <Resource Include="Resources\Buckler.png" />
     <Resource Include="Resources\Chakrams.png" />
+    <Resource Include="Resources\Copy.png" />
     <Resource Include="Resources\Daggers.png" />
     <Resource Include="Resources\Delete.png" />
     <Resource Include="Resources\FaeBlades.png" />
