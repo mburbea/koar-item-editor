@@ -240,25 +240,9 @@ namespace KoAR.SaveEditor.Views
             MessageBox.Show($"Save successful! Original save backed up as {this._fileName}.bak.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private void AddCoreEffect(uint code)
-        {
-            if (this.SelectedItem == null)
-            {
-                return;
-            }
-            this.SelectedItem.AddCoreEffect(code);
-            this.Refresh();
-        }
+        private void AddCoreEffect(uint code) => this.SelectedItem?.AddCoreEffect(code);
 
-        private void AddEffect(uint code)
-        {
-            if (this.SelectedItem == null)
-            {
-                return;
-            }
-            this.SelectedItem.AddEffect(code);
-            this.Refresh();
-        }
+        private void AddEffect(uint code) => this.SelectedItem?.AddEffect(code);
 
         private bool CanAddCoreEffect(uint code) => this.SelectedItem != null && code != 0u;
 
@@ -272,25 +256,9 @@ namespace KoAR.SaveEditor.Views
 
         private bool CanUpdateInventorySize() => Amalur.IsFileOpen && Amalur.InventorySize != this.InventorySize;
 
-        private void DeleteCoreEffect(uint code)
-        {
-            if (this.SelectedItem == null)
-            {
-                return;
-            }
-            this.SelectedItem.DeleteCoreEffect(code);
-            this.Refresh();
-        }
+        private void DeleteCoreEffect(uint code) => this.SelectedItem?.DeleteCoreEffect(code);
 
-        private void DeleteEffect(uint code)
-        {
-            if (this.SelectedItem == null)
-            {
-                return;
-            }
-            this.SelectedItem.DeleteEffect(code);
-            this.Refresh();
-        }
+        private void DeleteEffect(uint code) => this.SelectedItem?.DeleteEffect(code);
 
         private void EditItemHex(ItemModel model)
         {
@@ -298,15 +266,15 @@ namespace KoAR.SaveEditor.Views
             {
                 return;
             }
-            ItemEditorWindow view = new ItemEditorWindow
-            {
-                Owner = Application.Current.MainWindow,
-                DataContext = new ItemEditorViewModel(model.Item)
-            };
-            if (view.ShowDialog() == true)
-            {
-                this.Refresh();
-            }
+            //ItemEditorWindow view = new ItemEditorWindow
+            //{
+            //    Owner = Application.Current.MainWindow,
+            //    DataContext = new ItemEditorViewModel(model.Item)
+            //};
+            //if (view.ShowDialog() == true)
+            //{
+            //    this.Refresh();
+            //}
         }
 
         private void Item_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -373,18 +341,6 @@ namespace KoAR.SaveEditor.Views
                 : items.ToList();
             this.SelectedItem = null;
             this.OnPropertyChanged(nameof(this.AllItemsUnsellable));
-        }
-
-        private void Refresh()
-        {
-            //int? selectedItemIndex = this._selectedItem?.ItemIndex;
-            //this.RepopulateItems();
-            //if (selectedItemIndex.HasValue)
-            //{
-            //    this.SelectedItem = this._items.FirstOrDefault(item => item.ItemIndex == selectedItemIndex.Value);
-            //}
-            this.UnsavedChanges = true;
-            CommandManager.InvalidateRequerySuggested();
         }
 
         private void RepopulateItems()
