@@ -74,7 +74,7 @@ namespace KoAR.Core
             set => MemoryUtilities.Write(ItemBytes, Offsets.CurrentDurability, value);
         }
 
-        public int DataLength { get; }
+        public int DataLength { get; internal set; }
 
         public List<uint> Effects { get; }
 
@@ -112,7 +112,7 @@ namespace KoAR.Core
 
         public uint ItemId => MemoryUtilities.Read<uint>(ItemBytes);
 
-        public int ItemIndex { get; }
+        public int ItemIndex { get; internal set; }
 
         public string ItemName
         {

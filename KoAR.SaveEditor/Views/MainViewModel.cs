@@ -384,12 +384,12 @@ namespace KoAR.SaveEditor.Views
 
         private void Refresh()
         {
-            int? selectedItemIndex = this._selectedItem?.ItemIndex;
-            this.RepopulateItems();
-            if (selectedItemIndex.HasValue)
-            {
-                this.SelectedItem = this._items.FirstOrDefault(item => item.ItemIndex == selectedItemIndex.Value);
-            }
+            //int? selectedItemIndex = this._selectedItem?.ItemIndex;
+            //this.RepopulateItems();
+            //if (selectedItemIndex.HasValue)
+            //{
+            //    this.SelectedItem = this._items.FirstOrDefault(item => item.ItemIndex == selectedItemIndex.Value);
+            //}
             this.UnsavedChanges = true;
             CommandManager.InvalidateRequerySuggested();
         }
@@ -407,7 +407,7 @@ namespace KoAR.SaveEditor.Views
                 PropertyChangedEventManager.RemoveHandler(item, this.Item_PropertyChanged, string.Empty);
             }
             this._items.Clear();
-            foreach (ItemModel item in Amalur.GetAllEquipment().Select(info => new ItemModel(info)))
+            foreach (ItemModel item in Amalur.Items.Select(info => new ItemModel(info)))
             {
                 PropertyChangedEventManager.AddHandler(item, this.Item_PropertyChanged, string.Empty);
                 this._items.Add(item);

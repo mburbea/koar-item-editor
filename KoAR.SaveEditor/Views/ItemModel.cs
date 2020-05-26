@@ -74,12 +74,14 @@ namespace KoAR.SaveEditor.Views
         {
             this.CoreEffects.Add(code);
             Amalur.WriteEquipmentBytes(this.Item, out _);
+            this.OnPropertyChanged(nameof(this.CoreEffects));
         }
 
         internal void AddEffect(uint code)
         {
             this.Effects.Add(code);
             Amalur.WriteEquipmentBytes(this.Item, out _);
+            this.OnPropertyChanged(nameof(this.Effects));
         }
 
         internal void DeleteCoreEffect(uint code)
@@ -87,6 +89,7 @@ namespace KoAR.SaveEditor.Views
             if (this.CoreEffects.Remove(code))
             {
                 Amalur.WriteEquipmentBytes(this.Item, out _);
+                this.OnPropertyChanged(nameof(this.CoreEffects));
             }
         }
 
@@ -95,6 +98,7 @@ namespace KoAR.SaveEditor.Views
             if (this.Effects.Remove(code))
             {
                 Amalur.WriteEquipmentBytes(this.Item, out _);
+                this.OnPropertyChanged(nameof(this.Effects));
             }
         }
 

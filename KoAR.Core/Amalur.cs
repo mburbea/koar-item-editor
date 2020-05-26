@@ -25,6 +25,7 @@ namespace KoAR.Core
         public static List<EffectInfo> Effects { get; } = new List<EffectInfo>();
         public static Dictionary<uint, CoreEffectInfo> CoreEffects { get; } = new Dictionary<uint, CoreEffectInfo>();
         public static Dictionary<uint, EffectInfo> DedupedEffects { get; } = new Dictionary<uint, EffectInfo>();
+        public static List<ItemMemoryInfo> Items { get; } = new List<ItemMemoryInfo>();
         private static int? _bagOffset;
 
         internal static byte[] Bytes { get; set; }
@@ -33,6 +34,7 @@ namespace KoAR.Core
         {
             _bagOffset = null;
             Bytes = File.ReadAllBytes(path);
+            GetAllEquipment();
         }
 
         public static void SaveFile(string path)
@@ -109,7 +111,7 @@ namespace KoAR.Core
             set => MemoryUtilities.Write(Bytes, _bagOffset ??= GetBagOffset(), value);
         }
 
-        public static List<ItemMemoryInfo> GetAllEquipment()
+        public static void GetAllEquipment()
         {
             static List<int> FindAllCandidates()
             {
@@ -128,19 +130,32 @@ namespace KoAR.Core
                 return results;
             }
 
-            List<ItemMemoryInfo> equipmentList = new List<ItemMemoryInfo>();
+            Items.Clear();
             var candidates = FindAllCandidates();
             candidates.Add(Bytes.Length);
             for (int i = 0; i < candidates.Count - 1; i++)
             {
                 if (ItemMemoryInfo.Create(candidates[i], candidates[i + 1]) is ItemMemoryInfo item)
                 {
-                    equipmentList.Add(item);
+                    Items.Add(item);
                 }
             }
-            return equipmentList;
         }
 
+        public static void RefreshItemLocations(int offset, int delta)
+        {
+            foreach(var item in Items)
+            {
+                if(item.CoreEffects.ItemIndex > offset)
+                {
+                    item.CoreEffects.ItemIndex += delta;
+                }
+                if(item.ItemIndex > offset)
+                {
+                    item.ItemIndex += delta;
+                }
+            }
+        }
         public static void WriteEquipmentBytes(ItemMemoryInfo equipment, out bool lengthChanged)
         {
             var bytes = Bytes;
@@ -148,10 +163,24 @@ namespace KoAR.Core
             var coreMemory = equipment.CoreEffects;
             coreMemory.Serialize();
             bytes = MemoryUtilities.ReplaceBytes(bytes, coreMemory.ItemIndex, coreMemory.DataLength, coreMemory.Bytes);
+            var delta = bytes.Length - oldLength;
+            if(delta != 0)
+            {
+                coreMemory.DataLength += delta;
+                RefreshItemLocations(coreMemory.ItemIndex, delta);
+                oldLength += delta;
+            }
             equipment.Serialize();
             bytes = MemoryUtilities.ReplaceBytes(bytes, equipment.ItemIndex, equipment.DataLength, equipment.ItemBytes);
+            var delta2 = bytes.Length - oldLength;
+            if(delta2 != 0)
+            {
+                equipment.DataLength += delta;
+                RefreshItemLocations(equipment.ItemIndex, delta2);
+            }
+
             Bytes = bytes;
-            lengthChanged = Bytes.Length != oldLength;
+            lengthChanged = (delta | delta2) != 0;
         }
     }
 }

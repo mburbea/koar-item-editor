@@ -34,8 +34,8 @@ namespace KoAR.Core
         }
 
         internal byte[] Bytes { get; private set; }
-        public int ItemIndex { get; }
-        public int DataLength { get; }
+        public int ItemIndex { get; internal set; }
+        public int DataLength { get; internal set;  }
 
         public byte MysteryInteger
         {
