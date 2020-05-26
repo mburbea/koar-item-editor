@@ -133,7 +133,7 @@ namespace KoAR.SaveEditor.Views
             protected override void InsertItem(int index, uint item)
             {
                 base.InsertItem(index, item);
-                this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, index));
+                this.OnCollectionChanged(NotifyCollectionChangedAction.Add, item, index);
                 this.OnPropertyChanged(nameof(this.Count));
                 this.OnPropertyChanged(Binding.IndexerName);
             }
@@ -142,7 +142,7 @@ namespace KoAR.SaveEditor.Views
             {
                 uint item = this.Items[index];
                 base.RemoveItem(index);
-                this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item, index));
+                this.OnCollectionChanged(NotifyCollectionChangedAction.Remove, item, index);
                 this.OnPropertyChanged(nameof(this.Count));
                 this.OnPropertyChanged(Binding.IndexerName);
             }
@@ -150,11 +150,11 @@ namespace KoAR.SaveEditor.Views
             protected override void SetItem(int index, uint item)
             {
                 base.SetItem(index, item);
-                this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, item, index));
+                this.OnCollectionChanged(NotifyCollectionChangedAction.Replace, item, index);
                 this.OnPropertyChanged(Binding.IndexerName);
             }
 
-            private void OnCollectionChanged(NotifyCollectionChangedEventArgs e) => this.CollectionChanged?.Invoke(this, e);
+            private void OnCollectionChanged(NotifyCollectionChangedAction action, uint item, int index) => this.CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(action, item, index));
 
             private void OnPropertyChanged(string propertyName) => this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
