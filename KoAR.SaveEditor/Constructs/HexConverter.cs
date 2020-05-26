@@ -13,8 +13,8 @@ namespace KoAR.SaveEditor.Constructs
 
         object? IValueConverter.ConvertBack(object? value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value is string text  && uint.TryParse(text, NumberStyles.HexNumber, culture, out uint res)
-                ? res
+            return value is string text && uint.TryParse(text, NumberStyles.HexNumber, culture, out uint result)
+                ? result
                 : default(uint?);
         }
     }
