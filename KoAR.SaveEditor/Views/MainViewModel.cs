@@ -394,9 +394,6 @@ namespace KoAR.SaveEditor.Views
             CommandManager.InvalidateRequerySuggested();
         }
 
-        /// <summary>
-        /// Formerly called ShowAll or btnShowAll_Click
-        /// </summary>
         private void RepopulateItems()
         {
             if (!Amalur.IsFileOpen)
