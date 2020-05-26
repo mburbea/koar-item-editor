@@ -5,7 +5,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using KoAR.Core;
-using KoAR.SaveEditor.Constructs;
 
 namespace KoAR.SaveEditor.Views
 {
@@ -33,8 +32,6 @@ namespace KoAR.SaveEditor.Views
 
         public static readonly DependencyProperty PendingEffectProperty = DependencyProperty.Register(nameof(EffectsControl.PendingEffect), typeof(IEffectInfo), typeof(EffectsControl),
             new PropertyMetadata(EffectsControl.PendingEffectProperty_ValueChanged));
-
-        private ListBox? _listBox;
 
         static EffectsControl() => FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(EffectsControl), new FrameworkPropertyMetadata(typeof(EffectsControl)));
 
@@ -101,10 +98,16 @@ namespace KoAR.SaveEditor.Views
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            if ((this._listBox = this.Template.FindName("PART_ListBox", this) as ListBox) != null)
+            if (this.Template.FindName("PART_ListBox", this) is ListBox listBox)
             {
-                this._listBox.PreviewMouseRightButtonDown += this.ListBox_PreviewMouseRightButtonDown;
+                listBox.CommandBindings.Add(new CommandBinding(ApplicationCommands.Copy, EffectsControl.CopyCommand_Executed));
             }
+        }
+
+        private static void CopyCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            Clipboard.SetText(((uint)((ListBox)sender).ItemContainerGenerator.ItemFromContainer((ListBoxItem)e.OriginalSource)).ToString("X6"));
+            e.Handled = true;
         }
 
         private static void EffectDefinitionsProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -115,18 +118,6 @@ namespace KoAR.SaveEditor.Views
         private static void PendingEffectProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             ((EffectsControl)d).PendingEffectCode = ((IEffectInfo?)e.NewValue)?.Code;
-        }
-
-        private void ListBox_PreviewMouseRightButtonDown(object sender, RoutedEventArgs e)
-        {
-            ListBox listBox = (ListBox)sender;
-            ListBoxItem? container = e.OriginalSource as ListBoxItem ?? ((DependencyObject)e.OriginalSource).FindVisualTreeAncestor<ListBoxItem>();
-            if (container == null)
-            {
-                return;
-            }
-            uint code = (uint)listBox.ItemContainerGenerator.ItemFromContainer(container);
-            Clipboard.SetText(code.ToString("X6"));
         }
     }
 }
