@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Data;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
 
@@ -15,13 +18,18 @@ namespace KoAR.SaveEditor.Views
         public ItemModel(ItemMemoryInfo item)
         {
             this.Item = item;
+            this.CoreEffects = new EffectCollection(item.CoreEffects.List);
+            this.Effects = new EffectCollection(item.Effects);
         }
 
         public EquipmentCategory Category => this.Item.Category;
 
         public int CoreEffectCount => this.CoreEffects.Count;
 
-        public List<uint> CoreEffects => this.Item.CoreEffects.List;
+        public IList<uint> CoreEffects
+        {
+            get;
+        }
 
         public float CurrentDurability
         {
@@ -31,7 +39,10 @@ namespace KoAR.SaveEditor.Views
 
         public int EffectCount => this.Item.Effects.Count;
 
-        public List<uint> Effects => this.Item.Effects;
+        public IList<uint> Effects
+        {
+            get;
+        }
 
         public bool HasCustomName => this.Item.HasCustomName;
 
@@ -73,23 +84,20 @@ namespace KoAR.SaveEditor.Views
         internal void AddCoreEffect(uint code)
         {
             this.CoreEffects.Add(code);
-            Amalur.WriteEquipmentBytes(this.Item, out _);
-            this.OnPropertyChanged(nameof(this.CoreEffects));
+            this.OnPropertyChanged(nameof(this.CoreEffectCount));
         }
 
         internal void AddEffect(uint code)
         {
             this.Effects.Add(code);
-            Amalur.WriteEquipmentBytes(this.Item, out _);
-            this.OnPropertyChanged(nameof(this.Effects));
+            this.OnPropertyChanged(nameof(this.EffectCount));
         }
 
         internal void DeleteCoreEffect(uint code)
         {
             if (this.CoreEffects.Remove(code))
             {
-                Amalur.WriteEquipmentBytes(this.Item, out _);
-                this.OnPropertyChanged(nameof(this.CoreEffects));
+                this.OnPropertyChanged(nameof(this.CoreEffectCount));
             }
         }
 
@@ -97,8 +105,7 @@ namespace KoAR.SaveEditor.Views
         {
             if (this.Effects.Remove(code))
             {
-                Amalur.WriteEquipmentBytes(this.Item, out _);
-                this.OnPropertyChanged(nameof(this.Effects));
+                this.OnPropertyChanged(nameof(this.EffectCount));
             }
         }
 
@@ -110,6 +117,46 @@ namespace KoAR.SaveEditor.Views
             }
             setValue(value);
             this.OnPropertyChanged(propertyName);
+        }
+
+        private sealed class EffectCollection : Collection<uint>, INotifyCollectionChanged, INotifyPropertyChanged
+        {
+            public EffectCollection(List<uint> items)
+                : base(items)
+            {
+            }
+
+            public event NotifyCollectionChangedEventHandler? CollectionChanged;
+
+            public event PropertyChangedEventHandler? PropertyChanged;
+
+            protected override void InsertItem(int index, uint item)
+            {
+                base.InsertItem(index, item);
+                this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, index));
+                this.OnPropertyChanged(nameof(this.Count));
+                this.OnPropertyChanged(Binding.IndexerName);
+            }
+
+            protected override void RemoveItem(int index)
+            {
+                uint item = this.Items[index];
+                base.RemoveItem(index);
+                this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item, index));
+                this.OnPropertyChanged(nameof(this.Count));
+                this.OnPropertyChanged(Binding.IndexerName);
+            }
+
+            protected override void SetItem(int index, uint item)
+            {
+                base.SetItem(index, item);
+                this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, item, index));
+                this.OnPropertyChanged(Binding.IndexerName);
+            }
+
+            private void OnCollectionChanged(NotifyCollectionChangedEventArgs e) => this.CollectionChanged?.Invoke(this, e);
+
+            private void OnPropertyChanged(string propertyName) => this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
