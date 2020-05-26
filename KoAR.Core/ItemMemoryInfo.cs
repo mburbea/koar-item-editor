@@ -58,7 +58,7 @@ namespace KoAR.Core
             bytes.Slice(itemIndex, 8).CopyTo(buffer);
             CoreEffects = new CoreEffectMemory(buffer);
             Category = DetermineEquipmentType(bytes, buffer, ItemBytes[13]);
-            _typeIdMemory = new Memory<byte>(Amalur.Bytes, bytes.IndexOf(buffer.Slice(0, 4)) + 4, 4);
+            _typeIdOffset = bytes.IndexOf(buffer.Slice(0, 4)) + 4;
             Effects = new List<uint>(ItemBytes[Offset.EffectCount]);
             for (int i = 0; i < Effects.Capacity; i++)
             {
@@ -100,12 +100,12 @@ namespace KoAR.Core
 
         // this holds a pointer to the current instance of the item template.
         // any material change will blow away the backing array.
-        private readonly Memory<byte> _typeIdMemory; 
+        private readonly int _typeIdOffset;
 
         public uint TypeId
         {
-            get => MemoryMarshal.Read<uint>(_typeIdMemory.Span);
-            set => MemoryMarshal.Write(_typeIdMemory.Span, ref value);
+            get => MemoryUtilities.Read<uint>(Amalur.Bytes, _typeIdOffset);
+            set => MemoryUtilities.Write(Amalur.Bytes, _typeIdOffset, value);
         }
 
         public byte[] ItemBytes { get; set; }
