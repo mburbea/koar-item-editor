@@ -316,15 +316,8 @@ namespace KoAR.SaveEditor.Views
                 return;
             }
             ItemModel model = (ItemModel)sender;
-            Amalur.WriteEquipmentBytes(model.Item, out bool lengthChanged);
-            if (lengthChanged)
-            {
-                this.Refresh();
-            }
-            else
-            {
-                this.UnsavedChanges = true;
-            }
+            Amalur.WriteEquipmentBytes(model.Item);
+            this.UnsavedChanges = true;
             if (e.PropertyName == nameof(ItemModel.IsUnsellable))
             {
                 this.OnPropertyChanged(nameof(this.AllItemsUnsellable));

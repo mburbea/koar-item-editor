@@ -156,7 +156,7 @@ namespace KoAR.Core
                 }
             }
         }
-        public static void WriteEquipmentBytes(ItemMemoryInfo equipment, out bool lengthChanged)
+        public static void WriteEquipmentBytes(ItemMemoryInfo equipment)
         {
             var bytes = Bytes;
             var oldLength = bytes.Length;
@@ -172,15 +172,14 @@ namespace KoAR.Core
             }
             equipment.Serialize();
             bytes = MemoryUtilities.ReplaceBytes(bytes, equipment.ItemIndex, equipment.DataLength, equipment.ItemBytes);
-            var delta2 = bytes.Length - oldLength;
-            if(delta2 != 0)
+            delta = bytes.Length - oldLength;
+            if(delta != 0)
             {
                 equipment.DataLength += delta;
-                RefreshItemLocations(equipment.ItemIndex, delta2);
+                RefreshItemLocations(equipment.ItemIndex, delta);
             }
 
             Bytes = bytes;
-            lengthChanged = (delta | delta2) != 0;
         }
     }
 }
