@@ -52,8 +52,6 @@ namespace KoAR.SaveEditor.Views
             set => this.SetItemValue(value, this.Item.IsUnsellable, value => this.Item.IsUnsellable = value);
         }
 
-        public string ItemId => LittleEndianConverter.Convert(this.Item.ItemId);
-
         public int ItemIndex => this.Item.ItemIndex;
 
         public string ItemName
@@ -127,6 +125,9 @@ namespace KoAR.SaveEditor.Views
 
         private sealed class EffectCollection : Collection<uint>, INotifyCollectionChanged, INotifyPropertyChanged
         {
+            private static readonly PropertyChangedEventArgs _countArgs = new PropertyChangedEventArgs(nameof(IList<uint>.Count));
+            private static readonly PropertyChangedEventArgs _indexerArgs = new PropertyChangedEventArgs(Binding.IndexerName);
+
             public EffectCollection(List<uint> items)
                 : base(items)
             {
@@ -140,8 +141,8 @@ namespace KoAR.SaveEditor.Views
             {
                 base.InsertItem(index, item);
                 this.OnCollectionChanged(NotifyCollectionChangedAction.Add, item, index);
-                this.OnPropertyChanged(nameof(this.Count));
-                this.OnPropertyChanged(Binding.IndexerName);
+                this.OnPropertyChanged(EffectCollection._countArgs);
+                this.OnPropertyChanged(EffectCollection._indexerArgs);
             }
 
             protected override void RemoveItem(int index)
@@ -149,20 +150,13 @@ namespace KoAR.SaveEditor.Views
                 uint item = this.Items[index];
                 base.RemoveItem(index);
                 this.OnCollectionChanged(NotifyCollectionChangedAction.Remove, item, index);
-                this.OnPropertyChanged(nameof(this.Count));
-                this.OnPropertyChanged(Binding.IndexerName);
-            }
-
-            protected override void SetItem(int index, uint item)
-            {
-                base.SetItem(index, item);
-                this.OnCollectionChanged(NotifyCollectionChangedAction.Replace, item, index);
-                this.OnPropertyChanged(Binding.IndexerName);
+                this.OnPropertyChanged(EffectCollection._countArgs);
+                this.OnPropertyChanged(EffectCollection._indexerArgs);
             }
 
             private void OnCollectionChanged(NotifyCollectionChangedAction action, uint item, int index) => this.CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(action, item, index));
 
-            private void OnPropertyChanged(string propertyName) => this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            private void OnPropertyChanged(PropertyChangedEventArgs e) => this.PropertyChanged?.Invoke(this, e);
         }
     }
 }
