@@ -266,15 +266,15 @@ namespace KoAR.SaveEditor.Views
             {
                 return;
             }
-            //ItemEditorWindow view = new ItemEditorWindow
-            //{
-            //    Owner = Application.Current.MainWindow,
-            //    DataContext = new ItemEditorViewModel(model.Item)
-            //};
-            //if (view.ShowDialog() == true)
-            //{
-            //    this.Refresh();
-            //}
+            ItemEditorWindow view = new ItemEditorWindow
+            {
+                Owner = Application.Current.MainWindow,
+                DataContext = new ItemEditorViewModel(model)
+            };
+            if (view.ShowDialog() == true)
+            {
+                Amalur.WriteEquipmentBytes(model.Item);
+            }
         }
 
         private void Item_PropertyChanged(object sender, PropertyChangedEventArgs e)

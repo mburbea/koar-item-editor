@@ -109,6 +109,12 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
+        internal void Rematerialize(byte[] bytes)
+        {
+            this.Item.Rematerialize(bytes);
+            this.OnPropertyChanged(string.Empty);
+        }
+
         private void SetItemValue<T>(T value, T currentValue, Action<T> setValue, [CallerMemberName] string propertyName = "")
         {
             if (EqualityComparer<T>.Default.Equals(value, currentValue))
