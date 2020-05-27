@@ -2,7 +2,6 @@
 using System.Globalization;
 using System.Linq;
 using System.Windows;
-using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
 
 namespace KoAR.SaveEditor.Views
@@ -10,17 +9,17 @@ namespace KoAR.SaveEditor.Views
     public sealed class ItemEditorViewModel : NotifierBase
     {
         private readonly string _initialText;
-        private readonly ItemMemoryInfo _item;
+        private readonly ItemModel _model;
         private string _text;
 
-        public ItemEditorViewModel(ItemMemoryInfo item)
+        public ItemEditorViewModel(ItemModel model)
         {
-            this._item = item;
-            this._initialText = this._text = string.Join(" ", item.ItemBytes.Select(x => x.ToString("X2")));
+            this._model = model;
+            this._initialText = this._text = string.Join(" ", model.Item.ItemBytes.Select(x => x.ToString("X2")));
             this.SaveCommand = new DelegateCommand(this.Save, this.CanSave);
         }
 
-        public string ItemName => this._item.ItemName;
+        public string ItemName => this._model.ItemName;
 
         public DelegateCommand SaveCommand
         {
@@ -62,8 +61,7 @@ namespace KoAR.SaveEditor.Views
                 MessageBox.Show("Invalid byte text, (all bytes must be expressed as two character hex).", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            this._item.ItemBytes = bytes;
-            Amalur.WriteEquipmentBytes(this._item, out _);
+            this._model.Rematerialize(bytes);
             ItemEditorWindow view = Application.Current.Windows.OfType<ItemEditorWindow>().Single();
             view.DialogResult = true;
             view.Close();

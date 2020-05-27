@@ -50,7 +50,7 @@ namespace ItemTesting
             Amalur.ReadFile(path);
             var bytes = Amalur.Bytes;
             var interest = new[] { "D", "Primal Daggers" };
-            var mems = Amalur.GetAllEquipment()
+            var mems = Amalur.Items
                 //.Where(x => (x.CurrentDurability == 58 && x.MaxDurability == 84) || interest.Contains(x.ItemName) //&& x.ItemId == 0x19_02_1C)
                 .Where(x=> x.Category == EquipmentCategory.Chakrams || x.Category == EquipmentCategory.Daggers)
             .ToArray();

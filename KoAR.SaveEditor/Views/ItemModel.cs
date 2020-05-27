@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Data;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
 
@@ -15,13 +18,18 @@ namespace KoAR.SaveEditor.Views
         public ItemModel(ItemMemoryInfo item)
         {
             this.Item = item;
+            this.CoreEffects = new EffectCollection(item.CoreEffects.List);
+            this.Effects = new EffectCollection(item.Effects);
         }
 
         public EquipmentCategory Category => this.Item.Category;
 
         public int CoreEffectCount => this.CoreEffects.Count;
 
-        public List<uint> CoreEffects => this.Item.CoreEffects.List;
+        public IList<uint> CoreEffects
+        {
+            get;
+        }
 
         public float CurrentDurability
         {
@@ -31,7 +39,10 @@ namespace KoAR.SaveEditor.Views
 
         public int EffectCount => this.Item.Effects.Count;
 
-        public List<uint> Effects => this.Item.Effects;
+        public IList<uint> Effects
+        {
+            get;
+        }
 
         public bool HasCustomName => this.Item.HasCustomName;
 
@@ -40,8 +51,6 @@ namespace KoAR.SaveEditor.Views
             get => this.Item.IsUnsellable;
             set => this.SetItemValue(value, this.Item.IsUnsellable, value => this.Item.IsUnsellable = value);
         }
-
-        public string ItemId => LittleEndianConverter.Convert(this.Item.ItemId);
 
         public int ItemIndex => this.Item.ItemIndex;
 
@@ -73,20 +82,20 @@ namespace KoAR.SaveEditor.Views
         internal void AddCoreEffect(uint code)
         {
             this.CoreEffects.Add(code);
-            Amalur.WriteEquipmentBytes(this.Item, out _);
+            this.OnPropertyChanged(nameof(this.CoreEffectCount));
         }
 
         internal void AddEffect(uint code)
         {
             this.Effects.Add(code);
-            Amalur.WriteEquipmentBytes(this.Item, out _);
+            this.OnPropertyChanged(nameof(this.EffectCount));
         }
 
         internal void DeleteCoreEffect(uint code)
         {
             if (this.CoreEffects.Remove(code))
             {
-                Amalur.WriteEquipmentBytes(this.Item, out _);
+                this.OnPropertyChanged(nameof(this.CoreEffectCount));
             }
         }
 
@@ -94,8 +103,14 @@ namespace KoAR.SaveEditor.Views
         {
             if (this.Effects.Remove(code))
             {
-                Amalur.WriteEquipmentBytes(this.Item, out _);
+                this.OnPropertyChanged(nameof(this.EffectCount));
             }
+        }
+
+        internal void Rematerialize(byte[] bytes)
+        {
+            this.Item.Rematerialize(bytes);
+            this.OnPropertyChanged(string.Empty);
         }
 
         private void SetItemValue<T>(T value, T currentValue, Action<T> setValue, [CallerMemberName] string propertyName = "")
@@ -106,6 +121,42 @@ namespace KoAR.SaveEditor.Views
             }
             setValue(value);
             this.OnPropertyChanged(propertyName);
+        }
+
+        private sealed class EffectCollection : Collection<uint>, INotifyCollectionChanged, INotifyPropertyChanged
+        {
+            private static readonly PropertyChangedEventArgs _countArgs = new PropertyChangedEventArgs(nameof(IList<uint>.Count));
+            private static readonly PropertyChangedEventArgs _indexerArgs = new PropertyChangedEventArgs(Binding.IndexerName);
+
+            public EffectCollection(List<uint> items)
+                : base(items)
+            {
+            }
+
+            public event NotifyCollectionChangedEventHandler? CollectionChanged;
+
+            public event PropertyChangedEventHandler? PropertyChanged;
+
+            protected override void InsertItem(int index, uint item)
+            {
+                base.InsertItem(index, item);
+                this.OnCollectionChanged(NotifyCollectionChangedAction.Add, item, index);
+                this.OnPropertyChanged(EffectCollection._countArgs);
+                this.OnPropertyChanged(EffectCollection._indexerArgs);
+            }
+
+            protected override void RemoveItem(int index)
+            {
+                uint item = this.Items[index];
+                base.RemoveItem(index);
+                this.OnCollectionChanged(NotifyCollectionChangedAction.Remove, item, index);
+                this.OnPropertyChanged(EffectCollection._countArgs);
+                this.OnPropertyChanged(EffectCollection._indexerArgs);
+            }
+
+            private void OnCollectionChanged(NotifyCollectionChangedAction action, uint item, int index) => this.CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(action, item, index));
+
+            private void OnPropertyChanged(PropertyChangedEventArgs e) => this.PropertyChanged?.Invoke(this, e);
         }
     }
 }
