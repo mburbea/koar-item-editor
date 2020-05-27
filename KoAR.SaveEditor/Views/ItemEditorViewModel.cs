@@ -2,7 +2,6 @@
 using System.Globalization;
 using System.Linq;
 using System.Windows;
-using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
 
 namespace KoAR.SaveEditor.Views
