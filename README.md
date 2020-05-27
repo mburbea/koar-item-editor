@@ -29,7 +29,7 @@ This is heavily updated editor, rewritten in WPF and modern C#8 paradigms. A pro
    - This operation will change the durability of all unknown equipment.
    - You can use this to find an item in the editor. (e.g. 54/82 might become `Lightning Cage`,53/82 might become `Gentleman's Favor`).
 
-### What's old
+#### Retained Features:
 * List items.
 * Change Item current and max durability.
 * Change an item's name (if it has a name).
