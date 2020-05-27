@@ -64,7 +64,6 @@ namespace KoAR.Core
             {
                 Effects.Add(MemoryUtilities.Read<uint>(ItemBytes, Offset.FirstEffect + i * 8));
             }
-
         }
 
         public CoreEffectMemory CoreEffects { get; internal set; }
@@ -108,7 +107,18 @@ namespace KoAR.Core
             set => MemoryUtilities.Write(Amalur.Bytes, _typeIdOffset, value);
         }
 
-        public byte[] ItemBytes { get; set; }
+        public byte[] ItemBytes { get; private set; }
+
+        public void Rematerialize(byte[] bytes)
+        {
+            this.ItemBytes = bytes;
+            Effects.Clear();
+            Effects.Capacity = ItemBytes[Offset.EffectCount];
+            for (int i = 0; i < Effects.Capacity; i++)
+            {
+                Effects.Add(MemoryUtilities.Read<uint>(ItemBytes, Offset.FirstEffect + i * 8));
+            }
+        }
 
         public uint ItemId => MemoryUtilities.Read<uint>(ItemBytes);
 

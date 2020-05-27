@@ -62,7 +62,7 @@ namespace KoAR.SaveEditor.Views
                 MessageBox.Show("Invalid byte text, (all bytes must be expressed as two character hex).", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            this._item.ItemBytes = bytes;
+            this._item.Rematerialize(bytes);
             Amalur.WriteEquipmentBytes(this._item);
             ItemEditorWindow view = Application.Current.Windows.OfType<ItemEditorWindow>().Single();
             view.DialogResult = true;
