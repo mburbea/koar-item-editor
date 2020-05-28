@@ -111,7 +111,7 @@ namespace KoAR.Core
         public EquipmentCategory Category { get; }
 
         private readonly int _typeIdOffset;
-        private bool _hasShiftedLevelOffset;
+        private readonly bool _hasShiftedLevelOffset;
         private int LevelOffset => _typeIdOffset + 14 + (_hasShiftedLevelOffset ? 8 : 0);
 
         public uint TypeId
@@ -175,7 +175,7 @@ namespace KoAR.Core
 
         private Offset Offsets => new Offset(Effects.Count);
 
-        public static ItemMemoryInfo Create(int itemIndex, int nextOffset)
+        public static ItemMemoryInfo? TryCreate(int itemIndex, int nextOffset)
         {
             var bytes = Amalur.Bytes;
             if (nextOffset - itemIndex < MinEquipmentLength)

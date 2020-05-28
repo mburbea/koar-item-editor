@@ -234,7 +234,7 @@ namespace KoAR.SaveEditor.Views
             {
                 return;
             }
-            Amalur.SaveFile(this._fileName);
+            Amalur.SaveFile(this._fileName!);
             this.UnsavedChanges = false;
             this.RepopulateItems();
             MessageBox.Show($"Save successful! Original save backed up as {this._fileName}.bak.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);

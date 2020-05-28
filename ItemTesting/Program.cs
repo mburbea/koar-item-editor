@@ -45,7 +45,7 @@ namespace ItemTesting
         }
 
 
-        static void Main(string[] args)
+        static void Main()
         {
             var path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save97.sav";
 

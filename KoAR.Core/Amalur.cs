@@ -28,7 +28,7 @@ namespace KoAR.Core
         public static List<ItemMemoryInfo> Items { get; } = new List<ItemMemoryInfo>();
         private static int? _bagOffset;
 
-        internal static byte[] Bytes { get; set; }
+        internal static byte[] Bytes { get; set; } = Array.Empty<byte>();
 
         public static void ReadFile(string path)
         {
@@ -47,9 +47,9 @@ namespace KoAR.Core
             File.WriteAllBytes(path, Bytes);
         }
 
-        public static bool IsFileOpen => Bytes != null;
+        public static bool IsFileOpen => Bytes.Length != 0;
 
-        public static void Initialize(string path = null)
+        public static void Initialize(string? path = null)
         {
             path ??= Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
             var effectCsv = Path.Combine(path, "CoreEffects.csv");
@@ -136,7 +136,7 @@ namespace KoAR.Core
             candidates.Add(Bytes.Length);
             for (int i = 0; i < candidates.Count - 1; i++)
             {
-                if (ItemMemoryInfo.Create(candidates[i], candidates[i + 1]) is ItemMemoryInfo item)
+                if (ItemMemoryInfo.TryCreate(candidates[i], candidates[i + 1]) is ItemMemoryInfo item)
                 {
                     Items.Add(item);
                 }
