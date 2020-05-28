@@ -17,7 +17,7 @@ namespace KoAR.Core
 
         private ItemMemoryInfo(ReadOnlySpan<byte> bytes, int itemIndex, int dataLength)
         {
-            static EquipmentCategory DetermineEquipmentType(ReadOnlySpan<byte> bytes, Span<byte> buffer, byte byte13)
+            static EquipmentCategory DetermineEquipmentType(ReadOnlySpan<byte> bytes, Span<byte> buffer)
             {
                 ReadOnlySpan<byte> weaponTypeSequence = new byte[] { 0xD4, 0x08, 0x46, 0x00, 0x01 };
                 ReadOnlySpan<byte> additionalInfoSequence = new byte[] { 0x8D, 0xE3, 0x47, 0x00, 0x02 };
@@ -33,7 +33,6 @@ namespace KoAR.Core
                 var d = bytes[aisOffset + 17];
                 return equipTypeByte switch
                 {
-                    0x10 => EquipmentCategory.Shield,
                     0x18 => EquipmentCategory.LongBow,
                     0x20 when d == 0x00 || d == 0xBC || d == 0x55 || d == 0x56 || d == 0x18 => EquipmentCategory.LongSword,
                     0x20 => EquipmentCategory.GreatSword,
@@ -42,11 +41,7 @@ namespace KoAR.Core
                     0x1C when d == 0x00 || d == 0x18 || d == 0x53 || d == 0x54 => EquipmentCategory.Staff,
                     0x1C when d == 0x3E || d == 0x3F || d == 0xEA || d == 0xEB => EquipmentCategory.Chakrams,
                     0x1C when d == 0xEC || d == 0x43 || d == 0x7E => EquipmentCategory.Hammer,
-                    0x14 when d == 0x1D || d == 0x18 || d == 0xC9 || d == 0xAF => EquipmentCategory.Talisman,
                     0x14 when d == 0x4A || d == 0x47 || d == 0x48 => EquipmentCategory.Sceptre,
-                    0x14 when d == 0x1B || d == 0xCA => EquipmentCategory.Buckler,
-                    0x14 when d == 0x00 && byte13 == 0x3B => EquipmentCategory.Talisman,
-                    0x14 when d == 0x00 => EquipmentCategory.Buckler, /* 0x33 0x23 0x2B 0x00 */
                     _ => EquipmentCategory.Unknown,
                 };
             }
@@ -57,8 +52,27 @@ namespace KoAR.Core
             ItemBytes = bytes.Slice(itemIndex, dataLength).ToArray();
             bytes.Slice(itemIndex, 8).CopyTo(buffer);
             CoreEffects = new CoreEffectMemory(buffer);
-            Category = DetermineEquipmentType(bytes, buffer, ItemBytes[13]);
             _typeIdOffset = bytes.IndexOf(buffer.Slice(0, 4)) + 4;
+
+            if (bytes[_typeIdOffset + 10] == 1)
+            {
+                Category = bytes[_typeIdOffset + 14] switch
+                {
+                    0xEC => EquipmentCategory.Buckler,
+                    0xED => EquipmentCategory.Shield,
+                    0xEE => EquipmentCategory.Talisman,
+                    0xF3 => EquipmentCategory.Chakrams,
+                    _ => EquipmentCategory.Unknown,
+                };
+
+                _hasShiftedLevelOffset = true;
+            }
+
+            if(Category == EquipmentCategory.Unknown)
+            {
+                Category = DetermineEquipmentType(bytes, buffer);
+            }
+
             Effects = new List<uint>(ItemBytes[Offset.EffectCount]);
             for (int i = 0; i < Effects.Capacity; i++)
             {
@@ -97,14 +111,20 @@ namespace KoAR.Core
 
         public EquipmentCategory Category { get; }
 
-        // this holds a pointer to the current instance of the item template.
-        // any material change will blow away the backing array.
         private readonly int _typeIdOffset;
+        private bool _hasShiftedLevelOffset;
+        private int LevelOffset => _typeIdOffset + 14 + (_hasShiftedLevelOffset ? 8 : 0);
 
         public uint TypeId
         {
             get => MemoryUtilities.Read<uint>(Amalur.Bytes, _typeIdOffset);
             set => MemoryUtilities.Write(Amalur.Bytes, _typeIdOffset, value);
+        }
+
+        public byte Level
+        {
+            get => Amalur.Bytes[LevelOffset];
+            set => Amalur.Bytes[LevelOffset] = value;
         }
 
         public byte[] ItemBytes { get; private set; }

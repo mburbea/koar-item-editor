@@ -136,7 +136,42 @@
                                                     <TextBox TextAlignment="Right" Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                         constructs:TextBoxSelect.SelectOnFocus="{Binding IsVisible, RelativeSource={RelativeSource Self}}">
                                                         <TextBox.Text>
-                                                            <Binding Path="TypeId" Converter="{StaticResource HexConverter}"/>
+                                                            <Binding Path="TypeId" Converter="{StaticResource HexConverter}">
+                                                                <Binding.ValidationRules>
+                                                                    <constructs:ValueRequiredValidationRule />
+                                                                    <constructs:RangeValidationRule Min="0" Max="0xFFFFFF" NumberStyle="HexNumber"/>
+                                                                </Binding.ValidationRules>
+                                                            </Binding>
+                                                        </TextBox.Text>
+                                                    </TextBox>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Level" Width="Auto" views:ItemsView.PropertyName="Level">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate DataType="{x:Type views:ItemModel}">
+                                                <Grid>
+                                                    <TextBlock Text="{Binding Level}" TextAlignment="Right">
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="{x:Type TextBlock}">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True">
+                                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
+                                                    <TextBox TextAlignment="Right" Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                        constructs:TextBoxSelect.SelectOnFocus="{Binding IsVisible, RelativeSource={RelativeSource Self}}">
+                                                        <TextBox.Text>
+                                                            <Binding Path="Level">
+                                                                <Binding.ValidationRules>
+                                                                    <constructs:ValueRequiredValidationRule />
+                                                                    <constructs:RangeValidationRule Min="0" Max="255" NumberStyle="Integer"/>
+                                                                </Binding.ValidationRules>
+                                                            </Binding>
                                                         </TextBox.Text>
                                                     </TextBox>
                                                 </Grid>

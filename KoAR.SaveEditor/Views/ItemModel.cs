@@ -60,6 +60,12 @@ namespace KoAR.SaveEditor.Views
             set => this.SetItemValue(value, this.Item.ItemName, value => this.Item.ItemName = value);
         }
 
+        public byte Level
+        {
+            get => this.Item.Level;
+            set => this.SetItemValue(value, this.Item.Level, value => this.Item.Level = value);
+        }
+
         public float MaxDurability
         {
             get => this.Item.MaxDurability;

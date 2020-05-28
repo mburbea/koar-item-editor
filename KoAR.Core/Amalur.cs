@@ -142,7 +142,7 @@ namespace KoAR.Core
             }
         }
 
-        public static void RefreshItemLocations(int offset, int delta)
+        private static void RefreshItemLocations(int offset, int delta)
         {
             foreach(var item in Items)
             {
@@ -156,6 +156,7 @@ namespace KoAR.Core
                 }
             }
         }
+
         public static void WriteEquipmentBytes(ItemMemoryInfo equipment)
         {
             var bytes = Bytes;

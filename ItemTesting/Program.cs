@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Diagnostics;
 using KoAR.Core;
+using System.IO;
 
 namespace ItemTesting
 {
@@ -21,6 +22,7 @@ namespace ItemTesting
         }
         static string GetBytesString(byte[] b) => string.Join(' ', b.Select(x => x.ToString("X2")));
         static void PrintByteString(byte[] b) => Console.WriteLine(GetBytesString(b));
+        static  void WriteByteArray(byte[] b, string path) => File.WriteAllText(path,string.Join(", ", b.Select(x => $"0x{x:X2}")));
         static void PrintRuler()
         {
             Console.WriteLine(string.Join(' ', Enumerable.Range(0, 40).Select(x => x.ToString("D2"))));
@@ -45,30 +47,57 @@ namespace ItemTesting
 
         static void Main(string[] args)
         {
-            var path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save91.sav";
+            var path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save97.sav";
 
             Amalur.ReadFile(path);
             var bytes = Amalur.Bytes;
-            var interest = new[] { "D", "Primal Daggers" };
+            var interest = new[] { "Primal Chakrams", "Mastercrafted Prismere Chakrams" };
             var mems = Amalur.Items
-                //.Where(x => (x.CurrentDurability == 58 && x.MaxDurability == 84) || interest.Contains(x.ItemName) //&& x.ItemId == 0x19_02_1C)
-                .Where(x=> x.Category == EquipmentCategory.Chakrams || x.Category == EquipmentCategory.Daggers)
+                .Where(x=> x.Category == EquipmentCategory.Armor)
+                //.Append(Amalur.Items.FirstOrDefault(x=>x.Category == EquipmentCategory.Shield))
+                //.Append(Amalur.Items.FirstOrDefault(x => x.Category == EquipmentCategory.Talisman))
+                //.Append(Amalur.Items.FirstOrDefault(x => x.Category == EquipmentCategory.Buckler))
+                .Where(x=> x is object)
+
+            //&& x.ItemId == 0x19_02_1C)
             .ToArray();
+            //Console.Read();
             //ReadOnlySpan<byte> itemDesc = new byte[5] { 0x06, 0x2D, 0x75, 0x00, 0x05 };
             //var indices = GetAllIndices(bytes, itemDesc).GroupBy(x => bytes[x + 27]).ToDictionary(x => x.Key, x => x.Count());
+            ReadOnlySpan<byte> donor = new byte[]
+            {
+                0x06, 0x2D, 0x75, 0x00, 0x05, 0x3B, 0x00, 0x00, 0x00, 0x04, 0x05, 0xDD, 0x02, 0xF1, 0x1D, 0x20,
+                0x00, 0x83, 0x06, 0x0B, 0x00, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x2A, 0x00, 0x00, 0x00, 0x99,
+                0xFB, 0x37, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0C, 0x00, 0x00, 0x00, 0xF1, 0x1D, 0x20, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00
+            };
+            ReadOnlySpan<byte> donor2 = new byte[]
+            {
+                0x06, 0x2D, 0x75, 0x00, 0x05, 0x3B, 0x00, 0x00, 0x00, 0x59, 0x00, 0x2E, 0x01, 0xFA, 0x78, 0x07,
+                0x00, 0x24, 0xA0, 0x15, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x99, 
+                0xFB, 0x37, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0C, 0x00, 0x00, 0x00, 0xFA, 0x78, 0x07, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00
+            };
 
             for (int i = 0; i < mems.Length; i++)
             {
+        //        mems[0].TypeId = 0x201DF1;
                 byte[] crap = new byte[8]; //{ 0x1C, 0x02, 0x19, 0x_00, 0x92, 0xE1, 0x1E, 0x00 };
                 BitConverter.TryWriteBytes(crap, mems[i].ItemId);
                 BitConverter.TryWriteBytes(crap.AsSpan(4), mems[i].TypeId);
                 var loc = bytes.AsSpan().IndexOf(crap);
                 var header = bytes.AsSpan(loc + 8, 5);
+                //bytes[loc + 27] = 0x03;
+                //donor.Slice(22).CopyTo(bytes.AsSpan(loc - 9 +22));
+                //bytes[loc + 27 - 9] = 0x2D;
                 //Debug.Assert(bytes[loc - 4] == 0x3B);
                 var coo = bytes.AsSpan(loc - 9, 68).ToArray();
-                //bytes[loc + 34] = 0x92;
-                //bytes[loc + 35] = 0xE1;
-                //bytes[loc + 36] = 0x1E;
+                WriteByteArray(coo, "dump.txt");
+               // bytes[loc + 43] = 0xF1;
+               // bytes[loc + 44] = 0x1d;
+               // bytes[loc + 45] = 0x20;
                 //bytes[loc + 64] = 0x3B;
                 Console.WriteLine($"{i} Item ID: {(mems[i].HasCustomName? mems[i].ItemName : mems[i].ItemId.ToString("X8"))} {mems[i].Category}");
                 PrintRuler();
