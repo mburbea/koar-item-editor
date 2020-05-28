@@ -4,9 +4,16 @@ namespace KoAR.Core
 {
     public class CoreEffectInfo : IEffectInfo, IEquatable<CoreEffectInfo>
     {
-        public uint Code { get; set; }
-        public DamageType DamageType { get; set; }
-        public float Tier { get; set; }
+        public CoreEffectInfo(uint code, DamageType damageType, float tier = default)
+        {
+            Code = code;
+            DamageType = damageType;
+            Tier = tier;
+        }
+
+        public uint Code { get; }
+        public DamageType DamageType { get; }
+        public float Tier { get; }
         public string DisplayText => DamageType == DamageType.Unknown ? "Unknown" : $"{this.DamageType} (Tier: {this.Tier})";
 
         public CoreEffectInfo Clone() => (CoreEffectInfo)MemberwiseClone();

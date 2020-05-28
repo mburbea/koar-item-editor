@@ -39,7 +39,7 @@ namespace KoAR.SaveEditor.Views
             uint code = (uint)e.NewValue;
             icon.CoreEffect = Amalur.CoreEffects.TryGetValue(code, out CoreEffectInfo info)
                 ? info
-                : new CoreEffectInfo { DamageType = DamageType.Unknown, Code = code };
+                : new CoreEffectInfo(code, DamageType.Unknown);
         }
     }
 }

@@ -63,11 +63,11 @@ namespace KoAR.Core
                 var parts = row.Split(',');
                 var code = uint.Parse(parts[0], NumberStyles.HexNumber);
                 return (code, new CoreEffectInfo
-                {
-                    Code = code,
-                    DamageType = Enum.TryParse(parts[1], true, out DamageType damageType) ? damageType : default,
-                    Tier = float.Parse(parts[2])
-                });
+                (
+                    code,
+                    Enum.TryParse(parts[1], true, out DamageType damageType) ? damageType : default,
+                    float.Parse(parts[2])
+                ));
             }));
             var propertiesXml = Path.Combine(path, "properties.xml");
             if (!File.Exists(propertiesXml))
@@ -79,10 +79,10 @@ namespace KoAR.Core
             Effects.AddRange(XDocument.Load(stream).Root
                 .Elements()
                 .Select(element => new EffectInfo
-                {
-                    Code = uint.TryParse(element.Attribute("id").Value, NumberStyles.HexNumber, null, out var parsed) ? parsed : 0u,
-                    DisplayText = element.Value.Trim()
-                }));
+                (
+                    uint.TryParse(element.Attribute("id").Value, NumberStyles.HexNumber, null, out var parsed) ? parsed : 0u,
+                    element.Value.Trim()
+                )));
             DedupedEffects.AddRange(Effects
                 .Where(x => x.Code != 0)
                 .GroupBy(x => x.Code)

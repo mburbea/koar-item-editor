@@ -2,8 +2,7 @@
 {
     public interface IEffectInfo
     {
-        uint Code { get; set; }
-
+        uint Code { get; }
         string DisplayText { get; }
     }
 }
