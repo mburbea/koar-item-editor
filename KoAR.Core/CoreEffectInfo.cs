@@ -2,15 +2,11 @@
 
 namespace KoAR.Core
 {
-    public class CoreEffectInfo : IEffectInfo, IEquatable<CoreEffectInfo>
+    public sealed class CoreEffectInfo : IEffectInfo, IEquatable<CoreEffectInfo>
     {
-        public CoreEffectInfo(uint code, DamageType damageType, float tier = default)
-        {
-            Code = code;
-            DamageType = damageType;
-            Tier = tier;
-        }
-
+        public CoreEffectInfo(uint code, DamageType damageType, float tier = 0f) =>
+            (Code, DamageType, Tier) = (code, damageType, tier);
+         
         public uint Code { get; }
         public DamageType DamageType { get; }
         public float Tier { get; }

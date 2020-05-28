@@ -4,12 +4,8 @@ namespace KoAR.Core
 {
     public class EffectInfo : IEffectInfo, IEquatable<EffectInfo>
     {
-        public EffectInfo(uint code, string displayText)
-        {
-            Code = code;
-            DisplayText = displayText;
-        }
-
+        public EffectInfo(uint code, string displayText) => (Code, DisplayText) = (code, displayText);
+        
         public uint Code { get; }
         public string DisplayText { get; }
         public EffectInfo Clone() => (EffectInfo)MemberwiseClone();
