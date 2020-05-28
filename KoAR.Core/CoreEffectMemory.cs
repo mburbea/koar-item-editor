@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace KoAR.Core
@@ -35,7 +34,7 @@ namespace KoAR.Core
 
         internal byte[] Bytes { get; private set; }
         public int ItemIndex { get; internal set; }
-        public int DataLength { get; internal set;  }
+        public int DataLength { get; internal set; }
 
         public byte MysteryInteger
         {
@@ -49,12 +48,12 @@ namespace KoAR.Core
 
         public List<uint> List { get; } = new List<uint>();
 
-        internal void Serialize()
+        internal byte[] Serialize()
         {
             byte currentCount = Bytes[Offsets.EffectCount];
-            if(currentCount == Count)
+            if (currentCount == Count)
             {
-                return;
+                return Bytes;
             }
             var currentLength = currentCount * 24 + 8;
             var newCount = List.Count;
@@ -71,6 +70,7 @@ namespace KoAR.Core
             Bytes = MemoryUtilities.ReplaceBytes(Bytes, Offsets.FirstEffect, currentLength, MemoryMarshal.AsBytes(effectData));
             Bytes[Offsets.MysteryInteger] = Mystery[newCount];
             Bytes[Offsets.EffectCount] = (byte)newCount;
+            return Bytes;
         }
     }
 }

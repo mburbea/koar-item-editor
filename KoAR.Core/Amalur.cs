@@ -48,6 +48,7 @@ namespace KoAR.Core
         }
 
         public static bool IsFileOpen => Bytes != null;
+
         public static void Initialize(string path = null)
         {
             path ??= Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
@@ -142,45 +143,32 @@ namespace KoAR.Core
             }
         }
 
-        private static void RefreshItemLocations(int offset, int delta)
+        public static void WriteEquipmentBytes(ItemMemoryInfo item)
         {
-            foreach(var item in Items)
+            static int WriteItem(int itemIndex, int dataLength, byte[] bytes)
             {
-                if(item.CoreEffects.ItemIndex > offset)
+                int oldLength = Bytes.Length;
+                Bytes = MemoryUtilities.ReplaceBytes(Bytes, itemIndex, dataLength, bytes);
+                int delta = Bytes.Length - oldLength;
+                if (delta != 0)
                 {
-                    item.CoreEffects.ItemIndex += delta;
+                    foreach (var item in Items)
+                    {
+                        if (item.CoreEffects.ItemIndex > itemIndex)
+                        {
+                            item.CoreEffects.ItemIndex += delta;
+                        }
+                        if (item.ItemIndex > itemIndex)
+                        {
+                            item.ItemIndex += delta;
+                        }
+                    }
                 }
-                if(item.ItemIndex > offset)
-                {
-                    item.ItemIndex += delta;
-                }
-            }
-        }
-
-        public static void WriteEquipmentBytes(ItemMemoryInfo equipment)
-        {
-            var bytes = Bytes;
-            var oldLength = bytes.Length;
-            var coreMemory = equipment.CoreEffects;
-            coreMemory.Serialize();
-            bytes = MemoryUtilities.ReplaceBytes(bytes, coreMemory.ItemIndex, coreMemory.DataLength, coreMemory.Bytes);
-            var delta = bytes.Length - oldLength;
-            if(delta != 0)
-            {
-                coreMemory.DataLength += delta;
-                RefreshItemLocations(coreMemory.ItemIndex, delta);
-                oldLength += delta;
-            }
-            equipment.Serialize();
-            bytes = MemoryUtilities.ReplaceBytes(bytes, equipment.ItemIndex, equipment.DataLength, equipment.ItemBytes);
-            delta = bytes.Length - oldLength;
-            if(delta != 0)
-            {
-                equipment.DataLength += delta;
-                RefreshItemLocations(equipment.ItemIndex, delta);
+                return delta;
             }
 
-            Bytes = bytes;
+            item.CoreEffects.DataLength += WriteItem(item.CoreEffects.ItemIndex, item.CoreEffects.DataLength, item.CoreEffects.Serialize());
+            item.DataLength += WriteItem(item.ItemIndex, item.DataLength, item.Serialize());
         }
     }
 }

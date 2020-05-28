@@ -33,6 +33,7 @@ namespace KoAR.Core
                 var d = bytes[aisOffset + 17];
                 return equipTypeByte switch
                 {
+                    0x14 => EquipmentCategory.Sceptre,
                     0x18 => EquipmentCategory.LongBow,
                     0x20 when d == 0x00 || d == 0xBC || d == 0x55 || d == 0x56 || d == 0x18 => EquipmentCategory.LongSword,
                     0x20 => EquipmentCategory.GreatSword,
@@ -41,7 +42,6 @@ namespace KoAR.Core
                     0x1C when d == 0x00 || d == 0x18 || d == 0x53 || d == 0x54 => EquipmentCategory.Staff,
                     0x1C when d == 0x3E || d == 0x3F || d == 0xEA || d == 0xEB => EquipmentCategory.Chakrams,
                     0x1C when d == 0xEC || d == 0x43 || d == 0x7E => EquipmentCategory.Hammer,
-                    0x14 when d == 0x4A || d == 0x47 || d == 0x48 => EquipmentCategory.Sceptre,
                     _ => EquipmentCategory.Unknown,
                 };
             }
@@ -53,7 +53,6 @@ namespace KoAR.Core
             bytes.Slice(itemIndex, 8).CopyTo(buffer);
             CoreEffects = new CoreEffectMemory(buffer);
             _typeIdOffset = bytes.IndexOf(buffer.Slice(0, 4)) + 4;
-
             if (bytes[_typeIdOffset + 10] == 1)
             {
                 Category = bytes[_typeIdOffset + 14] switch
@@ -64,10 +63,8 @@ namespace KoAR.Core
                     0xF3 => EquipmentCategory.Chakrams,
                     _ => EquipmentCategory.Unknown,
                 };
-
                 _hasShiftedLevelOffset = true;
             }
-
             if(Category == EquipmentCategory.Unknown)
             {
                 Category = DetermineEquipmentType(bytes, buffer);
@@ -80,13 +77,15 @@ namespace KoAR.Core
             }
         }
 
-        public CoreEffectMemory CoreEffects { get; internal set; }
+        public CoreEffectMemory CoreEffects { get; }
+
         public float CurrentDurability
         {
             get => MemoryUtilities.Read<float>(ItemBytes, Offsets.CurrentDurability);
             set => MemoryUtilities.Write(ItemBytes, Offsets.CurrentDurability, value);
         }
 
+        
         public int DataLength { get; internal set; }
 
         public List<uint> Effects { get; }
@@ -189,7 +188,6 @@ namespace KoAR.Core
             {
                 return null;
             }
-
             int dataLength = bytes[itemIndex + offsets.HasCustomName] != 1
                 ? offsets.CustomNameLength
                 : offsets.CustomNameText + MemoryUtilities.Read<int>(bytes, itemIndex + offsets.CustomNameLength);
@@ -198,24 +196,22 @@ namespace KoAR.Core
 
         public static bool IsValidDurability(float durability) => durability > DurabilityLowerBound && durability < DurabilityUpperBound;
 
-        public void Serialize()
+        internal byte[] Serialize()
         {
             int currentCount = ItemBytes[Offset.EffectCount];
             if (currentCount == Effects.Count)
             {
-                return;
+                return ItemBytes;
             }
-            var offsets = new Offset(currentCount);
-            var currentLength = offsets.PostEffect - Offset.FirstEffect;
+            var currentLength = new Offset(currentCount).PostEffect - Offset.FirstEffect;
             ItemBytes[Offset.EffectCount] = (byte)Effects.Count;
             Span<ulong> effectData = stackalloc ulong[Effects.Count];
-
             for (int i = 0; i < effectData.Length; i++)
             {
                 effectData[i] = Effects[i] | (ulong)uint.MaxValue << 32;
             }
-
             ItemBytes = MemoryUtilities.ReplaceBytes(ItemBytes, Offset.FirstEffect, currentLength, MemoryMarshal.AsBytes(effectData));
+            return ItemBytes;
         }
     }
 }
