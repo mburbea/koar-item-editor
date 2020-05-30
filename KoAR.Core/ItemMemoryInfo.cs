@@ -146,18 +146,12 @@ namespace KoAR.Core
 
         public string ItemName
         {
-            get
-            {
-                if (!HasCustomName)
-                {
-                    return $"Unknown ({BinaryPrimitives.ReadUInt32BigEndian(ItemBytes):X8})";
-                }
-                int nameLength = MemoryUtilities.Read<int>(ItemBytes, Offsets.CustomNameLength);
-                return Encoding.Default.GetString(ItemBytes, Offsets.CustomNameText, nameLength);
-            }
+            get => !HasCustomName
+                ? string.Empty
+                : Encoding.Default.GetString(ItemBytes, Offsets.CustomNameText, MemoryUtilities.Read<int>(ItemBytes, Offsets.CustomNameLength));
             set
             {
-                if(value.Length > 0)
+                if (value.Length > 0)
                 {
                     var newBytes = Encoding.Default.GetBytes(value);
                     if (Offsets.CustomNameText + newBytes.Length != ItemBytes.Length)
@@ -170,7 +164,7 @@ namespace KoAR.Core
                     MemoryUtilities.Write(ItemBytes, Offsets.CustomNameLength, newBytes.Length);
                     newBytes.CopyTo(ItemBytes, Offsets.CustomNameText);
                 }
-                else if(HasCustomName)
+                else if (HasCustomName)
                 {
                     ItemBytes = ItemBytes.AsSpan(0, Offsets.CustomNameLength).ToArray();
                     ItemBytes[Offsets.HasCustomName] = 0;
