@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
@@ -91,7 +90,11 @@ namespace KoAR.Core
 
         public List<uint> Effects { get; }
 
-        public bool HasCustomName => ItemBytes[Offsets.HasCustomName] == 1;
+        public bool HasCustomName
+        {
+            get => ItemBytes[Offsets.HasCustomName] == 1;
+            private set => ItemBytes[Offsets.HasCustomName] = (byte)(value ? 1 : 0);
+        }
 
         public bool IsUnsellable
         {
@@ -146,9 +149,9 @@ namespace KoAR.Core
 
         public string ItemName
         {
-            get => !HasCustomName
-                ? string.Empty
-                : Encoding.Default.GetString(ItemBytes, Offsets.CustomNameText, MemoryUtilities.Read<int>(ItemBytes, Offsets.CustomNameLength));
+            get => HasCustomName
+                ? Encoding.Default.GetString(ItemBytes, Offsets.CustomNameText, MemoryUtilities.Read<int>(ItemBytes, Offsets.CustomNameLength))
+                : string.Empty;
             set
             {
                 if (value.Length > 0)
@@ -160,14 +163,14 @@ namespace KoAR.Core
                         ItemBytes.CopyTo(buffer, 0);
                         ItemBytes = buffer;
                     }
-                    ItemBytes[Offsets.HasCustomName] = 1;
+                    HasCustomName = true;
                     MemoryUtilities.Write(ItemBytes, Offsets.CustomNameLength, newBytes.Length);
                     newBytes.CopyTo(ItemBytes, Offsets.CustomNameText);
                 }
                 else if (HasCustomName)
                 {
                     ItemBytes = ItemBytes.AsSpan(0, Offsets.CustomNameLength).ToArray();
-                    ItemBytes[Offsets.HasCustomName] = 0;
+                    HasCustomName = false;
                 }
             }
         }
