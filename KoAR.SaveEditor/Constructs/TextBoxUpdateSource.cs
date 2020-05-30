@@ -30,7 +30,7 @@ namespace KoAR.SaveEditor.Constructs
             {
                 MultiBinding multiBinding => multiBinding.Mode,
                 Binding binding => binding.Mode,
-                _ => BindingMode.OneTime,
+                _ => BindingMode.OneTime
             };
             if (mode == BindingMode.Default || mode == BindingMode.TwoWay || mode == BindingMode.OneWayToSource)
             {
@@ -46,11 +46,11 @@ namespace KoAR.SaveEditor.Constructs
             }
             if ((bool)e.OldValue)
             {
-                WeakEventManager<TextBox, KeyEventArgs>.RemoveHandler(textBox, nameof(textBox.PreviewKeyDown), TextBox_PreviewKeyDown);
+                WeakEventManager<TextBox, KeyEventArgs>.RemoveHandler(textBox, nameof(textBox.PreviewKeyDown), TextBoxUpdateSource.TextBox_PreviewKeyDown);
             }
             if ((bool)e.NewValue)
             {
-                WeakEventManager<TextBox, KeyEventArgs>.AddHandler(textBox, nameof(textBox.PreviewKeyDown), TextBox_PreviewKeyDown);
+                WeakEventManager<TextBox, KeyEventArgs>.AddHandler(textBox, nameof(textBox.PreviewKeyDown), TextBoxUpdateSource.TextBox_PreviewKeyDown);
             }
         }
     }

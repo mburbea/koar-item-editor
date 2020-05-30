@@ -8,6 +8,14 @@ namespace KoAR.SaveEditor.Constructs
         public static readonly DependencyProperty SelectOnFocusProperty = DependencyProperty.RegisterAttached("SelectOnFocus", typeof(bool), typeof(TextBoxSelect),
             new PropertyMetadata(BooleanBoxes.False, TextBoxSelect.SelectOnFocusProperty_ValueChanged));
 
+        private static readonly RoutedEventHandler _gotKeyboardFocus = (sender, e) => ((TextBoxBase)sender).SelectAll();
+
+        private static readonly RoutedEventHandler _previewMouseDoubleClick = (sender, e) =>
+        {
+            ((TextBoxBase)sender).SelectAll();
+            e.Handled = true;
+        };
+
         private static readonly RoutedEventHandler _previewMouseLeftButtonDown = (sender, e) =>
         {
             if (!(e.OriginalSource is DependencyObject d))
@@ -15,24 +23,12 @@ namespace KoAR.SaveEditor.Constructs
                 return;
             }
             TextBoxBase? textBox = d as TextBoxBase ?? d.FindVisualTreeAncestor<TextBoxBase>();
-            if (textBox == null)
-            {
-                return;
-            }
-            if (!textBox.IsKeyboardFocusWithin)
+            if (textBox != null && !textBox.IsKeyboardFocusWithin)
             {
                 textBox.Focus();
                 e.Handled = true;
             }
         };
-
-        private static readonly RoutedEventHandler _textBoxMouseDoubleClick = (sender, e) =>
-        {
-            ((TextBoxBase)sender).SelectAll();
-            e.Handled = true;
-        };
-
-        private static readonly RoutedEventHandler _textBoxSelectAll = (sender, e) => ((TextBoxBase)sender).SelectAll();
 
         public static bool GetSelectOnFocus(TextBoxBase textBox) => textBox != null && (bool)textBox.GetValue(TextBoxSelect.SelectOnFocusProperty);
 
@@ -46,14 +42,14 @@ namespace KoAR.SaveEditor.Constructs
             }
             if ((bool)e.OldValue)
             {
-                textBox.RemoveHandler(TextBoxBase.GotKeyboardFocusEvent, TextBoxSelect._textBoxSelectAll);
-                textBox.RemoveHandler(TextBoxBase.PreviewMouseDoubleClickEvent, TextBoxSelect._textBoxMouseDoubleClick);
+                textBox.RemoveHandler(TextBoxBase.GotKeyboardFocusEvent, TextBoxSelect._gotKeyboardFocus);
+                textBox.RemoveHandler(TextBoxBase.PreviewMouseDoubleClickEvent, TextBoxSelect._previewMouseDoubleClick);
                 textBox.RemoveHandler(TextBoxBase.PreviewMouseLeftButtonDownEvent, TextBoxSelect._previewMouseLeftButtonDown);
             }
             if ((bool)e.NewValue)
             {
-                textBox.AddHandler(TextBoxBase.GotKeyboardFocusEvent, TextBoxSelect._textBoxSelectAll, true);
-                textBox.AddHandler(TextBoxBase.PreviewMouseDoubleClickEvent, TextBoxSelect._textBoxMouseDoubleClick, true);
+                textBox.AddHandler(TextBoxBase.GotKeyboardFocusEvent, TextBoxSelect._gotKeyboardFocus, true);
+                textBox.AddHandler(TextBoxBase.PreviewMouseDoubleClickEvent, TextBoxSelect._previewMouseDoubleClick, true);
                 textBox.AddHandler(TextBoxBase.PreviewMouseLeftButtonDownEvent, TextBoxSelect._previewMouseLeftButtonDown, true);
             }
         }
