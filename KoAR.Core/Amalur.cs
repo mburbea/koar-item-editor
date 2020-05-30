@@ -135,7 +135,7 @@ namespace KoAR.Core
             candidates.Add(Bytes.Length);
             for (int i = 0; i < candidates.Count - 1; i++)
             {
-                if (ItemMemoryInfo.TryCreate(candidates[i], candidates[i + 1]) is ItemMemoryInfo item)
+                if (ItemMemoryInfo.TryCreate(candidates[i], candidates[i + 1], out var item))
                 {
                     Items.Add(item);
                 }

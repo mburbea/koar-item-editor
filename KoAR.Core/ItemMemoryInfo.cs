@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Buffers.Binary;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -65,7 +66,7 @@ namespace KoAR.Core
                 };
                 _hasShiftedLevelOffset = true;
             }
-            if(Category == EquipmentCategory.Unknown)
+            if (Category == EquipmentCategory.Unknown)
             {
                 Category = DetermineEquipmentType(bytes, buffer);
             }
@@ -85,7 +86,7 @@ namespace KoAR.Core
             set => MemoryUtilities.Write(ItemBytes, Offsets.CurrentDurability, value);
         }
 
-        
+
         public int DataLength { get; internal set; }
 
         public List<uint> Effects { get; }
@@ -158,7 +159,15 @@ namespace KoAR.Core
             {
                 if (!HasCustomName)
                 {
-                    throw new Exception("Item's name is unmodifiable");
+                    if(value == "") return;
+                    var nb = Encoding.Default.GetBytes(value);
+                    var res = new byte[Offsets.CustomNameText + nb.Length];
+                    ItemBytes.CopyTo(res, 0);
+                    nb.CopyTo(res, Offsets.CustomNameText);
+                    ItemBytes = res;
+                    ItemBytes[Offsets.HasCustomName] = 1;
+                    MemoryUtilities.Write(ItemBytes, Offsets.CustomNameLength, nb.Length);
+                    return;
                 }
                 var currentLength = MemoryUtilities.Read<int>(ItemBytes, Offsets.CustomNameLength);
                 var newBytes = Encoding.Default.GetBytes(value);
@@ -175,23 +184,25 @@ namespace KoAR.Core
 
         private Offset Offsets => new Offset(Effects.Count);
 
-        public static ItemMemoryInfo? TryCreate(int itemIndex, int nextOffset)
+        public static bool TryCreate(int itemIndex, int nextOffset, [NotNullWhen(true)] out ItemMemoryInfo? item)
         {
+            item = null;
             var bytes = Amalur.Bytes;
             if (nextOffset - itemIndex < MinEquipmentLength)
             {
-                return null;
+                return false;
             }
             var offsets = new Offset(MemoryUtilities.Read<int>(bytes, itemIndex + Offset.EffectCount));
             if (!IsValidDurability(MemoryUtilities.Read<float>(bytes, itemIndex + offsets.CurrentDurability))
                 || !IsValidDurability(MemoryUtilities.Read<float>(bytes, itemIndex + offsets.MaxDurability)))
             {
-                return null;
+                return false;
             }
             int dataLength = bytes[itemIndex + offsets.HasCustomName] != 1
                 ? offsets.CustomNameLength
                 : offsets.CustomNameText + MemoryUtilities.Read<int>(bytes, itemIndex + offsets.CustomNameLength);
-            return new ItemMemoryInfo(bytes, itemIndex, dataLength);
+            item = new ItemMemoryInfo(bytes, itemIndex, dataLength);
+            return true;
         }
 
         public static bool IsValidDurability(float durability) => durability > DurabilityLowerBound && durability < DurabilityUpperBound;

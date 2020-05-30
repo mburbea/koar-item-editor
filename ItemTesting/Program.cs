@@ -53,7 +53,7 @@ namespace ItemTesting
             var bytes = Amalur.Bytes;
             var interest = new[] { "Primal Chakrams", "Mastercrafted Prismere Chakrams" };
             var mems = Amalur.Items
-                .Where(x=> x.Category == EquipmentCategory.Armor)
+                .Where(x=> x.Category == EquipmentCategory.Daggers)
                 //.Append(Amalur.Items.FirstOrDefault(x=>x.Category == EquipmentCategory.Shield))
                 //.Append(Amalur.Items.FirstOrDefault(x => x.Category == EquipmentCategory.Talisman))
                 //.Append(Amalur.Items.FirstOrDefault(x => x.Category == EquipmentCategory.Buckler))
@@ -83,27 +83,12 @@ namespace ItemTesting
 
             for (int i = 0; i < mems.Length; i++)
             {
-        //        mems[0].TypeId = 0x201DF1;
-                byte[] crap = new byte[8]; //{ 0x1C, 0x02, 0x19, 0x_00, 0x92, 0xE1, 0x1E, 0x00 };
-                BitConverter.TryWriteBytes(crap, mems[i].ItemId);
-                BitConverter.TryWriteBytes(crap.AsSpan(4), mems[i].TypeId);
-                var loc = bytes.AsSpan().IndexOf(crap);
-                var header = bytes.AsSpan(loc + 8, 5);
-                //bytes[loc + 27] = 0x03;
-                //donor.Slice(22).CopyTo(bytes.AsSpan(loc - 9 +22));
-                //bytes[loc + 27 - 9] = 0x2D;
-                //Debug.Assert(bytes[loc - 4] == 0x3B);
-                var coo = bytes.AsSpan(loc - 9, 68).ToArray();
-                WriteByteArray(coo, "dump.txt");
-               // bytes[loc + 43] = 0xF1;
-               // bytes[loc + 44] = 0x1d;
-               // bytes[loc + 45] = 0x20;
-                //bytes[loc + 64] = 0x3B;
-                Console.WriteLine($"{i} Item ID: {(mems[i].HasCustomName? mems[i].ItemName : mems[i].ItemId.ToString("X8"))} {mems[i].Category}");
-                PrintRuler();
-                PrintByteString(coo);
+                mems[i].TypeId = 0x201DF1;
+                mems[i].ItemName = $"Lvl {i + 1}";
+                mems[i].Level = (byte)(i + 1);
+                Amalur.WriteEquipmentBytes(mems[i]);
             }
-            //Amalur.SaveFile(path);
+            Amalur.SaveFile(path);
 
 
             //            var items = mems
