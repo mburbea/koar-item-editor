@@ -160,7 +160,7 @@ namespace KoAR.Core
                     if (Offsets.CustomNameText + newBytes.Length != ItemBytes.Length)
                     {
                         var buffer = new byte[Offsets.CustomNameText + newBytes.Length];
-                        ItemBytes.CopyTo(buffer, 0);
+                        ItemBytes.AsSpan(0, Offsets.CustomNameLength);
                         ItemBytes = buffer;
                     }
                     HasCustomName = true;
