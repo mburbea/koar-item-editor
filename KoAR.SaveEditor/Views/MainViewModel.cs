@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Windows;
-using System.Windows.Input;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
 using Microsoft.Win32;
@@ -17,7 +16,7 @@ namespace KoAR.SaveEditor.Views
         private readonly ObservableCollection<ItemModel> _items;
         private EquipmentCategory? _categoryFilter;
         private string _currentDurabilityFilter = string.Empty;
-        private string? _fileName;
+        private string _fileName = string.Empty;
         private IReadOnlyList<ItemModel> _filteredItems;
         private int _inventorySize;
         private string _itemNameFilter = string.Empty;
@@ -123,7 +122,7 @@ namespace KoAR.SaveEditor.Views
             get;
         }
 
-        public string? FileName
+        public string FileName
         {
             get => this._fileName;
             private set => this.SetValue(ref this._fileName, value);
@@ -234,7 +233,7 @@ namespace KoAR.SaveEditor.Views
             {
                 return;
             }
-            Amalur.SaveFile(this._fileName!);
+            Amalur.SaveFile(this._fileName);
             this.UnsavedChanges = false;
             this.RepopulateItems();
             MessageBox.Show($"Save successful! Original save backed up as {this._fileName}.bak.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
