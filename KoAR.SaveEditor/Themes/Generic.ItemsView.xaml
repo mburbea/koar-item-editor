@@ -191,38 +191,34 @@
                                                         <TextBlock.Style>
                                                             <Style TargetType="{x:Type TextBlock}">
                                                                 <Style.Triggers>
-                                                                    <MultiDataTrigger>
-                                                                        <MultiDataTrigger.Conditions>
-                                                                            <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True" />
-                                                                            <Condition Binding="{Binding HasCustomName}" Value="True" />
-                                                                        </MultiDataTrigger.Conditions>
+                                                                    <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True">
                                                                         <Setter Property="Visibility" Value="Collapsed" />
-                                                                    </MultiDataTrigger>
+                                                                    </DataTrigger>
                                                                 </Style.Triggers>
                                                             </Style>
                                                         </TextBlock.Style>
                                                     </TextBlock>
-                                                    <TextBox Grid.Column="1" VerticalAlignment="Center" Margin="1,0" constructs:TextBoxSelect.SelectOnFocus="{Binding IsVisible, RelativeSource={RelativeSource Self}}">
+                                                    <TextBox Grid.Column="1" VerticalAlignment="Center" Margin="1,0" constructs:TextBoxSelect.SelectOnFocus="{Binding IsVisible, RelativeSource={RelativeSource Self}}" Text="{Binding ItemName}">
                                                         <TextBox.Style>
                                                             <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
                                                                 <Style.Triggers>
                                                                     <MultiDataTrigger>
                                                                         <MultiDataTrigger.Conditions>
                                                                             <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True" />
-                                                                            <Condition Binding="{Binding HasCustomName}" Value="True" />
+                                                                            <!--<Condition Binding="{Binding HasCustomName}" Value="True" />-->
                                                                         </MultiDataTrigger.Conditions>
                                                                         <Setter Property="Visibility" Value="Visible" />
                                                                     </MultiDataTrigger>
                                                                 </Style.Triggers>
                                                             </Style>
                                                         </TextBox.Style>
-                                                        <TextBox.Text>
+                                                        <!--<TextBox.Text>
                                                             <Binding Path="ItemName">
                                                                 <Binding.ValidationRules>
                                                                     <constructs:ValueRequiredValidationRule />
                                                                 </Binding.ValidationRules>
                                                             </Binding>
-                                                        </TextBox.Text>
+                                                        </TextBox.Text>-->
                                                     </TextBox>
                                                 </Grid>
                                             </DataTemplate>

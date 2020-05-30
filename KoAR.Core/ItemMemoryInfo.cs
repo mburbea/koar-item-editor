@@ -157,22 +157,24 @@ namespace KoAR.Core
             }
             set
             {
-                if (!HasCustomName)
+                if(value.Length > 0)
                 {
-                    if(value == "") return;
-                    var nb = Encoding.Default.GetBytes(value);
-                    var res = new byte[Offsets.CustomNameText + nb.Length];
-                    ItemBytes.CopyTo(res, 0);
-                    nb.CopyTo(res, Offsets.CustomNameText);
-                    ItemBytes = res;
+                    var newBytes = Encoding.Default.GetBytes(value);
+                    if (Offsets.CustomNameText + newBytes.Length != ItemBytes.Length)
+                    {
+                        var buffer = new byte[Offsets.CustomNameText + newBytes.Length];
+                        ItemBytes.CopyTo(buffer, 0);
+                        ItemBytes = buffer;
+                    }
                     ItemBytes[Offsets.HasCustomName] = 1;
-                    MemoryUtilities.Write(ItemBytes, Offsets.CustomNameLength, nb.Length);
-                    return;
+                    MemoryUtilities.Write(ItemBytes, Offsets.CustomNameLength, newBytes.Length);
+                    newBytes.CopyTo(ItemBytes, Offsets.CustomNameText);
                 }
-                var currentLength = MemoryUtilities.Read<int>(ItemBytes, Offsets.CustomNameLength);
-                var newBytes = Encoding.Default.GetBytes(value);
-                ItemBytes = MemoryUtilities.ReplaceBytes(ItemBytes, Offsets.CustomNameText, currentLength, newBytes);
-                MemoryUtilities.Write(ItemBytes, Offsets.CustomNameLength, newBytes.Length);
+                else if(HasCustomName)
+                {
+                    ItemBytes = ItemBytes.AsSpan(0, Offsets.CustomNameLength).ToArray();
+                    ItemBytes[Offsets.HasCustomName] = 0;
+                }
             }
         }
 
