@@ -51,9 +51,10 @@
                         </Style>
                     </ControlTemplate.Resources>
                     <Border>
-                        <ListView x:Name="PART_ListView" ItemsSource="{Binding ItemsCollectionView, RelativeSource={RelativeSource TemplatedParent}}" SelectedItem="{Binding SelectedItem, RelativeSource={RelativeSource TemplatedParent}}"
+                        <ListView x:Name="PART_ListView" ItemsSource="{Binding ItemsCollectionView, RelativeSource={RelativeSource TemplatedParent}}" 
+                            SelectedItem="{Binding SelectedItem, RelativeSource={RelativeSource TemplatedParent}}" VirtualizingPanel.IsVirtualizing="True"
                             Margin="4" BorderBrush="LightGray" SelectionMode="Single" FocusVisualStyle="{x:Null}" VirtualizingPanel.VirtualizationMode="Recycling"
-                            TextSearch.TextPath="ItemId" AlternationCount="2">
+                            TextSearch.TextPath="ItemId" AlternationCount="2" VirtualizingPanel.IsVirtualizingWhenGrouping="True">
                             <ListView.Resources>
                                 <Style TargetType="{x:Type GridViewColumnHeader}" BasedOn="{StaticResource {x:Type GridViewColumnHeader}}">
                                     <Style.Triggers>
@@ -111,6 +112,87 @@
                                     <Setter Property="views:ItemsView.SelectRowOnClick" Value="{Binding IsVisible, RelativeSource={RelativeSource Self}}" />
                                 </Style>
                             </ListView.ItemContainerStyle>
+                            <ListView.GroupStyle>
+                                <GroupStyle>
+                                    <GroupStyle.ContainerStyle>
+                                        <Style TargetType="{x:Type GroupItem}">
+                                            <Style.Resources>
+                                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1" x:Key="BackChrome" po:Freeze="True">
+                                                    <LinearGradientBrush.GradientStops>
+                                                        <GradientStop Color="#F3F3F3" Offset="0" />
+                                                        <GradientStop Color="#EBEBEB" Offset="0.5" />
+                                                        <GradientStop Color="#DDDDDD" Offset="0.5" />
+                                                        <GradientStop Color="#CDCDCD" Offset="1" />
+                                                    </LinearGradientBrush.GradientStops>
+                                                </LinearGradientBrush>
+                                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0" x:Key="BufferBrush" po:Freeze="True">
+                                                    <LinearGradientBrush.GradientStops>
+                                                        <GradientStop Color="#EDEDED" Offset="0" />
+                                                        <GradientStop Color="#DDDDDD" Offset="0.5" />
+                                                        <GradientStop Color="#EDEDED" Offset="1" />
+                                                    </LinearGradientBrush.GradientStops>
+                                                </LinearGradientBrush>
+                                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1" x:Key="ButtonBrush" po:Freeze="True">
+                                                    <LinearGradientBrush.GradientStops>
+                                                        <GradientStop Color="#FFFFFFFF" Offset=".2"/>
+                                                        <GradientStop Color="#FFC0B7A6" Offset="1"/>
+                                                    </LinearGradientBrush.GradientStops>
+                                                </LinearGradientBrush>
+                                            </Style.Resources>
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="{x:Type GroupItem}">
+                                                        <Border BorderThickness="0,1,0,1" BorderBrush="Gray">
+                                                            <DockPanel>
+                                                                <Border DockPanel.Dock="Top" Background="{StaticResource BackChrome}">
+                                                                    <DockPanel>
+                                                                        <ToggleButton IsChecked="True" Width="18" Background="Transparent" FocusVisualStyle="{x:Null}" x:Name="PART_ToggleButton">
+                                                                            <ToggleButton.Template>
+                                                                                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                                                                    <Border Width="19" Height="13" Background="Transparent">
+                                                                                        <Border Width="9" Height="9" BorderThickness="1" BorderBrush="#FF7898B5" CornerRadius="1" SnapsToDevicePixels="True"
+                                                                                            Background="{StaticResource ButtonBrush}">                                                                                            
+                                                                                            <Path x:Name="ExpandPath" Margin="1" Fill="Black" Data="M 0 2 L 0 3 L 2 3 L 2 5 L 3 5 L 3 3 L 5 3 L 5 2 L 3 2 L 3 0 L 2 0 L 2 2 Z" />
+                                                                                        </Border>
+                                                                                    </Border>
+                                                                                    <ControlTemplate.Triggers>
+                                                                                        <Trigger Property="IsChecked" Value="True">
+                                                                                            <Setter Property="Data" TargetName="ExpandPath" Value="M 0 2 L 0 3 L 5 3 L 5 2 Z" />
+                                                                                        </Trigger>
+                                                                                    </ControlTemplate.Triggers>
+                                                                                </ControlTemplate>
+                                                                            </ToggleButton.Template>
+                                                                        </ToggleButton>
+                                                                        <ContentPresenter Margin="2" VerticalAlignment="Center" TextBlock.FontWeight="Bold" x:Name="PART_Header">
+                                                                            <ContentPresenter.Content>
+                                                                                <StackPanel Orientation="Horizontal">
+                                                                                    <views:EquipmentCategoryIcon Category="{Binding Name}" VerticalAlignment="Center" />
+                                                                                    <TextBlock VerticalAlignment="Center" Margin="2,0">
+                                                                                        <TextBlock.Text>
+                                                                                            <MultiBinding StringFormat="{}{0} ({1})">
+                                                                                                <Binding Path="Name" />
+                                                                                                <Binding Path="ItemCount" />
+                                                                                            </MultiBinding>
+                                                                                        </TextBlock.Text>
+                                                                                    </TextBlock>
+                                                                                </StackPanel>
+                                                                            </ContentPresenter.Content>
+                                                                        </ContentPresenter>
+                                                                    </DockPanel>
+                                                                </Border>
+                                                                <DockPanel Visibility="{Binding IsChecked, ElementName=PART_ToggleButton, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                                    <Rectangle Width="18" DockPanel.Dock="Left" Fill="#EDEDED" />
+                                                                    <ItemsPresenter />
+                                                                </DockPanel>
+                                                            </DockPanel>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </GroupStyle.ContainerStyle>
+                                </GroupStyle>
+                            </ListView.GroupStyle>
                             <ListView.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Command="{x:Static constructs:ListViewAutoSize.AutoSizeCommand}" />
