@@ -91,6 +91,7 @@ namespace KoAR.SaveEditor.Views
         {
             this.CoreEffects.Add(code);
             this.OnPropertyChanged(nameof(this.CoreEffectCount));
+            this.OnPropertyChanged(nameof(this.MysteryInteger));
         }
 
         internal void AddEffect(uint code)
@@ -104,6 +105,7 @@ namespace KoAR.SaveEditor.Views
             if (this.CoreEffects.Remove(code))
             {
                 this.OnPropertyChanged(nameof(this.CoreEffectCount));
+                this.OnPropertyChanged(nameof(this.MysteryInteger));
             }
         }
 
