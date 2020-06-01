@@ -59,7 +59,13 @@ namespace KoAR.SaveEditor.Views
         public string ItemName
         {
             get => this.Item.ItemName;
-            set => this.SetItemValue(value, this.Item.ItemName, value => this.Item.ItemName = value);
+            set
+            {
+                if (this.SetItemValue(value, this.Item.ItemName, value => this.Item.ItemName = value))
+                {
+                    this.OnPropertyChanged(nameof(this.HasCustomName));
+                }
+            }
         }
 
         public byte Level
@@ -123,14 +129,15 @@ namespace KoAR.SaveEditor.Views
             this.OnPropertyChanged(string.Empty);
         }
 
-        private void SetItemValue<T>(T value, T currentValue, Action<T> setValue, [CallerMemberName] string propertyName = "")
+        private bool SetItemValue<T>(T value, T currentValue, Action<T> setValue, [CallerMemberName] string propertyName = "")
         {
             if (EqualityComparer<T>.Default.Equals(value, currentValue))
             {
-                return;
+                return false;
             }
             setValue(value);
             this.OnPropertyChanged(propertyName);
+            return true;
         }
 
         private sealed class EffectCollection : Collection<uint>, INotifyCollectionChanged, INotifyPropertyChanged
