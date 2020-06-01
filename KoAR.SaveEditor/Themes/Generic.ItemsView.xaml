@@ -133,7 +133,7 @@
                                                     <ScrollBar x:Name="PART_VerticalScrollBar" Grid.Column="1" Cursor="Arrow" Margin="0" Minimum="0" Maximum="{TemplateBinding ScrollableHeight}"
                                                         Orientation="Vertical" Value="{TemplateBinding VerticalOffset}"
                                                         ViewportSize="{TemplateBinding ViewportHeight}" Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
-                                                    <DockPanel Grid.Column="1" Grid.Row="1" Background="{Binding Background, ElementName=PART_VerticalScrollBar}" LastChildFill="False"/>
+                                                    <Rectangle Grid.Row="1" Grid.Column="1" Fill="{Binding Background, ElementName=PART_HorizontalScrollBar}" Stroke="#D9D9D9" StrokeThickness="1" />
                                                 </Grid>
                                             </ControlTemplate>
                                         </Setter.Value>
