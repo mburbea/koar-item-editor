@@ -56,6 +56,8 @@ namespace KoAR.SaveEditor.Views
 
         public int ItemIndex => this.Item.ItemIndex;
 
+        public string ItemDisplayName => this.HasCustomName ? this.ItemName : $"Unknown ({LittleEndianConverter.Convert(this.ItemId)})";
+
         public string ItemName
         {
             get => this.Item.ItemName;
@@ -64,6 +66,7 @@ namespace KoAR.SaveEditor.Views
                 if (this.SetItemValue(value, this.Item.ItemName, value => this.Item.ItemName = value))
                 {
                     this.OnPropertyChanged(nameof(this.HasCustomName));
+                    this.OnPropertyChanged(nameof(this.ItemDisplayName));
                 }
             }
         }

@@ -313,7 +313,7 @@
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
-                                    <GridViewColumn Header="Name" Width="Auto" views:ItemsView.PropertyName="ItemName">
+                                    <GridViewColumn Header="Name" Width="Auto" views:ItemsView.PropertyName="ItemDisplayName">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate DataType="{x:Type views:ItemModel}">
                                                 <Grid>
@@ -322,18 +322,14 @@
                                                         <ColumnDefinition />
                                                     </Grid.ColumnDefinitions>
                                                     <views:EquipmentCategoryIcon Category="{Binding Category}" VerticalAlignment="Center" />
-                                                    <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="1,0">
+                                                    <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="1,0" Text="{Binding ItemDisplayName}">
                                                         <TextBlock.Style>
                                                             <Style TargetType="{x:Type TextBlock}">
                                                                 <Style.Triggers>
                                                                     <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True">
                                                                         <Setter Property="Visibility" Value="Collapsed" />
                                                                     </DataTrigger>
-                                                                    <DataTrigger Binding="{Binding HasCustomName}" Value="False">
-                                                                        <Setter Property="Text" Value="{Binding ItemId, Converter={StaticResource LittleEndianConverter}, StringFormat='Unknown ({0})'}" />
-                                                                    </DataTrigger>
                                                                 </Style.Triggers>
-                                                                <Setter Property="Text" Value="{Binding ItemName}" />
                                                             </Style>
                                                         </TextBlock.Style>
                                                     </TextBlock>
