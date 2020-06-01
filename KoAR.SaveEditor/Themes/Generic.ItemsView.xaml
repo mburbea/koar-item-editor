@@ -25,7 +25,7 @@
                         <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
                             <Style.Triggers>
                                 <Trigger Property="IsVisible" Value="True">
-                                    <Setter Property="constructs:ValidatingPropertyBehavior.ValidatingProperty" Value="{x:Static TextBox.TextProperty}" />                                    
+                                    <Setter Property="constructs:ValidatingPropertyBehavior.ValidatingProperty" Value="{x:Static TextBox.TextProperty}" />
                                 </Trigger>
                             </Style.Triggers>
                             <Setter Property="Validation.ErrorTemplate">
@@ -92,6 +92,52 @@
                                             </Setter>
                                         </DataTrigger>
                                     </Style.Triggers>
+                                </Style>
+                                <Style x:Key="{x:Static GridView.GridViewScrollViewerStyleKey}" TargetType="{x:Type ScrollViewer}">
+                                    <Setter Property="Focusable" Value="False"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type ScrollViewer}">
+                                                <Grid Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition />
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition />
+                                                        <RowDefinition Height="Auto"/>
+                                                    </Grid.RowDefinitions>
+                                                    <DockPanel Margin="{TemplateBinding Padding}">
+                                                        <ScrollViewer DockPanel.Dock="Top" Focusable="False" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
+                                                            <GridViewHeaderRowPresenter x:Name="PART_HeaderRowPresenter" Margin="18,0,0,0"
+                                                                AllowsColumnReorder="{Binding TemplatedParent.View.AllowsColumnReorder, RelativeSource={RelativeSource TemplatedParent}}"
+                                                                ColumnHeaderContainerStyle="{Binding TemplatedParent.View.ColumnHeaderContainerStyle, RelativeSource={RelativeSource TemplatedParent}}"
+                                                                ColumnHeaderContextMenu="{Binding TemplatedParent.View.ColumnHeaderContextMenu, RelativeSource={RelativeSource TemplatedParent}}"
+                                                                ColumnHeaderStringFormat="{Binding TemplatedParent.View.ColumnHeaderStringFormat, RelativeSource={RelativeSource TemplatedParent}}"
+                                                                ColumnHeaderTemplate="{Binding TemplatedParent.View.ColumnHeaderTemplate, RelativeSource={RelativeSource TemplatedParent}}"
+                                                                ColumnHeaderTemplateSelector="{Binding TemplatedParent.View.ColumnHeaderTemplateSelector, RelativeSource={RelativeSource TemplatedParent}}"
+                                                                ColumnHeaderToolTip="{Binding TemplatedParent.View.ColumnHeaderToolTip, RelativeSource={RelativeSource TemplatedParent}}"
+                                                                Columns="{Binding TemplatedParent.View.Columns, RelativeSource={RelativeSource TemplatedParent}}"
+                                                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                                        </ScrollViewer>
+                                                        <ScrollContentPresenter x:Name="PART_ScrollContentPresenter"
+                                                            CanContentScroll="{TemplateBinding CanContentScroll}"
+                                                            Content="{TemplateBinding Content}"
+                                                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                                            KeyboardNavigation.DirectionalNavigation="Local"/>
+                                                    </DockPanel>
+                                                    <ScrollBar x:Name="PART_HorizontalScrollBar" Grid.Row="1" Cursor="Arrow" Margin="0" Minimum="0" Maximum="{TemplateBinding ScrollableWidth}"
+                                                        Orientation="Horizontal" Value="{TemplateBinding HorizontalOffset}"
+                                                        ViewportSize="{TemplateBinding ViewportWidth}" Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"/>
+                                                    <ScrollBar x:Name="PART_VerticalScrollBar" Grid.Column="1" Cursor="Arrow" Margin="0" Minimum="0" Maximum="{TemplateBinding ScrollableHeight}"
+                                                        Orientation="Vertical" Value="{TemplateBinding VerticalOffset}"
+                                                        ViewportSize="{TemplateBinding ViewportHeight}" Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
+                                                    <DockPanel Grid.Column="1" Grid.Row="1" Background="{Binding Background, ElementName=PART_VerticalScrollBar}" LastChildFill="False"/>
+                                                </Grid>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
                                 </Style>
                             </ListView.Resources>
                             <ListView.ItemContainerStyle>
@@ -383,7 +429,7 @@
                                     <GridViewColumn Width="Auto">
                                         <GridViewColumn.Header>
                                             <CheckBox Margin="2" Content="Sellable?" FocusVisualStyle="{x:Null}"
-                                            IsChecked="{Binding AllItemsUnsellable, Converter={StaticResource NegatedBooleanConverter}, RelativeSource={RelativeSource TemplatedParent}}" />
+                                                IsChecked="{Binding AllItemsUnsellable, Converter={StaticResource NegatedBooleanConverter}, RelativeSource={RelativeSource TemplatedParent}}" />
                                         </GridViewColumn.Header>
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate DataType="{x:Type views:ItemModel}">
