@@ -63,7 +63,7 @@
                                                 <Setter.Value>
                                                     <DataTemplate>
                                                         <StackPanel Orientation="Horizontal">
-                                                            <TextBlock Text="{Binding}" />
+                                                            <ContentControl Content="{Binding}" FocusVisualStyle="{x:Null}" />
                                                             <TextBlock FontFamily="Segoe UI Symbol">
                                                                 <TextBlock.Style>
                                                                     <Style TargetType="{x:Type TextBlock}">
@@ -426,14 +426,17 @@
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
-                                    <GridViewColumn Width="Auto">
+                                    <GridViewColumn Width="Auto" views:ItemsView.PropertyName="IsUnsellable">
                                         <GridViewColumn.Header>
-                                            <CheckBox Margin="2" Content="Sellable?" FocusVisualStyle="{x:Null}"
-                                                IsChecked="{Binding AllItemsUnsellable, Converter={StaticResource NegatedBooleanConverter}, RelativeSource={RelativeSource TemplatedParent}}" />
+                                            <StackPanel Orientation="Horizontal">
+                                                <CheckBox Margin="2" FocusVisualStyle="{x:Null}" VerticalAlignment="Center"
+                                                    IsChecked="{Binding AllItemsUnsellable, Converter={StaticResource NegatedBooleanConverter}, RelativeSource={RelativeSource TemplatedParent}}" />
+                                                <TextBlock Text="Sellable?" VerticalAlignment="Center" />
+                                            </StackPanel>
                                         </GridViewColumn.Header>
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate DataType="{x:Type views:ItemModel}">
-                                                <CheckBox IsChecked="{Binding IsUnsellable, Converter={StaticResource NegatedBooleanConverter}, Mode=TwoWay}" HorizontalAlignment="Center" />
+                                                <CheckBox FocusVisualStyle="{x:Null}" HorizontalAlignment="Center" IsChecked="{Binding IsUnsellable, Converter={StaticResource NegatedBooleanConverter}}" />
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
