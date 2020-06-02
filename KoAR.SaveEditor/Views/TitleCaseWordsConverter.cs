@@ -7,14 +7,14 @@ namespace KoAR.SaveEditor.Views
 {
     public sealed class TitleCaseWordsConverter : IValueConverter
     {
-        static readonly char[] AllCaps = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
+        private static readonly char[] _allCaps = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
 
         object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return value?.ToString() switch
             {
                 null => DependencyProperty.UnsetValue,
-                string text when text.IndexOfAny(TitleCaseWordsConverter.AllCaps, 1) is int index && index != -1 => $"{text.Substring(0, index)} {text.Substring(index)}",
+                string text when text.IndexOfAny(TitleCaseWordsConverter._allCaps, 1) is int index && index != -1 => $"{text.Substring(0, index)} {text.Substring(index)}",
                 string text => text
             };
         }
