@@ -15,7 +15,7 @@ namespace KoAR.SaveEditor.Views
             }
             string text = value.ToString();
             int space = -1;
-            for (int index = 0; index < text.Length; index++)
+            for (int index = 1; index < text.Length; index++)
             {
                 if (Char.IsUpper(text, index))
                 {
