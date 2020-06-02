@@ -50,396 +50,261 @@
                             <Setter Property="constructs:TextBoxUpdateSource.UpdateOnEnter" Value="{Binding IsVisible, RelativeSource={RelativeSource Self}}" />
                         </Style>
                     </ControlTemplate.Resources>
-                    <Border>
-                        <ListView x:Name="PART_ListView" ItemsSource="{Binding ItemsCollectionView, RelativeSource={RelativeSource TemplatedParent}}" 
-                            SelectedItem="{Binding SelectedItem, RelativeSource={RelativeSource TemplatedParent}}" VirtualizingPanel.IsVirtualizing="True"
-                            Margin="4" BorderBrush="LightGray" SelectionMode="Single" FocusVisualStyle="{x:Null}" VirtualizingPanel.VirtualizationMode="Recycling"
-                            TextSearch.TextPath="ItemId" AlternationCount="2" VirtualizingPanel.IsVirtualizingWhenGrouping="True" VirtualizingPanel.ScrollUnit="Pixel">
-                            <ListView.Resources>
-                                <Style TargetType="{x:Type GridViewColumnHeader}" BasedOn="{StaticResource {x:Type GridViewColumnHeader}}">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Column.(views:ItemsView.PropertyName), Converter={StaticResource StringIsNullOrEmptyConverter}, RelativeSource={RelativeSource Self}}" Value="False">
-                                            <Setter Property="ContentTemplate">
-                                                <Setter.Value>
-                                                    <DataTemplate>
-                                                        <StackPanel Orientation="Horizontal">
-                                                            <ContentControl Content="{Binding}" FocusVisualStyle="{x:Null}" />
-                                                            <TextBlock FontFamily="Segoe UI Symbol">
-                                                                <TextBlock.Style>
-                                                                    <Style TargetType="{x:Type TextBlock}">
-                                                                        <Style.Triggers>
-                                                                            <DataTrigger Binding="{Binding SortDirection, RelativeSource={RelativeSource AncestorType={x:Type views:ItemsView}}}" Value="Descending">
-                                                                                <Setter Property="Text" Value="▾" />
-                                                                            </DataTrigger>
-                                                                            <DataTrigger Value="True">
-                                                                                <DataTrigger.Binding>
-                                                                                    <MultiBinding Converter="{StaticResource EqualityConverter}">
-                                                                                        <Binding Path="SortProperty" RelativeSource="{RelativeSource AncestorType={x:Type views:ItemsView}}" />
-                                                                                        <Binding Path="Column.(views:ItemsView.PropertyName)" RelativeSource="{RelativeSource AncestorType={x:Type GridViewColumnHeader}}" />
-                                                                                    </MultiBinding>
-                                                                                </DataTrigger.Binding>
-                                                                                <Setter Property="Visibility" Value="Visible" />
-                                                                            </DataTrigger>
-                                                                        </Style.Triggers>
-                                                                        <Setter Property="Text" Value="▴" />
-                                                                        <Setter Property="Visibility" Value="Hidden" />
-                                                                    </Style>
-                                                                </TextBlock.Style>
-                                                            </TextBlock>
-                                                        </StackPanel>
-                                                    </DataTemplate>
-                                                </Setter.Value>
-                                            </Setter>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                                <Style x:Key="{x:Static GridView.GridViewScrollViewerStyleKey}" TargetType="{x:Type ScrollViewer}">
-                                    <Setter Property="Focusable" Value="False"/>
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="{x:Type ScrollViewer}">
-                                                <Grid Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition />
-                                                        <ColumnDefinition Width="Auto"/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition />
-                                                        <RowDefinition Height="Auto"/>
-                                                    </Grid.RowDefinitions>
-                                                    <DockPanel Margin="{TemplateBinding Padding}">
-                                                        <ScrollViewer DockPanel.Dock="Top" Focusable="False" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
-                                                            <GridViewHeaderRowPresenter Margin="18,0,0,0"
-                                                                AllowsColumnReorder="{Binding TemplatedParent.View.AllowsColumnReorder, RelativeSource={RelativeSource TemplatedParent}}"
-                                                                ColumnHeaderContainerStyle="{Binding TemplatedParent.View.ColumnHeaderContainerStyle, RelativeSource={RelativeSource TemplatedParent}}"
-                                                                ColumnHeaderContextMenu="{Binding TemplatedParent.View.ColumnHeaderContextMenu, RelativeSource={RelativeSource TemplatedParent}}"
-                                                                ColumnHeaderStringFormat="{Binding TemplatedParent.View.ColumnHeaderStringFormat, RelativeSource={RelativeSource TemplatedParent}}"
-                                                                ColumnHeaderTemplate="{Binding TemplatedParent.View.ColumnHeaderTemplate, RelativeSource={RelativeSource TemplatedParent}}"
-                                                                ColumnHeaderTemplateSelector="{Binding TemplatedParent.View.ColumnHeaderTemplateSelector, RelativeSource={RelativeSource TemplatedParent}}"
-                                                                ColumnHeaderToolTip="{Binding TemplatedParent.View.ColumnHeaderToolTip, RelativeSource={RelativeSource TemplatedParent}}"
-                                                                Columns="{Binding TemplatedParent.View.Columns, RelativeSource={RelativeSource TemplatedParent}}"
-                                                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                                                        </ScrollViewer>
-                                                        <ScrollContentPresenter x:Name="PART_ScrollContentPresenter"
-                                                            CanContentScroll="{TemplateBinding CanContentScroll}"
-                                                            Content="{TemplateBinding Content}"
-                                                            ContentTemplate="{TemplateBinding ContentTemplate}"
-                                                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                                                            KeyboardNavigation.DirectionalNavigation="Local"/>
-                                                    </DockPanel>
-                                                    <ScrollBar x:Name="PART_HorizontalScrollBar" Grid.Row="1" Cursor="Arrow" Margin="0" Minimum="0" Maximum="{TemplateBinding ScrollableWidth}"
-                                                        Orientation="Horizontal" Value="{TemplateBinding HorizontalOffset}"
-                                                        ViewportSize="{TemplateBinding ViewportWidth}" Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"/>
-                                                    <ScrollBar x:Name="PART_VerticalScrollBar" Grid.Column="1" Cursor="Arrow" Margin="0" Minimum="0" Maximum="{TemplateBinding ScrollableHeight}"
-                                                        Orientation="Vertical" Value="{TemplateBinding VerticalOffset}"
-                                                        ViewportSize="{TemplateBinding ViewportHeight}" Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
-                                                    <Rectangle Grid.Row="1" Grid.Column="1" Fill="{Binding Background, ElementName=PART_HorizontalScrollBar}" Stroke="#D9D9D9" StrokeThickness="1" />
-                                                </Grid>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </ListView.Resources>
-                            <ListView.ItemContainerStyle>
-                                <Style TargetType="{x:Type ListViewItem}">
-                                    <Style.Triggers>
-                                        <MultiTrigger>
-                                            <MultiTrigger.Conditions>
-                                                <Condition Property="ItemsControl.AlternationIndex" Value="1" />
-                                                <Condition Property="IsSelected" Value="False" />
-                                                <Condition Property="IsMouseOver" Value="False" />
-                                            </MultiTrigger.Conditions>
-                                            <Setter Property="Background" Value="{StaticResource AlternateRowBrush}" />
-                                        </MultiTrigger>
-                                    </Style.Triggers>
-                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                    <Setter Property="constructs:MouseDoubleClick.CommandParameter" Value="{Binding}" />
-                                    <Setter Property="constructs:MouseDoubleClick.Command" Value="{Binding EditItemHexCommand, RelativeSource={RelativeSource AncestorType={x:Type views:ItemsView}}}" />
-                                    <Setter Property="views:ItemsView.SelectRowOnClick" Value="{Binding IsVisible, RelativeSource={RelativeSource Self}}" />
-                                </Style>
-                            </ListView.ItemContainerStyle>
-                            <ListView.GroupStyle>
-                                <GroupStyle>
-                                    <GroupStyle.ContainerStyle>
-                                        <Style TargetType="{x:Type GroupItem}">
-                                            <Style.Resources>
-                                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1" x:Key="BackChrome" po:Freeze="True">
-                                                    <LinearGradientBrush.GradientStops>
-                                                        <GradientStop Color="#F3F3F3" Offset="0" />
-                                                        <GradientStop Color="#EBEBEB" Offset="0.5" />
-                                                        <GradientStop Color="#DDDDDD" Offset="0.5" />
-                                                        <GradientStop Color="#CDCDCD" Offset="1" />
-                                                    </LinearGradientBrush.GradientStops>
-                                                </LinearGradientBrush>
-                                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0" x:Key="BufferBrush" po:Freeze="True">
-                                                    <LinearGradientBrush.GradientStops>
-                                                        <GradientStop Color="#EDEDED" Offset="0" />
-                                                        <GradientStop Color="#DDDDDD" Offset="0.5" />
-                                                        <GradientStop Color="#EDEDED" Offset="1" />
-                                                    </LinearGradientBrush.GradientStops>
-                                                </LinearGradientBrush>
-                                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1" x:Key="ButtonBrush" po:Freeze="True">
-                                                    <LinearGradientBrush.GradientStops>
-                                                        <GradientStop Color="#FFFFFFFF" Offset=".2"/>
-                                                        <GradientStop Color="#FFC0B7A6" Offset="1"/>
-                                                    </LinearGradientBrush.GradientStops>
-                                                </LinearGradientBrush>
-                                            </Style.Resources>
-                                            <Setter Property="Template">
-                                                <Setter.Value>
-                                                    <ControlTemplate TargetType="{x:Type GroupItem}">
-                                                        <Border BorderThickness="0,1,0,1" BorderBrush="Gray">
-                                                            <DockPanel>
-                                                                <ToggleButton x:Name="PART_ToggleButton" DockPanel.Dock="Top" Content="{Binding}" Cursor="Hand"
-                                                                    views:StickyBooleans.Key="{Binding Name}" FocusVisualStyle="{x:Null}" SnapsToDevicePixels="True"
-                                                                    IsChecked="{Binding (views:StickyBooleans.Value), RelativeSource={RelativeSource Self}}">
-                                                                    <ToggleButton.ContentTemplate>
-                                                                        <DataTemplate DataType="{x:Type CollectionViewGroup}">
-                                                                            <StackPanel Orientation="Horizontal">
-                                                                                <views:EquipmentCategoryIcon Category="{Binding Name}" VerticalAlignment="Center" Focusable="False" IsHitTestVisible="False" />
-                                                                                <TextBlock VerticalAlignment="Center" Margin="2,0" FontWeight="SemiBold">
-                                                                                    <TextBlock.Text>
-                                                                                        <MultiBinding StringFormat="{}{0} ({1})">
-                                                                                            <Binding Path="Name" />
-                                                                                            <Binding Path="ItemCount" />
-                                                                                        </MultiBinding>
-                                                                                    </TextBlock.Text>
-                                                                                </TextBlock>
-                                                                            </StackPanel>
-                                                                        </DataTemplate>
-                                                                    </ToggleButton.ContentTemplate>
-                                                                    <ToggleButton.Template>
-                                                                        <ControlTemplate TargetType="{x:Type ToggleButton}">
-                                                                            <Grid Background="{StaticResource BackChrome}">
-                                                                                <Grid.ColumnDefinitions>
-                                                                                    <ColumnDefinition Width="Auto" />
-                                                                                    <ColumnDefinition Width="Auto" />
-                                                                                    <ColumnDefinition />
-                                                                                </Grid.ColumnDefinitions>
-                                                                                <Border Width="19" Height="13" Background="Transparent" VerticalAlignment="Center">
-                                                                                    <Border Width="9" Height="9" BorderThickness="1" BorderBrush="#FF7898B5" CornerRadius="1" SnapsToDevicePixels="True"
-                                                                                            Background="{StaticResource ButtonBrush}">
-                                                                                        <Path x:Name="ExpandPath" Margin="1" Fill="Black" Data="M 0 2 L 0 3 L 2 3 L 2 5 L 3 5 L 3 3 L 5 3 L 5 2 L 3 2 L 3 0 L 2 0 L 2 2 Z" />
-                                                                                    </Border>
-                                                                                </Border>
-                                                                                <ContentPresenter Grid.Column="1" VerticalAlignment="Center" />
-                                                                            </Grid>
-                                                                            <ControlTemplate.Triggers>
-                                                                                <Trigger Property="IsChecked" Value="True">
-                                                                                    <Setter Property="Data" TargetName="ExpandPath" Value="M 0 2 L 0 3 L 5 3 L 5 2 Z" />
-                                                                                </Trigger>
-                                                                            </ControlTemplate.Triggers>
-                                                                        </ControlTemplate>
-                                                                    </ToggleButton.Template>
-                                                                </ToggleButton>
-                                                                <DockPanel Visibility="{Binding IsChecked, ElementName=PART_ToggleButton, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                                                    <Rectangle Width="18" DockPanel.Dock="Left" Fill="#EDEDED" />
-                                                                    <ItemsPresenter />
-                                                                </DockPanel>
-                                                            </DockPanel>
-                                                        </Border>
-                                                    </ControlTemplate>
-                                                </Setter.Value>
-                                            </Setter>
-                                        </Style>
-                                    </GroupStyle.ContainerStyle>
-                                </GroupStyle>
-                            </ListView.GroupStyle>
-                            <ListView.ContextMenu>
-                                <ContextMenu>
-                                    <MenuItem Command="{x:Static constructs:ListViewAutoSize.AutoSizeCommand}" />
-                                    <MenuItem Command="{TemplateBinding MakeAllItemsDistinctCommand}" Header="Make All Items Distinct" />
-                                </ContextMenu>
-                            </ListView.ContextMenu>
-                            <ListView.View>
-                                <GridView AllowsColumnReorder="True">
-                                    <GridViewColumn Header="Type Id" Width="Auto" views:ItemsView.PropertyName="TypeId">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate DataType="{x:Type views:ItemModel}">
-                                                <Grid>
-                                                    <TextBlock Text="{Binding TypeId, StringFormat='X6'}" TextAlignment="Right">
-                                                        <TextBlock.Style>
-                                                            <Style TargetType="{x:Type TextBlock}">
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True">
-                                                                        <Setter Property="Visibility" Value="Collapsed" />
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </TextBlock.Style>
-                                                    </TextBlock>
-                                                    <TextBox TextAlignment="Right" Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    <ListView x:Name="PART_ListView" ItemsSource="{Binding ItemsCollectionView, RelativeSource={RelativeSource TemplatedParent}}" 
+                        SelectedItem="{Binding SelectedItem, RelativeSource={RelativeSource TemplatedParent}}" VirtualizingPanel.IsVirtualizing="True"
+                        BorderBrush="LightGray" SelectionMode="Single" FocusVisualStyle="{x:Null}" VirtualizingPanel.VirtualizationMode="Recycling"
+                        TextSearch.TextPath="ItemId" AlternationCount="2">
+                        <ListView.Resources>
+                            <Style TargetType="{x:Type GridViewColumnHeader}" BasedOn="{StaticResource {x:Type GridViewColumnHeader}}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Column.(views:ItemsView.PropertyName), Converter={StaticResource StringIsNullOrEmptyConverter}, RelativeSource={RelativeSource Self}}" Value="False">
+                                        <Setter Property="ContentTemplate">
+                                            <Setter.Value>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <ContentControl Content="{Binding}" FocusVisualStyle="{x:Null}" />
+                                                        <TextBlock FontFamily="Segoe UI Symbol">
+                                                            <TextBlock.Style>
+                                                                <Style TargetType="{x:Type TextBlock}">
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding SortDirection, RelativeSource={RelativeSource AncestorType={x:Type views:ItemsView}}}" Value="Descending">
+                                                                            <Setter Property="Text" Value="▾" />
+                                                                        </DataTrigger>
+                                                                        <DataTrigger Value="True">
+                                                                            <DataTrigger.Binding>
+                                                                                <MultiBinding Converter="{StaticResource EqualityConverter}">
+                                                                                    <Binding Path="SortProperty" RelativeSource="{RelativeSource AncestorType={x:Type views:ItemsView}}" />
+                                                                                    <Binding Path="Column.(views:ItemsView.PropertyName)" RelativeSource="{RelativeSource AncestorType={x:Type GridViewColumnHeader}}" />
+                                                                                </MultiBinding>
+                                                                            </DataTrigger.Binding>
+                                                                            <Setter Property="Visibility" Value="Visible" />
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                    <Setter Property="Text" Value="▴" />
+                                                                    <Setter Property="Visibility" Value="Hidden" />
+                                                                </Style>
+                                                            </TextBlock.Style>
+                                                        </TextBlock>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListView.Resources>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListViewItem}">
+                                <Style.Triggers>
+                                    <MultiTrigger>
+                                        <MultiTrigger.Conditions>
+                                            <Condition Property="ItemsControl.AlternationIndex" Value="1" />
+                                            <Condition Property="IsSelected" Value="False" />
+                                            <Condition Property="IsMouseOver" Value="False" />
+                                        </MultiTrigger.Conditions>
+                                        <Setter Property="Background" Value="{StaticResource AlternateRowBrush}" />
+                                    </MultiTrigger>
+                                </Style.Triggers>
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                <Setter Property="constructs:MouseDoubleClick.CommandParameter" Value="{Binding}" />
+                                <Setter Property="constructs:MouseDoubleClick.Command" Value="{Binding EditItemHexCommand, RelativeSource={RelativeSource AncestorType={x:Type views:ItemsView}}}" />
+                                <Setter Property="views:ItemsView.SelectRowOnClick" Value="{Binding IsVisible, RelativeSource={RelativeSource Self}}" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Command="{x:Static constructs:ListViewAutoSize.AutoSizeCommand}" />
+                                <MenuItem Command="{TemplateBinding MakeAllItemsDistinctCommand}" Header="Make All Items Distinct" />
+                            </ContextMenu>
+                        </ListView.ContextMenu>
+                        <ListView.View>
+                            <GridView AllowsColumnReorder="True">
+                                <GridViewColumn Header="Type Id" Width="Auto" views:ItemsView.PropertyName="TypeId">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate DataType="{x:Type views:ItemModel}">
+                                            <Grid>
+                                                <TextBlock Text="{Binding TypeId, StringFormat='X6'}" TextAlignment="Right">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="{x:Type TextBlock}">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True">
+                                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                                <TextBox TextAlignment="Right" Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                         constructs:TextBoxSelect.SelectOnFocus="{Binding IsVisible, RelativeSource={RelativeSource Self}}">
-                                                        <TextBox.Text>
-                                                            <Binding Path="TypeId" Converter="{StaticResource HexConverter}">
-                                                                <Binding.ValidationRules>
-                                                                    <constructs:ValueRequiredValidationRule />
-                                                                    <constructs:RangeValidationRule Min="0" Max="0xFFFFFF" NumberStyle="HexNumber"/>
-                                                                </Binding.ValidationRules>
-                                                            </Binding>
-                                                        </TextBox.Text>
-                                                    </TextBox>
-                                                </Grid>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                    <GridViewColumn Header="Level" Width="Auto" views:ItemsView.PropertyName="Level">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate DataType="{x:Type views:ItemModel}">
-                                                <Grid>
-                                                    <TextBlock Text="{Binding Level}" TextAlignment="Right">
-                                                        <TextBlock.Style>
-                                                            <Style TargetType="{x:Type TextBlock}">
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True">
-                                                                        <Setter Property="Visibility" Value="Collapsed" />
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </TextBlock.Style>
-                                                    </TextBlock>
-                                                    <TextBox TextAlignment="Right" Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                    <TextBox.Text>
+                                                        <Binding Path="TypeId" Converter="{StaticResource HexConverter}">
+                                                            <Binding.ValidationRules>
+                                                                <constructs:ValueRequiredValidationRule />
+                                                                <constructs:RangeValidationRule Min="0" Max="0xFFFFFF" NumberStyle="HexNumber"/>
+                                                            </Binding.ValidationRules>
+                                                        </Binding>
+                                                    </TextBox.Text>
+                                                </TextBox>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Level" Width="Auto" views:ItemsView.PropertyName="Level">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate DataType="{x:Type views:ItemModel}">
+                                            <Grid>
+                                                <TextBlock Text="{Binding Level}" TextAlignment="Right">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="{x:Type TextBlock}">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True">
+                                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                                <TextBox TextAlignment="Right" Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                         constructs:TextBoxSelect.SelectOnFocus="{Binding IsVisible, RelativeSource={RelativeSource Self}}">
-                                                        <TextBox.Text>
-                                                            <Binding Path="Level">
-                                                                <Binding.ValidationRules>
-                                                                    <constructs:ValueRequiredValidationRule />
-                                                                    <constructs:RangeValidationRule Min="0" Max="255" NumberStyle="Integer"/>
-                                                                </Binding.ValidationRules>
-                                                            </Binding>
-                                                        </TextBox.Text>
-                                                    </TextBox>
-                                                </Grid>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                    <GridViewColumn Header="Name" Width="Auto" views:ItemsView.PropertyName="ItemDisplayName">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate DataType="{x:Type views:ItemModel}">
-                                                <Grid>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="Auto" />
-                                                        <ColumnDefinition />
-                                                    </Grid.ColumnDefinitions>
-                                                    <views:EquipmentCategoryIcon Category="{Binding Category}" VerticalAlignment="Center" />
-                                                    <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="1,0" Text="{Binding ItemDisplayName}">
-                                                        <TextBlock.Style>
-                                                            <Style TargetType="{x:Type TextBlock}">
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True">
-                                                                        <Setter Property="Visibility" Value="Collapsed" />
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </TextBlock.Style>
-                                                    </TextBlock>
-                                                    <TextBox Grid.Column="1" VerticalAlignment="Center" Margin="1,0" constructs:TextBoxSelect.SelectOnFocus="{Binding IsVisible, RelativeSource={RelativeSource Self}}" 
+                                                    <TextBox.Text>
+                                                        <Binding Path="Level">
+                                                            <Binding.ValidationRules>
+                                                                <constructs:ValueRequiredValidationRule />
+                                                                <constructs:RangeValidationRule Min="0" Max="255" NumberStyle="Integer"/>
+                                                            </Binding.ValidationRules>
+                                                        </Binding>
+                                                    </TextBox.Text>
+                                                </TextBox>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Name" Width="Auto" views:ItemsView.PropertyName="ItemDisplayName">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate DataType="{x:Type views:ItemModel}">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition />
+                                                </Grid.ColumnDefinitions>
+                                                <views:EquipmentCategoryIcon Category="{Binding Category}" VerticalAlignment="Center" />
+                                                <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="1,0" Text="{Binding ItemDisplayName}">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="{x:Type TextBlock}">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True">
+                                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                                <TextBox Grid.Column="1" VerticalAlignment="Center" Margin="1,0" constructs:TextBoxSelect.SelectOnFocus="{Binding IsVisible, RelativeSource={RelativeSource Self}}" 
                                                         Text="{Binding ItemName}" Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                                                </Grid>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                    <GridViewColumn Header="Cur Durability" Width="Auto" views:ItemsView.PropertyName="CurrentDurability">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate DataType="{x:Type views:ItemModel}">
-                                                <Grid>
-                                                    <TextBlock Text="{Binding CurrentDurability, StringFormat='0.####'}" TextAlignment="Right">
-                                                        <TextBlock.Style>
-                                                            <Style TargetType="{x:Type TextBlock}">
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True">
-                                                                        <Setter Property="Visibility" Value="Collapsed" />
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </TextBlock.Style>
-                                                    </TextBlock>
-                                                    <TextBox TextAlignment="Right" Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            </Grid>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Cur Durability" Width="Auto" views:ItemsView.PropertyName="CurrentDurability">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate DataType="{x:Type views:ItemModel}">
+                                            <Grid>
+                                                <TextBlock Text="{Binding CurrentDurability, StringFormat='0.####'}" TextAlignment="Right">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="{x:Type TextBlock}">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True">
+                                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                                <TextBox TextAlignment="Right" Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                         constructs:TextBoxSelect.SelectOnFocus="{Binding IsVisible, RelativeSource={RelativeSource Self}}">
-                                                        <TextBox.Text>
-                                                            <Binding Path="CurrentDurability" Converter="{StaticResource SingleConverter}">
-                                                                <Binding.ValidationRules>
-                                                                    <views:DurabilityValidationRule />
-                                                                </Binding.ValidationRules>
-                                                            </Binding>
-                                                        </TextBox.Text>
-                                                    </TextBox>
-                                                </Grid>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                    <GridViewColumn Header="Max Durability" Width="Auto" views:ItemsView.PropertyName="MaxDurability">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate DataType="{x:Type views:ItemModel}">
-                                                <Grid>
-                                                    <TextBlock Text="{Binding MaxDurability, StringFormat='0.####'}" TextAlignment="Right">
-                                                        <TextBlock.Style>
-                                                            <Style TargetType="{x:Type TextBlock}">
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True">
-                                                                        <Setter Property="Visibility" Value="Collapsed" />
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </TextBlock.Style>
-                                                    </TextBlock>
-                                                    <TextBox TextAlignment="Right" Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                    <TextBox.Text>
+                                                        <Binding Path="CurrentDurability" Converter="{StaticResource SingleConverter}">
+                                                            <Binding.ValidationRules>
+                                                                <views:DurabilityValidationRule />
+                                                            </Binding.ValidationRules>
+                                                        </Binding>
+                                                    </TextBox.Text>
+                                                </TextBox>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Max Durability" Width="Auto" views:ItemsView.PropertyName="MaxDurability">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate DataType="{x:Type views:ItemModel}">
+                                            <Grid>
+                                                <TextBlock Text="{Binding MaxDurability, StringFormat='0.####'}" TextAlignment="Right">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="{x:Type TextBlock}">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True">
+                                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                                <TextBox TextAlignment="Right" Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                         constructs:TextBoxSelect.SelectOnFocus="{Binding IsVisible, RelativeSource={RelativeSource Self}}">
-                                                        <TextBox.Text>
-                                                            <Binding Path="MaxDurability" Converter="{StaticResource SingleConverter}">
-                                                                <Binding.ValidationRules>
-                                                                    <views:DurabilityValidationRule />
-                                                                </Binding.ValidationRules>
-                                                            </Binding>
-                                                        </TextBox.Text>
-                                                    </TextBox>
-                                                </Grid>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                    <GridViewColumn Header="# Effects" Width="Auto" views:ItemsView.PropertyName="EffectCount">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate DataType="{x:Type views:ItemModel}">
-                                                <TextBlock Text="{Binding EffectCount, StringFormat='#,##0'}" TextAlignment="Right" />
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                    <GridViewColumn Header="Core Effects" Width="Auto" views:ItemsView.PropertyName="CoreEffectCount">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate DataType="{x:Type views:ItemModel}">
-                                                <ItemsControl ItemsSource="{Binding CoreEffects}" MinWidth="88">
-                                                    <ItemsControl.ItemsPanel>
-                                                        <ItemsPanelTemplate>
-                                                            <StackPanel Orientation="Horizontal" />
-                                                        </ItemsPanelTemplate>
-                                                    </ItemsControl.ItemsPanel>
-                                                    <ItemsControl.ItemTemplate>
-                                                        <DataTemplate DataType="{x:Type s:UInt32}">
-                                                            <views:CoreEffectIcon Code="{Binding}" />
-                                                        </DataTemplate>
-                                                    </ItemsControl.ItemTemplate>
-                                                </ItemsControl>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                    <GridViewColumn Width="Auto" views:ItemsView.PropertyName="IsUnsellable">
-                                        <GridViewColumn.Header>
-                                            <StackPanel Orientation="Horizontal">
-                                                <CheckBox Margin="2" FocusVisualStyle="{x:Null}" VerticalAlignment="Center"
+                                                    <TextBox.Text>
+                                                        <Binding Path="MaxDurability" Converter="{StaticResource SingleConverter}">
+                                                            <Binding.ValidationRules>
+                                                                <views:DurabilityValidationRule />
+                                                            </Binding.ValidationRules>
+                                                        </Binding>
+                                                    </TextBox.Text>
+                                                </TextBox>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="# Effects" Width="Auto" views:ItemsView.PropertyName="EffectCount">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate DataType="{x:Type views:ItemModel}">
+                                            <TextBlock Text="{Binding EffectCount, StringFormat='#,##0'}" TextAlignment="Right" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Core Effects" Width="Auto" views:ItemsView.PropertyName="CoreEffectCount">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate DataType="{x:Type views:ItemModel}">
+                                            <ItemsControl ItemsSource="{Binding CoreEffects}" MinWidth="88">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel Orientation="Horizontal" />
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate DataType="{x:Type s:UInt32}">
+                                                        <views:CoreEffectIcon Code="{Binding}" />
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Width="Auto" views:ItemsView.PropertyName="IsUnsellable">
+                                    <GridViewColumn.Header>
+                                        <StackPanel Orientation="Horizontal">
+                                            <CheckBox Margin="2" FocusVisualStyle="{x:Null}" VerticalAlignment="Center"
                                                     IsChecked="{Binding AllItemsUnsellable, Converter={StaticResource NegatedBooleanConverter}, RelativeSource={RelativeSource TemplatedParent}}" />
-                                                <TextBlock Text="Sellable?" VerticalAlignment="Center" />
-                                            </StackPanel>
-                                        </GridViewColumn.Header>
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate DataType="{x:Type views:ItemModel}">
-                                                <CheckBox FocusVisualStyle="{x:Null}" HorizontalAlignment="Center" IsChecked="{Binding IsUnsellable, Converter={StaticResource NegatedBooleanConverter}}" />
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
-                    </Border>
+                                            <TextBlock Text="Sellable?" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </GridViewColumn.Header>
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate DataType="{x:Type views:ItemModel}">
+                                            <CheckBox FocusVisualStyle="{x:Null}" HorizontalAlignment="Center" IsChecked="{Binding IsUnsellable, Converter={StaticResource NegatedBooleanConverter}}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

@@ -7,7 +7,8 @@
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views"
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs" 
     xmlns:core="clr-namespace:KoAR.Core;assembly=KoAR.Core"
-    xmlns:properties="clr-namespace:KoAR.SaveEditor.Properties"
+    xmlns:p="clr-namespace:KoAR.SaveEditor.Properties"
+    xmlns:s="clr-namespace:System;assembly=mscorlib"
     mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type views:MainViewModel}}"
     Width="1366" Height="768" WindowStartupLocation="CenterScreen" 
     Icon="/app.ico" ResizeMode="CanResizeWithGrip">
@@ -35,6 +36,15 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <ObjectDataProvider x:Key="Categories" ObjectType="{x:Type s:Enum}" MethodName="GetValues">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="core:EquipmentCategory" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        <CompositeCollection x:Key="CategoryContainers">
+            <CollectionContainer Collection="{Binding Source={x:Static constructs:DataContainer.Empty}, Converter={x:Static constructs:DataContainer.CollectionConverter}}" />
+            <CollectionContainer Collection="{Binding Source={StaticResource Categories}, Converter={x:Static constructs:DataContainer.CollectionConverter}}" />
+        </CompositeCollection>
     </Window.Resources>
     <Window.DataContext>
         <Binding Source="{StaticResource ViewModel}" />
@@ -115,8 +125,8 @@
                     <ColumnDefinition Width="120" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="{Binding FilteredItems.Count, StringFormat='Count: {0}'}" VerticalAlignment="Center" />
-                <TextBlock Grid.Column="1" Text="{Binding ZoomScale, Source={x:Static properties:Settings.Default}, StringFormat='##0%'}" VerticalAlignment="Center" TextAlignment="Right" />
-                <Slider Grid.Column="2" Value="{Binding ZoomScale, Source={x:Static properties:Settings.Default}}" FocusVisualStyle="{x:Null}" Margin="4,0,8,0" VerticalAlignment="Center" Minimum="0.25" Maximum="1.75">
+                <TextBlock Grid.Column="1" Text="{Binding ZoomScale, Source={x:Static p:Settings.Default}, StringFormat='##0%'}" VerticalAlignment="Center" TextAlignment="Right" />
+                <Slider Grid.Column="2" Value="{Binding ZoomScale, Source={x:Static p:Settings.Default}}" FocusVisualStyle="{x:Null}" Margin="4,0,8,0" VerticalAlignment="Center" Minimum="0.25" Maximum="1.75">
                     <Slider.Resources>
                         <Style TargetType="{x:Type Thumb}" BasedOn="{StaticResource {x:Type Thumb}}">
                             <Setter Property="FocusVisualStyle" Value="{x:Null}" />
@@ -137,7 +147,7 @@
                 </Style>
             </Grid.Style>
             <Grid.LayoutTransform>
-                <ScaleTransform ScaleX="{Binding ZoomScale, Source={x:Static properties:Settings.Default}}" ScaleY="{Binding ZoomScale, Source={x:Static properties:Settings.Default}}" />
+                <ScaleTransform ScaleX="{Binding ZoomScale, Source={x:Static p:Settings.Default}}" ScaleY="{Binding ZoomScale, Source={x:Static p:Settings.Default}}" />
             </Grid.LayoutTransform>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*" />
@@ -166,8 +176,6 @@
                         </Grid.Resources>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="48" />
-                            <ColumnDefinition Width="Auto" />
                             <ColumnDefinition />
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition />
@@ -175,12 +183,10 @@
                             <ColumnDefinition />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="Category:" />
-                        <views:EquipmentCategorySelector Grid.Column="1" Category="{Binding CategoryFilter}" Items="{Binding Items}" />
-                        <TextBlock Grid.Column="2" Text="Name:" />
-                        <TextBox Grid.Column="3" Text="{Binding ItemNameFilter, UpdateSourceTrigger=PropertyChanged}" />
-                        <TextBlock Grid.Column="4" Text="Cur. Durability:" />
-                        <TextBox Grid.Column="5">
+                        <TextBlock Text="Name:" />
+                        <TextBox Grid.Column="1" Text="{Binding ItemNameFilter, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBlock Grid.Column="2" Text="Cur. Durability:" />
+                        <TextBox Grid.Column="3">
                             <TextBox.Text>
                                 <Binding Path="CurrentDurabilityFilter" UpdateSourceTrigger="PropertyChanged">
                                     <Binding.ValidationRules>
@@ -189,8 +195,8 @@
                                 </Binding>
                             </TextBox.Text>
                         </TextBox>
-                        <TextBlock Grid.Column="6" Text="Max. Durability:" />
-                        <TextBox Grid.Column="7">
+                        <TextBlock Grid.Column="4" Text="Max. Durability:" />
+                        <TextBox Grid.Column="5">
                             <TextBox.Text>
                                 <Binding Path="MaxDurabilityFilter" UpdateSourceTrigger="PropertyChanged">
                                     <Binding.ValidationRules>
@@ -199,12 +205,78 @@
                                 </Binding>
                             </TextBox.Text>
                         </TextBox>
-                        <Button Grid.Column="8" Content="Reset" Command="{Binding ResetFiltersCommand}" Margin="2" VerticalAlignment="Center" />
+                        <Button Grid.Column="6" Content="Reset" Command="{Binding ResetFiltersCommand}" Margin="2" VerticalAlignment="Center" />
                     </Grid>
                 </GroupBox>
-                <views:ItemsView Grid.Row="1" Items="{Binding FilteredItems}" SelectedItem="{Binding SelectedItem}" 
-                    EditItemHexCommand="{Binding EditItemHexCommand}" AllItemsUnsellable="{Binding AllItemsUnsellable}" 
-                    MakeAllItemsDistinctCommand="{Binding MakeAllItemsDistinctCommand}" />
+                <DockPanel Grid.Row="1" Margin="4">
+                    <views:ScrollingTabControl DockPanel.Dock="Top" SelectedValuePath="Data" ItemsSource="{Binding Source={StaticResource CategoryContainers}}" SelectedValue="{Binding CategoryFilter}">
+                        <TabControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type constructs:DataContainer}">
+                                <StackPanel Orientation="Horizontal">
+                                    <views:EquipmentCategoryIcon Category="{Binding Data}" VerticalAlignment="Center">
+                                        <views:EquipmentCategoryIcon.Style>
+                                            <Style TargetType="{x:Type views:EquipmentCategoryIcon}">
+                                                <Style.Triggers>
+                                                    <Trigger Property="Category" Value="{x:Null}">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </views:EquipmentCategoryIcon.Style>
+                                    </views:EquipmentCategoryIcon>
+                                    <TextBlock VerticalAlignment="Center" Margin="2,0">
+                                        <TextBlock.Style>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type TabItem}}}" Value="True">
+                                                        <Setter Property="FontWeight" Value="SemiBold" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Data}" Value="{x:Null}">
+                                                        <Setter Property="Text" Value="All" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                                <Setter Property="Text" Value="{Binding Data}" />
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                    <TextBlock VerticalAlignment="Center">
+                                        <TextBlock.Style>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Style.Resources>
+                                                    <views:CategoryCountConverter x:Key="CategoryCountConverter" />
+                                                </Style.Resources>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type TabItem}}}" Value="True">
+                                                        <Setter Property="FontWeight" Value="SemiBold" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Data}" Value="{x:Null}">
+                                                        <Setter Property="Text" Value="{Binding Items.Count, Source={StaticResource ViewModel}, StringFormat='({0})'}" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                                <Setter Property="Text">
+                                                    <Setter.Value>
+                                                        <MultiBinding Converter="{StaticResource CategoryCountConverter}" StringFormat="({0})">
+                                                            <Binding Path="Data" />
+                                                            <Binding Path="Items" Source="{StaticResource ViewModel}" />
+                                                            <!-- Used to retrigger binding after loading file -->
+                                                            <Binding Path="Items.Count" Source="{StaticResource ViewModel}" />
+                                                        </MultiBinding>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </StackPanel>
+                            </DataTemplate>
+                        </TabControl.ItemTemplate>
+                        <TabControl.ContentTemplate>
+                            <DataTemplate />
+                        </TabControl.ContentTemplate>
+                    </views:ScrollingTabControl>
+                    <views:ItemsView Items="{Binding FilteredItems}" SelectedItem="{Binding SelectedItem}" 
+                        EditItemHexCommand="{Binding EditItemHexCommand}" AllItemsUnsellable="{Binding AllItemsUnsellable}" 
+                        MakeAllItemsDistinctCommand="{Binding MakeAllItemsDistinctCommand}" />
+                </DockPanel>
             </Grid>
             <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Stretch" Background="{x:Static SystemColors.ControlBrush}" FocusVisualStyle="{x:Null}" />
             <Grid Grid.Column="2">
