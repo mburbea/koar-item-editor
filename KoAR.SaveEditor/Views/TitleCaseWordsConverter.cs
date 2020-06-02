@@ -14,16 +14,15 @@ namespace KoAR.SaveEditor.Views
                 return DependencyProperty.UnsetValue;
             }
             string text = value.ToString();
-            int space = -1;
-            for (int index = 1; index < text.Length; index++)
+            int index = 1;
+            for (; index < text.Length; index++)
             {
-                if (Char.IsUpper(text, index))
+                if (char.IsUpper(text, index))
                 {
-                    space = index;
                     break;
                 }
             }
-            return space == -1 ? text : $"{text.Substring(0, space)} {text.Substring(space)}";
+            return index==text.Length ? text : $"{text.Substring(0, index)} {text.Substring(index)}";
         }
 
         object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();

@@ -227,6 +227,9 @@
                                     <TextBlock VerticalAlignment="Center" Margin="2,0">
                                         <TextBlock.Style>
                                             <Style TargetType="{x:Type TextBlock}">
+                                                <Style.Resources>
+                                                    <views:TitleCaseWordsConverter x:Key="TitleCaseWordsConverter" />
+                                                </Style.Resources>
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type TabItem}}}" Value="True">
                                                         <Setter Property="FontWeight" Value="SemiBold" />
@@ -235,7 +238,7 @@
                                                         <Setter Property="Text" Value="All" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
-                                                <Setter Property="Text" Value="{Binding Data}" />
+                                                <Setter Property="Text" Value="{Binding Data, Converter={StaticResource TitleCaseWordsConverter}}" />
                                             </Style>
                                         </TextBlock.Style>
                                     </TextBlock>
