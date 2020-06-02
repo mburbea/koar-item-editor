@@ -222,6 +222,11 @@ namespace KoAR.SaveEditor.Views
             Amalur.ReadFile(this.FileName = dialog.FileName);
             this.InventorySize = Amalur.InventorySize;
             this.RepopulateItems();
+            if (this._categoryFilter.HasValue)
+            {
+                this._categoryFilter = default;
+                this.OnPropertyChanged(nameof(this.CategoryFilter));
+            }
             this.ResetFilters();
             this._unsavedChanges = false;
             this.OnPropertyChanged(nameof(this.UnsavedChanges));
@@ -376,11 +381,6 @@ namespace KoAR.SaveEditor.Views
             if (Interlocked.Exchange(ref this._currentDurabilityFilter, string.Empty).Length != 0)
             {
                 this.OnPropertyChanged(nameof(this.CurrentDurabilityFilter));
-            }
-            if (this._categoryFilter.HasValue)
-            {
-                this._categoryFilter = default;
-                this.OnPropertyChanged(nameof(this.CategoryFilter));
             }
             this.OnFilterChange();
         }

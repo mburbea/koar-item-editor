@@ -158,10 +158,6 @@ namespace KoAR.SaveEditor.Views
             }
             view.ItemsCollectionView = new ListCollectionView((IList)e.NewValue)
             {
-                GroupDescriptions =
-                {
-                    new PropertyGroupDescription(nameof(ItemModel.Category))
-                },
                 SortDescriptions = 
                 {
                     new SortDescription(nameof(ItemModel.Category), ListSortDirection.Ascending),

@@ -20,7 +20,6 @@ namespace KoAR.SaveEditor.Constructs
 
         private static BitmapSource Convert(BitmapSource source)
         {
-
             FormatConvertedBitmap bitmap = new FormatConvertedBitmap();
             bitmap.BeginInit();
             bitmap.Source = source;

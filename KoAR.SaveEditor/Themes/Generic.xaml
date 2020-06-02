@@ -3,7 +3,7 @@
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.CoreEffectIcon.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.EffectsControl.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.EquipmentCategoryIcon.xaml" />
-        <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.EquipmentCategorySelector.xaml" />
+        <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.ScrollingTabControl.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.ItemsView.xaml" />
     </ResourceDictionary.MergedDictionaries>    
 </ResourceDictionary>

@@ -16,11 +16,15 @@
     <BitmapImage x:Key="Staff" UriSource="/KoAR.SaveEditor;component/Resources/Staff.png" po:Freeze="True" />
     <BitmapImage x:Key="Talisman" UriSource="/KoAR.SaveEditor;component/Resources/Talisman.png" po:Freeze="True" />
     <BitmapImage x:Key="Unknown" UriSource="/KoAR.SaveEditor;component/Resources/Unknown.png" po:Freeze="True" />
-    <Style TargetType="{x:Type views:EquipmentCategoryIcon}">        
+    <Style TargetType="{x:Type views:EquipmentCategoryIcon}">
+        <Style.Resources>
+            <views:TitleCaseWordsConverter x:Key="TitleCaseWordsConverter" />
+        </Style.Resources>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type views:EquipmentCategoryIcon}">
-                    <Image Margin="1,0" x:Name="PART_Image" Width="20" Source="{StaticResource Unknown}" ToolTip="{TemplateBinding Category}" />
+                    <Image Margin="1,0" x:Name="PART_Image" Width="20" Source="{StaticResource Unknown}" 
+                        ToolTip="{Binding Category, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource TitleCaseWordsConverter}}" />
                     <ControlTemplate.Triggers>
                         <Trigger Property="Category" Value="{x:Null}">
                             <Setter Property="Visibility" Value="Collapsed" />
