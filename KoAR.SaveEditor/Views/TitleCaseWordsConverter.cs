@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Data;
 
@@ -15,20 +13,19 @@ namespace KoAR.SaveEditor.Views
             {
                 return DependencyProperty.UnsetValue;
             }
-            string word = value.ToString();
-            return word.Skip(1).Aggregate(new StringBuilder(word.Length + 1).Append(word[0]), (builder, c) =>
+            string text = value.ToString();
+            int space = -1;
+            for (int index = 0; index < text.Length; index++)
             {
-                if (Char.IsUpper(c))
+                if (Char.IsUpper(text, index))
                 {
-                    builder.Append(' ');
+                    space = index;
+                    break;
                 }
-                return builder.Append(c);
-            }).ToString();
+            }
+            return space == -1 ? text : $"{text.Substring(0, space)} {text.Substring(space)}";
         }
 
-        object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
+        object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
     }
 }
