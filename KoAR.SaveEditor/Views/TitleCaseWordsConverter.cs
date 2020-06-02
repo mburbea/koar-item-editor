@@ -11,11 +11,11 @@ namespace KoAR.SaveEditor.Views
 
         object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value switch
+            int index;
+            return value?.ToString() switch
             {
                 null => DependencyProperty.UnsetValue,
-                _ when value.ToString() is string text && text.IndexOfAny(TitleCaseWordsConverter.AllCaps, 1) is int index && index != -1 => $"{text.Substring(0, index)} {text.Substring(index)}",
-                _ => value
+                string text => (index = text.IndexOfAny(TitleCaseWordsConverter.AllCaps, 1)) != -1 ? $"{text.Substring(0, index)} {text.Substring(index)}" : text
             };
         }
 
