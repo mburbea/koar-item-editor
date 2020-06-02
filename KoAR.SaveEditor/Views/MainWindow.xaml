@@ -205,7 +205,7 @@
                                 </Binding>
                             </TextBox.Text>
                         </TextBox>
-                        <Button Grid.Column="6" Content="Reset" Command="{Binding ResetFiltersCommand}" Margin="2" VerticalAlignment="Center" />
+                        <Button Grid.Column="6" Content="Reset" FocusVisualStyle="{x:Null}" Command="{Binding ResetFiltersCommand}" Margin="2" VerticalAlignment="Center" />
                     </Grid>
                 </GroupBox>
                 <DockPanel Grid.Row="1" Margin="4">
