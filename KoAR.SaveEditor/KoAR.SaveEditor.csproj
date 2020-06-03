@@ -127,6 +127,9 @@
     <None Update="CoreEffects.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Items.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="properties.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

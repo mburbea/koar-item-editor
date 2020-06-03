@@ -24,6 +24,7 @@ namespace KoAR.Core
         public static List<EffectInfo> Effects { get; } = new List<EffectInfo>();
         public static Dictionary<uint, CoreEffectInfo> CoreEffects { get; } = new Dictionary<uint, CoreEffectInfo>();
         public static Dictionary<uint, EffectInfo> DedupedEffects { get; } = new Dictionary<uint, EffectInfo>();
+        public static Dictionary<uint, TypeDefinition> TypeDefinitions { get; } = new Dictionary<uint, TypeDefinition>();
         public static List<ItemMemoryInfo> Items { get; } = new List<ItemMemoryInfo>();
         private static int? _bagOffset;
 
@@ -74,7 +75,6 @@ namespace KoAR.Core
                 throw new InvalidOperationException("Cannot find properties.xml");
             }
             using var stream = File.OpenRead(propertiesXml);
-
             Effects.AddRange(XDocument.Load(stream).Root
                 .Elements()
                 .Select(element => new EffectInfo
@@ -86,6 +86,8 @@ namespace KoAR.Core
                 .Where(x => x.Code != 0)
                 .GroupBy(x => x.Code)
                 .Select(x => (x.Key, x.First())));
+
+            TypeDefinitions.AddRange(TypeDefinition.ParseFile(Path.Combine(path, "items.csv")).Select(x => (x.TypeId, x)));
         }
 
         private static int GetBagOffset()
@@ -142,7 +144,7 @@ namespace KoAR.Core
             }
         }
 
-        public static void WriteEquipmentBytes(ItemMemoryInfo item)
+        public static void WriteEquipmentBytes(ItemMemoryInfo item, bool forced = false)
         {
             static int WriteItem(int itemIndex, int dataLength, byte[] bytes)
             {
@@ -166,8 +168,8 @@ namespace KoAR.Core
                 return delta;
             }
 
-            item.CoreEffects.DataLength += WriteItem(item.CoreEffects.ItemIndex, item.CoreEffects.DataLength, item.CoreEffects.Serialize());
-            item.DataLength += WriteItem(item.ItemIndex, item.DataLength, item.Serialize());
+            item.CoreEffects.DataLength += WriteItem(item.CoreEffects.ItemIndex, item.CoreEffects.DataLength, item.CoreEffects.Serialize(forced));
+            item.DataLength += WriteItem(item.ItemIndex, item.DataLength, item.Serialize(forced));
         }
     }
 }

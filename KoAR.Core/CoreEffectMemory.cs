@@ -48,10 +48,10 @@ namespace KoAR.Core
 
         public List<uint> List { get; } = new List<uint>();
 
-        internal byte[] Serialize()
+        internal byte[] Serialize(bool forced = false)
         {
             byte currentCount = Bytes[Offsets.EffectCount];
-            if (currentCount == Count)
+            if (!forced && currentCount == Count)
             {
                 return Bytes;
             }

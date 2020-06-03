@@ -56,7 +56,12 @@ namespace KoAR.SaveEditor.Views
 
         public int ItemIndex => this.Item.ItemIndex;
 
-        public string ItemDisplayName => this.HasCustomName ? this.ItemName : $"Unknown ({LittleEndianConverter.Convert(this.ItemId)})";
+        public string ItemDisplayName => this.HasCustomName switch
+            { 
+               true => this.ItemName,
+               false when Amalur.TypeDefinitions.TryGetValue(this.TypeId, out TypeDefinition def) => $"{def.Name}",
+               false => $"Unknown ({LittleEndianConverter.Convert(this.ItemId)})"
+            };
 
         public string ItemName
         {
