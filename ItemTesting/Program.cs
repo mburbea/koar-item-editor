@@ -5,6 +5,7 @@ using System.Linq;
 using System.Diagnostics;
 using KoAR.Core;
 using System.IO;
+using System.Buffers.Binary;
 
 namespace ItemTesting
 {
@@ -43,21 +44,17 @@ namespace ItemTesting
             }
             return results;
         }
-
-
+        private static char[] AllCaps = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
+        
         static void Main()
         {
-            var path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save97.sav";
-
+            var path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save98.sav";
+            var sw = Stopwatch.StartNew();
             Amalur.ReadFile(path);
             var bytes = Amalur.Bytes;
             var interest = new[] { "Primal Chakrams", "Mastercrafted Prismere Chakrams" };
             var mems = Amalur.Items
-                .Where(x=> x.Category == EquipmentCategory.Daggers)
-                //.Append(Amalur.Items.FirstOrDefault(x=>x.Category == EquipmentCategory.Shield))
-                //.Append(Amalur.Items.FirstOrDefault(x => x.Category == EquipmentCategory.Talisman))
-                //.Append(Amalur.Items.FirstOrDefault(x => x.Category == EquipmentCategory.Buckler))
-                .Where(x=> x is object)
+                .Where(x => x.HasCustomName)
 
             //&& x.ItemId == 0x19_02_1C)
             .ToArray();
@@ -81,14 +78,92 @@ namespace ItemTesting
                 0x00, 0x00, 0x00, 0x00
             };
 
-            for (int i = 0; i < mems.Length; i++)
+            var ore = new[] { "Iron", "Steel", "Azurite", "Sylvanite", "Prismere" };
+            var wood = new[] { "Birch", "Elm", "Oak", "Ash", "Ebony" };
+            var metal = new[] { "Bronze", "Copper", "Silver", "Gold", "Platinum" };
+
+
+            foreach (var item in mems)
             {
-                mems[i].TypeId = 0x201DF1;
-                mems[i].ItemName = $"Lvl {i + 1}";
-                mems[i].Level = (byte)(i + 1);
-                Amalur.WriteEquipmentBytes(mems[i]);
+                var material = item.Category switch
+                {
+                    EquipmentCategory.Talisman => metal,
+                    EquipmentCategory.Buckler => wood,
+                    EquipmentCategory.Longbow => wood,
+                    EquipmentCategory.Staff => wood,
+                    EquipmentCategory.Sceptre => wood,
+                    _ => ore
+                };
+                item.ItemName = $"{item.ItemName} [Lvl {item.Level}]";
+                item.WriteToCsv();
             }
-            Amalur.SaveFile(path);
+            return;
+                var arrays = new List<byte[]>[mems.Length];
+            var j = 0;
+            foreach(var chakrams  in mems)
+            {
+                arrays[j] = new List<byte[]>();
+                var foo = chakrams.ItemBytes.AsSpan(0, 4);
+                
+                ReadOnlySpan<byte> marker = new byte[] { 0x06, 0x2D, 0x75, 0x00, 0x05 };
+                var last = 0;
+                var start = Amalur.Bytes.AsSpan().IndexOf(foo);
+                Console.WriteLine($"{chakrams.Category} {chakrams.ItemName}");
+                while (start != -1)
+                {
+                    int next = -1;
+                    start += last;
+                    if (Amalur.Bytes[start+4] == 0x0B)
+                    {
+                        next = Amalur.Bytes.AsSpan(start + 13).IndexOf(Amalur.Bytes.AsSpan(start + 4, 9));
+                    }
+                    var end = arrays[j].Count switch
+                    {
+                        0 => 59,
+                        _ when next !=-1 => next + 9,
+                        _ => 150
+                    };
+
+                    arrays[j].Add(Amalur.Bytes.AsSpan(start + 4, end - 4).ToArray());
+
+                    last = start + end;
+                    start = Amalur.Bytes.AsSpan(last).IndexOf(foo);
+                }
+
+                j++;
+            }
+
+            for (int i = 0; i < arrays[0].Count; i++)
+            {
+                var sample = arrays[0][i];
+                var isEqual = true;
+                foreach (var list in arrays.Skip(1))
+                {
+                    if (!list[i].SequenceEqual(sample))
+                    {
+                        isEqual = false;
+                        break;
+                    }
+                }
+                if (!isEqual)
+                {
+                    Console.WriteLine($"Section {i}");
+                    PrintRuler();
+                    foreach (var (list,mem) in arrays.Zip(mems))
+                    {
+                        Console.WriteLine($"{mem.Category} {BinaryPrimitives.ReadInt32BigEndian(mem.ItemBytes):X8} {mem.TypeId:X6} {mem.Level}");
+                        PrintByteString(list[i]);
+                        Console.WriteLine();
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"Section {i} is identical");
+                }
+
+            }
+            Console.WriteLine(sw.Elapsed);
+            //Amalur.SaveFile(path);
 
 
             //            var items = mems

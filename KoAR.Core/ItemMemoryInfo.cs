@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -34,11 +36,11 @@ namespace KoAR.Core
                 return equipTypeByte switch
                 {
                     0x14 => EquipmentCategory.Sceptre,
-                    0x18 => EquipmentCategory.LongBow,
-                    0x20 when d == 0x00 || d == 0xBC || d == 0x55 || d == 0x56 || d == 0x18 => EquipmentCategory.LongSword,
-                    0x20 => EquipmentCategory.GreatSword,
+                    0x18 => EquipmentCategory.Longbow,
+                    0x20 when d == 0x00 || d == 0xBC || d == 0x55 || d == 0x56 || d == 0x18 => EquipmentCategory.Longsword,
+                    0x20 => EquipmentCategory.Greatsword,
                     0x24 when d == 0x00 || d == 0x40 || d == 0x41 || d == 0x2C || d == 0xE8 => EquipmentCategory.Daggers,
-                    0x24 => EquipmentCategory.FaeBlades,
+                    0x24 => EquipmentCategory.Faeblades,
                     0x1C when d == 0x00 || d == 0x18 || d == 0x53 || d == 0x54 => EquipmentCategory.Staff,
                     0x1C when d == 0x3E || d == 0x3F || d == 0xEA || d == 0xEB => EquipmentCategory.Chakrams,
                     0x1C when d == 0xEC || d == 0x43 || d == 0x7E => EquipmentCategory.Hammer,
@@ -63,7 +65,7 @@ namespace KoAR.Core
                     0xF3 => EquipmentCategory.Chakrams,
                     _ => EquipmentCategory.Unknown,
                 };
-                _hasShiftedLevelOffset = true;
+                _levelShiftOffset = 8;
             }
             if (Category == EquipmentCategory.Unknown)
             {
@@ -85,10 +87,9 @@ namespace KoAR.Core
             set => MemoryUtilities.Write(ItemBytes, Offsets.CurrentDurability, value);
         }
 
+        internal int DataLength { get; set; }
 
-        public int DataLength { get; internal set; }
-
-        public List<uint> Effects { get; }
+        public List<uint> Effects { get; } = new List<uint>();
 
         public bool HasCustomName
         {
@@ -115,13 +116,17 @@ namespace KoAR.Core
         public EquipmentCategory Category { get; }
 
         private readonly int _typeIdOffset;
-        private readonly bool _hasShiftedLevelOffset;
-        private int LevelOffset => _typeIdOffset + 14 + (_hasShiftedLevelOffset ? 8 : 0);
+        private readonly byte _levelShiftOffset;
+        private int LevelOffset => _typeIdOffset + 14 + _levelShiftOffset;
 
         public uint TypeId
         {
             get => MemoryUtilities.Read<uint>(Amalur.Bytes, _typeIdOffset);
-            set => MemoryUtilities.Write(Amalur.Bytes, _typeIdOffset, value);
+            set
+            {
+                MemoryUtilities.Write(Amalur.Bytes, _typeIdOffset, value);
+                MemoryUtilities.Write(Amalur.Bytes, _typeIdOffset + 30 + _levelShiftOffset, value);
+            }
         }
 
         public byte Level
@@ -132,25 +137,20 @@ namespace KoAR.Core
 
         public byte[] ItemBytes { get; private set; }
 
-        public void Rematerialize(byte[] bytes)
-        {
-            this.ItemBytes = bytes;
-            Effects.Clear();
-            Effects.Capacity = ItemBytes[Offset.EffectCount];
-            for (int i = 0; i < Effects.Capacity; i++)
-            {
-                Effects.Add(MemoryUtilities.Read<uint>(ItemBytes, Offset.FirstEffect + i * 8));
-            }
-        }
-
         public uint ItemId => MemoryUtilities.Read<uint>(ItemBytes);
 
         public int ItemIndex { get; internal set; }
 
+        private int NameLength
+        {
+            get => MemoryUtilities.Read<int>(ItemBytes, Offsets.CustomNameLength);
+            set => MemoryUtilities.Write(ItemBytes, Offsets.CustomNameLength, value);
+        }
+
         public string ItemName
         {
             get => HasCustomName
-                ? Encoding.Default.GetString(ItemBytes, Offsets.CustomNameText, MemoryUtilities.Read<int>(ItemBytes, Offsets.CustomNameLength))
+                ? Encoding.Default.GetString(ItemBytes, Offsets.CustomNameText, NameLength)
                 : string.Empty;
             set
             {
@@ -164,7 +164,7 @@ namespace KoAR.Core
                         ItemBytes = buffer;
                     }
                     HasCustomName = true;
-                    MemoryUtilities.Write(ItemBytes, Offsets.CustomNameLength, newBytes.Length);
+                    NameLength = newBytes.Length;
                     newBytes.CopyTo(ItemBytes, Offsets.CustomNameText);
                 }
                 else if (HasCustomName)
@@ -182,6 +182,17 @@ namespace KoAR.Core
         }
 
         private Offset Offsets => new Offset(Effects.Count);
+
+        public void Rematerialize(byte[] bytes)
+        {
+            ItemBytes = bytes;
+            Effects.Clear();
+            Effects.Capacity = ItemBytes[Offset.EffectCount];
+            for (int i = 0; i < Effects.Capacity; i++)
+            {
+                Effects.Add(MemoryUtilities.Read<uint>(ItemBytes, Offset.FirstEffect + i * 8));
+            }
+        }
 
         public static bool TryCreate(int itemIndex, int nextOffset, [NotNullWhen(true)] out ItemMemoryInfo? item)
         {
@@ -206,10 +217,10 @@ namespace KoAR.Core
 
         public static bool IsValidDurability(float durability) => durability > DurabilityLowerBound && durability < DurabilityUpperBound;
 
-        internal byte[] Serialize()
+        internal byte[] Serialize(bool forced = false)
         {
             int currentCount = ItemBytes[Offset.EffectCount];
-            if (currentCount == Effects.Count)
+            if (!forced && currentCount == Effects.Count)
             {
                 return ItemBytes;
             }
@@ -222,6 +233,30 @@ namespace KoAR.Core
             }
             ItemBytes = MemoryUtilities.ReplaceBytes(ItemBytes, Offset.FirstEffect, currentLength, MemoryMarshal.AsBytes(effectData));
             return ItemBytes;
+        }
+
+        internal void WriteToCsv()
+        {
+            IEnumerable<string> rows = new[] {
+                $"{Category},{TypeId:X6},{Level},\"{ItemName}\",{MaxDurability},{string.Join("", CoreEffects.List.Select(x => x.ToString("X6")))},{string.Join("", Effects.Select(x => x.ToString("X6")))}"
+            };
+            if (!File.Exists("items.user.csv"))
+            {
+                rows = rows.Prepend("Category,TypeId,Level,ItemName,Durability,CoreEffects,Effects");
+            }
+            File.AppendAllLines("items.user.csv", rows);
+        }
+
+        internal void LoadFromDefinition(TypeDefinition definition, bool assignName)
+        {
+            TypeId = definition.TypeId;
+            CurrentDurability = definition.MaxDurability;
+            MaxDurability = definition.MaxDurability;
+            CoreEffects.List.Clear();
+            CoreEffects.List.AddRange(definition.CoreEffects);
+            Effects.Clear();
+            Effects.AddRange(definition.Effects);
+            ItemName = assignName ? definition.Name : "";
         }
     }
 }
