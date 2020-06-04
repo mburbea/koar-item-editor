@@ -39,7 +39,7 @@ namespace KoAR.Core
                     0x18 => EquipmentCategory.Longbow,
                     0x20 when d == 0x00 || d == 0xBC || d == 0x55 || d == 0x56 || d == 0x18 => EquipmentCategory.Longsword,
                     0x20 => EquipmentCategory.Greatsword,
-                    0x24 when d == 0x00 || d == 0x40 || d == 0x41 || d == 0x2C || d == 0xE8 => EquipmentCategory.Daggers,
+                    0x24 when d == 0x00 || d == 0x40 || d == 0x41 || d == 0x2C || d == 0xE8 || d == 0x18 => EquipmentCategory.Daggers,
                     0x24 => EquipmentCategory.Faeblades,
                     0x1C when d == 0x00 || d == 0x18 || d == 0x53 || d == 0x54 => EquipmentCategory.Staff,
                     0x1C when d == 0x3E || d == 0x3F || d == 0xEA || d == 0xEB => EquipmentCategory.Chakrams,
@@ -55,27 +55,38 @@ namespace KoAR.Core
             bytes.Slice(itemIndex, 8).CopyTo(buffer);
             CoreEffects = new CoreEffectMemory(buffer);
             _typeIdOffset = bytes.IndexOf(buffer.Slice(0, 4)) + 4;
+            Effects = new List<uint>(ItemBytes[Offset.EffectCount]);
+            for (int i = 0; i < Effects.Capacity; i++)
+            {
+                Effects.Add(MemoryUtilities.Read<uint>(ItemBytes, Offset.FirstEffect + i * 8));
+            }
+            Category = TypeId switch // The fate & destiny dlc weapons are stupid and have stupid rules.
+            {
+                0x1A0E94 => EquipmentCategory.Greatsword, //Rhyderk is stupid.
+                0x1D2A03 => EquipmentCategory.Longsword,
+                0x1D2A04 => EquipmentCategory.Greatsword,
+                0x1D2A05 => EquipmentCategory.Hammer,
+                0x1D2A09 => EquipmentCategory.Staff,
+                0x1D2A0B => EquipmentCategory.Chakrams,
+                0x1D7EE8 => EquipmentCategory.Chakrams,
+                0x1D2A07 => EquipmentCategory.Faeblades,
+                0x1D2A08 => EquipmentCategory.Daggers,
+                _ => EquipmentCategory.Unknown,
+            };
             if (bytes[_typeIdOffset + 10] == 1)
             {
+                _levelShiftOffset = 8;
                 Category = bytes[_typeIdOffset + 14] switch
                 {
                     0xEC => EquipmentCategory.Buckler,
                     0xED => EquipmentCategory.Shield,
                     0xEE => EquipmentCategory.Talisman,
-                    0xF3 => EquipmentCategory.Chakrams,
-                    _ => EquipmentCategory.Unknown,
+                    _ => Category,
                 };
-                _levelShiftOffset = 8;
             }
             if (Category == EquipmentCategory.Unknown)
             {
                 Category = DetermineEquipmentType(bytes, buffer);
-            }
-
-            Effects = new List<uint>(ItemBytes[Offset.EffectCount]);
-            for (int i = 0; i < Effects.Capacity; i++)
-            {
-                Effects.Add(MemoryUtilities.Read<uint>(ItemBytes, Offset.FirstEffect + i * 8));
             }
         }
 
@@ -235,19 +246,12 @@ namespace KoAR.Core
             return ItemBytes;
         }
 
-        internal void WriteToCsv()
+        public TypeDefinition GetTypeDefinition()
         {
-            IEnumerable<string> rows = new[] {
-                $"{Category},{TypeId:X6},{Level},\"{ItemName}\",{MaxDurability},{string.Join("", CoreEffects.List.Select(x => x.ToString("X6")))},{string.Join("", Effects.Select(x => x.ToString("X6")))}"
-            };
-            if (!File.Exists("items.user.csv"))
-            {
-                rows = rows.Prepend("Category,TypeId,Level,ItemName,Durability,CoreEffects,Effects");
-            }
-            File.AppendAllLines("items.user.csv", rows);
+            return new TypeDefinition(Category, TypeId, Level, ItemName, MaxDurability, CoreEffects.List.ToArray(), Effects.ToArray());
         }
 
-        internal void LoadFromDefinition(TypeDefinition definition, bool assignName)
+        public void LoadFromDefinition(TypeDefinition definition, bool assignName)
         {
             TypeId = definition.TypeId;
             CurrentDurability = definition.MaxDurability;

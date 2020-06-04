@@ -6,6 +6,7 @@ using System.Diagnostics;
 using KoAR.Core;
 using System.IO;
 using System.Buffers.Binary;
+using System.Xml;
 
 namespace ItemTesting
 {
@@ -48,16 +49,24 @@ namespace ItemTesting
         
         static void Main()
         {
-            var path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save98.sav";
+            var path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save87.sav";
             var sw = Stopwatch.StartNew();
             Amalur.ReadFile(path);
             var bytes = Amalur.Bytes;
             var interest = new[] { "Primal Chakrams", "Mastercrafted Prismere Chakrams" };
             var mems = Amalur.Items
-                .Where(x => x.HasCustomName)
-
             //&& x.ItemId == 0x19_02_1C)
             .ToArray();
+            foreach (var mem in mems)
+            {
+                var poo = Amalur.Bytes.AsSpan(mem.CoreEffects.ItemIndex, 17 + mem.CoreEffects.MysteryInteger).ToArray();
+                PrintRuler();
+                PrintByteString(poo);
+            }
+            Amalur.SaveFile(path);
+            Console.Read();
+            return;
+
             //Console.Read();
             //ReadOnlySpan<byte> itemDesc = new byte[5] { 0x06, 0x2D, 0x75, 0x00, 0x05 };
             //var indices = GetAllIndices(bytes, itemDesc).GroupBy(x => bytes[x + 27]).ToDictionary(x => x.Key, x => x.Count());
@@ -81,7 +90,8 @@ namespace ItemTesting
             var ore = new[] { "Iron", "Steel", "Azurite", "Sylvanite", "Prismere" };
             var wood = new[] { "Birch", "Elm", "Oak", "Ash", "Ebony" };
             var metal = new[] { "Bronze", "Copper", "Silver", "Gold", "Platinum" };
-
+            var leather = new[] { "Leather", "Boiled Leather", "Studded Leather", "Trollhide","Dreadscale" };
+            var cloth = new[] { "Cotton", "Linen", "Silk", "Hexweave", "Spiritweave" };
 
             foreach (var item in mems)
             {
@@ -92,10 +102,11 @@ namespace ItemTesting
                     EquipmentCategory.Longbow => wood,
                     EquipmentCategory.Staff => wood,
                     EquipmentCategory.Sceptre => wood,
+
                     _ => ore
                 };
-                item.ItemName = $"{item.ItemName} [Lvl {item.Level}]";
-                item.WriteToCsv();
+                item.ItemName = $"{item.ItemName}";
+                item.GetTypeDefinition().WriteToCsv();
             }
             return;
                 var arrays = new List<byte[]>[mems.Length];

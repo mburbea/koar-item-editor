@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.IO;
+using System.Linq;
 
 namespace KoAR.Core
 {
@@ -52,7 +54,7 @@ namespace KoAR.Core
             {
                 TextFieldType = FieldType.Delimited,
                 Delimiters = new[] { "," },
-                HasFieldsEnclosedInQuotes = true,
+                HasFieldsEnclosedInQuotes = true
             };
             while (!parser.EndOfData)
             {
@@ -61,6 +63,18 @@ namespace KoAR.Core
                     yield return definition;
                 }
             }
+        }
+
+        internal void WriteToCsv()
+        {
+            IEnumerable<string> rows = new[] {
+                $"{Category},{TypeId:X6},{Level},\"{Name}\",{MaxDurability},{string.Join("", CoreEffects.Select(x => x.ToString("X6")))},{string.Join("", Effects.Select(x => x.ToString("X6")))}"
+            };
+            if (!File.Exists("items.user.csv"))
+            {
+                rows = rows.Prepend("Category,TypeId,Level,ItemName,Durability,CoreEffects,Effects");
+            }
+            File.AppendAllLines("items.user.csv", rows);
         }
 
         public TypeDefinition(EquipmentCategory category, uint typeId, byte level, string name, float maxDurability, uint[] coreEffects, uint[] effects)

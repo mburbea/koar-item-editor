@@ -1,4 +1,21 @@
 Category,TypeId,Level,ItemName,Durability,CoreEffects,Effects
+Buckler,089883,1,Crude Birch Buckler,17,,0832F5
+Buckler,089884,2,Birch Buckler,17,,0832F5
+Buckler,089885,3,Fine Birch Buckler,17,,0832F5
+Buckler,089886,5,Crude Elm Buckler,19,,0832F5
+Buckler,089887,7,Elm Buckler,19,,0832F5
+Buckler,089888,9,Fine Elm Buckler,19,,0832F5
+Buckler,089889,12,Crude Oak Buckler,21,,0832F5
+Buckler,08988A,15,Oak Buckler,21,,0832F5
+Buckler,08988B,18,Fine Oak Buckler,21,,0832F5
+Buckler,08988C,21,Crude Ash Buckler,24,,0832F5
+Buckler,08988D,24,Ash Buckler,24,,0832F5
+Buckler,08988F,27,Fine Ash Buckler,24,,0832F5
+Buckler,089890,31,Crude Ebony Buckler,26,,0832F5
+Buckler,089891,35,Ebony Buckler,26,,0832F5
+Buckler,089892,41,Fine Ebony Buckler,26,,0832F5
+Buckler,1F9CFE,2,The Moon,25,,0832F51FEBFA1FEBF91FEBF8
+Buckler,1D7EFF,3,Spinning Tom's Anvil,17,,0832F51D2B42
 Chakrams,135A40,1,Crude Iron Chakrams (Fire),20,,
 Chakrams,135A3F,2,Iron Chakrams (Fire),20,,
 Chakrams,135A3E,3,Fine Iron Chakrams (Fire),20,,
@@ -44,6 +61,22 @@ Chakrams,13AE8C,27,Fine Sylvanite Chakrams (Ice),26,,
 Chakrams,13AE8B,30,Crude Prismere Chakrams (Ice),28,,
 Chakrams,13AE8A,33,Prismere Chakrams (Ice),28,,
 Chakrams,13AE89,36,Fine Prismere Chakrams (Ice),28,,
+Chakrams,1E6CB6,10,Baronett's Blades [Lvl 10],25,1E6CE21E6CE3,
+Chakrams,1E6CED,10,Flotsam Chakrams [Lvl 10],25,1E6D1E,
+Chakrams,1EE19F,3,Titan's Cuff [Lvl 3],25,1F960C,1F960D
+Chakrams,1EE1A0,3,Hengerings [Lvl 3],25,20700A,1F96201F961F
+Chakrams,08F10F,8,Rimescythe,42,,13C27B
+Chakrams,08F110,13,Dragon Eyes,44,13C27C,
+Chakrams,08F111,18,Stormscythe,44,13C27D,
+Chakrams,08F112,24,Crafter's Hands,46,1CB598,13C27E
+Chakrams,08F113,29,Allender's Edge,46,1CB599,13C27F
+Chakrams,08F114,34,Katalepsis,48,,13C280
+Chakrams,08F115,39,Oristhimos,48,13C282,13C281
+Chakrams,1ACC22,25,Solstice,46,1CB59D,
+Chakrams,1F8AA6,2,The Song,25,1FF51A,1FF519
+Chakrams,1D7EE8,3,Twinned Souls,20,1D2A251D2A24,
+Chakrams,1D2A0B,3,Fate's Eyes,20,,1FAEA8
+Daggers,14FB14,1,Crude Iron Daggers (Allestar),20,,
 Daggers,0778F8,1,Crude Iron Daggers,20,,
 Daggers,0778F9,2,Iron Daggers,20,,
 Daggers,0778FA,3,Fine Iron Daggers,20,,
@@ -59,6 +92,23 @@ Daggers,077901,27,Fine Sylvanite Daggers,26,,
 Daggers,077906,30,Crude Prismere Daggers,28,,
 Daggers,077905,33,Prismere Daggers,28,,
 Daggers,077904,36,Fine Prismere Daggers,28,,
+Daggers,1E6808,10,Boning Knives [Lvl 10],25,1E68201E681F1E6821,
+Daggers,1E6826,10,Dvergan Swords [Lvl 10],25,1E688A,1E689C
+Daggers,1EE197,3,Rend and Carver [Lvl 3],25,1F7E76,1F7E75
+Daggers,1EE198,3,Xiphos [Lvl 3],25,1F7EB21F7EA01F7E9F,
+Daggers,1590A7,1,Foam Daggers,28,,
+Daggers,08F0F4,7,Spinning Tom's Blades,42,092368,0A4550
+Daggers,08F0F5,12,Claws of Astyl,44,1CC4F4,092369
+Daggers,08F0F6,16,Fangs of Aodh,44,09236A,
+Daggers,08C176,20,Kezar's Vice,46,0A454D,09236B
+Daggers,08F0F7,24,Heartpins,46,09236C,
+Daggers,08F0F8,29,Mirrorknives,46,09236D,1CC52A
+Daggers,08F0F9,34,Atropos and Veshani,48,09236E,
+Daggers,0B9A22,4,Shine and Shadow,40,0BBF2A,
+Daggers,1AB9B3,39,Eyes of Tirnoch,48,1ABA2C,
+Daggers,1D2A2D,3,Omniblades,20,1D2A2E,
+Daggers,1F8A98,2,The Night,25,,1FEC121FEC11
+Daggers,1D2A08,3,Fate's Needles,20,,1FAEA8
 Faeblades,03DBB7,1,Crude Iron Faeblades,20,,
 Faeblades,059893,2,Iron Faeblades,20,,
 Faeblades,059894,3,Fine Iron Faeblades,20,,
@@ -74,6 +124,22 @@ Faeblades,05989B,27,Fine Sylvanite Faeblades,26,,
 Faeblades,0598A0,30,Crude Prismere Faeblades,28,,
 Faeblades,05989F,33,Prismere Faeblades,28,,
 Faeblades,05989E,36,Fine Prismere Faeblades,28,,
+Faeblades,1E6791,10,Obsidian Blades [Lvl 10],25,1E67E21E67CC1E67CB,
+Faeblades,1E6763,10,Beak and Talon [Lvl 10],25,1E6775,
+Faeblades,1EE199,3,Zelus & Bia [Lvl 3],25,1F7C44,1F7C45
+Faeblades,1EE19A,3,Lunala's Crescents [Lvl 3],25,1F7E0E1F7E0D,1F7E0C
+Faeblades,067046,6,The Viper's Fangs,42,092360,
+Faeblades,08F0ED,11,The Shark's Fins,44,0923610A4548,
+Faeblades,08F0EE,16,The Dragon's Spurs,44,0923620A454A,
+Faeblades,08F0EF,21,The Salamander's Tail,46,092363,1CC5E5
+Faeblades,08F0F0,26,The Mantis' Legs,46,092364,
+Faeblades,08F0F1,31,The Dove's Wings,48,092365,
+Faeblades,08F0F2,36,The Lion's Claw,48,092366,
+Faeblades,08F0F3,5,Faeblades of Song,44,1CC5F4,1CC5F5
+Faeblades,1ACC96,22,The Swords of Sea and Storm,44,1CC64D,
+Faeblades,1ACC9B,34,Cydan's Faeblades,48,1CC667,1CC668
+Faeblades,1F8A9A,2,The Wind,25,,1FEC511FEC50
+Faeblades,1D2A07,3,Fate's Scours,20,,1FAEA8
 Greatsword,08897A,7,Steel Greatsword,22,,
 Greatsword,088977,9,Fine Steel Greatsword,22,,
 Greatsword,088976,12,Crude Azurite Greatsword,24,,
@@ -89,6 +155,26 @@ Greatsword,08896A,27,Fine Sylvanite Greatsword,26,,
 Greatsword,088969,30,Crude Prismere Greatsword,28,,
 Greatsword,088968,33,Prismere Greatsword,28,,
 Greatsword,088964,36,Fine Prismere Greatsword,28,,
+Greatsword,1E5E4D,10,The Harpy [Lvl 10],25,1E5E7D1E5E64,
+Greatsword,1E5F02,10,Trencher [Lvl 10],25,1E5F301E5F1E,
+Greatsword,1EE191,3,The Titan Spear [Lvl 3],25,1F6E43,1F6E42
+Greatsword,1EE192,3,Lightning Cage [Lvl 3],25,1F70B9,1F70B7
+Greatsword,088991,8,Frostbite,42,1CCAF8,1CCABD
+Greatsword,08F0C9,13,Fortune,44,092339,1CCB17
+Greatsword,08F0CA,17,Stormbrand,44,09233A,1CCB3F
+Greatsword,08F0CB,22,Luxuria,46,09233B,
+Greatsword,08F0CC,26,Lifedrinker,46,09233C,
+Greatsword,08F0CD,30,Gerstotad,48,09233D,
+Greatsword,08F0CE,33,Scourgebane,48,09233E,1CCB5C
+Greatsword,08F0CF,36,Scathe,48,1AB910,1CCB7B
+Greatsword,0B2E39,40,Sword of the Bolgan King,48,1CCB81,
+Greatsword,1AD2AF,44,Gentleman's Favor [Lvl 44],50,1CCB82,1CCB83
+Greatsword,144520,10,Gentleman's Favor [Lvl 10],50,1CCB82,1CCB83
+Greatsword,1AD1CD,25,Havoc,46,1CCB8D,1CCB87
+Greatsword,1706EB,14,Kellerac's Sword,44,1CCBD61CCC11,
+Greatsword,1F8A9C,2,The Forge,25,1FEA08,
+Greatsword,1D2A04,3,Fate's Brand,20,,1FAEA8
+Greatsword,1A0E94,10,"Rhyderk",28,,089600
 Hammer,03DBB8,1,Crude Iron Hammer,20,,
 Hammer,040A18,2,Iron Hammer,20,,
 Hammer,040B8B,3,Fine Iron Hammer,20,,
@@ -104,6 +190,26 @@ Hammer,040B94,27,Fine Sylvanite Hammer,26,,
 Hammer,040B95,30,Crude Prismere Hammer,28,,
 Hammer,040B96,33,Prismere Hammer,28,,
 Hammer,040B97,36,Fine Prismere Hammer,28,,
+Hammer,1E5FB4,10,Shipbuilder's Mate [Lvl 10],25,1E5FD4,1E60D3
+Hammer,1E60E8,10,The Spine [Lvl 10],25,1E60FD,
+Hammer,1EE193,3,The Naros Fang [Lvl 3],25,1F77CA,1F7801
+Hammer,1EE194,3,Fallenstar [Lvl 3],25,1F78D31F78D2,1F78D1
+Hammer,1AD23F,37,Mystic Hammer,48,,1CC7921CC791
+Hammer,0B9DDF,10,Mortrost,42,1CC793,1CC79D
+Hammer,08F0D7,36,First of Kreios,48,092348,
+Hammer,08F0D8,40,Legacy's End,50,09234909234A,
+Hammer,08F0D9,32,Ward of the North,48,1CC78E,1CC790
+Hammer,08F0D3,20,Corthian Mallet,46,092344,
+Hammer,08F0D4,24,Heart of Ember,46,092345,1CC784
+Hammer,08F0D5,28,The Ouranos Maul,46,092346,0A3EBF
+Hammer,08F0D6,32,Nearth's Hammer,48,092347,1CC78D
+Hammer,08F0D0,9,Thintri's Malus,42,092341,1CC783
+Hammer,08F0D1,13,Boltrsledge,44,092342,0A3EBC
+Hammer,08F0D2,16,Fjarell,44,092343,
+Hammer,067044,5,Earthgavel,42,092340,0A3D6B
+Hammer,1F8A9D,2,The Mountain,25,1FEA351FEA34,
+Hammer,1D2A05,3,Fate's Mallet,20,,1FAEA8
+Longbow,14CD5A,1,Crude Birch Longbow (Allestar),20,,
 Longbow,040AE1,1,Crude Birch Longbow,20,,
 Longbow,040AF8,2,Birch Longbow,20,,
 Longbow,040AF9,3,Fine Birch Longbow,20,,
@@ -119,6 +225,24 @@ Longbow,040B02,27,Fine Ash Longbow,26,,
 Longbow,040B03,30,Crude Ebony Longbow,28,,
 Longbow,040B04,33,Ebony Longbow,28,,
 Longbow,040B05,36,Fine Ebony Longbow,28,,
+Longbow,1E653E,10,Silver Stag [Lvl 10],25,1E65631E6551,1E659A
+Longbow,1E6668,10,Eye [Lvl 10],25,1E66811E6680,
+Longbow,1EE195,3,The Deadshot [Lvl 3],25,1F79321F7931,
+Longbow,1EE196,3,Venomstrike [Lvl 3],25,1F79F71F79F5,
+Longbow,067045,5,Sylvan Order,42,092354,
+Longbow,08F0E2,9,Breath of Vraekor,42,092355,1CC69D
+Longbow,08F0E3,13,Merciless,44,092356,1CC6AD
+Longbow,08F0E4,17,Keloren's Messenger,44,092357,
+Longbow,08F0E5,21,Hailstorm,46,092358,1CC6B4
+Longbow,08F0E6,25,Stormcaller,46,092359,0A4502
+Longbow,08F0E7,29,Bow of D'nargel,46,09235A1CC6EC,
+Longbow,08F0E8,33,Nature's Kiss,48,09235B,0A4503
+Longbow,08F0E9,37,Helius' Aim,48,0A450409235C,
+Longbow,08F0EA,40,Lunala's Sight,50,0A450509235D,
+Longbow,1ACC35,40,Sin,50,1ACBCD,
+Longbow,08F0EC,27,Shadow Stalker,46,1CC7451CC744,
+Longbow,1F8A99,2,The Hunter,25,,1FEC311FEC30
+Longbow,1D2A06,3,Fate's Curve,20,,1FAEA8
 Longsword,040748,30,Crude Prismere Longsword,28,,
 Longsword,040749,33,Prismere Longsword,28,,
 Longsword,04074A,36,Fine Prismere Longsword,28,,
@@ -134,7 +258,30 @@ Longsword,040741,9,Fine Steel Longsword,22,,
 Longsword,04073C,2,Iron Longsword,20,,
 Longsword,04073D,3,Fine Iron Longsword,20,,
 Longsword,03DBB4,1,Crude Iron Longsword,20,,
-Longsword,14C2BB,1,Rusty Longsword,20,"",""
+Longsword,14C2BB,1,Rusty Longsword,20,,
+Longsword,1EE18F,3,Windcarver [Lvl 3],25,1F6D641F6D631F6D62,
+Longsword,1EE190,3,Makhaira [Lvl 3],25,1F6E2D1F6E18,1F6E2C
+Longsword,1E5CE9,10,Torment [Lvl 10],25,1E5D161E5E2F,1E5D15
+Longsword,1E5D4E,10,Niskaru Blade [Lvl 10],25,1E5E3B,
+Longsword,08F0C0,25,Ferox,46,0A37D809232F,
+Longsword,08F0C1,28,Warnir's Reward,46,,092330
+Longsword,08F0BD,16,Flameblade,44,09232C,1D6F3B
+Longsword,08F0BE,19,Bastion,44,,09232D
+Longsword,08F0BF,22,Stormblade,46,09232E,1D6F99
+Longsword,08F0BB,10,Bloodhunter,42,09232A,
+Longsword,08F0BC,13,Almain Cutlass,44,09232B0A1C26,
+Longsword,067048,4,Vengal's Vengeance,40,,092328
+Longsword,08F0BA,7,Frostblade,42,1D6F2A,092329
+Longsword,08F0C2,31,Cessblade,48,092331,1D6FA3
+Longsword,08F0C3,34,Piercing Rapier,48,092333,
+Longsword,08F0C4,37,Fervor,48,092333,1D6FB4
+Longsword,08F0C5,40,Dragonfang,48,092334,
+Longsword,08F0C6,11,Hellbane,44,1D6FB6,1D6FBD
+Longsword,08F0C7,30,Daybreaker,48,1D6FC3,1D6FC4
+Longsword,1AD1BA,21,Haldebier's Blade,46,1D6FD3,1D6FD2
+Longsword,1F8A9B,2,The Beast,25,1FE9F11FE9F0,
+Longsword,1D2A03,3,Fate's Edge,20,,1FAEA8
+Longsword,1A3932,19,Blade of The Pariah,44,1D6FD81D6FD7,09232D
 Sceptre,097250,1,Crude Birch Sceptre (Fire),20,,
 Sceptre,09724F,2,Birch Sceptre (Fire),20,,
 Sceptre,09724E,3,Fine Birch Sceptre (Fire),20,,
@@ -180,6 +327,37 @@ Sceptre,09722E,27,Fine Ash Sceptre (Ice),26,,
 Sceptre,09722D,30,Crude Ebony Sceptre (Ice),28,,
 Sceptre,09722C,33,Ebony Sceptre (Ice),28,,
 Sceptre,09722B,36,Fine Ebony Sceptre (Ice),28,,
+Sceptre,1E69C9,10,The Wavemaker [Lvl 10],25,,1E69DF
+Sceptre,1E69F6,10,Scuttler [Lvl 10],25,1E6A14,
+Sceptre,1EE19D,3,Primal Mirror [Lvl 3],25,20700A1F92A6,1F92A4
+Sceptre,1EE19E,3,Lightning Rod [Lvl 3],25,1F8991,1F8990
+Sceptre,08F107,5,Apprentice,42,,092370
+Sceptre,08F108,10,Desire,44,,092371
+Sceptre,08F109,15,Stormspirit,44,092372,
+Sceptre,08F10A,21,Serenity,46,1CB5A0,092373
+Sceptre,08F10B,26,Rei'zarf's Guidance,46,092374,0A4566
+Sceptre,08F10C,31,Mysrik's Demise,48,,092375
+Sceptre,08F10D,37,Obsidian Sceptre,48,,092376
+Sceptre,1AE298,34,Khleran's Sceptre,48,1CB5A9,
+Sceptre,1F8AA5,2,The Field,25,1FF5711FF556,
+Sceptre,1D2A0A,3,Fate's Stem,20,,1FAEA8
+Shield,089851,1,Crude Iron Kite Shield,20,,0832F6
+Shield,089852,2,Iron Kite Shield,20,,0832F6
+Shield,089853,3,Fine Iron Kite Shield,20,,0832F6
+Shield,089856,5,Crude Steel Kite Shield,23,,0832F6
+Shield,089855,7,Steel Kite Shield,23,,0832F6
+Shield,089854,9,Fine Steel Kite Shield,23,,0832F6
+Shield,089857,12,Crude Azurite Kite Shield,26,,0832F6
+Shield,089858,15,Azurite Kite Shield,26,,0832F6
+Shield,089859,18,Fine Azurite Kite Shield,26,,0832F6
+Shield,08987F,21,Crude Sylvanite Kite Shield,29,,0832F6
+Shield,08987E,24,Sylvanite Kite Shield,29,,0832F6
+Shield,08987D,27,Fine Sylvanite Kite Shield,29,,0832F6
+Shield,089880,31,Crude Prismere Kite Shield,32,,0832F6
+Shield,089881,35,Prismere Kite Shield,32,,0832F6
+Shield,089882,41,Fine Prismere Kite Shield,32,,0832F6
+Shield,1F9CF5,2,The Tower,30,,0832F61FEB621FEB61
+Staff,1B9709,1,Crude Birch Staff (Allestar Tower),20,,
 Staff,07371A,1,Crude Birch Staff (Fire),20,,
 Staff,073719,2,Birch Staff (Fire),20,,
 Staff,073718,3,Fine Birch Staff (Fire),20,,
@@ -225,114 +403,68 @@ Staff,073722,27,Fine Ash Staff (Ice),26,,
 Staff,073721,30,Crude Ebony Staff (Ice),28,,
 Staff,073720,33,Ebony Staff (Ice),28,,
 Staff,07371F,36,Fine Ebony Staff (Ice),28,,
-Talisman,15153E,3,"Fine Bronze Talisman (Ice)",15,,0B5691
-Talisman,089895,3,"Fine Bronze Talisman (Fire)",15,,0B5691
-Talisman,15155D,2,"Bronze Talisman (Shock)",15,,0B5691
-Talisman,15153F,2,"Bronze Talisman (Ice)",15,,0B5691
-Talisman,089894,2,"Bronze Talisman (Fire)",15,,0B5691
-Talisman,15155E,1,"Crude Bronze Talisman (Shock)",15,,0B5691
-Talisman,089893,1,"Crude Bronze Talisman (Fire)",15,,0B5691
-Talisman,151540,1,"Crude Bronze Talisman (Ice)",15,,0B5691
-Talisman,15155C,3,"Fine Bronze Talisman (Shock)",15,,0B5691
-Talisman,089896,5,"Crude Copper Talisman (Fire)",17,,0B5691
-Talisman,15153D,5,"Crude Copper Talisman (Ice)",17,,0B5691
-Talisman,15155B,5,"Crude Copper Talisman (Shock)",17,,0B5691
-Talisman,089897,7,"Copper Talisman (Fire)",17,,0B5691
-Talisman,15153C,7,"Copper Talisman (Ice)",17,,0B5691
-Talisman,15155A,7,"Copper Talisman (Shock)",17,,0B5691
-Talisman,089898,9,"Fine Copper Talisman (Fire)",17,,0B5691
-Talisman,15153B,9,"Fine Copper Talisman (Ice)",17,,0B5691
-Talisman,151559,9,"Fine Copper Talisman (Shock)",17,,0B5691
-Talisman,151558,12,"Crude Silver Talisman (Shock)",18,,0B5691
-Talisman,089899,12,"Crude Silver Talisman (Fire)",18,,0B5691
-Talisman,15153A,12,"Crude Silver Talisman (Ice)",18,,0B5691
-Talisman,08989B,15,"Silver Talisman (Fire)",18,,0B5691
-Talisman,151539,15,"Silver Talisman (Ice)",18,,0B5691
-Talisman,151557,15,"Silver Talisman (Shock)",18,,0B5691
-Talisman,08989C,18,"Fine Silver Talisman (Fire)",18,,0B5691
-Talisman,151538,18,"Fine Silver Talisman (Ice)",18,,0B5691
-Talisman,151556,18,"Fine Silver Talisman (Shock)",18,,0B5691
-Talisman,08989D,21,"Crude Gold Talisman (Fire)",21,,0B5691
-Talisman,151537,21,"Crude Gold Talisman (Ice)",21,,0B5691
-Talisman,151555,21,"Crude Gold Talisman (Shock)",21,,0B5691
-Talisman,08989E,24,"Gold Talisman (Fire)",21,,0B5691
-Talisman,151536,24,"Gold Talisman (Ice)",21,,0B5691
-Talisman,151554,24,"Gold Talisman (Shock)",21,,0B5691
-Talisman,08989F,27,"Fine Gold Talisman (Fire)",21,,0B5691
-Talisman,151535,27,"Fine Gold Talisman (Ice)",21,,0B5691
-Talisman,151553,27,"Fine Gold Talisman (Shock)",21,,0B5691
-Talisman,0898A0,31,"Crude Platinum Talisman (Fire)",23,,0B5691
-Talisman,151534,31,"Crude Platinum Talisman (Ice)",23,,0B5691
-Talisman,151552,31,"Crude Platinum Talisman (Shock)",23,,0B5691
-Talisman,0898A1,35,"Platinum Talisman (Fire)",23,,0B5691
-Talisman,151533,35,"Platinum Talisman (Ice)",23,,0B5691
-Talisman,151551,35,"Platinum Talisman (Shock)",23,,0B5691
-Talisman,0898A2,41,"Fine Platinum Talisman (Fire)",23,,0B5691
-Talisman,151532,41,"Fine Platinum Talisman (Ice)",23,,0B5691
-Talisman,151550,41,"Fine Platinum Talisman (Shock)",23,,0B5691
-Buckler,089883,1,"Crude Birch Buckler",17,,0832F5
-Buckler,089884,2,"Birch Buckler",17,,0832F5
-Buckler,089885,3,"Fine Birch Buckler",17,,0832F5
-Buckler,089886,5,"Crude Elm Buckler",19,,0832F5
-Buckler,089887,7,"Elm Buckler",19,,0832F5
-Buckler,089888,9,"Fine Elm Buckler",19,,0832F5
-Buckler,089889,12,"Crude Oak Buckler",21,,0832F5
-Buckler,08988A,15,"Oak Buckler",21,,0832F5
-Buckler,08988B,18,"Fine Oak Buckler",21,,0832F5
-Buckler,08988C,21,"Crude Ash Buckler",24,,0832F5
-Buckler,08988D,24,"Ash Buckler",24,,0832F5
-Buckler,08988F,27,"Fine Ash Buckler",24,,0832F5
-Buckler,089890,31,"Crude Ebony Buckler",26,,0832F5
-Buckler,089891,35,"Ebony Buckler",26,,0832F5
-Buckler,089892,41,"Fine Ebony Buckler",26,,0832F5
-Shield,089851,1,"Crude Iron Kite Shield",20,,0832F6
-Shield,089852,2,"Iron Kite Shield",20,,0832F6
-Shield,089853,3,"Fine Iron Kite Shield",20,,0832F6
-Shield,089856,5,"Crude Steel Kite Shield",23,,0832F6
-Shield,089855,7,"Steel Kite Shield",23,,0832F6
-Shield,089854,9,"Fine Steel Kite Shield",23,,0832F6
-Shield,089857,12,"Crude Azurite Kite Shield",26,,0832F6
-Shield,089858,15,"Azurite Kite Shield",26,,0832F6
-Shield,089859,18,"Fine Azurite Kite Shield",26,,0832F6
-Shield,08987F,21,"Crude Sylvanite Kite Shield",29,,0832F6
-Shield,08987E,24,"Sylvanite Kite Shield",29,,0832F6
-Shield,08987D,27,"Fine Sylvanite Kite Shield",29,,0832F6
-Shield,089880,31,"Crude Prismere Kite Shield",32,,0832F6
-Shield,089881,35,"Prismere Kite Shield",32,,0832F6
-Shield,089882,41,"Fine Prismere Kite Shield",32,,0832F6
-Greatsword,1E5E4D,10,"The Harpy [Lvl 10]",25,1E5E7D1E5E64,
-Greatsword,1E5F02,10,"Trencher [Lvl 10]",25,1E5F301E5F1E,
-Hammer,1E5FB4,10,"Shipbuilder's Mate [Lvl 10]",25,1E5FD4,1E60D3
-Faeblades,1E6791,10,"Obsidian Blades [Lvl 10]",25,1E67E21E67CC1E67CB,
-Hammer,1E60E8,10,"The Spine [Lvl 10]",25,1E60FD,
-Longbow,1E653E,10,"Silver Stag [Lvl 10]",25,1E65631E6551,1E659A
-Chakrams,1E6CB6,10,"Baronett's Blades [Lvl 10]",25,1E6CE21E6CE3,
-Chakrams,1E6CED,10,"Flotsam Chakrams [Lvl 10]",25,1E6D1E,
-Longbow,1E6668,10,"Eye [Lvl 10]",25,1E66811E6680,
-Faeblades,1E6763,10,"Beak and Talon [Lvl 10]",25,1E6775,
-Sceptre,1E69C9,10,"The Wavemaker [Lvl 10]",25,,1E69DF
-Daggers,1E6808,10,"Boning Knives [Lvl 10]",25,1E68201E681F1E6821,
-Daggers,1E6826,10,"Dvergan Swords [Lvl 10]",25,1E688A,1E689C
-Longsword,1EE18F,3,"Windcarver [Lvl 3]",25,1F6D641F6D631F6D62,
-Staff,1E6946,10,"Seaglass [Lvl 10]",25,,1E696E1E696F
-Staff,1E6974,10,"The Crafted Sun [Lvl 10]",25,1E698D,1E698C
-Chakrams,1EE19F,3,"Titan's Cuff [Lvl 3]",25,1F960C,1F960D
-Chakrams,1EE1A0,3,"Hengerings [Lvl 3]",25,20700A,1F96201F961F
-Sceptre,1E69F6,10,"Scuttler [Lvl 10]",25,1E6A14,
-Greatsword,1EE191,3,"The Titan Spear [Lvl 3]",25,1F6E43,1F6E42
-Longsword,1EE190,3,"Makhaira [Lvl 3]",25,1F6E2D1F6E18,1F6E2C
-Longsword,1E5CE9,10,"Torment [Lvl 10]",25,1E5D161E5E2F,1E5D15
-Longsword,1E5D4E,10,"Niskaru Blade [Lvl 10]",25,1E5E3B,
-Daggers,1EE197,3,"Rend and Carver [Lvl 3]",25,1F7E76,1F7E75
-Daggers,1EE198,3,"Xiphos [Lvl 3]",25,1F7EB21F7EA01F7E9F,
-Faeblades,1EE199,3,"Zelus & Bia [Lvl 3]",25,1F7C44,1F7C45
-Faeblades,1EE19A,3,"Lunala's Crescents [Lvl 3]",25,1F7E0E1F7E0D,1F7E0C
-Staff,1EE19B,3,"The Heavens' Gift [Lvl 3]",25,20700A1F80E61F80E5,
-Staff,1EE19C,3,"Pteryx Talon [Lvl 3]",25,1F8939,
-Sceptre,1EE19D,3,"Primal Mirror [Lvl 3]",25,20700A1F92A6,1F92A4
-Sceptre,1EE19E,3,"Lightning Rod [Lvl 3]",25,1F8991,1F8990
-Greatsword,1EE192,3,"Lightning Cage [Lvl 3]",25,1F70B9,1F70B7
-Hammer,1EE193,3,"The Naros Fang [Lvl 3]",25,1F77CA,1F7801
-Hammer,1EE194,3,"Fallenstar [Lvl 3]",25,1F78D31F78D2,1F78D1
-Longbow,1EE195,3,"The Deadshot [Lvl 3]",25,1F79321F7931,
-Longbow,1EE196,3,"Venomstrike [Lvl 3]",25,1F79F71F79F5,
+Staff,1E6946,10,Seaglass [Lvl 10],25,,1E696E1E696F
+Staff,1E6974,10,The Crafted Sun [Lvl 10],25,1E698D,1E698C
+Staff,1EE19B,3,The Heavens' Gift [Lvl 3],25,20700A1F80E61F80E5,
+Staff,1EE19C,3,Pteryx Talon [Lvl 3],25,1F8939,
+Staff,08F0FB,4,Humble Staff,40,,092380
+Staff,08F0FC,8,Tempest,42,092381,
+Staff,08F0FD,12,Totem of the Wild,44,0A4551,092382
+Staff,08F0FE,16,Shillelagh,44,,092383
+Staff,08F0FF,20,Chaos Stem,46,0A4553,092384
+Staff,08F100,24,Coldspike,46,13C264,092385
+Staff,08F101,28,Pyromancer,46,092386,1CB5AA
+Staff,08F102,32,Esharra's Song,48,092387,0A4554
+Staff,08F103,36,Staff of the Ashen Prophet,48,092388,0A4555
+Staff,08F104,40,Archsage's Light,48,092389,
+Staff,1ACCE5,33,Sorrow,48,1CB5B1,1CB5AC
+Staff,1ACC4E,25,Ivory Staff,46,1CB5B7,
+Staff,1B1948,25,Staff of Arne,46,1CB5BD,
+Staff,1F8AA4,2,The Flame,25,1FF591,1FF592
+Staff,1D2A09,3,Fate's Arbor,20,,1FAEA8
+Talisman,15153E,3,Fine Bronze Talisman (Ice),15,,0B5691
+Talisman,089895,3,Fine Bronze Talisman (Fire),15,,0B5691
+Talisman,15155D,2,Bronze Talisman (Shock),15,,0B5691
+Talisman,15153F,2,Bronze Talisman (Ice),15,,0B5691
+Talisman,089894,2,Bronze Talisman (Fire),15,,0B5691
+Talisman,15155E,1,Crude Bronze Talisman (Shock),15,,0B5691
+Talisman,089893,1,Crude Bronze Talisman (Fire),15,,0B5691
+Talisman,151540,1,Crude Bronze Talisman (Ice),15,,0B5691
+Talisman,15155C,3,Fine Bronze Talisman (Shock),15,,0B5691
+Talisman,089896,5,Crude Copper Talisman (Fire),17,,0B5691
+Talisman,15153D,5,Crude Copper Talisman (Ice),17,,0B5691
+Talisman,15155B,5,Crude Copper Talisman (Shock),17,,0B5691
+Talisman,089897,7,Copper Talisman (Fire),17,,0B5691
+Talisman,15153C,7,Copper Talisman (Ice),17,,0B5691
+Talisman,15155A,7,Copper Talisman (Shock),17,,0B5691
+Talisman,089898,9,Fine Copper Talisman (Fire),17,,0B5691
+Talisman,15153B,9,Fine Copper Talisman (Ice),17,,0B5691
+Talisman,151559,9,Fine Copper Talisman (Shock),17,,0B5691
+Talisman,151558,12,Crude Silver Talisman (Shock),18,,0B5691
+Talisman,089899,12,Crude Silver Talisman (Fire),18,,0B5691
+Talisman,15153A,12,Crude Silver Talisman (Ice),18,,0B5691
+Talisman,08989B,15,Silver Talisman (Fire),18,,0B5691
+Talisman,151539,15,Silver Talisman (Ice),18,,0B5691
+Talisman,151557,15,Silver Talisman (Shock),18,,0B5691
+Talisman,08989C,18,Fine Silver Talisman (Fire),18,,0B5691
+Talisman,151538,18,Fine Silver Talisman (Ice),18,,0B5691
+Talisman,151556,18,Fine Silver Talisman (Shock),18,,0B5691
+Talisman,08989D,21,Crude Gold Talisman (Fire),21,,0B5691
+Talisman,151537,21,Crude Gold Talisman (Ice),21,,0B5691
+Talisman,151555,21,Crude Gold Talisman (Shock),21,,0B5691
+Talisman,08989E,24,Gold Talisman (Fire),21,,0B5691
+Talisman,151536,24,Gold Talisman (Ice),21,,0B5691
+Talisman,151554,24,Gold Talisman (Shock),21,,0B5691
+Talisman,08989F,27,Fine Gold Talisman (Fire),21,,0B5691
+Talisman,151535,27,Fine Gold Talisman (Ice),21,,0B5691
+Talisman,151553,27,Fine Gold Talisman (Shock),21,,0B5691
+Talisman,0898A0,31,Crude Platinum Talisman (Fire),23,,0B5691
+Talisman,151534,31,Crude Platinum Talisman (Ice),23,,0B5691
+Talisman,151552,31,Crude Platinum Talisman (Shock),23,,0B5691
+Talisman,0898A1,35,Platinum Talisman (Fire),23,,0B5691
+Talisman,151533,35,Platinum Talisman (Ice),23,,0B5691
+Talisman,151551,35,Platinum Talisman (Shock),23,,0B5691
+Talisman,0898A2,41,Fine Platinum Talisman (Fire),23,,0B5691
+Talisman,151532,41,Fine Platinum Talisman (Ice),23,,0B5691
+Talisman,151550,41,Fine Platinum Talisman (Shock),23,,0B5691
+Talisman,1F9D16,2,The Truth,20,,0B56911FF16E1FF16D1FF16C
