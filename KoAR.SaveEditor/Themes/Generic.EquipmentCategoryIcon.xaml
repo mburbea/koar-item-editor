@@ -6,11 +6,11 @@
     <BitmapImage x:Key="Buckler" UriSource="/KoAR.SaveEditor;component/Resources/Buckler.png" po:Freeze="True" />
     <BitmapImage x:Key="Chakrams" UriSource="/KoAR.SaveEditor;component/Resources/Chakrams.png" po:Freeze="True" />
     <BitmapImage x:Key="Daggers" UriSource="/KoAR.SaveEditor;component/Resources/Daggers.png" po:Freeze="True" />
-    <BitmapImage x:Key="FaeBlades" UriSource="/KoAR.SaveEditor;component/Resources/FaeBlades.png" po:Freeze="True" />
-    <BitmapImage x:Key="GreatSword" UriSource="/KoAR.SaveEditor;component/Resources/GreatSword.png" po:Freeze="True" />
+    <BitmapImage x:Key="Faeblades" UriSource="/KoAR.SaveEditor;component/Resources/Faeblades.png" po:Freeze="True" />
+    <BitmapImage x:Key="Greatsword" UriSource="/KoAR.SaveEditor;component/Resources/Greatsword.png" po:Freeze="True" />
     <BitmapImage x:Key="Hammer" UriSource="/KoAR.SaveEditor;component/Resources/Hammer.png" po:Freeze="True" />
-    <BitmapImage x:Key="LongBow" UriSource="/KoAR.SaveEditor;component/Resources/LongBow.png" po:Freeze="True" />
-    <BitmapImage x:Key="LongSword" UriSource="/KoAR.SaveEditor;component/Resources/LongSword.png" po:Freeze="True" />
+    <BitmapImage x:Key="Longbow" UriSource="/KoAR.SaveEditor;component/Resources/Longbow.png" po:Freeze="True" />
+    <BitmapImage x:Key="Longsword" UriSource="/KoAR.SaveEditor;component/Resources/Longsword.png" po:Freeze="True" />
     <BitmapImage x:Key="Sceptre" UriSource="/KoAR.SaveEditor;component/Resources/Sceptre.png" po:Freeze="True" />
     <BitmapImage x:Key="Shield" UriSource="/KoAR.SaveEditor;component/Resources/Shield.png" po:Freeze="True" />
     <BitmapImage x:Key="Staff" UriSource="/KoAR.SaveEditor;component/Resources/Staff.png" po:Freeze="True" />
@@ -41,20 +41,20 @@
                         <Trigger Property="Category" Value="Daggers">
                             <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource Daggers}" />
                         </Trigger>
-                        <Trigger Property="Category" Value="FaeBlades">
-                            <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource FaeBlades}" />
+                        <Trigger Property="Category" Value="Faeblades">
+                            <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource Faeblades}" />
                         </Trigger>
-                        <Trigger Property="Category" Value="GreatSword">
-                            <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource GreatSword}" />
+                        <Trigger Property="Category" Value="Greatsword">
+                            <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource Greatsword}" />
                         </Trigger>
                         <Trigger Property="Category" Value="Hammer">
                             <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource Hammer}" />
                         </Trigger>
-                        <Trigger Property="Category" Value="LongBow">
-                            <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource LongBow}" />
+                        <Trigger Property="Category" Value="Longbow">
+                            <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource Longbow}" />
                         </Trigger>
-                        <Trigger Property="Category" Value="LongSword">
-                            <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource LongSword}" />
+                        <Trigger Property="Category" Value="Longsword">
+                            <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource Longsword}" />
                         </Trigger>
                         <Trigger Property="Category" Value="Sceptre">
                             <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource Sceptre}" />

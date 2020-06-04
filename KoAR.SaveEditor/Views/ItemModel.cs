@@ -57,11 +57,11 @@ namespace KoAR.SaveEditor.Views
         public int ItemIndex => this.Item.ItemIndex;
 
         public string ItemDisplayName => this.HasCustomName switch
-            { 
-               true => this.ItemName,
-               false when Amalur.TypeDefinitions.TryGetValue(this.TypeId, out TypeDefinition def) => $"{def.Name}",
-               false => $"Unknown ({LittleEndianConverter.Convert(this.ItemId)})"
-            };
+        { 
+            true => this.ItemName,
+            false when Amalur.TypeDefinitions.TryGetValue(this.TypeId, out TypeDefinition type) => type.Name,
+            _ => $"Unknown ({LittleEndianConverter.Convert(this.ItemId)})"
+        };
 
         public string ItemName
         {
@@ -150,10 +150,10 @@ namespace KoAR.SaveEditor.Views
 
         private sealed class EffectCollection : Collection<uint>, INotifyCollectionChanged, INotifyPropertyChanged
         {
-            private static readonly PropertyChangedEventArgs _countArgs = new PropertyChangedEventArgs(nameof(IList<uint>.Count));
+            private static readonly PropertyChangedEventArgs _countArgs = new PropertyChangedEventArgs(nameof(EffectCollection.Count));
             private static readonly PropertyChangedEventArgs _indexerArgs = new PropertyChangedEventArgs(Binding.IndexerName);
 
-            public EffectCollection(List<uint> items)
+            public EffectCollection(IList<uint> items)
                 : base(items)
             {
             }
