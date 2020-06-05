@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using KoAR.SaveEditor.Constructs;
@@ -37,19 +37,25 @@ namespace KoAR.SaveEditor.Views
         public static readonly DependencyProperty SortPropertyProperty = DependencyProperty.RegisterAttached(nameof(ItemsView.SortProperty), typeof(string), typeof(ItemsView),
             new PropertyMetadata());
 
-        private static readonly DependencyPropertyKey _itemsCollectionViewProperty = DependencyProperty.RegisterReadOnly(nameof(ItemsView.ItemsCollectionView), typeof(CollectionView), typeof(ItemsView),
+        private static readonly DependencyPropertyKey _collectionViewProperty = DependencyProperty.RegisterReadOnly(nameof(ItemsView.CollectionView), typeof(CollectionView), typeof(ItemsView),
             new PropertyMetadata());
 
         private ListView? _listView;
 
         static ItemsView() => FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(ItemsView), new FrameworkPropertyMetadata(typeof(ItemsView)));
 
-        public static DependencyProperty ItemsCollectionViewProperty => ItemsView._itemsCollectionViewProperty.DependencyProperty;
+        public static DependencyProperty CollectionViewProperty => ItemsView._collectionViewProperty.DependencyProperty;
 
         public bool? AllItemsUnsellable
         {
             get => (bool?)this.GetValue(ItemsView.AllItemsUnsellableProperty);
             set => this.SetValue(ItemsView.AllItemsUnsellableProperty, value.HasValue ? BooleanBoxes.GetBox(value.Value) : null);
+        }
+
+        public ICollectionView? CollectionView
+        {
+            get => (ICollectionView?)this.GetValue(ItemsView.CollectionViewProperty);
+            private set => this.SetValue(ItemsView._collectionViewProperty, value);
         }
 
         public ICommand? EditItemHexCommand
@@ -62,12 +68,6 @@ namespace KoAR.SaveEditor.Views
         {
             get => (IEnumerable<ItemModel>?)this.GetValue(ItemsView.ItemsProperty);
             set => this.SetValue(ItemsView.ItemsProperty, value);
-        }
-
-        public ListCollectionView? ItemsCollectionView
-        {
-            get => (ListCollectionView?)this.GetValue(ItemsView.ItemsCollectionViewProperty);
-            private set => this.SetValue(ItemsView._itemsCollectionViewProperty, value);
         }
 
         public ICommand? MakeAllItemsDistinctCommand
@@ -96,14 +96,14 @@ namespace KoAR.SaveEditor.Views
 
         public static string? GetPropertyName(GridViewColumn column) => (string?)column?.GetValue(ItemsView.PropertyNameProperty);
 
-        public static bool GetSelectRowOnClick(FrameworkElement? element)
+        public static bool GetSelectRowOnClick(UIElement? element)
         {
             return element != null && (bool)element.GetValue(ItemsView.SelectRowOnClickProperty);
         }
 
         public static void SetPropertyName(GridViewColumn column, string? value) => column?.SetValue(ItemsView.PropertyNameProperty, value);
 
-        public static void SetSelectRowOnClick(FrameworkElement? element, bool value)
+        public static void SetSelectRowOnClick(UIElement? element, bool value)
         {
             element?.SetValue(ItemsView.SelectRowOnClickProperty, BooleanBoxes.GetBox(value));
         }
@@ -116,13 +116,13 @@ namespace KoAR.SaveEditor.Views
                 return;
             }
             ListViewAutoSize.AutoSizeColumns(this._listView);
-            this._listView.AddHandler(GridViewColumnHeader.ClickEvent, new RoutedEventHandler(this.GridViewColumn_Click));
+            this._listView.AddHandler(ButtonBase.ClickEvent, new RoutedEventHandler(this.GridViewColumn_Click));
         }
 
         private void GridViewColumn_Click(object sender, RoutedEventArgs e)
         {
-            ListCollectionView? view;
-            if (!(e.OriginalSource is GridViewColumnHeader header) || (view = this.ItemsCollectionView) == null || view.SortDescriptions == null)
+            ICollectionView? view;
+            if (!(e.OriginalSource is GridViewColumnHeader header) || (view = this.CollectionView) == null || view.SortDescriptions == null)
             {
                 return;
             }
@@ -131,10 +131,12 @@ namespace KoAR.SaveEditor.Views
             {
                 return;
             }
-            SortDescription sort = view.SortDescriptions[1];
+            SortDescription current = view.SortDescriptions[1];
             view.SortDescriptions[1] = new SortDescription(
                 this.SortProperty = propertyName,
-                this.SortDirection = propertyName == sort.PropertyName ? (ListSortDirection)((int)sort.Direction ^ 1) : ListSortDirection.Ascending
+                this.SortDirection = propertyName == current.PropertyName 
+                    ? (ListSortDirection)((int)current.Direction ^ 1) 
+                    : ListSortDirection.Ascending
             );
         }
 
@@ -150,37 +152,35 @@ namespace KoAR.SaveEditor.Views
 
         private static void ItemsProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ItemsView view = (ItemsView)d;
-            if (e.NewValue == null)
-            {
-                view.ItemsCollectionView = null;
-                return;
-            }
-            view.ItemsCollectionView = new ListCollectionView((IList)e.NewValue)
-            {
-                SortDescriptions = 
-                {
-                    new SortDescription(nameof(ItemModel.Category), ListSortDirection.Ascending),
-                    view.SortProperty == null
-                        ? new SortDescription(nameof(ItemModel.Level), ListSortDirection.Ascending)
-                        : new SortDescription(view.SortProperty, view.SortDirection)
-                }
-            };
+            ItemsView itemsView = (ItemsView)d;
+            itemsView.CollectionView = e.NewValue == null
+                ? null
+                : new ListCollectionView((IList)e.NewValue)
+                  {
+                      SortDescriptions =
+                      {
+                          new SortDescription(nameof(ItemModel.Category), ListSortDirection.Ascending),
+                          itemsView.SortProperty == null
+                              ? new SortDescription(nameof(ItemModel.Level), ListSortDirection.Ascending)
+                              : new SortDescription(itemsView.SortProperty, itemsView.SortDirection),
+                          new SortDescription(nameof(ItemModel.ItemDisplayName), ListSortDirection.Ascending)
+                      }
+                  };
         }
 
         private static void SelectRowOnClickProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (!(d is FrameworkElement element))
+            if (!(d is UIElement element))
             {
                 return;
             }
             if ((bool)e.OldValue)
             {
-                WeakEventManager<FrameworkElement, RoutedEventArgs>.RemoveHandler(element, nameof(FrameworkElement.PreviewMouseLeftButtonDown), ItemsView.Element_PreviewMouseLeftButtonDown);
+                WeakEventManager<UIElement, RoutedEventArgs>.RemoveHandler(element, nameof(UIElement.PreviewMouseLeftButtonDown), ItemsView.Element_PreviewMouseLeftButtonDown);
             }
             if ((bool)e.NewValue)
             {
-                WeakEventManager<FrameworkElement, RoutedEventArgs>.AddHandler(element, nameof(FrameworkElement.PreviewMouseLeftButtonDown), ItemsView.Element_PreviewMouseLeftButtonDown);
+                WeakEventManager<UIElement, RoutedEventArgs>.AddHandler(element, nameof(UIElement.PreviewMouseLeftButtonDown), ItemsView.Element_PreviewMouseLeftButtonDown);
             }
         }
     }

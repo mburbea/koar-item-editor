@@ -50,7 +50,7 @@
                             <Setter Property="constructs:TextBoxUpdateSource.UpdateOnEnter" Value="{Binding IsVisible, RelativeSource={RelativeSource Self}}" />
                         </Style>
                     </ControlTemplate.Resources>
-                    <ListView x:Name="PART_ListView" ItemsSource="{Binding ItemsCollectionView, RelativeSource={RelativeSource TemplatedParent}}" 
+                    <ListView x:Name="PART_ListView" ItemsSource="{Binding CollectionView, RelativeSource={RelativeSource TemplatedParent}}" 
                         SelectedItem="{Binding SelectedItem, RelativeSource={RelativeSource TemplatedParent}}" VirtualizingPanel.IsVirtualizing="True"
                         BorderBrush="LightGray" SelectionMode="Single" FocusVisualStyle="{x:Null}" VirtualizingPanel.VirtualizationMode="Recycling"
                         TextSearch.TextPath="ItemId" AlternationCount="2">
@@ -135,7 +135,7 @@
                                                     </TextBlock.Style>
                                                 </TextBlock>
                                                 <TextBox TextAlignment="Right" Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                        constructs:TextBoxSelect.SelectOnFocus="{Binding IsVisible, RelativeSource={RelativeSource Self}}">
+                                                    constructs:TextBoxSelect.SelectOnFocus="{Binding IsVisible, RelativeSource={RelativeSource Self}}">
                                                     <TextBox.Text>
                                                         <Binding Path="TypeId" Converter="{StaticResource HexConverter}">
                                                             <Binding.ValidationRules>
@@ -165,7 +165,7 @@
                                                     </TextBlock.Style>
                                                 </TextBlock>
                                                 <TextBox TextAlignment="Right" Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                        constructs:TextBoxSelect.SelectOnFocus="{Binding IsVisible, RelativeSource={RelativeSource Self}}">
+                                                    constructs:TextBoxSelect.SelectOnFocus="{Binding IsVisible, RelativeSource={RelativeSource Self}}">
                                                     <TextBox.Text>
                                                         <Binding Path="Level">
                                                             <Binding.ValidationRules>
@@ -200,7 +200,7 @@
                                                     </TextBlock.Style>
                                                 </TextBlock>
                                                 <TextBox Grid.Column="1" VerticalAlignment="Center" Margin="1,0" constructs:TextBoxSelect.SelectOnFocus="{Binding IsVisible, RelativeSource={RelativeSource Self}}" 
-                                                        Text="{Binding ItemName}" Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                                    Text="{Binding ItemName}" Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                             </Grid>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
@@ -221,7 +221,7 @@
                                                     </TextBlock.Style>
                                                 </TextBlock>
                                                 <TextBox TextAlignment="Right" Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                        constructs:TextBoxSelect.SelectOnFocus="{Binding IsVisible, RelativeSource={RelativeSource Self}}">
+                                                    constructs:TextBoxSelect.SelectOnFocus="{Binding IsVisible, RelativeSource={RelativeSource Self}}">
                                                     <TextBox.Text>
                                                         <Binding Path="CurrentDurability" Converter="{StaticResource SingleConverter}">
                                                             <Binding.ValidationRules>
@@ -250,7 +250,7 @@
                                                     </TextBlock.Style>
                                                 </TextBlock>
                                                 <TextBox TextAlignment="Right" Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                        constructs:TextBoxSelect.SelectOnFocus="{Binding IsVisible, RelativeSource={RelativeSource Self}}">
+                                                    constructs:TextBoxSelect.SelectOnFocus="{Binding IsVisible, RelativeSource={RelativeSource Self}}">
                                                     <TextBox.Text>
                                                         <Binding Path="MaxDurability" Converter="{StaticResource SingleConverter}">
                                                             <Binding.ValidationRules>
@@ -292,7 +292,7 @@
                                     <GridViewColumn.Header>
                                         <StackPanel Orientation="Horizontal">
                                             <CheckBox Margin="2" FocusVisualStyle="{x:Null}" VerticalAlignment="Center"
-                                                    IsChecked="{Binding AllItemsUnsellable, Converter={StaticResource NegatedBooleanConverter}, RelativeSource={RelativeSource TemplatedParent}}" />
+                                                IsChecked="{Binding AllItemsUnsellable, Converter={StaticResource NegatedBooleanConverter}, RelativeSource={RelativeSource TemplatedParent}}" />
                                             <TextBlock Text="Sellable?" VerticalAlignment="Center" />
                                         </StackPanel>
                                     </GridViewColumn.Header>
