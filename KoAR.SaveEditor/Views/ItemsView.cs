@@ -35,7 +35,7 @@ namespace KoAR.SaveEditor.Views
             new PropertyMetadata());
 
         public static readonly DependencyProperty SortPropertyProperty = DependencyProperty.RegisterAttached(nameof(ItemsView.SortProperty), typeof(string), typeof(ItemsView),
-            new PropertyMetadata());
+            new PropertyMetadata(nameof(ItemModel.Level)));
 
         private static readonly DependencyPropertyKey _collectionViewProperty = DependencyProperty.RegisterReadOnly(nameof(ItemsView.CollectionView), typeof(CollectionView), typeof(ItemsView),
             new PropertyMetadata());
@@ -88,9 +88,9 @@ namespace KoAR.SaveEditor.Views
             set => this.SetValue(ItemsView.SortDirectionProperty, value);
         }
 
-        public string? SortProperty
+        public string SortProperty
         {
-            get => (string?)this.GetValue(ItemsView.SortPropertyProperty);
+            get => (string)this.GetValue(ItemsView.SortPropertyProperty);
             set => this.SetValue(ItemsView.SortPropertyProperty, value);
         }
 
@@ -134,8 +134,8 @@ namespace KoAR.SaveEditor.Views
             SortDescription current = view.SortDescriptions[1];
             view.SortDescriptions[1] = new SortDescription(
                 this.SortProperty = propertyName,
-                this.SortDirection = propertyName == current.PropertyName 
-                    ? (ListSortDirection)((int)current.Direction ^ 1) 
+                this.SortDirection = propertyName == current.PropertyName
+                    ? (ListSortDirection)((int)current.Direction ^ 1)
                     : ListSortDirection.Ascending
             );
         }
@@ -153,19 +153,15 @@ namespace KoAR.SaveEditor.Views
         private static void ItemsProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             ItemsView itemsView = (ItemsView)d;
-            itemsView.CollectionView = e.NewValue == null
-                ? null
-                : new ListCollectionView((IList)e.NewValue)
-                  {
-                      SortDescriptions =
-                      {
-                          new SortDescription(nameof(ItemModel.Category), ListSortDirection.Ascending),
-                          itemsView.SortProperty == null
-                              ? new SortDescription(nameof(ItemModel.Level), ListSortDirection.Ascending)
-                              : new SortDescription(itemsView.SortProperty, itemsView.SortDirection),
-                          new SortDescription(nameof(ItemModel.ItemDisplayName), ListSortDirection.Ascending)
-                      }
-                  };
+            itemsView.CollectionView = e.NewValue == null ? null : new ListCollectionView((IList)e.NewValue)
+            {
+                SortDescriptions =
+                {
+                    new SortDescription(nameof(ItemModel.Category), ListSortDirection.Ascending),
+                    new SortDescription(itemsView.SortProperty, itemsView.SortDirection),
+                    new SortDescription(nameof(ItemModel.ItemDisplayName), ListSortDirection.Ascending)
+                }
+            };
         }
 
         private static void SelectRowOnClickProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
