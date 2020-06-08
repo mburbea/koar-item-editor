@@ -49,14 +49,22 @@ namespace ItemTesting
         
         static void Main()
         {
-            var path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save87.sav";
+            var path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save88.sav";
             var sw = Stopwatch.StartNew();
             Amalur.ReadFile(path);
             var bytes = Amalur.Bytes;
+            
             var interest = new[] { "Primal Chakrams", "Mastercrafted Prismere Chakrams" };
             var mems = Amalur.Items
             //&& x.ItemId == 0x19_02_1C)
             .ToArray();
+            var stash = new Stash();
+            PrintRuler();
+            PrintByteString(stash)
+            stash.AddItem(0x1A3932);
+            Amalur.SaveFile(path);
+            return;
+
             foreach (var mem in mems)
             {
                 var poo = Amalur.Bytes.AsSpan(mem.CoreEffects.ItemIndex, 17 + mem.CoreEffects.MysteryInteger).ToArray();
