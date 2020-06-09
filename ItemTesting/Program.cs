@@ -5,36 +5,15 @@ using System.Linq;
 using System.Diagnostics;
 using KoAR.Core;
 using System.IO;
-using System.Buffers.Binary;
-using System.Xml;
 using System.IO.Compression;
-using System.Text.RegularExpressions;
+using System.Text;
+using Microsoft.Data.SqlClient;
+using System.Data.Common;
 
 namespace ItemTesting
 {
-    class Program
+    static class Program
     {
-        static readonly Regex _topRegex = new Regex(@"^Number of entries\: (?<lines>\d+)$", RegexOptions.ExplicitCapture);
-        static readonly Regex _lineRegex = new Regex(@"\s*\d+\s\|\s*(?<id>\d+)\:\s(?<text>.*)$", RegexOptions.ExplicitCapture);
-
-        static Dictionary<uint, string> ParseStream(Stream stream)
-        {
-            using var reader = new StreamReader(stream,leaveOpen:true);
-            int lines = int.Parse(_topRegex.Match(reader.ReadLine()).Groups["lines"].Value);
-            var dictionary = new Dictionary<uint, string>();
-            for (int index = 0; index < lines; index++)
-            {
-                Match match = _lineRegex.Match(reader.ReadLine());
-                dictionary.Add(uint.Parse(match.Groups["id"].Value), match.Groups["text"].Value);
-            }
-            return dictionary;
-        }
-
-
-
-
-
-
         static byte[] GetBytesFromText(string text)
         {
             List<byte> list = new List<byte>();
@@ -45,6 +24,7 @@ namespace ItemTesting
             }
             return list.ToArray();
         }
+
         static string GetBytesString(byte[] b) => string.Join(' ', b.Select(x => x.ToString("X2")));
         static void PrintByteString(byte[] b) => Console.WriteLine(GetBytesString(b));
         static void WriteByteArray(byte[] b, string path) => File.WriteAllText(path, string.Join(", ", b.Select(x => $"0x{x:X2}")));
@@ -68,34 +48,109 @@ namespace ItemTesting
             }
             return results;
         }
+        static void ConvertSymbolsToCsv(string inPath, string outPath)
+        {
+            foreach (var file in Directory.EnumerateFiles(inPath, "symbol_table_*.bin", SearchOption.TopDirectoryOnly))
+            {
+                var fileInfo = new FileInfo(file);
+                var data = File.ReadAllBytes(file);
+                var elementCount = BitConverter.ToInt32(data, 0);
+                var firstString = 8 + elementCount * 12;
+
+                File.WriteAllLines(Path.Combine(outPath, fileInfo.Name["symbol_table_".Length..^4] + ".csv"),
+                    Enumerable.Range(0, elementCount)
+                    .Select(x => (id: BitConverter.ToInt32(data, 4 + x * 12), s: BitConverter.ToInt32(data, 4 + x * 12 + 4), e: BitConverter.ToInt32(data, 4 + x * 12 + 8)))
+                    .Select(y => $"{y.id:X6},{Encoding.Default.GetString(data[(firstString + y.s)..(firstString + y.e)])}").Prepend("id,value"));
+            }
+        }
+
         private static char[] AllCaps = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
+
+        const string LdbConnStr = @"Data Source=(localDb)\mssqllocaldb;Initial Catalog={0};Integrated Security=true";
+        private static void SetupLocalDb()
+        {
+            using var conn = new SqlConnection(string.Format(LdbConnStr, "master"));
+            conn.Open();
+            using var cmd = new SqlCommand($@"create database symbols on (name='symbols', fileName='{Path.GetTempFileName()}.mdf'); alter database symbols collate latin1_general_bin2", conn);
+            cmd.ExecuteNonQuery();
+        }
+        private static void TeardownLocalDb()
+        {
+            using var conn = new SqlConnection(string.Format(LdbConnStr, "master"));
+            conn.Open();
+            using var cmd = new SqlCommand(@"
+select top 1 physical_name from sys.master_files where db_id('symbols')=database_id;
+if db_id('symbols') is not null
+begin
+    alter database symbols set single_user with rollback immediate
+    exec sp_detach_db 'symbols'
+end", conn);
+            var path = (cmd.ExecuteScalar() as string)[0..^4];
+            static void TryDelete(string p)
+            {
+                if (File.Exists(p)) File.Delete(p);
+            }
+            TryDelete(path);
+            TryDelete(path + ".mdf");
+            TryDelete(path + "_log.ldf");
+        }
+
+        public static void BulkInsertTable(string name, IEnumerable<object[]> table,
+            string initializer = "id = 0,hex=space(8), name = space(8000)",
+            int count = 3)
+        {
+            using var conn = new SqlConnection(string.Format(LdbConnStr, "symbols"));
+            conn.Open();
+            using var cmd = new SqlCommand($"select {initializer} into {name} where 1=0;", conn);
+            cmd.ExecuteNonQuery();
+            using var bulk = new SqlBulkCopy(conn)
+            {
+                DestinationTableName = name,
+                BatchSize = 10_000,
+                EnableStreaming = true
+            };
+            using var adapter = new DbDataReaderAdapter(table, count);
+            bulk.WriteToServer(adapter);
+        }
 
         static void Main()
         {
-            var archive = ZipFile.OpenRead(@"..\..\..\..\symbol_tables.zip");
-
-            var parsed = new Dictionary<string, Dictionary<uint, string>>();
-            foreach (var entry in archive.Entries)
+            ConvertSymbolsToCsv(@"C:\temp\", @"C:\temp\output");
+            try
             {
-                using Stream stream = entry.Open();
-                parsed.Add(entry.Name, ParseStream(stream));
+                using var archive = ZipFile.OpenRead(@"..\..\..\..\symbol_tables.zip");
+                SetupLocalDb();
+                foreach (var entry in archive.Entries)
+                {
+                    using var reader = new StreamReader(entry.Open());
+                    BulkInsertTable(entry.Name[0..^4], Enumerable
+                        .Repeat(reader, int.MaxValue)
+                        .Select(rdr => rdr.ReadLine())
+                        .TakeWhile(s => s is string)
+                        .Skip(1)
+                        .Select(l => l.Split(','))
+                        .Select(a => new object[] { int.Parse(a[0], NumberStyles.HexNumber), a[0], a[1] }));
+                }
             }
-
-
-
-
-
-
-
+            catch (Exception)
+            {
+                Console.WriteLine("WTF");
+            }
+            finally
+            {
+                TeardownLocalDb();
+            }
+            return;
 
 
             var path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save97.sav";
             var sw = Stopwatch.StartNew();
             Amalur.ReadFile(path);
-            var torso = GetAllIndices(Amalur.Bytes, BitConverter.GetBytes(590481));
-            var legs = GetAllIndices(Amalur.Bytes, BitConverter.GetBytes(590480));
-            MemoryUtilities.Write(Amalur.Bytes, torso[0], 1476282);
-            MemoryUtilities.Write(Amalur.Bytes, legs[0], 1476266);
+            var torso = GetAllIndices(Amalur.Bytes, BitConverter.GetBytes(578143));
+            var face = GetAllIndices(Amalur.Bytes, BitConverter.GetBytes(1580320));
+            //MemoryUtilities.Write(Amalur.Bytes, 207204, 590481);
+            var q = MemoryUtilities.Read<int>(Amalur.Bytes, 207208);
+            // MemoryUtilities.Write(Amalur.Bytes, 206319, 1024178); 
 
             Amalur.SaveFile(path);
             //var ruler = GetAllIndices(Amalur.Bytes, new byte[] { 0x00, 0xF5, 0x43, 0xEB, 0x00, 0x02 });
