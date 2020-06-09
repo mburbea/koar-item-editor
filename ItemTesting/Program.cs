@@ -90,14 +90,14 @@ end", conn);
             {
                 if (File.Exists(p)) File.Delete(p);
             }
+
             TryDelete(path);
             TryDelete(path + ".mdf");
             TryDelete(path + "_log.ldf");
         }
 
         public static void BulkInsertTable(string name, IEnumerable<object[]> table,
-            string initializer = "id = 0,hex=space(8), name = space(8000)",
-            int count = 3)
+            string initializer = "id = 0,hex=space(8), name = space(8000)")
         {
             using var conn = new SqlConnection(string.Format(LdbConnStr, "symbols"));
             conn.Open();
@@ -109,7 +109,7 @@ end", conn);
                 BatchSize = 10_000,
                 EnableStreaming = true
             };
-            using var adapter = new DbDataReaderAdapter(table, count);
+            using var adapter = new DbDataReaderAdapter(table);
             bulk.WriteToServer(adapter);
         }
 
