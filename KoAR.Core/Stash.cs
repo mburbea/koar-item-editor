@@ -13,36 +13,45 @@ namespace KoAR.Core
         
         public Stash()
         {
-            ReadOnlySpan<byte> stashIndicator = new byte[] { 0x00, 0x00, 0xF5, 0x43, 0xEB, 0x00, 0x02 };
-            Offset = Amalur.Bytes.AsSpan().IndexOf(stashIndicator) + 7;
+            ReadOnlySpan<byte> stashIndicator = new byte[] { 0x00, 0xF5, 0x43, 0xEB, 0x00, 0x02 };
+            Offset = Amalur.Bytes.AsSpan().IndexOf(stashIndicator) - 3;
         }
 
-        private int Size
+        public int DataLength
         {
             get => MemoryUtilities.Read<int>(Amalur.Bytes, Offset);
-            set => MemoryUtilities.Write(Amalur.Bytes, Offset, value);
+            set
+            {
+                MemoryUtilities.Write(Amalur.Bytes, Offset, value);
+                MemoryUtilities.Write(Amalur.Bytes, Offset + 9, value - 9);
+            }
+        }
+
+        public int DataLength2
+        {
+            get => MemoryUtilities.Read<int>(Amalur.Bytes, Offset + 9);
         }
 
         private int Count
         {
-            get => MemoryUtilities.Read<int>(Amalur.Bytes, Offset + 4);
-            set => MemoryUtilities.Write(Amalur.Bytes, Offset + 4, value);
+            get => MemoryUtilities.Read<int>(Amalur.Bytes, Offset + 13);
+            set => MemoryUtilities.Write(Amalur.Bytes, Offset + 13, value);
         }
 
-        private uint NextItemType
+        public uint FirstItemTypeId
         {
-            get => MemoryUtilities.Read<uint>(Amalur.Bytes, Offset + 8);
+            get => MemoryUtilities.Read<uint>(Amalur.Bytes, Offset + 17);
+            set => MemoryUtilities.Write(Amalur.Bytes, Offset + 17, value);
         }
 
         public void AddItem(uint typeId)
         {
-            Span<uint> buffer = stackalloc uint[7];
-            buffer[0] = typeId;
-            buffer[1] = 0x00_03_0A;
-            buffer[3] = 0x01_41_E0;
-            buffer[6] = NextItemType << 8 | 0xFF;
-            Amalur.Bytes = MemoryUtilities.ReplaceBytes(Amalur.Bytes, Offset + 8, 3, MemoryMarshal.Cast<uint, byte>(buffer));
-            Size += 25;
+            ReadOnlySpan<byte> src = new byte[] { 0, 0, 0, 0, 0x0A, 0x03, 0, 0, 0, 0, 0, 0, 0x80, 0x3F, 0x01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF };
+            Span<byte> temp = stackalloc byte[25];
+            src.CopyTo(temp);
+            MemoryUtilities.Write(temp, 0, typeId);
+            Amalur.Bytes = MemoryUtilities.ReplaceBytes(Amalur.Bytes, Offset + 17, 0, temp);
+            DataLength += 25;
             Count++;
         }
 
