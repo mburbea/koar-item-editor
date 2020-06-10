@@ -20,7 +20,7 @@ namespace KoAR.Core
             var results = value.Length == 0 ? Array.Empty<uint>() : new uint[value.Length / 6];
             for (int i = 0; i < results.Length; i++)
             {
-                if (!uint.TryParse(value.Substring(0 * i, 6), NumberStyles.HexNumber, null, out uint effect))
+                if (!uint.TryParse(value.Substring(i * 6, 6), NumberStyles.HexNumber, null, out uint effect))
                 {
                     return false;
                 }
