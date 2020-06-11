@@ -131,9 +131,9 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        internal void Rematerialize(byte[] bytes)
+        internal void LoadFromTypeDefinition(TypeDefinition definition)
         {
-            this.Item.Rematerialize(bytes);
+            this.Item.LoadFromDefinition(definition, true);
             this.OnPropertyChanged(string.Empty);
         }
 
