@@ -9,6 +9,7 @@ using System.IO.Compression;
 using System.Text;
 using Microsoft.Data.SqlClient;
 using System.Data.Common;
+using Disposable;
 
 namespace ItemTesting
 {
@@ -65,41 +66,12 @@ namespace ItemTesting
         }
 
         private static char[] AllCaps = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
-
-        const string LdbConnStr = @"Data Source=(localDb)\mssqllocaldb;Initial Catalog={0};Integrated Security=true";
-        private static void SetupLocalDb()
-        {
-            using var conn = new SqlConnection(string.Format(LdbConnStr, "master"));
-            conn.Open();
-            using var cmd = new SqlCommand($@"create database symbols on (name='symbols', fileName='{Path.GetTempFileName()}.mdf'); alter database symbols collate latin1_general_bin2", conn);
-            cmd.ExecuteNonQuery();
-        }
-        private static void TeardownLocalDb()
-        {
-            using var conn = new SqlConnection(string.Format(LdbConnStr, "master"));
-            conn.Open();
-            using var cmd = new SqlCommand(@"
-select top 1 physical_name from sys.master_files where db_id('symbols')=database_id;
-if db_id('symbols') is not null
-begin
-    alter database symbols set single_user with rollback immediate
-    exec sp_detach_db 'symbols'
-end", conn);
-            var path = (cmd.ExecuteScalar() as string)[0..^4];
-            static void TryDelete(string p)
-            {
-                if (File.Exists(p)) File.Delete(p);
-            }
-
-            TryDelete(path);
-            TryDelete(path + ".mdf");
-            TryDelete(path + "_log.ldf");
-        }
+        private static DisposableLocalDb LocalDb = new DisposableLocalDb("symbols", "alter database symbols collate latin1_general_bin2");
 
         public static void BulkInsertTable(string name, IEnumerable<object[]> table,
             string initializer = "id = 0,hex=space(8), name = space(8000)")
         {
-            using var conn = new SqlConnection(string.Format(LdbConnStr, "symbols"));
+            using var conn = new SqlConnection(LocalDb.ConnectionString);
             conn.Open();
             using var cmd = new SqlCommand($"select {initializer} into {name} where 1=0;", conn);
             cmd.ExecuteNonQuery();
@@ -116,10 +88,10 @@ end", conn);
         static void Main()
         {
             ConvertSymbolsToCsv(@"C:\temp\", @"C:\temp\output");
+            Amalur.Initialize(@"..\..\..\..\Koar.SaveEditor\");
             try
             {
                 using var archive = ZipFile.OpenRead(@"..\..\..\..\symbol_tables.zip");
-                SetupLocalDb();
                 foreach (var entry in archive.Entries)
                 {
                     using var reader = new StreamReader(entry.Open());
@@ -131,14 +103,28 @@ end", conn);
                         .Select(l => l.Split(','))
                         .Select(a => new object[] { int.Parse(a[0], NumberStyles.HexNumber), a[0], a[1] }));
                 }
+                var qwat = string.Join(',',Amalur.TypeDefinitions[2071806].Effects);
+                
+
+                BulkInsertTable("definitions", Amalur.TypeDefinitions.Values.Select(x => new object[]
+                 {
+                x.Category,
+                x.TypeId,
+                x.Level,
+                x.Name,
+                x.MaxDurability,
+                $"[{string.Join(',', x.CoreEffects)}]",
+                $"[{string.Join(',', x.Effects)}]",
+                 }),
+                "category=space(35),type_id=0,level=0,name=space(255),durability=0e,core_effects=space(8000),effects=space(8000)");
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 Console.WriteLine("WTF");
             }
             finally
             {
-                TeardownLocalDb();
+                LocalDb.Dispose();
             }
             return;
 

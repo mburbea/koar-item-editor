@@ -50,8 +50,7 @@ namespace KoAR.Core
 
             Span<byte> buffer = stackalloc byte[13];
             ItemIndex = itemIndex;
-            DataLength = dataLength;
-            ItemBytes = bytes.Slice(itemIndex, dataLength).ToArray();
+            ItemBytes = bytes.Slice(itemIndex, 17 + MemoryUtilities.Read<int>(bytes, itemIndex + Offset.DataLength)).ToArray();
             bytes.Slice(itemIndex, 8).CopyTo(buffer);
             CoreEffects = new CoreEffectMemory(buffer);
             _typeIdOffset = bytes.IndexOf(buffer.Slice(0, 4)) + 4;
@@ -98,7 +97,11 @@ namespace KoAR.Core
             set => MemoryUtilities.Write(ItemBytes, Offsets.CurrentDurability, value);
         }
 
-        internal int DataLength { get; set; }
+        internal int DataLength
+        {
+            get => MemoryUtilities.Read<int>(ItemBytes, Offset.DataLength) + 17;
+            set => MemoryUtilities.Write(ItemBytes, Offset.DataLength, value - 17);
+        }
 
         public List<uint> Effects { get; } = new List<uint>();
 

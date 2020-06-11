@@ -4,6 +4,7 @@
     {
         private readonly struct Offset
         {
+            public const int DataLength = 13;
             public const int EffectCount = 21;
             public const int FirstEffect = EffectCount + 4;
 
