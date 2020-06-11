@@ -41,7 +41,7 @@
         </Grid.ColumnDefinitions>
         <TextBlock Grid.ColumnSpan="2" Text="WARNING: Changing the type is irreversible!" TextAlignment="Center" FontWeight="SemiBold" Foreground="Red" Margin="4" />
         <TextBlock Grid.Row="1" Text="Category:" Margin="2" VerticalAlignment="Center" />
-        <ComboBox Grid.Row="1" ItemsSource="{Binding Category, Converter={StaticResource ArrayConverter}}" SelectedItem="{Binding Category, Mode=OneTime}" IsHitTestVisible="False" >
+        <ComboBox Grid.Row="1" ItemsSource="{Binding Category, Converter={StaticResource ArrayConverter}}" SelectedItem="{Binding Category, Mode=OneTime}">
             <ComboBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type core:EquipmentCategory}">
                     <StackPanel Orientation="Horizontal">
