@@ -277,7 +277,7 @@
                         </TabControl.ContentTemplate>
                     </views:ScrollingTabControl>
                     <views:ItemsView Items="{Binding FilteredItems}" SelectedItem="{Binding SelectedItem}" 
-                        EditItemHexCommand="{Binding EditItemHexCommand}" AllItemsUnsellable="{Binding AllItemsUnsellable}" 
+                        DoubleClickCommand="{Binding HandleDoubleClickCommmand}" AllItemsUnsellable="{Binding AllItemsUnsellable}" 
                         MakeAllItemsDistinctCommand="{Binding MakeAllItemsDistinctCommand}" />
                 </DockPanel>
             </Grid>

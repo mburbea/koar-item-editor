@@ -30,7 +30,7 @@ namespace KoAR.SaveEditor.Views
             this._filteredItems = this.Items = new ReadOnlyObservableCollection<ItemModel>(this._items);
             this.OpenFileCommand = new DelegateCommand(this.OpenFile);
             this.ResetFiltersCommand = new DelegateCommand(this.ResetFilters);
-            this.EditItemHexCommand = new DelegateCommand<ItemModel>(this.EditItemHex);
+            this.HandleDoubleClickCommmand = new DelegateCommand<ItemModel>(this.HandleDoubleClick);
             this.UpdateInventorySizeCommand = new DelegateCommand(this.UpdateInventorySize, this.CanUpdateInventorySize);
             this.AddCoreEffectCommand = new DelegateCommand<uint>(this.AddCoreEffect, this.CanAddCoreEffect);
             this.AddEffectCommand = new DelegateCommand<uint>(this.AddEffect, this.CanAddEffect);
@@ -117,11 +117,6 @@ namespace KoAR.SaveEditor.Views
             get;
         }
 
-        public DelegateCommand<ItemModel> EditItemHexCommand
-        {
-            get;
-        }
-
         public string FileName
         {
             get => this._fileName;
@@ -132,6 +127,11 @@ namespace KoAR.SaveEditor.Views
         {
             get => this._filteredItems;
             private set => this.SetValue(ref this._filteredItems, value);
+        }
+
+        public DelegateCommand<ItemModel> HandleDoubleClickCommmand
+        {
+            get;
         }
 
         public int InventorySize
@@ -264,20 +264,20 @@ namespace KoAR.SaveEditor.Views
 
         private void DeleteEffect(uint code) => this.SelectedItem?.DeleteEffect(code);
 
-        private void EditItemHex(ItemModel model)
+        private void HandleDoubleClick(ItemModel model)
         {
             if (!Amalur.IsFileOpen)
             {
                 return;
             }
-            ItemEditorWindow view = new ItemEditorWindow
+            ChangeDefinitionWindow view = new ChangeDefinitionWindow
             {
                 Owner = Application.Current.MainWindow,
-                DataContext = new ItemEditorViewModel(model)
+                DataContext = new ChangeDefinitionViewModel(model)
             };
             if (view.ShowDialog() == true)
             {
-                Amalur.WriteEquipmentBytes(model.Item);
+                Amalur.WriteEquipmentBytes(model.Item, true);
             }
         }
 

@@ -15,7 +15,7 @@ namespace KoAR.SaveEditor.Views
         public static readonly DependencyProperty AllItemsUnsellableProperty = DependencyProperty.Register(nameof(ItemsView.AllItemsUnsellable), typeof(bool?), typeof(ItemsView),
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
-        public static readonly DependencyProperty EditItemHexCommandProperty = DependencyProperty.Register(nameof(ItemsView.EditItemHexCommand), typeof(ICommand), typeof(ItemsView));
+        public static readonly DependencyProperty DoubleClickCommandProperty = DependencyProperty.Register(nameof(ItemsView.DoubleClickCommand), typeof(ICommand), typeof(ItemsView));
 
         public static readonly DependencyProperty ItemsProperty = DependencyProperty.Register(nameof(ItemsView.Items), typeof(IList), typeof(ItemsView),
             new PropertyMetadata(ItemsView.ItemsProperty_ValueChanged));
@@ -58,10 +58,10 @@ namespace KoAR.SaveEditor.Views
             private set => this.SetValue(ItemsView._collectionViewProperty, value);
         }
 
-        public ICommand? EditItemHexCommand
+        public ICommand? DoubleClickCommand
         {
-            get => (ICommand?)this.GetValue(ItemsView.EditItemHexCommandProperty);
-            set => this.SetValue(ItemsView.EditItemHexCommandProperty, value);
+            get => (ICommand?)this.GetValue(ItemsView.DoubleClickCommandProperty);
+            set => this.SetValue(ItemsView.DoubleClickCommandProperty, value);
         }
 
         public IEnumerable<ItemModel>? Items
