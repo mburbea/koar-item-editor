@@ -6,8 +6,8 @@
     xmlns:core="clr-namespace:KoAR.Core;assembly=KoAR.Core"
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs"
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views"
-        xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
-        mc:Ignorable="d" d:DataContext="{d:DesignInstance views:ChangeDefinitionViewModel}"
+    xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+    mc:Ignorable="d" d:DataContext="{d:DesignInstance views:ChangeDefinitionViewModel}"
     Icon="/app.ico" Width="400" SizeToContent="Height"
     WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
     Title="{Binding DisplayName, StringFormat='Change Definition - {0}'}">
