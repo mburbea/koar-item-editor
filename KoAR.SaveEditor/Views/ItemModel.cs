@@ -133,7 +133,7 @@ namespace KoAR.SaveEditor.Views
 
         internal void LoadFromTypeDefinition(TypeDefinition definition)
         {
-            this.Item.LoadFromDefinition(definition, true);
+            this.Item.LoadFromDefinition(definition, false);
             this.OnPropertyChanged(string.Empty);
         }
 
