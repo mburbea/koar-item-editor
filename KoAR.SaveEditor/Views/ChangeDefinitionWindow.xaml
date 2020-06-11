@@ -16,9 +16,12 @@
             <constructs:ArrayConverter x:Key="ArrayConverter" />
             <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
                 <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="Margin" Value="2" />
+                <Setter Property="Grid.Column" Value="1" />
             </Style>
             <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                <Setter Property="FocusVisualStyle" Value="{x:Null}" />                
+                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
             </Style>
             <CollectionViewSource x:Key="Definitions" Source="{Binding Definitions}">
                 <CollectionViewSource.SortDescriptions>
@@ -38,8 +41,7 @@
         </Grid.ColumnDefinitions>
         <TextBlock Grid.ColumnSpan="2" Text="WARNING: Changing the type is irreversible!" TextAlignment="Center" FontWeight="SemiBold" Foreground="Red" Margin="4" />
         <TextBlock Grid.Row="1" Text="Category:" Margin="2" VerticalAlignment="Center" />
-        <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Category, Converter={StaticResource ArrayConverter}}" SelectedItem="{Binding Category, Mode=OneTime}" IsHitTestVisible="False" 
-            FocusVisualStyle="{x:Null}" Style="{StaticResource {x:Type ComboBox}}" VerticalAlignment="Center" Margin="2">
+        <ComboBox Grid.Row="1" ItemsSource="{Binding Category, Converter={StaticResource ArrayConverter}}" SelectedItem="{Binding Category, Mode=OneTime}" IsHitTestVisible="False" >
             <ComboBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type core:EquipmentCategory}">
                     <StackPanel Orientation="Horizontal">
@@ -50,8 +52,7 @@
             </ComboBox.ItemTemplate>
         </ComboBox>
         <TextBlock Grid.Row="2" Text="Definition:" Margin="2" VerticalAlignment="Center" />
-        <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Source={StaticResource Definitions}}" SelectedValuePath="TypeId" SelectedValue="{Binding TypeId}" 
-            FocusVisualStyle="{x:Null}" Style="{StaticResource {x:Type ComboBox}}" VerticalAlignment="Center" Margin="2" TextSearch.TextPath="Name">
+        <ComboBox Grid.Row="2" ItemsSource="{Binding Source={StaticResource Definitions}}" SelectedValuePath="TypeId" SelectedValue="{Binding TypeId}" TextSearch.TextPath="Name">
             <ComboBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type core:TypeDefinition}">
                     <TextBlock>
