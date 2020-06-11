@@ -21,6 +21,7 @@ namespace KoAR.Core
             }
         }
 
+        public static Dictionary<uint, string> Buffs { get; } = new Dictionary<uint, string>();
         public static List<EffectInfo> Effects { get; } = new List<EffectInfo>();
         public static Dictionary<uint, CoreEffectInfo> CoreEffects { get; } = new Dictionary<uint, CoreEffectInfo>();
         public static Dictionary<uint, EffectInfo> DedupedEffects { get; } = new Dictionary<uint, EffectInfo>();
@@ -87,7 +88,15 @@ namespace KoAR.Core
                 .GroupBy(x => x.Code)
                 .Select(x => (x.Key, x.First())));
 
+            var buffCsv = Path.Combine(path, "buff.csv");
+            if (!File.Exists(buffCsv))
+            {
+                throw new InvalidOperationException("Cannot find buff.csv");
+            }
+            Buffs.AddRange(File.ReadLines(buffCsv).Skip(1).Select(r => (uint.Parse(r[..6], NumberStyles.HexNumber), r[7..])));
+
             TypeDefinitions.AddRange(TypeDefinition.ParseFile(Path.Combine(path, "items.csv")).Select(x => (x.TypeId, x)));
+            
         }
 
         private static int GetBagOffset()

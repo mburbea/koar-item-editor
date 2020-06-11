@@ -264,6 +264,7 @@ namespace KoAR.Core
             Effects.Clear();
             Effects.AddRange(definition.Effects);
             ItemName = assignName ? definition.Name : "";
+            Level = definition.Level;
         }
     }
 }
