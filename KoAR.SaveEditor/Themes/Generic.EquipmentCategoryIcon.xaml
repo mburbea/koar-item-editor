@@ -1,72 +1,20 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views">
-    <BitmapImage x:Key="Armor" UriSource="/KoAR.SaveEditor;component/Resources/Armor.png" po:Freeze="True" />
-    <BitmapImage x:Key="Buckler" UriSource="/KoAR.SaveEditor;component/Resources/Buckler.png" po:Freeze="True" />
-    <BitmapImage x:Key="Chakrams" UriSource="/KoAR.SaveEditor;component/Resources/Chakrams.png" po:Freeze="True" />
-    <BitmapImage x:Key="Daggers" UriSource="/KoAR.SaveEditor;component/Resources/Daggers.png" po:Freeze="True" />
-    <BitmapImage x:Key="Faeblades" UriSource="/KoAR.SaveEditor;component/Resources/Faeblades.png" po:Freeze="True" />
-    <BitmapImage x:Key="Greatsword" UriSource="/KoAR.SaveEditor;component/Resources/Greatsword.png" po:Freeze="True" />
-    <BitmapImage x:Key="Hammer" UriSource="/KoAR.SaveEditor;component/Resources/Hammer.png" po:Freeze="True" />
-    <BitmapImage x:Key="Longbow" UriSource="/KoAR.SaveEditor;component/Resources/Longbow.png" po:Freeze="True" />
-    <BitmapImage x:Key="Longsword" UriSource="/KoAR.SaveEditor;component/Resources/Longsword.png" po:Freeze="True" />
-    <BitmapImage x:Key="Sceptre" UriSource="/KoAR.SaveEditor;component/Resources/Sceptre.png" po:Freeze="True" />
-    <BitmapImage x:Key="Shield" UriSource="/KoAR.SaveEditor;component/Resources/Shield.png" po:Freeze="True" />
-    <BitmapImage x:Key="Staff" UriSource="/KoAR.SaveEditor;component/Resources/Staff.png" po:Freeze="True" />
-    <BitmapImage x:Key="Talisman" UriSource="/KoAR.SaveEditor;component/Resources/Talisman.png" po:Freeze="True" />
-    <BitmapImage x:Key="Unknown" UriSource="/KoAR.SaveEditor;component/Resources/Unknown.png" po:Freeze="True" />
     <Style TargetType="{x:Type views:EquipmentCategoryIcon}">
-        <Style.Resources>
-            <views:TitleCaseWordsConverter x:Key="TitleCaseWordsConverter" />
-        </Style.Resources>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type views:EquipmentCategoryIcon}">
-                    <Image Margin="1,0" x:Name="PART_Image" Width="20" Source="{StaticResource Unknown}" 
+                    <ControlTemplate.Resources>
+                        <views:TitleCaseWordsConverter x:Key="TitleCaseWordsConverter" />
+                        <views:EnumToBitmapConverter x:Key="EnumToBitmapConverter" />
+                    </ControlTemplate.Resources>
+                    <Image Margin="1,0" x:Name="PART_Image" Width="20" 
+                        Source="{Binding Category, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource EnumToBitmapConverter}}"
                         ToolTip="{Binding Category, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource TitleCaseWordsConverter}}" />
                     <ControlTemplate.Triggers>
                         <Trigger Property="Category" Value="{x:Null}">
                             <Setter Property="Visibility" Value="Collapsed" />
-                        </Trigger>
-                        <Trigger Property="Category" Value="Armor">
-                            <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource Armor}" />
-                        </Trigger>
-                        <Trigger Property="Category" Value="Buckler">
-                            <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource Buckler}" />
-                        </Trigger>
-                        <Trigger Property="Category" Value="Chakrams">
-                            <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource Chakrams}" />
-                        </Trigger>
-                        <Trigger Property="Category" Value="Daggers">
-                            <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource Daggers}" />
-                        </Trigger>
-                        <Trigger Property="Category" Value="Faeblades">
-                            <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource Faeblades}" />
-                        </Trigger>
-                        <Trigger Property="Category" Value="Greatsword">
-                            <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource Greatsword}" />
-                        </Trigger>
-                        <Trigger Property="Category" Value="Hammer">
-                            <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource Hammer}" />
-                        </Trigger>
-                        <Trigger Property="Category" Value="Longbow">
-                            <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource Longbow}" />
-                        </Trigger>
-                        <Trigger Property="Category" Value="Longsword">
-                            <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource Longsword}" />
-                        </Trigger>
-                        <Trigger Property="Category" Value="Sceptre">
-                            <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource Sceptre}" />
-                        </Trigger>
-                        <Trigger Property="Category" Value="Shield">
-                            <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource Shield}" />
-                        </Trigger>
-                        <Trigger Property="Category" Value="Staff">
-                            <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource Staff}" />
-                        </Trigger>
-                        <Trigger Property="Category" Value="Talisman">
-                            <Setter TargetName="PART_Image" Property="Source" Value="{StaticResource Talisman}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
