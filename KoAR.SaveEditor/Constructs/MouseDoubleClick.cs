@@ -50,10 +50,7 @@ namespace KoAR.SaveEditor.Constructs
         {
             Control control = (Control)sender;
             ICommand? command = MouseDoubleClick.GetCommand(control);
-            if (command != null)
-            {
-                command.TryExecute(MouseDoubleClick.GetCommandParameter(control), MouseDoubleClick.GetCommandTarget(control) ?? control);
-            }
+            command?.TryExecute(MouseDoubleClick.GetCommandParameter(control), MouseDoubleClick.GetCommandTarget(control) ?? control);
         }
 
         private static void OnCommandPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
