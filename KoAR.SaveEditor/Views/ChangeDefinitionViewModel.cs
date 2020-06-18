@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using KoAR.Core;
@@ -7,7 +6,7 @@ using KoAR.SaveEditor.Constructs;
 
 namespace KoAR.SaveEditor.Views
 {
-    public sealed class ChangeDefinitionViewModel
+    public sealed class ChangeDefinitionViewModel : NotifierBase
     {
         private readonly ItemModel _item;
         private uint _typeId;
@@ -24,8 +23,6 @@ namespace KoAR.SaveEditor.Views
             this.ChangeDefinitionCommand = new DelegateCommand(this.ChangeDefinition, () => this._typeId != this._item.TypeId);
         }
 
-        public event EventHandler? TypeIdChanged;
-
         public EquipmentCategory Category => this._item.Category;
 
         public DelegateCommand ChangeDefinitionCommand { get; }
@@ -37,15 +34,7 @@ namespace KoAR.SaveEditor.Views
         public uint TypeId
         {
             get => this._typeId;
-            set
-            {
-                if (this._typeId == value)
-                {
-                    return;
-                }
-                this._typeId = value;
-                this.TypeIdChanged?.Invoke(this, EventArgs.Empty);
-            }
+            set => this.SetValue(ref this._typeId, value);
         }
 
         private void ChangeDefinition()

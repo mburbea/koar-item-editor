@@ -75,8 +75,8 @@
             </ComboBox.ItemTemplate>
         </ComboBox>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="3" Grid.ColumnSpan="2">
-            <Button Content="Cancel" Command="Close" Margin="4" />
-            <Button Content="Save" Command="{Binding ChangeDefinitionCommand}" Margin="4" IsDefault="True" />
+            <Button Content="Cancel" Command="Close" Margin="4" FocusVisualStyle="{x:Null}" />
+            <Button Content="Save" Command="{Binding ChangeDefinitionCommand}" Margin="4" IsDefault="True" FocusVisualStyle="{x:Null}" />
         </StackPanel>
     </Grid>
 </Window>
