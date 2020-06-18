@@ -319,7 +319,7 @@
                                 </Style.Triggers>
                             </Style>
                         </StackPanel.Resources>
-                        <views:EffectsControl Margin="4" Capacity="4" Header="{Binding SelectedItem}" Effects="{Binding SelectedItem.CoreEffects}" 
+                        <views:EffectsControl Margin="4" Capacity="4" Header="{Binding SelectedItem}" Effects="{Binding SelectedItem.CoreEffects}" Buffs="{x:Static core:Amalur.Buffs}"
                             EffectTranslations="{x:Static core:Amalur.CoreEffects}" EffectDefinitions="{Binding Values, Source={x:Static core:Amalur.CoreEffects}}"
                             AddEffectCommand="{Binding AddCoreEffectCommand}" DeleteEffectCommand="{Binding DeleteCoreEffectCommand}">
                             <views:EffectsControl.HeaderTemplate>
@@ -339,7 +339,7 @@
                                 </DataTemplate>
                             </views:EffectsControl.HeaderTemplate>
                         </views:EffectsControl>
-                        <views:EffectsControl Margin="4" Header="Effects:" Effects="{Binding SelectedItem.Effects}" 
+                        <views:EffectsControl Margin="4" Header="Effects:" Effects="{Binding SelectedItem.Effects}" Buffs="{x:Static core:Amalur.Buffs}"
                             EffectTranslations="{x:Static core:Amalur.DedupedEffects}" EffectDefinitions="{x:Static core:Amalur.Effects}"
                             AddEffectCommand="{Binding AddEffectCommand}" DeleteEffectCommand="{Binding DeleteEffectCommand}" />
                     </StackPanel>
