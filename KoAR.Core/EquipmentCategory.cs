@@ -3,7 +3,11 @@
     public enum EquipmentCategory
     {
         Unknown = 0,
-        Armor,
+        Hat,
+        Torso,
+        Legs,
+        Hands,
+        Feet,
         Buckler,
         Chakrams,
         Daggers,
