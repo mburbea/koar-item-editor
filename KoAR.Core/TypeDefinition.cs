@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net.Sockets;
 
 namespace KoAR.Core
 {
@@ -32,19 +33,29 @@ namespace KoAR.Core
 
         private static bool TryLoadFromRow(string[] entries, [NotNullWhen(true)] out TypeDefinition? definition)
         {
+            // category,typeId,level,name
+            // internal_name,durability,sockets,rarity
+            // element,armorType,coreEffects,effects
             definition = null;
-            if (entries.Length != 7
+            if (entries.Length != 15
                 || !Enum.TryParse(entries[0], true, out EquipmentCategory category)
                 || !uint.TryParse(entries[1], NumberStyles.HexNumber, null, out uint typeId)
                 || !byte.TryParse(entries[2], out byte level)
-                || !float.TryParse(entries[4], out float maxDurability)
-                || !TryParseEffectList(entries[5], out uint[]? coreEffects)
-                || !TryParseEffectList(entries[6], out uint[]? effects))
+                || !float.TryParse(entries[5], out float maxDurability)
+                || !Enum.TryParse(entries[6], out Rarity rarity)
+                || !int.TryParse(entries[7], out int weapon)
+                || !int.TryParse(entries[8], out int armor)
+                || !int.TryParse(entries[9], out int utility)
+                || !int.TryParse(entries[10], out int epic)
+                || !Enum.TryParse(entries[11], out Element element)
+                || !Enum.TryParse(entries[12], out ArmorType armorType)
+                || !TryParseEffectList(entries[13], out uint[]? coreEffects)
+                || !TryParseEffectList(entries[14], out uint[]? effects))
             {
                 return false;
             }
 
-            definition = new TypeDefinition(category, typeId, level, entries[3], maxDurability, coreEffects, effects);
+            definition = new TypeDefinition(category, typeId, level, entries[3], entries[4], maxDurability, rarity, weapon, armor, utility, epic, element, armorType, coreEffects, effects);
             return true;
         }
 
@@ -77,13 +88,22 @@ namespace KoAR.Core
             File.AppendAllLines("items.user.csv", rows);
         }
 
-        public TypeDefinition(EquipmentCategory category, uint typeId, byte level, string name, float maxDurability, uint[] coreEffects, uint[] effects)
+        internal TypeDefinition(EquipmentCategory category, uint typeId, byte level, string name, string internalName, float maxDurability, Rarity rarity,
+            int weapon, int armor, int utility, int epic, Element element, ArmorType armorType, uint[] coreEffects, uint[] effects)
         {
             Category = category;
             TypeId = typeId;
             Level = level;
             Name = name;
+            InternalName = internalName;
             MaxDurability = maxDurability;
+            Rarity = rarity;
+            WeaponSockets = weapon;
+            ArmorSockets = armor;
+            UtilitySockets = utility;
+            EpicSockets = epic;
+            ArmorType = armorType;
+            Element = element;
             CoreEffects = coreEffects;
             Effects = effects;
         }
@@ -92,7 +112,15 @@ namespace KoAR.Core
         public uint TypeId { get; }
         public byte Level { get; }
         public string Name { get; }
+        public string InternalName { get; }
         public float MaxDurability { get; }
+        public Rarity Rarity { get; }
+        public int WeaponSockets { get; }
+        public int ArmorSockets { get; }
+        public int UtilitySockets { get; }
+        public int EpicSockets { get; }
+        public Element Element { get; }
+        public ArmorType ArmorType { get; }
         public uint[] CoreEffects { get; }
         public uint[] Effects { get; }
     }
