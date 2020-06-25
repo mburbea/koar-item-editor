@@ -6,17 +6,9 @@ namespace KoAR.SaveEditor.Constructs
 {
     public sealed class RegexValidationRule : ValidationRule
     {
-        public string? Pattern
-        {
-            get;
-            set;
-        }
+        public string? ErrorText { get; set; }
 
-        public string? ErrorText
-        {
-            get;
-            set;
-        }
+        public string? Pattern { get; set; }
 
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {

@@ -40,15 +40,9 @@ namespace KoAR.SaveEditor.Views
             this.MakeAllItemsDistinctCommand = new DelegateCommand(this.MakeAllItemsDistinct);
         }
 
-        public DelegateCommand<uint> AddCoreEffectCommand
-        {
-            get;
-        }
+        public DelegateCommand<uint> AddCoreEffectCommand { get; }
 
-        public DelegateCommand<uint> AddEffectCommand
-        {
-            get;
-        }
+        public DelegateCommand<uint> AddEffectCommand { get; }
 
         public bool? AllItemsUnsellable
         {
@@ -107,15 +101,9 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        public DelegateCommand<uint> DeleteCoreEffectCommand
-        {
-            get;
-        }
+        public DelegateCommand<uint> DeleteCoreEffectCommand { get; }
 
-        public DelegateCommand<uint> DeleteEffectCommand
-        {
-            get;
-        }
+        public DelegateCommand<uint> DeleteEffectCommand { get; }
 
         public string FileName
         {
@@ -129,10 +117,7 @@ namespace KoAR.SaveEditor.Views
             private set => this.SetValue(ref this._filteredItems, value);
         }
 
-        public DelegateCommand<ItemModel> HandleDoubleClickCommmand
-        {
-            get;
-        }
+        public DelegateCommand<ItemModel> HandleDoubleClickCommmand { get; }
 
         public int InventorySize
         {
@@ -152,15 +137,9 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        public ReadOnlyObservableCollection<ItemModel> Items
-        {
-            get;
-        }
+        public ReadOnlyObservableCollection<ItemModel> Items { get; }
 
-        public DelegateCommand MakeAllItemsDistinctCommand
-        {
-            get;
-        }
+        public DelegateCommand MakeAllItemsDistinctCommand { get; }
 
         public string MaxDurabilityFilter
         {
@@ -174,20 +153,11 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        public DelegateCommand OpenFileCommand
-        {
-            get;
-        }
+        public DelegateCommand OpenFileCommand { get; }
 
-        public DelegateCommand ResetFiltersCommand
-        {
-            get;
-        }
+        public DelegateCommand ResetFiltersCommand { get; }
 
-        public DelegateCommand SaveCommand
-        {
-            get;
-        }
+        public DelegateCommand SaveCommand { get; }
 
         public ItemModel? SelectedItem
         {
@@ -201,10 +171,7 @@ namespace KoAR.SaveEditor.Views
             private set => this.SetValue(ref this._unsavedChanges, value);
         }
 
-        public DelegateCommand UpdateInventorySizeCommand
-        {
-            get;
-        }
+        public DelegateCommand UpdateInventorySizeCommand { get; }
 
         internal void OpenFile()
         {

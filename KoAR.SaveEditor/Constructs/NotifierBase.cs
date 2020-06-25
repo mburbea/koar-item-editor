@@ -6,6 +6,10 @@ namespace KoAR.SaveEditor.Constructs
 {
     public abstract class NotifierBase : INotifyPropertyChanged
     {
+        protected NotifierBase()
+        {
+        }
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = "")

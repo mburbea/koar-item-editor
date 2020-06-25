@@ -26,10 +26,7 @@ namespace KoAR.SaveEditor.Views
 
         public int CoreEffectCount => this.CoreEffects.Count;
 
-        public IList<uint> CoreEffects
-        {
-            get;
-        }
+        public IList<uint> CoreEffects { get; }
 
         public float CurrentDurability
         {
@@ -39,10 +36,7 @@ namespace KoAR.SaveEditor.Views
 
         public int EffectCount => this.Item.Effects.Count;
 
-        public IList<uint> Effects
-        {
-            get;
-        }
+        public IList<uint> Effects { get; }
 
         public bool HasCustomName => this.Item.HasCustomName;
 
@@ -57,7 +51,7 @@ namespace KoAR.SaveEditor.Views
         public int ItemIndex => this.Item.ItemIndex;
 
         public string ItemDisplayName => this.HasCustomName switch
-        { 
+        {
             true => this.ItemName,
             false when Amalur.TypeDefinitions.TryGetValue(this.TypeId, out TypeDefinition type) => type.Name,
             _ => $"Unknown ({LittleEndianConverter.Convert(this.ItemId)})"
@@ -96,10 +90,7 @@ namespace KoAR.SaveEditor.Views
             set => this.SetItemValue(value, this.Item.TypeId, value => this.Item.TypeId = value);
         }
 
-        internal ItemMemoryInfo Item
-        {
-            get;
-        }
+        internal ItemMemoryInfo Item { get; }
 
         internal void AddCoreEffect(uint code)
         {
