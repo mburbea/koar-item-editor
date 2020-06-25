@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Diagnostics;
-using KoAR.Core;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
 using Microsoft.Data.SqlClient;
-using System.Data.Common;
 using Disposable;
+using KoAR.Core;
+using System.Runtime.InteropServices;
 
 namespace ItemTesting
 {
@@ -66,7 +66,7 @@ namespace ItemTesting
         }
 
         private static char[] AllCaps = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
-        private static DisposableLocalDb LocalDb = new DisposableLocalDb("symbols", "alter database symbols collate latin1_general_bin2");
+        private static DisposableLocalDb LocalDb;
 
         public static void BulkInsertTable(string name, IEnumerable<object[]> table,
             string initializer = "id = 0,hex=space(8), name = space(8000)")
@@ -87,8 +87,23 @@ namespace ItemTesting
 
         static void Main()
         {
-            ConvertSymbolsToCsv(@"C:\temp\", @"C:\temp\output");
-            Amalur.Initialize(@"..\..\..\..\Koar.SaveEditor\");
+            var path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save98.sav";
+            var bytes = File.ReadAllBytes(path);
+            ReadOnlySpan<byte> lengthMarker = new byte[8] { 0, 0, 0, 0, 0x0A, 0, 0, 0 };
+            var length = MemoryUtilities.Read<int>(bytes, bytes.AsSpan().IndexOf(lengthMarker) -4);
+
+            //ConvertSymbolsToCsv(@"C:\temp\", @"C:\temp\output");
+            //Amalur.Initialize(@"..\..\..\..\Koar.SaveEditor\");
+            //Amalur.ReadFile(path);
+            //var stash = new Stash();
+            ////var variants = new[] { 1710274u, 1716331u, 1716334u, 1716335u, 1716338u };
+            ////foreach (var variant in variants)
+            ////{
+            ////    stash.AddItem(variant);
+            ////}
+            //Amalur.SaveFile(path);
+            return;
+            LocalDb = new DisposableLocalDb("symbols", "alter database symbols collate latin1_general_bin2");
             try
             {
                 using var archive = ZipFile.OpenRead(@"..\..\..\..\symbol_tables.zip");
@@ -129,7 +144,7 @@ namespace ItemTesting
             return;
 
 
-            var path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save97.sav";
+
             var sw = Stopwatch.StartNew();
             Amalur.ReadFile(path);
             var torso = GetAllIndices(Amalur.Bytes, BitConverter.GetBytes(578143));

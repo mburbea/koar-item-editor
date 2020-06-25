@@ -17,6 +17,10 @@ namespace KoAR.Core
         public const float DurabilityUpperBound = 100f;
         public const int MinEquipmentLength = 44;
 
+        public ItemMemoryInfo(TypeDefinition definition, int typeIdOffset, int itemOffset, int coreEffectOffset)
+        {
+
+        }
         private ItemMemoryInfo(ReadOnlySpan<byte> bytes, int itemIndex, int dataLength)
         {
             static EquipmentCategory DetermineEquipmentType(ReadOnlySpan<byte> bytes, Span<byte> buffer)
@@ -27,7 +31,7 @@ namespace KoAR.Core
                 var offset = bytes.IndexOf(buffer);
                 if (offset == -1)
                 {
-                    return EquipmentCategory.Armor; // Armor doesn't have this section.
+                    return EquipmentCategory.Torso; // Armor doesn't have this section.
                 }
                 var equipTypeByte = bytes[offset + 13];
                 additionalInfoSequence.CopyTo(buffer.Slice(8));
@@ -127,7 +131,39 @@ namespace KoAR.Core
             }
         }
 
-        public EquipmentCategory Category { get; }
+        public bool IsUnstashable
+        {
+            get => (ItemBytes[Offsets.SellableFlag] & 0x40) == 0x40;
+            set
+            {
+                if (value)
+                {
+                    ItemBytes[Offsets.SellableFlag] |= 0x40;
+                }
+                else
+                {
+                    ItemBytes[Offsets.SellableFlag] &= 0xD7;
+                }
+            }
+        }
+
+        private TypeDefinition _typeDefinition;
+        public TypeDefinition TypeDefinition 
+        {
+            get => _typeDefinition;
+            set
+            {
+                _typeDefinition = value;
+                var typeId = value.TypeId;
+                MemoryUtilities.Write(Amalur.Bytes, _typeIdOffset, typeId);
+                MemoryUtilities.Write(Amalur.Bytes, _typeIdOffset + 30 + _levelShiftOffset, typeId);
+            }
+        }
+
+        public EquipmentCategory Category {
+            get => TypeDefinition.Category;
+            set { }
+        }
 
         private readonly int _typeIdOffset;
         private readonly byte _levelShiftOffset;
@@ -165,7 +201,7 @@ namespace KoAR.Core
         {
             get => HasCustomName
                 ? Encoding.Default.GetString(ItemBytes, Offsets.CustomNameText, NameLength)
-                : string.Empty;
+                : _typeDefinition.Name;
             set
             {
                 if (value.Length > 0)
@@ -251,7 +287,7 @@ namespace KoAR.Core
 
         public TypeDefinition GetTypeDefinition()
         {
-            return new TypeDefinition(Category, TypeId, Level, ItemName, MaxDurability, CoreEffects.List.ToArray(), Effects.ToArray());
+            return new TypeDefinition(Category, TypeId, Level, ItemName, "unknown", MaxDurability, Rarity.Common, "", Element.None, ArmorType.None, CoreEffects.List.ToArray(), Effects.ToArray());
         }
 
         public void LoadFromDefinition(TypeDefinition definition, bool assignName)

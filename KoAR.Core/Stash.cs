@@ -44,12 +44,14 @@ namespace KoAR.Core
             set => MemoryUtilities.Write(Amalur.Bytes, Offset + 17, value);
         }
 
-        public void AddItem(uint typeId)
+        public void AddItem(TypeDefinition type)
         {
+            uint typeId = type.TypeId;
             ReadOnlySpan<byte> src = new byte[] { 0, 0, 0, 0, 0x0A, 0x03, 0, 0, 0, 0, 0, 0, 0x80, 0x3F, 0x01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF };
             Span<byte> temp = stackalloc byte[25];
             src.CopyTo(temp);
             MemoryUtilities.Write(temp, 0, typeId);
+            MemoryUtilities.Write(temp, 10, type.MaxDurability);
             Amalur.Bytes = MemoryUtilities.ReplaceBytes(Amalur.Bytes, Offset + 17, 0, temp);
             DataLength += 25;
             Count++;

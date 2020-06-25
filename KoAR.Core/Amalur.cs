@@ -4,6 +4,9 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Xml;
 using System.Xml.Linq;
 
 namespace KoAR.Core
@@ -27,9 +30,15 @@ namespace KoAR.Core
         public static Dictionary<uint, EffectInfo> DedupedEffects { get; } = new Dictionary<uint, EffectInfo>();
         public static Dictionary<uint, TypeDefinition> TypeDefinitions { get; } = new Dictionary<uint, TypeDefinition>();
         public static List<ItemMemoryInfo> Items { get; } = new List<ItemMemoryInfo>();
+
         private static int? _bagOffset;
 
         internal static byte[] Bytes { get; set; } = Array.Empty<byte>();
+
+        private static int _fileLengthOffset;
+        private static int _typeDataOffset;
+        private static Container ItemMemoryContainer;
+        private static Container CoreEffectContainer;
 
         public static void ReadFile(string path)
         {
@@ -122,35 +131,76 @@ namespace KoAR.Core
             set => MemoryUtilities.Write(Bytes, _bagOffset ??= GetBagOffset(), value);
         }
 
+        private static Dictionary<int, int> CollectAllCandidates(Container container)
+        {
+            var ix = container.FirstItemOffset;
+            var retVal = new Dictionary<int, int>(container.Count);
+            for (int i = 0; i < container.Count; i++)
+            {
+                var itemId = MemoryUtilities.Read<int>(Bytes, ix);
+                retVal.Add(itemId, ix);
+                ix += 21 + MemoryUtilities.Read<int>(Bytes, ix + 13);
+            }
+            return retVal;
+        }
+
         public static void GetAllEquipment()
         {
-            static List<int> FindAllCandidates()
-            {
-                ReadOnlySpan<byte> sequence = new byte[] { 0x0B, 0x00, 0x00, 0x00, 0x68, 0xD5, 0x24, 0x00, 0x03 };
-                ReadOnlySpan<byte> data = Bytes;
-                var results = new List<int>();
-                int ix = data.IndexOf(sequence);
-                int start = 0;
+            ReadOnlySpan<byte> typeIdSeq = new byte[] { 0x06, 0x2D, 0x75, 0x00, 0x05 };
+            ReadOnlySpan<byte> fileLengthSeq = new byte[8] { 0, 0, 0, 0, 0xA, 0, 0, 0 };
+            ReadOnlySpan<byte> ItemEffectMarker = new byte[5] { 0xD3, 0x34, 0x43, 0x00, 0x00 }; // 26 to first item. 5 to first DL, 13 to second DL. 18 for count
+            ReadOnlySpan<byte> coreEffectMarker = new byte[5] { 0xBB, 0xD5, 0x43, 0x00, 0x00 }; // 26 to first item. 5 to first DL, 13 to second DL. 18 for count
+            ReadOnlySpan<byte> data = Bytes;
+            _fileLengthOffset = data.IndexOf(fileLengthSeq) - 4;
+            ItemMemoryContainer = new Container(data.IndexOf(ItemEffectMarker));
+            CoreEffectContainer = new Container(data.IndexOf(coreEffectMarker));
 
-                while (ix != -1)
-                {
-                    results.Add(start + ix - 4);
-                    start += ix + sequence.Length;
-                    ix = data.Slice(start).IndexOf(sequence);
-                }
-                return results;
-            }
+            //static List<int> FindActors()
+            //{
+            //    ReadOnlySpan<byte> itemMemorySeq = new byte[] { 0x0B, 0x00, 0x00, 0x00,  };
+            //    ReadOnlySpan<byte> data = Bytes;
+            //    var results = new List<int>();
+            //    int ix = data.IndexOf(typeIdSequence);
+            //    int start = 0;
+
+            //    while (ix != -1)
+            //    {
+            //        if(TypeDefinitions.TryGetValue(MemoryUtilities.Read<uint>(data, ix + 13), out var definition))
+            //        results.Add(start + ix);
+            //        start += ix + typeIdSequence.Length;
+            //        ix = data.Slice(start).IndexOf(typeIdSequence);
+            //    }
+            //    return results;
+            //}
 
             Items.Clear();
-            var candidates = FindAllCandidates();
-            candidates.Add(Bytes.Length);
-            for (int i = 0; i < candidates.Count - 1; i++)
+
+            
+            int ixOfTypeId = data.IndexOf(typeIdSeq);
+            Span<byte> buffer = stackalloc byte[13];
+            ReadOnlySpan<byte> itemMemorySeq = new byte[] { 0x0B, 0x00, 0x00, 0x00, 0x68, 0xD5, 0x24, 0x00, 0x03 };
+            itemMemorySeq.CopyTo(buffer.Slice(4));
+            while(typeIdSeq.SequenceEqual(data.Slice(ixOfTypeId, 5)))
             {
-                if (ItemMemoryInfo.TryCreate(candidates[i], candidates[i + 1], out var item))
+                int id = MemoryUtilities.Read<int>(data, 5);
+                int length = MemoryUtilities.Read<int>(data, 9);
+
+                if(TypeDefinitions.TryGetValue(MemoryUtilities.Read<uint>(data, ixOfTypeId + 13), out var definition))
                 {
-                    Items.Add(item);
+                    MemoryUtilities.Write(buffer, 0, id);
+                    var itemIx = data.IndexOf(buffer);
                 }
+
+                ixOfTypeId += 13 + MemoryUtilities.Read<int>(data, 9);
             }
+            //candidates.Add(Bytes.Length);
+            //for (int i = 0; i < candidates.Count - 1; i++)
+            //{
+            //    if (ItemMemoryInfo.TryCreate(candidates[i], candidates[i + 1], out var item))
+            //    {
+            //        Items.Add(item);
+            //    }
+            //}
         }
 
         public static void WriteEquipmentBytes(ItemMemoryInfo item, bool forced = false)
