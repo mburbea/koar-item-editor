@@ -14,16 +14,23 @@ namespace KoAR.SaveEditor.Views
 
         object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            Type enumType;
-            if (value == null || !(enumType = value.GetType()).IsEnum)
+            if (value == null || !value.GetType().IsEnum)
             {
                 return DependencyProperty.UnsetValue;
             }
-            string uriString = $"pack://application:,,,/{Assembly.GetExecutingAssembly().GetName().Name};component/Resources/{Enum.GetName(enumType, value)}.png";
+            string uriString = $"pack://application:,,,/{Assembly.GetExecutingAssembly().GetName().Name};component/Resources/{value}.png";
             if (!EnumToBitmapConverter._dictionary.TryGetValue(uriString, out BitmapImage image))
             {
-                EnumToBitmapConverter._dictionary.Add(uriString, image = new BitmapImage(new Uri(uriString)));
-                image.Freeze();                
+                try
+                {
+                    image = new BitmapImage(new Uri(uriString));
+                }
+                catch (Exception)
+                {
+                    image = new BitmapImage();
+                }
+                image.Freeze();
+                EnumToBitmapConverter._dictionary.Add(uriString, image);
             }
             return image;
         }
