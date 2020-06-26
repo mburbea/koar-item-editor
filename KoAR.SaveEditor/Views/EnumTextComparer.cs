@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using KoAR.SaveEditor.Constructs;
 
 namespace KoAR.SaveEditor.Views
@@ -12,7 +13,7 @@ namespace KoAR.SaveEditor.Views
         {
         }
 
-        public int Compare(object? x, object? y)
+        public int Compare([AllowNull] object x, [AllowNull] object y)
         {
             if (x == y)
             {
