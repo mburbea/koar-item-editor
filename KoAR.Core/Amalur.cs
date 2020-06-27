@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Xml.Linq;
 
 namespace KoAR.Core
@@ -51,8 +52,8 @@ namespace KoAR.Core
 
         public static void Initialize(string? path = null)
         {
-            CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
-            CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
+            CultureInfo.DefaultThreadCurrentCulture = CultureInfo.DefaultThreadCurrentUICulture = 
+                Thread.CurrentThread.CurrentCulture = Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
 
             path ??= Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
             var effectCsv = Path.Combine(path, "CoreEffects.csv");
