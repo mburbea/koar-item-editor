@@ -51,6 +51,9 @@ namespace KoAR.Core
 
         public static void Initialize(string? path = null)
         {
+            CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
+            CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
+
             path ??= Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
             var effectCsv = Path.Combine(path, "CoreEffects.csv");
             if (!File.Exists(effectCsv))
