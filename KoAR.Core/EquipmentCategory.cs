@@ -8,11 +8,9 @@
         Legs,
         Hands,
         Feet,
-        Buckler,
         Chakrams,
         Daggers,
         Faeblades,
-        Talisman,
         Greatsword,
         Hammer,
         Longbow,
@@ -20,5 +18,7 @@
         Sceptre,
         Shield,
         Staff,
+        Necklace,
+        Ring
     }
 }

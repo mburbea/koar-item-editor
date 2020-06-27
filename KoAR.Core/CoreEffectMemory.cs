@@ -8,13 +8,21 @@ namespace KoAR.Core
     {
         private static class Offsets
         {
-            public const int MysteryInteger = 13;
-            public const int EffectCount = MysteryInteger + 4;
+            public const int DataLength = 13;
+            public const int EffectCount = DataLength + 4;
             public const int FirstEffect = EffectCount + 4;
         }
 
-        private static ReadOnlySpan<byte> Prefixes => new byte[] { 0x73, 0x8E, 0x57, 0x00, 0xAA, 0x6E, 0x58, 0x00, 0xF9, 0x03, 0x4B, 0x00, 0xF4, 0x43, 0x4B, 0x00 };
-        private static ReadOnlySpan<byte> Mystery => new byte[] { 0x14, 0x2C, 0x44, 0x5C, 0x74 };
+        private static ReadOnlySpan<byte> Prefixes => new byte[] { 
+            0x73, 0x8E, 0x57, 0x00,
+            0xAA, 0x6E, 0x58, 0x00,
+            0xF9, 0x03, 0x4B, 0x00,
+            0xF4, 0x43, 0x4B, 0x00,
+            0xEB, 0x87, 0x4B, 0x00,
+            0x0A, 0xC2, 0x4B, 0x00,
+            0x71, 0xFF, 0x4B, 0x00
+        };
+
         internal CoreEffectMemory(Span<byte> buffer)
         {
             ReadOnlySpan<byte> bytes = Amalur.Bytes;
@@ -23,7 +31,6 @@ namespace KoAR.Core
             ItemIndex = bytes.IndexOf(buffer);
             ReadOnlySpan<byte> span = bytes.Slice(ItemIndex);
             int count = span[Offsets.EffectCount];
-            DataLength = Offsets.FirstEffect + (count * 24) + 8;
             Bytes = span.Slice(0, DataLength).ToArray();
             var firstDisplayEffect = Offsets.FirstEffect + (count * 16) + 8;
             for (int i = 0; i < count; i++)
@@ -34,11 +41,10 @@ namespace KoAR.Core
 
         internal byte[] Bytes { get; private set; }
         public int ItemIndex { get; internal set; }
-        public int DataLength { get; internal set; }
+        public int DataLength {
 
-        public byte MysteryInteger
-        {
-            get => Bytes[Offsets.MysteryInteger];
+            get => MemoryUtilities.Read<int>(Bytes, Offsets.DataLength);
+            set => MemoryUtilities.Write(Bytes, Offsets.DataLength, value);
         }
 
         public int Count
@@ -68,7 +74,7 @@ namespace KoAR.Core
             }
             effectData[newCount * 2] = (ulong)(uint)newCount << 32;
             Bytes = MemoryUtilities.ReplaceBytes(Bytes, Offsets.FirstEffect, currentLength, MemoryMarshal.AsBytes(effectData));
-            Bytes[Offsets.MysteryInteger] = Mystery[newCount];
+           // Bytes[Offsets.DataLength] = Mystery[newCount];
             Bytes[Offsets.EffectCount] = (byte)newCount;
             return Bytes;
         }
