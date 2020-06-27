@@ -87,14 +87,12 @@ namespace ItemTesting
 
         static void Main()
         {
-            var path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save98.sav";
-            var bytes = File.ReadAllBytes(path);
-            ReadOnlySpan<byte> lengthMarker = new byte[8] { 0, 0, 0, 0, 0x0A, 0, 0, 0 };
-            var length = MemoryUtilities.Read<int>(bytes, bytes.AsSpan().IndexOf(lengthMarker) -4);
 
+            const string path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save98.sav";
+            Amalur.Initialize(@"..\..\..\..\Koar.SaveEditor\");
+            Amalur.ReadFile(path);
             //ConvertSymbolsToCsv(@"C:\temp\", @"C:\temp\output");
-            //Amalur.Initialize(@"..\..\..\..\Koar.SaveEditor\");
-            //Amalur.ReadFile(path);
+
             //var stash = new Stash();
             ////var variants = new[] { 1710274u, 1716331u, 1716334u, 1716335u, 1716338u };
             ////foreach (var variant in variants)

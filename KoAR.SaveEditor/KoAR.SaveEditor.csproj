@@ -33,7 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="app.ico" />
-    <None Remove="Resources\Armor.png" />
+    <None Remove="Resources\Armor_Socket.png" />
     <None Remove="Resources\Bleeding.png" />
     <None Remove="Resources\Bloodseeker.png" />
     <None Remove="Resources\Buckler.png" />
@@ -41,12 +41,17 @@
     <None Remove="Resources\Copy.png" />
     <None Remove="Resources\Daggers.png" />
     <None Remove="Resources\Delete.png" />
+    <None Remove="Resources\Epic_Socket.png" />
     <None Remove="Resources\Faeblades.png" />
+    <None Remove="Resources\Feet.png" />
     <None Remove="Resources\Fire.png" />
     <None Remove="Resources\Greatsword.png" />
     <None Remove="Resources\Hammer.png" />
+    <None Remove="Resources\Hands.png" />
+    <None Remove="Resources\Hat.png" />
     <None Remove="Resources\Help.png" />
     <None Remove="Resources\Ice.png" />
+    <None Remove="Resources\Legs.png" />
     <None Remove="Resources\Lightning.png" />
     <None Remove="Resources\Longbow.png" />
     <None Remove="Resources\Longsword.png" />
@@ -64,14 +69,23 @@
     <None Remove="Resources\Shield.png" />
     <None Remove="Resources\Staff.png" />
     <None Remove="Resources\Talisman.png" />
+    <None Remove="Resources\Torso.png" />
     <None Remove="Resources\Unknown.png" />
+    <None Remove="Resources\Utility_Socket.png" />
+    <None Remove="Resources\Weapon_Socket.jpg" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="WPFTaskDialog" Version="1.7.1" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="app.ico" />
-    <Resource Include="Resources\Armor.png" />
+    <Resource Include="Resources\Armor_Socket.png" />
+    <Resource Include="Resources\Epic_Socket.png" />
+    <Resource Include="Resources\Feet.png" />
+    <Resource Include="Resources\Hands.png" />
+    <Resource Include="Resources\Hat.png" />
+    <Resource Include="Resources\Legs.png" />
+    <Resource Include="Resources\Torso.png" />
     <Resource Include="Resources\Bleeding.png" />
     <Resource Include="Resources\BloodSeeker.png" />
     <Resource Include="Resources\Buckler.png" />
@@ -103,6 +117,8 @@
     <Resource Include="Resources\Staff.png" />
     <Resource Include="Resources\Talisman.png" />
     <Resource Include="Resources\Unknown.png" />
+    <Resource Include="Resources\Utility_Socket.png" />
+    <Resource Include="Resources\Weapon_Socket.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />

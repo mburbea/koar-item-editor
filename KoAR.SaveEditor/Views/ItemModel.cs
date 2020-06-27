@@ -22,7 +22,7 @@ namespace KoAR.SaveEditor.Views
             this.Effects = new EffectCollection(item.Effects);
         }
 
-        public EquipmentCategory Category => this.Item.Category;
+        public EquipmentCategory Category => this.Item.TypeDefinition.Category;
 
         public int CoreEffectCount => this.CoreEffects.Count;
 
@@ -82,12 +82,12 @@ namespace KoAR.SaveEditor.Views
             set => this.SetItemValue(value, this.Item.MaxDurability, value => this.Item.MaxDurability = value);
         }
 
-        public byte MysteryInteger => this.Item.CoreEffects.MysteryInteger;
+        public int MysteryInteger => this.Item.CoreEffects.DataLength;
 
         public uint TypeId
         {
-            get => this.Item.TypeId;
-            set => this.SetItemValue(value, this.Item.TypeId, value => this.Item.TypeId = value);
+            get => this.Item.TypeDefinition.TypeId;
+            set { }// this.SetItemValue(value, this.Item.TypeDefinition.TypeId, value => this.Item.TypeId = value);
         }
 
         internal ItemMemoryInfo Item { get; }
@@ -124,7 +124,7 @@ namespace KoAR.SaveEditor.Views
 
         internal void LoadFromTypeDefinition(TypeDefinition definition)
         {
-            this.Item.LoadFromDefinition(definition, false);
+            this.Item.LoadFromDefinition(definition);
             this.OnPropertyChanged(string.Empty);
         }
 

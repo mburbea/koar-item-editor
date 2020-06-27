@@ -6290,12 +6290,3 @@ Hands,01EBB1,1,Crude Iron Gauntlets,warrior_common01a_hands,20,Common,,None,Migh
 Torso,01EBAF,1,Crude Iron Cuirass,warrior_common01a_torso,20,Common,,None,Might,,1D1E801AC307
 Feet,01EBAE,1,Crude Iron Greaves,warrior_common01a_feet,20,Common,,None,Might,,1D1E84
 Torso,0154A9,0,Armor_Default,Armor_Default,100,Common,,None,None,,
-Longsword,14C2BB,1,Rusty Longsword,Sword_WoS_InitialWeapon,20,Common,,None,None,,
-Magic,0356DC,0,Storm Bolt,Sorcery_StormBolt,100,Infrequent,,None,None,1D79331D79321D79311D79301D792F1D792E1D792D,
-Legs,142A47,1,Ragged Leggings,Clothing_Tatters_Legs,7,Common,,None,None,,
-Torso,142A46,1,Tattered Shirt,Clothing_Tatters_Torso,10,Common,,None,None,,1AC307
-Beard,14EEF2,0,,Generic_Beard_05,0,Common,,None,None,,
-Tattoo,15D969,0,Test Tattoo 2,Generic_Tattoo_01,0,Common,,None,None,,
-FaceAccesory,16DD8B,0,,Generic_Jewelry_01,0,Common,,None,None,,
-Hair,152032,0,,Varani_Female_Hair_05,0,Common,,None,None,,
-Head,152278,0,,Varani_Female_Head_01,0,Common,,None,None,,

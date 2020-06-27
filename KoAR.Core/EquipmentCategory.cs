@@ -2,7 +2,6 @@
 {
     public enum EquipmentCategory
     {
-        Unknown = 0,
         Hat,
         Torso,
         Legs,

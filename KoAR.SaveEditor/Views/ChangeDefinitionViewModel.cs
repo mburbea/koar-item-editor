@@ -17,7 +17,7 @@ namespace KoAR.SaveEditor.Views
             List<TypeDefinition> definitions = Amalur.TypeDefinitions.Values.Where(definition => definition.Category == item.Category).ToList();
             if (!Amalur.TypeDefinitions.ContainsKey(this._typeId))
             {
-                definitions.Add(item.Item.GetTypeDefinition());
+                definitions.Add(item.Item.TypeDefinition);
             }
             this.Definitions = definitions;
             this.ChangeDefinitionCommand = new DelegateCommand(this.ChangeDefinition, () => this._typeId != this._item.TypeId);

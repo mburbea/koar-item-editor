@@ -23,19 +23,20 @@ namespace KoAR.Core
             0x71, 0xFF, 0x4B, 0x00
         };
 
-        internal CoreEffectMemory(Span<byte> buffer)
+        internal CoreEffectMemory(int coreOffset, int coreLength)
         {
-            ReadOnlySpan<byte> bytes = Amalur.Bytes;
-            ReadOnlySpan<byte> coreEffectSequence = new byte[] { 0x84, 0x60, 0x28, 0x00, 0x00 };
-            coreEffectSequence.CopyTo(buffer.Slice(8));
-            ItemIndex = bytes.IndexOf(buffer);
-            ReadOnlySpan<byte> span = bytes.Slice(ItemIndex);
-            int count = span[Offsets.EffectCount];
-            Bytes = span.Slice(0, DataLength).ToArray();
-            var firstDisplayEffect = Offsets.FirstEffect + (count * 16) + 8;
+            Bytes = Amalur.Bytes.AsSpan(coreOffset, coreLength).ToArray();
+            int count = Bytes[Offsets.EffectCount];
             for (int i = 0; i < count; i++)
             {
-                List.Add(MemoryUtilities.Read<uint>(span, firstDisplayEffect + i * 8));
+                var prefix = MemoryUtilities.Read<uint>(Bytes, Offsets.FirstEffect + (i * 16));
+                var effect = MemoryUtilities.Read<uint>(Bytes, Offsets.FirstEffect + (i * 16) + 4);
+                var expectedPrefix = MemoryUtilities.Read<uint>(Prefixes, i * 4);
+                if (prefix != expectedPrefix)
+                {
+                    Console.WriteLine("wtf");
+                }
+                List.Add(effect);
             }
         }
 
