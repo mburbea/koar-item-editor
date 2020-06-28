@@ -4,12 +4,9 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
-using System.Xml;
 using System.Xml.Linq;
 
 namespace KoAR.Core
@@ -186,14 +183,6 @@ namespace KoAR.Core
                 }
                 ixOfActor += datalength;
             }
-            //candidates.Add(Bytes.Length);
-            //for (int i = 0; i < candidates.Count - 1; i++)
-            //{
-            //    if (ItemMemoryInfo.TryCreate(candidates[i], candidates[i + 1], out var item))
-            //    {
-            //        Items.Add(item);
-            //    }
-            //}
         }
 
         public static void WriteEquipmentBytes(ItemMemoryInfo item, bool forced = false)

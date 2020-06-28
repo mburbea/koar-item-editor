@@ -6,7 +6,8 @@ namespace KoAR.Core
     {
         public uint Id { get; set; }
         public string? Modifier { get; set; }
-        public string? Name { get; set; }
+        public string Name { get; set; } = "";
+        public string? Flavor { get; set; }
         public Rarity Rarity { get; set; }
         public BuffType? Ap { get; set; }
         public BuffDescription[]? Desc { get; set; }
