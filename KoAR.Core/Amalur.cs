@@ -64,7 +64,8 @@ namespace KoAR.Core
 
         public static void Initialize(string? path = null)
         {
-            Thread.CurrentThread.CurrentCulture = Thread.CurrentThread.CurrentUICulture =
+            var sw = Stopwatch.StartNew();
+            Thread.CurrentThread.CurrentCulture = Thread.CurrentThread.CurrentUICulture = 
                 CultureInfo.DefaultThreadCurrentCulture = CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
             path ??= Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
             var effectCsv = Path.Combine(path, "CoreEffects.csv");
@@ -110,7 +111,7 @@ namespace KoAR.Core
             Buffs.AddRange(File.ReadLines(buffCsv).Skip(1).Select(r => (uint.Parse(r[..6], NumberStyles.HexNumber), r[7..])));
 
             TypeDefinitions.AddRange(TypeDefinition.ParseFile(Path.Combine(path, "items.csv")).Select(x => (x.TypeId, x)));
-
+            Debug.WriteLine(sw.Elapsed);
         }
 
         private static int GetBagOffset()
