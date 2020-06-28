@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System;
+using System.Text.Json.Serialization;
 
 namespace KoAR.Core
 {
@@ -6,11 +7,11 @@ namespace KoAR.Core
     {
         public uint Id { get; set; }
         public string? Modifier { get; set; }
-        public string Name { get; set; } = "";
+        public string Name { get; set; } = string.Empty;
         public string? Flavor { get; set; }
         public Rarity Rarity { get; set; }
-        public BuffType? Ap { get; set; }
-        public BuffDescription[]? Desc { get; set; }
+        public BuffType Ap { get; set; }
+        public BuffDescription[] Desc { get; set; } = Array.Empty<BuffDescription>();
     }
 
     public class BuffDescription

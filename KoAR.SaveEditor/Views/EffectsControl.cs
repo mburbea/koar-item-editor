@@ -145,7 +145,23 @@ namespace KoAR.SaveEditor.Views
                 {
                     return ((IEffectInfo)translations[code]).DisplayText;
                 }
-                return buffs.TryGetValue(code, out Buff buff) ? buff.Name! : "Unknown";
+                if (buffs.TryGetValue(code, out Buff buff))
+                {
+                    if (buff.Flavor != null)
+                    {
+                        return buff.Flavor;
+                    }
+                    if (buff.Ap != BuffType.Suffix && buff.Ap != BuffType.Prefix && buff.Ap != BuffType.Self && buff.Modifier != null)
+                    {
+                        return buff.Modifier;
+                    }
+                    if (buff.Desc.Length != 0)
+                    {
+                        return string.Join("; ", buff.Desc.Select(desc => desc.Text));
+                    }
+                    return buff.Name;
+                }
+                return "Unknown";
             }
 
             object[] IMultiValueConverter.ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture) => throw new NotImplementedException();
