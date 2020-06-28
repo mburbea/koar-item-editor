@@ -10,6 +10,7 @@ using Microsoft.Data.SqlClient;
 using Disposable;
 using KoAR.Core;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 
 namespace ItemTesting
 {
@@ -91,6 +92,19 @@ namespace ItemTesting
             const string path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save98.sav";
             Amalur.Initialize(@"..\..\..\..\Koar.SaveEditor\");
             Amalur.ReadFile(path);
+            int i = 0;
+            foreach(var group in CoreEffectMemory.SetOfPrefixes.GroupBy(x=> x.prefix).OrderByDescending(x=> x.Count()))
+            {
+                var what = (from item in Amalur.Items
+                           join id in @group.Select(x => x.itemId)
+                             on item.ItemId equals id
+                           select item.TypeDefinition);
+
+                var poo = what.Select(x => x.Category).Distinct();
+                var all_merchant = what.All(x => x.InternalName.Contains("merchant", StringComparison.OrdinalIgnoreCase));
+                Console.WriteLine($"{group.Key}\t{group.Key:X8}\t{string.Join(',', group.Select(x => x.offset).Distinct())}\t{group.Count()}\t{all_merchant}\t{string.Join(',', poo)}");
+            }
+            Console.WriteLine($"Total:{CoreEffectMemory.SetOfPrefixes.Count}");
             //ConvertSymbolsToCsv(@"C:\temp\", @"C:\temp\output");
 
             //var stash = new Stash();

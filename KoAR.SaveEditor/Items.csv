@@ -1,4 +1,3 @@
-Category,TypeId,Level,Name,Internal_Name,Durability,Rarity,Sockets,Element,ArmorType,Effects,CoreEffects
 Staff,1D182C,36,Electrifying Staff of Bloodletting,staff_merchant_rare04c,28,Rare,,Lightning,None,1C3D801C3D90,
 Staff,1D182B,36,Arctic Staff of Gluttony,staff_merchant_rare04b,28,Rare,,Ice,None,1C3D7F1C3D92,
 Staff,1D182A,36,Mage's Staff of the Inferno,staff_merchant_rare04a,28,Infrequent,,Fire,None,,1C429314221F
@@ -245,41 +244,41 @@ Daggers,1D16DD,5,Ruthless Daggers,daggers_merchant_infrequent01a,22,Infrequent,,
 Daggers,1D16DC,2,Iron Daggers,daggers_merchant_common01c,20,Infrequent,W,None,None,,
 Daggers,1D16DB,2,Daggers of Skill,daggers_merchant_common01b,20,Rare,,None,None,,07AA70
 Daggers,1D16DA,2,Erosive Daggers,daggers_merchant_common01a,20,Infrequent,,None,None,1C3D82,
-Greathammer,1D16CD,36,Rotting Hammer of Precision,greathammer_merchant_rare04c,28,Rare,,None,None,1C3D89,1C3EB6
-Greathammer,1D16CC,36,Arctic Hammer of Bloodletting,greathammer_merchant_rare04b,28,Rare,,None,None,1C3D7F1C3D90,
-Greathammer,1D16CA,36,Staggering Hammer,greathammer_merchant_infrequent04c,28,Rare,,None,None,,1CBD5A
-Greathammer,1D16C9,36,Electrifying Hammer,greathammer_merchant_infrequent04b,28,Infrequent,,None,None,1C3D80,
-Greathammer,1D16C8,33,Prismere Hammer,greathammer_merchant_infrequent04a,28,Infrequent,WUU,None,None,,
-Greathammer,1D16C7,33,Prismere Hammer,greathammer_merchant_common04c,28,Infrequent,WU,None,None,,
-Greathammer,1D16C6,33,Hammer of Ferocity,greathammer_merchant_common04b,28,Rare,,None,None,1C3D91,
-Greathammer,1D16C5,33,Bolstering Hammer,greathammer_merchant_common04a,28,Infrequent,,None,None,140BC8,
-Greathammer,1D16C4,33,Prismere Hammer,greathammer_merchant_rare03c,28,Infrequent,WUU,None,None,,
-Greathammer,1D16C3,30,Glacial Hammer of Gloom,greathammer_merchant_rare03b,28,Rare,,None,None,140C62,142297
-Greathammer,1D16C2,30,Scorching Hammer of the Gladiator,greathammer_merchant_rare03a,28,Rare,,None,None,140CAD07AA8F,
-Greathammer,1D16C1,27,Hammer of Execution,greathammer_merchant_infrequent03c,26,Rare,,None,None,,1C3EB5
-Greathammer,1D16C0,27,Tyrant's Hammer,greathammer_merchant_infrequent03b,26,Infrequent,,None,None,,1C4229
-Greathammer,1D16BF,24,Sylvanite Hammer,greathammer_merchant_infrequent03a,26,Infrequent,WUU,None,None,,
-Greathammer,1D16BE,24,Sylvanite Hammer,greathammer_merchant_common03c,26,Infrequent,WU,None,None,,
-Greathammer,1D16BD,24,Hammer of Eradicating,greathammer_merchant_common03b,26,Infrequent,,None,None,,1421ED
-Greathammer,1D16BC,24,Jolting Hammer,greathammer_merchant_common03a,26,Infrequent,,None,None,140D4F,
-Greathammer,1D16BB,24,Sylvanite Hammer,greathammer_merchant_rare02c,26,Infrequent,WUU,None,None,,
-Greathammer,1D16BA,24,Incinerating Hammer of Ravening,greathammer_merchant_rare02b,26,Rare,,None,None,140CAC13AE20,
-Greathammer,1D16B9,24,Jolting Hammer of the Gale,greathammer_merchant_rare02a,26,Infrequent,,None,None,140D4F,07A954
-Greathammer,1D16B8,15,Azurite Hammer,greathammer_merchant_infrequent02c,24,Infrequent,WU,None,None,,
-Greathammer,1D16B7,15,Rimy Hammer,greathammer_merchant_infrequent02b,24,Infrequent,,None,None,079F8A,
-Greathammer,1D16B6,15,Bewildering Hammer,greathammer_merchant_infrequent02a,24,Rare,,None,None,,07A033
-Greathammer,1D16B5,12,Surging Hammer,greathammer_merchant_common02c,24,Infrequent,,None,None,07A01F,
-Greathammer,1D16B4,12,Hammer of Breadth,greathammer_merchant_common02b,24,Rare,,None,None,,080B0A
-Greathammer,1D16B3,12,Dazing Hammer,greathammer_merchant_common02a,24,Rare,,None,None,,07A02D
-Greathammer,1D16B2,7,Venomous Hammer of Leeching,greathammer_merchant_rare01c,22,Rare,,None,None,1C3D8513AE17,
-Greathammer,1D16B1,7,Emboldening Hammer of Daybreak,greathammer_merchant_rare01b,22,Rare,,None,None,079F5A,0809B0
-Greathammer,1D16B0,7,Crackling Hammer of the Squall,greathammer_merchant_rare01a,22,Infrequent,,None,None,07A020,07A952
-Greathammer,1D16AF,7,Steel Hammer,greathammer_merchant_infrequent01c,22,Infrequent,WU,None,None,,
-Greathammer,1D16AE,5,Hammer of Luck,greathammer_merchant_infrequent01b,22,Infrequent,,None,None,,080B00
-Greathammer,1D16AD,5,Frosted Hammer,greathammer_merchant_infrequent01a,22,Infrequent,,None,None,079F87,
-Greathammer,1D16AC,2,Iron Hammer,greathammer_merchant_common01c,20,Infrequent,W,None,None,,
-Greathammer,1D16AB,2,Smoldering Hammer,greathammer_merchant_common01b,20,Infrequent,,None,None,079F8B,
-Greathammer,1D16AA,2,Iron Hammer,greathammer_merchant_common01a,20,Common,,None,None,,
+Hammer,1D16CD,36,Rotting Hammer of Precision,greathammer_merchant_rare04c,28,Rare,,None,None,1C3D89,1C3EB6
+Hammer,1D16CC,36,Arctic Hammer of Bloodletting,greathammer_merchant_rare04b,28,Rare,,None,None,1C3D7F1C3D90,
+Hammer,1D16CA,36,Staggering Hammer,greathammer_merchant_infrequent04c,28,Rare,,None,None,,1CBD5A
+Hammer,1D16C9,36,Electrifying Hammer,greathammer_merchant_infrequent04b,28,Infrequent,,None,None,1C3D80,
+Hammer,1D16C8,33,Prismere Hammer,greathammer_merchant_infrequent04a,28,Infrequent,WUU,None,None,,
+Hammer,1D16C7,33,Prismere Hammer,greathammer_merchant_common04c,28,Infrequent,WU,None,None,,
+Hammer,1D16C6,33,Hammer of Ferocity,greathammer_merchant_common04b,28,Rare,,None,None,1C3D91,
+Hammer,1D16C5,33,Bolstering Hammer,greathammer_merchant_common04a,28,Infrequent,,None,None,140BC8,
+Hammer,1D16C4,33,Prismere Hammer,greathammer_merchant_rare03c,28,Infrequent,WUU,None,None,,
+Hammer,1D16C3,30,Glacial Hammer of Gloom,greathammer_merchant_rare03b,28,Rare,,None,None,140C62,142297
+Hammer,1D16C2,30,Scorching Hammer of the Gladiator,greathammer_merchant_rare03a,28,Rare,,None,None,140CAD07AA8F,
+Hammer,1D16C1,27,Hammer of Execution,greathammer_merchant_infrequent03c,26,Rare,,None,None,,1C3EB5
+Hammer,1D16C0,27,Tyrant's Hammer,greathammer_merchant_infrequent03b,26,Infrequent,,None,None,,1C4229
+Hammer,1D16BF,24,Sylvanite Hammer,greathammer_merchant_infrequent03a,26,Infrequent,WUU,None,None,,
+Hammer,1D16BE,24,Sylvanite Hammer,greathammer_merchant_common03c,26,Infrequent,WU,None,None,,
+Hammer,1D16BD,24,Hammer of Eradicating,greathammer_merchant_common03b,26,Infrequent,,None,None,,1421ED
+Hammer,1D16BC,24,Jolting Hammer,greathammer_merchant_common03a,26,Infrequent,,None,None,140D4F,
+Hammer,1D16BB,24,Sylvanite Hammer,greathammer_merchant_rare02c,26,Infrequent,WUU,None,None,,
+Hammer,1D16BA,24,Incinerating Hammer of Ravening,greathammer_merchant_rare02b,26,Rare,,None,None,140CAC13AE20,
+Hammer,1D16B9,24,Jolting Hammer of the Gale,greathammer_merchant_rare02a,26,Infrequent,,None,None,140D4F,07A954
+Hammer,1D16B8,15,Azurite Hammer,greathammer_merchant_infrequent02c,24,Infrequent,WU,None,None,,
+Hammer,1D16B7,15,Rimy Hammer,greathammer_merchant_infrequent02b,24,Infrequent,,None,None,079F8A,
+Hammer,1D16B6,15,Bewildering Hammer,greathammer_merchant_infrequent02a,24,Rare,,None,None,,07A033
+Hammer,1D16B5,12,Surging Hammer,greathammer_merchant_common02c,24,Infrequent,,None,None,07A01F,
+Hammer,1D16B4,12,Hammer of Breadth,greathammer_merchant_common02b,24,Rare,,None,None,,080B0A
+Hammer,1D16B3,12,Dazing Hammer,greathammer_merchant_common02a,24,Rare,,None,None,,07A02D
+Hammer,1D16B2,7,Venomous Hammer of Leeching,greathammer_merchant_rare01c,22,Rare,,None,None,1C3D8513AE17,
+Hammer,1D16B1,7,Emboldening Hammer of Daybreak,greathammer_merchant_rare01b,22,Rare,,None,None,079F5A,0809B0
+Hammer,1D16B0,7,Crackling Hammer of the Squall,greathammer_merchant_rare01a,22,Infrequent,,None,None,07A020,07A952
+Hammer,1D16AF,7,Steel Hammer,greathammer_merchant_infrequent01c,22,Infrequent,WU,None,None,,
+Hammer,1D16AE,5,Hammer of Luck,greathammer_merchant_infrequent01b,22,Infrequent,,None,None,,080B00
+Hammer,1D16AD,5,Frosted Hammer,greathammer_merchant_infrequent01a,22,Infrequent,,None,None,079F87,
+Hammer,1D16AC,2,Iron Hammer,greathammer_merchant_common01c,20,Infrequent,W,None,None,,
+Hammer,1D16AB,2,Smoldering Hammer,greathammer_merchant_common01b,20,Infrequent,,None,None,079F8B,
+Hammer,1D16AA,2,Iron Hammer,greathammer_merchant_common01a,20,Common,,None,None,,
 Greatsword,1D16A4,36,Staggering Greatsword of Annihilating,sword2h_merchant_rare04c,28,Rare,,None,None,,1CBD5A1421EE
 Greatsword,1D16A3,36,Assaulter's Greatsword of Devouring,sword2h_merchant_rare04b,28,Rare,,None,None,1C3D8F,1C4228
 Greatsword,1D16A2,36,Electrifying Greatsword of the Mystic,sword2h_merchant_rare04a,28,Infrequent,,None,None,1C3D80,1C421D
@@ -690,24 +689,24 @@ Longsword,1D10EF,5,Longsword of Puncturing,sword1h_merchant_infrequent01a,22,Inf
 Longsword,1D10EC,2,Iron Longsword,sword1h_merchant_common01c,20,Infrequent,W,None,None,,
 Longsword,1D10E0,2,Numbing Longsword,sword1h_merchant_common01b,20,Infrequent,,None,None,079F86,
 Longsword,1D10DF,2,Iron Longsword,sword1h_merchant_common01a,20,Common,,None,None,,
-Greathammer,1D0B56,45,Mortrost,greathammer_unique13s,42,Unique,,None,None,1CC793,1CC79D
-Greathammer,1D0B55,44,Mortrost,greathammer_unique13r,42,Unique,,None,None,1CC793,1CC79D
-Greathammer,1D0B54,42,Mortrost,greathammer_unique13q,42,Unique,,None,None,1CC793,1CC79D
-Greathammer,1D0B53,40,Mortrost,greathammer_unique13p,42,Unique,,None,None,1CC793,1CC79D
-Greathammer,1D0B52,38,Mortrost,greathammer_unique13o,42,Unique,,None,None,1CC793,1CC79D
-Greathammer,1D0B51,36,Mortrost,greathammer_unique13n,42,Unique,,None,None,1CC793,1CC79D
-Greathammer,1D0B50,34,Mortrost,greathammer_unique13m,42,Unique,,None,None,1CC793,1CC79D
-Greathammer,1D0B4F,32,Mortrost,greathammer_unique13l,42,Unique,,None,None,1CC793,1CC79D
-Greathammer,1D0B4E,30,Mortrost,greathammer_unique13k,42,Unique,,None,None,1CC793,1CC79D
-Greathammer,1D0B4D,28,Mortrost,greathammer_unique13j,42,Unique,,None,None,1CC793,1CC79D
-Greathammer,1D0B4C,26,Mortrost,greathammer_unique13i,42,Unique,,None,None,1CC793,1CC79D
-Greathammer,1D0B4B,24,Mortrost,greathammer_unique13h,42,Unique,,None,None,1CC793,1CC79D
-Greathammer,1D0B4A,22,Mortrost,greathammer_unique13g,42,Unique,,None,None,1CC793,1CC79D
-Greathammer,1CEFCE,40,Nearth's Hammer,greathammer_unique11f,48,Unique,,None,None,1CC78E,1CC790
-Greathammer,1CEFCD,38,Nearth's Hammer,greathammer_unique11e,48,Unique,,None,None,1CC78E,1CC790
-Greathammer,1CEFCC,32,Nearth's Hammer,greathammer_unique11d,48,Unique,,None,None,1CC78E,1CC790
-Greathammer,1CEFCB,36,Nearth's Hammer,greathammer_unique11c,48,Unique,,None,None,1CC78E,1CC790
-Greathammer,1CEFCA,34,Nearth's Hammer,greathammer_unique11b,48,Unique,,None,None,1CC78E,1CC790
+Hammer,1D0B56,45,Mortrost,greathammer_unique13s,42,Unique,,None,None,1CC793,1CC79D
+Hammer,1D0B55,44,Mortrost,greathammer_unique13r,42,Unique,,None,None,1CC793,1CC79D
+Hammer,1D0B54,42,Mortrost,greathammer_unique13q,42,Unique,,None,None,1CC793,1CC79D
+Hammer,1D0B53,40,Mortrost,greathammer_unique13p,42,Unique,,None,None,1CC793,1CC79D
+Hammer,1D0B52,38,Mortrost,greathammer_unique13o,42,Unique,,None,None,1CC793,1CC79D
+Hammer,1D0B51,36,Mortrost,greathammer_unique13n,42,Unique,,None,None,1CC793,1CC79D
+Hammer,1D0B50,34,Mortrost,greathammer_unique13m,42,Unique,,None,None,1CC793,1CC79D
+Hammer,1D0B4F,32,Mortrost,greathammer_unique13l,42,Unique,,None,None,1CC793,1CC79D
+Hammer,1D0B4E,30,Mortrost,greathammer_unique13k,42,Unique,,None,None,1CC793,1CC79D
+Hammer,1D0B4D,28,Mortrost,greathammer_unique13j,42,Unique,,None,None,1CC793,1CC79D
+Hammer,1D0B4C,26,Mortrost,greathammer_unique13i,42,Unique,,None,None,1CC793,1CC79D
+Hammer,1D0B4B,24,Mortrost,greathammer_unique13h,42,Unique,,None,None,1CC793,1CC79D
+Hammer,1D0B4A,22,Mortrost,greathammer_unique13g,42,Unique,,None,None,1CC793,1CC79D
+Hammer,1CEFCE,40,Nearth's Hammer,greathammer_unique11f,48,Unique,,None,None,1CC78E,1CC790
+Hammer,1CEFCD,38,Nearth's Hammer,greathammer_unique11e,48,Unique,,None,None,1CC78E,1CC790
+Hammer,1CEFCC,32,Nearth's Hammer,greathammer_unique11d,48,Unique,,None,None,1CC78E,1CC790
+Hammer,1CEFCB,36,Nearth's Hammer,greathammer_unique11c,48,Unique,,None,None,1CC78E,1CC790
+Hammer,1CEFCA,34,Nearth's Hammer,greathammer_unique11b,48,Unique,,None,None,1CC78E,1CC790
 Legs,1CEFC6,20,Double-Plated Chausses,warrior_unique10_legs_f,48,Unique,,None,Might,,1D1E811CD499
 Legs,1CEFC5,18,Double-Plated Chausses,warrior_unique10_legs_e,48,Unique,,None,Might,,1D1E811CD499
 Legs,1CEFC4,16,Double-Plated Chausses,warrior_unique10_legs_d,48,Unique,,None,Might,,1D1E811CD499
@@ -745,11 +744,11 @@ Torso,1CCBEE,18,Armor of the Fallen,warrior_unique10_torso_e,46,Unique,,None,Mig
 Torso,1CCBED,16,Armor of the Fallen,warrior_unique10_torso_d,46,Unique,,None,Might,,1D1E801AC3071CCCB01CCC71
 Torso,1CCBEC,14,Armor of the Fallen,warrior_unique10_torso_c,46,Unique,,None,Might,,1D1E801AC3071CCCAF1CCC70
 Torso,1CCBEB,12,Armor of the Fallen,warrior_unique10_torso_b,44,Unique,,None,Might,,1D1E801AC3071CCCAE1CCC6F
-Greathammer,1CC7A5,20,Mortrost,greathammer_unique13f,44,Unique,,None,None,1CC793,1CC79D
-Greathammer,1CC7A4,18,Mortrost,greathammer_unique13e,44,Unique,,None,None,1CC793,1CC79D
-Greathammer,1CC7A3,16,Mortrost,greathammer_unique13d,44,Unique,,None,None,1CC793,1CC79D
-Greathammer,1CC7A2,14,Mortrost,greathammer_unique13c,42,Unique,,None,None,1CC793,1CC79D
-Greathammer,1CC7A1,12,Mortrost,greathammer_unique13b,42,Unique,,None,None,1CC793,1CC79D
+Hammer,1CC7A5,20,Mortrost,greathammer_unique13f,44,Unique,,None,None,1CC793,1CC79D
+Hammer,1CC7A4,18,Mortrost,greathammer_unique13e,44,Unique,,None,None,1CC793,1CC79D
+Hammer,1CC7A3,16,Mortrost,greathammer_unique13d,44,Unique,,None,None,1CC793,1CC79D
+Hammer,1CC7A2,14,Mortrost,greathammer_unique13c,42,Unique,,None,None,1CC793,1CC79D
+Hammer,1CC7A1,12,Mortrost,greathammer_unique13b,42,Unique,,None,None,1CC793,1CC79D
 Greatsword,201E55,42,Primal Greatsword,sword2h_dlc2_primal14,25,Infrequent,,Primal,None,20700A,
 Greatsword,201E54,39,Primal Greatsword,sword2h_dlc2_primal13,25,Infrequent,,Primal,None,20700A,
 Greatsword,201E53,36,Primal Greatsword,sword2h_dlc2_primal12,25,Infrequent,,Primal,None,20700A,
@@ -834,20 +833,20 @@ Longbow,201E03,12,Primal Bow,longbow_dlc2_primal04,25,Infrequent,,Primal,None,20
 Longbow,201E02,9,Primal Bow,longbow_dlc2_primal03,25,Infrequent,,Primal,None,20700A,
 Longbow,201E01,6,Primal Bow,longbow_dlc2_primal02,25,Infrequent,,Primal,None,20700A,
 Longbow,201E00,3,Primal Bow,longbow_dlc2_primal01,25,Infrequent,,Primal,None,20700A,
-Greathammer,201DFF,42,Primal Greathammer,greathammer_dlc2_primal14,25,Infrequent,,Primal,None,20700A,
-Greathammer,201DFE,39,Primal Greathammer,greathammer_dlc2_primal13,25,Infrequent,,Primal,None,20700A,
-Greathammer,201DFD,36,Primal Greathammer,greathammer_dlc2_primal12,25,Infrequent,,Primal,None,20700A,
-Greathammer,201DFC,33,Primal Greathammer,greathammer_dlc2_primal11,25,Infrequent,,Primal,None,20700A,
-Greathammer,201DFB,30,Primal Greathammer,greathammer_dlc2_primal10,25,Infrequent,,Primal,None,20700A,
-Greathammer,201DFA,27,Primal Greathammer,greathammer_dlc2_primal09,25,Infrequent,,Primal,None,20700A,
-Greathammer,201DF9,24,Primal Greathammer,greathammer_dlc2_primal08,25,Infrequent,,Primal,None,20700A,
-Greathammer,201DF8,21,Primal Greathammer,greathammer_dlc2_primal07,25,Infrequent,,Primal,None,20700A,
-Greathammer,201DF7,18,Primal Greathammer,greathammer_dlc2_primal06,25,Infrequent,,Primal,None,20700A,
-Greathammer,201DF6,15,Primal Greathammer,greathammer_dlc2_primal05,25,Infrequent,,Primal,None,20700A,
-Greathammer,201DF5,12,Primal Greathammer,greathammer_dlc2_primal04,25,Infrequent,,Primal,None,20700A,
-Greathammer,201DF4,9,Primal Greathammer,greathammer_dlc2_primal03,25,Infrequent,,Primal,None,20700A,
-Greathammer,201DF3,6,Primal Greathammer,greathammer_dlc2_primal02,25,Infrequent,,Primal,None,20700A,
-Greathammer,201DF2,3,Primal Greathammer,greathammer_dlc2_primal01,25,Infrequent,,Primal,None,20700A,
+Hammer,201DFF,42,Primal Greathammer,greathammer_dlc2_primal14,25,Infrequent,,Primal,None,20700A,
+Hammer,201DFE,39,Primal Greathammer,greathammer_dlc2_primal13,25,Infrequent,,Primal,None,20700A,
+Hammer,201DFD,36,Primal Greathammer,greathammer_dlc2_primal12,25,Infrequent,,Primal,None,20700A,
+Hammer,201DFC,33,Primal Greathammer,greathammer_dlc2_primal11,25,Infrequent,,Primal,None,20700A,
+Hammer,201DFB,30,Primal Greathammer,greathammer_dlc2_primal10,25,Infrequent,,Primal,None,20700A,
+Hammer,201DFA,27,Primal Greathammer,greathammer_dlc2_primal09,25,Infrequent,,Primal,None,20700A,
+Hammer,201DF9,24,Primal Greathammer,greathammer_dlc2_primal08,25,Infrequent,,Primal,None,20700A,
+Hammer,201DF8,21,Primal Greathammer,greathammer_dlc2_primal07,25,Infrequent,,Primal,None,20700A,
+Hammer,201DF7,18,Primal Greathammer,greathammer_dlc2_primal06,25,Infrequent,,Primal,None,20700A,
+Hammer,201DF6,15,Primal Greathammer,greathammer_dlc2_primal05,25,Infrequent,,Primal,None,20700A,
+Hammer,201DF5,12,Primal Greathammer,greathammer_dlc2_primal04,25,Infrequent,,Primal,None,20700A,
+Hammer,201DF4,9,Primal Greathammer,greathammer_dlc2_primal03,25,Infrequent,,Primal,None,20700A,
+Hammer,201DF3,6,Primal Greathammer,greathammer_dlc2_primal02,25,Infrequent,,Primal,None,20700A,
+Hammer,201DF2,3,Primal Greathammer,greathammer_dlc2_primal01,25,Infrequent,,Primal,None,20700A,
 Daggers,201DF1,42,Primal Daggers,daggers_dlc2_primal14,25,Infrequent,,Primal,None,20700A,
 Daggers,201DF0,39,Primal Daggers,daggers_dlc2_primal13,25,Infrequent,,Primal,None,20700A,
 Daggers,201DEF,36,Primal Daggers,daggers_dlc2_primal12,25,Infrequent,,Primal,None,20700A,
@@ -936,10 +935,10 @@ Longsword,1FDF66,44,The Beast,sword1h_MightPack_01_v,25,Unique,,None,None,1FE9F0
 Longsword,1FDF65,42,The Beast,sword1h_MightPack_01_u,25,Unique,,None,None,1FE9F01FEA05,
 Longsword,1FDF64,40,The Beast,sword1h_MightPack_01_t,25,Unique,,None,None,1FE9F01FEA04,
 Longsword,1FDF63,38,The Beast,sword1h_MightPack_01_s,25,Unique,,None,None,1FE9F01FEA03,
-Greathammer,1FDF61,44,The Mountain,greathammer_MightPack_01_v,25,Unique,,None,None,1FEA341FEA4A,
-Greathammer,1FDF60,42,The Mountain,greathammer_MightPack_01_u,25,Unique,,None,None,1FEA341FEA49,
-Greathammer,1FDF5F,40,The Mountain,greathammer_MightPack_01_t,25,Unique,,None,None,1FEA341FEA48,
-Greathammer,1FDF5E,38,The Mountain,greathammer_MightPack_01_s,25,Unique,,None,None,1FEA341FEA47,
+Hammer,1FDF61,44,The Mountain,greathammer_MightPack_01_v,25,Unique,,None,None,1FEA341FEA4A,
+Hammer,1FDF60,42,The Mountain,greathammer_MightPack_01_u,25,Unique,,None,None,1FEA341FEA49,
+Hammer,1FDF5F,40,The Mountain,greathammer_MightPack_01_t,25,Unique,,None,None,1FEA341FEA48,
+Hammer,1FDF5E,38,The Mountain,greathammer_MightPack_01_s,25,Unique,,None,None,1FEA341FEA47,
 Torso,1FDF5D,44,The Running Man Armor,rogue_FinessePack_set01_torso_v,25,Set,,None,Finesse,,081EDA1AC3071FF0E2
 Torso,1FDF5C,42,The Running Man Armor,rogue_FinessePack_set01_torso_u,25,Set,,None,Finesse,,081EDA1AC3071FF0E1
 Torso,1FDF5B,40,The Running Man Armor,rogue_FinessePack_set01_torso_t,25,Set,,None,Finesse,,081EDA1AC3071FF0E0
@@ -1147,23 +1146,23 @@ Shield,1FD62D,10,The Tower,kiteshield_MightPack_01_e,30,Unique,,None,Might,,0832
 Shield,1FD62B,8,The Tower,kiteshield_MightPack_01_d,30,Unique,,None,Might,,0832F61FEB611FEB65
 Shield,1FD62A,6,The Tower,kiteshield_MightPack_01_c,30,Unique,,None,Might,,0832F61FEB611FEB64
 Shield,1FD629,4,The Tower,kiteshield_MightPack_01_b,30,Unique,,None,Might,,0832F61FEB611FEB63
-Greathammer,1FD628,36,The Mountain,greathammer_MightPack_01_r,25,Unique,,None,None,1FEA341FEA46,
-Greathammer,1FD627,34,The Mountain,greathammer_MightPack_01_q,25,Unique,,None,None,1FEA341FEA45,
-Greathammer,1FD626,32,The Mountain,greathammer_MightPack_01_p,25,Unique,,None,None,1FEA341FEA44,
-Greathammer,1FD625,30,The Mountain,greathammer_MightPack_01_o,25,Unique,,None,None,1FEA341FEA43,
-Greathammer,1FD624,28,The Mountain,greathammer_MightPack_01_n,25,Unique,,None,None,1FEA341FEA42,
-Greathammer,1FD623,26,The Mountain,greathammer_MightPack_01_m,25,Unique,,None,None,1FEA341FEA41,
-Greathammer,1FD622,24,The Mountain,greathammer_MightPack_01_l,25,Unique,,None,None,1FEA341FEA40,
-Greathammer,1FD621,22,The Mountain,greathammer_MightPack_01_k,25,Unique,,None,None,1FEA341FEA3F,
-Greathammer,1FD61F,20,The Mountain,greathammer_MightPack_01_j,25,Unique,,None,None,1FEA341FEA3E,
-Greathammer,1FD61D,18,The Mountain,greathammer_MightPack_01_i,25,Unique,,None,None,1FEA341FEA3D,
-Greathammer,1FD61C,16,The Mountain,greathammer_MightPack_01_h,25,Unique,,None,None,1FEA341FEA3C,
-Greathammer,1FD61A,14,The Mountain,greathammer_MightPack_01_g,25,Unique,,None,None,1FEA341FEA3B,
-Greathammer,1FD618,12,The Mountain,greathammer_MightPack_01_f,25,Unique,,None,None,1FEA341FEA3A,
-Greathammer,1FD616,10,The Mountain,greathammer_MightPack_01_e,25,Unique,,None,None,1FEA341FEA39,
-Greathammer,1FD614,8,The Mountain,greathammer_MightPack_01_d,25,Unique,,None,None,1FEA341FEA38,
-Greathammer,1FD613,6,The Mountain,greathammer_MightPack_01_c,25,Unique,,None,None,1FEA341FEA37,
-Greathammer,1FD612,4,The Mountain,greathammer_MightPack_01_b,25,Unique,,None,None,1FEA341FEA36,
+Hammer,1FD628,36,The Mountain,greathammer_MightPack_01_r,25,Unique,,None,None,1FEA341FEA46,
+Hammer,1FD627,34,The Mountain,greathammer_MightPack_01_q,25,Unique,,None,None,1FEA341FEA45,
+Hammer,1FD626,32,The Mountain,greathammer_MightPack_01_p,25,Unique,,None,None,1FEA341FEA44,
+Hammer,1FD625,30,The Mountain,greathammer_MightPack_01_o,25,Unique,,None,None,1FEA341FEA43,
+Hammer,1FD624,28,The Mountain,greathammer_MightPack_01_n,25,Unique,,None,None,1FEA341FEA42,
+Hammer,1FD623,26,The Mountain,greathammer_MightPack_01_m,25,Unique,,None,None,1FEA341FEA41,
+Hammer,1FD622,24,The Mountain,greathammer_MightPack_01_l,25,Unique,,None,None,1FEA341FEA40,
+Hammer,1FD621,22,The Mountain,greathammer_MightPack_01_k,25,Unique,,None,None,1FEA341FEA3F,
+Hammer,1FD61F,20,The Mountain,greathammer_MightPack_01_j,25,Unique,,None,None,1FEA341FEA3E,
+Hammer,1FD61D,18,The Mountain,greathammer_MightPack_01_i,25,Unique,,None,None,1FEA341FEA3D,
+Hammer,1FD61C,16,The Mountain,greathammer_MightPack_01_h,25,Unique,,None,None,1FEA341FEA3C,
+Hammer,1FD61A,14,The Mountain,greathammer_MightPack_01_g,25,Unique,,None,None,1FEA341FEA3B,
+Hammer,1FD618,12,The Mountain,greathammer_MightPack_01_f,25,Unique,,None,None,1FEA341FEA3A,
+Hammer,1FD616,10,The Mountain,greathammer_MightPack_01_e,25,Unique,,None,None,1FEA341FEA39,
+Hammer,1FD614,8,The Mountain,greathammer_MightPack_01_d,25,Unique,,None,None,1FEA341FEA38,
+Hammer,1FD613,6,The Mountain,greathammer_MightPack_01_c,25,Unique,,None,None,1FEA341FEA37,
+Hammer,1FD612,4,The Mountain,greathammer_MightPack_01_b,25,Unique,,None,None,1FEA341FEA36,
 Longbow,1FD585,36,The Hunter,longbow_FinessePack_01_r,25,Unique,,None,None,,1FEC301FEC42
 Longbow,1FD584,34,The Hunter,longbow_FinessePack_01_q,25,Unique,,None,None,,1FEC301FEC41
 Longbow,1FD583,32,The Hunter,longbow_FinessePack_01_p,25,Unique,,None,None,,1FEC301FEC40
@@ -2205,7 +2204,7 @@ Staff,1F8DCD,1,Staff,PARENT_staff_primal,25,Infrequent,,Primal,None,20700A,
 Chakrams,1F8AA6,2,The Song,chakrams_SorceryPack_01_a,25,Unique,,Ice,None,1FF51A,1FF519
 Sceptre,1F8AA5,2,The Field,sceptre_SorceryPack_01_a,25,Unique,,Lightning,None,1FF5711FF556,
 Staff,1F8AA4,2,The Flame,staff_SorceryPack_01_a,25,Unique,,Fire,None,1FF591,1FF592
-Greathammer,1F8A9D,2,The Mountain,greathammer_MightPack_01_a,25,Unique,,None,None,1FEA351FEA34,
+Hammer,1F8A9D,2,The Mountain,greathammer_MightPack_01_a,25,Unique,,None,None,1FEA351FEA34,
 Greatsword,1F8A9C,2,The Forge,sword2h_MightPack_01_a,25,Unique,,None,None,1FEA08,
 Longsword,1F8A9B,2,The Beast,sword1h_MightPack_01_a,25,Unique,,None,None,1FE9F11FE9F0,
 Faeblades,1F8A9A,2,The Wind,mirrorblades_FinessePack_01_a,25,Unique,,None,None,,1FEC511FEC50
@@ -2283,7 +2282,7 @@ Staff,1F7DB9,5,DLC2 DEV Staff Primal,DEV_DLC2_staff_primal01,25,Common,,Primal,N
 Longbow,1F7DB8,5,DLC2 DEV Bow Primal,DEV_DLC2_longbow_primal01,25,Common,,Primal,None,,
 Faeblades,1F7DB7,5,DLC2 DEV Faeblades Primal,DEV_DLC2_mirrorblades_primal01,25,Common,,Primal,None,,
 Daggers,1F7DB6,5,DLC2 DEV Daggers Primal,DEV_DLC2_daggers_primal01,25,Common,,Primal,None,,
-Greathammer,1F7DB5,5,DLC2 DEV Greathammer Primal,DEV_DLC2_greathammer_primal01,25,Common,,Primal,None,,
+Hammer,1F7DB5,5,DLC2 DEV Greathammer Primal,DEV_DLC2_greathammer_primal01,25,Common,,Primal,None,,
 Greatsword,1F7DB4,5,DLC2 DEV Greatsword Primal,DEV_DLC2_sword2h_primal01,25,Common,,Primal,None,,
 Faeblades,1F7C29,42,Lunala's Crescents,mirrorblades_DLC2_unique02_n,25,Unique,,None,None,1F7E0D1F7E1D,1F7E0C
 Faeblades,1F7C28,39,Lunala's Crescents,mirrorblades_DLC2_unique02_m,25,Unique,,None,None,1F7E0D1F7E1C,1F7E0C
@@ -2337,32 +2336,32 @@ Longbow,1F7919,15,The Deadshot,longbow_DLC2_unique01_e,25,Unique,,None,None,1F79
 Longbow,1F7918,12,The Deadshot,longbow_DLC2_unique01_d,25,Unique,,None,None,1F79311F7935,
 Longbow,1F7917,9,The Deadshot,longbow_DLC2_unique01_c,25,Unique,,None,None,1F79311F7934,
 Longbow,1F7916,6,The Deadshot,longbow_DLC2_unique01_b,25,Unique,,None,None,1F79311F7933,
-Greathammer,1F7864,42,Fallenstar,greathammer_DLC2_unique02_n,25,Unique,,None,None,1F78D21F78E0,1F78D1
-Greathammer,1F7862,39,Fallenstar,greathammer_DLC2_unique02_m,25,Unique,,None,None,1F78D21F78DF,1F78D1
-Greathammer,1F7860,36,Fallenstar,greathammer_DLC2_unique02_l,25,Unique,,None,None,1F78D21F78DE,1F78D1
-Greathammer,1F785E,33,Fallenstar,greathammer_DLC2_unique02_k,25,Unique,,None,None,1F78D21F78DD,1F78D1
-Greathammer,1F785C,30,Fallenstar,greathammer_DLC2_unique02_j,25,Unique,,None,None,1F78D21F78DC,1F78D1
-Greathammer,1F785A,27,Fallenstar,greathammer_DLC2_unique02_i,25,Unique,,None,None,1F78D21F78DB,1F78D1
-Greathammer,1F7859,24,Fallenstar,greathammer_DLC2_unique02_h,25,Unique,,None,None,1F78D21F78DA,1F78D1
-Greathammer,1F7856,21,Fallenstar,greathammer_DLC2_unique02_g,25,Unique,,None,None,1F78D21F78D9,1F78D1
-Greathammer,1F7854,18,Fallenstar,greathammer_DLC2_unique02_f,25,Unique,,None,None,1F78D21F78D8,1F78D1
-Greathammer,1F7852,15,Fallenstar,greathammer_DLC2_unique02_e,25,Unique,,None,None,1F78D21F78D7,1F78D1
-Greathammer,1F7850,12,Fallenstar,greathammer_DLC2_unique02_d,25,Unique,,None,None,1F78D21F78D6,1F78D1
-Greathammer,1F784E,9,Fallenstar,greathammer_DLC2_unique02_c,25,Unique,,None,None,1F78D21F78D5,1F78D1
-Greathammer,1F784D,6,Fallenstar,greathammer_DLC2_unique02_b,25,Unique,,None,None,1F78D21F78D4,1F78D1
-Greathammer,1F77C5,42,The Naros Fang,greathammer_DLC2_unique01_n,25,Unique,,None,None,1F77D7,1F780E
-Greathammer,1F77C4,39,The Naros Fang,greathammer_DLC2_unique01_m,25,Unique,,None,None,1F77D6,1F780D
-Greathammer,1F77C3,36,The Naros Fang,greathammer_DLC2_unique01_l,25,Unique,,None,None,1F77D5,1F780C
-Greathammer,1F77C2,33,The Naros Fang,greathammer_DLC2_unique01_k,25,Unique,,None,None,1F77D4,1F780B
-Greathammer,1F77C1,30,The Naros Fang,greathammer_DLC2_unique01_j,25,Unique,,None,None,1F77D3,1F780A
-Greathammer,1F77C0,27,The Naros Fang,greathammer_DLC2_unique01_i,25,Unique,,None,None,1F77D2,1F7809
-Greathammer,1F77BF,24,The Naros Fang,greathammer_DLC2_unique01_h,25,Unique,,None,None,1F77D1,1F7808
-Greathammer,1F77BE,21,The Naros Fang,greathammer_DLC2_unique01_g,25,Unique,,None,None,1F77D0,1F7807
-Greathammer,1F77BD,18,The Naros Fang,greathammer_DLC2_unique01_f,25,Unique,,None,None,1F77CF,1F7806
-Greathammer,1F77BC,15,The Naros Fang,greathammer_DLC2_unique01_e,25,Unique,,None,None,1F77CE,1F7805
-Greathammer,1F77BB,12,The Naros Fang,greathammer_DLC2_unique01_d,25,Unique,,None,None,1F77CD,1F7804
-Greathammer,1F77BA,9,The Naros Fang,greathammer_DLC2_unique01_c,25,Unique,,None,None,1F77CC,1F7803
-Greathammer,1F77B9,6,The Naros Fang,greathammer_DLC2_unique01_b,25,Unique,,None,None,1F77CB,1F7802
+Hammer,1F7864,42,Fallenstar,greathammer_DLC2_unique02_n,25,Unique,,None,None,1F78D21F78E0,1F78D1
+Hammer,1F7862,39,Fallenstar,greathammer_DLC2_unique02_m,25,Unique,,None,None,1F78D21F78DF,1F78D1
+Hammer,1F7860,36,Fallenstar,greathammer_DLC2_unique02_l,25,Unique,,None,None,1F78D21F78DE,1F78D1
+Hammer,1F785E,33,Fallenstar,greathammer_DLC2_unique02_k,25,Unique,,None,None,1F78D21F78DD,1F78D1
+Hammer,1F785C,30,Fallenstar,greathammer_DLC2_unique02_j,25,Unique,,None,None,1F78D21F78DC,1F78D1
+Hammer,1F785A,27,Fallenstar,greathammer_DLC2_unique02_i,25,Unique,,None,None,1F78D21F78DB,1F78D1
+Hammer,1F7859,24,Fallenstar,greathammer_DLC2_unique02_h,25,Unique,,None,None,1F78D21F78DA,1F78D1
+Hammer,1F7856,21,Fallenstar,greathammer_DLC2_unique02_g,25,Unique,,None,None,1F78D21F78D9,1F78D1
+Hammer,1F7854,18,Fallenstar,greathammer_DLC2_unique02_f,25,Unique,,None,None,1F78D21F78D8,1F78D1
+Hammer,1F7852,15,Fallenstar,greathammer_DLC2_unique02_e,25,Unique,,None,None,1F78D21F78D7,1F78D1
+Hammer,1F7850,12,Fallenstar,greathammer_DLC2_unique02_d,25,Unique,,None,None,1F78D21F78D6,1F78D1
+Hammer,1F784E,9,Fallenstar,greathammer_DLC2_unique02_c,25,Unique,,None,None,1F78D21F78D5,1F78D1
+Hammer,1F784D,6,Fallenstar,greathammer_DLC2_unique02_b,25,Unique,,None,None,1F78D21F78D4,1F78D1
+Hammer,1F77C5,42,The Naros Fang,greathammer_DLC2_unique01_n,25,Unique,,None,None,1F77D7,1F780E
+Hammer,1F77C4,39,The Naros Fang,greathammer_DLC2_unique01_m,25,Unique,,None,None,1F77D6,1F780D
+Hammer,1F77C3,36,The Naros Fang,greathammer_DLC2_unique01_l,25,Unique,,None,None,1F77D5,1F780C
+Hammer,1F77C2,33,The Naros Fang,greathammer_DLC2_unique01_k,25,Unique,,None,None,1F77D4,1F780B
+Hammer,1F77C1,30,The Naros Fang,greathammer_DLC2_unique01_j,25,Unique,,None,None,1F77D3,1F780A
+Hammer,1F77C0,27,The Naros Fang,greathammer_DLC2_unique01_i,25,Unique,,None,None,1F77D2,1F7809
+Hammer,1F77BF,24,The Naros Fang,greathammer_DLC2_unique01_h,25,Unique,,None,None,1F77D1,1F7808
+Hammer,1F77BE,21,The Naros Fang,greathammer_DLC2_unique01_g,25,Unique,,None,None,1F77D0,1F7807
+Hammer,1F77BD,18,The Naros Fang,greathammer_DLC2_unique01_f,25,Unique,,None,None,1F77CF,1F7806
+Hammer,1F77BC,15,The Naros Fang,greathammer_DLC2_unique01_e,25,Unique,,None,None,1F77CE,1F7805
+Hammer,1F77BB,12,The Naros Fang,greathammer_DLC2_unique01_d,25,Unique,,None,None,1F77CD,1F7804
+Hammer,1F77BA,9,The Naros Fang,greathammer_DLC2_unique01_c,25,Unique,,None,None,1F77CC,1F7803
+Hammer,1F77B9,6,The Naros Fang,greathammer_DLC2_unique01_b,25,Unique,,None,None,1F77CB,1F7802
 Greatsword,1F6F44,42,Lightning Cage,sword2h_DLC2_unique02_n,25,Unique,,None,None,1F70D2,1F70B7
 Greatsword,1F6F40,39,Lightning Cage,sword2h_DLC2_unique02_m,25,Unique,,None,None,1F70D0,1F70B7
 Greatsword,1F6F3C,36,Lightning Cage,sword2h_DLC2_unique02_l,25,Unique,,None,None,1F70CE,1F70B7
@@ -2474,8 +2473,8 @@ Daggers,1EE198,3,Xiphos,daggers_DLC2_unique02_a,25,Unique,,None,None,1F7EB21F7EA
 Daggers,1EE197,3,Rend and Carver,daggers_DLC2_unique01_a,25,Unique,,None,None,1F7E76,1F7E75
 Longbow,1EE196,3,Venomstrike,longbow_DLC2_unique02_a,25,Unique,,None,None,1F79F71F79F5,
 Longbow,1EE195,3,The Deadshot,longbow_DLC2_unique01_a,25,Unique,,None,None,1F79321F7931,
-Greathammer,1EE194,3,Fallenstar,greathammer_DLC2_unique02_a,25,Unique,,None,None,1F78D31F78D2,1F78D1
-Greathammer,1EE193,3,The Naros Fang,greathammer_DLC2_unique01_a,25,Unique,,None,None,1F77CA,1F7801
+Hammer,1EE194,3,Fallenstar,greathammer_DLC2_unique02_a,25,Unique,,None,None,1F78D31F78D2,1F78D1
+Hammer,1EE193,3,The Naros Fang,greathammer_DLC2_unique01_a,25,Unique,,None,None,1F77CA,1F7801
 Greatsword,1EE192,3,Lightning Cage,sword2h_DLC2_unique02_a,25,Unique,,None,None,1F70B9,1F70B7
 Greatsword,1EE191,3,The Titan Spear,sword2h_DLC2_unique01_a,25,Unique,,None,None,1F6E43,1F6E42
 Longsword,1EE190,3,Makhaira,sword1h_DLC2_unique02_a,25,Unique,,None,None,1F6E2D1F6E18,1F6E2C
@@ -3065,42 +3064,42 @@ Longbow,1E6541,16,Silver Stag,longbow_dlc1_unique01_d,25,Unique,,None,None,1E656
 Longbow,1E6540,14,Silver Stag,longbow_dlc1_unique01_c,25,Unique,,None,None,1E65631E6553,1E659A
 Longbow,1E653F,12,Silver Stag,longbow_dlc1_unique01_b,25,Unique,,None,None,1E65631E6552,1E659A
 Longbow,1E653E,10,Silver Stag,longbow_dlc1_unique01_a,25,Unique,,None,None,1E65631E6551,1E659A
-Greathammer,1E60F9,44,The Spine,greathammer_dlc1_unique02_r,25,Unique,,None,None,1E610F,
-Greathammer,1E60F8,42,The Spine,greathammer_dlc1_unique02_q,25,Unique,,None,None,1E610E,
-Greathammer,1E60F7,40,The Spine,greathammer_dlc1_unique02_p,25,Unique,,None,None,1E610D,
-Greathammer,1E60F6,38,The Spine,greathammer_dlc1_unique02_o,25,Unique,,None,None,1E610C,
-Greathammer,1E60F5,36,The Spine,greathammer_dlc1_unique02_n,25,Unique,,None,None,1E610B,
-Greathammer,1E60F4,34,The Spine,greathammer_dlc1_unique02_m,25,Unique,,None,None,1E610A,
-Greathammer,1E60F3,32,The Spine,greathammer_dlc1_unique02_l,25,Unique,,None,None,1E6109,
-Greathammer,1E60F2,30,The Spine,greathammer_dlc1_unique02_k,25,Unique,,None,None,1E6108,
-Greathammer,1E60F1,28,The Spine,greathammer_dlc1_unique02_j,25,Unique,,None,None,1E6107,
-Greathammer,1E60F0,26,The Spine,greathammer_dlc1_unique02_i,25,Unique,,None,None,1E6106,
-Greathammer,1E60EF,24,The Spine,greathammer_dlc1_unique02_h,25,Unique,,None,None,1E6105,
-Greathammer,1E60EE,22,The Spine,greathammer_dlc1_unique02_g,25,Unique,,None,None,1E6104,
-Greathammer,1E60ED,20,The Spine,greathammer_dlc1_unique02_f,25,Unique,,None,None,1E6103,
-Greathammer,1E60EC,18,The Spine,greathammer_dlc1_unique02_e,25,Unique,,None,None,1E6102,
-Greathammer,1E60EB,16,The Spine,greathammer_dlc1_unique02_d,25,Unique,,None,None,1E6101,
-Greathammer,1E60EA,14,The Spine,greathammer_dlc1_unique02_c,25,Unique,,None,None,1E6100,
-Greathammer,1E60E9,12,The Spine,greathammer_dlc1_unique02_b,25,Unique,,None,None,1E60FF,
-Greathammer,1E60E8,10,The Spine,greathammer_dlc1_unique02_a,25,Unique,,None,None,1E60FD,
-Greathammer,1E5FC5,44,Shipbuilder's Mate,greathammer_dlc1_unique01_r,25,Unique,,None,None,1E5FEE,1E60D3
-Greathammer,1E5FC4,42,Shipbuilder's Mate,greathammer_dlc1_unique01_q,25,Unique,,None,None,1E5FED,1E60D3
-Greathammer,1E5FC3,40,Shipbuilder's Mate,greathammer_dlc1_unique01_p,25,Unique,,None,None,1E5FEB,1E60D3
-Greathammer,1E5FC2,38,Shipbuilder's Mate,greathammer_dlc1_unique01_o,25,Unique,,None,None,1E5FEA,1E60D3
-Greathammer,1E5FC1,36,Shipbuilder's Mate,greathammer_dlc1_unique01_n,25,Unique,,None,None,1E5FE8,1E60D3
-Greathammer,1E5FC0,34,Shipbuilder's Mate,greathammer_dlc1_unique01_m,25,Unique,,None,None,1E5FE7,1E60D3
-Greathammer,1E5FBF,32,Shipbuilder's Mate,greathammer_dlc1_unique01_l,25,Unique,,None,None,1E5FE5,1E60D3
-Greathammer,1E5FBE,30,Shipbuilder's Mate,greathammer_dlc1_unique01_k,25,Unique,,None,None,1E5FE4,1E60D3
-Greathammer,1E5FBD,28,Shipbuilder's Mate,greathammer_dlc1_unique01_j,25,Unique,,None,None,1E5FE2,1E60D3
-Greathammer,1E5FBC,26,Shipbuilder's Mate,greathammer_dlc1_unique01_i,25,Unique,,None,None,1E5FE1,1E60D3
-Greathammer,1E5FBB,24,Shipbuilder's Mate,greathammer_dlc1_unique01_h,25,Unique,,None,None,1E5FDF,1E60D3
-Greathammer,1E5FBA,22,Shipbuilder's Mate,greathammer_dlc1_unique01_g,25,Unique,,None,None,1E5FDE,1E60D3
-Greathammer,1E5FB9,20,Shipbuilder's Mate,greathammer_dlc1_unique01_f,25,Unique,,None,None,1E5FDC,1E60D3
-Greathammer,1E5FB8,18,Shipbuilder's Mate,greathammer_dlc1_unique01_e,25,Unique,,None,None,1E5FDA,1E60D3
-Greathammer,1E5FB7,16,Shipbuilder's Mate,greathammer_dlc1_unique01_d,25,Unique,,None,None,1E5FD9,1E60D3
-Greathammer,1E5FB6,14,Shipbuilder's Mate,greathammer_dlc1_unique01_c,25,Unique,,None,None,1E5FD7,1E60D3
-Greathammer,1E5FB5,12,Shipbuilder's Mate,greathammer_dlc1_unique01_b,25,Unique,,None,None,1E5FD6,1E60D3
-Greathammer,1E5FB4,10,Shipbuilder's Mate,greathammer_dlc1_unique01_a,25,Unique,,None,None,1E5FD4,1E60D3
+Hammer,1E60F9,44,The Spine,greathammer_dlc1_unique02_r,25,Unique,,None,None,1E610F,
+Hammer,1E60F8,42,The Spine,greathammer_dlc1_unique02_q,25,Unique,,None,None,1E610E,
+Hammer,1E60F7,40,The Spine,greathammer_dlc1_unique02_p,25,Unique,,None,None,1E610D,
+Hammer,1E60F6,38,The Spine,greathammer_dlc1_unique02_o,25,Unique,,None,None,1E610C,
+Hammer,1E60F5,36,The Spine,greathammer_dlc1_unique02_n,25,Unique,,None,None,1E610B,
+Hammer,1E60F4,34,The Spine,greathammer_dlc1_unique02_m,25,Unique,,None,None,1E610A,
+Hammer,1E60F3,32,The Spine,greathammer_dlc1_unique02_l,25,Unique,,None,None,1E6109,
+Hammer,1E60F2,30,The Spine,greathammer_dlc1_unique02_k,25,Unique,,None,None,1E6108,
+Hammer,1E60F1,28,The Spine,greathammer_dlc1_unique02_j,25,Unique,,None,None,1E6107,
+Hammer,1E60F0,26,The Spine,greathammer_dlc1_unique02_i,25,Unique,,None,None,1E6106,
+Hammer,1E60EF,24,The Spine,greathammer_dlc1_unique02_h,25,Unique,,None,None,1E6105,
+Hammer,1E60EE,22,The Spine,greathammer_dlc1_unique02_g,25,Unique,,None,None,1E6104,
+Hammer,1E60ED,20,The Spine,greathammer_dlc1_unique02_f,25,Unique,,None,None,1E6103,
+Hammer,1E60EC,18,The Spine,greathammer_dlc1_unique02_e,25,Unique,,None,None,1E6102,
+Hammer,1E60EB,16,The Spine,greathammer_dlc1_unique02_d,25,Unique,,None,None,1E6101,
+Hammer,1E60EA,14,The Spine,greathammer_dlc1_unique02_c,25,Unique,,None,None,1E6100,
+Hammer,1E60E9,12,The Spine,greathammer_dlc1_unique02_b,25,Unique,,None,None,1E60FF,
+Hammer,1E60E8,10,The Spine,greathammer_dlc1_unique02_a,25,Unique,,None,None,1E60FD,
+Hammer,1E5FC5,44,Shipbuilder's Mate,greathammer_dlc1_unique01_r,25,Unique,,None,None,1E5FEE,1E60D3
+Hammer,1E5FC4,42,Shipbuilder's Mate,greathammer_dlc1_unique01_q,25,Unique,,None,None,1E5FED,1E60D3
+Hammer,1E5FC3,40,Shipbuilder's Mate,greathammer_dlc1_unique01_p,25,Unique,,None,None,1E5FEB,1E60D3
+Hammer,1E5FC2,38,Shipbuilder's Mate,greathammer_dlc1_unique01_o,25,Unique,,None,None,1E5FEA,1E60D3
+Hammer,1E5FC1,36,Shipbuilder's Mate,greathammer_dlc1_unique01_n,25,Unique,,None,None,1E5FE8,1E60D3
+Hammer,1E5FC0,34,Shipbuilder's Mate,greathammer_dlc1_unique01_m,25,Unique,,None,None,1E5FE7,1E60D3
+Hammer,1E5FBF,32,Shipbuilder's Mate,greathammer_dlc1_unique01_l,25,Unique,,None,None,1E5FE5,1E60D3
+Hammer,1E5FBE,30,Shipbuilder's Mate,greathammer_dlc1_unique01_k,25,Unique,,None,None,1E5FE4,1E60D3
+Hammer,1E5FBD,28,Shipbuilder's Mate,greathammer_dlc1_unique01_j,25,Unique,,None,None,1E5FE2,1E60D3
+Hammer,1E5FBC,26,Shipbuilder's Mate,greathammer_dlc1_unique01_i,25,Unique,,None,None,1E5FE1,1E60D3
+Hammer,1E5FBB,24,Shipbuilder's Mate,greathammer_dlc1_unique01_h,25,Unique,,None,None,1E5FDF,1E60D3
+Hammer,1E5FBA,22,Shipbuilder's Mate,greathammer_dlc1_unique01_g,25,Unique,,None,None,1E5FDE,1E60D3
+Hammer,1E5FB9,20,Shipbuilder's Mate,greathammer_dlc1_unique01_f,25,Unique,,None,None,1E5FDC,1E60D3
+Hammer,1E5FB8,18,Shipbuilder's Mate,greathammer_dlc1_unique01_e,25,Unique,,None,None,1E5FDA,1E60D3
+Hammer,1E5FB7,16,Shipbuilder's Mate,greathammer_dlc1_unique01_d,25,Unique,,None,None,1E5FD9,1E60D3
+Hammer,1E5FB6,14,Shipbuilder's Mate,greathammer_dlc1_unique01_c,25,Unique,,None,None,1E5FD7,1E60D3
+Hammer,1E5FB5,12,Shipbuilder's Mate,greathammer_dlc1_unique01_b,25,Unique,,None,None,1E5FD6,1E60D3
+Hammer,1E5FB4,10,Shipbuilder's Mate,greathammer_dlc1_unique01_a,25,Unique,,None,None,1E5FD4,1E60D3
 Greatsword,1E5F13,44,Trencher,sword2h_dlc1_unique02_r,25,Unique,,None,None,1E5F301E5F2F,
 Greatsword,1E5F12,42,Trencher,sword2h_dlc1_unique02_q,25,Unique,,None,None,1E5F301E5F2E,
 Greatsword,1E5F11,40,Trencher,sword2h_dlc1_unique02_p,25,Unique,,None,None,1E5F301E5F2D,
@@ -4058,7 +4057,7 @@ Staff,1D2A09,3,Fate's Arbor,staff_entitlement01,20,Unique,,Lightning,None,,1FAEA
 Daggers,1D2A08,3,Fate's Needles,daggers_entitlement01,20,Unique,,None,None,,1FAEA8
 Faeblades,1D2A07,3,Fate's Scours,mirrorblades_entitlement01,20,Unique,,None,None,,1FAEA8
 Longbow,1D2A06,3,Fate's Curve,longbow_entitlement01,20,Unique,,None,None,,1FAEA8
-Greathammer,1D2A05,3,Fate's Mallet,greathammer_entitlement01,20,Unique,,None,None,,1FAEA8
+Hammer,1D2A05,3,Fate's Mallet,greathammer_entitlement01,20,Unique,,None,None,,1FAEA8
 Greatsword,1D2A04,3,Fate's Brand,sword2h_entitlement01,20,Unique,,None,None,,1FAEA8
 Longsword,1D2A03,3,Fate's Edge,sword1h_entitlement01,20,Unique,,None,None,,1FAEA8
 Chakrams,1C2AFB,30,Thunderous Chakrams of the Tempest,chakrams_common05a_lightning_merchant_02,28,Rare,,Lightning,None,07A7EE,142222
@@ -4248,16 +4247,16 @@ Longbow,1C0745,12,Crackling Longbow,longbow_common03a_merchant_02,24,Infrequent,
 Longbow,1C0741,12,Chilled Longbow,longbow_common03a_merchant_01,24,Infrequent,,None,None,079F89,
 Longbow,1C073D,5,Blistering Longbow,longbow_common02a_merchant_02,22,Infrequent,,None,None,079F8D,
 Longbow,1C0737,5,Hunter's Longbow,longbow_common02a_merchant_01,22,Infrequent,,None,None,079F83,
-Greathammer,1C0733,30,Jolting Hammer of the Tempest,greathammer_common05a_merchant_03,28,Infrequent,,None,None,140D4F,142222
-Greathammer,1C072D,30,Incinerating Hammer of the Inferno,greathammer_common05a_merchant_02,28,Infrequent,,None,None,140CAC,14221F
-Greathammer,1C0727,30,Frozen Hammer of the Avalanche,greathammer_common05a_merchant_01,28,Infrequent,,None,None,140C61,142219
-Greathammer,1C0723,21,Searing Hammer of the Wildfire,greathammer_common04a_merchant_03,26,Infrequent,,None,None,079F8F,14221E
-Greathammer,1C0720,21,Prodigy's Hammer of Eradicating,greathammer_common04a_merchant_02,26,Infrequent,,None,None,,07A71C1421ED
-Greathammer,1C071D,21,Savage Hammer of Craft,greathammer_common04a_merchant_01,26,Rare,,None,None,07A764,07AA72
-Greathammer,1C0719,12,Frigid Hammer,greathammer_common03a_merchant_02,24,Infrequent,,None,None,079F88,
-Greathammer,1C0715,12,Blistering Hammer,greathammer_common03a_merchant_01,24,Infrequent,,None,None,079F8D,
-Greathammer,1C0711,5,Charged Hammer,greathammer_common02a_merchant_02,22,Infrequent,,None,None,07A01E,
-Greathammer,1C070D,5,Rousing Hammer,greathammer_common02a_merchant_01,22,Infrequent,,None,None,079F59,
+Hammer,1C0733,30,Jolting Hammer of the Tempest,greathammer_common05a_merchant_03,28,Infrequent,,None,None,140D4F,142222
+Hammer,1C072D,30,Incinerating Hammer of the Inferno,greathammer_common05a_merchant_02,28,Infrequent,,None,None,140CAC,14221F
+Hammer,1C0727,30,Frozen Hammer of the Avalanche,greathammer_common05a_merchant_01,28,Infrequent,,None,None,140C61,142219
+Hammer,1C0723,21,Searing Hammer of the Wildfire,greathammer_common04a_merchant_03,26,Infrequent,,None,None,079F8F,14221E
+Hammer,1C0720,21,Prodigy's Hammer of Eradicating,greathammer_common04a_merchant_02,26,Infrequent,,None,None,,07A71C1421ED
+Hammer,1C071D,21,Savage Hammer of Craft,greathammer_common04a_merchant_01,26,Rare,,None,None,07A764,07AA72
+Hammer,1C0719,12,Frigid Hammer,greathammer_common03a_merchant_02,24,Infrequent,,None,None,079F88,
+Hammer,1C0715,12,Blistering Hammer,greathammer_common03a_merchant_01,24,Infrequent,,None,None,079F8D,
+Hammer,1C0711,5,Charged Hammer,greathammer_common02a_merchant_02,22,Infrequent,,None,None,07A01E,
+Hammer,1C070D,5,Rousing Hammer,greathammer_common02a_merchant_01,22,Infrequent,,None,None,079F59,
 Daggers,1C0491,30,Rallying Daggers of Madness,daggers_common05a_merchant_03,28,Infrequent,,None,None,140BC7,080C39
 Daggers,1C048E,30,Incinerating Daggers,daggers_common05a_merchant_02,28,Infrequent,,None,None,140CAC,
 Daggers,1C048B,30,Jolting Daggers of Expansion,daggers_common05a_merchant_01,28,Rare,,None,None,140D4F,080B52
@@ -4375,7 +4374,7 @@ Sceptre,1AE296,30,Khleran's Sceptre,sceptre_unique08d,48,Unique,,Fire,None,1CB5A
 Sceptre,1AE295,28,Khleran's Sceptre,sceptre_unique08c,46,Unique,,Fire,None,1CB5A6,
 Sceptre,1AE294,26,Khleran's Sceptre,sceptre_unique08b,46,Unique,,Fire,None,1CB5A5,
 Longsword,1AD348,15,Sturdy Sword,EA3_Demo_Sword,25,Common,,None,None,,
-Greathammer,1AD347,15,Frost Hammer,EA3_Demo_Hammer,25,Common,,Ice,None,,
+Hammer,1AD347,15,Frost Hammer,EA3_Demo_Hammer,25,Common,,Ice,None,,
 Shield,1AD2D7,40,Winter's Respite,warrior_unique10_shield_j,54,Unique,,None,Might,,0832F61CD2E1
 Shield,1AD2D6,39,Winter's Respite,warrior_unique10_shield_i,52,Unique,,None,Might,,0832F61CD2E0
 Shield,1AD2D5,37,Winter's Respite,warrior_unique10_shield_h,52,Unique,,None,Might,,0832F61CD2DF
@@ -4484,14 +4483,14 @@ Feet,1AD249,18,Ardra's Greaves,warrior_unique09_feet_e,46,Unique,,None,Might,,1D
 Feet,1AD248,16,Ardra's Greaves,warrior_unique09_feet_d,46,Unique,,None,Might,,1D1E841CD677
 Feet,1AD247,14,Ardra's Greaves,warrior_unique09_feet_c,46,Unique,,None,Might,,1D1E841CD677
 Feet,1AD245,12,Ardra's Greaves,warrior_unique09_feet_b,44,Unique,,None,Might,,1D1E841CD677
-Greathammer,1AD240,40,Mystic Hammer,greathammer_unique12i,50,Unique,,None,None,,1CC7921CC791
-Greathammer,1AD23F,37,Mystic Hammer,greathammer_unique12h,48,Unique,,None,None,,1CC7921CC791
-Greathammer,1AD23E,35,Mystic Hammer,greathammer_unique12g,48,Unique,,None,None,,1CC7921CC791
-Greathammer,1AD23C,33,Mystic Hammer,greathammer_unique12f,48,Unique,,None,None,,1CC7921CC791
-Greathammer,1AD23B,31,Mystic Hammer,greathammer_unique12e,48,Unique,,None,None,,1CC7921CC791
-Greathammer,1AD23A,29,Mystic Hammer,greathammer_unique12d,46,Unique,,None,None,,1CC7921CC791
-Greathammer,1AD239,27,Mystic Hammer,greathammer_unique12c,46,Unique,,None,None,,1CC7921CC791
-Greathammer,1AD238,25,Mystic Hammer,greathammer_unique12b,46,Unique,,None,None,,1CC7921CC791
+Hammer,1AD240,40,Mystic Hammer,greathammer_unique12i,50,Unique,,None,None,,1CC7921CC791
+Hammer,1AD23F,37,Mystic Hammer,greathammer_unique12h,48,Unique,,None,None,,1CC7921CC791
+Hammer,1AD23E,35,Mystic Hammer,greathammer_unique12g,48,Unique,,None,None,,1CC7921CC791
+Hammer,1AD23C,33,Mystic Hammer,greathammer_unique12f,48,Unique,,None,None,,1CC7921CC791
+Hammer,1AD23B,31,Mystic Hammer,greathammer_unique12e,48,Unique,,None,None,,1CC7921CC791
+Hammer,1AD23A,29,Mystic Hammer,greathammer_unique12d,46,Unique,,None,None,,1CC7921CC791
+Hammer,1AD239,27,Mystic Hammer,greathammer_unique12c,46,Unique,,None,None,,1CC7921CC791
+Hammer,1AD238,25,Mystic Hammer,greathammer_unique12b,46,Unique,,None,None,,1CC7921CC791
 Greatsword,1AD1D2,24,Kellerac's Sword,sword2h_unique12f,46,Unique,W,None,None,1CCC111CCC01,
 Greatsword,1AD1D1,22,Kellerac's Sword,sword2h_unique12e,46,Unique,W,None,None,1CCC111CCC00,
 Greatsword,1AD1D0,20,Kellerac's Sword,sword2h_unique12d,46,Unique,W,None,None,1CCC111CCBFF,
@@ -4772,7 +4771,7 @@ Chakrams,188C86,2,Iron Chakrams,chakrams_common01b_ice_sockets_01,20,Infrequent,
 Chakrams,188C85,2,Iron Chakrams,chakrams_common01b_fire_sockets_01,20,Infrequent,U,Fire,None,,
 Daggers,1880F6,18,Heartpins,DEV_GDC_Daggers,26,Unique,,None,None,09236C,
 Faeblades,1880CC,15,Iron Faeblades,DEV_GDC_Faeblades,22,Common,,None,None,,
-Greathammer,187202,5,Mystic Hammer,DEV_GDC_greathammer_unique02,28,Unique,,None,None,,07A02D0682A7
+Hammer,187202,5,Mystic Hammer,DEV_GDC_greathammer_unique02,28,Unique,,None,None,,07A02D0682A7
 Ring,1862F1,0,Ring of Fyragnos,QuestItem_SQ143_FyragnosRing,100,Common,,None,None,,
 Shield,181AF0,25,Ash Buckler,DEV_GDC_Shield_Rogue,24,Common,,None,Finesse,,0832F5
 Shield,181AEF,30,Platinum Talisman,DEV_GDC_Shield_Mage,23,Common,,None,Sorcery,,0B5691
@@ -4782,7 +4781,7 @@ Feet,180F66,1,Crude Cotton Shoes,DEV_GDC_mage_common01a_feet,15,Common,,None,Sor
 Hands,180F62,1,Crude Cotton Handwraps,DEV_GDC_mage_common01a_hands,15,Common,,None,Sorcery,,05E7D6
 Shield,180F4D,5,Crude Azurite Kite Shield,DEV_GDC_Shield_Warrior,26,Common,,None,Might,,0832F6
 Longsword,17FDF5,5,Azurite Longsword,DEV_GDC_sword1h_sockets_01,24,Infrequent,W,None,None,,
-Greathammer,17FDE2,5,Earthgavel,DEV_GDC_greathammer_unique01,22,Unique,,None,None,0A3D6B,092340
+Hammer,17FDE2,5,Earthgavel,DEV_GDC_greathammer_unique01,22,Unique,,None,None,0A3D6B,092340
 Feet,17FC28,11,Thrydon's Greaves of War,DEV_GDC_warrior_set03_feet,30,Unique,,None,Might,,1D1E84089787
 Hands,17FC27,11,Thyrdon's Gauntlets of War,DEV_GDC_warrior_set03_hands,30,Unique,,None,Might,,1D1E83089705
 Hat,17FC26,11,Thyrdon's Helm of War,DEV_GDC_warrior_set03_head,30,Unique,,None,Might,,1D1E820895A4
@@ -4998,7 +4997,7 @@ Daggers,0BC651,12,Shine and Shadow,daggers_unique08e,44,Unique,,None,None,0BC65E
 Daggers,0BC650,10,Shine and Shadow,daggers_unique08d,44,Unique,,None,None,0BC65C0BC65B,
 Daggers,0BC64F,8,Shine and Shadow,daggers_unique08c,42,Unique,,None,None,0BC65A0BC659,
 Daggers,0BC64E,6,Shine and Shadow,daggers_unique08b,42,Unique,,None,None,0BC6580BC656,
-Greathammer,0B9DDF,10,Mortrost,greathammer_unique13a,42,Unique,,None,None,1CC793,1CC79D
+Hammer,0B9DDF,10,Mortrost,greathammer_unique13a,42,Unique,,None,None,1CC793,1CC79D
 Daggers,0B9A22,4,Shine and Shadow,daggers_unique08a,40,Unique,,None,None,0BBF2A0BBF29,
 Ring,0B355F,0,Ratofer's Ring,QuestItem_FFQ18_Ring,100,Common,,None,None,,
 Greatsword,0B2E39,40,Sword of the Bolgan King,sword2h_unique09,48,Unique,,None,None,1CCB81,
@@ -5164,7 +5163,7 @@ Ring,0A2F9C,9,Band of Lightning Shield,ring_common02b_merchant01,100,Infrequent,
 Ring,0A2F9B,10,Energizing Signet,ring_common02c_merchant01,100,Rare,,None,None,,07A7D3
 Ring,0A2F9A,12,Ring of Ice Aversion,ring_common03a_merchant01,100,Infrequent,,None,None,,07AA4F
 Ring,0A2F99,15,Band of Refuge,ring_common03b_merchant01,100,Rare,,None,None,,07AA6E
-Greathammer,0A1FD7,1,Dazing Greathammer,DEV_QA_greathammer_unique01,25,Rare,,None,None,,07A02D
+Hammer,0A1FD7,1,Dazing Greathammer,DEV_QA_greathammer_unique01,25,Rare,,None,None,,07A02D
 Feet,0A1BC0,0,Buru's Boots,QuestItem_TR06_BurusBoots,25,Common,,None,None,,0ABA71
 Longsword,0A1A36,1,Vile Longsword,DEV_QA_sword1h_Unique01,25,Rare,,None,None,07A7EF,
 Necklace,0A0C16,0,Rithen Amulet,QuestItem_TR06_Amulet,100,Common,,None,None,,
@@ -5174,10 +5173,10 @@ Daggers,09AFFE,2,[DEV] Poison Daggers,Daggers_DEV_poison,20,Unique,,None,None,03
 Daggers,09AFFD,2,[DEV] Lightning Daggers,Daggers_DEV_lightning,20,Unique,,Lightning,None,065FB20342F4,
 Daggers,09AFFC,2,[DEV] Ice Daggers,Daggers_DEV_ice,20,Unique,,Ice,None,06476A064761,
 Daggers,09AFFB,2,[DEV] Fire Daggers,Daggers_DEV_fire,20,Unique,,Fire,None,065FDD0342F3,
-Greathammer,09AFFA,2,[DEV] Poison Hammer,Hammer_DEV_poison,20,Unique,,None,None,0342F6,
-Greathammer,09AFF9,2,[DEV] Lightning Hammer,Hammer_DEV_lightning,20,Unique,,Lightning,None,065FB20342F4,
-Greathammer,09AFF8,2,[DEV] Ice Hammer,Hammer_DEV_ice,20,Unique,,Ice,None,06476A064761,
-Greathammer,09AFF7,2,[DEV] Fire Hammer,Hammer_DEV_fire,20,Unique,,Fire,None,065FDD0342F3,
+Hammer,09AFFA,2,[DEV] Poison Hammer,Hammer_DEV_poison,20,Unique,,None,None,0342F6,
+Hammer,09AFF9,2,[DEV] Lightning Hammer,Hammer_DEV_lightning,20,Unique,,Lightning,None,065FB20342F4,
+Hammer,09AFF8,2,[DEV] Ice Hammer,Hammer_DEV_ice,20,Unique,,Ice,None,06476A064761,
+Hammer,09AFF7,2,[DEV] Fire Hammer,Hammer_DEV_fire,20,Unique,,Fire,None,065FDD0342F3,
 Sceptre,09865B,1,Sceptre,PARENT_sceptre_fire,25,Common,,Fire,None,,
 Sceptre,09865A,1,Sceptre,PARENT_sceptre_ice,25,Common,,Ice,None,,
 Sceptre,098659,1,Sceptre,PARENT_sceptre_lightning,25,Common,,Lightning,None,,
@@ -5320,17 +5319,17 @@ Longbow,08F0E5,21,Hailstorm,longbow_unique05,46,Unique,,None,None,092358,1CC6B4
 Longbow,08F0E4,17,Keloren's Messenger,longbow_unique04,44,Unique,,None,None,092357,
 Longbow,08F0E3,13,Merciless,longbow_unique03,44,Unique,,Poison,None,092356,1CC6AD
 Longbow,08F0E2,9,Breath of Vraekor,longbow_unique02,42,Unique,,None,None,092355,1CC69D
-Greathammer,08F0DA,23,Mystic Hammer,greathammer_unique12a,46,Unique,,None,None,,1CC7921CC791
-Greathammer,08F0D9,32,Nearth's Hammer,greathammer_unique11a,48,Unique,,None,None,1CC78E,1CC790
-Greathammer,08F0D8,40,Legacy's End,greathammer_unique10,50,Unique,,None,None,09234909234A,
-Greathammer,08F0D7,36,Fist of Kreios,greathammer_unique09,48,Unique,,None,None,092348,
-Greathammer,08F0D6,32,Ward of the North,greathammer_unique08,48,Unique,,None,None,092347,1CC78D
-Greathammer,08F0D5,28,The Ouranos Maul,greathammer_unique07,46,Unique,,None,None,092346,0A3EBF
-Greathammer,08F0D4,24,Heart of Ember,greathammer_unique06,46,Unique,,None,None,092345,1CC784
-Greathammer,08F0D3,20,Corthian Mallet,greathammer_unique05,46,Unique,,None,None,092344,
-Greathammer,08F0D2,16,Fjarell,greathammer_unique04,44,Unique,,None,None,092343,
-Greathammer,08F0D1,13,Boltrsledge,greathammer_unique03,44,Unique,,None,None,092342,0A3EBC
-Greathammer,08F0D0,9,Thintri's Malus,greathammer_unique02,42,Unique,,None,None,092341,1CC783
+Hammer,08F0DA,23,Mystic Hammer,greathammer_unique12a,46,Unique,,None,None,,1CC7921CC791
+Hammer,08F0D9,32,Nearth's Hammer,greathammer_unique11a,48,Unique,,None,None,1CC78E,1CC790
+Hammer,08F0D8,40,Legacy's End,greathammer_unique10,50,Unique,,None,None,09234909234A,
+Hammer,08F0D7,36,Fist of Kreios,greathammer_unique09,48,Unique,,None,None,092348,
+Hammer,08F0D6,32,Ward of the North,greathammer_unique08,48,Unique,,None,None,092347,1CC78D
+Hammer,08F0D5,28,The Ouranos Maul,greathammer_unique07,46,Unique,,None,None,092346,0A3EBF
+Hammer,08F0D4,24,Heart of Ember,greathammer_unique06,46,Unique,,None,None,092345,1CC784
+Hammer,08F0D3,20,Corthian Mallet,greathammer_unique05,46,Unique,,None,None,092344,
+Hammer,08F0D2,16,Fjarell,greathammer_unique04,44,Unique,,None,None,092343,
+Hammer,08F0D1,13,Boltrsledge,greathammer_unique03,44,Unique,,None,None,092342,0A3EBC
+Hammer,08F0D0,9,Thintri's Malus,greathammer_unique02,42,Unique,,None,None,092341,1CC783
 Greatsword,08F0CF,36,Scathe,sword2h_unique08,48,Unique,W,None,None,1AB910,1CCB7B
 Greatsword,08F0CE,33,Scourgebane,sword2h_unique07,48,Unique,,None,None,09233E,1CCB5C
 Greatsword,08F0CD,30,Gerstotad,sword2h_unique06,48,Unique,,None,None,09233D,
@@ -5354,7 +5353,7 @@ Longsword,08F0BC,13,Almain Cutlass,sword1h_unique04,44,Unique,,None,None,09232B0
 Longsword,08F0BB,10,Bloodhunter,sword1h_unique03,42,Unique,,None,None,09232A,
 Longsword,08F0BA,7,Frostblade,sword1h_unique02,42,Unique,,None,None,1D6F2A,092329
 Shield,08EA7D,15,Protector,QuestItem_SQ35_HreidsShield,25,Common,,None,Might,,0832F6
-Greathammer,08EA79,18,Wrathful,QuestItem_SQ35_HreidsHammer,25,Common,,None,None,,
+Hammer,08EA79,18,Wrathful,QuestItem_SQ35_HreidsHammer,25,Common,,None,None,,
 Greatsword,08D3BB,26,Haldebier's Blade,sword2h_SQ46_HaldebiersBlade,26,Infrequent,WU,None,None,,
 Daggers,08C176,20,Kezar's Vice,daggers_unique04,46,Unique,,None,None,0A454D,09236B
 Hat,08BDF3,2,Iron Helm,warrior_common01b_head,20,Common,,None,Might,,1D1E82
@@ -5818,18 +5817,18 @@ Longbow,084A61,15,Oak Longbow,longbow_common03b_sockets_01,24,Infrequent,W,None,
 Longbow,084A60,7,Elm Longbow,longbow_common02b_sockets_02,22,Infrequent,WU,None,None,,
 Longbow,084A5F,7,Elm Longbow,longbow_common02b_sockets_01,22,Infrequent,W,None,None,,
 Longbow,084A5E,2,Birch Longbow,longbow_common01b_sockets_01,20,Infrequent,W,None,None,,
-Greathammer,084A5D,33,Prismere Hammer,greathammer_common05b_sockets_03,28,Infrequent,WUU,None,None,,
-Greathammer,084A5C,33,Prismere Hammer,greathammer_common05b_sockets_02,28,Infrequent,WU,None,None,,
-Greathammer,084A5B,33,Prismere Hammer,greathammer_common05b_sockets_01,28,Infrequent,W,None,None,,
-Greathammer,084A5A,24,Sylvanite Hammer,greathammer_common04b_sockets_03,26,Infrequent,WUU,None,None,,
-Greathammer,084A59,24,Sylvanite Hammer,greathammer_common04b_sockets_02,26,Infrequent,WU,None,None,,
-Greathammer,084A58,24,Sylvanite Hammer,greathammer_common04b_sockets_01,26,Infrequent,W,None,None,,
-Greathammer,084A57,15,Azurite Hammer,greathammer_common03b_sockets_03,24,Infrequent,WUU,None,None,,
-Greathammer,084A56,15,Azurite Hammer,greathammer_common03b_sockets_02,24,Infrequent,WU,None,None,,
-Greathammer,084A55,15,Azurite Hammer,greathammer_common03b_sockets_01,24,Infrequent,W,None,None,,
-Greathammer,084A54,7,Steel Hammer,greathammer_common02b_sockets_02,22,Infrequent,WU,None,None,,
-Greathammer,084A53,7,Steel Hammer,greathammer_common02b_sockets_01,22,Infrequent,W,None,None,,
-Greathammer,084A52,2,Iron Hammer,greathammer_common01b_sockets_01,20,Infrequent,W,None,None,,
+Hammer,084A5D,33,Prismere Hammer,greathammer_common05b_sockets_03,28,Infrequent,WUU,None,None,,
+Hammer,084A5C,33,Prismere Hammer,greathammer_common05b_sockets_02,28,Infrequent,WU,None,None,,
+Hammer,084A5B,33,Prismere Hammer,greathammer_common05b_sockets_01,28,Infrequent,W,None,None,,
+Hammer,084A5A,24,Sylvanite Hammer,greathammer_common04b_sockets_03,26,Infrequent,WUU,None,None,,
+Hammer,084A59,24,Sylvanite Hammer,greathammer_common04b_sockets_02,26,Infrequent,WU,None,None,,
+Hammer,084A58,24,Sylvanite Hammer,greathammer_common04b_sockets_01,26,Infrequent,W,None,None,,
+Hammer,084A57,15,Azurite Hammer,greathammer_common03b_sockets_03,24,Infrequent,WUU,None,None,,
+Hammer,084A56,15,Azurite Hammer,greathammer_common03b_sockets_02,24,Infrequent,WU,None,None,,
+Hammer,084A55,15,Azurite Hammer,greathammer_common03b_sockets_01,24,Infrequent,W,None,None,,
+Hammer,084A54,7,Steel Hammer,greathammer_common02b_sockets_02,22,Infrequent,WU,None,None,,
+Hammer,084A53,7,Steel Hammer,greathammer_common02b_sockets_01,22,Infrequent,W,None,None,,
+Hammer,084A52,2,Iron Hammer,greathammer_common01b_sockets_01,20,Infrequent,W,None,None,,
 Daggers,084A51,33,Prismere Daggers,daggers_common05b_sockets_03,28,Infrequent,WUU,None,None,,
 Daggers,084A50,33,Prismere Daggers,daggers_common05b_sockets_02,28,Infrequent,WU,None,None,,
 Daggers,084A4F,33,Prismere Daggers,daggers_common05b_sockets_01,28,Infrequent,W,None,None,,
@@ -5858,7 +5857,7 @@ Legs,083CB8,1,[DEV] Char Art Pants,DEV_CharArtTest_armor_legs,30,Common,,None,Mi
 Torso,083CB7,1,[DEV] Char Art Torso,DEV_CharArtTest_armor_torso,30,Common,,None,Might,,1D1E801AC307
 Shield,083CB6,0,[DEV] Char Art Shield,DEV_CharArtTest_shield,25,Common,,None,None,,
 Daggers,083CB5,0,[DEV] Char Art Daggers,DEV_CharArtTest_daggers,25,Common,,None,None,,
-Greathammer,083CB4,0,[DEV] Char Art Hammer,DEV_CharArtTest_greathammer,25,Common,,None,None,,
+Hammer,083CB4,0,[DEV] Char Art Hammer,DEV_CharArtTest_greathammer,25,Common,,None,None,,
 Longbow,083CB3,0,[DEV] Char Art Longbow,DEV_CharArtTest_longbow,25,Common,,None,None,,
 Faeblades,083CB2,0,[DEV] Char Art Faeblades,DEV_CharArtTest_faeblades,25,Common,,None,None,,
 Staff,083CB0,0,[DEV] Char Art Staff,DEV_CharArtTest_staff_ice,25,Common,,Ice,None,,
@@ -6082,7 +6081,7 @@ Staff,06B227,0,[DEV] Parent Staff,PARENT_Staff,25,Common,,None,None,,
 Longsword,067048,4,Vengal's Vengeance,sword1h_unique01,40,Unique,,None,None,,092328
 Faeblades,067046,6,The Viper's Fangs,mirrorblades_unique01,42,Unique,,None,None,092360,
 Longbow,067045,5,Sylvan Order,longbow_unique01,42,Unique,,None,None,092354,
-Greathammer,067044,5,Earthgavel,greathammer_unique01,42,Unique,,None,None,092340,0A3D6B
+Hammer,067044,5,Earthgavel,greathammer_unique01,42,Unique,,None,None,092340,0A3D6B
 Torso,066FEF,5,Hauberk of the Tormentor,warrior_unique01_torso,42,Unique,,None,Might,,1D1E801AC3071CCC53
 Legs,066FEE,4,Legplates of Kronash,warrior_unique01_legs,42,Unique,,None,Might,,1D1E811CD48D
 Hat,066FED,5,Varani Frosthelm,warrior_unique01_head,42,Unique,,None,Might,,1D1E820ADF89
@@ -6108,7 +6107,7 @@ Longbow,06437D,1,Winter's Shade,DEV_icebow,25,Unique,,Ice,None,,06466A
 Longbow,05E0EB,0,[DEV] Parent Bow,PARENT_bow,25,Common,,None,None,,
 Longsword,05E0E9,0,[DEV] Parent 1H Sword,PARENT_Sword_1H,25,Common,,None,None,,
 Faeblades,05E0E7,0,[DEV] Parent Faeblades,PARENT_Mirrorblades,25,Common,,None,None,,
-Greathammer,05E0E6,0,[DEV] Parent Hammer,PARENT_Greathammer,25,Common,,None,None,,
+Hammer,05E0E6,0,[DEV] Parent Hammer,PARENT_Greathammer,25,Common,,None,None,,
 Faeblades,0598A0,30,Crude Prismere Faeblades,mirrorblades_common05a,28,Common,,None,None,,
 Faeblades,05989F,33,Prismere Faeblades,mirrorblades_common05b,28,Common,,None,None,,
 Faeblades,05989E,36,Fine Prismere Faeblades,mirrorblades_common05c,28,Common,,None,None,,
@@ -6128,19 +6127,19 @@ Longsword,04748F,2,DEV_Poison Sword[DEV],Sword_DEV_Poison,25,Unique,,None,None,0
 Longsword,04748E,2,DEV_Lightning Sword[DEV],Sword_DEV_Lightning,25,Unique,,Lightning,None,065FB20342F4,
 Longsword,04748D,2,DEV_Ice Sword[DEV],Sword_DEV_Ice,25,Unique,,Ice,None,06476A064761,
 Longsword,04748C,2,DEV_Fire Sword[DEV],Sword_DEV_Fire,25,Unique,,Fire,None,065FDD0342F3,
-Greathammer,040B97,36,Fine Prismere Hammer,greathammer_common05c,28,Common,,None,None,,
-Greathammer,040B96,33,Prismere Hammer,greathammer_common05b,28,Common,,None,None,,
-Greathammer,040B95,30,Crude Prismere Hammer,greathammer_common05a,28,Common,,None,None,,
-Greathammer,040B94,27,Fine Sylvanite Hammer,greathammer_common04c,26,Common,,None,None,,
-Greathammer,040B93,24,Sylvanite Hammer,greathammer_common04b,26,Common,,None,None,,
-Greathammer,040B92,21,Crude Sylvanite Hammer,greathammer_common04a,26,Common,,None,None,,
-Greathammer,040B91,15,Azurite Hammer,greathammer_common03b,24,Common,,None,None,,
-Greathammer,040B90,12,Crude Azurite Hammer,greathammer_common03a,24,Common,,None,None,,
-Greathammer,040B8F,9,Fine Steel Hammer,greathammer_common02c,22,Common,,None,None,,
-Greathammer,040B8E,18,Fine Azurite Hammer,greathammer_common03c,24,Common,,None,None,,
-Greathammer,040B8D,7,Steel Hammer,greathammer_common02b,22,Common,,None,None,,
-Greathammer,040B8C,5,Crude Steel Hammer,greathammer_common02a,22,Common,,None,None,,
-Greathammer,040B8B,3,Fine Iron Hammer,greathammer_common01c,20,Common,,None,None,,
+Hammer,040B97,36,Fine Prismere Hammer,greathammer_common05c,28,Common,,None,None,,
+Hammer,040B96,33,Prismere Hammer,greathammer_common05b,28,Common,,None,None,,
+Hammer,040B95,30,Crude Prismere Hammer,greathammer_common05a,28,Common,,None,None,,
+Hammer,040B94,27,Fine Sylvanite Hammer,greathammer_common04c,26,Common,,None,None,,
+Hammer,040B93,24,Sylvanite Hammer,greathammer_common04b,26,Common,,None,None,,
+Hammer,040B92,21,Crude Sylvanite Hammer,greathammer_common04a,26,Common,,None,None,,
+Hammer,040B91,15,Azurite Hammer,greathammer_common03b,24,Common,,None,None,,
+Hammer,040B90,12,Crude Azurite Hammer,greathammer_common03a,24,Common,,None,None,,
+Hammer,040B8F,9,Fine Steel Hammer,greathammer_common02c,22,Common,,None,None,,
+Hammer,040B8E,18,Fine Azurite Hammer,greathammer_common03c,24,Common,,None,None,,
+Hammer,040B8D,7,Steel Hammer,greathammer_common02b,22,Common,,None,None,,
+Hammer,040B8C,5,Crude Steel Hammer,greathammer_common02a,22,Common,,None,None,,
+Hammer,040B8B,3,Fine Iron Hammer,greathammer_common01c,20,Common,,None,None,,
 Longbow,040B05,36,Fine Ebony Longbow,longbow_common05c,28,Common,,None,None,,
 Longbow,040B04,33,Ebony Longbow,longbow_common05b,28,Common,,None,None,,
 Longbow,040B03,30,Crude Ebony Longbow,longbow_common05a,28,Common,,None,None,,
@@ -6156,7 +6155,7 @@ Longbow,040AFA,5,Crude Elm Longbow,longbow_common02a,22,Common,,None,None,,
 Longbow,040AF9,3,Fine Birch Longbow,longbow_common01c,20,Common,,None,None,,
 Longbow,040AF8,2,Birch Longbow,longbow_common01b,20,Common,,None,None,,
 Longbow,040AE1,1,Crude Birch Longbow,longbow_common01a,20,Common,,None,None,,
-Greathammer,040A18,2,Iron Hammer,greathammer_common01b,20,Common,,None,None,,
+Hammer,040A18,2,Iron Hammer,greathammer_common01b,20,Common,,None,None,,
 Longsword,04074A,36,Fine Prismere Longsword,sword1h_common05c,28,Common,,None,None,,
 Longsword,040749,33,Prismere Longsword,sword1h_common05b,28,Common,,None,None,,
 Longsword,040748,30,Crude Prismere Longsword,sword1h_common05a,28,Common,,None,None,,
@@ -6282,7 +6281,7 @@ Torso,03E5D6,5,Chainmail Cuirass,warrior_common02b_torso,22,Common,,None,Might,,
 Torso,03E5D5,4,Crude Chainmail Cuirass,warrior_common02a_torso,22,Common,,None,Might,,1D1E801AC307
 Torso,03E5D3,3,Fine Iron Cuirass,warrior_common01c_torso,20,Common,,None,Might,,1D1E801AC307
 Torso,03E5D2,2,Iron Cuirass,warrior_common01b_torso,20,Common,,None,Might,,1D1E801AC307
-Greathammer,03DBB8,1,Crude Iron Hammer,greathammer_common01a,20,Common,,None,None,,
+Hammer,03DBB8,1,Crude Iron Hammer,greathammer_common01a,20,Common,,None,None,,
 Faeblades,03DBB7,1,Crude Iron Faeblades,mirrorblades_common01a,20,Common,,None,None,,
 Longsword,03DBB4,1,Crude Iron Longsword,sword1h_common01a,20,Common,,None,None,,
 Legs,01EBB3,1,Crude Iron Chausses,warrior_common01a_legs,20,Common,,None,Might,,1D1E81

@@ -10,12 +10,8 @@ namespace KoAR.Core
     public class Stash
     {
         public int Offset { get; }
-        
-        public Stash()
-        {
-            ReadOnlySpan<byte> stashIndicator = new byte[] { 0x00, 0xF5, 0x43, 0xEB, 0x00, 0x02 };
-            Offset = Amalur.Bytes.AsSpan().IndexOf(stashIndicator) - 3;
-        }
+
+        public Stash(int offset) => Offset = offset;
 
         public int DataLength
         {
@@ -57,5 +53,15 @@ namespace KoAR.Core
             Count++;
         }
 
+        public static Stash? TryCreateStash()
+        {
+            ReadOnlySpan<byte> stashIndicator = new byte[] { 0x00, 0xF5, 0x43, 0xEB, 0x00, 0x02 };
+            var offset = Amalur.Bytes.AsSpan().IndexOf(stashIndicator);
+            if (offset == -1)
+            {
+                return null;
+            }
+            return new Stash(offset - 3);
+        }
     }
 }

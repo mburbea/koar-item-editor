@@ -6,6 +6,7 @@ namespace KoAR.Core
 {
     public class CoreEffectMemory
     {
+        internal static List<(uint itemId, int offset, uint prefix)> SetOfPrefixes = new List<(uint, int, uint)>();
         private static class Offsets
         {
             public const int DataLength = 13;
@@ -26,6 +27,7 @@ namespace KoAR.Core
         internal CoreEffectMemory(int coreOffset, int coreLength)
         {
             Bytes = Amalur.Bytes.AsSpan(coreOffset, coreLength).ToArray();
+            var itemId = MemoryUtilities.Read<uint>(Bytes);
             int count = Bytes[Offsets.EffectCount];
             for (int i = 0; i < count; i++)
             {
@@ -34,7 +36,7 @@ namespace KoAR.Core
                 var expectedPrefix = MemoryUtilities.Read<uint>(Prefixes, i * 4);
                 if (prefix != expectedPrefix)
                 {
-                    Console.WriteLine("wtf");
+                    SetOfPrefixes.Add((itemId, i, prefix));
                 }
                 List.Add(effect);
             }

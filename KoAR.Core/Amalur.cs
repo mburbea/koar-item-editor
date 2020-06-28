@@ -58,6 +58,8 @@ namespace KoAR.Core
             File.WriteAllBytes(path, Bytes);
         }
 
+        public static Stash? Stash { get; private set; }
+
         public static bool IsFileOpen => Bytes.Length != 0;
 
         public static void Initialize(string? path = null)
@@ -141,12 +143,15 @@ namespace KoAR.Core
             ReadOnlySpan<byte> ItemEffectMarker = new byte[5] { 0xD3, 0x34, 0x43, 0x00, 0x00 }; // 26 to first item. 5 to first DL, 13 to second DL. 18 for count
             ReadOnlySpan<byte> coreEffectMarker = new byte[5] { 0xBB, 0xD5, 0x43, 0x00, 0x00 }; // 26 to first item. 5 to first DL, 13 to second DL. 18 for count
             ReadOnlySpan<byte> data = Bytes;
+
             _fileLengthOffset = data.IndexOf(fileLengthSeq) - 4;
             ItemMemoryContainer = new Container(data.IndexOf(ItemEffectMarker), 0x00_24_D5_68_00_00_00_0Bul);
             CoreEffectContainer = new Container(data.IndexOf(coreEffectMarker), 0x00_28_60_84_00_00_00_0Bul);
             var itemMemoryLocs = ItemMemoryContainer.ToDictionary(x => x.id, x => (x.offset, x.datalength));
             var coreLocs = CoreEffectContainer.ToDictionary(x => x.id, x => (x.offset, x.datalength));
             Items.Clear();
+            
+            Stash = Stash.TryCreateStash();
 
             _simTypeOffset = data.IndexOf(typeIdSeq);
             int ixOfActor = _simTypeOffset + 9;
