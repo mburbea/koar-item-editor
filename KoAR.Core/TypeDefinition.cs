@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualBasic.FileIO;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -57,31 +56,13 @@ namespace KoAR.Core
 
         internal static IEnumerable<TypeDefinition> ParseFile(string path)
         {
-            using var parser = new TextFieldParser(path)
+            foreach(var line in File.ReadLines(path).Skip(1))
             {
-                TextFieldType = FieldType.Delimited,
-                Delimiters = new[] { "," },
-                HasFieldsEnclosedInQuotes = true
-            };
-            while (!parser.EndOfData)
-            {
-                if (TryLoadFromRow(parser.ReadFields(), out var definition))
+                if(TryLoadFromRow(line.Split(','), out var definition))
                 {
                     yield return definition;
                 }
             }
-        }
-
-        internal void WriteToCsv()
-        {
-            IEnumerable<string> rows = new[] {
-                $"{Category},{TypeId:X6},{Level},\"{Name}\",{MaxDurability},{string.Join("", CoreEffects.Select(x => x.ToString("X6")))},{string.Join("", Effects.Select(x => x.ToString("X6")))}"
-            };
-            if (!File.Exists("items.user.csv"))
-            {
-                rows = rows.Prepend("Category,TypeId,Level,ItemName,Durability,CoreEffects,Effects");
-            }
-            File.AppendAllLines("items.user.csv", rows);
         }
 
         internal TypeDefinition(EquipmentCategory category, uint typeId, byte level, string name, string internalName, float maxDurability, Rarity rarity,
@@ -95,8 +76,8 @@ namespace KoAR.Core
             MaxDurability = maxDurability;
             Rarity = rarity;
             Sockets = sockets;
-            ArmorType = armorType;
-            Element = element;
+            ArmorType = ArmorType == 0 ? default(ArmorType?) : armorType;
+            Element = element == 0 ? default(Element?) : element;
             CoreEffects = coreEffects;
             Effects = effects;
         }
@@ -109,8 +90,8 @@ namespace KoAR.Core
         public float MaxDurability { get; }
         public Rarity Rarity { get; }
         public string Sockets { get; }
-        public Element Element { get; }
-        public ArmorType ArmorType { get; }
+        public Element? Element { get; }
+        public ArmorType? ArmorType { get; }
         public uint[] CoreEffects { get; }
         public uint[] Effects { get; }
     }

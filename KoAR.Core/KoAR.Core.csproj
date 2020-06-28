@@ -2,7 +2,7 @@
   <PropertyGroup>
     <ProductVersion>8.0.30703</ProductVersion>
     <ProjectGuid>{F204356A-6213-4B0C-A35C-03DA5CE5AC21}</ProjectGuid>
-    <TargetFramework>net48</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyTitle>KoAR Item Editor</AssemblyTitle>
     <NeutralLanguage>en-US</NeutralLanguage>
     <Description>Allows editing of items in KoAR saves.</Description>
@@ -23,8 +23,5 @@
     <PackageReference Include="IndexRange" Version="1.0.0" />
     <PackageReference Include="System.Memory" Version="4.5.4" />
     <PackageReference Include="System.Text.Json" Version="4.7.2" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Microsoft.VisualBasic" />
   </ItemGroup>
 </Project>

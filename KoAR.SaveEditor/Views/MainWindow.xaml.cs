@@ -14,10 +14,6 @@ namespace KoAR.SaveEditor.Views
         static MainWindow()
         {
             CommandManager.RegisterClassCommandBinding(typeof(MainWindow), new CommandBinding(ApplicationCommands.Help, MainWindow.DisplayHelp));
-            if (!(bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(Window)).DefaultValue)
-            {
-                Amalur.Initialize();
-            }
         }
 
         public MainWindow()

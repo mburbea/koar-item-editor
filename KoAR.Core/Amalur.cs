@@ -6,6 +6,8 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Xml;
 using System.Xml.Linq;
@@ -25,12 +27,13 @@ namespace KoAR.Core
             }
         }
 
-        public static Dictionary<uint, string> Buffs { get; } = new Dictionary<uint, string>();
+        //public static Dictionary<uint, string> Buffs { get; } = new Dictionary<uint, string>();
         public static List<EffectInfo> Effects { get; } = new List<EffectInfo>();
         public static Dictionary<uint, CoreEffectInfo> CoreEffects { get; } = new Dictionary<uint, CoreEffectInfo>();
         public static Dictionary<uint, EffectInfo> DedupedEffects { get; } = new Dictionary<uint, EffectInfo>();
         public static Dictionary<uint, TypeDefinition> TypeDefinitions { get; } = new Dictionary<uint, TypeDefinition>();
         public static List<ItemMemoryInfo> Items { get; } = new List<ItemMemoryInfo>();
+        public static Dictionary<uint, Buff> Buffs { get; } = new Dictionary<uint, Buff>();
 
         private static int? _bagOffset;
 
@@ -64,10 +67,12 @@ namespace KoAR.Core
 
         public static void Initialize(string? path = null)
         {
-            var sw = Stopwatch.StartNew();
-            Thread.CurrentThread.CurrentCulture = Thread.CurrentThread.CurrentUICulture = 
+            Thread.CurrentThread.CurrentCulture = Thread.CurrentThread.CurrentUICulture =
                 CultureInfo.DefaultThreadCurrentCulture = CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
+            var sw = Stopwatch.StartNew();
             path ??= Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
+            TypeDefinitions.AddRange(TypeDefinition.ParseFile(Path.Combine(path, "items.csv")).Select(x => (x.TypeId, x)));
+
             var effectCsv = Path.Combine(path, "CoreEffects.csv");
             if (!File.Exists(effectCsv))
             {
@@ -103,15 +108,21 @@ namespace KoAR.Core
                 .GroupBy(x => x.Code)
                 .Select(x => (x.Key, x.First())));
 
-            var buffCsv = Path.Combine(path, "buff.csv");
-            if (!File.Exists(buffCsv))
+            var buffJson = Path.Combine(path, "buff.json");
+            if (!File.Exists(buffJson))
             {
-                throw new InvalidOperationException("Cannot find buff.csv");
+                throw new InvalidOperationException("Cannot find buff.json");
             }
-            Buffs.AddRange(File.ReadLines(buffCsv).Skip(1).Select(r => (uint.Parse(r[..6], NumberStyles.HexNumber), r[7..])));
+            Buffs.AddRange(
+            JsonSerializer.Deserialize<Buff[]>(
+                File.ReadAllBytes(buffJson), new JsonSerializerOptions { 
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                    Converters = {new JsonStringEnumConverter()} 
+                })
+              .Select(x => (x.Id, x)));
 
-            TypeDefinitions.AddRange(TypeDefinition.ParseFile(Path.Combine(path, "items.csv")).Select(x => (x.TypeId, x)));
             Debug.WriteLine(sw.Elapsed);
+            return;
         }
 
         private static int GetBagOffset()

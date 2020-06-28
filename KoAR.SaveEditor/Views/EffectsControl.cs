@@ -15,7 +15,7 @@ namespace KoAR.SaveEditor.Views
     {
         public static readonly DependencyProperty AddEffectCommandProperty = DependencyProperty.Register(nameof(EffectsControl.AddEffectCommand), typeof(ICommand), typeof(EffectsControl));
 
-        public static readonly DependencyProperty BuffsProperty = DependencyProperty.Register(nameof(EffectsControl.Buffs), typeof(IReadOnlyDictionary<uint, string>), typeof(EffectsControl));
+        public static readonly DependencyProperty BuffsProperty = DependencyProperty.Register(nameof(EffectsControl.Buffs), typeof(IReadOnlyDictionary<uint, Buff>), typeof(EffectsControl));
 
         public static readonly DependencyProperty CapacityProperty = DependencyProperty.Register(nameof(EffectsControl.Capacity), typeof(int), typeof(EffectsControl),
             new PropertyMetadata(int.MaxValue));
@@ -48,9 +48,9 @@ namespace KoAR.SaveEditor.Views
             set => this.SetValue(EffectsControl.AddEffectCommandProperty, value);
         }
 
-        public IReadOnlyDictionary<uint, string>? Buffs
+        public IReadOnlyDictionary<uint, Buff>? Buffs
         {
-            get => (IReadOnlyDictionary<uint, string>?)this.GetValue(EffectsControl.BuffsProperty);
+            get => (IReadOnlyDictionary<uint, Buff>?)this.GetValue(EffectsControl.BuffsProperty);
             set => this.SetValue(EffectsControl.BuffsProperty, value);
         }
 
