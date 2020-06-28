@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
-using KoAR.Core;
 using KoAR.SaveEditor.Properties;
 using TaskDialogInterop;
 
@@ -11,10 +10,7 @@ namespace KoAR.SaveEditor.Views
 {
     partial class MainWindow
     {
-        static MainWindow()
-        {
-            CommandManager.RegisterClassCommandBinding(typeof(MainWindow), new CommandBinding(ApplicationCommands.Help, MainWindow.DisplayHelp));
-        }
+        static MainWindow() => CommandManager.RegisterClassCommandBinding(typeof(MainWindow), new CommandBinding(ApplicationCommands.Help, MainWindow.DisplayHelp));
 
         public MainWindow()
         {            

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace KoAR.SaveEditor
+namespace KoAR.SaveEditor.Constructs
 {
     public sealed class Disposable : IDisposable
     {
