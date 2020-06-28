@@ -12,10 +12,10 @@
                 <ControlTemplate TargetType="{x:Type views:EquipmentCategoryIcon}">
                     <ControlTemplate.Resources>
                         <views:TitleCaseWordsConverter x:Key="TitleCaseWordsConverter" />
-                        <views:EnumToBitmapConverter x:Key="EnumToBitmapConverter" />
+                        <views:BitmapConverter x:Key="BitmapConverter" />
                     </ControlTemplate.Resources>
                     <Image Margin="1,0" x:Name="PART_Image" Width="20" 
-                        Source="{Binding Category, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource EnumToBitmapConverter}}"
+                        Source="{Binding Category, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BitmapConverter}}"
                         ToolTip="{Binding Category, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource TitleCaseWordsConverter}}" />
                 </ControlTemplate>
             </Setter.Value>
