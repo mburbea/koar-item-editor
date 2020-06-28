@@ -48,10 +48,7 @@ namespace KoAR.SaveEditor.Views
 
         object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
 
-        object[] IMultiValueConverter.ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
+        object[] IMultiValueConverter.ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture) => throw new NotImplementedException();
 
         private static BitmapImage CreateFallback()
         {
@@ -69,7 +66,7 @@ namespace KoAR.SaveEditor.Views
                 .Select(entry => (string)entry.Key)
                 .Where(name => name.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
                 .ToDictionary(
-                    name => Path.GetFileNameWithoutExtension(name),
+                    Path.GetFileNameWithoutExtension,
                     name => new Uri($"pack://application:,,,/{Assembly.GetExecutingAssembly().GetName().Name};component/{name}"),
                     StringComparer.InvariantCultureIgnoreCase
                 );
