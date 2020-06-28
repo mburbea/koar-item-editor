@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Windows;
+using System.Windows.Data;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
 using Microsoft.Win32;
@@ -13,7 +15,7 @@ namespace KoAR.SaveEditor.Views
 {
     public sealed class MainViewModel : NotifierBase
     {
-        private readonly ObservableCollection<ItemModel> _items;
+        private readonly ItemCollection _items;
         private EquipmentCategory? _categoryFilter;
         private string _currentDurabilityFilter = string.Empty;
         private string _fileName = string.Empty;
@@ -26,7 +28,7 @@ namespace KoAR.SaveEditor.Views
 
         public MainViewModel()
         {
-            this._items = new ObservableCollection<ItemModel>();
+            this._items = new ItemCollection();
             this._filteredItems = this.Items = new ReadOnlyObservableCollection<ItemModel>(this._items);
             this.OpenFileCommand = new DelegateCommand(this.OpenFile);
             this.ResetFiltersCommand = new DelegateCommand(this.ResetFilters);
@@ -322,15 +324,18 @@ namespace KoAR.SaveEditor.Views
                 this.OpenFile();
                 return;
             }
-            foreach (ItemModel item in this._items)
+            using (this._items.GetPauseScope())
             {
-                PropertyChangedEventManager.RemoveHandler(item, this.Item_PropertyChanged, string.Empty);
-            }
-            this._items.Clear();
-            foreach (ItemModel item in Amalur.Items.Select(info => new ItemModel(info)))
-            {
-                PropertyChangedEventManager.AddHandler(item, this.Item_PropertyChanged, string.Empty);
-                this._items.Add(item);
+                foreach (ItemModel item in this._items)
+                {
+                    PropertyChangedEventManager.RemoveHandler(item, this.Item_PropertyChanged, string.Empty);
+                }
+                this._items.Clear();
+                foreach (ItemModel item in Amalur.Items.Select(info => new ItemModel(info)))
+                {
+                    PropertyChangedEventManager.AddHandler(item, this.Item_PropertyChanged, string.Empty);
+                    this._items.Add(item);
+                }
             }
             this.OnFilterChange();
         }
@@ -360,6 +365,41 @@ namespace KoAR.SaveEditor.Views
             }
             Amalur.InventorySize = this.InventorySize;
             this.UnsavedChanges = true;
+        }
+
+        private sealed class ItemCollection : ObservableCollection<ItemModel>
+        {
+            private int _pauseCounter;
+
+            public IDisposable GetPauseScope()
+            {
+                Interlocked.Increment(ref this._pauseCounter);
+                return new Disposable(() =>
+                {
+                    if (Interlocked.Decrement(ref this._pauseCounter) == 0)
+                    {
+                        this.OnPropertyChanged(new PropertyChangedEventArgs(nameof(this.Count)));
+                        this.OnPropertyChanged(new PropertyChangedEventArgs(Binding.IndexerName));
+                        this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+                    }
+                });
+            }
+
+            protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
+            {
+                if (this._pauseCounter == 0)
+                {
+                    base.OnCollectionChanged(e);
+                }
+            }
+
+            protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+            {
+                if (this._pauseCounter == 0)
+                {
+                    base.OnPropertyChanged(e);
+                }
+            }
         }
     }
 }
