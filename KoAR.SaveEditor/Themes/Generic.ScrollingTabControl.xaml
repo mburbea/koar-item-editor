@@ -33,7 +33,7 @@
                             </Grid.ColumnDefinitions>
                             <RepeatButton Content="◂" x:Name="PART_LeftButton" Padding="0" FocusVisualStyle="{x:Null}" />
                             <ScrollViewer x:Name="PART_ScrollViewer" IsTabStop="False" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Hidden" 
-                                BorderThickness="0" Padding="0" Margin="0,0,0,-1" Grid.Column="1">
+                                BorderThickness="0" Padding="0" Margin="0,0,0,-1" Grid.Column="1" FocusVisualStyle="{x:Null}">
                                 <TabPanel x:Name="PART_HeaderPanel" IsItemsHost="True" KeyboardNavigation.TabIndex="1" Margin="2,2,2,0" />
                             </ScrollViewer>
                             <RepeatButton Grid.Column="2" Content="▸" x:Name="PART_RightButton" Padding="0" FocusVisualStyle="{x:Null}" />

@@ -137,7 +137,7 @@ namespace KoAR.SaveEditor.Views
         {
             object IMultiValueConverter.Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
             {
-                if (values.Length < 3 || !(values[0] is uint code && values[1] is IDictionary translations && values[2] is IReadOnlyDictionary<uint, string> buffs))
+                if (values.Length < 3 || !(values[0] is uint code && values[1] is IDictionary translations && values[2] is IReadOnlyDictionary<uint, Buff> buffs))
                 {
                     return DependencyProperty.UnsetValue;
                 }
@@ -145,7 +145,7 @@ namespace KoAR.SaveEditor.Views
                 {
                     return ((IEffectInfo)translations[code]).DisplayText;
                 }
-                return buffs.TryGetValue(code, out string text) ? text : "Unknown";
+                return buffs.TryGetValue(code, out Buff buff) ? buff.Name! : "Unknown";
             }
 
             object[] IMultiValueConverter.ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture) => throw new NotImplementedException();
