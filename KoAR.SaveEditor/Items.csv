@@ -1,3 +1,4 @@
+Category,typeId,level,name,internal_name,durability,rarity,sockets,element,armortype,coreEffects,effects
 Staff,1D182C,36,Electrifying Staff of Bloodletting,staff_merchant_rare04c,28,Rare,,Lightning,None,1C3D801C3D90,
 Staff,1D182B,36,Arctic Staff of Gluttony,staff_merchant_rare04b,28,Rare,,Ice,None,1C3D7F1C3D92,
 Staff,1D182A,36,Mage's Staff of the Inferno,staff_merchant_rare04a,28,Infrequent,,Fire,None,,1C429314221F
