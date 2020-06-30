@@ -98,25 +98,66 @@ namespace ItemTesting
             int nm = 0;
             var dl = Amalur.Items.GroupBy(x => x.CoreEffects.DataLength).ToDictionary(x => x.Key, x => x.Count());
             using var zarchive = ZipFile.OpenRead(@"..\..\..\..\ItemTesting\simtypes_unpacked.zip");
-            var typesByName = Amalur.TypeDefinitions.ToDictionary(x => x.Value.InternalName, x => x.Value, StringComparer.OrdinalIgnoreCase);
             var buffer = (stackalloc byte[4]);
-            var lines = new List<string>();
+            var lines = new List<(uint typeId, string name, uint parentId, string parentName)>();
+            var supers = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Armor_Default", "DEV_DummyFeet", "DEV_DummyHands", "DEV_Palmstones", "PARENT_amulet", "PARENT_bow", "PARENT_Chakram", 
+                "PARENT_clothing_feet", "PARENT_clothing_head", "PARENT_clothing_legs", "PARENT_clothing_torso", "PARENT_Daggers", "PARENT_Greathammer", "PARENT_mage_feet", "PARENT_mage_hands", 
+                "PARENT_mage_head", "PARENT_Mirrorblades", "PARENT_rogue_feet", "PARENT_rogue_hands", "PARENT_rogue_head", "PARENT_rogue_legs", "PARENT_rogue_torso", "PARENT_Sceptre", 
+                "PARENT_Shield", "PARENT_Staff", "PARENT_Sword_1H", "PARENT_Sword_2H", "PARENT_warrior_feet", "PARENT_warrior_hands", "PARENT_warrior_head", "PARENT_warrior_legs", "PARENT_warrior_torso",
+                "QuestItem_SA04_GemCuttersWraps", "QuestItem_SA04_PendantOfWarmth", "QuestItem_SQ07_Ravensfeet", "QuestItem_SQ103_MurghanCharm", 
+                "QuestItem_TR06_Amulet", "QuestItem_TR06_BurusBoots",
+                 "test_full_head","PARENT_chakram_fire","PARENT_chakram_ice","PARENT_chakram_lightning","PARENT_sceptre_fire","PARENT_sceptre_ice","PARENT_sceptre_lightning",
+                "PARENT_Shield_Mage","PARENT_Shield_Mage_Fire","PARENT_Shield_Mage_Ice","PARENT_Shield_Mage_Lightning","PARENT_Shield_Rogue","PARENT_Shield_Warrior","PARENT_staff_fire","PARENT_staff_ice",
+                "PARENT_staff_lightning","PARENT_chakram_primal","PARENT_sceptre_primal","PARENT_staff_primal","PARENT_mage_torso"
+                ,"PARENT_ring","QuestItem_FFQ04_MaidensRing", "QuestItem_HM01_SignetRing", "SA03_DocentsRing","QuestItem_SQ143_FyragnosRing", "QuestItem_SQ15_Ring","SA04_AdeptsRing", "DLC2_QuestItem_SQ09_Ring","QuestItem_TRSQ02_WeddingBand", "QuestItem_TRSQ02_WGSignet"};
+
+            var simtypes = File.ReadLines(@"..\..\..\..\ItemTesting\simtype.csv")
+                .Skip(1)
+                .ToDictionary(x => uint.Parse(x[..6], NumberStyles.HexNumber), x => x[7..]);
+            var byName = simtypes.ToDictionary(x => x.Value, x => x.Key, StringComparer.OrdinalIgnoreCase);
             foreach (var entry in zarchive.Entries)
             {
                 var sname = Path.GetFileNameWithoutExtension(entry.Name);
-                if(typesByName.TryGetValue(sname, out var item))
+                if(byName.TryGetValue(sname, out var typeId))
                 {
-
                     using var stream = entry.Open();
                     stream.Read(buffer);
-                    var typeId = BitConverter.ToUInt32(buffer);
-                    Amalur.TypeDefinitions.TryGetValue(typeId, out var e);
-                    lines.Add($"{item.TypeId:X6},{item.InternalName},{typeId:X6},{e?.InternalName?? "UNKNOWN"}");
+                    var parentId = BitConverter.ToUInt32(buffer);
+                    if(parentId == 0xCDCDCDCD 
+                        && (sname.Contains("SorceryPack") || sname.Contains("MightPack") || sname.Contains("FinessePack"))
+                        && char.IsLetter(sname[^1]))
+                    {
+                        var newName = sname[..^1] + 'a';
+                        byName.TryGetValue(newName, out parentId);
+                    }
+                    simtypes.TryGetValue(parentId, out var parentName);
+                    lines.Add((typeId, sname,parentId,parentName));
                 }
-
             }
-            File.WriteAllLines("parent.csv", lines);
-            return;
+            var rec = lines.ToDictionary(x => (x.typeId, x.name), x => (x.parentId, x.parentName));
+            var output = new List<string> { "typeId,name,parentId,parentName" };
+            foreach(var l in lines)
+            {
+                if (supers.Contains(l.name))
+                {
+                    output.Add($"{l.typeId:X6},{l.name},None,None");
+                    continue;
+                }
+                var candidate = (l.typeId, l.name);
+          
+                while(rec.TryGetValue(candidate, out candidate))
+                {
+                    if (supers.Contains(candidate.name))
+                    {
+                        output.Add($"{l.typeId:X6},{l.name},{candidate.typeId:X6},{candidate.name}");
+                        break;
+                    }
+
+                }
+            }
+            File.WriteAllLines("parent.csv", output);
+
+           return;
             foreach (var (key,val) in dl.OrderBy(x=> x.Key))
             {
                 Console.WriteLine($"{key - 17} : {val}");
