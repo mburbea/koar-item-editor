@@ -40,14 +40,15 @@ namespace KoAR.Core
                 }
                 List.Add(effect);
             }
+            
         }
 
         internal byte[] Bytes { get; private set; }
         public int ItemIndex { get; internal set; }
-        public int DataLength {
-
-            get => MemoryUtilities.Read<int>(Bytes, Offsets.DataLength);
-            set => MemoryUtilities.Write(Bytes, Offsets.DataLength, value);
+        public int DataLength 
+        {
+            get => MemoryUtilities.Read<int>(Bytes, Offsets.DataLength) + 17;
+            set => MemoryUtilities.Write(Bytes, Offsets.DataLength, value - 17);
         }
 
         public int Count
@@ -55,6 +56,7 @@ namespace KoAR.Core
             get => List.Count;
         }
 
+        public bool CanModify { get; }
         public List<uint> List { get; } = new List<uint>();
 
         internal byte[] Serialize(bool forced = false)

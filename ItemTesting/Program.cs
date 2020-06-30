@@ -11,6 +11,7 @@ using Disposable;
 using KoAR.Core;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using System.Buffers.Binary;
 
 namespace ItemTesting
 {
@@ -88,12 +89,76 @@ namespace ItemTesting
 
         static void Main()
         {
+            static string FormatAsStr(IEnumerable<uint> effects) => string.Join("", effects.Select(x => $"{x:X6}"));
 
-            const string path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save98.sav";
+            const string path = @"..\..\..\..\9190114save98.sav";
             Amalur.Initialize(@"..\..\..\..\Koar.SaveEditor\");
             Amalur.ReadFile(path);
+            int c = 0;
+            int nm = 0;
+            var dl = Amalur.Items.GroupBy(x => x.CoreEffects.DataLength).ToDictionary(x => x.Key, x => x.Count());
+            using var zarchive = ZipFile.OpenRead(@"..\..\..\..\ItemTesting\simtypes_unpacked.zip");
+            var typesByName = Amalur.TypeDefinitions.ToDictionary(x => x.Value.InternalName, x => x.Value, StringComparer.OrdinalIgnoreCase);
+            var buffer = (stackalloc byte[4]);
+            var lines = new List<string>();
+            foreach (var entry in zarchive.Entries)
+            {
+                var sname = Path.GetFileNameWithoutExtension(entry.Name);
+                if(typesByName.TryGetValue(sname, out var item))
+                {
+
+                    using var stream = entry.Open();
+                    stream.Read(buffer);
+                    var typeId = BitConverter.ToUInt32(buffer);
+                    Amalur.TypeDefinitions.TryGetValue(typeId, out var e);
+                    lines.Add($"{item.TypeId:X6},{item.InternalName},{typeId:X6},{e?.InternalName?? "UNKNOWN"}");
+                }
+
+            }
+            File.WriteAllLines("parent.csv", lines);
+            return;
+            foreach (var (key,val) in dl.OrderBy(x=> x.Key))
+            {
+                Console.WriteLine($"{key - 17} : {val}");
+            }
+            foreach (var item in Amalur.Items)
+            {
+                var b = false;
+                var type = item.TypeDefinition;
+                if(type.Rarity != Rarity.Unique)
+                {
+                    continue;
+                }
+
+                if (FormatAsStr(item.CoreEffects.List) is string ce
+                    && FormatAsStr(type.CoreEffects) is string tce
+                    && tce != ce)
+                {
+                    b=true;
+                    Console.WriteLine($"Core Effects for '{type.Name}' are wrong ");
+                    Console.WriteLine($"i:{ce}\tt:{tce}");
+                }
+                if (FormatAsStr(item.Effects) is string e
+                    && FormatAsStr(type.Effects) is string te
+                    && te != e)
+                {
+                    b=true;
+                    Console.WriteLine($"Effects for '{type.Name}' are wrong");
+                    Console.WriteLine($"i:{e}\tt:{te}");
+                }
+                if (b)
+                {
+                    Console.WriteLine(BinaryPrimitives.ReverseEndianness(item.ItemId).ToString("X8"));
+                    c++;
+                    if(!type.InternalName.Contains("merchant", StringComparison.OrdinalIgnoreCase))
+                    {
+                        nm++;
+                    }
+                }
+            }
+            Console.WriteLine($"C:{c} NM:{nm}");
             int i = 0;
-            foreach(var group in CoreEffectMemory.SetOfPrefixes.GroupBy(x=> x.prefix).OrderByDescending(x=> x.Count()))
+            foreach (var group in CoreEffectMemory.SetOfPrefixes.GroupBy(x=> x.prefix).OrderByDescending(x=> x.Count()))
             {
                 var what = (from item in Amalur.Items
                            join id in @group.Select(x => x.itemId)
