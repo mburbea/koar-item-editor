@@ -53,9 +53,15 @@ namespace KoAR.SaveEditor.Views
         public string ItemDisplayName => this.HasCustomName switch
         {
             true => this.ItemName,
-            false when Amalur.TypeDefinitions.TryGetValue(this.TypeId, out TypeDefinition type) => type.Name,
-            _ => $"Unknown ({LittleEndianConverter.Convert(this.ItemId)})"
+            false when this.Item.TypeDefinition.AffixableName && (this.Item.CoreEffects.Prefix | Item.CoreEffects.Suffix) != 0 => $"{Prefix?.Modifier} {Category} {Suffix?.Modifier}".Trim(),
+            false => this.Item.TypeDefinition.Name,
+//            _ => $"Unknown ({LittleEndianConverter.Convert(this.ItemId)})"
         };
+
+
+        public Buff? Prefix => Amalur.Buffs.TryGetValue(this.Item.CoreEffects.Prefix, out Buff buff) ? buff : null;
+        public Buff? Suffix => Amalur.Buffs.TryGetValue(this.Item.CoreEffects.Suffix, out Buff buff) ? buff : null;
+
 
         public string ItemName
         {
@@ -83,6 +89,8 @@ namespace KoAR.SaveEditor.Views
         }
 
         public int MysteryInteger => this.Item.CoreEffects.DataLength;
+
+        public TypeDefinition TypeDefinition => this.Item.TypeDefinition;
 
         public uint TypeId
         {

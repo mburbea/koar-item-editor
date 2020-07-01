@@ -95,7 +95,7 @@ namespace ItemTesting
             const string path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save3.sav";
             Amalur.Initialize(@"..\..\..\..\Koar.SaveEditor\");
             Amalur.ReadFile(path);
-            var chakrams = Amalur.Items.FirstOrDefault(x => x.TypeDefinition.TypeId == 0x188CE6u);
+            var chakrams = Amalur.Items.FirstOrDefault(x => x.TypeDefinition.TypeId == 0x1D1794u);
             chakrams.CoreEffects.Suffix = 502416;
             chakrams.CoreEffects.Prefix = 688373;
             Amalur.WriteEquipmentBytes(chakrams, false);

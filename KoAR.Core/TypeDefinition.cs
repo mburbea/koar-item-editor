@@ -80,6 +80,8 @@ namespace KoAR.Core
             Element = element == 0 ? default(Element?) : element;
             CoreEffects = coreEffects;
             Effects = effects;
+            // merchant search is case sensitive to avoid affixing the Merchant's hat.
+            AffixableName = internalName.IndexOf("common", StringComparison.OrdinalIgnoreCase) != -1 || InternalName.IndexOf("merchant") != -1;
         }
 
         public EquipmentCategory Category { get; }
@@ -94,5 +96,6 @@ namespace KoAR.Core
         public ArmorType? ArmorType { get; }
         public uint[] CoreEffects { get; }
         public uint[] Effects { get; }
+        public bool AffixableName { get; } 
     }
 }

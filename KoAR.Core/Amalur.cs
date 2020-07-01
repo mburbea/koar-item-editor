@@ -23,6 +23,9 @@ namespace KoAR.Core
                 dictionary.Add(k, v);
             }
         }
+        public static TValue GetOrDefault<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key, TValue defaultValue = default) =>
+            dictionary.TryGetValue(key, out var res) ? res : defaultValue;
+
 
         //public static Dictionary<uint, string> Buffs { get; } = new Dictionary<uint, string>();
         public static List<EffectInfo> Effects { get; } = new List<EffectInfo>();
