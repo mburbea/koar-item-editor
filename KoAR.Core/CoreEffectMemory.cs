@@ -26,6 +26,7 @@ namespace KoAR.Core
 
         internal CoreEffectMemory(int coreOffset, int coreLength)
         {
+            ItemIndex = coreOffset;
             Bytes = Amalur.Bytes.AsSpan(coreOffset, coreLength).ToArray();
             var itemId = MemoryUtilities.Read<uint>(Bytes);
             int count = Bytes[Offsets.EffectCount];
@@ -36,11 +37,11 @@ namespace KoAR.Core
                 var expectedPrefix = MemoryUtilities.Read<uint>(Prefixes, i * 4);
                 if (prefix != expectedPrefix)
                 {
+                    UnsupportedFormat = true;
                     SetOfPrefixes.Add((itemId, i, prefix));
                 }
                 List.Add(effect);
             }
-            
         }
 
         internal byte[] Bytes { get; private set; }
@@ -56,7 +57,19 @@ namespace KoAR.Core
             get => List.Count;
         }
 
-        public bool CanModify { get; }
+        public uint Prefix
+        {
+            get => MemoryUtilities.Read<uint>(Bytes, Bytes.Length - 8);
+            set => MemoryUtilities.Write(Bytes, Bytes.Length - 8, value);
+        }
+
+        public uint Suffix
+        {
+            get => MemoryUtilities.Read<uint>(Bytes, Bytes.Length - 4);
+            set => MemoryUtilities.Write(Bytes, Bytes.Length - 4, value);
+        }
+
+        public bool UnsupportedFormat { get; }
         public List<uint> List { get; } = new List<uint>();
 
         internal byte[] Serialize(bool forced = false)
@@ -78,8 +91,7 @@ namespace KoAR.Core
                 effectData[newCount * 2 + 1 + i] = effect | (ulong)uint.MaxValue << 32;
             }
             effectData[newCount * 2] = (ulong)(uint)newCount << 32;
-            Bytes = MemoryUtilities.ReplaceBytes(Bytes, Offsets.FirstEffect, currentLength, MemoryMarshal.AsBytes(effectData));
-           // Bytes[Offsets.DataLength] = Mystery[newCount];
+            Bytes = MemoryUtilities.ReplaceBytes(Bytes, Offsets.FirstEffect, currentCount, MemoryMarshal.AsBytes(effectData));
             Bytes[Offsets.EffectCount] = (byte)newCount;
             return Bytes;
         }

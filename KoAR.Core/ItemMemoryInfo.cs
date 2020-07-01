@@ -25,7 +25,7 @@ namespace KoAR.Core
                 _levelShiftOffset = 8;
             }
             ItemIndex = offset;
-            ItemBytes = Amalur.Bytes.AsSpan(ItemIndex, datalength).ToArray();
+            ItemBytes = Amalur.Bytes.AsSpan(offset, datalength).ToArray();
             CoreEffects = new CoreEffectMemory(coreEffectOffset, coreEffectDataLength);
             Effects = new List<uint>(ItemBytes[Offset.EffectCount]);
             for (int i = 0; i < Effects.Capacity; i++)

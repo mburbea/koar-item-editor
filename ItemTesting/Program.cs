@@ -91,9 +91,16 @@ namespace ItemTesting
         {
             static string FormatAsStr(IEnumerable<uint> effects) => string.Join("", effects.Select(x => $"{x:X6}"));
 
-            const string path = @"..\..\..\..\9190114save98.sav";
+            //const string path = @"..\..\..\..\9190114save90.sav";
+            const string path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save3.sav";
             Amalur.Initialize(@"..\..\..\..\Koar.SaveEditor\");
             Amalur.ReadFile(path);
+            var chakrams = Amalur.Items.FirstOrDefault(x => x.TypeDefinition.TypeId == 0x188CE6u);
+            chakrams.CoreEffects.Suffix = 502416;
+            chakrams.CoreEffects.Prefix = 688373;
+            Amalur.WriteEquipmentBytes(chakrams, false);
+            Amalur.SaveFile(path);
+
             int c = 0;
             int nm = 0;
             var dl = Amalur.Items.GroupBy(x => x.CoreEffects.DataLength).ToDictionary(x => x.Key, x => x.Count());
@@ -157,7 +164,6 @@ namespace ItemTesting
             }
             File.WriteAllLines("parent.csv", output);
 
-           return;
             foreach (var (key,val) in dl.OrderBy(x=> x.Key))
             {
                 Console.WriteLine($"{key - 17} : {val}");
@@ -166,10 +172,6 @@ namespace ItemTesting
             {
                 var b = false;
                 var type = item.TypeDefinition;
-                if(type.Rarity != Rarity.Unique)
-                {
-                    continue;
-                }
 
                 if (FormatAsStr(item.CoreEffects.List) is string ce
                     && FormatAsStr(type.CoreEffects) is string tce
@@ -184,8 +186,14 @@ namespace ItemTesting
                     && te != e)
                 {
                     b=true;
-                    Console.WriteLine($"Effects for '{type.Name}' are wrong");
-                    Console.WriteLine($"i:{e}\tt:{te}");
+                    //Console.WriteLine($"Effects for '{type.Name}' are wrong");
+                    //Console.WriteLine($"i:{e}\tt:{te}");
+                }
+                if((item.CoreEffects.Prefix | item.CoreEffects.Suffix) != 0)
+                {
+                    b = true;
+                    var (first, second) = (item.CoreEffects.Prefix == 0 ? "" : Amalur.Buffs[item.CoreEffects.Prefix].Modifier, item.CoreEffects.Suffix == 0 ? "" : Amalur.Buffs[item.CoreEffects.Suffix].Modifier);
+                    //Console.WriteLine($"{type.Name} uses compact format has modifiers: {first} and {second}");
                 }
                 if (b)
                 {

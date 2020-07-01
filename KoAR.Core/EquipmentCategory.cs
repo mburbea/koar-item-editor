@@ -4,6 +4,7 @@
     {
         Hat,
         Torso,
+        Robe,
         Legs,
         Hands,
         Feet,
