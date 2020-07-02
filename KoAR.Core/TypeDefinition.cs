@@ -44,14 +44,13 @@ namespace KoAR.Core
                 || !Enum.TryParse(entries[6], out Rarity rarity)
                 || !Enum.TryParse(entries[8], out Element element)
                 || !Enum.TryParse(entries[9], out ArmorType armorType)
+                || uint.TryParse(entries[10], NumberStyles.HexNumber, null, out uint prefix)
+                || uint.TryParse(entries[11], NumberStyles.HexNumber, null, out uint suffix)
                 || !TryParseEffectList(entries[12], out uint[]? coreEffects)
                 || !TryParseEffectList(entries[13], out uint[]? effects))
             {
                 return false;
             }
-            uint.TryParse(entries[10], out uint prefix);
-            uint.TryParse(entries[11], out uint suffix);
-
             definition = new TypeDefinition(category, typeId, level, entries[3], entries[4], maxDurability, rarity, entries[7], element, armorType, prefix, suffix, coreEffects, effects);
             return true;
         }
