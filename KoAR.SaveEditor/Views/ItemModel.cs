@@ -24,8 +24,6 @@ namespace KoAR.SaveEditor.Views
 
         public EquipmentCategory Category => this.Item.TypeDefinition.Category;
 
-        public int CoreEffectCount => this.CoreEffects.Count;
-
         public IList<uint> CoreEffects { get; }
 
         public float CurrentDurability
@@ -33,8 +31,6 @@ namespace KoAR.SaveEditor.Views
             get => this.Item.CurrentDurability;
             set => this.SetItemValue(value, this.Item.CurrentDurability, value => this.Item.CurrentDurability = value);
         }
-
-        public int EffectCount => this.Item.Effects.Count;
 
         public IList<uint> Effects { get; }
 
@@ -53,15 +49,9 @@ namespace KoAR.SaveEditor.Views
         public string ItemDisplayName => this.HasCustomName switch
         {
             true => this.ItemName,
-            false when this.Item.TypeDefinition.AffixableName && (this.Item.CoreEffects.Prefix | Item.CoreEffects.Suffix) != 0 => $"{Prefix?.Modifier} {Category} {Suffix?.Modifier}".Trim(),
-            false => this.Item.TypeDefinition.Name,
-//            _ => $"Unknown ({LittleEndianConverter.Convert(this.ItemId)})"
+            false when this.TypeDefinition.AffixableName && (this.Prefix ?? this.Suffix) != null => $"{this.Prefix?.Modifier} {this.Category} {this.Suffix?.Modifier}".Trim(),
+            false => this.TypeDefinition.Name,
         };
-
-
-        public Buff? Prefix => Amalur.Buffs.TryGetValue(this.Item.CoreEffects.Prefix, out Buff buff) ? buff : null;
-        public Buff? Suffix => Amalur.Buffs.TryGetValue(this.Item.CoreEffects.Suffix, out Buff buff) ? buff : null;
-
 
         public string ItemName
         {
@@ -88,7 +78,9 @@ namespace KoAR.SaveEditor.Views
             set => this.SetItemValue(value, this.Item.MaxDurability, value => this.Item.MaxDurability = value);
         }
 
-        public int MysteryInteger => this.Item.CoreEffects.DataLength;
+        public Buff? Prefix => Amalur.Buffs.TryGetValue(this.Item.CoreEffects.Prefix, out Buff buff) ? buff : default;
+
+        public Buff? Suffix => Amalur.Buffs.TryGetValue(this.Item.CoreEffects.Suffix, out Buff buff) ? buff : default;
 
         public TypeDefinition TypeDefinition => this.Item.TypeDefinition;
 
@@ -100,35 +92,13 @@ namespace KoAR.SaveEditor.Views
 
         internal ItemMemoryInfo Item { get; }
 
-        internal void AddCoreEffect(uint code)
-        {
-            this.CoreEffects.Add(code);
-            this.OnPropertyChanged(nameof(this.CoreEffectCount));
-            this.OnPropertyChanged(nameof(this.MysteryInteger));
-        }
+        internal void AddCoreEffect(uint code)=> this.CoreEffects.Add(code);
 
-        internal void AddEffect(uint code)
-        {
-            this.Effects.Add(code);
-            this.OnPropertyChanged(nameof(this.EffectCount));
-        }
+        internal void AddEffect(uint code)=>this.Effects.Add(code);
 
-        internal void DeleteCoreEffect(uint code)
-        {
-            if (this.CoreEffects.Remove(code))
-            {
-                this.OnPropertyChanged(nameof(this.CoreEffectCount));
-                this.OnPropertyChanged(nameof(this.MysteryInteger));
-            }
-        }
+        internal void DeleteCoreEffect(uint code) => this.CoreEffects.Remove(code);
 
-        internal void DeleteEffect(uint code)
-        {
-            if (this.Effects.Remove(code))
-            {
-                this.OnPropertyChanged(nameof(this.EffectCount));
-            }
-        }
+        internal void DeleteEffect(uint code) => this.Effects.Remove(code);
 
         internal void LoadFromTypeDefinition(TypeDefinition definition)
         {

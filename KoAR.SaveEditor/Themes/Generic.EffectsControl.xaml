@@ -67,7 +67,8 @@
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             <ListBox x:Name="PART_ListBox" Grid.ColumnSpan="2" BorderBrush="LightGray" ScrollViewer.HorizontalScrollBarVisibility="Disabled" FocusVisualStyle="{x:Null}"
-                                ItemsSource="{TemplateBinding Effects}" AlternationCount="{Binding Effects.Count, RelativeSource={RelativeSource TemplatedParent}}">
+                                ItemsSource="{TemplateBinding Effects}" AlternationCount="{Binding Effects.Count, RelativeSource={RelativeSource TemplatedParent}}" MaxHeight="250"
+                                VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling" VirtualizingPanel.ScrollUnit="Pixel">
                                 <ListBox.Style>
                                     <Style TargetType="{x:Type ListBox}">
                                         <Style.Triggers>

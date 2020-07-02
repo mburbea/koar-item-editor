@@ -332,16 +332,33 @@
                                                         <Setter Property="Text" Value="Core Effects:" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
-                                                <Setter Property="Text" Value="{Binding MysteryInteger, Mode=OneWay, StringFormat='Core Effects: (Mystery Byte: {0:X2})'}" />
+                                                <Setter Property="Text" Value="{Binding CoreEffects.Count, Mode=OneWay, StringFormat='Core Effects: ({0})'}" />
                                             </Style>
                                         </TextBlock.Style>
                                     </TextBlock>
                                 </DataTemplate>
                             </views:EffectsControl.HeaderTemplate>
                         </views:EffectsControl>
-                        <views:EffectsControl Margin="4" Header="Effects:" Effects="{Binding SelectedItem.Effects}" Buffs="{x:Static core:Amalur.Buffs}"
+                        <views:EffectsControl Margin="4" Header="{Binding SelectedItem}" Effects="{Binding SelectedItem.Effects}" Buffs="{x:Static core:Amalur.Buffs}"
                             EffectTranslations="{x:Static core:Amalur.DedupedEffects}" EffectDefinitions="{x:Static core:Amalur.Effects}"
-                            AddEffectCommand="{Binding AddEffectCommand}" DeleteEffectCommand="{Binding DeleteEffectCommand}" />
+                            AddEffectCommand="{Binding AddEffectCommand}" DeleteEffectCommand="{Binding DeleteEffectCommand}">
+                            <views:EffectsControl.HeaderTemplate>
+                                <DataTemplate DataType="{x:Type views:ItemModel}">
+                                    <TextBlock>
+                                        <TextBlock.Style>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding}" Value="{x:Null}">
+                                                        <Setter Property="Text" Value="Effects:" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                                <Setter Property="Text" Value="{Binding Effects.Count, Mode=OneWay, StringFormat='Core Effects: ({0})'}" />
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </views:EffectsControl.HeaderTemplate>
+                        </views:EffectsControl>
                     </StackPanel>
                 </ScrollViewer>
             </Grid>
