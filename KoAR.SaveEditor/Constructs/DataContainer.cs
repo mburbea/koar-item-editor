@@ -33,6 +33,8 @@ namespace KoAR.SaveEditor.Constructs
 
         public override int GetHashCode() => this.Data == null ? 0 : this.Data.GetHashCode();
 
+        public override string ToString() => this.Data == null ? string.Empty : this.Data.ToString();
+
         private sealed class DataContainerCollectionConverter : IValueConverter
         {
             object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
