@@ -42,14 +42,18 @@ namespace KoAR.Core
 
         public void AddItem(TypeDefinition type)
         {
-            uint typeId = type.TypeId;
-            ReadOnlySpan<byte> src = new byte[] { 0, 0, 0, 0, 0x0A, 0x03, 0, 0, 0, 0, 0, 0, 0x80, 0x3F, 0x01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF };
-            Span<byte> temp = stackalloc byte[25];
-            src.CopyTo(temp);
-            MemoryUtilities.Write(temp, 0, typeId);
+            Span<byte> temp = stackalloc byte[25 + type.Effects.Length * 8];
+            MemoryUtilities.Write(temp, 0, (ulong)type.TypeId | ((ulong)0x03_0A) << 32); // 8
             MemoryUtilities.Write(temp, 10, type.MaxDurability);
+            temp[14] = 1;
+            MemoryUtilities.Write(temp, 18, type.Effects.Length);
+            for(int i = 0; i < type.Effects.Length; i++)
+            {
+                MemoryUtilities.Write(temp,  i * 8 + 22, (ulong)type.Effects[i] | ((ulong)uint.MaxValue) << 32);
+            }
+            temp[^1] = 0xFF;
             Amalur.Bytes = MemoryUtilities.ReplaceBytes(Amalur.Bytes, Offset + 17, 0, temp);
-            DataLength += 25;
+            DataLength += temp.Length;
             Count++;
         }
 

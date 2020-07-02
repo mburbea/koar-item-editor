@@ -91,15 +91,16 @@ namespace ItemTesting
         {
             static string FormatAsStr(IEnumerable<uint> effects) => string.Join("", effects.Select(x => $"{x:X6}"));
 
-            //const string path = @"..\..\..\..\9190114save90.sav";
-            const string path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save3.sav";
+            const string path = @"..\..\..\..\9190114save90.sav";
+            //const string path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save3.sav";
             Amalur.Initialize(@"..\..\..\..\Koar.SaveEditor\");
             Amalur.ReadFile(path);
-            var chakrams = Amalur.Items.FirstOrDefault(x => x.TypeDefinition.TypeId == 0x1D1794u);
-            chakrams.CoreEffects.Suffix = 502416;
-            chakrams.CoreEffects.Prefix = 688373;
-            Amalur.WriteEquipmentBytes(chakrams, false);
-            Amalur.SaveFile(path);
+            //Amalur.Stash.AddItem(Amalur.TypeDefinitions[0x1FDF23]);
+            //Amalur.SaveFile(path);
+            //return;
+            //var chakrams = Amalur.Items.FirstOrDefault(x => x.TypeDefinition.TypeId == 0x1D16F4);
+            //Amalur.WriteEquipmentBytes(chakrams, false);
+            //Amalur.SaveFile(path);
 
             int c = 0;
             int nm = 0;
@@ -122,6 +123,15 @@ namespace ItemTesting
                 .Skip(1)
                 .ToDictionary(x => uint.Parse(x[..6], NumberStyles.HexNumber), x => x[7..]);
             var byName = simtypes.ToDictionary(x => x.Value, x => x.Key, StringComparer.OrdinalIgnoreCase);
+            var affixedItems = new Dictionary<uint, string>();
+            foreach(var item in Amalur.Items)
+            {
+                
+                if((item.CoreEffects.Prefix | item.CoreEffects.Suffix) != 0u)
+                {
+                    affixedItems[item.TypeDefinition.TypeId] = $"{item.CoreEffects.Prefix:X6},{item.CoreEffects.Suffix:X6}";
+                }
+            }
             foreach (var entry in zarchive.Entries)
             {
                 var sname = Path.GetFileNameWithoutExtension(entry.Name);
@@ -147,7 +157,8 @@ namespace ItemTesting
             {
                 if (supers.Contains(l.name))
                 {
-                    output.Add($"{l.typeId:X6},{l.name},None,None");
+                    var affix = affixedItems.GetOrDefault(l.typeId, "None,None");
+                    output.Add($"{l.typeId:X6},{l.name},None,None,{affix}");
                     continue;
                 }
                 var candidate = (l.typeId, l.name);
@@ -156,10 +167,10 @@ namespace ItemTesting
                 {
                     if (supers.Contains(candidate.name))
                     {
-                        output.Add($"{l.typeId:X6},{l.name},{candidate.typeId:X6},{candidate.name}");
+                        var affix = affixedItems.GetOrDefault(l.typeId, "None,None");
+                        output.Add($"{l.typeId:X6},{l.name},{candidate.typeId:X6},{candidate.name},{affix}");
                         break;
                     }
-
                 }
             }
             File.WriteAllLines("parent.csv", output);
@@ -172,32 +183,19 @@ namespace ItemTesting
             {
                 var b = false;
                 var type = item.TypeDefinition;
-
-                if (FormatAsStr(item.CoreEffects.List) is string ce
-                    && FormatAsStr(type.CoreEffects) is string tce
-                    && tce != ce)
+                var ce = FormatAsStr(item.CoreEffects.List);
+                var tce = FormatAsStr(type.CoreEffects);
+                var e = FormatAsStr(item.Effects);
+                var te = FormatAsStr(type.Effects);
+                if (tce != ce || te != e)
                 {
                     b=true;
-                    Console.WriteLine($"Core Effects for '{type.Name}' are wrong ");
-                    Console.WriteLine($"i:{ce}\tt:{tce}");
-                }
-                if (FormatAsStr(item.Effects) is string e
-                    && FormatAsStr(type.Effects) is string te
-                    && te != e)
-                {
-                    b=true;
-                    //Console.WriteLine($"Effects for '{type.Name}' are wrong");
-                    //Console.WriteLine($"i:{e}\tt:{te}");
-                }
-                if((item.CoreEffects.Prefix | item.CoreEffects.Suffix) != 0)
-                {
-                    b = true;
-                    var (first, second) = (item.CoreEffects.Prefix == 0 ? "" : Amalur.Buffs[item.CoreEffects.Prefix].Modifier, item.CoreEffects.Suffix == 0 ? "" : Amalur.Buffs[item.CoreEffects.Suffix].Modifier);
-                    //Console.WriteLine($"{type.Name} uses compact format has modifiers: {first} and {second}");
-                }
-                if (b)
-                {
-                    Console.WriteLine(BinaryPrimitives.ReverseEndianness(item.ItemId).ToString("X8"));
+                    Console.WriteLine($"Effects for '{type.InternalName}' are wrong ");
+                    Console.WriteLine($"Type_e:{te}\tType_ce:{tce}\tItem_e:{e}\tItem_ce:{ce} bad prefixes:{item.CoreEffects.UnsupportedFormat}");
+                    if(Amalur.Buffs.TryGetValue(item.CoreEffects.Prefix, out var p) | Amalur.Buffs.TryGetValue(item.CoreEffects.Suffix, out var s))
+                    {
+                        Console.WriteLine($"prefix {p?.Modifier} ({p?.Id:X6})\tsuffix {s?.Modifier} ({s?.Id:X6})");
+                    }
                     c++;
                     if(!type.InternalName.Contains("merchant", StringComparison.OrdinalIgnoreCase))
                     {
@@ -207,7 +205,7 @@ namespace ItemTesting
             }
             Console.WriteLine($"C:{c} NM:{nm}");
             int i = 0;
-            foreach (var group in CoreEffectMemory.SetOfPrefixes.GroupBy(x=> x.prefix).OrderByDescending(x=> x.Count()))
+            foreach (var group in CoreEffectMemory.SetOfInstances.GroupBy(x=> x.prefix).OrderByDescending(x=> x.Count()))
             {
                 var what = (from item in Amalur.Items
                            join id in @group.Select(x => x.itemId)
@@ -218,7 +216,7 @@ namespace ItemTesting
                 var all_merchant = what.All(x => x.InternalName.Contains("merchant", StringComparison.OrdinalIgnoreCase));
                 Console.WriteLine($"{group.Key}\t{group.Key:X8}\t{string.Join(',', group.Select(x => x.offset).Distinct())}\t{group.Count()}\t{all_merchant}\t{string.Join(',', poo)}");
             }
-            Console.WriteLine($"Total:{CoreEffectMemory.SetOfPrefixes.Count}");
+            Console.WriteLine($"Total:{CoreEffectMemory.SetOfInstances.Count}");
             //ConvertSymbolsToCsv(@"C:\temp\", @"C:\temp\output");
 
             //var stash = new Stash();
