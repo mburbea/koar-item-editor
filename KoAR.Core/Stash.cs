@@ -49,7 +49,7 @@ namespace KoAR.Core
             MemoryUtilities.Write(temp, 18, type.Effects.Length);
             for(int i = 0; i < type.Effects.Length; i++)
             {
-                MemoryUtilities.Write(temp,  i * 8 + 22, (ulong)type.Effects[i] | ((ulong)uint.MaxValue) << 32);
+                MemoryUtilities.Write(temp,  i * 8 + 22, type.Effects[i] | ((ulong)uint.MaxValue) << 32);
             }
             temp[^1] = 0xFF;
             Amalur.Bytes = MemoryUtilities.ReplaceBytes(Amalur.Bytes, Offset + 17, 0, temp);

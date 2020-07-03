@@ -49,7 +49,7 @@ namespace KoAR.SaveEditor.Views
         public string ItemDisplayName => this.HasCustomName switch
         {
             true => this.ItemName,
-            false when this.TypeDefinition.AffixableName && (this.Prefix ?? this.Suffix) != null => $"{this.Prefix?.Modifier} {this.Category} {this.Suffix?.Modifier}".Trim(),
+            false when this.TypeDefinition.AffixableName && (this.Prefix ?? this.Suffix) != null => $"{this.Prefix?.Modifier} {this.TypeDefinition.TypeDisplayName} {this.Suffix?.Modifier}".Trim(),
             false => this.TypeDefinition.Name,
         };
 

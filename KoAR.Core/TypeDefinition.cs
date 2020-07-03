@@ -101,6 +101,40 @@ namespace KoAR.Core
         public uint[] Effects { get; }
         public uint Prefix { get; }
         public uint Suffix { get; }
-        public bool AffixableName { get; } 
+        public bool AffixableName { get; }
+
+        public string TypeDisplayName => ArmorType switch
+        {
+            Core.ArmorType.Finesse => Category switch
+            {
+                EquipmentCategory.Hat => "Hood",
+                EquipmentCategory.Feet => "Greaves",
+                EquipmentCategory.Hands => "Gloves",
+                EquipmentCategory.Legs => "Leggings",
+                EquipmentCategory.Torso => "Armor",
+                EquipmentCategory.Shield => "Buckler",
+                _ => Category.ToString()
+            },
+            Core.ArmorType.Might => Category switch
+            {
+                EquipmentCategory.Hat => "Helm",
+                EquipmentCategory.Feet => "Greaves",
+                EquipmentCategory.Hands => "Gauntlets",
+                EquipmentCategory.Legs => "Chausses",
+                EquipmentCategory.Torso => "Cuirass",
+                EquipmentCategory.Shield => "Kite Shield",
+                _ => Category.ToString()
+            },
+            Core.ArmorType.Sorcery => Category switch
+            {
+                EquipmentCategory.Hat => "Cowl",
+                EquipmentCategory.Feet => "Greaves",
+                EquipmentCategory.Hands => "Handwraps",
+                EquipmentCategory.Robes => "Robes",
+                EquipmentCategory.Shield => "Talisman",
+                _ => Category.ToString()
+            },
+            _ => Category.ToString()
+        };
     }
 }
