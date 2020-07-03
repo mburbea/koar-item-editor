@@ -43,7 +43,7 @@ namespace KoAR.Core
         public void AddItem(TypeDefinition type)
         {
             Span<byte> temp = stackalloc byte[25 + type.Effects.Length * 8];
-            MemoryUtilities.Write(temp, 0, (ulong)type.TypeId | ((ulong)0x03_0A) << 32); // 8
+            MemoryUtilities.Write(temp, 0, type.TypeId | ((ulong)0x03_0A) << 32); // 8
             MemoryUtilities.Write(temp, 10, type.MaxDurability);
             temp[14] = 1;
             MemoryUtilities.Write(temp, 18, type.Effects.Length);
@@ -61,11 +61,7 @@ namespace KoAR.Core
         {
             ReadOnlySpan<byte> stashIndicator = new byte[] { 0x00, 0xF5, 0x43, 0xEB, 0x00, 0x02 };
             var offset = Amalur.Bytes.AsSpan().IndexOf(stashIndicator);
-            if (offset == -1)
-            {
-                return null;
-            }
-            return new Stash(offset - 3);
+            return offset == -1 ? null : new Stash(offset - 3);
         }
     }
 }
