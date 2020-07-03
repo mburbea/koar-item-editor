@@ -57,9 +57,9 @@ namespace KoAR.Core
 
         internal static IEnumerable<TypeDefinition> ParseFile(string path)
         {
-            foreach(var line in File.ReadLines(path).Skip(1))
+            foreach (var line in File.ReadLines(path).Skip(1))
             {
-                if(TryLoadFromRow(line.Split(','), out var definition))
+                if (TryLoadFromRow(line.Split(','), out var definition))
                 {
                     yield return definition;
                 }
@@ -77,8 +77,8 @@ namespace KoAR.Core
             MaxDurability = maxDurability;
             Rarity = rarity;
             Sockets = sockets;
-            ArmorType = ArmorType == 0 ? default(ArmorType?) : armorType;
-            Element = element == 0 ? default(Element?) : element;
+            ArmorType = armorType;
+            Element = element;
             CoreEffects = coreEffects;
             Effects = effects;
             Prefix = prefix;
@@ -95,45 +95,33 @@ namespace KoAR.Core
         public float MaxDurability { get; }
         public Rarity Rarity { get; }
         public string Sockets { get; }
-        public Element? Element { get; }
-        public ArmorType? ArmorType { get; }
+        public Element Element { get; }
+        public ArmorType ArmorType { get; }
         public uint[] CoreEffects { get; }
         public uint[] Effects { get; }
         public uint Prefix { get; }
         public uint Suffix { get; }
         public bool AffixableName { get; }
 
-        public string TypeDisplayName => ArmorType switch
+        public string TypeDisplayName => this switch
         {
-            Core.ArmorType.Finesse => Category switch
-            {
-                EquipmentCategory.Hat => "Hood",
-                EquipmentCategory.Feet => "Greaves",
-                EquipmentCategory.Hands => "Gloves",
-                EquipmentCategory.Legs => "Leggings",
-                EquipmentCategory.Torso => "Armor",
-                EquipmentCategory.Shield => "Buckler",
-                _ => Category.ToString()
-            },
-            Core.ArmorType.Might => Category switch
-            {
-                EquipmentCategory.Hat => "Helm",
-                EquipmentCategory.Feet => "Greaves",
-                EquipmentCategory.Hands => "Gauntlets",
-                EquipmentCategory.Legs => "Chausses",
-                EquipmentCategory.Torso => "Cuirass",
-                EquipmentCategory.Shield => "Kite Shield",
-                _ => Category.ToString()
-            },
-            Core.ArmorType.Sorcery => Category switch
-            {
-                EquipmentCategory.Hat => "Cowl",
-                EquipmentCategory.Feet => "Greaves",
-                EquipmentCategory.Hands => "Handwraps",
-                EquipmentCategory.Robes => "Robes",
-                EquipmentCategory.Shield => "Talisman",
-                _ => Category.ToString()
-            },
+            TypeDefinition { ArmorType: ArmorType.Finesse, Category: EquipmentCategory.Hat } => "Hood",
+            TypeDefinition { ArmorType: ArmorType.Finesse, Category: EquipmentCategory.Feet } => "Boots",
+            TypeDefinition { ArmorType: ArmorType.Finesse, Category: EquipmentCategory.Hands } => "Gloves",
+            TypeDefinition { ArmorType: ArmorType.Finesse, Category: EquipmentCategory.Legs } => "Leggings",
+            TypeDefinition { ArmorType: ArmorType.Finesse, Category: EquipmentCategory.Torso } => "Armor",
+            TypeDefinition { ArmorType: ArmorType.Finesse, Category: EquipmentCategory.Shield } => "Buckler",
+            TypeDefinition { ArmorType: ArmorType.Might, Category: EquipmentCategory.Hat } => "Hood",
+            TypeDefinition { ArmorType: ArmorType.Might, Category: EquipmentCategory.Feet } => "Greaves",
+            TypeDefinition { ArmorType: ArmorType.Might, Category: EquipmentCategory.Hands } => "Gauntlets",
+            TypeDefinition { ArmorType: ArmorType.Might, Category: EquipmentCategory.Legs } => "Chausses",
+            TypeDefinition { ArmorType: ArmorType.Might, Category: EquipmentCategory.Torso } => "Cuirass",
+            TypeDefinition { ArmorType: ArmorType.Might, Category: EquipmentCategory.Shield } => "Kite Shield",
+            TypeDefinition { ArmorType: ArmorType.Sorcery, Category: EquipmentCategory.Hat } => "Cowl",
+            TypeDefinition { ArmorType: ArmorType.Sorcery, Category: EquipmentCategory.Feet } => "Shoes",
+            TypeDefinition { ArmorType: ArmorType.Sorcery, Category: EquipmentCategory.Hands } => "Handwraps",
+            TypeDefinition { ArmorType: ArmorType.Sorcery, Category: EquipmentCategory.Robes } => "Robes",
+            TypeDefinition { ArmorType: ArmorType.Sorcery, Category: EquipmentCategory.Shield } => "Talisman",
             _ => Category.ToString()
         };
     }
