@@ -44,8 +44,8 @@ namespace KoAR.Core
                 || !Enum.TryParse(entries[6], out Rarity rarity)
                 || !Enum.TryParse(entries[8], out Element element)
                 || !Enum.TryParse(entries[9], out ArmorType armorType)
-                || uint.TryParse(entries[10], NumberStyles.HexNumber, null, out uint prefix)
-                || uint.TryParse(entries[11], NumberStyles.HexNumber, null, out uint suffix)
+                || !uint.TryParse(entries[10], NumberStyles.HexNumber, null, out uint prefix)
+                || !uint.TryParse(entries[11], NumberStyles.HexNumber, null, out uint suffix)
                 || !TryParseEffectList(entries[12], out uint[]? coreEffects)
                 || !TryParseEffectList(entries[13], out uint[]? effects))
             {
@@ -81,6 +81,8 @@ namespace KoAR.Core
             Element = element == 0 ? default(Element?) : element;
             CoreEffects = coreEffects;
             Effects = effects;
+            Prefix = prefix;
+            Suffix = suffix;
             // merchant search is case sensitive to avoid affixing the Merchant's hat.
             AffixableName = internalName.IndexOf("common", StringComparison.OrdinalIgnoreCase) != -1 || InternalName.IndexOf("merchant") != -1;
         }
