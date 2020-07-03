@@ -11,15 +11,11 @@ namespace KoAR.SaveEditor.Constructs
 
         object? IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => NegatedBooleanConverter.Convert(value);
 
-        private static object? Convert(object value)
+        private static object? Convert(object value) => value switch
         {
-            return value switch
-            {
-                null => null,
-                true => BooleanBoxes.False,
-                false => BooleanBoxes.True,
-                _ => DependencyProperty.UnsetValue,
-            };
-        }
+            null => null,
+            bool boolean => BooleanBoxes.GetBox(!boolean),
+            _ => DependencyProperty.UnsetValue,
+        };
     }
 }

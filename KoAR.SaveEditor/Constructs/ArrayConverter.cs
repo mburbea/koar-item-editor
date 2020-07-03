@@ -10,7 +10,7 @@ namespace KoAR.SaveEditor.Constructs
 
         object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value is object[] array && array.Length == 1 ? array[0] : value;
+            return value is object[] { Length: 1 } array ? array[0] : value;
         }
     }
 }

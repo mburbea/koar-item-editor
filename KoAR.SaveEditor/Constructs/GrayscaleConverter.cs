@@ -25,6 +25,7 @@ namespace KoAR.SaveEditor.Constructs
             bitmap.Source = source;
             bitmap.DestinationFormat = PixelFormats.Gray8;
             bitmap.EndInit();
+            bitmap.Freeze();
             return bitmap;
         }
     }
