@@ -82,12 +82,14 @@ namespace KoAR.SaveEditor.Views
 
         public Buff? Suffix => Amalur.Buffs.TryGetValue(this.Item.CoreEffects.Suffix, out Buff buff) ? buff : default;
 
-        public TypeDefinition TypeDefinition => this.Item.TypeDefinition;
-
-        public uint TypeId
+        public TypeDefinition TypeDefinition
         {
-            get => this.Item.TypeDefinition.TypeId;
-            set { }// this.SetItemValue(value, this.Item.TypeDefinition.TypeId, value => this.Item.TypeId = value);
+            get => this.Item.TypeDefinition;
+            set
+            {
+                this.Item.TypeDefinition = value;
+                this.OnPropertyChanged(string.Empty);
+            }
         }
 
         internal ItemMemoryInfo Item { get; }
@@ -99,12 +101,6 @@ namespace KoAR.SaveEditor.Views
         internal void DeleteCoreEffect(uint code) => this.CoreEffects.Remove(code);
 
         internal void DeleteEffect(uint code) => this.Effects.Remove(code);
-
-        internal void LoadFromTypeDefinition(TypeDefinition definition)
-        {
-            this.Item.LoadFromDefinition(definition);
-            this.OnPropertyChanged(string.Empty);
-        }
 
         private bool SetItemValue<T>(T value, T currentValue, Action<T> setValue, [CallerMemberName] string propertyName = "")
         {

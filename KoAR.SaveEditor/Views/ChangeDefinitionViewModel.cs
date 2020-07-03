@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using KoAR.Core;
@@ -8,45 +9,128 @@ namespace KoAR.SaveEditor.Views
 {
     public sealed class ChangeDefinitionViewModel : NotifierBase
     {
-        private readonly ItemModel _item;
-        private uint _typeId;
+        private ArmorType _armorTypeFilter;
+        private EquipmentCategory _category;
+        private TypeDefinition? _definition;
+        private IEnumerable<TypeDefinition>? _definitions;
+        private Element _elementFilter;
+        private Rarity _rarityFilter;
 
-        public ChangeDefinitionViewModel(ItemModel item)
+        public ChangeDefinitionViewModel(ItemModel? item)
         {
-            this._typeId = (this._item = item).TypeId;
-            List<TypeDefinition> definitions = Amalur.TypeDefinitions.Values.Where(definition => definition.Category == item.Category).ToList();
-            if (!Amalur.TypeDefinitions.ContainsKey(this._typeId))
+            this._definition = (this.Item = item)?.TypeDefinition ?? Amalur.TypeDefinitions.Values.First();
+            this._category = item?.Category ?? default;
+            this.ProcessCommand = new DelegateCommand(this.Process, this.CanProcess);
+            this.OnFilterChanged();
+        }
+
+        public ArmorType ArmorTypeFilter
+        {
+            get => this._armorTypeFilter;
+            set
             {
-                definitions.Add(item.Item.TypeDefinition);
+                if (this.SetValue(ref this._armorTypeFilter, value))
+                {
+                    this.OnFilterChanged();
+                }
             }
-            this.Definitions = definitions;
-            this.ChangeDefinitionCommand = new DelegateCommand(this.ChangeDefinition, () => this._typeId != this._item.TypeId);
         }
 
-        public EquipmentCategory Category => this._item.Category;
-
-        public DelegateCommand ChangeDefinitionCommand { get; }
-
-        public IReadOnlyList<TypeDefinition> Definitions { get; }
-
-        public string DisplayName => this._item.ItemDisplayName;
-
-        public uint TypeId
+        public EquipmentCategory Category
         {
-            get => this._typeId;
-            set => this.SetValue(ref this._typeId, value);
+            get => this._category;
+            set
+            {
+                if (this.SetValue(ref this._category, value))
+                {
+                    this._rarityFilter = default;
+                    this.OnPropertyChanged(nameof(this.RarityFilter));
+                    this._elementFilter = default;
+                    this.OnPropertyChanged(nameof(this.ElementFilter));
+                    this._armorTypeFilter = default;
+                    this.OnPropertyChanged(nameof(this.ArmorTypeFilter));
+                    this.OnFilterChanged();
+                }
+            }
         }
 
-        private void ChangeDefinition()
+        public TypeDefinition? Definition
         {
-            if (!Amalur.TypeDefinitions.TryGetValue(this._typeId, out TypeDefinition definition))
+            get => this._definition;
+            set => this.SetValue(ref this._definition, value);
+        }
+
+        public IEnumerable<TypeDefinition>? Definitions
+        {
+            get => this._definitions;
+            private set => this.SetValue(ref this._definitions, value);
+        }
+
+        public Element ElementFilter
+        {
+            get => this._elementFilter;
+            set
+            {
+                if (this.SetValue(ref this._elementFilter, value))
+                {
+                    this.OnFilterChanged();
+                }
+            }
+        }
+
+        public ItemModel? Item { get; }
+
+        public DelegateCommand ProcessCommand { get; }
+
+        public Rarity RarityFilter
+        {
+            get => this._rarityFilter;
+            set
+            {
+                if (this.SetValue(ref this._rarityFilter, value))
+                {
+                    this.OnFilterChanged();
+                }
+            }
+        }
+
+        private bool CanProcess() => this._definition != null;
+
+        private void OnFilterChanged()
+        {
+            IEnumerable<TypeDefinition> definitions = Amalur.TypeDefinitions.Values.Where(item => item.Category == this._category);
+            if (this._elementFilter != default)
+            {
+                definitions = definitions.Where(item => item.Element == this._elementFilter);
+            }
+            if (this._armorTypeFilter != default)
+            {
+                definitions = definitions.Where(item => item.ArmorType == this._armorTypeFilter);
+            }
+            if (this._rarityFilter != default)
+            {
+                definitions = definitions.Where(item => item.Rarity == this._rarityFilter);
+            }
+            this.Definitions = definitions.ToArray();
+            if (this._definition == null || !this.Definitions.Contains(this._definition))
+            {
+                this.Definition = this.Definitions.FirstOrDefault();
+            }
+        }
+
+        private void Process()
+        {
+            if (this._definition == null)
             {
                 return;
             }
-            this._item.LoadFromTypeDefinition(definition);
-            Window window = Application.Current.Windows.OfType<ChangeDefinitionWindow>().Single();
-            window.DialogResult = true;
-            window.Close();
+            if (this.Item != null)
+            {
+                this.Item.TypeDefinition = this._definition;
+                Window window = Application.Current.Windows.OfType<ChangeDefinitionWindow>().Single();
+                window.DialogResult = true;
+                window.Close();
+            }
         }
     }
 }

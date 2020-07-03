@@ -119,36 +119,8 @@
                         </ListView.ContextMenu>
                         <ListView.View>
                             <GridView AllowsColumnReorder="True">
-                                <GridViewColumn Header="Type Id" Width="Auto" views:ItemsView.PropertyName="TypeId">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate DataType="{x:Type views:ItemModel}">
-                                            <Grid>
-                                                <TextBlock Text="{Binding TypeId, StringFormat='X6'}" TextAlignment="Right">
-                                                    <TextBlock.Style>
-                                                        <Style TargetType="{x:Type TextBlock}">
-                                                            <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True">
-                                                                    <Setter Property="Visibility" Value="Collapsed" />
-                                                                </DataTrigger>
-                                                            </Style.Triggers>
-                                                        </Style>
-                                                    </TextBlock.Style>
-                                                </TextBlock>
-                                                <TextBox TextAlignment="Right" Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                    constructs:TextBoxSelect.SelectOnFocus="{Binding IsVisible, RelativeSource={RelativeSource Self}}">
-                                                    <TextBox.Text>
-                                                        <Binding Path="TypeId" Converter="{StaticResource HexConverter}">
-                                                            <Binding.ValidationRules>
-                                                                <constructs:ValueRequiredValidationRule />
-                                                                <constructs:RangeValidationRule Min="0" Max="0xFFFFFF" NumberStyle="HexNumber"/>
-                                                            </Binding.ValidationRules>
-                                                        </Binding>
-                                                    </TextBox.Text>
-                                                </TextBox>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
+                                <GridViewColumn Header="Type Id" Width="Auto" views:ItemsView.PropertyName="TypeDefinition.TypeId" 
+                                    DisplayMemberBinding="{Binding TypeDefinition.TypeId, StringFormat=X6}" />
                                 <GridViewColumn Header="Level" Width="Auto" views:ItemsView.PropertyName="Level">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate DataType="{x:Type views:ItemModel}">

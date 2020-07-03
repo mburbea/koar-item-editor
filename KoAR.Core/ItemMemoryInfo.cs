@@ -259,7 +259,7 @@ namespace KoAR.Core
             return ItemBytes;
         }
 
-        public void LoadFromDefinition(TypeDefinition definition)
+        internal void LoadFromDefinition(TypeDefinition definition)
         {
             CurrentDurability = definition.MaxDurability;
             MaxDurability = definition.MaxDurability;

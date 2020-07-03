@@ -6,11 +6,21 @@
     xmlns:core="clr-namespace:KoAR.Core;assembly=KoAR.Core"
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs"
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views"
+    xmlns:s="clr-namespace:System;assembly=mscorlib"
     xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
     mc:Ignorable="d" d:DataContext="{d:DesignInstance views:ChangeDefinitionViewModel}"
-    Icon="/app.ico" Width="400" SizeToContent="Height"
-    WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
-    Title="{Binding DisplayName, StringFormat='Change Definition - {0}'}">
+    Icon="/app.ico" SizeToContent="WidthAndHeight"
+    WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
+    <Window.Style>
+        <Style TargetType="{x:Type Window}" BasedOn="{StaticResource {x:Type Window}}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Item}" Value="{x:Null}">
+                    <Setter Property="Title" Value="Add Stash Item" />
+                </DataTrigger>
+            </Style.Triggers>
+            <Setter Property="Title" Value="{Binding Item.ItemDisplayName, StringFormat='Change Definition - {0}'}" />
+        </Style>
+    </Window.Style>
     <Grid Margin="4">
         <Grid.Resources>
             <constructs:ArrayConverter x:Key="ArrayConverter" />
@@ -18,7 +28,6 @@
                 <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                 <Setter Property="VerticalAlignment" Value="Center" />
                 <Setter Property="Margin" Value="2" />
-                <Setter Property="Grid.Column" Value="1" />
             </Style>
             <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
                 <Setter Property="FocusVisualStyle" Value="{x:Null}" />
@@ -28,20 +37,56 @@
                     <scm:SortDescription PropertyName="Name" />
                 </CollectionViewSource.SortDescriptions>
             </CollectionViewSource>
+            <ObjectDataProvider x:Key="Categories" ObjectType="{x:Type s:Enum}" MethodName="GetValues">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="core:EquipmentCategory" />
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
+
+
+
+
+
+
         </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition />
+            <!--Category-->
+            <RowDefinition Height="Auto" />
+            <!--3 Pickers -->
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto "/>
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <TextBlock Grid.ColumnSpan="2" Text="WARNING: Changing the type is irreversible!" TextAlignment="Center" FontWeight="SemiBold" Foreground="Red" Margin="4" />
+        <TextBlock Grid.ColumnSpan="2" Text="WARNING: Changing the type is irreversible!" TextAlignment="Center" 
+            FontWeight="SemiBold" Foreground="Red" Margin="4">
+            <TextBlock.Style>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Item}" Value="{x:Null}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
         <TextBlock Grid.Row="1" Text="Category:" Margin="2" VerticalAlignment="Center" />
-        <ComboBox Grid.Row="1" ItemsSource="{Binding Category, Converter={StaticResource ArrayConverter}}" SelectedItem="{Binding Category, Mode=OneTime}">
+        <ComboBox Grid.Row="1" Grid.Column="1" SelectedItem="{Binding Category}">
+            <ComboBox.Style>
+                <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Item}" Value="{x:Null}">
+                            <Setter Property="ItemsSource" Value="{Binding Source={StaticResource Categories}}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                    <Setter Property="ItemsSource" Value="{Binding Category, Converter={StaticResource ArrayConverter}, Mode=OneTime}" />
+                </Style>
+            </ComboBox.Style>
             <ComboBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type core:EquipmentCategory}">
                     <StackPanel Orientation="Horizontal">
@@ -51,8 +96,77 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-        <TextBlock Grid.Row="2" Text="Definition:" Margin="2" VerticalAlignment="Center" />
-        <ComboBox Grid.Row="2" ItemsSource="{Binding Source={StaticResource Definitions}}" SelectedValuePath="TypeId" SelectedValue="{Binding TypeId}" TextSearch.TextPath="Name">
+        <Grid Grid.ColumnSpan="2" Grid.Row="2" Margin="2">
+            <Grid.Resources>
+                <Style TargetType="{x:Type ListBox}" BasedOn="{StaticResource {x:Type ListBox}}">
+                    <Setter Property="Grid.Row" Value="1" />
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="Margin" Value="2" />
+                    <Setter Property="ItemContainerStyle">
+                        <Setter.Value>
+                            <Style TargetType="{x:Type ListBoxItem}">
+                                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                            <RadioButton x:Name="PART_Button" IsChecked="{Binding IsSelected, RelativeSource={RelativeSource TemplatedParent}}" 
+                                    Content="{TemplateBinding Content}" FocusVisualStyle="{x:Null}" Margin="2,0" />
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+                <ObjectDataProvider x:Key="ArmorTypes" ObjectType="{x:Type s:Enum}" MethodName="GetValues">
+                    <ObjectDataProvider.MethodParameters>
+                        <x:Type TypeName="core:ArmorType" />
+                    </ObjectDataProvider.MethodParameters>
+                </ObjectDataProvider>
+                <ObjectDataProvider x:Key="Elements" ObjectType="{x:Type s:Enum}" MethodName="GetValues">
+                    <ObjectDataProvider.MethodParameters>
+                        <x:Type TypeName="core:Element" />
+                    </ObjectDataProvider.MethodParameters>
+                </ObjectDataProvider>
+                <ObjectDataProvider x:Key="Rarities" ObjectType="{x:Type s:Enum}" MethodName="GetValues">
+                    <ObjectDataProvider.MethodParameters>
+                        <x:Type TypeName="core:Rarity" />
+                    </ObjectDataProvider.MethodParameters>
+                </ObjectDataProvider>
+                <Style TargetType="{x:Type TextBlock}" x:Key="Prompt">
+                    <Setter Property="TextAlignment" Value="Center" />
+                    <Setter Property="FontWeight" Value="SemiBold" />
+                </Style>
+            </Grid.Resources>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <TextBlock Style="{StaticResource Prompt}" Text="Rarity" Margin="2" VerticalAlignment="Center" />
+            <ListBox
+                ItemsSource="{Binding Source={StaticResource Rarities}}" SelectedItem="{Binding RarityFilter}" />
+            <TextBlock Grid.Column="1" Style="{StaticResource Prompt}" Text="Element" Margin="2" VerticalAlignment="Center" />
+            <ListBox Grid.Column="1"
+                ItemsSource="{Binding Source={StaticResource Elements}}" SelectedItem="{Binding ElementFilter}" />
+            <TextBlock Grid.Column="2" Style="{StaticResource Prompt}" Text="ArmorType" Margin="2" VerticalAlignment="Center" />
+            <ListBox Grid.Column="2"
+                ItemsSource="{Binding Source={StaticResource ArmorTypes}}" SelectedItem="{Binding ArmorTypeFilter}" />
+
+            <Border Grid.Column="1" Grid.RowSpan="2" BorderThickness="0.5,0" BorderBrush="Black" SnapsToDevicePixels="True" />
+
+            <Border Grid.ColumnSpan="3" BorderThickness="0,0.5" BorderBrush="Black" SnapsToDevicePixels="True" />
+        </Grid>
+        <ComboBox Grid.Row="3" Grid.ColumnSpan="2" ItemsSource="{Binding Source={StaticResource Definitions}}" SelectedItem="{Binding Definition}" TextSearch.TextPath="Name">
+            <ComboBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel IsItemsHost="True" VirtualizingPanel.VirtualizationMode="Recycling" VirtualizingPanel.ScrollUnit="Pixel" />
+                </ItemsPanelTemplate>
+            </ComboBox.ItemsPanel>
             <ComboBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type core:TypeDefinition}">
                     <TextBlock>
@@ -74,7 +188,7 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="3" Grid.ColumnSpan="2">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="4" Grid.ColumnSpan="2">
             <Button Content="Cancel" Command="Close" Margin="4" FocusVisualStyle="{x:Null}" />
             <Button Content="Save" Command="{Binding ChangeDefinitionCommand}" Margin="4" IsDefault="True" FocusVisualStyle="{x:Null}" />
         </StackPanel>
