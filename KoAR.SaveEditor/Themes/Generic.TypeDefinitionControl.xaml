@@ -2,11 +2,14 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     xmlns:s="clr-namespace:System;assembly=mscorlib"
+    xmlns:core="clr-namespace:KoAR.Core;assembly=KoAR.Core"
+    xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs"
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views">
     <Style TargetType="{x:Type views:TypeDefinitionControl}">
         <Style.Resources>
             <views:BitmapConverter x:Key="BitmapConverter" />
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <constructs:EqualityConverter x:Key="EqualityConverter" />
             <s:String x:Key="Merchant">Merchant</s:String>            
             <Color x:Key="CommonColor">#DCDCDC</Color>
             <SolidColorBrush x:Key="CommonBrush" po:Freeze="True" Color="{StaticResource CommonColor}" />
@@ -60,6 +63,33 @@
                 <ControlTemplate TargetType="{x:Type views:TypeDefinitionControl}">
                     <StackPanel Orientation="Horizontal">
                         <Image Height="24" SnapsToDevicePixels="True" VerticalAlignment="Center" Margin="2,0">
+                            <Image.ToolTip>
+                                <ToolTip Content="{TemplateBinding Definition}">
+                                    <ToolTip.ContentTemplate>
+                                        <DataTemplate DataType="{x:Type core:TypeDefinition}">
+                                            <TextBlock>
+                                                <TextBlock.Style>
+                                                    <Style TargetType="{x:Type TextBlock}">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Value="False" Binding="{Binding Element, ConverterParameter={x:Static core:Element.None}, Converter={StaticResource EqualityConverter}}">
+                                                                <Setter Property="Text">
+                                                                    <Setter.Value>
+                                                                        <MultiBinding StringFormat="{}{0} {1}">
+                                                                            <Binding Path="Element" />
+                                                                            <Binding Path="CategoryDisplayName" />
+                                                                        </MultiBinding>
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                        <Setter Property="Text" Value="{Binding CategoryDisplayName}" />
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock> 
+                                        </DataTemplate>
+                                    </ToolTip.ContentTemplate>
+                                </ToolTip>
+                            </Image.ToolTip>
                             <Image.Source>
                                 <MultiBinding Converter="{StaticResource BitmapConverter}">
                                     <Binding Path="Definition.Category" RelativeSource="{RelativeSource TemplatedParent}" />
@@ -68,7 +98,7 @@
                                 </MultiBinding>
                             </Image.Source>
                         </Image>
-                        <Ellipse Height="18" Width="18" VerticalAlignment="Center" x:Name="PART_Ellipse"
+                        <Ellipse Height="18" Width="18" VerticalAlignment="Center" x:Name="PART_Ellipse" ToolTip="{TemplateBinding Rarity}"
                             Stroke="{StaticResource CommonBrush}" StrokeThickness="0.5" Fill="{StaticResource CommonGradient}" />
                         <TextBlock VerticalAlignment="Center" Margin="2,0">
                             <TextBlock.Style>
@@ -97,7 +127,7 @@
                                 </Style>
                             </TextBlock.Style>
                         </TextBlock>
-                        <Image Height="24" SnapsToDevicePixels="True" VerticalAlignment="Center" Margin="2,0" 
+                        <Image Height="24" SnapsToDevicePixels="True" VerticalAlignment="Center" Margin="2,0" ToolTip="Merchant Item"
                             Source="{Binding Source={StaticResource Merchant}, Converter={StaticResource BitmapConverter}}"
                             Visibility="{Binding Definition.IsMerchant, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}}" />
                         <ItemsControl ItemsSource="{Binding Definition.Sockets, RelativeSource={RelativeSource TemplatedParent}}" VerticalAlignment="Center">
@@ -109,6 +139,7 @@
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate DataType="{x:Type s:Char}">
                                     <Image Width="18" SnapsToDevicePixels="True" VerticalAlignment="Center" Margin="1,0"
+                                        ToolTip="{Binding Converter={x:Static views:TypeDefinitionControl.SocketTextConverter}}"
                                         Source="{Binding Converter={StaticResource BitmapConverter}}" />
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>

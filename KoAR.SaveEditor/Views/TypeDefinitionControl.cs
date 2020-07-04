@@ -1,7 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
 
@@ -18,6 +20,8 @@ namespace KoAR.SaveEditor.Views
             new PropertyMetadata(TypeDefinitionControl.ItemProperty_ValueChanged));
 
         public static readonly DependencyProperty RarityProperty;
+
+        public static readonly IValueConverter SocketTextConverter = new SocketLabelConverter();
 
         private static readonly DependencyPropertyKey _hasCustomNamePropertyKey = DependencyProperty.RegisterReadOnly(nameof(HasCustomName), typeof(bool), typeof(TypeDefinitionControl),
             new PropertyMetadata(BooleanBoxes.False));
@@ -80,5 +84,23 @@ namespace KoAR.SaveEditor.Views
         }
 
         private void Item_HasCustomNameChanged(object sender, EventArgs e) => this.HasCustomName = ((ItemModel)sender).HasCustomName;
+
+        private sealed class SocketLabelConverter : IValueConverter
+        {
+            object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
+            {
+                string prefix = value switch
+                {
+                    'W' => "Weapon",
+                    'A' => "Armor",
+                    'U' => "Utility",
+                    'E' => "Epic",
+                    _ => string.Empty
+                };
+                return $"{prefix} Socket";
+            }
+
+            object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
+        }
     }
 }

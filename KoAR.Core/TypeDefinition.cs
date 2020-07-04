@@ -116,7 +116,7 @@ namespace KoAR.Core
             TypeDefinition { ArmorType: ArmorType.Finesse, Category: EquipmentCategory.Legs } => "Leggings",
             TypeDefinition { ArmorType: ArmorType.Finesse, Category: EquipmentCategory.Torso } => "Armor",
             TypeDefinition { ArmorType: ArmorType.Finesse, Category: EquipmentCategory.Shield } => "Buckler",
-            TypeDefinition { ArmorType: ArmorType.Might, Category: EquipmentCategory.Hat } => "Hood",
+            TypeDefinition { ArmorType: ArmorType.Might, Category: EquipmentCategory.Hat } => "Helm",
             TypeDefinition { ArmorType: ArmorType.Might, Category: EquipmentCategory.Feet } => "Greaves",
             TypeDefinition { ArmorType: ArmorType.Might, Category: EquipmentCategory.Hands } => "Gauntlets",
             TypeDefinition { ArmorType: ArmorType.Might, Category: EquipmentCategory.Legs } => "Chausses",
