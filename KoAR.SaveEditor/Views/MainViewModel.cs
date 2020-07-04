@@ -39,7 +39,6 @@ namespace KoAR.SaveEditor.Views
             this.DeleteCoreEffectCommand = new DelegateCommand<uint>(this.DeleteCoreEffect, this.CanDeleteCoreEffect);
             this.DeleteEffectCommand = new DelegateCommand<uint>(this.DeleteEffect, this.CanDeleteEffect);
             this.SaveCommand = new DelegateCommand(this.Save, this.CanSave);
-            this.MakeAllItemsDistinctCommand = new DelegateCommand(this.MakeAllItemsDistinct);
         }
 
         public DelegateCommand<uint> AddCoreEffectCommand { get; }
@@ -140,8 +139,6 @@ namespace KoAR.SaveEditor.Views
         }
 
         public ReadOnlyObservableCollection<ItemModel> Items { get; }
-
-        public DelegateCommand MakeAllItemsDistinctCommand { get; }
 
         public string MaxDurabilityFilter
         {
@@ -262,29 +259,6 @@ namespace KoAR.SaveEditor.Views
             if (e.PropertyName == nameof(ItemModel.IsUnsellable))
             {
                 this.OnPropertyChanged(nameof(this.AllItemsUnsellable));
-            }
-        }
-
-        private void MakeAllItemsDistinct()
-        {
-            MessageBoxResult result = MessageBox.Show("This operation will assign a unique combination of current and max durability to your inventory and is irreversible.", "KoAR Save Editor", MessageBoxButton.OKCancel, MessageBoxImage.Warning, MessageBoxResult.Cancel);
-            if (result != MessageBoxResult.OK)
-            {
-                return;
-            }
-            float maxDurability = 100;
-            foreach (IGrouping<EquipmentCategory, ItemModel> grouping in this.Items.Where(model => !model.HasCustomName).GroupBy(model => model.Category))
-            {
-                float currentDurability = --maxDurability;
-                foreach (ItemModel model in grouping)
-                {
-                    if (currentDurability == 0)
-                    {
-                        currentDurability = --maxDurability;
-                    }
-                    model.MaxDurability = maxDurability;
-                    model.CurrentDurability = currentDurability--;
-                }
             }
         }
 

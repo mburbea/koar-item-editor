@@ -68,7 +68,7 @@
                                 </MultiBinding>
                             </Image.Source>
                         </Image>
-                        <Ellipse Height="18" Width="18" VerticalAlignment="Center" Margin="2,0" x:Name="PART_Ellipse"
+                        <Ellipse Height="18" Width="18" VerticalAlignment="Center" x:Name="PART_Ellipse"
                             Stroke="{StaticResource CommonBrush}" StrokeThickness="0.5" Fill="{StaticResource CommonGradient}" />
                         <TextBlock VerticalAlignment="Center" Margin="2,0">
                             <TextBlock.Style>
@@ -82,7 +82,7 @@
                                 </Style>
                             </TextBlock.Style>
                         </TextBlock>
-                        <TextBlock VerticalAlignment="Center" Margin="2,0">
+                        <TextBlock VerticalAlignment="Center">
                             <TextBlock.Style>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Style.Triggers>
