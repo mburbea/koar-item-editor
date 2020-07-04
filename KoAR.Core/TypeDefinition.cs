@@ -36,7 +36,7 @@ namespace KoAR.Core
             //Element,ArmorType,CoreEffects,Effects
 
             definition = null;
-            if (entries.Length != 14
+            if (entries.Length != 15
                 || !Enum.TryParse(entries[0], true, out EquipmentCategory category)
                 || !uint.TryParse(entries[1], NumberStyles.HexNumber, null, out uint typeId)
                 || !byte.TryParse(entries[2], out byte level)
@@ -47,11 +47,12 @@ namespace KoAR.Core
                 || !uint.TryParse(entries[10], NumberStyles.HexNumber, null, out uint prefix)
                 || !uint.TryParse(entries[11], NumberStyles.HexNumber, null, out uint suffix)
                 || !TryParseEffectList(entries[12], out uint[]? coreEffects)
-                || !TryParseEffectList(entries[13], out uint[]? effects))
+                || !TryParseEffectList(entries[13], out uint[]? effects)
+                || bool.TryParse(entries[14], out bool isScalingItem))
             {
                 return false;
             }
-            definition = new TypeDefinition(category, typeId, level, entries[3], entries[4], maxDurability, rarity, entries[7], element, armorType, prefix, suffix, coreEffects, effects);
+            definition = new TypeDefinition(category, typeId, level, entries[3], entries[4], maxDurability, rarity, entries[7], element, armorType, prefix, suffix, coreEffects, effects, isScalingItem);
             return true;
         }
 
@@ -67,7 +68,7 @@ namespace KoAR.Core
         }
 
         internal TypeDefinition(EquipmentCategory category, uint typeId, byte level, string name, string internalName, float maxDurability, Rarity rarity,
-            string sockets, Element element, ArmorType armorType, uint prefix, uint suffix, uint[] coreEffects, uint[] effects)
+            string sockets, Element element, ArmorType armorType, uint prefix, uint suffix, uint[] coreEffects, uint[] effects, bool isScalingItem)
         {
             Category = category;
             TypeId = typeId;
@@ -83,6 +84,7 @@ namespace KoAR.Core
             Effects = effects;
             Prefix = prefix;
             Suffix = suffix;
+            IsScalingItem = isScalingItem;
             // merchant search is case sensitive to avoid affixing the Merchant's hat.
             AffixableName = internalName.IndexOf("common", StringComparison.OrdinalIgnoreCase) != -1 || InternalName.IndexOf("merchant") != -1;
         }
@@ -102,6 +104,7 @@ namespace KoAR.Core
         public uint Prefix { get; }
         public uint Suffix { get; }
         public bool AffixableName { get; }
+        public bool IsScalingItem { get; }
 
         public string TypeDisplayName => this switch
         {

@@ -91,21 +91,21 @@ namespace ItemTesting
         {
             static string FormatAsStr(IEnumerable<uint> effects) => string.Join("", effects.Select(x => $"{x:X6}"));
 
-            //const string path = @"..\..\..\..\9190114save90.sav";
-            const string path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save3.sav";
+            const string path = @"..\..\..\..\9190114save90.sav";
+            //const string path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save3.sav";
             Amalur.Initialize(@"..\..\..\..\Koar.SaveEditor\");
             Amalur.ReadFile(path);
 
             //Amalur.Stash.AddItem(Amalur.TypeDefinitions[0x1FDF23]);
             //Amalur.SaveFile(path);
             //return;
-            var chakrams = Amalur.Items.FirstOrDefault(x => x.TypeDefinition.TypeId == 0x1A3072);
-            chakrams.CoreEffects.Suffix = 502416;
+            //var chakrams = Amalur.Items.FirstOrDefault(x => x.TypeDefinition.TypeId == 0x1A3072);
+            //chakrams.CoreEffects.Suffix = 502416;
 
 
-            Amalur.WriteEquipmentBytes(chakrams, false);
-            Amalur.SaveFile(path);
-            return;
+            //Amalur.WriteEquipmentBytes(chakrams, false);
+            //Amalur.SaveFile(path);
+            //return;
 
             int c = 0;
             int nm = 0;
@@ -128,15 +128,6 @@ namespace ItemTesting
                 .Skip(1)
                 .ToDictionary(x => uint.Parse(x[..6], NumberStyles.HexNumber), x => x[7..]);
             var byName = simtypes.ToDictionary(x => x.Value, x => x.Key, StringComparer.OrdinalIgnoreCase);
-            var affixedItems = new Dictionary<uint, string>();
-            foreach(var item in Amalur.Items)
-            {
-                
-                if((item.CoreEffects.Prefix | item.CoreEffects.Suffix) != 0u)
-                {
-                    affixedItems[item.TypeDefinition.TypeId] = $"{item.CoreEffects.Prefix:X6},{item.CoreEffects.Suffix:X6}";
-                }
-            }
             foreach (var entry in zarchive.Entries)
             {
                 var sname = Path.GetFileNameWithoutExtension(entry.Name);
@@ -156,29 +147,50 @@ namespace ItemTesting
                     lines.Add((typeId, sname,parentId,parentName));
                 }
             }
+            var itemsCsv = File.ReadAllLines(@"..\..\..\..\Koar.SaveEditor\items.csv").ToArray();
+            HashSet<uint> scalingItem = new HashSet<uint>();
+            foreach(var line in lines.Where(x=> Amalur.TypeDefinitions.TryGetValue(x.typeId, out var _) 
+            && !(supers.Contains(x.name)
+            || supers.Contains(x.parentName)
+            || x.name.Contains("dev_", StringComparison.OrdinalIgnoreCase)
+            || x.name.Contains("merchant") || x.name.Contains("socket")
+            )))//.Select(x => $"{x.typeId},{x.name},{x.parentId},{x.parentName}")
+            {
+                scalingItem.Add(line.typeId);
+                scalingItem.Add(line.parentId);
+            }
+            File.WriteAllLines("items2.csv",itemsCsv.Select((x, i) => x + "," + true switch {
+                _ when i == 0 => "IsScaling",
+                _ when x.IndexOf(',') is int ix
+                && scalingItem.Contains(uint.Parse(x[(ix+1)..(ix+7)], NumberStyles.HexNumber)) => bool.TrueString,
+                _ => bool.FalseString
+            }));
+            return;
+            
             var rec = lines.ToDictionary(x => (x.typeId, x.name), x => (x.parentId, x.parentName));
             var output = new List<string> { "typeId,name,parentId,parentName" };
-            foreach(var l in lines)
-            {
-                if (supers.Contains(l.name))
-                {
-                    var affix = affixedItems.GetOrDefault(l.typeId, "None,None");
-                    output.Add($"{l.typeId:X6},{l.name},None,None,{affix}");
-                    continue;
-                }
-                var candidate = (l.typeId, l.name);
+            
+            //foreach(var l in lines)
+            //{
+            //    if (supers.Contains(l.name))
+            //    {
+            //        var affix = affixedItems.GetOrDefault(l.typeId, "None,None");
+            //        output.Add($"{l.typeId:X6},{l.name},None,None,{affix}");
+            //        continue;
+            //    }
+            //    var candidate = (l.typeId, l.name);
           
-                while(rec.TryGetValue(candidate, out candidate))
-                {
-                    if (supers.Contains(candidate.name))
-                    {
-                        var affix = affixedItems.GetOrDefault(l.typeId, "None,None");
-                        output.Add($"{l.typeId:X6},{l.name},{candidate.typeId:X6},{candidate.name},{affix}");
-                        break;
-                    }
-                }
-            }
-            File.WriteAllLines("parent.csv", output);
+            //    while(rec.TryGetValue(candidate, out candidate))
+            //    {
+            //        if (supers.Contains(candidate.name))
+            //        {
+            //            var affix = affixedItems.GetOrDefault(l.typeId, "None,None");
+            //            output.Add($"{l.typeId:X6},{l.name},{candidate.typeId:X6},{candidate.name},{affix}");
+            //            break;
+            //        }
+            //    }
+            //}
+            File.WriteAllLines("parent_one.csv", output);
 
             foreach (var (key,val) in dl.OrderBy(x=> x.Key))
             {

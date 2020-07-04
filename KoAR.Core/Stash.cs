@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KoAR.Core
 {
@@ -21,11 +16,6 @@ namespace KoAR.Core
                 MemoryUtilities.Write(Amalur.Bytes, Offset, value);
                 MemoryUtilities.Write(Amalur.Bytes, Offset + 9, value - 9);
             }
-        }
-
-        public int DataLength2
-        {
-            get => MemoryUtilities.Read<int>(Amalur.Bytes, Offset + 9);
         }
 
         private int Count
