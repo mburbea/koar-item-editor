@@ -209,7 +209,8 @@
                     </Grid>
                 </GroupBox>
                 <DockPanel Grid.Row="1" Margin="4">
-                    <views:ScrollingTabControl DockPanel.Dock="Top" SelectedValuePath="Data" ItemsSource="{Binding Source={StaticResource CategoryContainers}}" SelectedValue="{Binding CategoryFilter}">
+                    <views:ScrollingTabControl DockPanel.Dock="Top" SelectedValuePath="Data" VerticalContentAlignment="Stretch"
+                        ItemsSource="{Binding Source={StaticResource CategoryContainers}}" SelectedValue="{Binding CategoryFilter}">
                         <TabControl.ItemTemplate>
                             <DataTemplate DataType="{x:Type constructs:DataContainer}">
                                 <StackPanel Orientation="Horizontal">

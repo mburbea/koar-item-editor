@@ -25,7 +25,7 @@
                             <RowDefinition x:Name="RowDefinition0" Height="Auto" />
                             <RowDefinition x:Name="RowDefinition1" />
                         </Grid.RowDefinitions>
-                        <Grid Canvas.ZIndex="1" Height="{StaticResource HeaderHeight}">
+                        <Grid Canvas.ZIndex="1" Tag="{StaticResource HeaderHeight}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition />
