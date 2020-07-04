@@ -11,23 +11,23 @@ namespace KoAR.Core
         public int DataLength
         {
             get => MemoryUtilities.Read<int>(Amalur.Bytes, Offset);
-            set
+            private set
             {
                 MemoryUtilities.Write(Amalur.Bytes, Offset, value);
                 MemoryUtilities.Write(Amalur.Bytes, Offset + 9, value - 9);
             }
         }
 
-        private int Count
+        public int Count
         {
             get => MemoryUtilities.Read<int>(Amalur.Bytes, Offset + 13);
-            set => MemoryUtilities.Write(Amalur.Bytes, Offset + 13, value);
+            private set => MemoryUtilities.Write(Amalur.Bytes, Offset + 13, value);
         }
 
         public uint FirstItemTypeId
         {
             get => MemoryUtilities.Read<uint>(Amalur.Bytes, Offset + 17);
-            set => MemoryUtilities.Write(Amalur.Bytes, Offset + 17, value);
+            private set => MemoryUtilities.Write(Amalur.Bytes, Offset + 17, value);
         }
 
         public void AddItem(TypeDefinition type)

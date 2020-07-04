@@ -1,4 +1,4 @@
-﻿<Window x:Class="KoAR.SaveEditor.Views.ChangeDefinitionWindow"
+﻿<Window x:Class="KoAR.SaveEditor.Views.ChangeOrAddItemWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -8,7 +8,7 @@
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views"
     xmlns:s="clr-namespace:System;assembly=mscorlib"
     xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
-    mc:Ignorable="d" d:DataContext="{d:DesignInstance views:ChangeDefinitionViewModel}"
+    mc:Ignorable="d" d:DataContext="{d:DesignInstance views:ChangeOrAddItemViewModel}"
     Icon="/app.ico" SizeToContent="WidthAndHeight" MinWidth="400"
     WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
     <Window.Style>

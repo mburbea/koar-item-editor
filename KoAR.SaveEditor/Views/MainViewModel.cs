@@ -21,7 +21,6 @@ namespace KoAR.SaveEditor.Views
         private string _currentDurabilityFilter = string.Empty;
         private string _fileName = string.Empty;
         private IReadOnlyList<ItemModel> _filteredItems;
-        private int _inventorySize;
         private string _itemNameFilter = string.Empty;
         private string _maxDurabilityFilter = string.Empty;
         private ItemModel? _selectedItem;
@@ -33,18 +32,20 @@ namespace KoAR.SaveEditor.Views
             this._filteredItems = this.Items = new ReadOnlyObservableCollection<ItemModel>(this._items);
             this.OpenFileCommand = new DelegateCommand(this.OpenFile);
             this.ResetFiltersCommand = new DelegateCommand(this.ResetFilters);
-            this.HandleDoubleClickCommmand = new DelegateCommand<ItemModel>(this.HandleDoubleClick);
-            this.UpdateInventorySizeCommand = new DelegateCommand(this.UpdateInventorySize, this.CanUpdateInventorySize);
+            this.ChangeDefinitionCommand = new DelegateCommand<ItemModel>(this.ChangeDefinition);
             this.AddCoreEffectCommand = new DelegateCommand<uint>(this.AddCoreEffect, this.CanAddCoreEffect);
             this.AddEffectCommand = new DelegateCommand<uint>(this.AddEffect, this.CanAddEffect);
             this.DeleteCoreEffectCommand = new DelegateCommand<uint>(this.DeleteCoreEffect, this.CanDeleteCoreEffect);
             this.DeleteEffectCommand = new DelegateCommand<uint>(this.DeleteEffect, this.CanDeleteEffect);
-            this.SaveCommand = new DelegateCommand(this.Save, this.CanSave);
+            this.SaveCommand = new DelegateCommand(this.Save, () => this._unsavedChanges);
+            this.AddStashItemCommand = new DelegateCommand(this.AddStashItem, () => Amalur.IsFileOpen && Amalur.Stash != null);
         }
 
         public DelegateCommand<uint> AddCoreEffectCommand { get; }
 
         public DelegateCommand<uint> AddEffectCommand { get; }
+
+        public DelegateCommand AddStashItemCommand { get; }
 
         public bool? AllItemsUnsellable
         {
@@ -69,6 +70,8 @@ namespace KoAR.SaveEditor.Views
                 }
             }
         }
+
+        public DelegateCommand<ItemModel> ChangeDefinitionCommand { get; }
 
         public string CurrentDurabilityFilter
         {
@@ -98,12 +101,19 @@ namespace KoAR.SaveEditor.Views
             private set => this.SetValue(ref this._filteredItems, value);
         }
 
-        public DelegateCommand<ItemModel> HandleDoubleClickCommmand { get; }
-
         public int InventorySize
         {
-            get => this._inventorySize;
-            set => this.SetValue(ref this._inventorySize, value);
+            get => Amalur.IsFileOpen ? Amalur.InventorySize : 0;
+            set
+            {
+                if (!Amalur.IsFileOpen || value == Amalur.InventorySize)
+                {
+                    return;
+                }
+                Amalur.InventorySize = value;
+                this.OnPropertyChanged();
+                this.UnsavedChanges = true;
+            }
         }
 
         public string ItemNameFilter
@@ -152,8 +162,6 @@ namespace KoAR.SaveEditor.Views
             private set => this.SetValue(ref this._unsavedChanges, value);
         }
 
-        public DelegateCommand UpdateInventorySizeCommand { get; }
-
         internal void OpenFile()
         {
             OpenFileDialog dialog = new OpenFileDialog
@@ -197,6 +205,26 @@ namespace KoAR.SaveEditor.Views
 
         private void AddEffect(uint code) => this.SelectedItem?.AddEffect(code);
 
+        private void AddStashItem()
+        {
+            if (!Amalur.IsFileOpen || Amalur.Stash == null)
+            {
+                return;
+            }
+            ChangeOrAddItemViewModel viewModel = new ChangeOrAddItemViewModel();
+            ChangeOrAddItemWindow view = new ChangeOrAddItemWindow
+            {
+                Owner = Application.Current.MainWindow,
+                DataContext = viewModel
+            };
+            if (view.ShowDialog() == true && viewModel.Definition != null)
+            {
+                Amalur.Stash.AddItem(viewModel.Definition);
+                this.UnsavedChanges = true;
+                this.OnPropertyChanged(nameof(this.Stash));
+            }
+        }
+
         private bool CanAddCoreEffect(uint code) => this.SelectedItem != null && code != 0u;
 
         private bool CanAddEffect(uint code) => this.SelectedItem != null && code != 0u;
@@ -205,9 +233,24 @@ namespace KoAR.SaveEditor.Views
 
         private bool CanDeleteEffect(uint code) => this.SelectedItem != null && code != 0u;
 
-        private bool CanSave() => this._unsavedChanges;
-
-        private bool CanUpdateInventorySize() => Amalur.IsFileOpen && Amalur.InventorySize != this.InventorySize;
+        private void ChangeDefinition(ItemModel model)
+        {
+            if (!Amalur.IsFileOpen)
+            {
+                return;
+            }
+            ChangeOrAddItemViewModel viewModel = new ChangeOrAddItemViewModel(model);
+            ChangeOrAddItemWindow view = new ChangeOrAddItemWindow
+            {
+                Owner = Application.Current.MainWindow,
+                DataContext = viewModel
+            };
+            if (view.ShowDialog() == true && viewModel.Definition != null)
+            {
+                model.TypeDefinition = viewModel.Definition;
+                Amalur.WriteEquipmentBytes(model.Item, true);
+            }
+        }
 
         private void DeleteCoreEffect(uint code) => this.SelectedItem?.DeleteCoreEffect(code);
 
@@ -225,23 +268,6 @@ namespace KoAR.SaveEditor.Views
                 return null;
             }
             return first;
-        }
-
-        private void HandleDoubleClick(ItemModel model)
-        {
-            if (!Amalur.IsFileOpen)
-            {
-                return;
-            }
-            ChangeDefinitionWindow view = new ChangeDefinitionWindow
-            {
-                Owner = Application.Current.MainWindow,
-                DataContext = new ChangeDefinitionViewModel(model)
-            };
-            if (view.ShowDialog() == true)
-            {
-                Amalur.WriteEquipmentBytes(model.Item, true);
-            }
         }
 
         private void Item_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -341,16 +367,6 @@ namespace KoAR.SaveEditor.Views
                 action(item);
             }
             this.OnPropertyChanged(propertyName);
-        }
-
-        private void UpdateInventorySize()
-        {
-            if (!Amalur.IsFileOpen)
-            {
-                return;
-            }
-            Amalur.InventorySize = this.InventorySize;
-            this.UnsavedChanges = true;
         }
 
         private sealed class ItemCollection : ObservableCollection<ItemModel>

@@ -278,7 +278,7 @@
                         </TabControl.ContentTemplate>
                     </views:ScrollingTabControl>
                     <views:ItemsView Items="{Binding FilteredItems}" SelectedItem="{Binding SelectedItem}" AllItemsUnstashable="{Binding AllItemsUnstashable}"
-                        DoubleClickCommand="{Binding HandleDoubleClickCommmand}" AllItemsUnsellable="{Binding AllItemsUnsellable}" />
+                        DoubleClickCommand="{Binding ChangeDefinitionCommand}" AllItemsUnsellable="{Binding AllItemsUnsellable}" />
                 </DockPanel>
             </Grid>
             <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Stretch" Background="{x:Static SystemColors.ControlBrush}" FocusVisualStyle="{x:Null}" />
@@ -287,15 +287,19 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <GroupBox Header="Inventory Size" Margin="4">
+                <GroupBox Header="Management" Margin="4">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="Size:" Margin="2" VerticalAlignment="Center" TextAlignment="Right"/>
-                        <TextBox Grid.Column="1" MinWidth="100" Margin="2" TextAlignment="Right">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Inv Size:" Margin="2" VerticalAlignment="Center" TextAlignment="Right"/>
+                        <TextBox Grid.Column="1" MinWidth="100" Margin="2" TextAlignment="Right" Grid.ColumnSpan="2">
                             <TextBox.Text>
                                 <Binding Path="InventorySize" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                                     <Binding.ValidationRules>
@@ -304,7 +308,10 @@
                                 </Binding>
                             </TextBox.Text>
                         </TextBox>
-                        <Button Grid.Column="2" Margin="2" Command="{Binding UpdateInventorySizeCommand}" Content="_Update" />
+                        <TextBlock Grid.Row="1" Text="Shash Size:" Margin="2" VerticalAlignment="Center" TextAlignment="Right"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" MinWidth="100" Margin="2" TextAlignment="Right" 
+                            Background="{x:Static SystemColors.ControlBrush}" Text="{Binding Stash.Count, Mode=OneWay}" />
+                        <Button Grid.Row="1" Grid.Column="2" Margin="2" Command="{Binding AddStashItemCommand}" Content="_Add Item" FocusVisualStyle="{x:Null}" />
                     </Grid>
                 </GroupBox>
                 <ScrollViewer Grid.Row="1" FocusVisualStyle="{x:Null}" Margin="0,0,4,4" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">

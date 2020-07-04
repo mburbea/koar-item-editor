@@ -7,7 +7,7 @@ using KoAR.SaveEditor.Constructs;
 
 namespace KoAR.SaveEditor.Views
 {
-    public sealed class ChangeDefinitionViewModel : NotifierBase
+    public sealed class ChangeOrAddItemViewModel : NotifierBase
     {
         private ArmorType _armorTypeFilter;
         private EquipmentCategory _category;
@@ -16,7 +16,7 @@ namespace KoAR.SaveEditor.Views
         private Element _elementFilter;
         private Rarity _rarityFilter;
 
-        public ChangeDefinitionViewModel(ItemModel? item)
+        public ChangeOrAddItemViewModel(ItemModel? item = null)
         {
             this._definition = (this.Item = item)?.TypeDefinition ?? Amalur.TypeDefinitions.Values.First();
             this._category = item?.Category ?? default;
@@ -124,13 +124,9 @@ namespace KoAR.SaveEditor.Views
             {
                 return;
             }
-            if (this.Item != null)
-            {
-                this.Item.TypeDefinition = this._definition;
-                Window window = Application.Current.Windows.OfType<ChangeDefinitionWindow>().Single();
-                window.DialogResult = true;
-                window.Close();
-            }
+            Window window = Application.Current.Windows.OfType<ChangeOrAddItemWindow>().Single();
+            window.DialogResult = true;
+            window.Close();
         }
     }
 }
