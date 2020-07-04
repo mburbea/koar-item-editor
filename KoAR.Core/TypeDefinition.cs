@@ -48,7 +48,7 @@ namespace KoAR.Core
                 || !uint.TryParse(entries[11], NumberStyles.HexNumber, null, out uint suffix)
                 || !TryParseEffectList(entries[12], out uint[]? coreEffects)
                 || !TryParseEffectList(entries[13], out uint[]? effects)
-                || bool.TryParse(entries[14], out bool isScalingItem))
+                || !bool.TryParse(entries[14], out bool isScalingItem))
             {
                 return false;
             }
