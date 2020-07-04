@@ -108,7 +108,7 @@ namespace KoAR.Core
         public bool HasVariants { get; }
         public bool IsMerchant { get; }
 
-        public string TypeDisplayName => this switch
+        public string CategoryDisplayName => this switch
         {
             TypeDefinition { ArmorType: ArmorType.Finesse, Category: EquipmentCategory.Hat } => "Hood",
             TypeDefinition { ArmorType: ArmorType.Finesse, Category: EquipmentCategory.Feet } => "Boots",
