@@ -32,6 +32,13 @@ namespace KoAR.SaveEditor.Views
             set => this.SetItemValue(value, this.Item.CurrentDurability, value => this.Item.CurrentDurability = value);
         }
 
+        public string DisplayName => this.HasCustomName switch
+        {
+            true => this.ItemName,
+            false when this.TypeDefinition.AffixableName && (this.Prefix ?? this.Suffix) != null => $"{this.Prefix?.Modifier} {this.TypeDefinition.TypeDisplayName} {this.Suffix?.Modifier}".Trim(),
+            false => this.TypeDefinition.Name,
+        };
+
         public IList<uint> Effects { get; }
 
         public bool HasCustomName => this.Item.HasCustomName;
@@ -46,13 +53,6 @@ namespace KoAR.SaveEditor.Views
 
         public int ItemIndex => this.Item.ItemIndex;
 
-        public string ItemDisplayName => this.HasCustomName switch
-        {
-            true => this.ItemName,
-            false when this.TypeDefinition.AffixableName && (this.Prefix ?? this.Suffix) != null => $"{this.Prefix?.Modifier} {this.TypeDefinition.TypeDisplayName} {this.Suffix?.Modifier}".Trim(),
-            false => this.TypeDefinition.Name,
-        };
-
         public string ItemName
         {
             get => this.Item.ItemName;
@@ -61,7 +61,7 @@ namespace KoAR.SaveEditor.Views
                 if (this.SetItemValue(value, this.Item.ItemName, value => this.Item.ItemName = value))
                 {
                     this.OnPropertyChanged(nameof(this.HasCustomName));
-                    this.OnPropertyChanged(nameof(this.ItemDisplayName));
+                    this.OnPropertyChanged(nameof(this.DisplayName));
                 }
             }
         }

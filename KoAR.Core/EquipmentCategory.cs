@@ -8,6 +8,7 @@
         Legs,
         Hands,
         Feet,
+        Shield,
         Chakrams,
         Daggers,
         Faeblades,
@@ -16,7 +17,6 @@
         Longbow,
         Longsword,
         Sceptre,
-        Shield,
         Staff,
         Necklace,
         Ring

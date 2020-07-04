@@ -151,27 +151,22 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="Name" Width="Auto" views:ItemsView.PropertyName="ItemDisplayName">
+                                <GridViewColumn Header="Name" Width="Auto" views:ItemsView.PropertyName="DisplayName">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate DataType="{x:Type views:ItemModel}">
                                             <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto" />
-                                                    <ColumnDefinition />
-                                                </Grid.ColumnDefinitions>
-                                                <views:EquipmentCategoryIcon Category="{Binding Category}" VerticalAlignment="Center" />
-                                                <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="1,0" Text="{Binding ItemDisplayName}">
-                                                    <TextBlock.Style>
-                                                        <Style TargetType="{x:Type TextBlock}">
+                                                <views:TypeDefinitionControl Item="{Binding}">
+                                                    <views:TypeDefinitionControl.Style>
+                                                        <Style TargetType="{x:Type views:TypeDefinitionControl}">
                                                             <Style.Triggers>
                                                                 <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True">
                                                                     <Setter Property="Visibility" Value="Collapsed" />
                                                                 </DataTrigger>
                                                             </Style.Triggers>
                                                         </Style>
-                                                    </TextBlock.Style>
-                                                </TextBlock>
-                                                <TextBox Grid.Column="1" VerticalAlignment="Center" Margin="1,0" constructs:TextBoxSelect.SelectOnFocus="{Binding IsVisible, RelativeSource={RelativeSource Self}}" 
+                                                    </views:TypeDefinitionControl.Style>
+                                                </views:TypeDefinitionControl>
+                                                <TextBox VerticalAlignment="Center" Margin="1,0" constructs:TextBoxSelect.SelectOnFocus="{Binding IsVisible, RelativeSource={RelativeSource Self}}" 
                                                     Text="{Binding ItemName}" Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                             </Grid>
                                         </DataTemplate>

@@ -303,7 +303,7 @@ namespace KoAR.SaveEditor.Views
             }
             if (this._itemNameFilter.Length != 0)
             {
-                items = items.Where(model => model.ItemDisplayName.IndexOf(this._itemNameFilter, StringComparison.OrdinalIgnoreCase) != -1);
+                items = items.Where(model => model.DisplayName.IndexOf(this._itemNameFilter, StringComparison.OrdinalIgnoreCase) != -1);
             }
             if (this._categoryFilter.HasValue)
             {

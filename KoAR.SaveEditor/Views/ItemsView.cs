@@ -159,7 +159,7 @@ namespace KoAR.SaveEditor.Views
                 {
                     new SortDescription(nameof(ItemModel.Category), ListSortDirection.Ascending),
                     new SortDescription(itemsView.SortProperty, itemsView.SortDirection),
-                    new SortDescription(nameof(ItemModel.ItemDisplayName), ListSortDirection.Ascending)
+                    new SortDescription(nameof(ItemModel.DisplayName), ListSortDirection.Ascending)
                 }
             };
         }

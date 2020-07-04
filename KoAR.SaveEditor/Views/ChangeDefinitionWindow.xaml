@@ -18,7 +18,7 @@
                     <Setter Property="Title" Value="Add Stash Item" />
                 </DataTrigger>
             </Style.Triggers>
-            <Setter Property="Title" Value="{Binding Item.ItemDisplayName, StringFormat='Change Definition - {0}'}" />
+            <Setter Property="Title" Value="{Binding Item.DisplayName, StringFormat='Change Definition - {0}'}" />
         </Style>
     </Window.Style>
     <Grid Margin="4">
@@ -42,13 +42,6 @@
                     <x:Type TypeName="core:EquipmentCategory" />
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
-
-
-
-
-
-
-
         </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -156,9 +149,7 @@
             <TextBlock Grid.Column="2" Style="{StaticResource Prompt}" Text="ArmorType" Margin="2" VerticalAlignment="Center" />
             <ListBox Grid.Column="2"
                 ItemsSource="{Binding Source={StaticResource ArmorTypes}}" SelectedItem="{Binding ArmorTypeFilter}" />
-
             <Border Grid.Column="1" Grid.RowSpan="2" BorderThickness="0.5,0" BorderBrush="Black" SnapsToDevicePixels="True" />
-
             <Border Grid.ColumnSpan="3" BorderThickness="0,0.5" BorderBrush="Black" SnapsToDevicePixels="True" />
         </Grid>
         <ComboBox Grid.Row="3" Grid.ColumnSpan="2" ItemsSource="{Binding Source={StaticResource Definitions}}" SelectedItem="{Binding Definition}" TextSearch.TextPath="Name">
@@ -169,22 +160,7 @@
             </ComboBox.ItemsPanel>
             <ComboBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type core:TypeDefinition}">
-                    <TextBlock>
-                        <Run>
-                            <Run.Style>
-                                <Style TargetType="{x:Type Run}">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Name}" Value="">
-                                            <Setter Property="Text" Value="Unknown" />
-                                            <Setter Property="FontStyle" Value="Italic" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                    <Setter Property="Text" Value="{Binding Name, Mode=OneTime}" />
-                                </Style>
-                            </Run.Style>
-                        </Run>
-                        <Run Text="{Binding Level, Mode=OneTime, StringFormat='({0})'}" />
-                    </TextBlock>
+                    <views:TypeDefinitionControl Definition="{Binding}" />
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>

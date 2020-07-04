@@ -25,15 +25,18 @@ namespace KoAR.SaveEditor.Views
         {
             if (values != null)
             {
-                string[] joins = new string[values.Length];
-                for (int index = 0; index < values.Length; index++)
+                List<string> list = new List<string>(values.Length);
+                foreach (object value in values)
                 {
-                    string text = values[index]?.ToString() ?? string.Empty;
-                    joins[index] = index == 0 ? text : $"{joins[index - 1]}_{text}";
+                    string? text = value?.ToString();
+                    if (text != null && text != "None")
+                    {
+                        list.Add(list.Count == 0 ? text : $"{list.Last()}_{text}");
+                    }
                 }
-                for (int index = values.Length - 1; index != -1; index--)
+                for (int index = list.Count - 1; index != -1; index--)
                 {
-                    string text = joins[index];
+                    string text = list[index];
                     if (BitmapConverter._bitmaps.TryGetValue(text, out BitmapImage? bitmap))
                     {
                         return bitmap;

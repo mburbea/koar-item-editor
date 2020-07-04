@@ -48,11 +48,11 @@ namespace KoAR.Core
                 || !uint.TryParse(entries[11], NumberStyles.HexNumber, null, out uint suffix)
                 || !TryParseEffectList(entries[12], out uint[]? coreEffects)
                 || !TryParseEffectList(entries[13], out uint[]? effects)
-                || !bool.TryParse(entries[14], out bool isScalingItem))
+                || !bool.TryParse(entries[14], out bool hasVariants))
             {
                 return false;
             }
-            definition = new TypeDefinition(category, typeId, level, entries[3], entries[4], maxDurability, rarity, entries[7], element, armorType, prefix, suffix, coreEffects, effects, isScalingItem);
+            definition = new TypeDefinition(category, typeId, level, entries[3], entries[4], maxDurability, rarity, entries[7], element, armorType, prefix, suffix, coreEffects, effects, hasVariants);
             return true;
         }
 
@@ -68,7 +68,7 @@ namespace KoAR.Core
         }
 
         internal TypeDefinition(EquipmentCategory category, uint typeId, byte level, string name, string internalName, float maxDurability, Rarity rarity,
-            string sockets, Element element, ArmorType armorType, uint prefix, uint suffix, uint[] coreEffects, uint[] effects, bool isScalingItem)
+            string sockets, Element element, ArmorType armorType, uint prefix, uint suffix, uint[] coreEffects, uint[] effects, bool hasVariants)
         {
             Category = category;
             TypeId = typeId;
@@ -84,9 +84,10 @@ namespace KoAR.Core
             Effects = effects;
             Prefix = prefix;
             Suffix = suffix;
-            IsScalingItem = isScalingItem;
+            HasVariants = hasVariants;
             // merchant search is case sensitive to avoid affixing the Merchant's hat.
-            AffixableName = internalName.IndexOf("common", StringComparison.OrdinalIgnoreCase) != -1 || InternalName.IndexOf("merchant") != -1;
+            IsMerchant = InternalName.IndexOf("merchant") != -1;
+            AffixableName = IsMerchant || internalName.IndexOf("common", StringComparison.OrdinalIgnoreCase) != -1;
         }
 
         public EquipmentCategory Category { get; }
@@ -104,7 +105,8 @@ namespace KoAR.Core
         public uint Prefix { get; }
         public uint Suffix { get; }
         public bool AffixableName { get; }
-        public bool IsScalingItem { get; }
+        public bool HasVariants { get; }
+        public bool IsMerchant { get; }
 
         public string TypeDisplayName => this switch
         {
