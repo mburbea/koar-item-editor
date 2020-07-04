@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,6 +14,9 @@ namespace KoAR.SaveEditor.Views
     public sealed class ItemsView : Control
     {
         public static readonly DependencyProperty AllItemsUnsellableProperty = DependencyProperty.Register(nameof(ItemsView.AllItemsUnsellable), typeof(bool?), typeof(ItemsView),
+            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+
+        public static readonly DependencyProperty AllItemsUnstashableProperty = DependencyProperty.Register(nameof(ItemsView.AllItemsUnstashable), typeof(bool?), typeof(ItemsView),
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         public static readonly DependencyProperty DoubleClickCommandProperty = DependencyProperty.Register(nameof(ItemsView.DoubleClickCommand), typeof(ICommand), typeof(ItemsView));
@@ -36,7 +40,7 @@ namespace KoAR.SaveEditor.Views
             new PropertyMetadata(nameof(ItemModel.Level)));
 
         private static readonly DependencyPropertyKey _collectionViewProperty = DependencyProperty.RegisterReadOnly(nameof(ItemsView.CollectionView), typeof(CollectionView), typeof(ItemsView),
-            new PropertyMetadata());
+            new PropertyMetadata(ItemsView.CollectionView_ValueChanged));
 
         private ListView? _listView;
 
@@ -48,6 +52,12 @@ namespace KoAR.SaveEditor.Views
         {
             get => (bool?)this.GetValue(ItemsView.AllItemsUnsellableProperty);
             set => this.SetValue(ItemsView.AllItemsUnsellableProperty, value.HasValue ? BooleanBoxes.GetBox(value.Value) : null);
+        }
+
+        public bool? AllItemsUnstashable
+        {
+            get => (bool?)this.GetValue(ItemsView.AllItemsUnstashableProperty);
+            set => this.SetValue(ItemsView.AllItemsUnstashableProperty, value.HasValue ? BooleanBoxes.GetBox(value.Value) : null);
         }
 
         public ICollectionView? CollectionView
@@ -109,11 +119,11 @@ namespace KoAR.SaveEditor.Views
             }
             ListViewAutoSize.AutoSizeColumns(this._listView);
             this._listView.AddHandler(ButtonBase.ClickEvent, new RoutedEventHandler(this.GridViewColumn_Click));
-            if (this.DataContext is MainViewModel viewModel)
-            {
-                viewModel.PropertyChanged += this.ViewModel_PropertyChanged;
-                this.Unloaded += this.ItemsView_Unloaded;
-            }
+        }
+
+        private void CollectionView_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            this.Dispatcher.InvokeAsync(() => ListViewAutoSize.AutoSizeColumns(this._listView));
         }
 
         private void GridViewColumn_Click(object sender, RoutedEventArgs e)
@@ -137,20 +147,17 @@ namespace KoAR.SaveEditor.Views
             );
         }
 
-        private void ItemsView_Unloaded(object sender, RoutedEventArgs e)
+        private static void CollectionView_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            this.Unloaded -= this.ItemsView_Unloaded;
-            if (this.DataContext is MainViewModel viewModel)
+            ItemsView itemsView = (ItemsView)d;
+            if (e.OldValue != null)
             {
-                viewModel.PropertyChanged -= this.ViewModel_PropertyChanged;
+                CollectionChangedEventManager.RemoveHandler((ListCollectionView)e.OldValue, itemsView.CollectionView_CollectionChanged);
             }
-        }
-
-        private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(MainViewModel.CategoryFilter))
+            if (e.NewValue != null)
             {
-                this.Dispatcher.InvokeAsync(() => ListViewAutoSize.AutoSizeColumns(this._listView!));
+                CollectionChangedEventManager.AddHandler((ListCollectionView)e.NewValue, itemsView.CollectionView_CollectionChanged);
+                itemsView.Dispatcher.InvokeAsync(() => ListViewAutoSize.AutoSizeColumns(itemsView._listView));
             }
         }
 

@@ -9,7 +9,7 @@
     xmlns:s="clr-namespace:System;assembly=mscorlib"
     xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
     mc:Ignorable="d" d:DataContext="{d:DesignInstance views:ChangeDefinitionViewModel}"
-    Icon="/app.ico" SizeToContent="WidthAndHeight"
+    Icon="/app.ico" SizeToContent="WidthAndHeight" MinWidth="400"
     WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
     <Window.Style>
         <Style TargetType="{x:Type Window}" BasedOn="{StaticResource {x:Type Window}}">
@@ -166,7 +166,7 @@
         </ComboBox>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="4" Grid.ColumnSpan="2">
             <Button Content="Cancel" Command="Close" Margin="4" FocusVisualStyle="{x:Null}" />
-            <Button Content="Save" Command="{Binding ChangeDefinitionCommand}" Margin="4" IsDefault="True" FocusVisualStyle="{x:Null}" />
+            <Button Content="Save" Command="{Binding ProcessCommand}" Margin="4" IsDefault="True" FocusVisualStyle="{x:Null}" />
         </StackPanel>
     </Grid>
 </Window>

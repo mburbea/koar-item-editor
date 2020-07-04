@@ -156,10 +156,10 @@
             </Grid.ColumnDefinitions>
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" SharedSizeGroup="TopRow" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <GroupBox Header="Filters" Margin="4">
+                <Expander Header="Filters" Margin="4" FocusVisualStyle="{x:Null}" views:FocusVisualStyleKiller.Kill="True">
                     <Grid>
                         <Grid.Resources>
                             <Style TargetType="FrameworkElement" x:Key="ElementStyle">
@@ -207,7 +207,7 @@
                         </TextBox>
                         <Button Grid.Column="6" Content="Reset" FocusVisualStyle="{x:Null}" Command="{Binding ResetFiltersCommand}" Margin="2" VerticalAlignment="Center" />
                     </Grid>
-                </GroupBox>
+                </Expander>
                 <DockPanel Grid.Row="1" Margin="4">
                     <views:ScrollingTabControl DockPanel.Dock="Top" SelectedValuePath="Data" VerticalContentAlignment="Stretch"
                         ItemsSource="{Binding Source={StaticResource CategoryContainers}}" SelectedValue="{Binding CategoryFilter}">
@@ -277,14 +277,14 @@
                             <DataTemplate />
                         </TabControl.ContentTemplate>
                     </views:ScrollingTabControl>
-                    <views:ItemsView Items="{Binding FilteredItems}" SelectedItem="{Binding SelectedItem}" 
+                    <views:ItemsView Items="{Binding FilteredItems}" SelectedItem="{Binding SelectedItem}" AllItemsUnstashable="{Binding AllItemsUnstashable}"
                         DoubleClickCommand="{Binding HandleDoubleClickCommmand}" AllItemsUnsellable="{Binding AllItemsUnsellable}" />
                 </DockPanel>
             </Grid>
             <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Stretch" Background="{x:Static SystemColors.ControlBrush}" FocusVisualStyle="{x:Null}" />
             <Grid Grid.Column="2">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" SharedSizeGroup="TopRow"/>
+                    <RowDefinition Height="Auto" />
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <GroupBox Header="Inventory Size" Margin="4">
@@ -319,9 +319,10 @@
                                 </Style.Triggers>
                             </Style>
                         </StackPanel.Resources>
-                        <views:EffectsControl Margin="4" Capacity="4" Header="{Binding SelectedItem}" Effects="{Binding SelectedItem.CoreEffects}" Buffs="{x:Static core:Amalur.Buffs}"
+                        <views:EffectsControl Margin="4" Header="{Binding SelectedItem}" Effects="{Binding SelectedItem.CoreEffects}" Buffs="{x:Static core:Amalur.Buffs}"
                             EffectTranslations="{x:Static core:Amalur.CoreEffects}" EffectDefinitions="{Binding Values, Source={x:Static core:Amalur.CoreEffects}}"
-                            AddEffectCommand="{Binding AddCoreEffectCommand}" DeleteEffectCommand="{Binding DeleteCoreEffectCommand}">
+                            AddEffectCommand="{Binding AddCoreEffectCommand}" DeleteEffectCommand="{Binding DeleteCoreEffectCommand}"
+                            UnsupportedFormat="{Binding SelectedItem.UnsupportedFormat}" Capacity="{x:Static core:CoreEffectMemory.MaxCoreEffects}">
                             <views:EffectsControl.HeaderTemplate>
                                 <DataTemplate DataType="{x:Type views:ItemModel}">
                                     <TextBlock>
@@ -352,7 +353,7 @@
                                                         <Setter Property="Text" Value="Effects:" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
-                                                <Setter Property="Text" Value="{Binding Effects.Count, Mode=OneWay, StringFormat='Core Effects: ({0})'}" />
+                                                <Setter Property="Text" Value="{Binding Effects.Count, Mode=OneWay, StringFormat='Effects: ({0})'}" />
                                             </Style>
                                         </TextBlock.Style>
                                     </TextBlock>

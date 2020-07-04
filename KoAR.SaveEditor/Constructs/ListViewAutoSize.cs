@@ -17,7 +17,7 @@ namespace KoAR.SaveEditor.Constructs
 
         public static void SetSkipAutoSize(GridViewColumn column, bool value) => column?.SetValue(ListViewAutoSize.SkipAutoSizeProperty, BooleanBoxes.GetBox(value));
 
-        public static void AutoSizeColumns(ListView listView)
+        public static void AutoSizeColumns(ListView? listView)
         {
             if (listView?.View is GridView view)
             {

@@ -154,7 +154,7 @@ namespace KoAR.Core
                 }
                 else
                 {
-                    ItemBytes[Offsets.SellableFlag] &= 0xD7;
+                    ItemBytes[Offsets.SellableFlag] &= 0xBF;
                 }
             }
         }
@@ -265,6 +265,8 @@ namespace KoAR.Core
             MaxDurability = definition.MaxDurability;
             CoreEffects.List.Clear();
             CoreEffects.List.AddRange(definition.CoreEffects);
+            CoreEffects.Prefix = definition.Prefix;
+            CoreEffects.Suffix = definition.Suffix;
             Effects.Clear();
             Effects.AddRange(definition.Effects);
             Level = definition.Level;

@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using KoAR.Core;
+using KoAR.SaveEditor.Constructs;
 
 namespace KoAR.SaveEditor.Views
 {
@@ -39,6 +40,9 @@ namespace KoAR.SaveEditor.Views
 
         public static readonly DependencyProperty PendingEffectProperty = DependencyProperty.Register(nameof(EffectsControl.PendingEffect), typeof(IEffectInfo), typeof(EffectsControl),
             new PropertyMetadata(EffectsControl.PendingEffectProperty_ValueChanged));
+
+        public static readonly DependencyProperty UnsupportedFormatProperty = DependencyProperty.Register(nameof(EffectsControl.UnsupportedFormat), typeof(bool), typeof(EffectsControl),
+            new PropertyMetadata(BooleanBoxes.False));
 
         static EffectsControl() => FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(EffectsControl), new FrameworkPropertyMetadata(typeof(EffectsControl)));
 
@@ -106,6 +110,12 @@ namespace KoAR.SaveEditor.Views
         {
             get => (uint?)this.GetValue(EffectsControl.PendingEffectCodeProperty);
             set => this.SetValue(EffectsControl.PendingEffectCodeProperty, value);
+        }
+
+        public bool UnsupportedFormat
+        {
+            get => (bool)this.GetValue(EffectsControl.UnsupportedFormatProperty);
+            set => this.SetValue(EffectsControl.UnsupportedFormatProperty, BooleanBoxes.GetBox(value));
         }
 
         public override void OnApplyTemplate()

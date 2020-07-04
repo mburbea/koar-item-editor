@@ -15,6 +15,7 @@
             <constructs:PlusOneConverter x:Key="PlusOneConverter" />
             <constructs:EqualityConverter x:Key="EqualityConverter" />
             <constructs:HexConverter x:Key="HexConverter" />
+            <constructs:NegatedBooleanConverter x:Key="NegatedBooleanConverter" />
             <Style TargetType="{x:Type Button}" x:Key="CommandButtonStyle">
                 <Setter Property="Template">
                     <Setter.Value>
@@ -213,6 +214,7 @@
                                             <Button Grid.Column="2" Style="{StaticResource CommandButtonStyle}" Tag="{StaticResource Copy}" CommandTarget="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}"
                                                 Command="Copy" ToolTip="Copy" />
                                             <Button Grid.Column="3" Style="{StaticResource CommandButtonStyle}" Tag="{StaticResource Delete}" CommandParameter="{Binding}" 
+                                                IsEnabled="{Binding UnsupportedFormat, RelativeSource={RelativeSource AncestorType={x:Type views:EffectsControl}}, Converter={StaticResource NegatedBooleanConverter}}"
                                                 Command="{Binding DeleteEffectCommand, RelativeSource={RelativeSource AncestorType={x:Type views:EffectsControl}}}" ToolTip="Delete" />
                                         </Grid>
                                     </DataTemplate>
@@ -223,6 +225,9 @@
                                     <Style TargetType="{x:Type GroupBox}">
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding Effects, RelativeSource={RelativeSource TemplatedParent}}" Value="{x:Null}">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding UnsupportedFormat, RelativeSource={RelativeSource TemplatedParent}}" Value="True">
                                                 <Setter Property="Visibility" Value="Collapsed" />
                                             </DataTrigger>
                                             <DataTrigger Binding="{Binding Effects.Count, RelativeSource={RelativeSource TemplatedParent}}" Value="0">

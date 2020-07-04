@@ -48,6 +48,12 @@ namespace KoAR.SaveEditor.Views
             get => this.Item.IsUnsellable;
             set => this.SetItemValue(value, this.Item.IsUnsellable, value => this.Item.IsUnsellable = value);
         }
+
+        public bool IsUnstashable
+        {
+            get => this.Item.IsUnstashable;
+            set => this.SetItemValue(value, this.Item.IsUnstashable, value => this.Item.IsUnstashable = value);
+        }
          
         public uint ItemId => this.Item.ItemId;
 
@@ -91,6 +97,8 @@ namespace KoAR.SaveEditor.Views
                 this.OnPropertyChanged(string.Empty);
             }
         }
+
+        public bool UnsupportedFormat => this.Item.CoreEffects.UnsupportedFormat;
 
         internal ItemMemoryInfo Item { get; }
 

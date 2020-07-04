@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Data;
@@ -47,35 +48,14 @@ namespace KoAR.SaveEditor.Views
 
         public bool? AllItemsUnsellable
         {
-            get
-            {
-                if (this.FilteredItems.Count == 0)
-                {
-                    return true;
-                }
-                bool first = this.FilteredItems[0].IsUnsellable;
-                for (int index = 1; index < this.FilteredItems.Count; index++)
-                {
-                    bool current = this.FilteredItems[index].IsUnsellable;
-                    if (current != first)
-                    {
-                        return null;
-                    }
-                }
-                return first;
-            }
-            set
-            {
-                if (!Amalur.IsFileOpen)
-                {
-                    return;
-                }
-                foreach (ItemModel model in this.FilteredItems)
-                {
-                    model.IsUnsellable = value.GetValueOrDefault();
-                }
-                this.OnPropertyChanged();
-            }
+            get => this.GetAppliesToAllItems(item => item.IsUnsellable);
+            set => this.SetAppliesToAllItems(item => item.IsUnsellable = value.GetValueOrDefault());
+        }
+
+        public bool? AllItemsUnstashable
+        {
+            get => this.GetAppliesToAllItems(item => item.IsUnstashable);
+            set => this.SetAppliesToAllItems(item => item.IsUnstashable = value.GetValueOrDefault());
         }
 
         public EquipmentCategory? CategoryFilter
@@ -164,6 +144,8 @@ namespace KoAR.SaveEditor.Views
             set => this.SetValue(ref this._selectedItem, value);
         }
 
+        public Stash? Stash => Amalur.Stash;
+
         public bool UnsavedChanges
         {
             get => this._unsavedChanges;
@@ -194,6 +176,7 @@ namespace KoAR.SaveEditor.Views
                 this.OnPropertyChanged(nameof(this.CategoryFilter));
             }
             this.ResetFilters();
+            this.OnPropertyChanged(nameof(this.Stash));
             this._unsavedChanges = false;
             this.OnPropertyChanged(nameof(this.UnsavedChanges));
         }
@@ -230,6 +213,20 @@ namespace KoAR.SaveEditor.Views
 
         private void DeleteEffect(uint code) => this.SelectedItem?.DeleteEffect(code);
 
+        private bool? GetAppliesToAllItems(Func<ItemModel, bool> projection)
+        {
+            if (this.FilteredItems.Count == 0)
+            {
+                return true;
+            }
+            bool first = projection(this.FilteredItems[0]);
+            if (this.FilteredItems.Skip(1).Select(projection).Any(value => value != first))
+            {
+                return null;
+            }
+            return first;
+        }
+
         private void HandleDoubleClick(ItemModel model)
         {
             if (!Amalur.IsFileOpen)
@@ -256,9 +253,14 @@ namespace KoAR.SaveEditor.Views
             ItemModel model = (ItemModel)sender;
             Amalur.WriteEquipmentBytes(model.Item);
             this.UnsavedChanges = true;
-            if (e.PropertyName == nameof(ItemModel.IsUnsellable))
+            switch (e.PropertyName)
             {
-                this.OnPropertyChanged(nameof(this.AllItemsUnsellable));
+                case nameof(ItemModel.IsUnsellable):
+                    this.OnPropertyChanged(nameof(this.AllItemsUnsellable));
+                    break;
+                case nameof(ItemModel.IsUnstashable):
+                    this.OnPropertyChanged(nameof(this.AllItemsUnstashable));
+                    break;
             }
         }
 
@@ -288,6 +290,7 @@ namespace KoAR.SaveEditor.Views
                 : items.ToList();
             this.SelectedItem = null;
             this.OnPropertyChanged(nameof(this.AllItemsUnsellable));
+            this.OnPropertyChanged(nameof(this.AllItemsUnstashable));
         }
 
         private void RepopulateItems()
@@ -329,6 +332,15 @@ namespace KoAR.SaveEditor.Views
                 this.OnPropertyChanged(nameof(this.CurrentDurabilityFilter));
             }
             this.OnFilterChange();
+        }
+
+        private void SetAppliesToAllItems(Action<ItemModel> action, [CallerMemberName] string propertyName = "")
+        {
+            foreach (ItemModel item in this.FilteredItems)
+            {
+                action(item);
+            }
+            this.OnPropertyChanged(propertyName);
         }
 
         private void UpdateInventorySize()

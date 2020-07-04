@@ -72,18 +72,22 @@ namespace KoAR.SaveEditor.Views
             if (e.OldValue != null)
             {
                 ItemModel oldItem = (ItemModel)e.OldValue;
+                PropertyChangedEventManager.RemoveHandler(oldItem, control.Item_TypeDefinitionChanged, nameof(oldItem.TypeDefinition));
                 PropertyChangedEventManager.RemoveHandler(oldItem, control.Item_HasCustomNameChanged, nameof(oldItem.HasCustomName));
             }
             ItemModel? item = (ItemModel)e.NewValue;
             if (item != null)
             {
                 control.Definition = item.TypeDefinition;
+                PropertyChangedEventManager.AddHandler(item, control.Item_TypeDefinitionChanged, nameof(item.TypeDefinition));
                 PropertyChangedEventManager.AddHandler(item, control.Item_HasCustomNameChanged, nameof(item.HasCustomName));
             }
             control.HasCustomName = item?.HasCustomName ?? false;
         }
 
         private void Item_HasCustomNameChanged(object sender, EventArgs e) => this.HasCustomName = ((ItemModel)sender).HasCustomName;
+
+        private void Item_TypeDefinitionChanged(object sender, EventArgs e) => this.Definition = ((ItemModel)sender).TypeDefinition;
 
         private sealed class SocketLabelConverter : IValueConverter
         {

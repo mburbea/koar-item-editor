@@ -15,7 +15,10 @@ namespace KoAR.Core
             public const int FirstEffect = EffectCount + 4;
         }
 
-        private static ReadOnlySpan<byte> InstanceIds => new byte[] { 
+        /// <summary>
+        /// Remember to change <see cref="MaxCoreEffects"/> if max supported core effecs changes.
+        /// </summary>
+        private static ReadOnlySpan<byte> InstanceIds => new byte[] {
             0x73, 0x8E, 0x57, 0x00,
             0xAA, 0x6E, 0x58, 0x00,
             0xF9, 0x03, 0x4B, 0x00,
@@ -24,6 +27,8 @@ namespace KoAR.Core
             0x0A, 0xC2, 0x4B, 0x00,
             0x71, 0xFF, 0x4B, 0x00
         };
+                
+        public const int MaxCoreEffects = 7;
 
         internal CoreEffectMemory(int coreOffset, int coreLength)
         {
@@ -47,16 +52,13 @@ namespace KoAR.Core
 
         internal byte[] Bytes { get; private set; }
         public int ItemIndex { get; internal set; }
-        public int DataLength 
+        public int DataLength
         {
             get => MemoryUtilities.Read<int>(Bytes, Offsets.DataLength) + 17;
             set => MemoryUtilities.Write(Bytes, Offsets.DataLength, value - 17);
         }
 
-        public int Count
-        {
-            get => List.Count;
-        }
+        public int Count => List.Count;
 
         public uint Prefix
         {
