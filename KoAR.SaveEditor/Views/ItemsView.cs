@@ -109,6 +109,11 @@ namespace KoAR.SaveEditor.Views
             }
             ListViewAutoSize.AutoSizeColumns(this._listView);
             this._listView.AddHandler(ButtonBase.ClickEvent, new RoutedEventHandler(this.GridViewColumn_Click));
+            if (this.DataContext is MainViewModel viewModel)
+            {
+                viewModel.PropertyChanged += this.ViewModel_PropertyChanged;
+                this.Unloaded += this.ItemsView_Unloaded;
+            }
         }
 
         private void GridViewColumn_Click(object sender, RoutedEventArgs e)
@@ -130,6 +135,23 @@ namespace KoAR.SaveEditor.Views
                     ? (ListSortDirection)((int)current.Direction ^ 1)
                     : ListSortDirection.Ascending
             );
+        }
+
+        private void ItemsView_Unloaded(object sender, RoutedEventArgs e)
+        {
+            this.Unloaded -= this.ItemsView_Unloaded;
+            if (this.DataContext is MainViewModel viewModel)
+            {
+                viewModel.PropertyChanged -= this.ViewModel_PropertyChanged;
+            }
+        }
+
+        private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(MainViewModel.CategoryFilter))
+            {
+                this.Dispatcher.InvokeAsync(() => ListViewAutoSize.AutoSizeColumns(this._listView!));
+            }
         }
 
         private static void Element_PreviewMouseLeftButtonDown(object sender, RoutedEventArgs e)

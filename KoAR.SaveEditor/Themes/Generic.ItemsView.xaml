@@ -118,8 +118,6 @@
                         </ListView.ContextMenu>
                         <ListView.View>
                             <GridView AllowsColumnReorder="True">
-                                <GridViewColumn Header="Type Id" Width="Auto" views:ItemsView.PropertyName="TypeDefinition.TypeId" 
-                                    DisplayMemberBinding="{Binding TypeDefinition.TypeId, StringFormat=X6}" />
                                 <GridViewColumn Header="Level" Width="Auto" views:ItemsView.PropertyName="Level">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate DataType="{x:Type views:ItemModel}">
@@ -175,6 +173,18 @@
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate DataType="{x:Type views:ItemModel}">
                                             <Grid>
+                                                <Grid.Style>
+                                                    <Style TargetType="{x:Type Grid}">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Category}" Value="Ring">
+                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Category}" Value="Necklace">
+                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Grid.Style>
                                                 <TextBlock Text="{Binding CurrentDurability, StringFormat='0.####'}" TextAlignment="Right">
                                                     <TextBlock.Style>
                                                         <Style TargetType="{x:Type TextBlock}">
@@ -204,6 +214,18 @@
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate DataType="{x:Type views:ItemModel}">
                                             <Grid>
+                                                <Grid.Style>
+                                                    <Style TargetType="{x:Type Grid}">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Category}" Value="Ring">
+                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Category}" Value="Necklace">
+                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Grid.Style>
                                                 <TextBlock Text="{Binding MaxDurability, StringFormat='0.####'}" TextAlignment="Right">
                                                     <TextBlock.Style>
                                                         <Style TargetType="{x:Type TextBlock}">
