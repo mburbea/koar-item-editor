@@ -48,7 +48,7 @@ namespace KoAR.SaveEditor.Views
             get => this.Item.IsUnsellable;
             set => this.SetItemValue(value, this.Item.IsUnsellable, value => this.Item.IsUnsellable = value);
         }
-
+         
         public uint ItemId => this.Item.ItemId;
 
         public int ItemIndex => this.Item.ItemIndex;
@@ -94,9 +94,9 @@ namespace KoAR.SaveEditor.Views
 
         internal ItemMemoryInfo Item { get; }
 
-        internal void AddCoreEffect(uint code)=> this.CoreEffects.Add(code);
+        internal void AddCoreEffect(uint code) => this.CoreEffects.Add(code);
 
-        internal void AddEffect(uint code)=>this.Effects.Add(code);
+        internal void AddEffect(uint code) => this.Effects.Add(code);
 
         internal void DeleteCoreEffect(uint code) => this.CoreEffects.Remove(code);
 

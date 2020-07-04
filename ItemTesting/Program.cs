@@ -91,21 +91,22 @@ namespace ItemTesting
         {
             static string FormatAsStr(IEnumerable<uint> effects) => string.Join("", effects.Select(x => $"{x:X6}"));
 
-            const string path = @"..\..\..\..\9190114save90.sav";
-            //const string path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save3.sav";
+            //const string path = @"..\..\..\..\9190114save90.sav";
+            const string path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save3.sav";
             Amalur.Initialize(@"..\..\..\..\Koar.SaveEditor\");
             Amalur.ReadFile(path);
 
             //Amalur.Stash.AddItem(Amalur.TypeDefinitions[0x1FDF23]);
             //Amalur.SaveFile(path);
             //return;
-            //var chakrams = Amalur.Items.FirstOrDefault(x => x.TypeDefinition.TypeId == 0x1A3072);
-            //chakrams.CoreEffects.Suffix = 502416;
+            var chakrams = Amalur.Items.FirstOrDefault(x => x.TypeDefinition.Name == "Crude Iron Longsword");
+
+            chakrams.CoreEffects.Suffix = 502416;
 
 
-            //Amalur.WriteEquipmentBytes(chakrams, false);
-            //Amalur.SaveFile(path);
-            //return;
+            Amalur.WriteEquipmentBytes(chakrams, false);
+            Amalur.SaveFile(path);
+            return;
 
             int c = 0;
             int nm = 0;
