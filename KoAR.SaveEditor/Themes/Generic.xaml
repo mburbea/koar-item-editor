@@ -1,5 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
     <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.BuffControl.xaml" />
+        <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.BuffSelector.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.CoreEffectIcon.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.EffectsControl.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.EquipmentCategoryIcon.xaml" />
