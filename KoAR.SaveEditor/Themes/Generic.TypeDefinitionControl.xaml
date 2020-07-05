@@ -10,47 +10,7 @@
             <views:BitmapConverter x:Key="BitmapConverter" />
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <constructs:EqualityConverter x:Key="EqualityConverter" />
-            <s:String x:Key="Merchant">Merchant</s:String>            
-            <Color x:Key="CommonColor">#DCDCDC</Color>
-            <SolidColorBrush x:Key="CommonBrush" po:Freeze="True" Color="{StaticResource CommonColor}" />
-            <RadialGradientBrush x:Key="CommonGradient" GradientOrigin="0.5,1" po:Freeze="True">
-                <RadialGradientBrush.GradientStops>
-                    <GradientStop Color="White" />
-                    <GradientStop Color="{StaticResource CommonColor}" Offset="1" />
-                </RadialGradientBrush.GradientStops>
-            </RadialGradientBrush>
-            <Color x:Key="UniqueColor">#A433C9</Color>
-            <SolidColorBrush x:Key="UniqueBrush" po:Freeze="True" Color="{StaticResource UniqueColor}" />
-            <RadialGradientBrush x:Key="UniqueGradient" GradientOrigin="0.5,1" po:Freeze="True">
-                <RadialGradientBrush.GradientStops>
-                    <GradientStop Color="White" />
-                    <GradientStop Color="{StaticResource UniqueColor}" Offset="1" />
-                </RadialGradientBrush.GradientStops>
-            </RadialGradientBrush>
-            <Color x:Key="InfrequentColor">#46C001</Color>
-            <SolidColorBrush x:Key="InfrequentBrush" po:Freeze="True" Color="{StaticResource InfrequentColor}" />
-            <RadialGradientBrush x:Key="InfrequentGradient" GradientOrigin="0.5,1" po:Freeze="True">
-                <RadialGradientBrush.GradientStops>
-                    <GradientStop Color="White" />
-                    <GradientStop Color="{StaticResource InfrequentColor}" Offset="1" />
-                </RadialGradientBrush.GradientStops>
-            </RadialGradientBrush>
-            <Color x:Key="RareColor">#3B9BEE</Color>
-            <SolidColorBrush x:Key="RareBrush" po:Freeze="True" Color="{StaticResource RareColor}" />
-            <RadialGradientBrush x:Key="RareGradient" GradientOrigin="0.5,1" po:Freeze="True">
-                <RadialGradientBrush.GradientStops>
-                    <GradientStop Color="White" />
-                    <GradientStop Color="{StaticResource RareColor}" Offset="1" />
-                </RadialGradientBrush.GradientStops>
-            </RadialGradientBrush>
-            <Color x:Key="SetColor">#D2CB13</Color>
-            <SolidColorBrush x:Key="SetBrush" po:Freeze="True" Color="{StaticResource SetColor}" />
-            <RadialGradientBrush x:Key="SetGradient" GradientOrigin="0.5,1" po:Freeze="True">
-                <RadialGradientBrush.GradientStops>
-                    <GradientStop Color="White" />
-                    <GradientStop Color="{StaticResource SetColor}" Offset="1" />
-                </RadialGradientBrush.GradientStops>
-            </RadialGradientBrush>
+            <s:String x:Key="Merchant">Merchant</s:String>  
         </Style.Resources>
         <Style.Triggers>
             <Trigger Property="Definition" Value="{x:Null}">
@@ -85,7 +45,7 @@
                                                         <Setter Property="Text" Value="{Binding CategoryDisplayName}" />
                                                     </Style>
                                                 </TextBlock.Style>
-                                            </TextBlock> 
+                                            </TextBlock>
                                         </DataTemplate>
                                     </ToolTip.ContentTemplate>
                                 </ToolTip>
@@ -98,8 +58,7 @@
                                 </MultiBinding>
                             </Image.Source>
                         </Image>
-                        <Ellipse Height="18" Width="18" VerticalAlignment="Center" x:Name="PART_Ellipse" ToolTip="{TemplateBinding Rarity}"
-                            Stroke="{StaticResource CommonBrush}" StrokeThickness="0.5" Fill="{StaticResource CommonGradient}" />
+                        <views:RarityControl Rarity="{TemplateBinding Rarity}" />
                         <TextBlock VerticalAlignment="Center" Margin="2,0">
                             <TextBlock.Style>
                                 <Style TargetType="{x:Type TextBlock}">
@@ -145,24 +104,6 @@
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
                     </StackPanel>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="Rarity" Value="Infrequent">
-                            <Setter TargetName="PART_Ellipse" Property="Fill" Value="{StaticResource InfrequentGradient}" />
-                            <Setter TargetName="PART_Ellipse" Property="Stroke" Value="{StaticResource InfrequentBrush}" />
-                        </Trigger>
-                        <Trigger Property="Rarity" Value="Rare">
-                            <Setter TargetName="PART_Ellipse" Property="Fill" Value="{StaticResource RareGradient}" />
-                            <Setter TargetName="PART_Ellipse" Property="Stroke" Value="{StaticResource RareBrush}" />
-                        </Trigger>
-                        <Trigger Property="Rarity" Value="Unique">
-                            <Setter TargetName="PART_Ellipse" Property="Fill" Value="{StaticResource UniqueGradient}" />
-                            <Setter TargetName="PART_Ellipse" Property="Stroke" Value="{StaticResource UniqueBrush}" />
-                        </Trigger>
-                        <Trigger Property="Rarity" Value="Set">
-                            <Setter TargetName="PART_Ellipse" Property="Fill" Value="{StaticResource SetGradient}" />
-                            <Setter TargetName="PART_Ellipse" Property="Stroke" Value="{StaticResource SetBrush}" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
