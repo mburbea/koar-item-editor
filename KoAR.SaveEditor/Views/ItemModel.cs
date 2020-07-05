@@ -18,8 +18,8 @@ namespace KoAR.SaveEditor.Views
         public ItemModel(ItemMemoryInfo item)
         {
             this.Item = item;
-            this.CoreEffects = new EffectCollection(item.CoreEffects.List);
-            this.Effects = new EffectCollection(item.Effects);
+            this.CoreEffects = new NotifyingCollection<uint>(item.CoreEffects.List);
+            this.Effects = new NotifyingCollection<uint>(item.Effects);
         }
 
         public EquipmentCategory Category => this.Item.TypeDefinition.Category;
@@ -54,7 +54,7 @@ namespace KoAR.SaveEditor.Views
             get => this.Item.IsUnstashable;
             set => this.SetItemValue(value, this.Item.IsUnstashable, value => this.Item.IsUnstashable = value);
         }
-         
+
         public uint ItemId => this.Item.ItemId;
 
         public int ItemIndex => this.Item.ItemIndex;
@@ -84,9 +84,17 @@ namespace KoAR.SaveEditor.Views
             set => this.SetItemValue(value, this.Item.MaxDurability, value => this.Item.MaxDurability = value);
         }
 
-        public Buff? Prefix => Amalur.Buffs.TryGetValue(this.Item.CoreEffects.Prefix, out Buff buff) ? buff : default;
+        public Buff? Prefix
+        {
+            get => Amalur.Buffs.TryGetValue(this.Item.CoreEffects.Prefix, out Buff buff) ? buff : default;
+            set => this.SetItemValue(value?.Id ?? 0, this.Item.CoreEffects.Prefix, value => this.Item.CoreEffects.Prefix = value);
+        }
 
-        public Buff? Suffix => Amalur.Buffs.TryGetValue(this.Item.CoreEffects.Suffix, out Buff buff) ? buff : default;
+        public Buff? Suffix
+        {
+            get => Amalur.Buffs.TryGetValue(this.Item.CoreEffects.Suffix, out Buff buff) ? buff : default;
+            set => this.SetItemValue(value?.Id ?? 0, this.Item.CoreEffects.Suffix, value => this.Item.CoreEffects.Suffix = value);
+        }
 
         public TypeDefinition TypeDefinition
         {
@@ -121,12 +129,12 @@ namespace KoAR.SaveEditor.Views
             return true;
         }
 
-        private sealed class EffectCollection : Collection<uint>, INotifyCollectionChanged, INotifyPropertyChanged
+        private sealed class NotifyingCollection<T> : Collection<T>, INotifyCollectionChanged, INotifyPropertyChanged
         {
-            private static readonly PropertyChangedEventArgs _countArgs = new PropertyChangedEventArgs(nameof(EffectCollection.Count));
+            private static readonly PropertyChangedEventArgs _countArgs = new PropertyChangedEventArgs(nameof(IList<T>.Count));
             private static readonly PropertyChangedEventArgs _indexerArgs = new PropertyChangedEventArgs(Binding.IndexerName);
 
-            public EffectCollection(IList<uint> items)
+            public NotifyingCollection(IList<T> items)
                 : base(items)
             {
             }
@@ -135,24 +143,24 @@ namespace KoAR.SaveEditor.Views
 
             public event PropertyChangedEventHandler? PropertyChanged;
 
-            protected override void InsertItem(int index, uint item)
+            protected override void InsertItem(int index, T item)
             {
                 base.InsertItem(index, item);
                 this.OnCollectionChanged(NotifyCollectionChangedAction.Add, item, index);
-                this.OnPropertyChanged(EffectCollection._countArgs);
-                this.OnPropertyChanged(EffectCollection._indexerArgs);
+                this.OnPropertyChanged(NotifyingCollection<T>._countArgs);
+                this.OnPropertyChanged(NotifyingCollection<T>._indexerArgs);
             }
 
             protected override void RemoveItem(int index)
             {
-                uint item = this.Items[index];
+                T item = this.Items[index];
                 base.RemoveItem(index);
                 this.OnCollectionChanged(NotifyCollectionChangedAction.Remove, item, index);
-                this.OnPropertyChanged(EffectCollection._countArgs);
-                this.OnPropertyChanged(EffectCollection._indexerArgs);
+                this.OnPropertyChanged(NotifyingCollection<T>._countArgs);
+                this.OnPropertyChanged(NotifyingCollection<T>._indexerArgs);
             }
 
-            private void OnCollectionChanged(NotifyCollectionChangedAction action, uint item, int index) => this.CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(action, item, index));
+            private void OnCollectionChanged(NotifyCollectionChangedAction action, T item, int index) => this.CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(action, item, index));
 
             private void OnPropertyChanged(PropertyChangedEventArgs e) => this.PropertyChanged?.Invoke(this, e);
         }

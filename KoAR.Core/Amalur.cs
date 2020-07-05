@@ -190,11 +190,10 @@ namespace KoAR.Core
 
         public static void WriteEquipmentBytes(ItemMemoryInfo item, bool forced = false)
         {
-            static int WriteItem(int itemIndex, int dataLength, byte[] bytes)
+            static int WriteItem(int itemIndex, int oldLength, byte[] bytes)
             {
-                int oldLength = Bytes.Length;
-                Bytes = MemoryUtilities.ReplaceBytes(Bytes, itemIndex, dataLength, bytes);
-                int delta = Bytes.Length - oldLength;
+                Bytes = MemoryUtilities.ReplaceBytes(Bytes, itemIndex, oldLength, bytes);
+                int delta = bytes.Length - oldLength;
                 if (delta != 0)
                 {
                     foreach (var item in Items)
@@ -212,8 +211,8 @@ namespace KoAR.Core
                 return delta;
             }
 
-            item.CoreEffects.DataLength += WriteItem(item.CoreEffects.ItemIndex, item.CoreEffects.DataLength, item.CoreEffects.Serialize(forced));
-            item.DataLength += WriteItem(item.ItemIndex, item.DataLength, item.Serialize(forced));
+            WriteItem(item.CoreEffects.ItemIndex, item.CoreEffects.DataLength, item.CoreEffects.Serialize(forced));
+            WriteItem(item.ItemIndex, item.DataLength, item.Serialize(forced));
         }
     }
 }

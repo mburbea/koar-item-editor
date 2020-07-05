@@ -101,7 +101,10 @@ namespace ItemTesting
             //return;
             var chakrams = Amalur.Items.FirstOrDefault(x => x.TypeDefinition.Name == "Crude Iron Longsword");
 
-            chakrams.CoreEffects.Suffix = 502416;
+            chakrams.CoreEffects.Prefix = 1850750;
+            Amalur.WriteEquipmentBytes(chakrams, false);
+            Amalur.SaveFile(path);
+            return;
 
 
             Amalur.WriteEquipmentBytes(chakrams, false);

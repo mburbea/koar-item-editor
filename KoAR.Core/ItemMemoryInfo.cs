@@ -256,6 +256,7 @@ namespace KoAR.Core
                 effectData[i] = Effects[i] | (ulong)uint.MaxValue << 32;
             }
             ItemBytes = MemoryUtilities.ReplaceBytes(ItemBytes, Offset.FirstEffect, currentLength, MemoryMarshal.AsBytes(effectData));
+            DataLength = ItemBytes.Length;
             return ItemBytes;
         }
 

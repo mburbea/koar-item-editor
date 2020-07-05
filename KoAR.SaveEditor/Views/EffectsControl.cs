@@ -161,7 +161,7 @@ namespace KoAR.SaveEditor.Views
                     {
                         return buff.Flavor;
                     }
-                    if (buff.Ap != BuffType.Suffix && buff.Ap != BuffType.Prefix && buff.Ap != BuffType.Self && buff.Modifier != null)
+                    if (buff.BuffType != BuffTypes.Suffix && buff.BuffType != BuffTypes.Prefix && buff.BuffType != BuffTypes.Self && buff.Modifier != null)
                     {
                         return buff.Modifier;
                     }

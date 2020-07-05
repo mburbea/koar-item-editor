@@ -48,6 +48,11 @@ namespace KoAR.Core
                 }
                 List.Add(effect);
             }
+            var displayCount = MemoryUtilities.Read<int>(Bytes, Offsets.FirstEffect + 4 + (count * 16));
+            if (displayCount != count)
+            {
+                UnsupportedFormat = true;
+            }
         }
 
         internal byte[] Bytes { get; private set; }
@@ -91,11 +96,12 @@ namespace KoAR.Core
                 ulong effect = List[i];
                 effectData[i * 2] = prefixes[i] | effect << 32;
                 effectData[i * 2 + 1] = ulong.MaxValue;
-                effectData[newCount * 2 + 1 + i] = effect | (ulong)uint.MaxValue << 32;
+                effectData[newCount * 2 + 1 + i] = effect | ((ulong)uint.MaxValue) << 32;
             }
-            effectData[newCount * 2] = ((uint)newCount) << 32;
-            Bytes = MemoryUtilities.ReplaceBytes(Bytes, Offsets.FirstEffect, currentCount, MemoryMarshal.AsBytes(effectData));
-            Bytes[Offsets.EffectCount] = (byte)newCount;
+            effectData[newCount * 2] = ((ulong)newCount) << 32;
+            Bytes = MemoryUtilities.ReplaceBytes(Bytes, Offsets.FirstEffect, currentLength, MemoryMarshal.AsBytes(effectData));
+            MemoryUtilities.Write(Bytes, Offsets.EffectCount, newCount);
+            DataLength = Bytes.Length;
             return Bytes;
         }
     }

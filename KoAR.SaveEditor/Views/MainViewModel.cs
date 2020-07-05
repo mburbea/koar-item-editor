@@ -201,9 +201,27 @@ namespace KoAR.SaveEditor.Views
             MessageBox.Show($"Save successful! Original save backed up as {this._fileName}.bak.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private void AddCoreEffect(uint code) => this.SelectedItem?.AddCoreEffect(code);
+        private void AddCoreEffect(uint code)
+        {
+            if (this.SelectedItem == null)
+            {
+                return;
+            }
+            this.SelectedItem.AddCoreEffect(code);
+            Amalur.WriteEquipmentBytes(this.SelectedItem.Item);
+            this.UnsavedChanges = true;
+        }
 
-        private void AddEffect(uint code) => this.SelectedItem?.AddEffect(code);
+        private void AddEffect(uint code)
+        {
+            if (this.SelectedItem == null)
+            {
+                return;
+            }
+            this.SelectedItem.AddEffect(code);
+            Amalur.WriteEquipmentBytes(this.SelectedItem.Item);
+            this.UnsavedChanges = true;
+        }
 
         private void AddStashItem()
         {
@@ -229,9 +247,9 @@ namespace KoAR.SaveEditor.Views
 
         private bool CanAddEffect(uint code) => this.SelectedItem != null && code != 0u;
 
-        private bool CanDeleteCoreEffect(uint code) => this.SelectedItem != null && code != 0u;
+        private bool CanDeleteCoreEffect(uint code) => this.SelectedItem != null;
 
-        private bool CanDeleteEffect(uint code) => this.SelectedItem != null && code != 0u;
+        private bool CanDeleteEffect(uint code) => this.SelectedItem != null;
 
         private void ChangeDefinition(ItemModel model)
         {
@@ -252,9 +270,27 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        private void DeleteCoreEffect(uint code) => this.SelectedItem?.DeleteCoreEffect(code);
+        private void DeleteCoreEffect(uint code)
+        {
+            if (this.SelectedItem == null)
+            {
+                return;
+            }
+            this.SelectedItem.DeleteCoreEffect(code);
+            Amalur.WriteEquipmentBytes(this.SelectedItem.Item);
+            this.UnsavedChanges = true;
+        }
 
-        private void DeleteEffect(uint code) => this.SelectedItem?.DeleteEffect(code);
+        private void DeleteEffect(uint code)
+        {
+            if (this.SelectedItem == null)
+            {
+                return;
+            }
+            this.SelectedItem.DeleteEffect(code);
+            Amalur.WriteEquipmentBytes(this.SelectedItem.Item);
+            this.UnsavedChanges = true;
+        }
 
         private bool? GetAppliesToAllItems(Func<ItemModel, bool> projection)
         {

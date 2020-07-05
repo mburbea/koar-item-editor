@@ -10,7 +10,8 @@ namespace KoAR.Core
         public string Name { get; set; } = string.Empty;
         public string? Flavor { get; set; }
         public Rarity Rarity { get; set; }
-        public BuffType Ap { get; set; }
+        [JsonPropertyName("ap")]
+        public BuffTypes BuffType { get; set; }
         public BuffDescription[] Desc { get; set; } = Array.Empty<BuffDescription>();
     }
 
@@ -23,18 +24,19 @@ namespace KoAR.Core
         public string? BuffId { get; set; }
     }
 
-    public enum BuffType
+    [Flags]
+    public enum BuffTypes
     {
-        Normal,
-        Curse,
-        Destiny,
-        Disease,
-        Prefix,
-        Self,
-        SpecialCurse,
-        SpecialDisease,
-        Suffix,
-        TemporaryPositive,
-        Trait
+        Normal = 0x1,
+        Curse = 0x2,
+        Destiny = 0x4,
+        Disease = 0x8,
+        Prefix = 0x10,
+        Self = 0x20,
+        SpecialCurse = 0x40,
+        SpecialDisease = 0x80,
+        Suffix = 0x100,
+        TemporaryPositive = 0x200,
+        Trait = 0x400
     }
 }
