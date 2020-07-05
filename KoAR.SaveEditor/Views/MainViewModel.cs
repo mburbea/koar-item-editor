@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Data;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
 using Microsoft.Win32;
@@ -16,7 +14,8 @@ namespace KoAR.SaveEditor.Views
 {
     public sealed class MainViewModel : NotifierBase
     {
-        private readonly ItemCollection _items;
+        private readonly Func<Task<IReadOnlyList<ItemModel>>> _debouncedGetFilteredItems;
+        private readonly NotifyingCollection<ItemModel> _items;
         private EquipmentCategory? _categoryFilter;
         private string _currentDurabilityFilter = string.Empty;
         private string _fileName = string.Empty;
@@ -28,8 +27,8 @@ namespace KoAR.SaveEditor.Views
 
         public MainViewModel()
         {
-            this._items = new ItemCollection();
-            this._filteredItems = this.Items = new ReadOnlyObservableCollection<ItemModel>(this._items);
+            this._filteredItems = this._items = new NotifyingCollection<ItemModel>();
+            this._debouncedGetFilteredItems = Debounce.Method(this.GetFilteredItems, 200);
             this.OpenFileCommand = new DelegateCommand(this.OpenFile);
             this.ResetFiltersCommand = new DelegateCommand(this.ResetFilters);
             this.ChangeDefinitionCommand = new DelegateCommand<ItemModel>(this.ChangeDefinition);
@@ -66,7 +65,7 @@ namespace KoAR.SaveEditor.Views
             {
                 if (this.SetValue(ref this._categoryFilter, value))
                 {
-                    this.OnFilterChange();
+                    this.OnFilterChange(false);
                 }
             }
         }
@@ -128,7 +127,7 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        public ReadOnlyObservableCollection<ItemModel> Items { get; }
+        public IReadOnlyList<ItemModel> Items => this._items;
 
         public string MaxDurabilityFilter
         {
@@ -306,27 +305,7 @@ namespace KoAR.SaveEditor.Views
             return first;
         }
 
-        private void Item_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (!Amalur.IsFileOpen)
-            {
-                return;
-            }
-            ItemModel model = (ItemModel)sender;
-            Amalur.WriteEquipmentBytes(model.Item);
-            this.UnsavedChanges = true;
-            switch (e.PropertyName)
-            {
-                case nameof(ItemModel.IsUnsellable):
-                    this.OnPropertyChanged(nameof(this.AllItemsUnsellable));
-                    break;
-                case nameof(ItemModel.IsUnstashable):
-                    this.OnPropertyChanged(nameof(this.AllItemsUnstashable));
-                    break;
-            }
-        }
-
-        private void OnFilterChange()
+        private IReadOnlyList<ItemModel> GetFilteredItems()
         {
             IEnumerable<ItemModel> items = this.Items;
             if (this._currentDurabilityFilter.Length != 0 && float.TryParse(this._currentDurabilityFilter, out float single))
@@ -347,12 +326,52 @@ namespace KoAR.SaveEditor.Views
             {
                 items = items.Where(model => model.Category == this._categoryFilter);
             }
-            this.FilteredItems = object.ReferenceEquals(items, this.Items)
-                ? (IReadOnlyList<ItemModel>)this.Items
-                : items.ToList();
-            this.SelectedItem = null;
-            this.OnPropertyChanged(nameof(this.AllItemsUnsellable));
-            this.OnPropertyChanged(nameof(this.AllItemsUnstashable));
+            return object.Equals(items, this.FilteredItems) ? this.FilteredItems : items.ToList();
+        }
+
+        private void Item_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (!Amalur.IsFileOpen)
+            {
+                return;
+            }
+            ItemModel model = (ItemModel)sender;
+            Amalur.WriteEquipmentBytes(model.Item);
+            this.UnsavedChanges = true;
+            switch (e.PropertyName)
+            {
+                case nameof(ItemModel.IsUnsellable):
+                    this.OnPropertyChanged(nameof(this.AllItemsUnsellable));
+                    break;
+                case nameof(ItemModel.IsUnstashable):
+                    this.OnPropertyChanged(nameof(this.AllItemsUnstashable));
+                    break;
+            }
+        }
+
+        private void OnFilterChange(bool debounce = true)
+        {
+            void ProcessFilteredItems(IReadOnlyList<ItemModel> items)
+            {
+                this.FilteredItems = items;
+                this.SelectedItem = null;
+                this.OnPropertyChanged(nameof(this.AllItemsUnsellable));
+                this.OnPropertyChanged(nameof(this.AllItemsUnstashable));
+            }
+
+            if (!debounce)
+            {
+                ProcessFilteredItems(this.GetFilteredItems());
+            }
+            else
+            {
+                this._debouncedGetFilteredItems().ContinueWith(
+                    task => ProcessFilteredItems(task.Result),
+                    default,
+                    TaskContinuationOptions.OnlyOnRanToCompletion,
+                    TaskScheduler.FromCurrentSynchronizationContext()
+                );
+            }
         }
 
         private void RepopulateItems()
@@ -363,7 +382,7 @@ namespace KoAR.SaveEditor.Views
                 this.OpenFile();
                 return;
             }
-            using (this._items.GetPauseScope())
+            using (this._items.CreatePauseEventsScope())
             {
                 foreach (ItemModel item in this._items)
                 {
@@ -393,7 +412,7 @@ namespace KoAR.SaveEditor.Views
             {
                 this.OnPropertyChanged(nameof(this.CurrentDurabilityFilter));
             }
-            this.OnFilterChange();
+            this.OnFilterChange(false);
         }
 
         private void SetAppliesToAllItems(Action<ItemModel> action, [CallerMemberName] string propertyName = "")
@@ -403,41 +422,6 @@ namespace KoAR.SaveEditor.Views
                 action(item);
             }
             this.OnPropertyChanged(propertyName);
-        }
-
-        private sealed class ItemCollection : ObservableCollection<ItemModel>
-        {
-            private int _pauseCounter;
-
-            public IDisposable GetPauseScope()
-            {
-                Interlocked.Increment(ref this._pauseCounter);
-                return new Disposable(() =>
-                {
-                    if (Interlocked.Decrement(ref this._pauseCounter) == 0)
-                    {
-                        this.OnPropertyChanged(new PropertyChangedEventArgs(nameof(this.Count)));
-                        this.OnPropertyChanged(new PropertyChangedEventArgs(Binding.IndexerName));
-                        this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-                    }
-                });
-            }
-
-            protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
-            {
-                if (this._pauseCounter == 0)
-                {
-                    base.OnCollectionChanged(e);
-                }
-            }
-
-            protected override void OnPropertyChanged(PropertyChangedEventArgs e)
-            {
-                if (this._pauseCounter == 0)
-                {
-                    base.OnPropertyChanged(e);
-                }
-            }
         }
     }
 }

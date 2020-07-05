@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows.Data;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
 
@@ -127,42 +124,6 @@ namespace KoAR.SaveEditor.Views
             setValue(value);
             this.OnPropertyChanged(propertyName);
             return true;
-        }
-
-        private sealed class NotifyingCollection<T> : Collection<T>, INotifyCollectionChanged, INotifyPropertyChanged
-        {
-            private static readonly PropertyChangedEventArgs _countArgs = new PropertyChangedEventArgs(nameof(IList<T>.Count));
-            private static readonly PropertyChangedEventArgs _indexerArgs = new PropertyChangedEventArgs(Binding.IndexerName);
-
-            public NotifyingCollection(IList<T> items)
-                : base(items)
-            {
-            }
-
-            public event NotifyCollectionChangedEventHandler? CollectionChanged;
-
-            public event PropertyChangedEventHandler? PropertyChanged;
-
-            protected override void InsertItem(int index, T item)
-            {
-                base.InsertItem(index, item);
-                this.OnCollectionChanged(NotifyCollectionChangedAction.Add, item, index);
-                this.OnPropertyChanged(NotifyingCollection<T>._countArgs);
-                this.OnPropertyChanged(NotifyingCollection<T>._indexerArgs);
-            }
-
-            protected override void RemoveItem(int index)
-            {
-                T item = this.Items[index];
-                base.RemoveItem(index);
-                this.OnCollectionChanged(NotifyCollectionChangedAction.Remove, item, index);
-                this.OnPropertyChanged(NotifyingCollection<T>._countArgs);
-                this.OnPropertyChanged(NotifyingCollection<T>._indexerArgs);
-            }
-
-            private void OnCollectionChanged(NotifyCollectionChangedAction action, T item, int index) => this.CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(action, item, index));
-
-            private void OnPropertyChanged(PropertyChangedEventArgs e) => this.PropertyChanged?.Invoke(this, e);
         }
     }
 }
