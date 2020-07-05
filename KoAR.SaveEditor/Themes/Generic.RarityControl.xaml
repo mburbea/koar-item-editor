@@ -44,11 +44,15 @@
     </RadialGradientBrush>
     <Style TargetType="{x:Type views:RarityControl}">
         <Setter Property="Focusable" Value="False" />
+        <Setter Property="Width" Value="18" />
+        <Setter Property="Height" Value="18" />
+        <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type views:RarityControl}">
-                    <Ellipse Height="18" Width="18" VerticalAlignment="Center" x:Name="PART_Ellipse" ToolTip="{TemplateBinding Rarity}"
-                            Stroke="{StaticResource CommonBrush}" StrokeThickness="0.5" Fill="{StaticResource CommonGradient}" />
+                    <Ellipse x:Name="PART_Ellipse" Height="{TemplateBinding Height}" Width="{TemplateBinding Width}"
+                        Stroke="{StaticResource CommonBrush}" StrokeThickness="0.5" Fill="{StaticResource CommonGradient}" 
+                        ToolTip="{TemplateBinding Rarity}" />                    
                     <ControlTemplate.Triggers>
                         <Trigger Property="Rarity" Value="Infrequent">
                             <Setter TargetName="PART_Ellipse" Property="Fill" Value="{StaticResource InfrequentGradient}" />

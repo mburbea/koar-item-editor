@@ -17,7 +17,9 @@
         <constructs:NegatedBooleanConverter x:Key="NegatedBooleanConverter" />
         <constructs:StringIsNullOrEmptyConverter x:Key="StringIsNullOrEmptyConverter" />
         <constructs:LittleEndianConverter x:Key="LittleEndianConverter" />
+        <constructs:EqualityConverter x:Key="EqualityConverter" />
         <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
             <Setter Property="Validation.ErrorTemplate">
                 <Setter.Value>
                     <ControlTemplate>
@@ -159,52 +161,132 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <Expander Header="Filters" Margin="4" FocusVisualStyle="{x:Null}" views:FocusVisualStyleKiller.Kill="True">
+                <Expander IsExpanded="True" Header="Filters" Margin="4" FocusVisualStyle="{x:Null}" views:FocusVisualStyleKiller.Kill="True">
                     <Grid>
                         <Grid.Resources>
-                            <Style TargetType="FrameworkElement" x:Key="ElementStyle">
+                            <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="Margin" Value="2" />
                                 <Setter Property="VerticalAlignment" Value="Center" />
-                            </Style>
-                            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource ElementStyle}">
                                 <Setter Property="TextAlignment" Value="Right" />
+                            </Style>
+                            <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
+                                <Setter Property="Margin" Value="2" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                             </Style>
                             <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
                                 <Setter Property="Margin" Value="2" />
                                 <Setter Property="VerticalAlignment" Value="Center" />
                             </Style>
+                            <ObjectDataProvider x:Key="Rarities" ObjectType="{x:Type s:Enum}" MethodName="GetValues">
+                                <ObjectDataProvider.MethodParameters>
+                                    <x:Type TypeName="core:Rarity" />
+                                </ObjectDataProvider.MethodParameters>
+                            </ObjectDataProvider>
+                            <ObjectDataProvider x:Key="Elements" ObjectType="{x:Type s:Enum}" MethodName="GetValues">
+                                <ObjectDataProvider.MethodParameters>
+                                    <x:Type TypeName="core:Element" />
+                                </ObjectDataProvider.MethodParameters>
+                            </ObjectDataProvider>
                         </Grid.Resources>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition />
                             <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition />
                             <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition />
+
+
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="Name:" />
                         <TextBox Grid.Column="1" Text="{Binding ItemNameFilter, UpdateSourceTrigger=PropertyChanged}" />
-                        <TextBlock Grid.Column="2" Text="Cur. Durability:" />
-                        <TextBox Grid.Column="3">
-                            <TextBox.Text>
-                                <Binding Path="CurrentDurabilityFilter" UpdateSourceTrigger="PropertyChanged">
-                                    <Binding.ValidationRules>
-                                        <constructs:RegexValidationRule Pattern="^\d+(\.\d+)?$" />
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </TextBox.Text>
-                        </TextBox>
-                        <TextBlock Grid.Column="4" Text="Max. Durability:" />
-                        <TextBox Grid.Column="5">
-                            <TextBox.Text>
-                                <Binding Path="MaxDurabilityFilter" UpdateSourceTrigger="PropertyChanged">
-                                    <Binding.ValidationRules>
-                                        <constructs:RegexValidationRule Pattern="^\d+(\.\d+)?$" />
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </TextBox.Text>
-                        </TextBox>
+
+                        <TextBlock Grid.Column="2" Text="Rarity:" />
+                        <ComboBox Grid.Column="3" ItemsSource="{Binding Source={StaticResource Rarities}}" SelectedItem="{Binding RarityFilter}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate DataType="{x:Type core:Rarity}">
+                                    <StackPanel Orientation="Horizontal" Margin="0,2">
+                                        <views:RarityControl Rarity="{Binding}" Height="16" Width="16">
+                                            <views:RarityControl.Style>
+                                                <Style TargetType="{x:Type views:RarityControl}">
+                                                    <Style.Triggers>
+                                                        <Trigger Property="Rarity" Value="None">
+                                                            <Setter Property="Visibility" Value="Hidden" />
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </views:RarityControl.Style>
+                                        </views:RarityControl>
+                                        <TextBlock VerticalAlignment="Center" Margin="2,0">
+                                            <TextBlock.Style>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Style.Triggers>
+                                                        <MultiDataTrigger>
+                                                            <MultiDataTrigger.Conditions>
+                                                                <Condition Binding="{Binding Converter={StaticResource EqualityConverter}, ConverterParameter={x:Static core:Rarity.None}}" Value="False" />
+                                                                <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ComboBoxItem}}, Converter={StaticResource EqualityConverter}}" Value="False" />
+                                                            </MultiDataTrigger.Conditions>
+                                                            <Setter Property="Text" Value="{Binding}" />
+                                                        </MultiDataTrigger>
+                                                        <DataTrigger Binding="{Binding}" Value="None">
+                                                            <Setter Property="Text" Value="All" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <TextBlock Grid.Column="4" Text="Element:" />
+                        <ComboBox Grid.Column="5" ItemsSource="{Binding Source={StaticResource Elements}}" SelectedItem="{Binding ElementFilter}">
+                            <ComboBox.Resources>
+                                <constructs:CompositeConverter x:Key="ImageConverter">
+                                    <constructs:StringFormatConverter />
+                                    <views:BitmapConverter />
+                                </constructs:CompositeConverter>
+                            </ComboBox.Resources>
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate DataType="{x:Type core:Element}">
+                                    <StackPanel Orientation="Horizontal" Margin="0,2">
+                                        <Image Width="16">
+                                            <Image.Style>
+                                                <Style TargetType="{x:Type Image}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Converter={StaticResource EqualityConverter}, ConverterParameter={x:Static core:Element.None}}" Value="False">
+                                                            <Setter Property="Source" Value="{Binding Converter={StaticResource ImageConverter}, ConverterParameter='{}{0}_dot_amount'}" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Image.Style>
+                                        </Image>
+                                        <TextBlock VerticalAlignment="Center" Margin="2,0">
+                                            <TextBlock.Style>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Style.Triggers>
+                                                        <MultiDataTrigger>
+                                                            <MultiDataTrigger.Conditions>
+                                                                <Condition Binding="{Binding Converter={StaticResource EqualityConverter}, ConverterParameter={x:Static core:Element.None}}" Value="False" />
+                                                                <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ComboBoxItem}}, Converter={StaticResource EqualityConverter}}" Value="False" />
+                                                            </MultiDataTrigger.Conditions>
+                                                            <Setter Property="Text" Value="{Binding}" />
+                                                        </MultiDataTrigger>
+                                                        <DataTrigger Binding="{Binding}" Value="None">
+                                                            <Setter Property="Text" Value="All" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+
                         <Button Grid.Column="6" Content="Reset" FocusVisualStyle="{x:Null}" Command="{Binding ResetFiltersCommand}" Margin="2" VerticalAlignment="Center" />
                     </Grid>
                 </Expander>

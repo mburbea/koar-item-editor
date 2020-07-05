@@ -87,6 +87,8 @@ namespace KoAR.SaveEditor.Views
             set => this.SetItemValue(value?.Id ?? 0, this.Item.CoreEffects.Prefix, value => this.Item.CoreEffects.Prefix = value);
         }
 
+        public Rarity Rarity => this.TypeDefinition.Rarity;
+
         public Buff? Suffix
         {
             get => Amalur.Buffs.TryGetValue(this.Item.CoreEffects.Suffix, out Buff buff) ? buff : default;

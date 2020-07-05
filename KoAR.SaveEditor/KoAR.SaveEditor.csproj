@@ -100,6 +100,7 @@
     <None Remove="Resources\buffs\powercostreduction.png" />
     <None Remove="Resources\buffs\PowerRecovery.png" />
     <None Remove="Resources\buffs\PowerRecoveryCombat.png" />
+    <None Remove="Resources\buffs\primal_dot_amount.png" />
     <None Remove="Resources\buffs\RangedDmgMitigation.png" />
     <None Remove="Resources\buffs\Sagecraft.png" />
     <None Remove="Resources\buffs\Sorcery.png" />
@@ -256,6 +257,7 @@
     <Resource Include="Resources\buffs\powercostreduction.png" />
     <Resource Include="Resources\buffs\PowerRecovery.png" />
     <Resource Include="Resources\buffs\PowerRecoveryCombat.png" />
+    <Resource Include="Resources\buffs\primal_dot_amount.png" />
     <Resource Include="Resources\buffs\RangedDmgMitigation.png" />
     <Resource Include="Resources\buffs\Sagecraft.png" />
     <Resource Include="Resources\buffs\Sorcery.png" />

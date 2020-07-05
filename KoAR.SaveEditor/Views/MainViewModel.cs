@@ -17,11 +17,11 @@ namespace KoAR.SaveEditor.Views
         private readonly Func<Task<IReadOnlyList<ItemModel>>> _debouncedGetFilteredItems;
         private readonly NotifyingCollection<ItemModel> _items;
         private EquipmentCategory? _categoryFilter;
-        private string _currentDurabilityFilter = string.Empty;
+        private Element _elementFilter;
         private string _fileName = string.Empty;
         private IReadOnlyList<ItemModel> _filteredItems;
         private string _itemNameFilter = string.Empty;
-        private string _maxDurabilityFilter = string.Empty;
+        private Rarity _rarityFilter;
         private ItemModel? _selectedItem;
         private bool _unsavedChanges;
 
@@ -72,21 +72,21 @@ namespace KoAR.SaveEditor.Views
 
         public DelegateCommand<ItemModel> ChangeDefinitionCommand { get; }
 
-        public string CurrentDurabilityFilter
+        public DelegateCommand<uint> DeleteCoreEffectCommand { get; }
+
+        public DelegateCommand<uint> DeleteEffectCommand { get; }
+
+        public Element ElementFilter
         {
-            get => this._currentDurabilityFilter;
+            get => this._elementFilter;
             set
             {
-                if (this.SetValue(ref this._currentDurabilityFilter, value))
+                if (this.SetValue(ref this._elementFilter, value))
                 {
                     this.OnFilterChange();
                 }
             }
         }
-
-        public DelegateCommand<uint> DeleteCoreEffectCommand { get; }
-
-        public DelegateCommand<uint> DeleteEffectCommand { get; }
 
         public string FileName
         {
@@ -129,19 +129,19 @@ namespace KoAR.SaveEditor.Views
 
         public IReadOnlyList<ItemModel> Items => this._items;
 
-        public string MaxDurabilityFilter
+        public DelegateCommand OpenFileCommand { get; }
+
+        public Rarity RarityFilter
         {
-            get => this._maxDurabilityFilter;
+            get => this._rarityFilter;
             set
             {
-                if (this.SetValue(ref this._maxDurabilityFilter, value))
+                if (this.SetValue(ref this._rarityFilter, value))
                 {
                     this.OnFilterChange();
                 }
             }
         }
-
-        public DelegateCommand OpenFileCommand { get; }
 
         public DelegateCommand ResetFiltersCommand { get; }
 
@@ -308,23 +308,21 @@ namespace KoAR.SaveEditor.Views
         private IReadOnlyList<ItemModel> GetFilteredItems()
         {
             IEnumerable<ItemModel> items = this.Items;
-            if (this._currentDurabilityFilter.Length != 0 && float.TryParse(this._currentDurabilityFilter, out float single))
+            if (this._categoryFilter.HasValue)
             {
-                int temp = (int)Math.Floor(single);
-                items = items.Where(model => (int)Math.Floor(model.CurrentDurability) == temp);
+                items = items.Where(model => model.Category == this._categoryFilter);
             }
-            if (this._maxDurabilityFilter.Length != 0 && float.TryParse(this._maxDurabilityFilter, out single))
+            if (this._rarityFilter != Rarity.None)
             {
-                int temp = (int)Math.Floor(single);
-                items = items.Where(model => (int)Math.Floor(model.MaxDurability) == temp);
+                items = items.Where(model => model.Rarity == this._rarityFilter);
+            }
+            if (this._elementFilter != Element.None)
+            {
+                items = items.Where(model => model.TypeDefinition.Element == this._elementFilter);
             }
             if (this._itemNameFilter.Length != 0)
             {
                 items = items.Where(model => model.DisplayName.IndexOf(this._itemNameFilter, StringComparison.OrdinalIgnoreCase) != -1);
-            }
-            if (this._categoryFilter.HasValue)
-            {
-                items = items.Where(model => model.Category == this._categoryFilter);
             }
             return object.Equals(items, this.FilteredItems) ? this.FilteredItems : items.ToList();
         }
@@ -404,13 +402,15 @@ namespace KoAR.SaveEditor.Views
             {
                 this.OnPropertyChanged(nameof(this.ItemNameFilter));
             }
-            if (Interlocked.Exchange(ref this._maxDurabilityFilter, string.Empty).Length != 0)
+            if (this._elementFilter != Element.None)
             {
-                this.OnPropertyChanged(nameof(this.MaxDurabilityFilter));
+                this._elementFilter = Element.None;
+                this.OnPropertyChanged(nameof(this.ElementFilter));
             }
-            if (Interlocked.Exchange(ref this._currentDurabilityFilter, string.Empty).Length != 0)
+            if (this._rarityFilter != Rarity.None)
             {
-                this.OnPropertyChanged(nameof(this.CurrentDurabilityFilter));
+                this._rarityFilter = Rarity.None;
+                this.OnPropertyChanged(nameof(this.RarityFilter));
             }
             this.OnFilterChange(false);
         }
