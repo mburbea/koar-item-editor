@@ -211,8 +211,17 @@ namespace KoAR.Core
                 return delta;
             }
 
-            WriteItem(item.CoreEffects.ItemIndex, item.CoreEffects.DataLength, item.CoreEffects.Serialize(forced));
-            WriteItem(item.ItemIndex, item.DataLength, item.Serialize(forced));
+            var delta = WriteItem(item.CoreEffects.ItemIndex, item.CoreEffects.DataLength, item.CoreEffects.Serialize(forced));
+            if(delta != 0)
+            {
+                CoreEffectContainer.UpdateDataLength(delta);
+            }
+            delta = WriteItem(item.ItemIndex, item.DataLength, item.Serialize(forced));
+            if (delta != 0)
+            {
+                ItemMemoryContainer.UpdateDataLength(delta);
+            }
+
         }
     }
 }

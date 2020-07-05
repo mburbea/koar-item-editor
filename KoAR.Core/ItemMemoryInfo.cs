@@ -217,6 +217,7 @@ namespace KoAR.Core
                     ItemBytes = ItemBytes.AsSpan(0, Offsets.CustomNameLength).ToArray();
                     HasCustomName = false;
                 }
+                DataLength = ItemBytes.Length;
             }
         }
 

@@ -100,8 +100,8 @@ namespace ItemTesting
             //Amalur.SaveFile(path);
             //return;
             var chakrams = Amalur.Items.FirstOrDefault(x => x.TypeDefinition.Name == "Crude Iron Longsword");
-
-            chakrams.CoreEffects.Prefix = 1850750;
+            chakrams.Effects.Add(1850750);
+            //chakrams.CoreEffects.Prefix = 1850750;
             Amalur.WriteEquipmentBytes(chakrams, false);
             Amalur.SaveFile(path);
             return;
