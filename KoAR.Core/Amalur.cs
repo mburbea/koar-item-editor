@@ -26,11 +26,6 @@ namespace KoAR.Core
         public static TValue GetOrDefault<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key, TValue defaultValue = default) =>
             dictionary.TryGetValue(key, out var res) ? res : defaultValue;
 
-
-        //public static Dictionary<uint, string> Buffs { get; } = new Dictionary<uint, string>();
-        public static List<EffectInfo> Effects { get; } = new List<EffectInfo>();
-        public static Dictionary<uint, CoreEffectInfo> CoreEffects { get; } = new Dictionary<uint, CoreEffectInfo>();
-        public static Dictionary<uint, EffectInfo> DedupedEffects { get; } = new Dictionary<uint, EffectInfo>();
         public static Dictionary<uint, TypeDefinition> TypeDefinitions { get; } = new Dictionary<uint, TypeDefinition>();
         public static List<ItemMemoryInfo> Items { get; } = new List<ItemMemoryInfo>();
         public static Dictionary<uint, Buff> Buffs { get; } = new Dictionary<uint, Buff>();
@@ -71,47 +66,11 @@ namespace KoAR.Core
                 CultureInfo.DefaultThreadCurrentCulture = CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
             var sw = Stopwatch.StartNew();
             path ??= Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
-            var effectCsv = Path.Combine(path, "CoreEffects.csv");
-            if (!File.Exists(effectCsv))
-            {
-                throw new InvalidOperationException("Cannot find CoreEffects.csv");
-            }
-
-            CoreEffects.AddRange(File.ReadLines(effectCsv).Skip(1).Select(row =>
-            {
-                var parts = row.Split(',');
-                var code = uint.Parse(parts[0], NumberStyles.HexNumber);
-                return (code, new CoreEffectInfo
-                (
-                    code,
-                    Enum.TryParse(parts[1], true, out DamageType damageType) ? damageType : default,
-                    float.Parse(parts[2])
-                ));
-            }));
-            var propertiesXml = Path.Combine(path, "properties.xml");
-            if (!File.Exists(propertiesXml))
-            {
-                throw new InvalidOperationException("Cannot find properties.xml");
-            }
-            using var stream = File.OpenRead(propertiesXml);
-            Effects.AddRange(XDocument.Load(stream).Root
-                .Elements()
-                .Select(element => new EffectInfo
-                (
-                    uint.TryParse(element.Attribute("id").Value, NumberStyles.HexNumber, null, out var parsed) ? parsed : 0u,
-                    element.Value.Trim()
-                )));
-            DedupedEffects.AddRange(Effects
-                .Where(x => x.Code != 0)
-                .GroupBy(x => x.Code)
-                .Select(x => (x.Key, x.First())));
-
             var buffJson = Path.Combine(path, "buff.json");
             if (!File.Exists(buffJson))
             {
                 throw new InvalidOperationException("Cannot find buff.json");
             }
-            Buffs.Add(0u, new Buff { Id = 0, Name = "Unknown" });
             Buffs.AddRange(
             JsonSerializer.Deserialize<Buff[]>(
                 File.ReadAllBytes(buffJson), new JsonSerializerOptions
@@ -120,7 +79,12 @@ namespace KoAR.Core
                     Converters = { new JsonStringEnumConverter() }
                 })
               .Select(x => (x.Id, x)));
-            TypeDefinitions.AddRange(TypeDefinition.ParseFile(Path.Combine(path, "items.csv")).Select(x => (x.TypeId, x)));
+            var definitionsCsv = Path.Combine(path, "definitions.csv");
+            if (!File.Exists(definitionsCsv))
+            {
+                throw new InvalidOperationException("Cannot find definitions.csv");
+            }
+            TypeDefinitions.AddRange(TypeDefinition.ParseFile(definitionsCsv).Select(x => (x.TypeId, x)));
             Debug.WriteLine(sw.Elapsed);
             return;
         }
