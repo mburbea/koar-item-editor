@@ -35,6 +35,7 @@
             <CollectionViewSource x:Key="Definitions" Source="{Binding Definitions}">
                 <CollectionViewSource.SortDescriptions>
                     <scm:SortDescription PropertyName="Name" />
+                    <scm:SortDescription PropertyName="Level" />
                 </CollectionViewSource.SortDescriptions>
             </CollectionViewSource>
             <ObjectDataProvider x:Key="Categories" ObjectType="{x:Type s:Enum}" MethodName="GetValues">
