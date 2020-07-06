@@ -193,22 +193,18 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition />
                             <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition />
                             <ColumnDefinition Width="Auto" />
-
-
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-
+                            <ColumnDefinition />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="Name:" />
                         <TextBox Grid.Column="1" Text="{Binding ItemNameFilter, UpdateSourceTrigger=PropertyChanged}" />
-
                         <TextBlock Grid.Column="2" Text="Rarity:" />
                         <ComboBox Grid.Column="3" ItemsSource="{Binding Source={StaticResource Rarities}}" SelectedItem="{Binding RarityFilter}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate DataType="{x:Type core:Rarity}">
-                                    <StackPanel Orientation="Horizontal" Margin="0,2">
+                                    <StackPanel Orientation="Horizontal" Margin="2">
                                         <views:RarityControl Rarity="{Binding}" Height="16" Width="16">
                                             <views:RarityControl.Style>
                                                 <Style TargetType="{x:Type views:RarityControl}">
@@ -224,17 +220,11 @@
                                             <TextBlock.Style>
                                                 <Style TargetType="{x:Type TextBlock}">
                                                     <Style.Triggers>
-                                                        <MultiDataTrigger>
-                                                            <MultiDataTrigger.Conditions>
-                                                                <Condition Binding="{Binding Converter={StaticResource EqualityConverter}, ConverterParameter={x:Static core:Rarity.None}}" Value="False" />
-                                                                <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ComboBoxItem}}, Converter={StaticResource EqualityConverter}}" Value="False" />
-                                                            </MultiDataTrigger.Conditions>
+                                                        <DataTrigger Binding="{Binding Converter={StaticResource EqualityConverter}, ConverterParameter={x:Static core:Rarity.None}}" Value="False">
                                                             <Setter Property="Text" Value="{Binding}" />
-                                                        </MultiDataTrigger>
-                                                        <DataTrigger Binding="{Binding}" Value="None">
-                                                            <Setter Property="Text" Value="All" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
+                                                    <Setter Property="Text" Value="(All)" />
                                                 </Style>
                                             </TextBlock.Style>
                                         </TextBlock>
@@ -245,20 +235,24 @@
                         <TextBlock Grid.Column="4" Text="Element:" />
                         <ComboBox Grid.Column="5" ItemsSource="{Binding Source={StaticResource Elements}}" SelectedItem="{Binding ElementFilter}">
                             <ComboBox.Resources>
-                                <constructs:CompositeConverter x:Key="ImageConverter">
-                                    <constructs:StringFormatConverter />
-                                    <views:BitmapConverter />
-                                </constructs:CompositeConverter>
+                                <views:BitmapConverter x:Key="BitmapConverter" />
                             </ComboBox.Resources>
                             <ComboBox.ItemTemplate>
                                 <DataTemplate DataType="{x:Type core:Element}">
-                                    <StackPanel Orientation="Horizontal" Margin="0,2">
+                                    <StackPanel Orientation="Horizontal" Margin="2">
                                         <Image Width="16">
                                             <Image.Style>
                                                 <Style TargetType="{x:Type Image}">
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding Converter={StaticResource EqualityConverter}, ConverterParameter={x:Static core:Element.None}}" Value="False">
-                                                            <Setter Property="Source" Value="{Binding Converter={StaticResource ImageConverter}, ConverterParameter='{}{0}_dot_amount'}" />
+                                                            <Setter Property="Source">
+                                                                <Setter.Value>
+                                                                    <MultiBinding Converter="{StaticResource BitmapConverter}">
+                                                                        <Binding />
+                                                                        <Binding Source="Dot_Amount" />
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
@@ -268,17 +262,11 @@
                                             <TextBlock.Style>
                                                 <Style TargetType="{x:Type TextBlock}">
                                                     <Style.Triggers>
-                                                        <MultiDataTrigger>
-                                                            <MultiDataTrigger.Conditions>
-                                                                <Condition Binding="{Binding Converter={StaticResource EqualityConverter}, ConverterParameter={x:Static core:Element.None}}" Value="False" />
-                                                                <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ComboBoxItem}}, Converter={StaticResource EqualityConverter}}" Value="False" />
-                                                            </MultiDataTrigger.Conditions>
+                                                        <DataTrigger Binding="{Binding Converter={StaticResource EqualityConverter}, ConverterParameter={x:Static core:Element.None}}" Value="False">
                                                             <Setter Property="Text" Value="{Binding}" />
-                                                        </MultiDataTrigger>
-                                                        <DataTrigger Binding="{Binding}" Value="None">
-                                                            <Setter Property="Text" Value="All" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
+                                                    <Setter Property="Text" Value="(All)" />
                                                 </Style>
                                             </TextBlock.Style>
                                         </TextBlock>
