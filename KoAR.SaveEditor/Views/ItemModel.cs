@@ -15,13 +15,13 @@ namespace KoAR.SaveEditor.Views
         public ItemModel(ItemMemoryInfo item)
         {
             this.Item = item;
-            this.CoreEffects = new NotifyingCollection<uint>(item.CoreEffects.List);
-            this.Effects = new NotifyingCollection<uint>(item.Effects);
+            this.CoreEffects = new NotifyingCollection<Buff>(item.CoreEffects.List);
+            this.Effects = new NotifyingCollection<Buff>(item.Effects);
         }
 
         public EquipmentCategory Category => this.Item.TypeDefinition.Category;
 
-        public IList<uint> CoreEffects { get; }
+        public IList<Buff> CoreEffects { get; }
 
         public float CurrentDurability
         {
@@ -36,7 +36,7 @@ namespace KoAR.SaveEditor.Views
             false => this.TypeDefinition.Name,
         };
 
-        public IList<uint> Effects { get; }
+        public IList<Buff> Effects { get; }
 
         public bool HasCustomName => this.Item.HasCustomName;
 
@@ -83,16 +83,16 @@ namespace KoAR.SaveEditor.Views
 
         public Buff? Prefix
         {
-            get => Amalur.Buffs.TryGetValue(this.Item.CoreEffects.Prefix, out Buff buff) ? buff : default;
-            set => this.SetItemValue(value?.Id ?? 0, this.Item.CoreEffects.Prefix, value => this.Item.CoreEffects.Prefix = value);
+            get => this.Item.CoreEffects.Prefix;
+            set => this.SetItemValue(value, this.Item.CoreEffects.Prefix, value => this.Item.CoreEffects.Prefix = value);
         }
 
         public Rarity Rarity => this.TypeDefinition.Rarity;
 
         public Buff? Suffix
         {
-            get => Amalur.Buffs.TryGetValue(this.Item.CoreEffects.Suffix, out Buff buff) ? buff : default;
-            set => this.SetItemValue(value?.Id ?? 0, this.Item.CoreEffects.Suffix, value => this.Item.CoreEffects.Suffix = value);
+            get => this.Item.CoreEffects.Suffix;
+            set => this.SetItemValue(value, this.Item.CoreEffects.Suffix, value => this.Item.CoreEffects.Suffix = value);
         }
 
         public TypeDefinition TypeDefinition
@@ -109,13 +109,13 @@ namespace KoAR.SaveEditor.Views
 
         internal ItemMemoryInfo Item { get; }
 
-        internal void AddCoreEffect(uint code) => this.CoreEffects.Add(code);
+        internal void AddCoreEffect(Buff buff) => this.CoreEffects.Add(buff);
 
-        internal void AddEffect(uint code) => this.Effects.Add(code);
+        internal void AddEffect(Buff buff) => this.Effects.Add(buff);
 
-        internal void DeleteCoreEffect(uint code) => this.CoreEffects.Remove(code);
+        internal void DeleteCoreEffect(Buff buff) => this.CoreEffects.Remove(buff);
 
-        internal void DeleteEffect(uint code) => this.Effects.Remove(code);
+        internal void DeleteEffect(Buff buff) => this.Effects.Remove(buff);
 
         private bool SetItemValue<T>(T value, T currentValue, Action<T> setValue, [CallerMemberName] string propertyName = "")
         {

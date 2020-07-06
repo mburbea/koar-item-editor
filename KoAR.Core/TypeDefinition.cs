@@ -9,21 +9,21 @@ namespace KoAR.Core
 {
     public class TypeDefinition
     {
-        private static bool TryParseEffectList(string value, [NotNullWhen(true)] out uint[]? effects)
+        private static bool TryParseEffectList(string value, [NotNullWhen(true)] out Buff[]? effects)
         {
             effects = null;
             if (value.Length % 6 != 0)
             {
                 return false;
             }
-            var results = value.Length == 0 ? Array.Empty<uint>() : new uint[value.Length / 6];
+            var results = value.Length == 0 ? Array.Empty<Buff>() : new Buff[value.Length / 6];
             for (int i = 0; i < results.Length; i++)
             {
                 if (!uint.TryParse(value.Substring(i * 6, 6), NumberStyles.HexNumber, null, out uint effect))
                 {
                     return false;
                 }
-                results[i] = effect;
+                results[i] = Amalur.GetBuff(effect);
             }
             effects = results;
             return true;
@@ -31,10 +31,6 @@ namespace KoAR.Core
 
         private static bool TryLoadFromRow(string[] entries, [NotNullWhen(true)] out TypeDefinition? definition)
         {
-            //Category,TypeId,Level,Name,
-            //Internal_Name,Durability,Rarity,Sockets
-            //Element,ArmorType,CoreEffects,Effects
-
             definition = null;
             if (entries.Length != 15
                 || !Enum.TryParse(entries[0], true, out EquipmentCategory category)
@@ -46,13 +42,14 @@ namespace KoAR.Core
                 || !Enum.TryParse(entries[9], out ArmorType armorType)
                 || !uint.TryParse(entries[10], NumberStyles.HexNumber, null, out uint prefix)
                 || !uint.TryParse(entries[11], NumberStyles.HexNumber, null, out uint suffix)
-                || !TryParseEffectList(entries[12], out uint[]? coreEffects)
-                || !TryParseEffectList(entries[13], out uint[]? effects)
+                || !TryParseEffectList(entries[12], out var coreEffects)
+                || !TryParseEffectList(entries[13], out var effects)
                 || !bool.TryParse(entries[14], out bool hasVariants))
             {
                 return false;
             }
-            definition = new TypeDefinition(category, typeId, level, entries[3], entries[4], maxDurability, rarity, entries[7], element, armorType, prefix, suffix, coreEffects, effects, hasVariants);
+            definition = new TypeDefinition(category, typeId, level, entries[3], entries[4], maxDurability, rarity, entries[7], 
+                element, armorType, Amalur.GetBuff(prefix), Amalur.GetBuff(suffix), coreEffects, effects, hasVariants);
             return true;
         }
 
@@ -68,7 +65,7 @@ namespace KoAR.Core
         }
 
         internal TypeDefinition(EquipmentCategory category, uint typeId, byte level, string name, string internalName, float maxDurability, Rarity rarity,
-            string sockets, Element element, ArmorType armorType, uint prefix, uint suffix, uint[] coreEffects, uint[] effects, bool hasVariants)
+            string sockets, Element element, ArmorType armorType, Buff? prefix, Buff? suffix, Buff[] coreEffects, Buff[] effects, bool hasVariants)
         {
             Category = category;
             TypeId = typeId;
@@ -100,10 +97,10 @@ namespace KoAR.Core
         public string Sockets { get; }
         public Element Element { get; }
         public ArmorType ArmorType { get; }
-        public uint[] CoreEffects { get; }
-        public uint[] Effects { get; }
-        public uint Prefix { get; }
-        public uint Suffix { get; }
+        public Buff[] CoreEffects { get; }
+        public Buff[] Effects { get; }
+        public Buff? Prefix { get; }
+        public Buff? Suffix { get; }
         public bool AffixableName { get; }
         public bool HasVariants { get; }
         public bool IsMerchant { get; }

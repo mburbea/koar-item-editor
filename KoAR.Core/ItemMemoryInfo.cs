@@ -27,10 +27,10 @@ namespace KoAR.Core
             ItemIndex = offset;
             ItemBytes = Amalur.Bytes.AsSpan(offset, datalength).ToArray();
             CoreEffects = new CoreEffectMemory(coreEffectOffset, coreEffectDataLength);
-            Effects = new List<uint>(ItemBytes[Offset.EffectCount]);
+            Effects = new List<Buff>(ItemBytes[Offset.EffectCount]);
             for (int i = 0; i < Effects.Capacity; i++)
             {
-                Effects.Add(MemoryUtilities.Read<uint>(ItemBytes, Offset.FirstEffect + i * 8));
+                Effects.Add(Amalur.GetBuff(MemoryUtilities.Read<uint>(ItemBytes, Offset.FirstEffect + i * 8)));
             }
         }
         //private ItemMemoryInfo(ReadOnlySpan<byte> bytes, int itemIndex, int dataLength)
@@ -119,7 +119,7 @@ namespace KoAR.Core
             set => MemoryUtilities.Write(ItemBytes, Offset.DataLength, value - 17);
         }
 
-        public List<uint> Effects { get; } = new List<uint>();
+        public List<Buff> Effects { get; } = new List<Buff>();
 
         public bool HasCustomName
         {
@@ -159,7 +159,7 @@ namespace KoAR.Core
             }
         }
 
-        public TypeDefinition TypeDefinition 
+        public TypeDefinition TypeDefinition
         {
             get => Amalur.TypeDefinitions[MemoryUtilities.Read<uint>(Amalur.Bytes, _typeIdOffset)];
             set
@@ -229,16 +229,16 @@ namespace KoAR.Core
 
         private Offset Offsets => new Offset(Effects.Count);
 
-        public void Rematerialize(byte[] bytes)
-        {
-            ItemBytes = bytes;
-            Effects.Clear();
-            Effects.Capacity = ItemBytes[Offset.EffectCount];
-            for (int i = 0; i < Effects.Capacity; i++)
-            {
-                Effects.Add(MemoryUtilities.Read<uint>(ItemBytes, Offset.FirstEffect + i * 8));
-            }
-        }
+        //public void Rematerialize(byte[] bytes)
+        //{
+        //    ItemBytes = bytes;
+        //    Effects.Clear();
+        //    Effects.Capacity = ItemBytes[Offset.EffectCount];
+        //    for (int i = 0; i < Effects.Capacity; i++)
+        //    {
+        //        Effects.Add(MemoryUtilities.Read<uint>(ItemBytes, Offset.FirstEffect + i * 8));
+        //    }
+        //}
 
         public static bool IsValidDurability(float durability) => durability > DurabilityLowerBound && durability < DurabilityUpperBound;
 
@@ -254,7 +254,7 @@ namespace KoAR.Core
             Span<ulong> effectData = stackalloc ulong[Effects.Count];
             for (int i = 0; i < effectData.Length; i++)
             {
-                effectData[i] = Effects[i] | (ulong)uint.MaxValue << 32;
+                effectData[i] = Effects[i].Id | (ulong)uint.MaxValue << 32;
             }
             ItemBytes = MemoryUtilities.ReplaceBytes(ItemBytes, Offset.FirstEffect, currentLength, MemoryMarshal.AsBytes(effectData));
             DataLength = ItemBytes.Length;

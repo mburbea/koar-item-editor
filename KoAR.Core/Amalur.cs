@@ -71,8 +71,6 @@ namespace KoAR.Core
                 CultureInfo.DefaultThreadCurrentCulture = CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
             var sw = Stopwatch.StartNew();
             path ??= Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
-            TypeDefinitions.AddRange(TypeDefinition.ParseFile(Path.Combine(path, "items.csv")).Select(x => (x.TypeId, x)));
-
             var effectCsv = Path.Combine(path, "CoreEffects.csv");
             if (!File.Exists(effectCsv))
             {
@@ -113,14 +111,16 @@ namespace KoAR.Core
             {
                 throw new InvalidOperationException("Cannot find buff.json");
             }
+            Buffs.Add(0u, new Buff { Id = 0, Name = "Unknown" });
             Buffs.AddRange(
             JsonSerializer.Deserialize<Buff[]>(
-                File.ReadAllBytes(buffJson), new JsonSerializerOptions { 
+                File.ReadAllBytes(buffJson), new JsonSerializerOptions
+                {
                     PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                    Converters = {new JsonStringEnumConverter()} 
+                    Converters = { new JsonStringEnumConverter() }
                 })
               .Select(x => (x.Id, x)));
-
+            TypeDefinitions.AddRange(TypeDefinition.ParseFile(Path.Combine(path, "items.csv")).Select(x => (x.TypeId, x)));
             Debug.WriteLine(sw.Elapsed);
             return;
         }
@@ -142,6 +142,11 @@ namespace KoAR.Core
             return finalOffset + (inventoryLimitOrder * 12);
         }
 
+        public static Buff GetBuff(uint buffId) => Amalur.Buffs.TryGetValue(buffId, out var buff)
+                    ? buff : new Buff { Id = buffId, Name = "Unknown" };
+
+
+
         public static int InventorySize
         {
             get => MemoryUtilities.Read<int>(Bytes, _bagOffset ??= GetBagOffset());
@@ -162,7 +167,7 @@ namespace KoAR.Core
             var itemMemoryLocs = ItemMemoryContainer.ToDictionary(x => x.id, x => (x.offset, x.datalength));
             var coreLocs = CoreEffectContainer.ToDictionary(x => x.id, x => (x.offset, x.datalength));
             Items.Clear();
-            
+
             Stash = Stash.TryCreateStash();
 
             _simTypeOffset = data.IndexOf(typeIdSeq);
@@ -180,7 +185,7 @@ namespace KoAR.Core
 
                 if (TypeDefinitions.TryGetValue(typeId, out var definition))
                 {
-                    var (itemOffset,itemLength) = itemMemoryLocs[id];
+                    var (itemOffset, itemLength) = itemMemoryLocs[id];
                     var (coreOffset, coreLength) = coreLocs[id];
                     Items.Add(new ItemMemoryInfo(ixOfActor + 13, itemOffset, itemLength, coreOffset, coreLength));
                 }
@@ -212,7 +217,7 @@ namespace KoAR.Core
             }
 
             var delta = WriteItem(item.CoreEffects.ItemIndex, item.CoreEffects.DataLength, item.CoreEffects.Serialize(forced));
-            if(delta != 0)
+            if (delta != 0)
             {
                 CoreEffectContainer.UpdateDataLength(delta);
             }

@@ -34,8 +34,8 @@ namespace KoAR.SaveEditor.Views
             this.ChangeDefinitionCommand = new DelegateCommand<ItemModel>(this.ChangeDefinition);
             this.AddCoreEffectCommand = new DelegateCommand<uint>(this.AddCoreEffect, this.CanAddCoreEffect);
             this.AddEffectCommand = new DelegateCommand<uint>(this.AddEffect, this.CanAddEffect);
-            this.DeleteCoreEffectCommand = new DelegateCommand<uint>(this.DeleteCoreEffect, this.CanDeleteCoreEffect);
-            this.DeleteEffectCommand = new DelegateCommand<uint>(this.DeleteEffect, this.CanDeleteEffect);
+            this.DeleteCoreEffectCommand = new DelegateCommand<Buff>(this.DeleteCoreEffect, this.CanDeleteCoreEffect);
+            this.DeleteEffectCommand = new DelegateCommand<Buff>(this.DeleteEffect, this.CanDeleteEffect);
             this.SaveCommand = new DelegateCommand(this.Save, () => this._unsavedChanges);
             this.AddStashItemCommand = new DelegateCommand(this.AddStashItem, () => Amalur.IsFileOpen && Amalur.Stash != null);
         }
@@ -72,9 +72,9 @@ namespace KoAR.SaveEditor.Views
 
         public DelegateCommand<ItemModel> ChangeDefinitionCommand { get; }
 
-        public DelegateCommand<uint> DeleteCoreEffectCommand { get; }
+        public DelegateCommand<Buff> DeleteCoreEffectCommand { get; }
 
-        public DelegateCommand<uint> DeleteEffectCommand { get; }
+        public DelegateCommand<Buff> DeleteEffectCommand { get; }
 
         public Element ElementFilter
         {
@@ -206,7 +206,7 @@ namespace KoAR.SaveEditor.Views
             {
                 return;
             }
-            this.SelectedItem.AddCoreEffect(code);
+            this.SelectedItem.AddCoreEffect(Amalur.GetBuff(code));
             Amalur.WriteEquipmentBytes(this.SelectedItem.Item);
             this.UnsavedChanges = true;
         }
@@ -217,7 +217,7 @@ namespace KoAR.SaveEditor.Views
             {
                 return;
             }
-            this.SelectedItem.AddEffect(code);
+            this.SelectedItem.AddEffect(Amalur.GetBuff(code));
             Amalur.WriteEquipmentBytes(this.SelectedItem.Item);
             this.UnsavedChanges = true;
         }
@@ -246,9 +246,9 @@ namespace KoAR.SaveEditor.Views
 
         private bool CanAddEffect(uint code) => this.SelectedItem != null && code != 0u;
 
-        private bool CanDeleteCoreEffect(uint code) => this.SelectedItem != null;
+        private bool CanDeleteCoreEffect(Buff _) => this.SelectedItem != null;
 
-        private bool CanDeleteEffect(uint code) => this.SelectedItem != null;
+        private bool CanDeleteEffect(Buff _) => this.SelectedItem != null;
 
         private void ChangeDefinition(ItemModel model)
         {
@@ -269,24 +269,24 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        private void DeleteCoreEffect(uint code)
+        private void DeleteCoreEffect(Buff buff)
         {
             if (this.SelectedItem == null)
             {
                 return;
             }
-            this.SelectedItem.DeleteCoreEffect(code);
+            this.SelectedItem.DeleteCoreEffect(buff);
             Amalur.WriteEquipmentBytes(this.SelectedItem.Item);
             this.UnsavedChanges = true;
         }
 
-        private void DeleteEffect(uint code)
+        private void DeleteEffect(Buff buff)
         {
             if (this.SelectedItem == null)
             {
                 return;
             }
-            this.SelectedItem.DeleteEffect(code);
+            this.SelectedItem.DeleteEffect(buff);
             Amalur.WriteEquipmentBytes(this.SelectedItem.Item);
             this.UnsavedChanges = true;
         }
