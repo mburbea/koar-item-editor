@@ -176,6 +176,7 @@ namespace KoAR.SaveEditor.Views
             }
             Amalur.ReadFile(this.FileName = dialog.FileName);
             this.InventorySize = Amalur.InventorySize;
+            this.OnPropertyChanged(nameof(this.InventorySize));
             this.RepopulateItems();
             if (this._categoryFilter.HasValue)
             {
