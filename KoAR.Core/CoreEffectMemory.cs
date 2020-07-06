@@ -7,7 +7,7 @@ namespace KoAR.Core
 {
     public class CoreEffectMemory
     {
-        internal static List<(uint itemId, int offset, uint prefix)> SetOfInstances = new List<(uint, int, uint)>();
+        internal static List<(uint itemId, int offset, uint instanceId, bool hasPrefix, bool hasSuffix)> SetOfInstances = new List<(uint, int, uint, bool, bool)>();
         private static class Offsets
         {
             public const int DataLength = 13;
@@ -44,7 +44,7 @@ namespace KoAR.Core
                 if (instanceId != expectedId)
                 {
                     UnsupportedFormat = true;
-                    SetOfInstances.Add((itemId, i, instanceId));
+                    SetOfInstances.Add((itemId, i, instanceId, Prefix != 0, Suffix != 0));
                 }
                 List.Add(effect);
             }

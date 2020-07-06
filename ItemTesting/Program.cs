@@ -95,20 +95,19 @@ namespace ItemTesting
             const string path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save3.sav";
             Amalur.Initialize(@"..\..\..\..\Koar.SaveEditor\");
             Amalur.ReadFile(path);
+            foreach(var g in CoreEffectMemory.SetOfInstances.GroupBy(x=> x.instanceId))
+            {
+                Console.WriteLine($"{g.Key:X8}\t{string.Join(',',g.Select(x => x.offset).Distinct())}\t{g.Count()}\t{g.Count(x=> x.hasSuffix && x.hasPrefix)}\t{g.Count(x=>x.hasPrefix && !x.hasSuffix)}\t{g.Count(x=>x.hasSuffix && !x.hasPrefix)}");
+            }
 
             //Amalur.Stash.AddItem(Amalur.TypeDefinitions[0x1FDF23]);
             //Amalur.SaveFile(path);
             //return;
-            var chakrams = Amalur.Items.FirstOrDefault(x => x.TypeDefinition.Name == "Crude Iron Longsword");
-            chakrams.Effects.Add(1850750);
-            //chakrams.CoreEffects.Prefix = 1850750;
-            Amalur.WriteEquipmentBytes(chakrams, false);
-            Amalur.SaveFile(path);
-            return;
+           
 
 
-            Amalur.WriteEquipmentBytes(chakrams, false);
-            Amalur.SaveFile(path);
+            //Amalur.WriteEquipmentBytes(chakrams, false);
+            //Amalur.SaveFile(path);
             return;
 
             int c = 0;
@@ -226,7 +225,7 @@ namespace ItemTesting
             }
             Console.WriteLine($"C:{c} NM:{nm}");
             int i = 0;
-            foreach (var group in CoreEffectMemory.SetOfInstances.GroupBy(x=> x.prefix).OrderByDescending(x=> x.Count()))
+            foreach (var group in CoreEffectMemory.SetOfInstances.GroupBy(x=> x.instanceId).OrderByDescending(x=> x.Count()))
             {
                 var what = (from item in Amalur.Items
                            join id in @group.Select(x => x.itemId)

@@ -63,7 +63,7 @@
                             <TextBlock.Style>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding HasCustomName, RelativeSource={RelativeSource TemplatedParent}}" Value="True">
+                                        <DataTrigger Binding="{Binding Item, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource EqualityConverter}}" Value="False">
                                             <Setter Property="Text" Value="{Binding Item.DisplayName, RelativeSource={RelativeSource TemplatedParent}}" />
                                         </DataTrigger>
                                     </Style.Triggers>
