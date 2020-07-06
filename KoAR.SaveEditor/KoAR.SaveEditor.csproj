@@ -191,10 +191,6 @@
     <None Remove="Resources\Weapon_Socket.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Nullable" Version="1.2.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="WPFTaskDialog" Version="1.7.1" />
   </ItemGroup>
   <ItemGroup>
