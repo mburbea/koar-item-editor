@@ -90,6 +90,7 @@ static class Program
 {
     static void Main()
     {
+       KoAR.Core.Amalur.Initialize(@"..\..\..\..\Koar.SaveEditor\");
     }
 }
 //        {

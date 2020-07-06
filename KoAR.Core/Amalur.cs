@@ -62,31 +62,29 @@ namespace KoAR.Core
 
         public static void Initialize(string? path = null)
         {
+            var sw = Stopwatch.StartNew();
             Thread.CurrentThread.CurrentCulture = Thread.CurrentThread.CurrentUICulture =
                 CultureInfo.DefaultThreadCurrentCulture = CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
-            var sw = Stopwatch.StartNew();
             path ??= Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
-            var buffJson = Path.Combine(path, "buff.json");
-            if (!File.Exists(buffJson))
+            var fileName = Path.Combine(path, "buff.json");
+            if (!File.Exists(fileName))
             {
-                throw new InvalidOperationException("Cannot find buff.json");
+                throw new InvalidOperationException($"Cannot find {Path.GetFileName(fileName)}");
             }
             Buffs.AddRange(
             JsonSerializer.Deserialize<Buff[]>(
-                File.ReadAllBytes(buffJson), new JsonSerializerOptions
+                File.ReadAllBytes(fileName), new JsonSerializerOptions
                 {
                     PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                     Converters = { new JsonStringEnumConverter() }
                 })
               .Select(x => (x.Id, x)));
-            var definitionsCsv = Path.Combine(path, "definitions.csv");
-            if (!File.Exists(definitionsCsv))
+            if (!File.Exists(fileName = Path.Combine(path, "definitions.csv")))
             {
-                throw new InvalidOperationException("Cannot find definitions.csv");
+                throw new InvalidOperationException($"Cannot find {Path.GetFileName(fileName)}");
             }
-            TypeDefinitions.AddRange(TypeDefinition.ParseFile(definitionsCsv).Select(x => (x.TypeId, x)));
+            TypeDefinitions.AddRange(TypeDefinition.ParseFile(fileName).Select(x => (x.TypeId, x)));
             Debug.WriteLine(sw.Elapsed);
-            return;
         }
 
         private static int GetBagOffset()
