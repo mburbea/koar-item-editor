@@ -379,8 +379,21 @@
                             </TextBox.Text>
                         </TextBox>
                         <TextBlock Grid.Row="1" Text="Stash Count:" Margin="2" VerticalAlignment="Center" TextAlignment="Right"/>
-                        <TextBox Grid.Row="1" Grid.Column="1" MinWidth="100" Margin="2" TextAlignment="Right" 
-                            Background="{x:Static SystemColors.ControlBrush}" Text="{Binding Stash.Count, Mode=OneWay}" />
+                        <TextBox Grid.Row="1" Grid.Column="1" MinWidth="100" Margin="2" IsReadOnly="True" Background="{x:Static SystemColors.ControlBrush}">
+                            <TextBox.Style>
+                                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Stash}" Value="{x:Null}">
+                                            <Setter Property="Text" Value="(No Stash)" />
+                                            <Setter Property="IsEnabled" Value="False" />
+                                            <Setter Property="TextAlignment" Value="Left" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                    <Setter Property="Text" Value="{Binding Stash.Count, Mode=OneWay}" />
+                                    <Setter Property="TextAlignment" Value="Right" />
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
                         <Button Grid.Row="1" Grid.Column="2" Margin="2" Command="{Binding AddStashItemCommand}" Content="_Add Item" FocusVisualStyle="{x:Null}" />
                     </Grid>
                 </GroupBox>
