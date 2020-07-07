@@ -170,50 +170,17 @@
                                     </Style>
                                 </ListBox.ItemContainerStyle>
                                 <ListBox.ItemTemplate>
-                                    <DataTemplate DataType="{x:Type s:UInt32}">
+                                    <DataTemplate DataType="{x:Type core:Buff}">
                                         <Grid>
-                                            <Grid.Tag>
-                                                <MultiBinding StringFormat="{}}{0}{1}" Mode="OneTime">
-                                                    <Binding />
-                                                    <Binding Path="EffectTranslations" RelativeSource="{RelativeSource AncestorType={x:Type views:EffectsControl}}" />
-                                                    <Binding Path="Buffs" RelativeSource="{RelativeSource AncestorType={x:Type views:EffectsControl}}" />
-                                                </MultiBinding>
-                                            </Grid.Tag>
-                                            <Grid.ToolTip>
-                                                <ToolTip Tag="{Binding}" Content="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
-                                                    <ToolTip.ContentTemplate>
-                                                        <DataTemplate DataType="{x:Type s:String}">
-                                                            <TextBlock>
-                                                                <TextBlock.Text>
-                                                                    <MultiBinding StringFormat="{}{0} ({1:X6})" Mode="OneTime">
-                                                                        <Binding />
-                                                                        <Binding Path="Tag" RelativeSource="{RelativeSource AncestorType={x:Type ToolTip}}" />
-                                                                    </MultiBinding>
-                                                                </TextBlock.Text>
-                                                            </TextBlock>
-                                                        </DataTemplate>
-                                                    </ToolTip.ContentTemplate>
-                                                </ToolTip>
-                                            </Grid.ToolTip>
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto" />
                                                 <ColumnDefinition />
                                                 <ColumnDefinition Width="Auto" />
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
-                                            <TextBlock Grid.Column="0" VerticalAlignment="Center" Margin="2" 
-                                                Text="{Binding (ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}, Converter={StaticResource PlusOneConverter}, StringFormat='{}{0}:'}" />
-                                            <TextBlock Grid.Column="1" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" Margin="2">
-                                                <TextBlock.Text>
-                                                    <MultiBinding StringFormat="{}{0} ({1:X6})" Mode="OneTime">
-                                                        <Binding Path="Tag" RelativeSource="{RelativeSource AncestorType={x:Type Grid}}" />
-                                                        <Binding />
-                                                    </MultiBinding>
-                                                </TextBlock.Text>
-                                            </TextBlock>
-                                            <Button Grid.Column="2" Style="{StaticResource CommandButtonStyle}" Tag="{StaticResource Copy}" CommandTarget="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}"
+                                            <views:BuffControl Buff="{Binding}" />
+                                            <Button Grid.Column="1" Style="{StaticResource CommandButtonStyle}" Tag="{StaticResource Copy}" CommandTarget="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}"
                                                 Command="Copy" ToolTip="Copy" />
-                                            <Button Grid.Column="3" Style="{StaticResource CommandButtonStyle}" Tag="{StaticResource Delete}" CommandParameter="{Binding}" 
+                                            <Button Grid.Column="2" Style="{StaticResource CommandButtonStyle}" Tag="{StaticResource Delete}" CommandParameter="{Binding}" 
                                                 IsEnabled="{Binding UnsupportedFormat, RelativeSource={RelativeSource AncestorType={x:Type views:EffectsControl}}, Converter={StaticResource NegatedBooleanConverter}}"
                                                 Command="{Binding DeleteEffectCommand, RelativeSource={RelativeSource AncestorType={x:Type views:EffectsControl}}}" ToolTip="Delete" />
                                         </Grid>
