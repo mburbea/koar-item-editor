@@ -185,11 +185,11 @@
             <ListBox Grid.Column="2" ItemsSource="{Binding Source={StaticResource ArmorTypes}}" SelectedItem="{Binding ArmorTypeFilter}">
                 <ListBox.Tag>
                     <DataTemplate DataType="{x:Type core:ArmorType}">
-                        <StackPanel Orientation="Horizontal" Margin="0,2">
-                            <Image Width="18" VerticalAlignment="Center" Margin="0,0,2,0" SnapsToDevicePixels="True">
+                        <StackPanel Orientation="Horizontal" Margin="0,1">
+                            <Image Width="20" VerticalAlignment="Center" Margin="0,0,2,0" SnapsToDevicePixels="True">
                                 <Image.Source>
                                     <MultiBinding Converter="{StaticResource BitmapConverter}">
-                                        <Binding Source="Hat" />
+                                        <Binding Source="Shield" />
                                         <Binding />
                                     </MultiBinding>
                                 </Image.Source>
@@ -198,7 +198,6 @@
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.Tag>
-
             </ListBox>
             <Border Grid.Column="1" Grid.RowSpan="2" BorderThickness="0.5,0" BorderBrush="Black" SnapsToDevicePixels="True" />
             <Border Grid.ColumnSpan="3" BorderThickness="0,0.5" BorderBrush="Black" SnapsToDevicePixels="True" />
