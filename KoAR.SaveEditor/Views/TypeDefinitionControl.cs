@@ -23,9 +23,6 @@ namespace KoAR.SaveEditor.Views
         private static readonly DependencyPropertyKey _hasCustomNamePropertyKey = DependencyProperty.RegisterReadOnly(nameof(HasCustomName), typeof(bool), typeof(TypeDefinitionControl),
             new PropertyMetadata(BooleanBoxes.False));
 
-        private static readonly DependencyPropertyKey _rarityPropertyKey = DependencyProperty.RegisterReadOnly(nameof(Rarity), typeof(Rarity), typeof(TypeDefinitionControl),
-            new PropertyMetadata(default(Rarity)));
-
         static TypeDefinitionControl()
         {
             FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(TypeDefinitionControl), new FrameworkPropertyMetadata(typeof(TypeDefinitionControl)));
