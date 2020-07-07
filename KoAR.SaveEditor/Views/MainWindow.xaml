@@ -205,17 +205,17 @@
                             <ComboBox.ItemTemplate>
                                 <DataTemplate DataType="{x:Type core:Rarity}">
                                     <StackPanel Orientation="Horizontal" Margin="2">
-                                        <views:RarityControl Rarity="{Binding}" Height="16" Width="16">
-                                            <views:RarityControl.Style>
-                                                <Style TargetType="{x:Type views:RarityControl}">
+                                        <views:RarityIcon Rarity="{Binding}" Height="16" Width="16">
+                                            <views:RarityIcon.Style>
+                                                <Style TargetType="{x:Type views:RarityIcon}">
                                                     <Style.Triggers>
                                                         <Trigger Property="Rarity" Value="None">
                                                             <Setter Property="Visibility" Value="Hidden" />
                                                         </Trigger>
                                                     </Style.Triggers>
                                                 </Style>
-                                            </views:RarityControl.Style>
-                                        </views:RarityControl>
+                                            </views:RarityIcon.Style>
+                                        </views:RarityIcon>
                                         <TextBlock VerticalAlignment="Center" Margin="2,0">
                                             <TextBlock.Style>
                                                 <Style TargetType="{x:Type TextBlock}">

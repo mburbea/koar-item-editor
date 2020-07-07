@@ -58,9 +58,9 @@
                                 </MultiBinding>
                             </Image.Source>
                         </Image>
-                        <views:RarityControl>
-                            <views:RarityControl.Style>
-                                <Style TargetType="{x:Type views:RarityControl}">
+                        <views:RarityIcon>
+                            <views:RarityIcon.Style>
+                                <Style TargetType="{x:Type views:RarityIcon}">
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding Item, RelativeSource={RelativeSource TemplatedParent}}" Value="{x:Null}">
                                             <Setter Property="Rarity" Value="{Binding Definition.Rarity, RelativeSource={RelativeSource TemplatedParent}}" />
@@ -68,8 +68,8 @@
                                     </Style.Triggers>
                                     <Setter Property="Rarity" Value="{Binding Item.Rarity, RelativeSource={RelativeSource TemplatedParent}}" />
                                 </Style>
-                            </views:RarityControl.Style>
-                        </views:RarityControl>
+                            </views:RarityIcon.Style>
+                        </views:RarityIcon>
                         <TextBlock VerticalAlignment="Center" Margin="2,0">
                             <TextBlock.Style>
                                 <Style TargetType="{x:Type TextBlock}">

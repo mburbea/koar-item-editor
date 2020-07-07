@@ -246,7 +246,7 @@
                                     </ComboBox>
                                     <TextBox Grid.Row="1" VerticalAlignment="Center" Margin="2">
                                         <TextBox.Text>
-                                            <Binding Path="PendingEffectCode" Converter="{StaticResource HexConverter}" RelativeSource="{RelativeSource TemplatedParent}" />
+                                            <Binding Path="PendingEffectId" Converter="{StaticResource HexConverter}" RelativeSource="{RelativeSource TemplatedParent}" />
                                         </TextBox.Text>
                                     </TextBox>
                                     <Button Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="2" Command="{TemplateBinding AddEffectCommand}" 

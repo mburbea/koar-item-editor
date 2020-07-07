@@ -3,7 +3,7 @@
     xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs"
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views"
-    xmlns:s="clr-namespace:System;assembly=mscorlib">
+    xmlns:core="clr-namespace:KoAR.Core;assembly=KoAR.Core">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/PresentationFramework.Aero,Version=4.0.0.0,PublicKeyToken=31bf3856ad364e35;component/Themes/Aero.NormalColor.xaml" />
     </ResourceDictionary.MergedDictionaries>
@@ -296,8 +296,8 @@
                                                     </ItemsPanelTemplate>
                                                 </ItemsControl.ItemsPanel>
                                                 <ItemsControl.ItemTemplate>
-                                                    <DataTemplate DataType="{x:Type s:UInt32}">
-                                                        <views:CoreEffectIcon Code="{Binding}" />
+                                                    <DataTemplate DataType="{x:Type core:Buff}">
+                                                        <TextBlock Text="(-)" />
                                                     </DataTemplate>
                                                 </ItemsControl.ItemTemplate>
                                             </ItemsControl>

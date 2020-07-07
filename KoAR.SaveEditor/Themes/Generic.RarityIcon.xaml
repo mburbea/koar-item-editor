@@ -42,14 +42,14 @@
             <GradientStop Color="{StaticResource SetColor}" Offset="1" />
         </RadialGradientBrush.GradientStops>
     </RadialGradientBrush>
-    <Style TargetType="{x:Type views:RarityControl}">
+    <Style TargetType="{x:Type views:RarityIcon}">
         <Setter Property="Focusable" Value="False" />
         <Setter Property="Width" Value="18" />
         <Setter Property="Height" Value="18" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type views:RarityControl}">
+                <ControlTemplate TargetType="{x:Type views:RarityIcon}">
                     <Ellipse x:Name="PART_Ellipse" Height="{TemplateBinding Height}" Width="{TemplateBinding Width}"
                         Stroke="{StaticResource CommonBrush}" StrokeThickness="0.5" Fill="{StaticResource CommonGradient}" 
                         ToolTip="{TemplateBinding Rarity}" />                    

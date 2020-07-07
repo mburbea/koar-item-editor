@@ -9,8 +9,7 @@
     xmlns:s="clr-namespace:System;assembly=mscorlib"
     xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
     mc:Ignorable="d" d:DataContext="{d:DesignInstance views:ChangeOrAddItemViewModel}"
-    Icon="/app.ico" SizeToContent="WidthAndHeight" MinWidth="400"
-    WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
+    Icon="/app.ico" SizeToContent="WidthAndHeight" MinWidth="400" WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
     <Window.Style>
         <Style TargetType="{x:Type Window}" BasedOn="{StaticResource {x:Type Window}}">
             <Style.Triggers>
@@ -104,8 +103,8 @@
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                            <RadioButton x:Name="PART_Button" FocusVisualStyle="{x:Null}" Margin="2,0"  
-                                                Content="{TemplateBinding Content}" IsChecked="{Binding IsSelected, RelativeSource={RelativeSource TemplatedParent}}">
+                                            <RadioButton x:Name="PART_Button" FocusVisualStyle="{x:Null}" Content="{TemplateBinding Content}" 
+                                                IsChecked="{Binding IsSelected, RelativeSource={RelativeSource TemplatedParent}}">
                                                 <RadioButton.Style>
                                                     <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource {x:Type RadioButton}}">
                                                         <Style.Triggers>
@@ -158,7 +157,7 @@
                 <ListBox.Tag>
                     <DataTemplate DataType="{x:Type core:Rarity}">
                         <StackPanel Orientation="Horizontal" Margin="0,2">
-                            <views:RarityControl Rarity="{Binding}" Width="18" Height="18" VerticalAlignment="Center" Margin="0,0,2,0" />
+                            <views:RarityIcon Rarity="{Binding}" Width="18" Height="18" VerticalAlignment="Center" Margin="0,0,2,0" />
                             <TextBlock Text="{Binding}" VerticalAlignment="Center" />
                         </StackPanel>
                     </DataTemplate>
@@ -169,7 +168,7 @@
                 <ListBox.Tag>
                     <DataTemplate DataType="{x:Type core:Element}">
                         <StackPanel Orientation="Horizontal" Margin="0,2">
-                            <Image Width="18" Height="18" VerticalAlignment="Center" Margin="0,0,2,0">
+                            <Image Width="18" VerticalAlignment="Center" Margin="0,0,2,0" SnapsToDevicePixels="True">
                                 <Image.Source>
                                     <MultiBinding Converter="{StaticResource BitmapConverter}">
                                         <Binding />
@@ -183,12 +182,11 @@
                 </ListBox.Tag>
             </ListBox>
             <TextBlock Grid.Column="2" Style="{StaticResource Prompt}" Text="ArmorType" Margin="2" VerticalAlignment="Center" />
-            <ListBox Grid.Column="2"
-                ItemsSource="{Binding Source={StaticResource ArmorTypes}}" SelectedItem="{Binding ArmorTypeFilter}">
+            <ListBox Grid.Column="2" ItemsSource="{Binding Source={StaticResource ArmorTypes}}" SelectedItem="{Binding ArmorTypeFilter}">
                 <ListBox.Tag>
                     <DataTemplate DataType="{x:Type core:ArmorType}">
                         <StackPanel Orientation="Horizontal" Margin="0,2">
-                            <Image Width="18" Height="18" VerticalAlignment="Center" Margin="0,0,2,0">
+                            <Image Width="18" VerticalAlignment="Center" Margin="0,0,2,0" SnapsToDevicePixels="True">
                                 <Image.Source>
                                     <MultiBinding Converter="{StaticResource BitmapConverter}">
                                         <Binding Source="Hat" />
