@@ -200,27 +200,9 @@ namespace KoAR.SaveEditor.Views
             MessageBox.Show($"Save successful! Original save backed up as {this._fileName}.bak.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private void AddCoreEffect(uint code)
-        {
-            if (this.SelectedItem == null)
-            {
-                return;
-            }
-            this.SelectedItem.AddCoreEffect(Amalur.GetBuff(code));
-            Amalur.WriteEquipmentBytes(this.SelectedItem.Item);
-            this.UnsavedChanges = true;
-        }
+        private void AddCoreEffect(uint code) => this.SelectedItem?.AddCoreEffect(Amalur.GetBuff(code));
 
-        private void AddEffect(uint code)
-        {
-            if (this.SelectedItem == null)
-            {
-                return;
-            }
-            this.SelectedItem.AddEffect(Amalur.GetBuff(code));
-            Amalur.WriteEquipmentBytes(this.SelectedItem.Item);
-            this.UnsavedChanges = true;
-        }
+        private void AddEffect(uint code) => this.SelectedItem?.AddEffect(Amalur.GetBuff(code));
 
         private void AddStashItem()
         {
@@ -269,27 +251,9 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        private void DeleteCoreEffect(Buff buff)
-        {
-            if (this.SelectedItem == null)
-            {
-                return;
-            }
-            this.SelectedItem.DeleteCoreEffect(buff);
-            Amalur.WriteEquipmentBytes(this.SelectedItem.Item);
-            this.UnsavedChanges = true;
-        }
+        private void DeleteCoreEffect(Buff buff) => this.SelectedItem?.DeleteCoreEffect(buff);
 
-        private void DeleteEffect(Buff buff)
-        {
-            if (this.SelectedItem == null)
-            {
-                return;
-            }
-            this.SelectedItem.DeleteEffect(buff);
-            Amalur.WriteEquipmentBytes(this.SelectedItem.Item);
-            this.UnsavedChanges = true;
-        }
+        private void DeleteEffect(Buff buff) => this.SelectedItem?.DeleteEffect(buff);
 
         private bool? GetAppliesToAllItems(Func<ItemModel, bool> projection)
         {
@@ -382,11 +346,12 @@ namespace KoAR.SaveEditor.Views
             }
             using (this._items.CreatePauseEventsScope())
             {
-                foreach (ItemModel item in this._items)
+                for (int index = this._items.Count - 1; index != -1; index--)
                 {
+                    using ItemModel item = this._items[index];
                     PropertyChangedEventManager.RemoveHandler(item, this.Item_PropertyChanged, string.Empty);
+                    this._items.RemoveAt(index);
                 }
-                this._items.Clear();
                 foreach (ItemModel item in Amalur.Items.Select(info => new ItemModel(info)))
                 {
                     PropertyChangedEventManager.AddHandler(item, this.Item_PropertyChanged, string.Empty);

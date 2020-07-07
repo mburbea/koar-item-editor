@@ -11,15 +11,12 @@ namespace KoAR.SaveEditor.Views
 {
     public sealed class TypeDefinitionControl : Control
     {
-        public static readonly DependencyProperty DefinitionProperty = DependencyProperty.Register(nameof(TypeDefinitionControl.Definition), typeof(TypeDefinition), typeof(TypeDefinitionControl),
-            new PropertyMetadata(TypeDefinitionControl.DefinitionProperty_ValueChanged));
+        public static readonly DependencyProperty DefinitionProperty = DependencyProperty.Register(nameof(TypeDefinitionControl.Definition), typeof(TypeDefinition), typeof(TypeDefinitionControl));
 
         public static readonly DependencyProperty HasCustomNameProperty;
 
         public static readonly DependencyProperty ItemProperty = DependencyProperty.Register(nameof(TypeDefinitionControl.Item), typeof(ItemModel), typeof(TypeDefinitionControl),
             new PropertyMetadata(TypeDefinitionControl.ItemProperty_ValueChanged));
-
-        public static readonly DependencyProperty RarityProperty;
 
         public static readonly IValueConverter SocketTextConverter = new SocketLabelConverter();
 
@@ -32,7 +29,6 @@ namespace KoAR.SaveEditor.Views
         static TypeDefinitionControl()
         {
             FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(TypeDefinitionControl), new FrameworkPropertyMetadata(typeof(TypeDefinitionControl)));
-            TypeDefinitionControl.RarityProperty = TypeDefinitionControl._rarityPropertyKey.DependencyProperty;
             TypeDefinitionControl.HasCustomNameProperty = TypeDefinitionControl._hasCustomNamePropertyKey.DependencyProperty;
         }
 
@@ -52,18 +48,6 @@ namespace KoAR.SaveEditor.Views
         {
             get => (ItemModel?)this.GetValue(TypeDefinitionControl.ItemProperty);
             set => this.SetValue(TypeDefinitionControl.ItemProperty, value);
-        }
-
-        public Rarity Rarity
-        {
-            get => (Rarity)this.GetValue(TypeDefinitionControl.RarityProperty);
-            private set => this.SetValue(TypeDefinitionControl._rarityPropertyKey, value);
-        }
-
-        private static void DefinitionProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            TypeDefinitionControl control = (TypeDefinitionControl)d;
-            control.Rarity = ((TypeDefinition?)e.NewValue)?.Rarity ?? Rarity.Common;
         }
 
         private static void ItemProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

@@ -210,9 +210,9 @@ namespace KoAR.Core
             set => MemoryUtilities.Write(ItemBytes, Offsets.CustomNameLength, value);
         }
 
-        public Rarity Rarity => TypeDefinition.Rarity == Rarity.Set ? Rarity.Set
-            : (Rarity)Math.Max((int)Effects.Select(x => x.Rarity).Concat(CoreEffects.List.Select(x => x.Rarity)).Max(),
-                (int)(TypeDefinition.Sockets.Any() ? Rarity.Infrequent : Rarity.Common));
+        public Rarity Rarity => TypeDefinition.Rarity == Rarity.Set
+            ? Rarity.Set
+            : Effects.Select(x => x.Rarity).Concat(CoreEffects.List.Select(x => x.Rarity).Concat(new[] { TypeDefinition.Sockets.Any() ? Rarity.Infrequent : Rarity.Common })).Max();
 
         public string ItemName { get; set; } = string.Empty;
  

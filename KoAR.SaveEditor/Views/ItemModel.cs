@@ -10,18 +10,23 @@ namespace KoAR.SaveEditor.Views
     /// <summary>
     /// A wrapper class for <see cref="ItemMemoryInfo"/> that implements <see cref="INotifyPropertyChanged"/>.
     /// </summary>
-    public sealed class ItemModel : NotifierBase
+    public sealed class ItemModel : NotifierBase, IDisposable
     {
+        private readonly NotifyingCollection<Buff> _effects;
+        private readonly NotifyingCollection<Buff> _coreEffects;
+
         public ItemModel(ItemMemoryInfo item)
         {
             this.Item = item;
-            this.CoreEffects = new NotifyingCollection<Buff>(item.CoreEffects.List);
-            this.Effects = new NotifyingCollection<Buff>(item.Effects);
+            this._coreEffects = new NotifyingCollection<Buff>(item.CoreEffects.List);
+            this._coreEffects.CollectionChanged += this.EffectsCollection_CollectionChanged;
+            this._effects = new NotifyingCollection<Buff>(item.Effects);
+            this._effects.CollectionChanged += this.EffectsCollection_CollectionChanged;
         }
 
         public EquipmentCategory Category => this.Item.TypeDefinition.Category;
 
-        public IList<Buff> CoreEffects { get; }
+        public IReadOnlyList<Buff> CoreEffects => this._coreEffects;
 
         public float CurrentDurability
         {
@@ -36,7 +41,7 @@ namespace KoAR.SaveEditor.Views
             false => this.TypeDefinition.Name,
         };
 
-        public IList<Buff> Effects { get; }
+        public IReadOnlyList<Buff> Effects => this._effects;
 
         public bool HasCustomName => this.Item.HasCustomName;
 
@@ -107,15 +112,23 @@ namespace KoAR.SaveEditor.Views
 
         public bool UnsupportedFormat => this.Item.CoreEffects.UnsupportedFormat;
 
+        public void Dispose()
+        {
+            this._effects.CollectionChanged -= this.EffectsCollection_CollectionChanged;
+            this._coreEffects.CollectionChanged -= this.EffectsCollection_CollectionChanged;
+        }
+
         internal ItemMemoryInfo Item { get; }
 
-        internal void AddCoreEffect(Buff buff) => this.CoreEffects.Add(buff);
+        internal void AddCoreEffect(Buff buff) => this._coreEffects.Add(buff);
 
-        internal void AddEffect(Buff buff) => this.Effects.Add(buff);
+        internal void AddEffect(Buff buff) => this._effects.Add(buff);
 
-        internal void DeleteCoreEffect(Buff buff) => this.CoreEffects.Remove(buff);
+        internal void DeleteCoreEffect(Buff buff) => this._coreEffects.Remove(buff);
 
-        internal void DeleteEffect(Buff buff) => this.Effects.Remove(buff);
+        internal void DeleteEffect(Buff buff) => this._effects.Remove(buff);
+
+        private void EffectsCollection_CollectionChanged(object sender, EventArgs e) => this.OnPropertyChanged(nameof(this.Rarity));
 
         private bool SetItemValue<T>(T value, T currentValue, Action<T> setValue, [CallerMemberName] string propertyName = "")
         {
