@@ -87,7 +87,7 @@ namespace KoAR.Core
             {
                 return Bytes;
             }
-            var currentLength = currentCount * 24 + 8;
+            var currentLength = Bytes.Length - 8 - Offsets.FirstEffect;
             var newCount = List.Count;
             var prefixes = MemoryMarshal.Cast<byte, uint>(InstanceIds);
             Span<ulong> effectData = stackalloc ulong[newCount * 3 + 1];

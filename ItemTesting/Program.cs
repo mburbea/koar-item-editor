@@ -1,96 +1,106 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Globalization;
-//using System.Linq;
-//using System.Diagnostics;
-//using System.IO;
-//using System.IO.Compression;
-//using System.Text;
-//using Microsoft.Data.SqlClient;
-//using Disposable;
-//using KoAR.Core;
-//using System.Runtime.InteropServices;
-//using System.Text.RegularExpressions;
-//using System.Buffers.Binary;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Diagnostics;
+using System.IO;
+using System.IO.Compression;
+using System.Text;
+using Microsoft.Data.SqlClient;
+using Disposable;
+using KoAR.Core;
+using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
+using System.Buffers.Binary;
 
-//namespace ItemTesting
-//{
-//    static class Program
-//    {
-//        static byte[] GetBytesFromText(string text)
-//        {
-//            List<byte> list = new List<byte>();
-//            foreach (string word in text.Trim().Split(' '))
-//            {
-//                string txt = word.Trim();
-//                list.Add(byte.Parse(txt, NumberStyles.HexNumber));
-//            }
-//            return list.ToArray();
-//        }
-
-//        static string GetBytesString(byte[] b) => string.Join(' ', b.Select(x => x.ToString("X2")));
-//        static void PrintByteString(byte[] b) => Console.WriteLine(GetBytesString(b));
-//        static void WriteByteArray(byte[] b, string path) => File.WriteAllText(path, string.Join(", ", b.Select(x => $"0x{x:X2}")));
-//        static void PrintRuler()
-//        {
-//            Console.WriteLine(string.Join(' ', Enumerable.Range(0, 40).Select(x => x.ToString("D2"))));
-//            Console.WriteLine(new string('-', 120));
-//        }
-
-//        static List<int> GetAllIndices(ReadOnlySpan<byte> data, ReadOnlySpan<byte> sequence)
-//        {
-//            var results = new List<int>();
-//            int ix = data.IndexOf(sequence);
-//            int start = 0;
-
-//            while (ix != -1)
-//            {
-//                results.Add(start + ix);
-//                start += ix + sequence.Length;
-//                ix = data.Slice(start).IndexOf(sequence);
-//            }
-//            return results;
-//        }
-//        static void ConvertSymbolsToCsv(string inPath, string outPath)
-//        {
-//            foreach (var file in Directory.EnumerateFiles(inPath, "symbol_table_*.bin", SearchOption.TopDirectoryOnly))
-//            {
-//                var fileInfo = new FileInfo(file);
-//                var data = File.ReadAllBytes(file);
-//                var elementCount = BitConverter.ToInt32(data, 0);
-//                var firstString = 8 + elementCount * 12;
-
-//                File.WriteAllLines(Path.Combine(outPath, fileInfo.Name["symbol_table_".Length..^4] + ".csv"),
-//                    Enumerable.Range(0, elementCount)
-//                    .Select(x => (id: BitConverter.ToInt32(data, 4 + x * 12), s: BitConverter.ToInt32(data, 4 + x * 12 + 4), e: BitConverter.ToInt32(data, 4 + x * 12 + 8)))
-//                    .Select(y => $"{y.id:X6},{Encoding.Default.GetString(data[(firstString + y.s)..(firstString + y.e)])}").Prepend("id,value"));
-//            }
-//        }
-
-//        private static char[] AllCaps = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
-//        private static DisposableLocalDb LocalDb;
-
-//        public static void BulkInsertTable(string name, IEnumerable<object[]> table,
-//            string initializer = "id = 0,hex=space(8), name = space(8000)")
-//        {
-//            using var conn = new SqlConnection(LocalDb.ConnectionString);
-//            conn.Open();
-//            using var cmd = new SqlCommand($"select {initializer} into {name} where 1=0;", conn);
-//            cmd.ExecuteNonQuery();
-//            using var bulk = new SqlBulkCopy(conn)
-//            {
-//                DestinationTableName = name,
-//                BatchSize = 10_000,
-//                EnableStreaming = true
-//            };
-//            using var adapter = new DbDataReaderAdapter(table);
-//            bulk.WriteToServer(adapter);
-//        }
-static class Program
+namespace ItemTesting
 {
-    static void Main()
+    //    static class Program
+    //    {
+    //        static byte[] GetBytesFromText(string text)
+    //        {
+    //            List<byte> list = new List<byte>();
+    //            foreach (string word in text.Trim().Split(' '))
+    //            {
+    //                string txt = word.Trim();
+    //                list.Add(byte.Parse(txt, NumberStyles.HexNumber));
+    //            }
+    //            return list.ToArray();
+    //        }
+
+    //        static string GetBytesString(byte[] b) => string.Join(' ', b.Select(x => x.ToString("X2")));
+    //        static void PrintByteString(byte[] b) => Console.WriteLine(GetBytesString(b));
+    //        static void WriteByteArray(byte[] b, string path) => File.WriteAllText(path, string.Join(", ", b.Select(x => $"0x{x:X2}")));
+    //        static void PrintRuler()
+    //        {
+    //            Console.WriteLine(string.Join(' ', Enumerable.Range(0, 40).Select(x => x.ToString("D2"))));
+    //            Console.WriteLine(new string('-', 120));
+    //        }
+
+    //        static List<int> GetAllIndices(ReadOnlySpan<byte> data, ReadOnlySpan<byte> sequence)
+    //        {
+    //            var results = new List<int>();
+    //            int ix = data.IndexOf(sequence);
+    //            int start = 0;
+
+    //            while (ix != -1)
+    //            {
+    //                results.Add(start + ix);
+    //                start += ix + sequence.Length;
+    //                ix = data.Slice(start).IndexOf(sequence);
+    //            }
+    //            return results;
+    //        }
+    //        static void ConvertSymbolsToCsv(string inPath, string outPath)
+    //        {
+    //            foreach (var file in Directory.EnumerateFiles(inPath, "symbol_table_*.bin", SearchOption.TopDirectoryOnly))
+    //            {
+    //                var fileInfo = new FileInfo(file);
+    //                var data = File.ReadAllBytes(file);
+    //                var elementCount = BitConverter.ToInt32(data, 0);
+    //                var firstString = 8 + elementCount * 12;
+
+    //                File.WriteAllLines(Path.Combine(outPath, fileInfo.Name["symbol_table_".Length..^4] + ".csv"),
+    //                    Enumerable.Range(0, elementCount)
+    //                    .Select(x => (id: BitConverter.ToInt32(data, 4 + x * 12), s: BitConverter.ToInt32(data, 4 + x * 12 + 4), e: BitConverter.ToInt32(data, 4 + x * 12 + 8)))
+    //                    .Select(y => $"{y.id:X6},{Encoding.Default.GetString(data[(firstString + y.s)..(firstString + y.e)])}").Prepend("id,value"));
+    //            }
+    //        }
+
+    //        private static char[] AllCaps = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
+    //        private static DisposableLocalDb LocalDb;
+
+    //        public static void BulkInsertTable(string name, IEnumerable<object[]> table,
+    //            string initializer = "id = 0,hex=space(8), name = space(8000)")
+    //        {
+    //            using var conn = new SqlConnection(LocalDb.ConnectionString);
+    //            conn.Open();
+    //            using var cmd = new SqlCommand($"select {initializer} into {name} where 1=0;", conn);
+    //            cmd.ExecuteNonQuery();
+    //            using var bulk = new SqlBulkCopy(conn)
+    //            {
+    //                DestinationTableName = name,
+    //                BatchSize = 10_000,
+    //                EnableStreaming = true
+    //            };
+    //            using var adapter = new DbDataReaderAdapter(table);
+    //            bulk.WriteToServer(adapter);
+    //        }
+    static class Program
     {
-       KoAR.Core.Amalur.Initialize(@"..\..\..\..\Koar.SaveEditor\");
+        static void Main()
+        {
+            const string path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save3.sav";
+            //const string path = @"..\..\..\..\9190114save90.sav";
+            KoAR.Core.Amalur.Initialize(@"..\..\..\..\Koar.SaveEditor\");
+            Amalur.ReadFile(path);
+            foreach(var g in Amalur.Items)
+            {
+                g.Effects.Clear();
+                Amalur.WriteEquipmentBytes(g, forced:true);
+            }
+            Amalur.SaveFile(path);
+        }
     }
 }
 //        {

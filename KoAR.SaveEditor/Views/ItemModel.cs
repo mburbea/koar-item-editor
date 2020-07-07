@@ -87,7 +87,7 @@ namespace KoAR.SaveEditor.Views
             set => this.SetItemValue(value, this.Item.CoreEffects.Prefix, value => this.Item.CoreEffects.Prefix = value);
         }
 
-        public Rarity Rarity => this.TypeDefinition.Rarity;
+        public Rarity Rarity => this.Item.Rarity;
 
         public Buff? Suffix
         {

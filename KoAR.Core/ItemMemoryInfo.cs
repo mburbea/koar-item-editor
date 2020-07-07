@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -212,6 +210,9 @@ namespace KoAR.Core
             set => MemoryUtilities.Write(ItemBytes, Offsets.CustomNameLength, value);
         }
 
+        public Rarity Rarity => TypeDefinition.Rarity == Rarity.Set ? Rarity.Set
+            : (Rarity)Math.Max((int)Effects.Select(x => x.Rarity).Concat(CoreEffects.List.Select(x => x.Rarity)).Max(),
+                (int)(TypeDefinition.Sockets.Any() ? Rarity.Infrequent : Rarity.Common));
 
         public string ItemName { get; set; } = string.Empty;
  
@@ -257,7 +258,7 @@ namespace KoAR.Core
                 return ItemBytes;
             }
             var currentLength = new Offset(currentCount).PostEffect - Offset.FirstEffect;
-            MemoryUtilities.Write(ItemBytes, Offset.EffectCount, (byte)Effects.Count);
+            MemoryUtilities.Write(ItemBytes, Offset.EffectCount, Effects.Count);
             Span<ulong> effectData = stackalloc ulong[Effects.Count];
             for (int i = 0; i < effectData.Length; i++)
             {
