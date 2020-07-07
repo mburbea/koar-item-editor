@@ -27,16 +27,17 @@ namespace KoAR.Core
     [Flags]
     public enum BuffTypes
     {
-        Normal = 0x1,
-        Curse = 0x2,
-        Destiny = 0x4,
-        Disease = 0x8,
-        Prefix = 0x10,
-        Self = 0x20,
-        SpecialCurse = 0x40,
-        SpecialDisease = 0x80,
-        Suffix = 0x100,
-        TemporaryPositive = 0x200,
-        Trait = 0x400
+        None                = 0,
+        Normal              = 1 << 0,
+        Curse               = 1 << 1,
+        Destiny             = 1 << 2,
+        Disease             = 1 << 3,
+        Prefix              = 1 << 4,
+        Self                = 1 << 5,
+        SpecialCurse        = 1 << 6,
+        SpecialDisease      = 1 << 7,
+        Suffix              = 1 << 8,
+        TemporaryPositive   = 1 << 9,
+        Trait               = 1 << 10
     }
 }
