@@ -5,7 +5,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using KoAR.Core;
-using KoAR.SaveEditor.Constructs;
 
 namespace KoAR.SaveEditor.Views
 {
@@ -13,32 +12,17 @@ namespace KoAR.SaveEditor.Views
     {
         public static readonly DependencyProperty DefinitionProperty = DependencyProperty.Register(nameof(TypeDefinitionControl.Definition), typeof(TypeDefinition), typeof(TypeDefinitionControl));
 
-        public static readonly DependencyProperty HasCustomNameProperty;
-
         public static readonly DependencyProperty ItemProperty = DependencyProperty.Register(nameof(TypeDefinitionControl.Item), typeof(ItemModel), typeof(TypeDefinitionControl),
             new PropertyMetadata(TypeDefinitionControl.ItemProperty_ValueChanged));
 
         public static readonly IValueConverter SocketTextConverter = new SocketLabelConverter();
 
-        private static readonly DependencyPropertyKey _hasCustomNamePropertyKey = DependencyProperty.RegisterReadOnly(nameof(HasCustomName), typeof(bool), typeof(TypeDefinitionControl),
-            new PropertyMetadata(BooleanBoxes.False));
-
-        static TypeDefinitionControl()
-        {
-            FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(TypeDefinitionControl), new FrameworkPropertyMetadata(typeof(TypeDefinitionControl)));
-            TypeDefinitionControl.HasCustomNameProperty = TypeDefinitionControl._hasCustomNamePropertyKey.DependencyProperty;
-        }
+        static TypeDefinitionControl() => FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(TypeDefinitionControl), new FrameworkPropertyMetadata(typeof(TypeDefinitionControl)));
 
         public TypeDefinition? Definition
         {
             get => (TypeDefinition?)this.GetValue(TypeDefinitionControl.DefinitionProperty);
             set => this.SetValue(TypeDefinitionControl.DefinitionProperty, value);
-        }
-
-        public bool HasCustomName
-        {
-            get => (bool)this.GetValue(TypeDefinitionControl.HasCustomNameProperty);
-            private set => this.SetValue(TypeDefinitionControl._hasCustomNamePropertyKey, BooleanBoxes.GetBox(value));
         }
 
         public ItemModel? Item
@@ -54,38 +38,31 @@ namespace KoAR.SaveEditor.Views
             {
                 ItemModel oldItem = (ItemModel)e.OldValue;
                 PropertyChangedEventManager.RemoveHandler(oldItem, control.Item_TypeDefinitionChanged, nameof(oldItem.TypeDefinition));
-                PropertyChangedEventManager.RemoveHandler(oldItem, control.Item_HasCustomNameChanged, nameof(oldItem.HasCustomName));
             }
             ItemModel? item = (ItemModel)e.NewValue;
             if (item != null)
             {
                 control.Definition = item.TypeDefinition;
                 PropertyChangedEventManager.AddHandler(item, control.Item_TypeDefinitionChanged, nameof(item.TypeDefinition));
-                PropertyChangedEventManager.AddHandler(item, control.Item_HasCustomNameChanged, nameof(item.HasCustomName));
             }
-            control.HasCustomName = item?.HasCustomName ?? false;
         }
-
-        private void Item_HasCustomNameChanged(object sender, EventArgs e) => this.HasCustomName = ((ItemModel)sender).HasCustomName;
 
         private void Item_TypeDefinitionChanged(object sender, EventArgs e) => this.Definition = ((ItemModel)sender).TypeDefinition;
 
         private sealed class SocketLabelConverter : IValueConverter
         {
-            object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
-            {
-                string prefix = value switch
-                {
-                    'W' => "Weapon",
-                    'A' => "Armor",
-                    'U' => "Utility",
-                    'E' => "Epic",
-                    _ => string.Empty
-                };
-                return $"{prefix} Socket";
-            }
+            object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture) => $"{SocketLabelConverter.GetPrefix(value)} Socket";
 
             object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
+
+            private static string GetPrefix(object value) => value switch
+            {
+                'W' => "Weapon",
+                'A' => "Armor",
+                'U' => "Utility",
+                'E' => "Epic",
+                _ => string.Empty
+            };
         }
     }
 }

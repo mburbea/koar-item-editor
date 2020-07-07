@@ -86,9 +86,13 @@
                             <TextBlock.Style>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding HasCustomName, RelativeSource={RelativeSource TemplatedParent}}" Value="True">
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Item, Converter={StaticResource EqualityConverter}, RelativeSource={RelativeSource TemplatedParent}}" Value="False" />
+                                                <Condition Binding="{Binding Item.HasCustomName, RelativeSource={RelativeSource TemplatedParent}}" Value="True" />
+                                            </MultiDataTrigger.Conditions>
                                             <Setter Property="Visibility" Value="Collapsed" />
-                                        </DataTrigger>
+                                        </MultiDataTrigger>
                                         <DataTrigger Binding="{Binding Definition.HasVariants, RelativeSource={RelativeSource TemplatedParent}}" Value="False">
                                             <Setter Property="Visibility" Value="Collapsed" />
                                         </DataTrigger>
