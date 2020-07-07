@@ -32,6 +32,10 @@ namespace KoAR.Core
             {
                 Effects.Add(Amalur.GetBuff(MemoryUtilities.Read<uint>(ItemBytes, Offset.FirstEffect + i * 8)));
             }
+            if(HasCustomNameFlag)
+            {
+                ItemName = Encoding.Default.GetString(ItemBytes, Offsets.CustomNameText, NameLength);
+            }
         }
         //private ItemMemoryInfo(ReadOnlySpan<byte> bytes, int itemIndex, int dataLength)
         //{
@@ -123,8 +127,13 @@ namespace KoAR.Core
 
         public bool HasCustomName
         {
+            get => ItemName != string.Empty;
+        }
+
+        private bool HasCustomNameFlag
+        {
             get => ItemBytes[Offsets.HasCustomName] == 1;
-            private set => ItemBytes[Offsets.HasCustomName] = (byte)(value ? 1 : 0);
+            set => ItemBytes[Offsets.HasCustomName] = (byte)(value ? 1 : 0);
         }
 
         public bool IsUnsellable
@@ -192,35 +201,9 @@ namespace KoAR.Core
             set => MemoryUtilities.Write(ItemBytes, Offsets.CustomNameLength, value);
         }
 
-        public string ItemName
-        {
-            get => HasCustomName
-                ? Encoding.Default.GetString(ItemBytes, Offsets.CustomNameText, NameLength)
-                : string.Empty;
-            set
-            {
-                if (value.Length > 0)
-                {
-                    var newBytes = Encoding.Default.GetBytes(value);
-                    if (Offsets.CustomNameText + newBytes.Length != ItemBytes.Length)
-                    {
-                        var buffer = new byte[Offsets.CustomNameText + newBytes.Length];
-                        ItemBytes.AsSpan(0, Offsets.CustomNameLength).CopyTo(buffer);
-                        ItemBytes = buffer;
-                    }
-                    HasCustomName = true;
-                    NameLength = newBytes.Length;
-                    newBytes.CopyTo(ItemBytes, Offsets.CustomNameText);
-                }
-                else if (HasCustomName)
-                {
-                    ItemBytes = ItemBytes.AsSpan(0, Offsets.CustomNameLength).ToArray();
-                    HasCustomName = false;
-                }
-                DataLength = ItemBytes.Length;
-            }
-        }
 
+        public string ItemName { get; set; } = string.Empty;
+ 
         public float MaxDurability
         {
             get => MemoryUtilities.Read<float>(ItemBytes, Offsets.MaxDurability);
@@ -229,22 +212,35 @@ namespace KoAR.Core
 
         private Offset Offsets => new Offset(Effects.Count);
 
-        //public void Rematerialize(byte[] bytes)
-        //{
-        //    ItemBytes = bytes;
-        //    Effects.Clear();
-        //    Effects.Capacity = ItemBytes[Offset.EffectCount];
-        //    for (int i = 0; i < Effects.Capacity; i++)
-        //    {
-        //        Effects.Add(MemoryUtilities.Read<uint>(ItemBytes, Offset.FirstEffect + i * 8));
-        //    }
-        //}
-
         public static bool IsValidDurability(float durability) => durability > DurabilityLowerBound && durability < DurabilityUpperBound;
 
         internal byte[] Serialize(bool forced = false)
-        {
-            int currentCount = ItemBytes[Offset.EffectCount];
+        {        
+            if (HasCustomNameFlag != HasCustomName
+                || HasCustomNameFlag && ItemName != Encoding.Default.GetString(ItemBytes, Offsets.CustomNameText, NameLength))
+            {
+                if (ItemName.Length > 0)
+                {
+                    var newBytes = Encoding.Default.GetBytes(ItemName);
+                    if (Offsets.CustomNameText + newBytes.Length != ItemBytes.Length)
+                    {
+                        var buffer = new byte[Offsets.CustomNameText + newBytes.Length];
+                        ItemBytes.AsSpan(0, Offsets.CustomNameLength).CopyTo(buffer);
+                        ItemBytes = buffer;
+                    }
+                    HasCustomNameFlag = true;
+                    NameLength = newBytes.Length;
+                    newBytes.CopyTo(ItemBytes, Offsets.CustomNameText);
+                }
+                else if (HasCustomNameFlag)
+                {
+                    ItemBytes = ItemBytes.AsSpan(0, Offsets.CustomNameLength).ToArray();
+                    HasCustomNameFlag = false;
+                }
+                DataLength = ItemBytes.Length;
+            }
+
+            int currentCount = MemoryUtilities.Read<int>(ItemBytes, Offset.EffectCount);
             if (!forced && currentCount == Effects.Count)
             {
                 return ItemBytes;

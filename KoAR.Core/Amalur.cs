@@ -104,10 +104,8 @@ namespace KoAR.Core
             return finalOffset + (inventoryLimitOrder * 12);
         }
 
-        public static Buff GetBuff(uint buffId) => Amalur.Buffs.TryGetValue(buffId, out var buff)
+        public static Buff GetBuff(uint buffId) => Buffs.TryGetValue(buffId, out var buff)
                     ? buff : new Buff { Id = buffId, Name = "Unknown" };
-
-
 
         public static int InventorySize
         {
@@ -157,10 +155,11 @@ namespace KoAR.Core
 
         public static void WriteEquipmentBytes(ItemMemoryInfo item, bool forced = false)
         {
-            static int WriteItem(int itemIndex, int oldLength, byte[] bytes)
+            static int WriteItem(int itemIndex, int dataLength, byte[] bytes)
             {
-                Bytes = MemoryUtilities.ReplaceBytes(Bytes, itemIndex, oldLength, bytes);
-                int delta = bytes.Length - oldLength;
+                var prevLength = Bytes.Length;
+                Bytes = MemoryUtilities.ReplaceBytes(Bytes, itemIndex, dataLength, bytes);
+                int delta = Bytes.Length - prevLength;
                 if (delta != 0)
                 {
                     foreach (var item in Items)
