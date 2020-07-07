@@ -168,14 +168,7 @@
                 <ListBox.Tag>
                     <DataTemplate DataType="{x:Type core:Element}">
                         <StackPanel Orientation="Horizontal" Margin="0,2">
-                            <Image Width="18" VerticalAlignment="Center" Margin="0,0,2,0" SnapsToDevicePixels="True">
-                                <Image.Source>
-                                    <MultiBinding Converter="{StaticResource BitmapConverter}">
-                                        <Binding />
-                                        <Binding Source="Dot_Amount" />
-                                    </MultiBinding>
-                                </Image.Source>
-                            </Image>
+                            <views:ElementIcon Element="{Binding}" Width="18" Height="18" VerticalAlignment="Center" Margin="0,0,2,0" />
                             <TextBlock Text="{Binding}" VerticalAlignment="Center" />
                         </StackPanel>
                     </DataTemplate>
@@ -186,14 +179,7 @@
                 <ListBox.Tag>
                     <DataTemplate DataType="{x:Type core:ArmorType}">
                         <StackPanel Orientation="Horizontal" Margin="0,1">
-                            <Image Width="20" VerticalAlignment="Center" Margin="0,0,2,0" SnapsToDevicePixels="True">
-                                <Image.Source>
-                                    <MultiBinding Converter="{StaticResource BitmapConverter}">
-                                        <Binding Source="Shield" />
-                                        <Binding />
-                                    </MultiBinding>
-                                </Image.Source>
-                            </Image>
+                            <views:ArmorTypeIcon ArmorType="{Binding}" Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,2,0" />
                             <TextBlock Text="{Binding}" VerticalAlignment="Center" />
                         </StackPanel>
                     </DataTemplate>

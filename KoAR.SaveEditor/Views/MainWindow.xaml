@@ -234,30 +234,20 @@
                         </ComboBox>
                         <TextBlock Grid.Column="4" Text="Element:" />
                         <ComboBox Grid.Column="5" ItemsSource="{Binding Source={StaticResource Elements}}" SelectedItem="{Binding ElementFilter}">
-                            <ComboBox.Resources>
-                                <views:BitmapConverter x:Key="BitmapConverter" />
-                            </ComboBox.Resources>
                             <ComboBox.ItemTemplate>
                                 <DataTemplate DataType="{x:Type core:Element}">
                                     <StackPanel Orientation="Horizontal" Margin="2">
-                                        <Image Width="16">
-                                            <Image.Style>
-                                                <Style TargetType="{x:Type Image}">
+                                        <views:ElementIcon Element="{Binding}" Height="16" Width="16">
+                                            <views:ElementIcon.Style>
+                                                <Style TargetType="{x:Type views:ElementIcon}">
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Converter={StaticResource EqualityConverter}, ConverterParameter={x:Static core:Element.None}}" Value="False">
-                                                            <Setter Property="Source">
-                                                                <Setter.Value>
-                                                                    <MultiBinding Converter="{StaticResource BitmapConverter}">
-                                                                        <Binding />
-                                                                        <Binding Source="Dot_Amount" />
-                                                                    </MultiBinding>
-                                                                </Setter.Value>
-                                                            </Setter>
-                                                        </DataTrigger>
+                                                        <Trigger Property="Element" Value="None">
+                                                            <Setter Property="Visibility" Value="Hidden" />
+                                                        </Trigger>
                                                     </Style.Triggers>
                                                 </Style>
-                                            </Image.Style>
-                                        </Image>
+                                            </views:ElementIcon.Style>
+                                        </views:ElementIcon>
                                         <TextBlock VerticalAlignment="Center" Margin="2,0">
                                             <TextBlock.Style>
                                                 <Style TargetType="{x:Type TextBlock}">
@@ -274,7 +264,6 @@
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
-
                         <Button Grid.Column="6" Content="Reset" FocusVisualStyle="{x:Null}" Command="{Binding ResetFiltersCommand}" Margin="2" VerticalAlignment="Center" />
                     </Grid>
                 </Expander>
