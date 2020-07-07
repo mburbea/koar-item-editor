@@ -21,6 +21,7 @@ namespace KoAR.SaveEditor.Views
         private string _fileName = string.Empty;
         private IReadOnlyList<ItemModel> _filteredItems;
         private string _itemNameFilter = string.Empty;
+        private ArmorType _armorTypeFilter;
         private Rarity _rarityFilter;
         private ItemModel? _selectedItem;
         private bool _unsavedChanges;
@@ -56,6 +57,18 @@ namespace KoAR.SaveEditor.Views
         {
             get => this.GetAppliesToAllItems(item => item.IsUnstashable);
             set => this.SetAppliesToAllItems(item => item.IsUnstashable = value.GetValueOrDefault());
+        }
+
+        public ArmorType ArmorTypeFilter
+        {
+            get => this._armorTypeFilter;
+            set
+            {
+                if (this.SetValue(ref this._armorTypeFilter, value))
+                {
+                    this.OnFilterChange();
+                }
+            }
         }
 
         public EquipmentCategory? CategoryFilter
@@ -284,9 +297,13 @@ namespace KoAR.SaveEditor.Views
             {
                 items = items.Where(model => model.TypeDefinition.Element == this._elementFilter);
             }
+            if (this._armorTypeFilter != ArmorType.None)
+            {
+                items = items.Where(model => model.TypeDefinition.ArmorType == this._armorTypeFilter);
+            }
             if (this._itemNameFilter.Length != 0)
             {
-                items = items.Where(model => model.DisplayName.IndexOf(this._itemNameFilter, StringComparison.OrdinalIgnoreCase) != -1);
+                items = items.Where(model => model.DisplayName.IndexOf(this._itemNameFilter, StringComparison.CurrentCultureIgnoreCase) != -1);
             }
             return object.Equals(items, this.FilteredItems) ? this.FilteredItems : items.ToList();
         }
@@ -376,6 +393,11 @@ namespace KoAR.SaveEditor.Views
             {
                 this._rarityFilter = Rarity.None;
                 this.OnPropertyChanged(nameof(this.RarityFilter));
+            }
+            if (this._armorTypeFilter != ArmorType.None)
+            {
+                this._armorTypeFilter = ArmorType.None;
+                this.OnPropertyChanged(nameof(this.ArmorTypeFilter));
             }
             this.OnFilterChange(false);
         }

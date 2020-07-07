@@ -188,8 +188,15 @@
                                     <x:Type TypeName="core:Element" />
                                 </ObjectDataProvider.MethodParameters>
                             </ObjectDataProvider>
+                            <ObjectDataProvider x:Key="ArmorTypes" ObjectType="{x:Type s:Enum}" MethodName="GetValues">
+                                <ObjectDataProvider.MethodParameters>
+                                    <x:Type TypeName="core:ArmorType" />
+                                </ObjectDataProvider.MethodParameters>
+                            </ObjectDataProvider>
                         </Grid.Resources>
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition />
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition />
                             <ColumnDefinition Width="Auto" />
@@ -264,7 +271,39 @@
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
-                        <Button Grid.Column="6" Content="Reset" FocusVisualStyle="{x:Null}" Command="{Binding ResetFiltersCommand}" Margin="2" VerticalAlignment="Center" />
+                        <TextBlock Grid.Column="6" Text="ArmorType:" />
+                        <ComboBox Grid.Column="7" ItemsSource="{Binding Source={StaticResource ArmorTypes}}" SelectedItem="{Binding ArmorTypeFilter}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate DataType="{x:Type core:ArmorType}">
+                                    <StackPanel Orientation="Horizontal" Margin="2">
+                                        <views:ArmorTypeIcon ArmorType="{Binding}" Height="16" Width="16">
+                                            <views:ArmorTypeIcon.Style>
+                                                <Style TargetType="{x:Type views:ArmorTypeIcon}">
+                                                    <Style.Triggers>
+                                                        <Trigger Property="ArmorType" Value="None">
+                                                            <Setter Property="Visibility" Value="Hidden" />
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </views:ArmorTypeIcon.Style>
+                                        </views:ArmorTypeIcon>
+                                        <TextBlock VerticalAlignment="Center" Margin="2,0">
+                                            <TextBlock.Style>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Converter={StaticResource EqualityConverter}, ConverterParameter={x:Static core:Element.None}}" Value="False">
+                                                            <Setter Property="Text" Value="{Binding}" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                    <Setter Property="Text" Value="(All)" />
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <Button Grid.Column="8" Content="Reset" FocusVisualStyle="{x:Null}" Command="{Binding ResetFiltersCommand}" Margin="2" VerticalAlignment="Center" />
                     </Grid>
                 </Expander>
                 <DockPanel Grid.Row="1" Margin="4">
