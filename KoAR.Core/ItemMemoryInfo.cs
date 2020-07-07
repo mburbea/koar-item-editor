@@ -173,9 +173,19 @@ namespace KoAR.Core
             get => Amalur.TypeDefinitions[MemoryUtilities.Read<uint>(Amalur.Bytes, _typeIdOffset)];
             set
             {
+                var oldType = Amalur.TypeDefinitions[MemoryUtilities.Read<uint>(Amalur.Bytes, _typeIdOffset)];
                 MemoryUtilities.Write(Amalur.Bytes, _typeIdOffset, value.TypeId);
                 MemoryUtilities.Write(Amalur.Bytes, _typeIdOffset + 30 + _levelShiftOffset, value.TypeId);
-                LoadFromDefinition(value);
+                if (oldType.Category == EquipmentCategory.Shield)
+                {
+                    Amalur.Bytes[_typeIdOffset + 14] = value.ArmorType switch
+                    {
+                        ArmorType.Finesse => 0xEC,
+                        ArmorType.Might => 0xED,
+                        ArmorType.Sorcery => 0xEE,
+                        _ => Amalur.Bytes[_typeIdOffset + 14],
+                    };
+                    LoadFromDefinition(value);
             }
         }
 
@@ -246,7 +256,7 @@ namespace KoAR.Core
                 return ItemBytes;
             }
             var currentLength = new Offset(currentCount).PostEffect - Offset.FirstEffect;
-            ItemBytes[Offset.EffectCount] = (byte)Effects.Count;
+            MemoryUtilities.Write(ItemBytes, Offset.EffectCount, (byte)Effects.Count);
             Span<ulong> effectData = stackalloc ulong[Effects.Count];
             for (int i = 0; i < effectData.Length; i++)
             {
