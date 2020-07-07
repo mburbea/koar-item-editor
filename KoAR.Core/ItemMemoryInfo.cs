@@ -176,7 +176,7 @@ namespace KoAR.Core
                 var oldType = Amalur.TypeDefinitions[MemoryUtilities.Read<uint>(Amalur.Bytes, _typeIdOffset)];
                 MemoryUtilities.Write(Amalur.Bytes, _typeIdOffset, value.TypeId);
                 MemoryUtilities.Write(Amalur.Bytes, _typeIdOffset + 30 + _levelShiftOffset, value.TypeId);
-                if (oldType.Category == EquipmentCategory.Shield)
+                if (oldType.Category == EquipmentCategory.Shield && oldType.ArmorType != value.ArmorType)
                 {
                     Amalur.Bytes[_typeIdOffset + 14] = value.ArmorType switch
                     {
@@ -186,6 +186,7 @@ namespace KoAR.Core
                         _ => Amalur.Bytes[_typeIdOffset + 14],
                     };
                     LoadFromDefinition(value);
+                }
             }
         }
 
