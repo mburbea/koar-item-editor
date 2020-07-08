@@ -294,17 +294,17 @@ namespace KoAR.SaveEditor.Views
         private IReadOnlyList<ItemModel> GetFilteredItems()
         {
             IEnumerable<ItemModel> items = this.Items;
-            if (this._rarityFilter != 0)
+            if (this.RarityFilter != default)
             {
-                items = items.Where(model => (int)model.Rarity == this._rarityFilter);
+                items = items.Where(model => model.Rarity == this.RarityFilter);
             }
-            if (this._elementFilter != 0)
+            if (this.ElementFilter != default)
             {
-                items = items.Where(model => (int)model.TypeDefinition.Element == this._elementFilter);
+                items = items.Where(model => model.TypeDefinition.Element == this.ElementFilter);
             }
-            if (this._armorTypeFilter != 0)
+            if (this.ArmorTypeFilter != default)
             {
-                items = items.Where(model => (int)model.TypeDefinition.ArmorType == this._armorTypeFilter);
+                items = items.Where(model => model.TypeDefinition.ArmorType == this.ArmorTypeFilter);
             }
             if (this._categoryFilter.HasValue)
             {
@@ -393,15 +393,15 @@ namespace KoAR.SaveEditor.Views
             {
                 this.OnPropertyChanged(nameof(this.ItemNameFilter));
             }
-            if (Interlocked.Exchange(ref this._elementFilter, 0) != 0)
+            if (Interlocked.Exchange(ref this._elementFilter, default) != default)
             {
                 this.OnPropertyChanged(nameof(this.ElementFilter));
             }
-            if (Interlocked.Exchange(ref this._rarityFilter, 0) != 0)
+            if (Interlocked.Exchange(ref this._rarityFilter, default) != default)
             {
                 this.OnPropertyChanged(nameof(this.RarityFilter));
             }
-            if (Interlocked.Exchange(ref this._armorTypeFilter, 0) != 0)
+            if (Interlocked.Exchange(ref this._armorTypeFilter, default) != default)
             {
                 this.OnPropertyChanged(nameof(this.ArmorTypeFilter));
             }
