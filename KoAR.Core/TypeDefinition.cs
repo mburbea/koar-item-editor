@@ -83,7 +83,7 @@ namespace KoAR.Core
             Suffix = suffix;
             HasVariants = hasVariants;
             // merchant search is case sensitive to avoid affixing the Merchant's hat.
-            IsMerchant = InternalName.IndexOf("merchant") != -1;
+            IsMerchant = InternalName.Contains("merchant");
             AffixableName = IsMerchant || internalName.IndexOf("common", StringComparison.OrdinalIgnoreCase) != -1;
         }
 

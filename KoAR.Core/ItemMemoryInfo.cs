@@ -25,7 +25,7 @@ namespace KoAR.Core
             ItemIndex = offset;
             ItemBytes = Amalur.Bytes.AsSpan(offset, datalength).ToArray();
             CoreEffects = new CoreEffectMemory(coreEffectOffset, coreEffectDataLength);
-            Effects = new List<Buff>(ItemBytes[Offset.EffectCount]);
+            Effects = new List<Buff>(BuffCount);
             for (int i = 0; i < Effects.Capacity; i++)
             {
                 Effects.Add(Amalur.GetBuff(MemoryUtilities.Read<uint>(ItemBytes, Offset.FirstEffect + i * 8)));
@@ -222,7 +222,13 @@ namespace KoAR.Core
             set => MemoryUtilities.Write(ItemBytes, Offsets.MaxDurability, value);
         }
 
-        private Offset Offsets => new Offset(Effects.Count);
+        private int BuffCount
+        {
+            get => MemoryUtilities.Read<int>(ItemBytes, Offset.EffectCount);
+            set => MemoryUtilities.Write<int>(ItemBytes, Offset.EffectCount, value);
+        }
+
+        private Offset Offsets => new Offset(BuffCount);
 
         public static bool IsValidDurability(float durability) => durability > DurabilityLowerBound && durability < DurabilityUpperBound;
 
@@ -252,12 +258,11 @@ namespace KoAR.Core
                 DataLength = ItemBytes.Length;
             }
 
-            int currentCount = MemoryUtilities.Read<int>(ItemBytes, Offset.EffectCount);
-            if (!forced && currentCount == Effects.Count)
+            if (!forced && Effects.Count == BuffCount)
             {
                 return ItemBytes;
             }
-            var currentLength = new Offset(currentCount).PostEffect - Offset.FirstEffect;
+            var currentLength = Offsets.PostEffect - Offset.FirstEffect;
             MemoryUtilities.Write(ItemBytes, Offset.EffectCount, Effects.Count);
             Span<ulong> effectData = stackalloc ulong[Effects.Count];
             for (int i = 0; i < effectData.Length; i++)
