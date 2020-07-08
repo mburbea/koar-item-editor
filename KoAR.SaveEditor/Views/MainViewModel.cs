@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -17,12 +16,12 @@ namespace KoAR.SaveEditor.Views
         private readonly Func<Task<IReadOnlyList<ItemModel>>> _debouncedGetFilteredItems;
         private readonly NotifyingCollection<ItemModel> _items;
         private EquipmentCategory? _categoryFilter;
-        private Element _elementFilter;
+        private int _elementFilter;
         private string _fileName = string.Empty;
         private IReadOnlyList<ItemModel> _filteredItems;
         private string _itemNameFilter = string.Empty;
-        private ArmorType _armorTypeFilter;
-        private Rarity _rarityFilter;
+        private int _armorTypeFilter;
+        private int _rarityFilter;
         private ItemModel? _selectedItem;
         private bool _unsavedChanges;
 
@@ -50,21 +49,33 @@ namespace KoAR.SaveEditor.Views
         public bool? AllItemsUnsellable
         {
             get => this.GetAppliesToAllItems(item => item.IsUnsellable);
-            set => this.SetAppliesToAllItems(item => item.IsUnsellable = value.GetValueOrDefault());
+            set
+            {
+                foreach (ItemModel item in this.FilteredItems)
+                {
+                    item.IsUnsellable = value.GetValueOrDefault();
+                }
+            }
         }
 
         public bool? AllItemsUnstashable
         {
             get => this.GetAppliesToAllItems(item => item.IsUnstashable);
-            set => this.SetAppliesToAllItems(item => item.IsUnstashable = value.GetValueOrDefault());
+            set
+            {
+                foreach (ItemModel item in this.FilteredItems)
+                {
+                    item.IsUnstashable = value.GetValueOrDefault();
+                }
+            }
         }
 
         public ArmorType ArmorTypeFilter
         {
-            get => this._armorTypeFilter;
+            get => (ArmorType)this._armorTypeFilter;
             set
             {
-                if (this.SetValue(ref this._armorTypeFilter, value))
+                if (this.SetValue(ref this._armorTypeFilter, (int)value))
                 {
                     this.OnFilterChange();
                 }
@@ -91,10 +102,10 @@ namespace KoAR.SaveEditor.Views
 
         public Element ElementFilter
         {
-            get => this._elementFilter;
+            get => (Element)this._elementFilter;
             set
             {
-                if (this.SetValue(ref this._elementFilter, value))
+                if (this.SetValue(ref this._elementFilter, (int)value))
                 {
                     this.OnFilterChange();
                 }
@@ -146,10 +157,10 @@ namespace KoAR.SaveEditor.Views
 
         public Rarity RarityFilter
         {
-            get => this._rarityFilter;
+            get => (Rarity)this._rarityFilter;
             set
             {
-                if (this.SetValue(ref this._rarityFilter, value))
+                if (this.SetValue(ref this._rarityFilter, (int)value))
                 {
                     this.OnFilterChange();
                 }
@@ -275,27 +286,25 @@ namespace KoAR.SaveEditor.Views
                 return true;
             }
             bool first = projection(this.FilteredItems[0]);
-            if (this.FilteredItems.Skip(1).Select(projection).Any(value => value != first))
-            {
-                return null;
-            }
-            return first;
+            return this.FilteredItems.Skip(1).Select(projection).Any(value => value != first)
+                ? default(bool?)
+                : first;
         }
 
         private IReadOnlyList<ItemModel> GetFilteredItems()
         {
             IEnumerable<ItemModel> items = this.Items;
-            if (this._rarityFilter != default)
+            if (this._rarityFilter != 0)
             {
-                items = items.Where(model => model.Rarity == this._rarityFilter);
+                items = items.Where(model => (int)model.Rarity == this._rarityFilter);
             }
-            if (this._elementFilter != default)
+            if (this._elementFilter != 0)
             {
-                items = items.Where(model => model.TypeDefinition.Element == this._elementFilter);
+                items = items.Where(model => (int)model.TypeDefinition.Element == this._elementFilter);
             }
-            if (this._armorTypeFilter != default)
+            if (this._armorTypeFilter != 0)
             {
-                items = items.Where(model => model.TypeDefinition.ArmorType == this._armorTypeFilter);
+                items = items.Where(model => (int)model.TypeDefinition.ArmorType == this._armorTypeFilter);
             }
             if (this._categoryFilter.HasValue)
             {
@@ -305,7 +314,7 @@ namespace KoAR.SaveEditor.Views
             {
                 items = items.Where(model => model.DisplayName.IndexOf(this._itemNameFilter, StringComparison.CurrentCultureIgnoreCase) != -1);
             }
-            return object.Equals(items, this.FilteredItems) ? this.FilteredItems : items.ToList();
+            return object.Equals(items, this.Items) ? this.Items : items.ToList();
         }
 
         private void Item_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -384,31 +393,19 @@ namespace KoAR.SaveEditor.Views
             {
                 this.OnPropertyChanged(nameof(this.ItemNameFilter));
             }
-            if (this._elementFilter != Element.None)
+            if (Interlocked.Exchange(ref this._elementFilter, 0) != 0)
             {
-                this._elementFilter = Element.None;
                 this.OnPropertyChanged(nameof(this.ElementFilter));
             }
-            if (this._rarityFilter != Rarity.None)
+            if (Interlocked.Exchange(ref this._rarityFilter, 0) != 0)
             {
-                this._rarityFilter = Rarity.None;
                 this.OnPropertyChanged(nameof(this.RarityFilter));
             }
-            if (this._armorTypeFilter != ArmorType.None)
+            if (Interlocked.Exchange(ref this._armorTypeFilter, 0) != 0)
             {
-                this._armorTypeFilter = ArmorType.None;
                 this.OnPropertyChanged(nameof(this.ArmorTypeFilter));
             }
             this.OnFilterChange(false);
-        }
-
-        private void SetAppliesToAllItems(Action<ItemModel> action, [CallerMemberName] string propertyName = "")
-        {
-            foreach (ItemModel item in this.FilteredItems)
-            {
-                action(item);
-            }
-            this.OnPropertyChanged(propertyName);
         }
     }
 }
