@@ -212,17 +212,7 @@
                             <ComboBox.ItemTemplate>
                                 <DataTemplate DataType="{x:Type core:Rarity}">
                                     <StackPanel Orientation="Horizontal" Margin="2">
-                                        <views:RarityIcon Rarity="{Binding}" Height="16" Width="16">
-                                            <views:RarityIcon.Style>
-                                                <Style TargetType="{x:Type views:RarityIcon}">
-                                                    <Style.Triggers>
-                                                        <Trigger Property="Rarity" Value="None">
-                                                            <Setter Property="Visibility" Value="Hidden" />
-                                                        </Trigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </views:RarityIcon.Style>
-                                        </views:RarityIcon>
+                                        <views:RarityIcon Rarity="{Binding}" Height="16" Width="16" />
                                         <TextBlock VerticalAlignment="Center" Margin="2,0">
                                             <TextBlock.Style>
                                                 <Style TargetType="{x:Type TextBlock}">
@@ -244,17 +234,7 @@
                             <ComboBox.ItemTemplate>
                                 <DataTemplate DataType="{x:Type core:Element}">
                                     <StackPanel Orientation="Horizontal" Margin="2">
-                                        <views:ElementIcon Element="{Binding}" Height="16" Width="16">
-                                            <views:ElementIcon.Style>
-                                                <Style TargetType="{x:Type views:ElementIcon}">
-                                                    <Style.Triggers>
-                                                        <Trigger Property="Element" Value="None">
-                                                            <Setter Property="Visibility" Value="Hidden" />
-                                                        </Trigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </views:ElementIcon.Style>
-                                        </views:ElementIcon>
+                                        <views:ElementIcon Element="{Binding}" Height="16" Width="16" />
                                         <TextBlock VerticalAlignment="Center" Margin="2,0">
                                             <TextBlock.Style>
                                                 <Style TargetType="{x:Type TextBlock}">
@@ -276,17 +256,7 @@
                             <ComboBox.ItemTemplate>
                                 <DataTemplate DataType="{x:Type core:ArmorType}">
                                     <StackPanel Orientation="Horizontal" Margin="2,1">
-                                        <views:ArmorTypeIcon ArmorType="{Binding}" Height="18" Width="18">
-                                            <views:ArmorTypeIcon.Style>
-                                                <Style TargetType="{x:Type views:ArmorTypeIcon}">
-                                                    <Style.Triggers>
-                                                        <Trigger Property="ArmorType" Value="None">
-                                                            <Setter Property="Visibility" Value="Hidden" />
-                                                        </Trigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </views:ArmorTypeIcon.Style>
-                                        </views:ArmorTypeIcon>
+                                        <views:ArmorTypeIcon ArmorType="{Binding}" Height="18" Width="18" />
                                         <TextBlock VerticalAlignment="Center" Margin="2,0">
                                             <TextBlock.Style>
                                                 <Style TargetType="{x:Type TextBlock}">
