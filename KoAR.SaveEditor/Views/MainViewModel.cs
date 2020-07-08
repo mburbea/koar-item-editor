@@ -306,13 +306,13 @@ namespace KoAR.SaveEditor.Views
             {
                 items = items.Where(model => model.TypeDefinition.ArmorType == this.ArmorTypeFilter);
             }
-            if (this._categoryFilter.HasValue)
+            if (this.CategoryFilter.HasValue)
             {
-                items = items.Where(model => model.Category == this._categoryFilter.GetValueOrDefault());
+                items = items.Where(model => model.Category == this.CategoryFilter.GetValueOrDefault());
             }
-            if (this._itemNameFilter.Length != 0)
+            if (this.ItemNameFilter.Length != 0)
             {
-                items = items.Where(model => model.DisplayName.IndexOf(this._itemNameFilter, StringComparison.CurrentCultureIgnoreCase) != -1);
+                items = items.Where(model => model.DisplayName.IndexOf(this.ItemNameFilter, StringComparison.CurrentCultureIgnoreCase) != -1);
             }
             return object.Equals(items, this.Items) ? this.Items : items.ToList();
         }
