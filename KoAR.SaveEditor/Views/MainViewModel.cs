@@ -285,21 +285,21 @@ namespace KoAR.SaveEditor.Views
         private IReadOnlyList<ItemModel> GetFilteredItems()
         {
             IEnumerable<ItemModel> items = this.Items;
-            if (this._categoryFilter.HasValue)
-            {
-                items = items.Where(model => model.Category == this._categoryFilter);
-            }
-            if (this._rarityFilter != Rarity.None)
+            if (this._rarityFilter != default)
             {
                 items = items.Where(model => model.Rarity == this._rarityFilter);
             }
-            if (this._elementFilter != Element.None)
+            if (this._elementFilter != default)
             {
                 items = items.Where(model => model.TypeDefinition.Element == this._elementFilter);
             }
-            if (this._armorTypeFilter != ArmorType.None)
+            if (this._armorTypeFilter != default)
             {
                 items = items.Where(model => model.TypeDefinition.ArmorType == this._armorTypeFilter);
+            }
+            if (this._categoryFilter.HasValue)
+            {
+                items = items.Where(model => model.Category == this._categoryFilter.GetValueOrDefault());
             }
             if (this._itemNameFilter.Length != 0)
             {
