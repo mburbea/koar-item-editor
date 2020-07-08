@@ -10,8 +10,10 @@ namespace KoAR.Core
         public string Name { get; set; } = string.Empty;
         public string? Flavor { get; set; }
         public Rarity Rarity { get; set; }
-        [JsonPropertyName("ap")]
+        [JsonPropertyName("buff_type")]
         public BuffTypes BuffType { get; set; }
+        [JsonPropertyName("apply_type")]
+        public ApplyType ApplyType { get; set; }
         public BuffDescription[] Desc { get; set; } = Array.Empty<BuffDescription>();
     }
 
@@ -33,11 +35,16 @@ namespace KoAR.Core
         Destiny             = 1 << 2,
         Disease             = 1 << 3,
         Prefix              = 1 << 4,
-        Self                = 1 << 5,
-        SpecialCurse        = 1 << 6,
-        SpecialDisease      = 1 << 7,
-        Suffix              = 1 << 8,
-        TemporaryPositive   = 1 << 9,
-        Trait               = 1 << 10
+        SpecialCurse        = 1 << 5,
+        SpecialDisease      = 1 << 6,
+        Suffix              = 1 << 7,
+        TemporaryPositive   = 1 << 8,
+        Trait               = 1 << 9
+    }
+
+    public enum ApplyType
+    {
+        OnOwner,
+        OnObject
     }
 }
