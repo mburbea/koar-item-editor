@@ -51,9 +51,12 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type views:RarityIcon}">
                     <Ellipse x:Name="PART_Ellipse" Height="{TemplateBinding Height}" Width="{TemplateBinding Width}"
-                        Stroke="{StaticResource CommonBrush}" StrokeThickness="0.5" Fill="{StaticResource CommonGradient}" 
-                        ToolTip="{TemplateBinding Rarity}" />                    
+                        StrokeThickness="0.5" ToolTip="{TemplateBinding Rarity}" />                    
                     <ControlTemplate.Triggers>
+                        <Trigger Property="Rarity" Value="Common">
+                            <Setter TargetName="PART_Ellipse" Property="Fill" Value="{StaticResource CommonGradient}" />
+                            <Setter TargetName="PART_Ellipse" Property="Stroke" Value="{StaticResource CommonBrush}" />
+                        </Trigger>
                         <Trigger Property="Rarity" Value="Infrequent">
                             <Setter TargetName="PART_Ellipse" Property="Fill" Value="{StaticResource InfrequentGradient}" />
                             <Setter TargetName="PART_Ellipse" Property="Stroke" Value="{StaticResource InfrequentBrush}" />
