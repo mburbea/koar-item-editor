@@ -18,8 +18,6 @@
                             </MultiBinding>
                         </Image.Source>
                     </Image>
-                    <ControlTemplate.Triggers>
-                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
