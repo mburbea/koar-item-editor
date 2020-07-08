@@ -206,9 +206,9 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="Name:" />
-                        <TextBox Grid.Column="1" Text="{Binding ItemNameFilter, UpdateSourceTrigger=PropertyChanged}" Height="26" />
+                        <TextBox Grid.Column="1" Text="{Binding ItemNameFilter, UpdateSourceTrigger=PropertyChanged}" Height="{Binding ActualHeight, ElementName=PART_Rarities}" />
                         <TextBlock Grid.Column="2" Text="Rarity:" />
-                        <ComboBox Grid.Column="3" ItemsSource="{Binding Source={StaticResource Rarities}}" SelectedItem="{Binding RarityFilter}">
+                        <ComboBox x:Name="PART_Rarities" Grid.Column="3" ItemsSource="{Binding Source={StaticResource Rarities}}" SelectedItem="{Binding RarityFilter}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate DataType="{x:Type core:Rarity}">
                                     <StackPanel Orientation="Horizontal" Margin="2">
@@ -291,7 +291,7 @@
                                             <TextBlock.Style>
                                                 <Style TargetType="{x:Type TextBlock}">
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Converter={StaticResource EqualityConverter}, ConverterParameter={x:Static core:Element.None}}" Value="False">
+                                                        <DataTrigger Binding="{Binding Converter={StaticResource EqualityConverter}, ConverterParameter={x:Static core:ArmorType.None}}" Value="False">
                                                             <Setter Property="Text" Value="{Binding}" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
@@ -303,7 +303,8 @@
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
-                        <Button Grid.Column="8" Content="Reset" FocusVisualStyle="{x:Null}" Command="{Binding ResetFiltersCommand}" Margin="2" Height="26" VerticalAlignment="Center" />
+                        <Button Grid.Column="8" Content="Reset" FocusVisualStyle="{x:Null}" Command="{Binding ResetFiltersCommand}" Margin="2" 
+                            Height="{Binding ActualHeight, ElementName=PART_Rarities}" VerticalAlignment="Center" />
                     </Grid>
                 </Expander>
                 <DockPanel Grid.Row="1" Margin="4">
