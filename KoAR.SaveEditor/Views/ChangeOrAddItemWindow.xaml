@@ -185,9 +185,18 @@
         </Grid>
         <ComboBox Grid.Row="3" Grid.ColumnSpan="2" ItemsSource="{Binding Source={StaticResource Definitions}}" SelectedItem="{Binding Definition}" TextSearch.TextPath="Name"
             MinHeight="{Binding ActualHeight, ElementName=PART_CategorySelector}">
+            <ComboBox.Style>
+                <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ItemsSource.Count, RelativeSource={RelativeSource Self}}" Value="0">
+                            <Setter Property="IsEnabled" Value="False" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ComboBox.Style>
             <ComboBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <VirtualizingStackPanel IsItemsHost="True" VirtualizingPanel.VirtualizationMode="Recycling" VirtualizingPanel.ScrollUnit="Pixel" />
+                    <VirtualizingStackPanel IsItemsHost="True" VirtualizingPanel.ScrollUnit="Pixel" />
                 </ItemsPanelTemplate>
             </ComboBox.ItemsPanel>
             <ComboBox.ItemTemplate>

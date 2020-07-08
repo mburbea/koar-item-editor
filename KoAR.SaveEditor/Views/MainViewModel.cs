@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
@@ -13,7 +12,6 @@ namespace KoAR.SaveEditor.Views
 {
     public sealed class MainViewModel : NotifierBase
     {
-        private readonly Func<Task<IReadOnlyList<ItemModel>>> _debouncedGetFilteredItems;
         private readonly NotifyingCollection<ItemModel> _items;
         private EquipmentCategory? _categoryFilter;
         private int _elementFilter;
@@ -28,7 +26,6 @@ namespace KoAR.SaveEditor.Views
         public MainViewModel()
         {
             this._filteredItems = this._items = new NotifyingCollection<ItemModel>();
-            this._debouncedGetFilteredItems = Debounce.Method(this.GetFilteredItems, 200);
             this.OpenFileCommand = new DelegateCommand(this.OpenFile);
             this.ResetFiltersCommand = new DelegateCommand(this.ResetFilters);
             this.ChangeDefinitionCommand = new DelegateCommand<ItemModel>(this.ChangeDefinition);
@@ -89,7 +86,7 @@ namespace KoAR.SaveEditor.Views
             {
                 if (this.SetValue(ref this._categoryFilter, value))
                 {
-                    this.OnFilterChange(false);
+                    this.OnFilterChange();
                 }
             }
         }
@@ -337,29 +334,12 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        private void OnFilterChange(bool debounce = true)
+        private void OnFilterChange()
         {
-            void ProcessFilteredItems(IReadOnlyList<ItemModel> items)
-            {
-                this.FilteredItems = items;
-                this.SelectedItem = null;
-                this.OnPropertyChanged(nameof(this.AllItemsUnsellable));
-                this.OnPropertyChanged(nameof(this.AllItemsUnstashable));
-            }
-
-            if (!debounce)
-            {
-                ProcessFilteredItems(this.GetFilteredItems());
-            }
-            else
-            {
-                this._debouncedGetFilteredItems().ContinueWith(
-                    task => ProcessFilteredItems(task.Result),
-                    default,
-                    TaskContinuationOptions.OnlyOnRanToCompletion,
-                    TaskScheduler.FromCurrentSynchronizationContext()
-                );
-            }
+            this.FilteredItems = this.GetFilteredItems();
+            this.SelectedItem = null;
+            this.OnPropertyChanged(nameof(this.AllItemsUnsellable));
+            this.OnPropertyChanged(nameof(this.AllItemsUnstashable));
         }
 
         private void RepopulateItems()
@@ -405,7 +385,7 @@ namespace KoAR.SaveEditor.Views
             {
                 this.OnPropertyChanged(nameof(this.ArmorTypeFilter));
             }
-            this.OnFilterChange(false);
+            this.OnFilterChange();
         }
     }
 }
