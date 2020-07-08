@@ -104,6 +104,8 @@
     <None Remove="Resources\buffs\primal_dot_amount.png" />
     <None Remove="Resources\buffs\RangedDmgMitigation.png" />
     <None Remove="Resources\buffs\Sagecraft.png" />
+    <None Remove="Resources\buffs\Scourge_damage_amount.png" />
+    <None Remove="Resources\buffs\Scourge_dot_amount.png" />
     <None Remove="Resources\buffs\Sorcery.png" />
     <None Remove="Resources\buffs\SpeedBonus.png" />
     <None Remove="Resources\buffs\Stealth.png" />
@@ -261,6 +263,8 @@
     <Resource Include="Resources\buffs\primal_dot_amount.png" />
     <Resource Include="Resources\buffs\RangedDmgMitigation.png" />
     <Resource Include="Resources\buffs\Sagecraft.png" />
+    <Resource Include="Resources\buffs\Scourge_damage_amount.png" />
+    <Resource Include="Resources\buffs\Scourge_dot_amount.png" />
     <Resource Include="Resources\buffs\Sorcery.png" />
     <Resource Include="Resources\buffs\SpeedBonus.png" />
     <Resource Include="Resources\buffs\Stealth.png" />
