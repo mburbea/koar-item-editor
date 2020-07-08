@@ -275,8 +275,8 @@
                         <ComboBox Grid.Column="7" ItemsSource="{Binding Source={StaticResource ArmorTypes}}" SelectedItem="{Binding ArmorTypeFilter}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate DataType="{x:Type core:ArmorType}">
-                                    <StackPanel Orientation="Horizontal" Margin="2">
-                                        <views:ArmorTypeIcon ArmorType="{Binding}" Height="16" Width="16">
+                                    <StackPanel Orientation="Horizontal" Margin="2,1">
+                                        <views:ArmorTypeIcon ArmorType="{Binding}" Height="18" Width="18">
                                             <views:ArmorTypeIcon.Style>
                                                 <Style TargetType="{x:Type views:ArmorTypeIcon}">
                                                     <Style.Triggers>
