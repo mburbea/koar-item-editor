@@ -12,8 +12,8 @@ namespace KoAR.SaveEditor.Views
     /// </summary>
     public sealed class ItemModel : NotifierBase, IDisposable
     {
-        private readonly NotifyingCollection<Buff> _effects;
         private readonly NotifyingCollection<Buff> _coreEffects;
+        private readonly NotifyingCollection<Buff> _effects;
 
         public ItemModel(ItemMemoryInfo item)
         {
@@ -28,7 +28,7 @@ namespace KoAR.SaveEditor.Views
 
         public EquipmentCategory Category => this.Item.TypeDefinition.Category;
 
-        public IReadOnlyList<Buff> CoreEffects => this._coreEffects;
+        public IList<Buff> CoreEffects => this._coreEffects;
 
         public float CurrentDurability
         {
@@ -43,7 +43,7 @@ namespace KoAR.SaveEditor.Views
             false => this.TypeDefinition.Name,
         };
 
-        public IReadOnlyList<Buff> Effects => this._effects;
+        public IList<Buff> Effects => this._effects;
 
         public bool HasCustomName => this.Item.HasCustomName;
 
@@ -128,21 +128,13 @@ namespace KoAR.SaveEditor.Views
 
         public bool UnsupportedFormat => this.Item.CoreEffects.UnsupportedFormat;
 
+        internal ItemMemoryInfo Item { get; }
+
         public void Dispose()
         {
             this._effects.CollectionChanged -= this.EffectsCollection_CollectionChanged;
             this._coreEffects.CollectionChanged -= this.EffectsCollection_CollectionChanged;
         }
-
-        internal ItemMemoryInfo Item { get; }
-
-        internal void AddCoreEffect(Buff buff) => this._coreEffects.Add(buff);
-
-        internal void AddEffect(Buff buff) => this._effects.Add(buff);
-
-        internal void DeleteCoreEffect(Buff buff) => this._coreEffects.Remove(buff);
-
-        internal void DeleteEffect(Buff buff) => this._effects.Remove(buff);
 
         private void EffectsCollection_CollectionChanged(object sender, EventArgs e) => this.OnPropertyChanged(nameof(this.Rarity));
 

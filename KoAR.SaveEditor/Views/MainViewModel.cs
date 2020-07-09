@@ -221,9 +221,9 @@ namespace KoAR.SaveEditor.Views
             MessageBox.Show($"Save successful! Original save backed up as {this._fileName}.bak.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private void AddCoreEffect(uint code) => this.SelectedItem?.AddCoreEffect(Amalur.GetBuff(code));
+        private void AddCoreEffect(uint code) => this.SelectedItem?.CoreEffects.Add(Amalur.GetBuff(code));
 
-        private void AddEffect(uint code) => this.SelectedItem?.AddEffect(Amalur.GetBuff(code));
+        private void AddEffect(uint code) => this.SelectedItem?.Effects.Add(Amalur.GetBuff(code));
 
         private void AddStashItem()
         {
@@ -272,9 +272,9 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        private void DeleteCoreEffect(Buff buff) => this.SelectedItem?.DeleteCoreEffect(buff);
+        private void DeleteCoreEffect(Buff buff) => this.SelectedItem?.CoreEffects.Add(buff);
 
-        private void DeleteEffect(Buff buff) => this.SelectedItem?.DeleteEffect(buff);
+        private void DeleteEffect(Buff buff) => this.SelectedItem?.Effects.Add(buff);
 
         private bool? GetAppliesToAllItems(Func<ItemModel, bool> projection)
         {
