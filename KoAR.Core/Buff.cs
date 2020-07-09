@@ -20,18 +20,12 @@ namespace KoAR.Core
 
         public override string ToString() => GetDisplayText(true);
 
+        public string TitleText => ((BuffTypes.TransientOrAffix.HasFlag(BuffType) ? Modifier : Flavor) ?? Name).Replace('\n', '.');
+
         private string GetDisplayText(bool expanded)
         {
-            var titleText = BuffTypes.TransientOrAffix.HasFlag(BuffType) ? Modifier : Flavor;
-            // some flavors have new lines in them...
-            titleText = !expanded ? titleText?.Replace('\n', '.') : titleText;
             var effectsConcat = Desc.Any() ? string.Join(expanded ? "\n" : ";", Desc.Select(x => x.Text)) : $"None ({Name})";
-            return expanded switch
-            {
-                true when titleText != null => $"{titleText}\n{effectsConcat}",
-                false when titleText != null => $"{titleText} [{effectsConcat}]",
-                _ => effectsConcat
-            };
+            return expanded ? $"{TitleText}\n{effectsConcat}" : $"{TitleText} [{effectsConcat}]";
         }
     }
 
@@ -47,20 +41,20 @@ namespace KoAR.Core
     [Flags]
     public enum BuffTypes
     {
-        None                = 0,
-        Normal              = 1 << 0,
-        Curse               = 1 << 1,
-        Destiny             = 1 << 2,
-        Disease             = 1 << 3,
-        Prefix              = 1 << 4,
-        SpecialCurse        = 1 << 5,
-        SpecialDisease      = 1 << 6,
-        Suffix              = 1 << 7,
-        TemporaryPositive   = 1 << 8,
-        Trait               = 1 << 9,
-        Affix               = Prefix | Suffix,
-        TransientBuff       = Curse | Disease | SpecialCurse | TemporaryPositive,
-        TransientOrAffix    = Affix | TransientBuff,
+        None = 0,
+        Normal = 1 << 0,
+        Curse = 1 << 1,
+        Destiny = 1 << 2,
+        Disease = 1 << 3,
+        Prefix = 1 << 4,
+        SpecialCurse = 1 << 5,
+        SpecialDisease = 1 << 6,
+        Suffix = 1 << 7,
+        TemporaryPositive = 1 << 8,
+        Trait = 1 << 9,
+        Affix = Prefix | Suffix,
+        TransientBuff = Curse | Disease | SpecialCurse | TemporaryPositive,
+        TransientOrAffix = Affix | TransientBuff,
     }
 
     public enum ApplyType

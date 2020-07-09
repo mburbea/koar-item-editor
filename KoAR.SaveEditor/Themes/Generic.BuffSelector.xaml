@@ -19,7 +19,7 @@
                         </ComboBox.ItemsPanel>
                         <ComboBox.ItemTemplate>
                             <DataTemplate DataType="{x:Type constructs:DataContainer}">
-                                <views:BuffControl Buff="{Binding Data}" ShowModifier="True" />
+                                <views:BuffControl Buff="{Binding Data}" Expanded="True" />
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                         <ComboBox.ItemContainerStyle>

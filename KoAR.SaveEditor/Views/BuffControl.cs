@@ -9,8 +9,8 @@ namespace KoAR.SaveEditor.Views
     {
         public static readonly DependencyProperty BuffProperty = DependencyProperty.Register(nameof(BuffControl.Buff), typeof(Buff), typeof(BuffControl));
 
-        public static readonly DependencyProperty ShowModifierProperty = DependencyProperty.Register(nameof(BuffControl.ShowModifier), typeof(bool), typeof(BuffControl),
-            new PropertyMetadata(BooleanBoxes.False));
+        public static readonly DependencyProperty ExpandedProperty = DependencyProperty.Register(nameof(BuffControl.Expanded), typeof(bool), typeof(BuffControl),
+            new FrameworkPropertyMetadata(BooleanBoxes.False, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         static BuffControl() => FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(BuffControl), new FrameworkPropertyMetadata(typeof(BuffControl)));
 
@@ -20,10 +20,10 @@ namespace KoAR.SaveEditor.Views
             set => this.SetValue(BuffControl.BuffProperty, value);
         }
 
-        public bool ShowModifier
+        public bool Expanded
         {
-            get => (bool)this.GetValue(BuffControl.ShowModifierProperty);
-            set => this.SetValue(BuffControl.ShowModifierProperty, BooleanBoxes.GetBox(value));
+            get => (bool)this.GetValue(BuffControl.ExpandedProperty);
+            set => this.SetValue(BuffControl.ExpandedProperty, BooleanBoxes.GetBox(value));
         }
     }
 }

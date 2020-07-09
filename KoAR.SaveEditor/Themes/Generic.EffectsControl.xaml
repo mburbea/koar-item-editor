@@ -9,6 +9,9 @@
     </ResourceDictionary.MergedDictionaries>
     <BitmapImage x:Key="Copy" UriSource="/KoAR.SaveEditor;component/Resources/Copy.png" po:Freeze="True" />
     <BitmapImage x:Key="Delete" UriSource="/KoAR.SaveEditor;component/Resources/Delete.png" po:Freeze="True" />
+    <DataTemplate x:Key="ToolTipTemplate" DataType="{x:Type core:Buff}">
+        <views:BuffControl Buff="{Binding}" Expanded="True" />
+    </DataTemplate>
     <Style TargetType="{x:Type views:EffectsControl}">
         <Style.Resources>
             <constructs:PlusOneConverter x:Key="PlusOneConverter" />
@@ -234,7 +237,13 @@
                                         </ComboBox.ItemsPanel>
                                         <ComboBox.ItemTemplate>
                                             <DataTemplate DataType="{x:Type core:Buff}">
-                                                <views:BuffControl Buff="{Binding}" />
+                                                <DockPanel>
+                                                    <DockPanel.ToolTip>
+                                                        <ToolTip Content="{Binding}" ContentTemplate="{StaticResource ToolTipTemplate}" />
+                                                    </DockPanel.ToolTip>
+                                                    <views:BuffIcon Buff="{Binding}" VerticalAlignment="Center"/>
+                                                    <TextBlock Margin="2,0,0,0" Text="{Binding ShortDisplayText}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+                                                </DockPanel>
                                             </DataTemplate>
                                         </ComboBox.ItemTemplate>
                                         <ComboBox.ItemContainerStyle>
