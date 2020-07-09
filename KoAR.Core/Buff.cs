@@ -17,7 +17,7 @@ namespace KoAR.Core
         public ApplyType ApplyType { get; set; }
         public BuffDescription[] Desc { get; set; } = Array.Empty<BuffDescription>();
 
-        public string TitleText => ((BuffTypes.TransientOrAffix.HasFlag(BuffType) ? Modifier : Flavor) ?? Name).Replace('\n', '.');
+        public string TitleText => (((BuffTypes.TransientOrAffix & BuffType) == BuffType ? Modifier : Flavor) ?? Name).Replace('\n', '.');
 
         public string ShortDisplayText => $"{TitleText} [{(Desc.Any() ? string.Join(";", Desc.Select(x => x.Text)) : $"None ({Name})")}]";
     }
