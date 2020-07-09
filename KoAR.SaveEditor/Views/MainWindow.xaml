@@ -418,10 +418,10 @@
                                             <Style TargetType="{x:Type TextBlock}">
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding}" Value="{x:Null}">
-                                                        <Setter Property="Text" Value="Core Effects:" />
+                                                        <Setter Property="Text" Value="Item Buffs:" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
-                                                <Setter Property="Text" Value="{Binding CoreEffects.Count, Mode=OneWay, StringFormat='Core Effects: ({0})'}" />
+                                                <Setter Property="Text" Value="{Binding CoreEffects.Count, Mode=OneWay, StringFormat='Item Buffs: ({0})'}" />
                                             </Style>
                                         </TextBlock.Style>
                                     </TextBlock>
@@ -437,10 +437,10 @@
                                             <Style TargetType="{x:Type TextBlock}">
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding}" Value="{x:Null}">
-                                                        <Setter Property="Text" Value="Effects:" />
+                                                        <Setter Property="Text" Value="Player Buffs:" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
-                                                <Setter Property="Text" Value="{Binding Effects.Count, Mode=OneWay, StringFormat='Effects: ({0})'}" />
+                                                <Setter Property="Text" Value="{Binding Effects.Count, Mode=OneWay, StringFormat='Player Buffs: ({0})'}" />
                                             </Style>
                                         </TextBlock.Style>
                                     </TextBlock>

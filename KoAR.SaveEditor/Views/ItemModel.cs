@@ -24,6 +24,8 @@ namespace KoAR.SaveEditor.Views
             this._effects.CollectionChanged += this.EffectsCollection_CollectionChanged;
         }
 
+        public int AffixCount => (this.Prefix == null ? 0 : 1) + (this.Suffix == null ? 0 : 1);
+
         public EquipmentCategory Category => this.Item.TypeDefinition.Category;
 
         public IReadOnlyList<Buff> CoreEffects => this._coreEffects;
@@ -89,7 +91,13 @@ namespace KoAR.SaveEditor.Views
         public Buff? Prefix
         {
             get => this.Item.CoreEffects.Prefix;
-            set => this.SetItemValue(value, this.Item.CoreEffects.Prefix, value => this.Item.CoreEffects.Prefix = value);
+            set
+            {
+                if (this.SetItemValue(value, this.Item.CoreEffects.Prefix, value => this.Item.CoreEffects.Prefix = value))
+                {
+                    this.OnPropertyChanged(nameof(this.AffixCount));
+                }
+            }
         }
 
         public Rarity Rarity => this.Item.Rarity;
@@ -97,7 +105,13 @@ namespace KoAR.SaveEditor.Views
         public Buff? Suffix
         {
             get => this.Item.CoreEffects.Suffix;
-            set => this.SetItemValue(value, this.Item.CoreEffects.Suffix, value => this.Item.CoreEffects.Suffix = value);
+            set
+            {
+                if (this.SetItemValue(value, this.Item.CoreEffects.Suffix, value => this.Item.CoreEffects.Suffix = value))
+                {
+                    this.OnPropertyChanged(nameof(this.AffixCount));
+                }
+            }
         }
 
         public TypeDefinition TypeDefinition

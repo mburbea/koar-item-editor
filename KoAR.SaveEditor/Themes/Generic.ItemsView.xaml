@@ -52,7 +52,7 @@
                     </ControlTemplate.Resources>
                     <ListView x:Name="PART_ListView" ItemsSource="{Binding CollectionView, RelativeSource={RelativeSource TemplatedParent}}" 
                         SelectedItem="{Binding SelectedItem, RelativeSource={RelativeSource TemplatedParent}}" VirtualizingPanel.IsVirtualizing="True"
-                        BorderBrush="LightGray" SelectionMode="Single" FocusVisualStyle="{x:Null}" VirtualizingPanel.VirtualizationMode="Recycling"
+                        BorderBrush="LightGray" SelectionMode="Single" FocusVisualStyle="{x:Null}" VirtualizingPanel.ScrollUnit="Pixel"
                         TextSearch.TextPath="ItemId" AlternationCount="2">
                         <ListView.Resources>
                             <Style TargetType="{x:Type GridViewColumnHeader}" BasedOn="{StaticResource {x:Type GridViewColumnHeader}}">
@@ -250,7 +250,7 @@
                                             </Grid>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
-                                </GridViewColumn>                                
+                                </GridViewColumn>
                                 <GridViewColumn Width="Auto" views:ItemsView.PropertyName="IsUnsellable">
                                     <GridViewColumn.Header>
                                         <StackPanel Orientation="Horizontal">
@@ -279,6 +279,16 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
+                                <GridViewColumn Header="Prefix/Suffix" Width="Auto" views:ItemsView.PropertyName="AffixCount">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate DataType="{x:Type views:ItemModel}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <views:BuffIcon Buff="{Binding Prefix}" ToolTip="{Binding Prefix.Modifier}" Margin="1,0" />
+                                                <views:BuffIcon Buff="{Binding Suffix}" ToolTip="{Binding Suffix.Modifier}" Margin="1,0" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
                                 <GridViewColumn Header="Player Buffs" Width="Auto" views:ItemsView.PropertyName="Effects.Count">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate DataType="{x:Type views:ItemModel}">
@@ -290,7 +300,7 @@
                                                 </ItemsControl.ItemsPanel>
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate DataType="{x:Type core:Buff}">
-                                                        <views:BuffIcon Buff="{Binding}" />
+                                                        <views:BuffIcon Buff="{Binding}" Margin="1,0" />
                                                     </DataTemplate>
                                                 </ItemsControl.ItemTemplate>
                                             </ItemsControl>
@@ -308,7 +318,7 @@
                                                 </ItemsControl.ItemsPanel>
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate DataType="{x:Type core:Buff}">
-                                                        <views:BuffIcon Buff="{Binding}" />
+                                                        <views:BuffIcon Buff="{Binding}" Margin="1,0" />
                                                     </DataTemplate>
                                                 </ItemsControl.ItemTemplate>
                                             </ItemsControl>
