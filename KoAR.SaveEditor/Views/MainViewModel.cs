@@ -272,9 +272,9 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        private void DeleteCoreEffect(Buff buff) => this.SelectedItem?.CoreEffects.Add(buff);
+        private void DeleteCoreEffect(Buff buff) => this.SelectedItem?.CoreEffects.Remove(buff);
 
-        private void DeleteEffect(Buff buff) => this.SelectedItem?.Effects.Add(buff);
+        private void DeleteEffect(Buff buff) => this.SelectedItem?.Effects.Remove(buff);
 
         private bool? GetAppliesToAllItems(Func<ItemModel, bool> projection)
         {
