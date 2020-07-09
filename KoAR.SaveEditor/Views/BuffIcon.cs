@@ -8,6 +8,8 @@ namespace KoAR.SaveEditor.Views
     {
         public static readonly DependencyProperty BuffProperty = DependencyProperty.Register(nameof(BuffIcon.Buff), typeof(Buff), typeof(BuffIcon));
 
+        public static readonly BuffDescription DefaultDescription = new BuffDescription { ParamIcon = "Default" };
+
         static BuffIcon() => FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(BuffIcon), new FrameworkPropertyMetadata(typeof(BuffIcon)));
 
         public Buff? Buff

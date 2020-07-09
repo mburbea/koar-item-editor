@@ -279,14 +279,25 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="# Effects" Width="Auto" views:ItemsView.PropertyName="Effects.Count">
+                                <GridViewColumn Header="Player Buffs" Width="Auto" views:ItemsView.PropertyName="Effects.Count">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate DataType="{x:Type views:ItemModel}">
-                                            <TextBlock Text="{Binding Effects.Count, StringFormat='#,##0'}" TextAlignment="Right" />
+                                            <ItemsControl ItemsSource="{Binding Effects}" MinWidth="88">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel Orientation="Horizontal" />
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate DataType="{x:Type core:Buff}">
+                                                        <views:BuffIcon Buff="{Binding}" />
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="Core Effects" Width="Auto" views:ItemsView.PropertyName="CoreEffects.Count">
+                                <GridViewColumn Header="Item Buffs" Width="Auto" views:ItemsView.PropertyName="CoreEffects.Count">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate DataType="{x:Type views:ItemModel}">
                                             <ItemsControl ItemsSource="{Binding CoreEffects}" MinWidth="88">
@@ -297,7 +308,7 @@
                                                 </ItemsControl.ItemsPanel>
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate DataType="{x:Type core:Buff}">
-                                                        <TextBlock Text="(-)" />
+                                                        <views:BuffIcon Buff="{Binding}" />
                                                     </DataTemplate>
                                                 </ItemsControl.ItemTemplate>
                                             </ItemsControl>
