@@ -309,7 +309,7 @@ namespace KoAR.SaveEditor.Views
             }
             if (this.ItemNameFilter.Length != 0)
             {
-                items = items.Where(model => model.DisplayName.IndexOf(this.ItemNameFilter, StringComparison.CurrentCultureIgnoreCase) != -1);
+                items = items.Where(model => model.DisplayName.IndexOf(this.ItemNameFilter, StringComparison.InvariantCultureIgnoreCase) != -1);
             }
             return object.Equals(items, this.Items) ? this.Items : items.ToList();
         }

@@ -71,7 +71,7 @@ namespace KoAR.SaveEditor.Views
                 .ToDictionary(
                     Path.GetFileNameWithoutExtension,
                     name => BitmapConverter.CreateFrozenBitmap(() => new BitmapImage(new Uri($"pack://application:,,,/{assembly.GetName().Name};component/{name}"))),
-                    StringComparer.InvariantCultureIgnoreCase
+                    StringComparer.OrdinalIgnoreCase
                 );
         }
 
