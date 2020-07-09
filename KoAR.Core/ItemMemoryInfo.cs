@@ -214,7 +214,8 @@ namespace KoAR.Core
             ? Rarity.Set
             : Effects.Select(x => x.Rarity)
                 .Concat(CoreEffects.List.Select(x => x.Rarity))
-                .Concat(new[] { CoreEffects.Prefix?.Rarity ?? default, CoreEffects.Suffix?.Rarity ?? default, TypeDefinition.Sockets.Any() ? Rarity.Infrequent : Rarity.Common }).Max();
+                .Concat(new[] { CoreEffects.Prefix?.Rarity ?? default, CoreEffects.Suffix?.Rarity ?? default, TypeDefinition.Sockets.Any() ? Rarity.Infrequent : Rarity.Common })
+                .Max();
 
         public string ItemName { get; set; } = string.Empty;
 
