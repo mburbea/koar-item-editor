@@ -121,6 +121,8 @@ namespace KoAR.SaveEditor.Views
             {
                 this.Item.TypeDefinition = value;
                 this.OnPropertyChanged(string.Empty);
+                this._effects.OnReset();
+                this._coreEffects.OnReset();
             }
         }
 

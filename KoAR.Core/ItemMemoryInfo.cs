@@ -183,8 +183,8 @@ namespace KoAR.Core
                         ArmorType.Sorcery => 0xEE,
                         _ => Amalur.Bytes[_typeIdOffset + 14],
                     };
-                    LoadFromDefinition(value);
                 }
+                LoadFromDefinition(value);
             }
         }
 
