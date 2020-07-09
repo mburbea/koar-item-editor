@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text.Json.Serialization;
 
 namespace KoAR.Core
@@ -15,6 +16,23 @@ namespace KoAR.Core
         [JsonPropertyName("apply_type")]
         public ApplyType ApplyType { get; set; }
         public BuffDescription[] Desc { get; set; } = Array.Empty<BuffDescription>();
+        public string ShortDisplayText => GetDisplayText(false);
+
+        public override string ToString() => GetDisplayText(true);
+
+        private string GetDisplayText(bool expanded)
+        {
+            var titleText = BuffTypes.TransientOrAffix.HasFlag(BuffType) ? Modifier : Flavor;
+            // some flavors have new lines in them...
+            titleText = !expanded ? titleText?.Replace('\n', '.') : titleText;
+            var effectsConcat = Desc.Any() ? string.Join(expanded ? "\n" : ";", Desc.Select(x => x.Text)) : $"None ({Name})";
+            return expanded switch
+            {
+                true when titleText != null => $"{titleText}\n{effectsConcat}",
+                false when titleText != null => $"{titleText} [{effectsConcat}]",
+                _ => effectsConcat
+            };
+        }
     }
 
     public class BuffDescription
@@ -39,7 +57,10 @@ namespace KoAR.Core
         SpecialDisease      = 1 << 6,
         Suffix              = 1 << 7,
         TemporaryPositive   = 1 << 8,
-        Trait               = 1 << 9
+        Trait               = 1 << 9,
+        Affix               = Prefix | Suffix,
+        TransientBuff       = Curse | Disease | SpecialCurse | TemporaryPositive,
+        TransientOrAffix    = Affix | TransientBuff,
     }
 
     public enum ApplyType

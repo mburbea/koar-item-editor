@@ -283,8 +283,8 @@
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate DataType="{x:Type views:ItemModel}">
                                             <StackPanel Orientation="Horizontal">
-                                                <views:BuffIcon Buff="{Binding Prefix}" ToolTip="{Binding Prefix.Modifier}" Margin="1,0" />
-                                                <views:BuffIcon Buff="{Binding Suffix}" ToolTip="{Binding Suffix.Modifier}" Margin="1,0" />
+                                                <views:BuffIcon Buff="{Binding Prefix}" Margin="1,0" />
+                                                <views:BuffIcon Buff="{Binding Suffix}" Margin="1,0" />
                                             </StackPanel>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
