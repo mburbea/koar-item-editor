@@ -16,17 +16,10 @@ namespace KoAR.Core
         [JsonPropertyName("apply_type")]
         public ApplyType ApplyType { get; set; }
         public BuffDescription[] Desc { get; set; } = Array.Empty<BuffDescription>();
-        public string ShortDisplayText => GetDisplayText(false);
-
-        public override string ToString() => GetDisplayText(true);
 
         public string TitleText => ((BuffTypes.TransientOrAffix.HasFlag(BuffType) ? Modifier : Flavor) ?? Name).Replace('\n', '.');
 
-        private string GetDisplayText(bool expanded)
-        {
-            var effectsConcat = Desc.Any() ? string.Join(expanded ? "\n" : ";", Desc.Select(x => x.Text)) : $"None ({Name})";
-            return expanded ? $"{TitleText}\n{effectsConcat}" : $"{TitleText} [{effectsConcat}]";
-        }
+        public string ShortDisplayText => $"{TitleText} [{(Desc.Any() ? string.Join(";", Desc.Select(x => x.Text)) : $"None ({Name})")}]";
     }
 
     public class BuffDescription
