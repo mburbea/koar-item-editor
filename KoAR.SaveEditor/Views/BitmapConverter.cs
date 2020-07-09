@@ -18,7 +18,9 @@ namespace KoAR.SaveEditor.Views
 
         object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value != null && BitmapConverter._bitmaps.TryGetValue(value.ToString(), out BitmapImage? image) ? image : BitmapConverter.GetFallback(parameter);
+            return value != null && BitmapConverter._bitmaps.TryGetValue(value.ToString(), out BitmapImage? bitmap)
+                ? bitmap
+                : BitmapConverter.GetFallback(parameter);
         }
 
         object IMultiValueConverter.Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
@@ -75,8 +77,8 @@ namespace KoAR.SaveEditor.Views
 
         private static BitmapImage GetFallback(object parameter)
         {
-            return parameter is string text && BitmapConverter._bitmaps.TryGetValue(text, out BitmapImage? image)
-                ? image
+            return parameter is string name && BitmapConverter._bitmaps.TryGetValue(name, out BitmapImage? bitmap)
+                ? bitmap
                 : BitmapConverter._fallback;
         }
     }
