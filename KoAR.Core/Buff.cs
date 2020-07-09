@@ -20,7 +20,7 @@ namespace KoAR.Core
     public class BuffDescription
     {
         [JsonPropertyName("param_icon")]
-        public string? ParamIcon { get; set; }
+        public string? Icon { get; set; }
         public string? Text { get; set; }
         [JsonPropertyName("buff_id")]
         public string? BuffId { get; set; }
