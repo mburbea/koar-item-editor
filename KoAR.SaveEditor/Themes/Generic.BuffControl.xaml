@@ -8,7 +8,7 @@
                 <ControlTemplate TargetType="{x:Type views:BuffControl}">
                     <StackPanel Orientation="Horizontal">
                         <views:BuffIcon Buff="{TemplateBinding Buff}" VerticalAlignment="Center" />
-                        <TextBlock Text="{Binding Buff.Name, RelativeSource={RelativeSource TemplatedParent}}" Margin="2,0,0,0" VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding Buff.ShortDisplayText, RelativeSource={RelativeSource TemplatedParent}}" Margin="2,0,0,0" VerticalAlignment="Center" />
                     </StackPanel>
                 </ControlTemplate>
             </Setter.Value>
