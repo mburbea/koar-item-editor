@@ -30,7 +30,7 @@ namespace KoAR.Core
             {
                 Effects.Add(Amalur.GetBuff(MemoryUtilities.Read<uint>(ItemBytes, Offset.FirstEffect + i * 8)));
             }
-            if(HasCustomNameFlag)
+            if (HasCustomNameFlag)
             {
                 ItemName = Encoding.Default.GetString(ItemBytes, Offsets.CustomNameText, NameLength);
             }
@@ -212,11 +212,12 @@ namespace KoAR.Core
 
         public Rarity Rarity => TypeDefinition.Rarity == Rarity.Set
             ? Rarity.Set
-            : Effects.Select(x => x.Rarity).Concat(CoreEffects.List.Select(x => x.Rarity)
-                .Concat(new[] { CoreEffects.Prefix?.Rarity ?? Rarity.Common , CoreEffects.Suffix?.Rarity ?? Rarity.Common, TypeDefinition.Sockets.Any() ? Rarity.Infrequent : Rarity.Common })).Max();
+            : Effects.Select(x => x.Rarity)
+                .Concat(CoreEffects.List.Select(x => x.Rarity))
+                .Concat(new[] { CoreEffects.Prefix?.Rarity ?? default, CoreEffects.Suffix?.Rarity ?? default, TypeDefinition.Sockets.Any() ? Rarity.Infrequent : Rarity.Common }).Max();
 
         public string ItemName { get; set; } = string.Empty;
- 
+
         public float MaxDurability
         {
             get => MemoryUtilities.Read<float>(ItemBytes, Offsets.MaxDurability);
@@ -226,7 +227,7 @@ namespace KoAR.Core
         private int BuffCount
         {
             get => MemoryUtilities.Read<int>(ItemBytes, Offset.EffectCount);
-            set => MemoryUtilities.Write<int>(ItemBytes, Offset.EffectCount, value);
+            set => MemoryUtilities.Write(ItemBytes, Offset.EffectCount, value);
         }
 
         private Offset Offsets => new Offset(BuffCount);
@@ -234,7 +235,7 @@ namespace KoAR.Core
         public static bool IsValidDurability(float durability) => durability > DurabilityLowerBound && durability < DurabilityUpperBound;
 
         internal byte[] Serialize(bool forced = false)
-        {        
+        {
             if (HasCustomNameFlag != HasCustomName
                 || HasCustomNameFlag && ItemName != Encoding.Default.GetString(ItemBytes, Offsets.CustomNameText, NameLength))
             {
