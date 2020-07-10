@@ -213,8 +213,9 @@ namespace KoAR.SaveEditor.Views
             }
             else
             {
-                this.SelectedIndex = ++index < this.Items.Count ? index : 0;
+                this.SelectedIndex = ++index == this.Items.Count ? 0 : index;
             }
+            e.Handled = true;
         }
     }
 }
