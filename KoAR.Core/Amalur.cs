@@ -28,7 +28,8 @@ namespace KoAR.Core
 
         public static Dictionary<uint, TypeDefinition> TypeDefinitions { get; } = new Dictionary<uint, TypeDefinition>();
         public static List<ItemMemoryInfo> Items { get; } = new List<ItemMemoryInfo>();
-        public static Dictionary<uint, Buff> Buffs { get; } = new Dictionary<uint, Buff>();
+        public static List<Buff> Buffs { get; } = new List<Buff>();
+        public static Dictionary<uint, Buff> BuffMap { get; } = new Dictionary<uint, Buff>();
 
         private static int? _bagOffset;
 
@@ -71,14 +72,13 @@ namespace KoAR.Core
             {
                 throw new InvalidOperationException($"Cannot find {Path.GetFileName(fileName)}");
             }
-            Buffs.AddRange(
-            JsonSerializer.Deserialize<Buff[]>(
+            Buffs.AddRange(JsonSerializer.Deserialize<Buff[]>(
                 File.ReadAllBytes(fileName), new JsonSerializerOptions
                 {
                     PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                     Converters = { new JsonStringEnumConverter() }
-                })
-              .Select(x => (x.Id, x)));
+                }));
+            BuffMap.AddRange(Buffs.Select(x => (x.Id, x)));
             if (!File.Exists(fileName = Path.Combine(path, "definitions.csv")))
             {
                 throw new InvalidOperationException($"Cannot find {Path.GetFileName(fileName)}");
@@ -104,7 +104,7 @@ namespace KoAR.Core
             return finalOffset + (inventoryLimitOrder * 12);
         }
 
-        public static Buff GetBuff(uint buffId) => Buffs.TryGetValue(buffId, out var buff)
+        public static Buff GetBuff(uint buffId) => BuffMap.TryGetValue(buffId, out var buff)
                     ? buff : new Buff { Id = buffId, Name = "Unknown" };
 
         public static int InventorySize

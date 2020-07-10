@@ -227,35 +227,8 @@
                                         <ColumnDefinition />
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
-                                    <views:BuffSelector Margin="2" Grid.ColumnSpan="2" Buffs="{TemplateBinding Buffs}"
+                                    <views:BuffSelector Margin="2" Grid.ColumnSpan="2" Buffs="{TemplateBinding Buffs}" Filter="{TemplateBinding BuffsFilter}"
                                         SelectedBuff="{Binding PendingEffect, RelativeSource={RelativeSource TemplatedParent}}" />
-                                    <!--<ComboBox Margin="2" Grid.ColumnSpan="2" ItemsSource="{Binding Buffs.Values, RelativeSource={RelativeSource TemplatedParent}}" 
-                                        SelectedItem="{Binding PendingEffect, RelativeSource={RelativeSource TemplatedParent}}"
-                                        FocusVisualStyle="{x:Null}" TextSearch.TextPath="ShortDisplayText">
-                                        <ComboBox.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <VirtualizingStackPanel IsItemsHost="True" />
-                                            </ItemsPanelTemplate>
-                                        </ComboBox.ItemsPanel>
-                                        <ComboBox.ItemTemplate>
-                                            <DataTemplate DataType="{x:Type core:Buff}">
-                                                <DockPanel>
-                                                    <DockPanel.ToolTip>
-                                                        <ToolTip Content="{Binding}" ContentTemplate="{StaticResource BuffToolTipTemplate}" />
-                                                    </DockPanel.ToolTip>
-                                                    <views:BuffIcon DockPanel.Dock="Left" Buff="{Binding}" VerticalAlignment="Center" />
-                                                    <views:RarityIcon DockPanel.Dock="Left" Rarity="{Binding Rarity}" VerticalAlignment="Center" Margin="2,0" />
-                                                    <TextBlock Text="{Binding ShortDisplayText}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
-                                                </DockPanel>
-                                            </DataTemplate>
-                                        </ComboBox.ItemTemplate>
-                                        <ComboBox.ItemContainerStyle>
-                                            <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                                                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                                                <Setter Property="MaxWidth" Value="400" />
-                                            </Style>
-                                        </ComboBox.ItemContainerStyle>
-                                    </ComboBox>-->
                                     <TextBox Grid.Row="1" VerticalAlignment="Center" Margin="2">
                                         <TextBox.Text>
                                             <Binding Path="PendingEffectId" Converter="{StaticResource HexConverter}" RelativeSource="{RelativeSource TemplatedParent}" />

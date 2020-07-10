@@ -438,7 +438,7 @@
                                     <RowDefinition />
                                 </Grid.RowDefinitions>
                                 <TextBlock Text="Prefix:" Margin="2" VerticalAlignment="Center" TextAlignment="Right"/>
-                                <views:BuffSelector Grid.Column="1" Buffs="{x:Static core:Amalur.Buffs}" MinWidth="100" Margin="2" IsEnabled="False">
+                                <views:BuffSelector Grid.Column="1" Buffs="{x:Static core:Amalur.Buffs}" MinWidth="100" Margin="2" IsEnabled="False" Filter="Prefix">
                                     <views:BuffSelector.Style>
                                         <Style TargetType="{x:Type views:BuffSelector}">
                                             <Style.Triggers>
@@ -451,7 +451,7 @@
                                     </views:BuffSelector.Style>
                                 </views:BuffSelector>
                                 <TextBlock Grid.Row="1" Text="Suffix:" Margin="2" VerticalAlignment="Center" TextAlignment="Right"/>
-                                <views:BuffSelector Grid.Row="1" Grid.Column="1" Buffs="{x:Static core:Amalur.Buffs}" MinWidth="100" Margin="2" IsEnabled="False">
+                                <views:BuffSelector Grid.Row="1" Grid.Column="1" Buffs="{x:Static core:Amalur.Buffs}" MinWidth="100" Margin="2" IsEnabled="False" Filter="Suffix">
                                     <views:BuffSelector.Style>
                                         <Style TargetType="{x:Type views:BuffSelector}">
                                             <Style.Triggers>
@@ -466,7 +466,7 @@
                             </Grid>
                         </GroupBox>                        
                         <views:EffectsControl Margin="4,4,4,0" Header="{Binding SelectedItem}" Effects="{Binding SelectedItem.CoreEffects}" Buffs="{x:Static core:Amalur.Buffs}"
-                            AddEffectCommand="{Binding AddCoreEffectCommand}" DeleteEffectCommand="{Binding DeleteCoreEffectCommand}"
+                            AddEffectCommand="{Binding AddCoreEffectCommand}" DeleteEffectCommand="{Binding DeleteCoreEffectCommand}" BuffsFilter="Item"
                             UnsupportedFormat="{Binding SelectedItem.UnsupportedFormat}" Capacity="{x:Static core:CoreEffectMemory.MaxCoreEffects}">
                             <views:EffectsControl.HeaderTemplate>
                                 <DataTemplate DataType="{x:Type views:ItemModel}">
@@ -486,7 +486,7 @@
                             </views:EffectsControl.HeaderTemplate>
                         </views:EffectsControl>
                         <views:EffectsControl Margin="4,4,4,0" Header="{Binding SelectedItem}" Effects="{Binding SelectedItem.Effects}" Buffs="{x:Static core:Amalur.Buffs}"
-                            AddEffectCommand="{Binding AddEffectCommand}" DeleteEffectCommand="{Binding DeleteEffectCommand}">
+                            AddEffectCommand="{Binding AddEffectCommand}" DeleteEffectCommand="{Binding DeleteEffectCommand}" BuffsFilter="Player">
                             <views:EffectsControl.HeaderTemplate>
                                 <DataTemplate DataType="{x:Type views:ItemModel}">
                                     <TextBlock>

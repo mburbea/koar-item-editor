@@ -12,8 +12,10 @@ namespace KoAR.SaveEditor.Views
     {
         public static readonly DependencyProperty AddEffectCommandProperty = DependencyProperty.Register(nameof(EffectsControl.AddEffectCommand), typeof(ICommand), typeof(EffectsControl));
 
-        public static readonly DependencyProperty BuffsProperty = DependencyProperty.Register(nameof(EffectsControl.Buffs), typeof(IReadOnlyDictionary<uint, Buff>), typeof(EffectsControl),
+        public static readonly DependencyProperty BuffsProperty = DependencyProperty.Register(nameof(EffectsControl.Buffs), typeof(IReadOnlyList<Buff>), typeof(EffectsControl),
             new PropertyMetadata(EffectsControl.BuffsProperty_ValueChanged));
+
+        public static readonly DependencyProperty BuffsFilterProperty = DependencyProperty.Register(nameof(EffectsControl.BuffsFilter), typeof(BuffsFilter), typeof(EffectsControl));
 
         public static readonly DependencyProperty CapacityProperty = DependencyProperty.Register(nameof(EffectsControl.Capacity), typeof(int), typeof(EffectsControl),
             new PropertyMetadata(int.MaxValue));
@@ -42,10 +44,16 @@ namespace KoAR.SaveEditor.Views
             set => this.SetValue(EffectsControl.AddEffectCommandProperty, value);
         }
 
-        public IReadOnlyDictionary<uint, Buff>? Buffs
+        public IReadOnlyList<Buff>? Buffs
         {
-            get => (IReadOnlyDictionary<uint, Buff>?)this.GetValue(EffectsControl.BuffsProperty);
+            get => (IReadOnlyList<Buff>?)this.GetValue(EffectsControl.BuffsProperty);
             set => this.SetValue(EffectsControl.BuffsProperty, value);
+        }
+
+        public BuffsFilter BuffsFilter
+        {
+            get => (BuffsFilter)this.GetValue(EffectsControl.BuffsFilterProperty);
+            set => this.SetValue(EffectsControl.BuffsFilterProperty, value);
         }
 
         public int Capacity
@@ -113,7 +121,7 @@ namespace KoAR.SaveEditor.Views
 
         private static void BuffsProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((EffectsControl)d).PendingEffect = ((IReadOnlyDictionary<uint, Buff>?)e.NewValue)?.Values.FirstOrDefault();
+            ((EffectsControl)d).PendingEffect = ((IReadOnlyList<Buff>?)e.NewValue)?.FirstOrDefault();
         }
 
         private static void PendingEffectProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

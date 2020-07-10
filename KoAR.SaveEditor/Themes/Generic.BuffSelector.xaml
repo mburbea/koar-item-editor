@@ -16,11 +16,10 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type views:BuffSelector}">
-                    <ComboBox ItemsSource="{Binding Buffs.Values, RelativeSource={RelativeSource TemplatedParent}}"
+                    <ComboBox x:Name="PART_ComboBox" ItemsSource="{TemplateBinding CollectionView}"
                         SelectedItem="{Binding SelectedBuff, RelativeSource={RelativeSource TemplatedParent}}"
                         HorizontalContentAlignment="Stretch" FocusVisualStyle="{x:Null}" TextSearch.TextPath="ShortDisplayText"
-                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                        x:Name="PART_ComboBox">
+                        ScrollViewer.HorizontalScrollBarVisibility="Disabled" IsSynchronizedWithCurrentItem="False">
                         <ComboBox.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <VirtualizingStackPanel IsItemsHost="True" MaxWidth="{Binding ActualWidth, ElementName=PART_ComboBox, Converter={StaticResource MaxWidthConverter}, ConverterParameter=400}" />
@@ -30,7 +29,7 @@
                             <DataTemplate DataType="{x:Type core:Buff}">
                                 <DockPanel Margin="0,1" x:Name="Panel">
                                     <views:RarityIcon DockPanel.Dock="Left" VerticalAlignment="Center" x:Name="RarityIcon" />
-                                    <views:BuffIcon DockPanel.Dock="Left" VerticalAlignment="Center" Margin="2,0"  x:Name="BuffIcon" />
+                                    <views:BuffIcon DockPanel.Dock="Left" VerticalAlignment="Center" Margin="2,0" x:Name="BuffIcon" />
                                     <TextBlock TextTrimming="CharacterEllipsis" VerticalAlignment="Center" x:Name="DisplayText" />
                                 </DockPanel>
                                 <DataTemplate.Triggers>
