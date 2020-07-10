@@ -51,6 +51,10 @@
     <Window.DataContext>
         <Binding Source="{StaticResource ViewModel}" />
     </Window.DataContext>
+    <Window.InputBindings>
+        <KeyBinding Gesture="CTRL+O" Command="{Binding OpenFileCommand}" />
+        <KeyBinding Gesture="CTRL+S" Command="{Binding SaveCommand}" />
+    </Window.InputBindings>
     <Window.Style>
         <Style TargetType="{x:Type Window}" BasedOn="{StaticResource {x:Type Window}}">
             <Style.Triggers>
