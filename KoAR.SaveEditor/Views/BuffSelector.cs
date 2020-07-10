@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using KoAR.Core;
 
 namespace KoAR.SaveEditor.Views
@@ -19,33 +17,33 @@ namespace KoAR.SaveEditor.Views
         public static readonly DependencyProperty SelectedBuffProperty = DependencyProperty.Register(nameof(BuffSelector.SelectedBuff), typeof(Buff), typeof(BuffSelector),
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
-        public static DependencyProperty CollectionViewProperty;
+        public static DependencyProperty FilteredItemsProperty;
 
-        private static readonly DependencyPropertyKey _collectionViewPropertyKey = DependencyProperty.RegisterReadOnly(nameof(BuffSelector.CollectionView), typeof(ICollectionView), typeof(BuffSelector),
+        private static readonly DependencyPropertyKey _filteredItemsPropertyKey = DependencyProperty.RegisterReadOnly(nameof(BuffSelector.FilteredItems), typeof(IReadOnlyList<Buff>), typeof(BuffSelector),
             new PropertyMetadata());
 
         static BuffSelector()
         {
             FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(BuffSelector), new FrameworkPropertyMetadata(typeof(BuffSelector)));
-            CollectionViewProperty = _collectionViewPropertyKey.DependencyProperty;
+            BuffSelector.FilteredItemsProperty = BuffSelector._filteredItemsPropertyKey.DependencyProperty;
         }
 
-        public IReadOnlyDictionary<uint, Buff>? Buffs
+        public IReadOnlyList<Buff>? Buffs
         {
-            get => (IReadOnlyDictionary<uint, Buff>?)this.GetValue(BuffSelector.BuffsProperty);
+            get => (IReadOnlyList<Buff>?)this.GetValue(BuffSelector.BuffsProperty);
             set => this.SetValue(BuffSelector.BuffsProperty, value);
-        }
-
-        public ICollectionView? CollectionView
-        {
-            get => (ICollectionView?)this.GetValue(BuffSelector.CollectionViewProperty);
-            private set => this.SetValue(BuffSelector._collectionViewPropertyKey, value);
         }
 
         public BuffsFilter Filter
         {
             get => (BuffsFilter)this.GetValue(BuffSelector.FilterProperty);
             set => this.SetValue(BuffSelector.FilterProperty, value);
+        }
+
+        public IReadOnlyList<Buff>? FilteredItems
+        {
+            get => (IReadOnlyList<Buff>?)this.GetValue(BuffSelector.FilteredItemsProperty);
+            private set => this.SetValue(BuffSelector._filteredItemsPropertyKey, value);
         }
 
         public Buff? SelectedBuff
@@ -57,34 +55,18 @@ namespace KoAR.SaveEditor.Views
         private static void BuffsProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             BuffSelector selector = (BuffSelector)d;
-            selector.CollectionView = e.NewValue == null ? null : new ListCollectionView((IList)e.NewValue)
-            {
-                Filter = selector.IncludeItem,
-                SortDescriptions =
-                {
-                    new SortDescription(nameof(Buff.ShortDisplayText), ListSortDirection.Ascending)
-                }
-            };
+            selector.FilteredItems = e.NewValue == null ? null : ((IReadOnlyList<Buff>)e.NewValue).Where(buff => selector.Filter.Matches(buff)).ToList();
         }
 
         private static void FilterProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             BuffSelector selector = (BuffSelector)d;
-            if (selector.CollectionView != null)
+            if (selector.Buffs == null)
             {
-                selector.CollectionView.Filter = selector.IncludeItem;
+                return;
             }
-        }
-
-        private bool IncludeItem(object item)
-        {
-            return item is Buff buff && this.Filter switch
-            {
-                BuffsFilter.Prefix => (buff.BuffType & BuffTypes.Prefix) == BuffTypes.Prefix,
-                BuffsFilter.Suffix => (buff.BuffType & BuffTypes.Suffix) == BuffTypes.Suffix,
-                BuffsFilter.Item => buff.ApplyType == ApplyType.OnObject,
-                _ => true,
-            };
+            BuffsFilter filter = (BuffsFilter)e.NewValue;
+            selector.FilteredItems = selector.Buffs.Where(buff => filter.Matches(buff)).ToList();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -121,7 +122,8 @@ namespace KoAR.SaveEditor.Views
 
         private static void BuffsProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((EffectsControl)d).PendingEffect = ((IReadOnlyList<Buff>?)e.NewValue)?.FirstOrDefault();
+            //EffectsControl control = (EffectsControl)d;
+            //control.PendingEffect = ((IReadOnlyList<Buff>?)e.NewValue)?.FirstOrDefault(buff => control.BuffsFilter.Matches(buff));
         }
 
         private static void PendingEffectProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
