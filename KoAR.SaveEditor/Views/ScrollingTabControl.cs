@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 
 namespace KoAR.SaveEditor.Views
 {
@@ -13,6 +14,7 @@ namespace KoAR.SaveEditor.Views
         private RepeatButton? _leftButton;
         private RepeatButton? _rightButton;
         private ScrollViewer? _scrollViewer;
+        private Window? _window;
 
         static ScrollingTabControl() => FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(ScrollingTabControl), new FrameworkPropertyMetadata(typeof(ScrollingTabControl)));
 
@@ -46,6 +48,12 @@ namespace KoAR.SaveEditor.Views
                 this._scrollViewer.Loaded += this.ScrollViewer_Loaded;
                 this._scrollViewer.ScrollChanged += this.ScrollViewer_ScrollChanged;
             }
+            if (this._window != null)
+            {
+                return;
+            }
+            this._window = Window.GetWindow(this);
+            this._window.PreviewKeyDown += this.Window_PreviewKeyDown;
         }
 
         protected override void OnSelectionChanged(SelectionChangedEventArgs e)
@@ -189,6 +197,22 @@ namespace KoAR.SaveEditor.Views
             {
                 this._rightButton.Visibility = width == 0d ? Visibility.Collapsed : Visibility.Visible;
                 this._rightButton.IsEnabled = offset < width;
+            }
+        }
+
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (this.Items.IsEmpty || e.Key != Key.Tab || (Keyboard.Modifiers & ModifierKeys.Control) != ModifierKeys.Control)
+            {
+                return;
+            }
+            if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
+            {
+                this.SelectedIndex = (this.SelectedIndex == 0 ? this.Items.Count : this.SelectedIndex) - 1;
+            }
+            else
+            {
+                this.SelectedIndex = (this.SelectedIndex == this.Items.Count - 1 ? 0 : (this.SelectedIndex + 1));
             }
         }
     }

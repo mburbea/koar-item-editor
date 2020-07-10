@@ -80,6 +80,20 @@ namespace KoAR.SaveEditor.Views
             base.OnKeyDown(e);
         }
 
+        protected override void OnPreviewMouseWheel(MouseWheelEventArgs e)
+        {
+            if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+            {
+                Settings.Default.ZoomScale = Math.Sign(e.Delta) switch
+                {
+                    1 => Math.Min(MainWindow.MaxScaleFactor, Settings.Default.ZoomScale + 0.05),
+                    -1 => Math.Max(MainWindow.MinScaleFactor, Settings.Default.ZoomScale - 0.05),
+                    _ => Settings.Default.ZoomScale,
+                };
+            }
+            base.OnPreviewMouseWheel(e);
+        }
+
         private static void DisplayHelp(object sender, ExecutedRoutedEventArgs e)
         {
             TaskDialog.Show(new TaskDialogOptions
