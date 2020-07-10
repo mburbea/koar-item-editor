@@ -57,6 +57,19 @@ namespace KoAR.Core
             File.WriteAllBytes(path, Bytes);
         }
 
+        private static int FileLength
+        {
+            get => MemoryUtilities.Read<int>(Bytes, _fileLengthOffset);
+            set => MemoryUtilities.Write<int>(Bytes, _fileLengthOffset, value);
+        }
+
+        private static int SimtypeSizes
+        {
+            get => MemoryUtilities.Read<int>(Bytes, _simTypeOffset + 5);
+            set => MemoryUtilities.Write<int>(Bytes, _simTypeOffset + 5, value);
+        }
+
+
         public static Stash? Stash { get; private set; }
 
         public static bool IsFileOpen => Bytes.Length != 0;
@@ -182,11 +195,14 @@ namespace KoAR.Core
             {
                 CoreEffectContainer.UpdateDataLength(delta);
             }
-            delta = WriteItem(item.ItemIndex, item.DataLength, item.Serialize(forced));
-            if (delta != 0)
+            var delta2 = WriteItem(item.ItemIndex, item.DataLength, item.Serialize(forced));
+            if (delta2 != 0)
             {
-                ItemMemoryContainer.UpdateDataLength(delta);
+                ItemMemoryContainer.UpdateDataLength(delta2);
             }
+
+            FileLength += (delta + delta2);
+            SimtypeSizes += (delta + delta2);
 
         }
     }
