@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -13,8 +11,7 @@ namespace KoAR.SaveEditor.Views
     {
         public static readonly DependencyProperty AddEffectCommandProperty = DependencyProperty.Register(nameof(EffectsControl.AddEffectCommand), typeof(ICommand), typeof(EffectsControl));
 
-        public static readonly DependencyProperty BuffsProperty = DependencyProperty.Register(nameof(EffectsControl.Buffs), typeof(IReadOnlyList<Buff>), typeof(EffectsControl),
-            new PropertyMetadata(EffectsControl.BuffsProperty_ValueChanged));
+        public static readonly DependencyProperty BuffsProperty = DependencyProperty.Register(nameof(EffectsControl.Buffs), typeof(IReadOnlyList<Buff>), typeof(EffectsControl));
 
         public static readonly DependencyProperty BuffsFilterProperty = DependencyProperty.Register(nameof(EffectsControl.BuffsFilter), typeof(BuffsFilter), typeof(EffectsControl));
 
@@ -118,12 +115,6 @@ namespace KoAR.SaveEditor.Views
         {
             Clipboard.SetText(((Buff)((ListBox)sender).ItemContainerGenerator.ItemFromContainer((ListBoxItem)e.OriginalSource)).Id.ToString("X6"));
             e.Handled = true;
-        }
-
-        private static void BuffsProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            //EffectsControl control = (EffectsControl)d;
-            //control.PendingEffect = ((IReadOnlyList<Buff>?)e.NewValue)?.FirstOrDefault(buff => control.BuffsFilter.Matches(buff));
         }
 
         private static void PendingEffectProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
