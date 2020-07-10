@@ -12,7 +12,7 @@
     <DataTemplate x:Key="BuffToolTipTemplate" DataType="{x:Type core:Buff}">
         <views:BuffControl Buff="{Binding}" IsExpanded="True" />
     </DataTemplate>
-    <Style TargetType="{x:Type views:EffectsControl}">
+    <Style TargetType="{x:Type views:BuffCollectionManager}">
         <Style.Resources>
             <constructs:PlusOneConverter x:Key="PlusOneConverter" />
             <constructs:EqualityConverter x:Key="EqualityConverter" />
@@ -62,7 +62,7 @@
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type views:EffectsControl}">
+                <ControlTemplate TargetType="{x:Type views:BuffCollectionManager}">
                     <GroupBox Header="{TemplateBinding Header}" HeaderTemplate="{TemplateBinding HeaderTemplate}" FocusVisualStyle="{x:Null}">
                         <Grid>
                             <Grid.RowDefinitions>
@@ -70,15 +70,15 @@
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             <ListBox x:Name="PART_ListBox" Grid.ColumnSpan="2" BorderBrush="LightGray" ScrollViewer.HorizontalScrollBarVisibility="Disabled" FocusVisualStyle="{x:Null}"
-                                ItemsSource="{TemplateBinding Effects}" AlternationCount="{Binding Effects.Count, RelativeSource={RelativeSource TemplatedParent}}" MaxHeight="250"
+                                ItemsSource="{TemplateBinding Collection}" AlternationCount="{Binding Collection.Count, RelativeSource={RelativeSource TemplatedParent}}" MaxHeight="250"
                                 VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling" VirtualizingPanel.ScrollUnit="Pixel">
                                 <ListBox.Style>
                                     <Style TargetType="{x:Type ListBox}">
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Effects, RelativeSource={RelativeSource TemplatedParent}}" Value="{x:Null}">
+                                            <DataTrigger Binding="{Binding Collection, RelativeSource={RelativeSource TemplatedParent}}" Value="{x:Null}">
                                                 <Setter Property="Visibility" Value="Collapsed" />
                                             </DataTrigger>
-                                            <DataTrigger Binding="{Binding Effects.Count, RelativeSource={RelativeSource TemplatedParent}}" Value="0">
+                                            <DataTrigger Binding="{Binding Collection.Count, RelativeSource={RelativeSource TemplatedParent}}" Value="0">
                                                 <Setter Property="Visibility" Value="Collapsed" />
                                             </DataTrigger>
                                         </Style.Triggers>
@@ -183,8 +183,8 @@
                                             <Button Grid.Column="1" Style="{StaticResource CommandButtonStyle}" Tag="{StaticResource Copy}" CommandTarget="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}"
                                                 Command="Copy" ToolTip="Copy" />
                                             <Button Grid.Column="2" Style="{StaticResource CommandButtonStyle}" Tag="{StaticResource Delete}" CommandParameter="{Binding}" 
-                                                IsEnabled="{Binding UnsupportedFormat, RelativeSource={RelativeSource AncestorType={x:Type views:EffectsControl}}, Converter={StaticResource NegatedBooleanConverter}}"
-                                                Command="{Binding DeleteEffectCommand, RelativeSource={RelativeSource AncestorType={x:Type views:EffectsControl}}}" ToolTip="Delete" />
+                                                IsEnabled="{Binding UnsupportedFormat, RelativeSource={RelativeSource AncestorType={x:Type views:BuffCollectionManager}}, Converter={StaticResource NegatedBooleanConverter}}"
+                                                Command="{Binding DeleteBuffCommand, RelativeSource={RelativeSource AncestorType={x:Type views:BuffCollectionManager}}}" ToolTip="Delete" />
                                         </Grid>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
@@ -193,13 +193,13 @@
                                 <GroupBox.Style>
                                     <Style TargetType="{x:Type GroupBox}">
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Effects, RelativeSource={RelativeSource TemplatedParent}}" Value="{x:Null}">
+                                            <DataTrigger Binding="{Binding Collection, RelativeSource={RelativeSource TemplatedParent}}" Value="{x:Null}">
                                                 <Setter Property="Visibility" Value="Collapsed" />
                                             </DataTrigger>
                                             <DataTrigger Binding="{Binding UnsupportedFormat, RelativeSource={RelativeSource TemplatedParent}}" Value="True">
                                                 <Setter Property="Visibility" Value="Collapsed" />
                                             </DataTrigger>
-                                            <DataTrigger Binding="{Binding Effects.Count, RelativeSource={RelativeSource TemplatedParent}}" Value="0">
+                                            <DataTrigger Binding="{Binding Collection.Count, RelativeSource={RelativeSource TemplatedParent}}" Value="0">
                                                 <Setter Property="Margin" Value="0" />
                                                 <Setter Property="Grid.Row" Value="0" />
                                                 <Setter Property="Grid.RowSpan" Value="2" />
@@ -207,7 +207,7 @@
                                             <DataTrigger Value="True">
                                                 <DataTrigger.Binding>
                                                     <MultiBinding Converter="{StaticResource EqualityConverter}">
-                                                        <Binding Path="Effects.Count" RelativeSource="{RelativeSource TemplatedParent}"/>
+                                                        <Binding Path="Collection.Count" RelativeSource="{RelativeSource TemplatedParent}"/>
                                                         <Binding Path="Capacity" RelativeSource="{RelativeSource TemplatedParent}"/>
                                                     </MultiBinding>
                                                 </DataTrigger.Binding>
@@ -228,14 +228,14 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <views:BuffSelector Margin="2" Grid.ColumnSpan="2" Buffs="{TemplateBinding Buffs}" Filter="{TemplateBinding BuffsFilter}"
-                                        SelectedBuff="{Binding PendingEffect, RelativeSource={RelativeSource TemplatedParent}}" />
+                                        SelectedBuff="{Binding PendingBuff, RelativeSource={RelativeSource TemplatedParent}}" />
                                     <TextBox Grid.Row="1" VerticalAlignment="Center" Margin="2">
                                         <TextBox.Text>
-                                            <Binding Path="PendingEffectId" Converter="{StaticResource HexConverter}" RelativeSource="{RelativeSource TemplatedParent}" />
+                                            <Binding Path="PendingBuffId" Converter="{StaticResource HexConverter}" RelativeSource="{RelativeSource TemplatedParent}" />
                                         </TextBox.Text>
                                     </TextBox>
-                                    <Button Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="2" Command="{TemplateBinding AddEffectCommand}" 
-                                        CommandParameter="{TemplateBinding PendingEffectId}" Content="Add" FocusVisualStyle="{x:Null}" />
+                                    <Button Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="2" Command="{TemplateBinding AddBuffCommand}" 
+                                        CommandParameter="{TemplateBinding PendingBuffId}" Content="Add" FocusVisualStyle="{x:Null}" />
                                 </Grid>
                             </GroupBox>
                         </Grid>

@@ -12,23 +12,21 @@ namespace KoAR.SaveEditor.Views
     /// </summary>
     public sealed class ItemModel : NotifierBase, IDisposable
     {
-        private readonly NotifyingCollection<Buff> _coreEffects;
-        private readonly NotifyingCollection<Buff> _effects;
+        private readonly NotifyingCollection<Buff> _itemBuffs;
+        private readonly NotifyingCollection<Buff> _playerBuffs;
 
         public ItemModel(ItemMemoryInfo item)
         {
             this.Item = item;
-            this._coreEffects = new NotifyingCollection<Buff>(item.CoreEffects.List);
-            this._coreEffects.CollectionChanged += this.EffectsCollection_CollectionChanged;
-            this._effects = new NotifyingCollection<Buff>(item.Effects);
-            this._effects.CollectionChanged += this.EffectsCollection_CollectionChanged;
+            this._itemBuffs = new NotifyingCollection<Buff>(item.ItemBuffs.List);
+            this._itemBuffs.CollectionChanged += this.Buffs_CollectionChanged;
+            this._playerBuffs = new NotifyingCollection<Buff>(item.PlayerBuffs);
+            this._playerBuffs.CollectionChanged += this.Buffs_CollectionChanged;
         }
 
         public int AffixCount => (this.Prefix == null ? 0 : 1) + (this.Suffix == null ? 0 : 1);
 
         public EquipmentCategory Category => this.Item.TypeDefinition.Category;
-
-        public IList<Buff> CoreEffects => this._coreEffects;
 
         public float CurrentDurability
         {
@@ -42,8 +40,6 @@ namespace KoAR.SaveEditor.Views
             false when this.TypeDefinition.AffixableName && (this.Prefix ?? this.Suffix) != null => $"{this.Prefix?.Modifier} {this.TypeDefinition.CategoryDisplayName} {this.Suffix?.Modifier}".Trim(),
             false => this.TypeDefinition.Name,
         };
-
-        public IList<Buff> Effects => this._effects;
 
         public bool HasCustomName => this.Item.HasCustomName;
 
@@ -59,8 +55,10 @@ namespace KoAR.SaveEditor.Views
             set => this.SetItemValue(value, this.Item.IsUnstashable, value => this.Item.IsUnstashable = value);
         }
 
-        public uint ItemId => this.Item.ItemId;
+        public IList<Buff> ItemBuffs => this._itemBuffs;
 
+        public uint ItemId => this.Item.ItemId;
+        
         public int ItemIndex => this.Item.ItemIndex;
 
         public string ItemName
@@ -88,12 +86,14 @@ namespace KoAR.SaveEditor.Views
             set => this.SetItemValue(value, this.Item.MaxDurability, value => this.Item.MaxDurability = value);
         }
 
+        public IList<Buff> PlayerBuffs => this._playerBuffs;
+
         public Buff? Prefix
         {
-            get => this.Item.CoreEffects.Prefix;
+            get => this.Item.ItemBuffs.Prefix;
             set
             {
-                if (this.SetItemValue(value, this.Item.CoreEffects.Prefix, value => this.Item.CoreEffects.Prefix = value))
+                if (this.SetItemValue(value, this.Item.ItemBuffs.Prefix, value => this.Item.ItemBuffs.Prefix = value))
                 {
                     this.OnPropertyChanged(nameof(this.AffixCount));
                 }
@@ -104,10 +104,10 @@ namespace KoAR.SaveEditor.Views
 
         public Buff? Suffix
         {
-            get => this.Item.CoreEffects.Suffix;
+            get => this.Item.ItemBuffs.Suffix;
             set
             {
-                if (this.SetItemValue(value, this.Item.CoreEffects.Suffix, value => this.Item.CoreEffects.Suffix = value))
+                if (this.SetItemValue(value, this.Item.ItemBuffs.Suffix, value => this.Item.ItemBuffs.Suffix = value))
                 {
                     this.OnPropertyChanged(nameof(this.AffixCount));
                 }
@@ -121,22 +121,22 @@ namespace KoAR.SaveEditor.Views
             {
                 this.Item.TypeDefinition = value;
                 this.OnPropertyChanged(string.Empty);
-                this._effects.OnReset();
-                this._coreEffects.OnReset();
+                this._playerBuffs.OnReset();
+                this._itemBuffs.OnReset();
             }
         }
 
-        public bool UnsupportedFormat => this.Item.CoreEffects.UnsupportedFormat;
+        public bool UnsupportedFormat => this.Item.ItemBuffs.UnsupportedFormat;
 
         internal ItemMemoryInfo Item { get; }
 
         public void Dispose()
         {
-            this._effects.CollectionChanged -= this.EffectsCollection_CollectionChanged;
-            this._coreEffects.CollectionChanged -= this.EffectsCollection_CollectionChanged;
+            this._playerBuffs.CollectionChanged -= this.Buffs_CollectionChanged;
+            this._itemBuffs.CollectionChanged -= this.Buffs_CollectionChanged;
         }
 
-        private void EffectsCollection_CollectionChanged(object sender, EventArgs e) => this.OnPropertyChanged(nameof(this.Rarity));
+        private void Buffs_CollectionChanged(object sender, EventArgs e) => this.OnPropertyChanged(nameof(this.Rarity));
 
         private bool SetItemValue<T>(T value, T currentValue, Action<T> setValue, [CallerMemberName] string propertyName = "")
         {

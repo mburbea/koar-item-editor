@@ -96,7 +96,7 @@ namespace ItemTesting
             Amalur.ReadFile(path);
             foreach(var g in Amalur.Items)
             {
-                g.Effects.Clear();
+                g.PlayerBuffs.Clear();
                 Amalur.WriteEquipmentBytes(g, forced:true);
             }
             Amalur.SaveFile(path);

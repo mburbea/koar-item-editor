@@ -305,10 +305,10 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="Item Buffs" Width="Auto" views:ItemsView.PropertyName="CoreEffects.Count">
+                                <GridViewColumn Header="Item Buffs" Width="Auto" views:ItemsView.PropertyName="ItemBuffs.Count">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate DataType="{x:Type views:ItemModel}">
-                                            <ItemsControl ItemsSource="{Binding CoreEffects}" MinWidth="88">
+                                            <ItemsControl ItemsSource="{Binding ItemBuffs}" MinWidth="88">
                                                 <ItemsControl.ItemsPanel>
                                                     <ItemsPanelTemplate>
                                                         <StackPanel Orientation="Horizontal" />
@@ -328,10 +328,10 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="Player Buffs" Width="Auto" views:ItemsView.PropertyName="Effects.Count">
+                                <GridViewColumn Header="Player Buffs" Width="Auto" views:ItemsView.PropertyName="PlayerBuffs.Count">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate DataType="{x:Type views:ItemModel}">
-                                            <ItemsControl ItemsSource="{Binding Effects}" MinWidth="88">
+                                            <ItemsControl ItemsSource="{Binding PlayerBuffs}" MinWidth="88">
                                                 <ItemsControl.ItemsPanel>
                                                     <ItemsPanelTemplate>
                                                         <StackPanel Orientation="Horizontal" />

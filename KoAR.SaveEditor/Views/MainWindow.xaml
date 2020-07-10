@@ -405,7 +405,7 @@
                 <ScrollViewer Grid.Row="1" FocusVisualStyle="{x:Null}" Margin="0,0,4,4" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                     <StackPanel Grid.IsSharedSizeScope="True">
                         <StackPanel.Resources>
-                            <Style TargetType="{x:Type views:EffectsControl}">
+                            <Style TargetType="{x:Type views:BuffCollectionManager}">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding SelectedItem}" Value="{x:Null}">
                                         <Setter Property="IsEnabled" Value="False" />
@@ -450,11 +450,12 @@
                                 <views:BuffSelector Grid.Row="1" Grid.Column="1" Buffs="{x:Static core:Amalur.Buffs}" 
                                     MinWidth="100" Margin="2" IsEnabled="False" Filter="Suffix" SelectedBuff="{Binding SelectedItem.Suffix}" />
                             </Grid>
-                        </GroupBox>                        
-                        <views:EffectsControl Margin="4,4,4,0" Header="{Binding SelectedItem}" Buffs="{x:Static core:Amalur.Buffs}"
-                            AddEffectCommand="{Binding AddCoreEffectCommand}" DeleteEffectCommand="{Binding DeleteCoreEffectCommand}"
-                            BuffsFilter="Item" Effects="{Binding SelectedItem.CoreEffects}" UnsupportedFormat="{Binding SelectedItem.UnsupportedFormat}" Capacity="{x:Static core:CoreEffectMemory.MaxCoreEffects}">
-                            <views:EffectsControl.HeaderTemplate>
+                        </GroupBox>
+                        <views:BuffCollectionManager Margin="4,4,4,0" Header="{Binding SelectedItem}" BuffsFilter="Item"
+                            Buffs="{x:Static core:Amalur.Buffs}" Collection="{Binding SelectedItem.ItemBuffs}" 
+                            AddBuffCommand="{Binding AddItemBuffCommand}" DeleteBuffCommand="{Binding DeleteItemBuffCommand}"
+                            UnsupportedFormat="{Binding SelectedItem.UnsupportedFormat}" Capacity="{x:Static core:ItemBuffMemory.MaxItemBuffs}">
+                            <views:BuffCollectionManager.HeaderTemplate>
                                 <DataTemplate DataType="{x:Type views:ItemModel}">
                                     <TextBlock>
                                         <TextBlock.Style>
@@ -464,16 +465,17 @@
                                                         <Setter Property="Text" Value="Item Buffs:" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
-                                                <Setter Property="Text" Value="{Binding CoreEffects.Count, Mode=OneWay, StringFormat='Item Buffs: ({0})'}" />
+                                                <Setter Property="Text" Value="{Binding ItemBuffs.Count, Mode=OneWay, StringFormat='Item Buffs: ({0})'}" />
                                             </Style>
                                         </TextBlock.Style>
                                     </TextBlock>
                                 </DataTemplate>
-                            </views:EffectsControl.HeaderTemplate>
-                        </views:EffectsControl>
-                        <views:EffectsControl Margin="4,4,4,0" Header="{Binding SelectedItem}" Effects="{Binding SelectedItem.Effects}"
-                            BuffsFilter="Player" Buffs="{x:Static core:Amalur.Buffs}" AddEffectCommand="{Binding AddEffectCommand}" DeleteEffectCommand="{Binding DeleteEffectCommand}" >
-                            <views:EffectsControl.HeaderTemplate>
+                            </views:BuffCollectionManager.HeaderTemplate>
+                        </views:BuffCollectionManager>
+                        <views:BuffCollectionManager Margin="4,4,4,0" Header="{Binding SelectedItem}" BuffsFilter="Player" 
+                            Buffs="{x:Static core:Amalur.Buffs}" Collection="{Binding SelectedItem.PlayerBuffs}"
+                            AddBuffCommand="{Binding AddPlayerBuffCommand}" DeleteBuffCommand="{Binding DeletePlayerBuffCommand}">
+                            <views:BuffCollectionManager.HeaderTemplate>
                                 <DataTemplate DataType="{x:Type views:ItemModel}">
                                     <TextBlock>
                                         <TextBlock.Style>
@@ -483,13 +485,13 @@
                                                         <Setter Property="Text" Value="Player Buffs:" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
-                                                <Setter Property="Text" Value="{Binding Effects.Count, Mode=OneWay, StringFormat='Player Buffs: ({0})'}" />
+                                                <Setter Property="Text" Value="{Binding PlayerBuffs.Count, Mode=OneWay, StringFormat='Player Buffs: ({0})'}" />
                                             </Style>
                                         </TextBlock.Style>
                                     </TextBlock>
                                 </DataTemplate>
-                            </views:EffectsControl.HeaderTemplate>
-                        </views:EffectsControl>
+                            </views:BuffCollectionManager.HeaderTemplate>
+                        </views:BuffCollectionManager>
                     </StackPanel>
                 </ScrollViewer>
             </Grid>

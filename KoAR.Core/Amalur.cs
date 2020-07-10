@@ -177,9 +177,9 @@ namespace KoAR.Core
                 {
                     foreach (var item in Items)
                     {
-                        if (item.CoreEffects.ItemIndex > itemIndex)
+                        if (item.ItemBuffs.ItemIndex > itemIndex)
                         {
-                            item.CoreEffects.ItemIndex += delta;
+                            item.ItemBuffs.ItemIndex += delta;
                         }
                         if (item.ItemIndex > itemIndex)
                         {
@@ -190,7 +190,7 @@ namespace KoAR.Core
                 return delta;
             }
 
-            var delta = WriteItem(item.CoreEffects.ItemIndex, item.CoreEffects.DataLength, item.CoreEffects.Serialize(forced));
+            var delta = WriteItem(item.ItemBuffs.ItemIndex, item.ItemBuffs.DataLength, item.ItemBuffs.Serialize(forced));
             if (delta != 0)
             {
                 CoreEffectContainer.UpdateDataLength(delta);
