@@ -13,12 +13,12 @@ namespace KoAR.SaveEditor.Views
     public sealed class MainViewModel : NotifierBase
     {
         private readonly NotifyingCollection<ItemModel> _items;
+        private int _armorTypeFilter;
         private EquipmentCategory? _categoryFilter;
         private int _elementFilter;
         private string _fileName = string.Empty;
         private IReadOnlyList<ItemModel> _filteredItems;
         private string _itemNameFilter = string.Empty;
-        private int _armorTypeFilter;
         private int _rarityFilter;
         private ItemModel? _selectedItem;
         private bool _unsavedChanges;
@@ -29,17 +29,17 @@ namespace KoAR.SaveEditor.Views
             this.OpenFileCommand = new DelegateCommand(this.OpenFile);
             this.ResetFiltersCommand = new DelegateCommand(this.ResetFilters);
             this.ChangeDefinitionCommand = new DelegateCommand<ItemModel>(this.ChangeDefinition);
-            this.AddCoreEffectCommand = new DelegateCommand<uint>(this.AddCoreEffect, this.CanAddCoreEffect);
-            this.AddEffectCommand = new DelegateCommand<uint>(this.AddEffect, this.CanAddEffect);
-            this.DeleteCoreEffectCommand = new DelegateCommand<Buff>(this.DeleteCoreEffect, this.CanDeleteCoreEffect);
-            this.DeleteEffectCommand = new DelegateCommand<Buff>(this.DeleteEffect, this.CanDeleteEffect);
+            this.AddItemBuffCommand = new DelegateCommand<uint>(this.AddItemBuff, this.CanAddItemBuff);
+            this.AddPlayerBuffCommand = new DelegateCommand<uint>(this.AddPlayerBuff, this.CanAddPlayerBuff);
+            this.DeleteItemBuffCommand = new DelegateCommand<Buff>(this.DeleteItemBuff, this.CanDeleteItemBuff);
+            this.DeletePlayerBuffCommand = new DelegateCommand<Buff>(this.DeletePlayerBuff, this.CanDeletePlayerBuff);
             this.SaveCommand = new DelegateCommand(this.Save, () => this._unsavedChanges);
             this.AddStashItemCommand = new DelegateCommand(this.AddStashItem, () => Amalur.IsFileOpen && Amalur.Stash != null);
         }
 
-        public DelegateCommand<uint> AddCoreEffectCommand { get; }
+        public DelegateCommand<uint> AddItemBuffCommand { get; }
 
-        public DelegateCommand<uint> AddEffectCommand { get; }
+        public DelegateCommand<uint> AddPlayerBuffCommand { get; }
 
         public DelegateCommand AddStashItemCommand { get; }
 
@@ -93,9 +93,9 @@ namespace KoAR.SaveEditor.Views
 
         public DelegateCommand<ItemModel> ChangeDefinitionCommand { get; }
 
-        public DelegateCommand<Buff> DeleteCoreEffectCommand { get; }
+        public DelegateCommand<Buff> DeleteItemBuffCommand { get; }
 
-        public DelegateCommand<Buff> DeleteEffectCommand { get; }
+        public DelegateCommand<Buff> DeletePlayerBuffCommand { get; }
 
         public Element ElementFilter
         {
@@ -221,9 +221,9 @@ namespace KoAR.SaveEditor.Views
             MessageBox.Show($"Save successful! Original save backed up as {this._fileName}.bak.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private void AddCoreEffect(uint code) => this.SelectedItem?.CoreEffects.Add(Amalur.GetBuff(code));
+        private void AddItemBuff(uint buffId) => this.SelectedItem?.ItemBuffs.Add(Amalur.GetBuff(buffId));
 
-        private void AddEffect(uint code) => this.SelectedItem?.Effects.Add(Amalur.GetBuff(code));
+        private void AddPlayerBuff(uint buffId) => this.SelectedItem?.PlayerBuffs.Add(Amalur.GetBuff(buffId));
 
         private void AddStashItem()
         {
@@ -245,13 +245,13 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        private bool CanAddCoreEffect(uint code) => this.SelectedItem != null && code != 0u;
+        private bool CanAddItemBuff(uint buffId) => this.SelectedItem != null && buffId != 0u;
 
-        private bool CanAddEffect(uint code) => this.SelectedItem != null && code != 0u;
+        private bool CanAddPlayerBuff(uint buffId) => this.SelectedItem != null && buffId != 0u;
 
-        private bool CanDeleteCoreEffect(Buff _) => this.SelectedItem != null;
+        private bool CanDeleteItemBuff(Buff buff) => buff != null && this.SelectedItem != null;
 
-        private bool CanDeleteEffect(Buff _) => this.SelectedItem != null;
+        private bool CanDeletePlayerBuff(Buff buff) => buff != null && this.SelectedItem != null;
 
         private void ChangeDefinition(ItemModel model)
         {
@@ -272,9 +272,9 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        private void DeleteCoreEffect(Buff buff) => this.SelectedItem?.CoreEffects.Remove(buff);
+        private void DeleteItemBuff(Buff buff) => this.SelectedItem?.ItemBuffs.Remove(buff);
 
-        private void DeleteEffect(Buff buff) => this.SelectedItem?.Effects.Remove(buff);
+        private void DeletePlayerBuff(Buff buff) => this.SelectedItem?.PlayerBuffs.Remove(buff);
 
         private bool? GetAppliesToAllItems(Func<ItemModel, bool> projection)
         {
