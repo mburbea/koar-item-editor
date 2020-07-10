@@ -121,10 +121,7 @@ namespace KoAR.SaveEditor.Views
             this._listView.AddHandler(ButtonBase.ClickEvent, new RoutedEventHandler(this.GridViewColumn_Click));
         }
 
-        private void CollectionView_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            this.Dispatcher.InvokeAsync(() => ListViewAutoSize.AutoSizeColumns(this._listView));
-        }
+        private void CollectionView_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) => this.Dispatcher.InvokeAsync(this.OnViewChanged);
 
         private void GridViewColumn_Click(object sender, RoutedEventArgs e)
         {
@@ -147,6 +144,20 @@ namespace KoAR.SaveEditor.Views
             );
         }
 
+        private void OnViewChanged()
+        {
+            if (this._listView == null)
+            {
+                return;
+            }
+            ListViewAutoSize.AutoSizeColumns(this._listView);
+            ListCollectionView collectionView = (ListCollectionView)this._listView.ItemsSource;
+            if (!collectionView.IsEmpty)
+            {
+                this._listView.ScrollIntoView(collectionView.GetItemAt(0));
+            }
+        }
+
         private static void CollectionView_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             ItemsView itemsView = (ItemsView)d;
@@ -157,7 +168,7 @@ namespace KoAR.SaveEditor.Views
             if (e.NewValue != null)
             {
                 CollectionChangedEventManager.AddHandler((ListCollectionView)e.NewValue, itemsView.CollectionView_CollectionChanged);
-                itemsView.Dispatcher.InvokeAsync(() => ListViewAutoSize.AutoSizeColumns(itemsView._listView));
+                itemsView.Dispatcher.InvokeAsync(itemsView.OnViewChanged);
             }
         }
 

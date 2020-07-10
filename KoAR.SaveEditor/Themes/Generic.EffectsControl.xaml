@@ -1,7 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
-    xmlns:s="clr-namespace:System;assembly=mscorlib"
     xmlns:core="clr-namespace:KoAR.Core;assembly=KoAR.Core"
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs"
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views">
@@ -10,6 +9,9 @@
     </ResourceDictionary.MergedDictionaries>
     <BitmapImage x:Key="Copy" UriSource="/KoAR.SaveEditor;component/Resources/Copy.png" po:Freeze="True" />
     <BitmapImage x:Key="Delete" UriSource="/KoAR.SaveEditor;component/Resources/Delete.png" po:Freeze="True" />
+    <DataTemplate x:Key="BuffToolTipTemplate" DataType="{x:Type core:Buff}">
+        <views:BuffControl Buff="{Binding}" IsExpanded="True" />
+    </DataTemplate>
     <Style TargetType="{x:Type views:EffectsControl}">
         <Style.Resources>
             <constructs:PlusOneConverter x:Key="PlusOneConverter" />
@@ -170,57 +172,24 @@
                                     </Style>
                                 </ListBox.ItemContainerStyle>
                                 <ListBox.ItemTemplate>
-                                    <DataTemplate DataType="{x:Type s:UInt32}">
+                                    <DataTemplate DataType="{x:Type core:Buff}">
                                         <Grid>
-                                            <Grid.Tag>
-                                                <MultiBinding Converter="{x:Static views:EffectsControl.EffectDisplayTextConverter}" Mode="OneTime">
-                                                    <Binding />
-                                                    <Binding Path="EffectTranslations" RelativeSource="{RelativeSource AncestorType={x:Type views:EffectsControl}}" />
-                                                    <Binding Path="Buffs" RelativeSource="{RelativeSource AncestorType={x:Type views:EffectsControl}}" />
-                                                </MultiBinding>
-                                            </Grid.Tag>
-                                            <Grid.ToolTip>
-                                                <ToolTip Tag="{Binding}" Content="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
-                                                    <ToolTip.ContentTemplate>
-                                                        <DataTemplate DataType="{x:Type s:String}">
-                                                            <TextBlock>
-                                                                <TextBlock.Text>
-                                                                    <MultiBinding StringFormat="{}{0} ({1:X6})" Mode="OneTime">
-                                                                        <Binding />
-                                                                        <Binding Path="Tag" RelativeSource="{RelativeSource AncestorType={x:Type ToolTip}}" />
-                                                                    </MultiBinding>
-                                                                </TextBlock.Text>
-                                                            </TextBlock>
-                                                        </DataTemplate>
-                                                    </ToolTip.ContentTemplate>
-                                                </ToolTip>
-                                            </Grid.ToolTip>
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto" />
                                                 <ColumnDefinition />
                                                 <ColumnDefinition Width="Auto" />
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
-                                            <TextBlock Grid.Column="0" VerticalAlignment="Center" Margin="2" 
-                                                Text="{Binding (ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}, Converter={StaticResource PlusOneConverter}, StringFormat='{}{0}:'}" />
-                                            <TextBlock Grid.Column="1" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" Margin="2">
-                                                <TextBlock.Text>
-                                                    <MultiBinding StringFormat="{}{0} ({1:X6})" Mode="OneTime">
-                                                        <Binding Path="Tag" RelativeSource="{RelativeSource AncestorType={x:Type Grid}}" />
-                                                        <Binding />
-                                                    </MultiBinding>
-                                                </TextBlock.Text>
-                                            </TextBlock>
-                                            <Button Grid.Column="2" Style="{StaticResource CommandButtonStyle}" Tag="{StaticResource Copy}" CommandTarget="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}"
+                                            <views:BuffControl Buff="{Binding}" />
+                                            <Button Grid.Column="1" Style="{StaticResource CommandButtonStyle}" Tag="{StaticResource Copy}" CommandTarget="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}"
                                                 Command="Copy" ToolTip="Copy" />
-                                            <Button Grid.Column="3" Style="{StaticResource CommandButtonStyle}" Tag="{StaticResource Delete}" CommandParameter="{Binding}" 
+                                            <Button Grid.Column="2" Style="{StaticResource CommandButtonStyle}" Tag="{StaticResource Delete}" CommandParameter="{Binding}" 
                                                 IsEnabled="{Binding UnsupportedFormat, RelativeSource={RelativeSource AncestorType={x:Type views:EffectsControl}}, Converter={StaticResource NegatedBooleanConverter}}"
                                                 Command="{Binding DeleteEffectCommand, RelativeSource={RelativeSource AncestorType={x:Type views:EffectsControl}}}" ToolTip="Delete" />
                                         </Grid>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                             </ListBox>
-                            <GroupBox Header="Add Effect:" BorderThickness="1" BorderBrush="LightGray" FocusVisualStyle="{x:Null}">
+                            <GroupBox Header="Add Buff:" BorderThickness="1" BorderBrush="LightGray" FocusVisualStyle="{x:Null}">
                                 <GroupBox.Style>
                                     <Style TargetType="{x:Type GroupBox}">
                                         <Style.Triggers>
@@ -258,32 +227,15 @@
                                         <ColumnDefinition />
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
-                                    <ComboBox Margin="2" Grid.ColumnSpan="2" ItemsSource="{TemplateBinding EffectDefinitions}" SelectedItem="{Binding PendingEffect, RelativeSource={RelativeSource TemplatedParent}}"
-                                        FocusVisualStyle="{x:Null}">
-                                        <ComboBox.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <VirtualizingStackPanel IsItemsHost="True" />
-                                            </ItemsPanelTemplate>
-                                        </ComboBox.ItemsPanel>
-                                        <ComboBox.ItemTemplate>
-                                            <DataTemplate DataType="{x:Type core:IEffectInfo}">
-                                                <TextBlock Text="{Binding DisplayText}" ToolTip="{Binding DisplayText}" TextTrimming="CharacterEllipsis" />
-                                            </DataTemplate>
-                                        </ComboBox.ItemTemplate>
-                                        <ComboBox.ItemContainerStyle>
-                                            <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                                                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                                                <Setter Property="MaxWidth" Value="400" />
-                                            </Style>
-                                        </ComboBox.ItemContainerStyle>
-                                    </ComboBox>
+                                    <views:BuffSelector Margin="2" Grid.ColumnSpan="2" Buffs="{TemplateBinding Buffs}" Filter="{TemplateBinding BuffsFilter}"
+                                        SelectedBuff="{Binding PendingEffect, RelativeSource={RelativeSource TemplatedParent}}" />
                                     <TextBox Grid.Row="1" VerticalAlignment="Center" Margin="2">
                                         <TextBox.Text>
-                                            <Binding Path="PendingEffectCode" Converter="{StaticResource HexConverter}" RelativeSource="{RelativeSource TemplatedParent}" />
+                                            <Binding Path="PendingEffectId" Converter="{StaticResource HexConverter}" RelativeSource="{RelativeSource TemplatedParent}" />
                                         </TextBox.Text>
                                     </TextBox>
                                     <Button Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="2" Command="{TemplateBinding AddEffectCommand}" 
-                                        CommandParameter="{TemplateBinding PendingEffectCode}" Content="Add" FocusVisualStyle="{x:Null}" />
+                                        CommandParameter="{TemplateBinding PendingEffectId}" Content="Add" FocusVisualStyle="{x:Null}" />
                                 </Grid>
                             </GroupBox>
                         </Grid>

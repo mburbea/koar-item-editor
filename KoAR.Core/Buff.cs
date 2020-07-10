@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text.Json.Serialization;
 
 namespace KoAR.Core
@@ -10,15 +11,23 @@ namespace KoAR.Core
         public string Name { get; set; } = string.Empty;
         public string? Flavor { get; set; }
         public Rarity Rarity { get; set; }
-        [JsonPropertyName("ap")]
+        [JsonPropertyName("buff_type")]
         public BuffTypes BuffType { get; set; }
+        [JsonPropertyName("apply_type")]
+        public ApplyType ApplyType { get; set; }
         public BuffDescription[] Desc { get; set; } = Array.Empty<BuffDescription>();
+
+        public string TitleText => (((BuffTypes.TransientOrAffix & BuffType) == BuffType ? Modifier : Flavor) ?? Name).Replace('\n', '.');
+
+        public string ShortDisplayText => $"{TitleText} [{(Desc.Any() ? string.Join(";", Desc.Select(x => x.Text)) : "None")}]";
     }
 
     public class BuffDescription
     {
+        public static readonly BuffDescription Empty = new BuffDescription { Icon = "Default", Text = "None" };
+
         [JsonPropertyName("param_icon")]
-        public string? ParamIcon { get; set; }
+        public string? Icon { get; set; }
         public string? Text { get; set; }
         [JsonPropertyName("buff_id")]
         public string? BuffId { get; set; }
@@ -27,16 +36,25 @@ namespace KoAR.Core
     [Flags]
     public enum BuffTypes
     {
-        Normal = 0x1,
-        Curse = 0x2,
-        Destiny = 0x4,
-        Disease = 0x8,
-        Prefix = 0x10,
-        Self = 0x20,
-        SpecialCurse = 0x40,
-        SpecialDisease = 0x80,
-        Suffix = 0x100,
-        TemporaryPositive = 0x200,
-        Trait = 0x400
+        None = 0,
+        Normal = 1 << 0,
+        Curse = 1 << 1,
+        Destiny = 1 << 2,
+        Disease = 1 << 3,
+        Prefix = 1 << 4,
+        SpecialCurse = 1 << 5,
+        SpecialDisease = 1 << 6,
+        Suffix = 1 << 7,
+        TemporaryPositive = 1 << 8,
+        Trait = 1 << 9,
+        Affix = Prefix | Suffix,
+        TransientBuff = Curse | Disease | SpecialCurse | TemporaryPositive,
+        TransientOrAffix = Affix | TransientBuff,
+    }
+
+    public enum ApplyType
+    {
+        OnOwner,
+        OnObject
     }
 }

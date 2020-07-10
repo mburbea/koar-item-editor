@@ -3,10 +3,13 @@
     xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs"
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views"
-    xmlns:s="clr-namespace:System;assembly=mscorlib">
+    xmlns:core="clr-namespace:KoAR.Core;assembly=KoAR.Core">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/PresentationFramework.Aero,Version=4.0.0.0,PublicKeyToken=31bf3856ad364e35;component/Themes/Aero.NormalColor.xaml" />
     </ResourceDictionary.MergedDictionaries>
+    <DataTemplate x:Key="BuffToolTipTemplate" DataType="{x:Type core:Buff}">
+        <views:BuffControl Buff="{Binding}" IsExpanded="True" />
+    </DataTemplate>
     <Style TargetType="{x:Type views:ItemsView}">
         <Style.Resources>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
@@ -52,7 +55,7 @@
                     </ControlTemplate.Resources>
                     <ListView x:Name="PART_ListView" ItemsSource="{Binding CollectionView, RelativeSource={RelativeSource TemplatedParent}}" 
                         SelectedItem="{Binding SelectedItem, RelativeSource={RelativeSource TemplatedParent}}" VirtualizingPanel.IsVirtualizing="True"
-                        BorderBrush="LightGray" SelectionMode="Single" FocusVisualStyle="{x:Null}" VirtualizingPanel.VirtualizationMode="Recycling"
+                        BorderBrush="LightGray" SelectionMode="Single" FocusVisualStyle="{x:Null}" VirtualizingPanel.ScrollUnit="Pixel"
                         TextSearch.TextPath="ItemId" AlternationCount="2">
                         <ListView.Resources>
                             <Style TargetType="{x:Type GridViewColumnHeader}" BasedOn="{StaticResource {x:Type GridViewColumnHeader}}">
@@ -250,7 +253,7 @@
                                             </Grid>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
-                                </GridViewColumn>                                
+                                </GridViewColumn>
                                 <GridViewColumn Width="Auto" views:ItemsView.PropertyName="IsUnsellable">
                                     <GridViewColumn.Header>
                                         <StackPanel Orientation="Horizontal">
@@ -279,14 +282,53 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="# Effects" Width="Auto" views:ItemsView.PropertyName="Effects.Count">
+                                <GridViewColumn Header="Prefix/Suffix" Width="Auto" views:ItemsView.PropertyName="AffixCount">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate DataType="{x:Type views:ItemModel}">
-                                            <TextBlock Text="{Binding Effects.Count, StringFormat='#,##0'}" TextAlignment="Right" />
+                                            <DataTemplate.Resources>
+                                                <Style TargetType="{x:Type ToolTip}" BasedOn="{StaticResource {x:Type ToolTip}}">
+                                                    <Setter Property="ContentTemplate" Value="{StaticResource BuffToolTipTemplate}" />
+                                                </Style>
+                                                <Style TargetType="{x:Type views:BuffIcon}">
+                                                    <Style.Triggers>
+                                                        <Trigger Property="Buff" Value="{x:Null}">
+                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                    <Setter Property="ToolTip" Value="{Binding Buff, RelativeSource={RelativeSource Self}}" />
+                                                </Style>
+                                            </DataTemplate.Resources>
+                                            <StackPanel Orientation="Horizontal">
+                                                <views:BuffIcon Margin="1,0" Buff="{Binding Prefix}" />
+                                                <views:BuffIcon Margin="1,0" Buff="{Binding Suffix}" />
+                                            </StackPanel>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="Core Effects" Width="Auto" views:ItemsView.PropertyName="CoreEffects.Count">
+                                <GridViewColumn Header="Player Buffs" Width="Auto" views:ItemsView.PropertyName="Effects.Count">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate DataType="{x:Type views:ItemModel}">
+                                            <ItemsControl ItemsSource="{Binding Effects}" MinWidth="88">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel Orientation="Horizontal" />
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate DataType="{x:Type core:Buff}">
+                                                        <DataTemplate.Resources>
+                                                            <Style TargetType="{x:Type ToolTip}" BasedOn="{StaticResource {x:Type ToolTip}}">
+                                                                <Setter Property="ContentTemplate" Value="{StaticResource BuffToolTipTemplate}" />
+                                                            </Style>
+                                                        </DataTemplate.Resources>
+                                                        <views:BuffIcon Buff="{Binding}" Margin="1,0" ToolTip="{Binding}" />
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Item Buffs" Width="Auto" views:ItemsView.PropertyName="CoreEffects.Count">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate DataType="{x:Type views:ItemModel}">
                                             <ItemsControl ItemsSource="{Binding CoreEffects}" MinWidth="88">
@@ -296,8 +338,13 @@
                                                     </ItemsPanelTemplate>
                                                 </ItemsControl.ItemsPanel>
                                                 <ItemsControl.ItemTemplate>
-                                                    <DataTemplate DataType="{x:Type s:UInt32}">
-                                                        <views:CoreEffectIcon Code="{Binding}" />
+                                                    <DataTemplate DataType="{x:Type core:Buff}">
+                                                        <DataTemplate.Resources>
+                                                            <Style TargetType="{x:Type ToolTip}" BasedOn="{StaticResource {x:Type ToolTip}}">
+                                                                <Setter Property="ContentTemplate" Value="{StaticResource BuffToolTipTemplate}" />
+                                                            </Style>
+                                                        </DataTemplate.Resources>
+                                                        <views:BuffIcon Buff="{Binding}" Margin="1,0" ToolTip="{Binding}" />
                                                     </DataTemplate>
                                                 </ItemsControl.ItemTemplate>
                                             </ItemsControl>

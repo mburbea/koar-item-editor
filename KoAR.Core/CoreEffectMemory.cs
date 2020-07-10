@@ -44,9 +44,9 @@ namespace KoAR.Core
                 if (instanceId != expectedId)
                 {
                     UnsupportedFormat = true;
-                    SetOfInstances.Add((itemId, i, instanceId, Prefix != 0, Suffix != 0));
+                    SetOfInstances.Add((itemId, i, instanceId, Prefix != null, Suffix != null));
                 }
-                List.Add(effect);
+                List.Add(Amalur.GetBuff(effect));
             }
             var displayCount = MemoryUtilities.Read<int>(Bytes, Offsets.FirstEffect + 4 + (count * 16));
             if (displayCount != count)
@@ -65,20 +65,20 @@ namespace KoAR.Core
 
         public int Count => List.Count;
 
-        public uint Prefix
+        public Buff? Prefix
         {
-            get => MemoryUtilities.Read<uint>(Bytes, Bytes.Length - 8);
-            set => MemoryUtilities.Write(Bytes, Bytes.Length - 8, value);
+            get => Amalur.BuffMap!.GetOrDefault(MemoryUtilities.Read<uint>(Bytes, Bytes.Length - 8));
+            set => MemoryUtilities.Write(Bytes, Bytes.Length - 8, value?.Id ?? 0);
         }
 
-        public uint Suffix
+        public Buff? Suffix
         {
-            get => MemoryUtilities.Read<uint>(Bytes, Bytes.Length - 4);
-            set => MemoryUtilities.Write(Bytes, Bytes.Length - 4, value);
+            get => Amalur.BuffMap!.GetOrDefault(MemoryUtilities.Read<uint>(Bytes, Bytes.Length - 4));
+            set => MemoryUtilities.Write(Bytes, Bytes.Length - 4, value?.Id ?? 0);
         }
 
         public bool UnsupportedFormat { get; }
-        public List<uint> List { get; } = new List<uint>();
+        public List<Buff> List { get; } = new List<Buff>();
 
         internal byte[] Serialize(bool forced = false)
         {
@@ -87,13 +87,13 @@ namespace KoAR.Core
             {
                 return Bytes;
             }
-            var currentLength = currentCount * 24 + 8;
+            var currentLength = Bytes.Length - 8 - Offsets.FirstEffect;
             var newCount = List.Count;
             var prefixes = MemoryMarshal.Cast<byte, uint>(InstanceIds);
             Span<ulong> effectData = stackalloc ulong[newCount * 3 + 1];
             for (int i = 0; i < newCount; i++)
             {
-                ulong effect = List[i];
+                ulong effect = List[i].Id;
                 effectData[i * 2] = prefixes[i] | effect << 32;
                 effectData[i * 2 + 1] = ulong.MaxValue;
                 effectData[newCount * 2 + 1 + i] = effect | ((ulong)uint.MaxValue) << 32;

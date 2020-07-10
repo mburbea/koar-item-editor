@@ -18,7 +18,9 @@ namespace KoAR.SaveEditor.Views
 
         object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value != null && BitmapConverter._bitmaps.TryGetValue(value.ToString(), out BitmapImage? image) ? image : BitmapConverter._fallback;
+            return value != null && BitmapConverter._bitmaps.TryGetValue(value.ToString(), out BitmapImage? bitmap)
+                ? bitmap
+                : BitmapConverter.GetFallback(parameter);
         }
 
         object IMultiValueConverter.Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
@@ -44,7 +46,7 @@ namespace KoAR.SaveEditor.Views
                     }
                 }
             }
-            return BitmapConverter._fallback;
+            return BitmapConverter.GetFallback(parameter);
         }
 
         object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
@@ -69,8 +71,15 @@ namespace KoAR.SaveEditor.Views
                 .ToDictionary(
                     Path.GetFileNameWithoutExtension,
                     name => BitmapConverter.CreateFrozenBitmap(() => new BitmapImage(new Uri($"pack://application:,,,/{assembly.GetName().Name};component/{name}"))),
-                    StringComparer.InvariantCultureIgnoreCase
+                    StringComparer.OrdinalIgnoreCase
                 );
+        }
+
+        private static BitmapImage GetFallback(object parameter)
+        {
+            return parameter is string name && BitmapConverter._bitmaps.TryGetValue(name, out BitmapImage? bitmap)
+                ? bitmap
+                : BitmapConverter._fallback;
         }
     }
 }

@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
@@ -16,29 +13,25 @@ namespace KoAR.SaveEditor.Views
     {
         public static readonly DependencyProperty AddEffectCommandProperty = DependencyProperty.Register(nameof(EffectsControl.AddEffectCommand), typeof(ICommand), typeof(EffectsControl));
 
-        public static readonly DependencyProperty BuffsProperty = DependencyProperty.Register(nameof(EffectsControl.Buffs), typeof(IReadOnlyDictionary<uint, Buff>), typeof(EffectsControl));
+        public static readonly DependencyProperty BuffsProperty = DependencyProperty.Register(nameof(EffectsControl.Buffs), typeof(IReadOnlyList<Buff>), typeof(EffectsControl),
+            new PropertyMetadata(EffectsControl.BuffsProperty_ValueChanged));
+
+        public static readonly DependencyProperty BuffsFilterProperty = DependencyProperty.Register(nameof(EffectsControl.BuffsFilter), typeof(BuffsFilter), typeof(EffectsControl));
 
         public static readonly DependencyProperty CapacityProperty = DependencyProperty.Register(nameof(EffectsControl.Capacity), typeof(int), typeof(EffectsControl),
             new PropertyMetadata(int.MaxValue));
 
         public static readonly DependencyProperty DeleteEffectCommandProperty = DependencyProperty.Register(nameof(EffectsControl.DeleteEffectCommand), typeof(ICommand), typeof(EffectsControl));
 
-        public static readonly DependencyProperty EffectDefinitionsProperty = DependencyProperty.Register(nameof(EffectsControl.EffectDefinitions), typeof(IEnumerable<IEffectInfo>), typeof(EffectsControl),
-            new PropertyMetadata(EffectsControl.EffectDefinitionsProperty_ValueChanged));
-
-        public static readonly IMultiValueConverter EffectDisplayTextConverter = new DisplayTextConverter();
-
-        public static readonly DependencyProperty EffectsProperty = DependencyProperty.Register(nameof(EffectsControl.Effects), typeof(IEnumerable<uint>), typeof(EffectsControl));
-
-        public static readonly DependencyProperty EffectTranslationsProperty = DependencyProperty.Register(nameof(EffectsControl.EffectTranslations), typeof(IDictionary), typeof(EffectsControl));
+        public static readonly DependencyProperty EffectsProperty = DependencyProperty.Register(nameof(EffectsControl.Effects), typeof(IEnumerable<Buff>), typeof(EffectsControl));
 
         public static readonly DependencyProperty HeaderProperty = DependencyProperty.Register(nameof(EffectsControl.Header), typeof(object), typeof(EffectsControl));
 
         public static readonly DependencyProperty HeaderTemplateProperty = DependencyProperty.Register(nameof(EffectsControl.HeaderTemplate), typeof(DataTemplate), typeof(EffectsControl));
 
-        public static readonly DependencyProperty PendingEffectCodeProperty = DependencyProperty.Register(nameof(EffectsControl.PendingEffectCode), typeof(uint?), typeof(EffectsControl));
+        public static readonly DependencyProperty PendingEffectIdProperty = DependencyProperty.Register(nameof(EffectsControl.PendingEffectId), typeof(uint?), typeof(EffectsControl));
 
-        public static readonly DependencyProperty PendingEffectProperty = DependencyProperty.Register(nameof(EffectsControl.PendingEffect), typeof(IEffectInfo), typeof(EffectsControl),
+        public static readonly DependencyProperty PendingEffectProperty = DependencyProperty.Register(nameof(EffectsControl.PendingEffect), typeof(Buff), typeof(EffectsControl),
             new PropertyMetadata(EffectsControl.PendingEffectProperty_ValueChanged));
 
         public static readonly DependencyProperty UnsupportedFormatProperty = DependencyProperty.Register(nameof(EffectsControl.UnsupportedFormat), typeof(bool), typeof(EffectsControl),
@@ -52,10 +45,16 @@ namespace KoAR.SaveEditor.Views
             set => this.SetValue(EffectsControl.AddEffectCommandProperty, value);
         }
 
-        public IReadOnlyDictionary<uint, Buff>? Buffs
+        public IReadOnlyList<Buff>? Buffs
         {
-            get => (IReadOnlyDictionary<uint, Buff>?)this.GetValue(EffectsControl.BuffsProperty);
+            get => (IReadOnlyList<Buff>?)this.GetValue(EffectsControl.BuffsProperty);
             set => this.SetValue(EffectsControl.BuffsProperty, value);
+        }
+
+        public BuffsFilter BuffsFilter
+        {
+            get => (BuffsFilter)this.GetValue(EffectsControl.BuffsFilterProperty);
+            set => this.SetValue(EffectsControl.BuffsFilterProperty, value);
         }
 
         public int Capacity
@@ -70,22 +69,10 @@ namespace KoAR.SaveEditor.Views
             set => this.SetValue(EffectsControl.DeleteEffectCommandProperty, value);
         }
 
-        public IEnumerable<IEffectInfo>? EffectDefinitions
+        public IEnumerable<Buff>? Effects
         {
-            get => (IEnumerable<IEffectInfo>?)this.GetValue(EffectsControl.EffectDefinitionsProperty);
-            set => this.SetValue(EffectsControl.EffectDefinitionsProperty, value);
-        }
-
-        public IEnumerable<uint>? Effects
-        {
-            get => (IEnumerable<uint>?)this.GetValue(EffectsControl.EffectsProperty);
+            get => (IEnumerable<Buff>?)this.GetValue(EffectsControl.EffectsProperty);
             set => this.SetValue(EffectsControl.EffectsProperty, value);
-        }
-
-        public IDictionary? EffectTranslations
-        {
-            get => (IDictionary?)this.GetValue(EffectsControl.EffectTranslationsProperty);
-            set => this.SetValue(EffectsControl.EffectTranslationsProperty, value);
         }
 
         public object? Header
@@ -100,16 +87,16 @@ namespace KoAR.SaveEditor.Views
             set => this.SetValue(EffectsControl.HeaderTemplateProperty, value);
         }
 
-        public IEffectInfo? PendingEffect
+        public Buff? PendingEffect
         {
-            get => (IEffectInfo?)this.GetValue(EffectsControl.PendingEffectProperty);
+            get => (Buff?)this.GetValue(EffectsControl.PendingEffectProperty);
             set => this.SetValue(EffectsControl.PendingEffectProperty, value);
         }
 
-        public uint? PendingEffectCode
+        public uint? PendingEffectId
         {
-            get => (uint?)this.GetValue(EffectsControl.PendingEffectCodeProperty);
-            set => this.SetValue(EffectsControl.PendingEffectCodeProperty, value);
+            get => (uint?)this.GetValue(EffectsControl.PendingEffectIdProperty);
+            set => this.SetValue(EffectsControl.PendingEffectIdProperty, value);
         }
 
         public bool UnsupportedFormat
@@ -129,52 +116,19 @@ namespace KoAR.SaveEditor.Views
 
         private static void CopyCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            Clipboard.SetText(((uint)((ListBox)sender).ItemContainerGenerator.ItemFromContainer((ListBoxItem)e.OriginalSource)).ToString("X6"));
+            Clipboard.SetText(((Buff)((ListBox)sender).ItemContainerGenerator.ItemFromContainer((ListBoxItem)e.OriginalSource)).Id.ToString("X6"));
             e.Handled = true;
         }
 
-        private static void EffectDefinitionsProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void BuffsProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((EffectsControl)d).PendingEffect = ((IEnumerable<IEffectInfo>?)e.NewValue)?.FirstOrDefault();
+            //EffectsControl control = (EffectsControl)d;
+            //control.PendingEffect = ((IReadOnlyList<Buff>?)e.NewValue)?.FirstOrDefault(buff => control.BuffsFilter.Matches(buff));
         }
 
         private static void PendingEffectProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((EffectsControl)d).PendingEffectCode = ((IEffectInfo?)e.NewValue)?.Code;
-        }
-
-        private sealed class DisplayTextConverter : IMultiValueConverter
-        {
-            object IMultiValueConverter.Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
-            {
-                if (values.Length < 3 || !(values[0] is uint code && values[1] is IDictionary translations && values[2] is IReadOnlyDictionary<uint, Buff> buffs))
-                {
-                    return DependencyProperty.UnsetValue;
-                }
-                if (translations.Contains(code))
-                {
-                    return ((IEffectInfo)translations[code]).DisplayText;
-                }
-                if (buffs.TryGetValue(code, out Buff buff))
-                {
-                    if (buff.Flavor != null)
-                    {
-                        return buff.Flavor;
-                    }
-                    if (buff.BuffType != BuffTypes.Suffix && buff.BuffType != BuffTypes.Prefix && buff.BuffType != BuffTypes.Self && buff.Modifier != null)
-                    {
-                        return buff.Modifier;
-                    }
-                    if (buff.Desc.Length != 0)
-                    {
-                        return string.Join("; ", buff.Desc.Select(desc => desc.Text));
-                    }
-                    return buff.Name;
-                }
-                return "Unknown";
-            }
-
-            object[] IMultiValueConverter.ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture) => throw new NotImplementedException();
+            ((EffectsControl)d).PendingEffectId = ((Buff?)e.NewValue)?.Id;
         }
     }
 }

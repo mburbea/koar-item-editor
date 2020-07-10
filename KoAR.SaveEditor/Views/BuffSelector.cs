@@ -3,48 +3,47 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using KoAR.Core;
-using KoAR.SaveEditor.Constructs;
 
 namespace KoAR.SaveEditor.Views
 {
     public sealed class BuffSelector : Control
     {
-        public static readonly DependencyProperty BuffsProperty = DependencyProperty.Register(nameof(BuffSelector.Buffs), typeof(IEnumerable<Buff>), typeof(BuffSelector),
+        public static readonly DependencyProperty BuffsProperty = DependencyProperty.Register(nameof(BuffSelector.Buffs), typeof(IReadOnlyList<Buff>), typeof(BuffSelector),
             new PropertyMetadata(BuffSelector.BuffsProperty_ValueChanged));
 
-        public static readonly DependencyProperty BuffTypesProperty = DependencyProperty.Register(nameof(BuffSelector.BuffTypes), typeof(BuffTypes), typeof(BuffSelector),
-            new PropertyMetadata((BuffTypes)(-1), BuffSelector.BuffTypesProperty_ValueChanged));
-
-        public static readonly DependencyProperty DataContainersProperty;
+        public static readonly DependencyProperty FilterProperty = DependencyProperty.Register(nameof(BuffSelector.Filter), typeof(BuffsFilter), typeof(BuffSelector),
+            new PropertyMetadata(BuffSelector.FilterProperty_ValueChanged));
 
         public static readonly DependencyProperty SelectedBuffProperty = DependencyProperty.Register(nameof(BuffSelector.SelectedBuff), typeof(Buff), typeof(BuffSelector),
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
-        private static readonly DependencyPropertyKey _dataContainersPropertyKey = DependencyProperty.RegisterReadOnly(nameof(BuffSelector.DataContainers), typeof(IReadOnlyList<DataContainer>), typeof(BuffSelector),
+        public static DependencyProperty FilteredItemsProperty;
+
+        private static readonly DependencyPropertyKey _filteredItemsPropertyKey = DependencyProperty.RegisterReadOnly(nameof(BuffSelector.FilteredItems), typeof(IReadOnlyList<Buff>), typeof(BuffSelector),
             new PropertyMetadata());
 
         static BuffSelector()
         {
-            BuffSelector.DataContainersProperty = BuffSelector._dataContainersPropertyKey.DependencyProperty;
             FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(BuffSelector), new FrameworkPropertyMetadata(typeof(BuffSelector)));
+            BuffSelector.FilteredItemsProperty = BuffSelector._filteredItemsPropertyKey.DependencyProperty;
         }
 
-        public IEnumerable<Buff>? Buffs
+        public IReadOnlyList<Buff>? Buffs
         {
-            get => (IEnumerable<Buff>?)this.GetValue(BuffSelector.BuffsProperty);
+            get => (IReadOnlyList<Buff>?)this.GetValue(BuffSelector.BuffsProperty);
             set => this.SetValue(BuffSelector.BuffsProperty, value);
         }
 
-        public BuffTypes BuffTypes
+        public BuffsFilter Filter
         {
-            get => (BuffTypes)this.GetValue(BuffSelector.BuffTypesProperty);
-            set => this.SetValue(BuffSelector.BuffTypesProperty, value);
+            get => (BuffsFilter)this.GetValue(BuffSelector.FilterProperty);
+            set => this.SetValue(BuffSelector.FilterProperty, value);
         }
 
-        public IReadOnlyList<DataContainer>? DataContainers
+        public IReadOnlyList<Buff>? FilteredItems
         {
-            get => (IReadOnlyList<DataContainer>?)this.GetValue(BuffSelector.DataContainersProperty);
-            private set => this.SetValue(BuffSelector._dataContainersPropertyKey, value);
+            get => (IReadOnlyList<Buff>?)this.GetValue(BuffSelector.FilteredItemsProperty);
+            private set => this.SetValue(BuffSelector._filteredItemsPropertyKey, value);
         }
 
         public Buff? SelectedBuff
@@ -56,27 +55,18 @@ namespace KoAR.SaveEditor.Views
         private static void BuffsProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             BuffSelector selector = (BuffSelector)d;
-            selector.DataContainers = e.NewValue == null ? null : BuffSelector.GetDataContainers((IEnumerable<Buff>)e.NewValue, selector.BuffTypes);
+            selector.FilteredItems = e.NewValue == null ? null : ((IReadOnlyList<Buff>)e.NewValue).Where(buff => selector.Filter.Matches(buff)).ToList();
         }
 
-        private static void BuffTypesProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void FilterProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             BuffSelector selector = (BuffSelector)d;
-            if (selector.Buffs != null)
+            if (selector.Buffs == null)
             {
-                selector.DataContainers = BuffSelector.GetDataContainers(selector.Buffs, (BuffTypes)e.NewValue);
+                return;
             }
-        }
-
-        private static IReadOnlyList<DataContainer> GetDataContainers(IEnumerable<Buff> buffs, BuffTypes buffTypes)
-        {
-            return buffs
-                .Where(buff => (buff.BuffType & buffTypes) != 0)
-                .OrderByDescending(buff => buff.Rarity)
-                .ThenBy(buff => buff.Desc.FirstOrDefault())
-                .Select(buff => new DataContainer(buff))
-                .Prepend(DataContainer.Empty)
-                .ToList();
+            BuffsFilter filter = (BuffsFilter)e.NewValue;
+            selector.FilteredItems = selector.Buffs.Where(buff => filter.Matches(buff)).ToList();
         }
     }
 }

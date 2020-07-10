@@ -26,14 +26,10 @@ namespace KoAR.Core
         public static TValue GetOrDefault<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key, TValue defaultValue = default) =>
             dictionary.TryGetValue(key, out var res) ? res : defaultValue;
 
-
-        //public static Dictionary<uint, string> Buffs { get; } = new Dictionary<uint, string>();
-        public static List<EffectInfo> Effects { get; } = new List<EffectInfo>();
-        public static Dictionary<uint, CoreEffectInfo> CoreEffects { get; } = new Dictionary<uint, CoreEffectInfo>();
-        public static Dictionary<uint, EffectInfo> DedupedEffects { get; } = new Dictionary<uint, EffectInfo>();
         public static Dictionary<uint, TypeDefinition> TypeDefinitions { get; } = new Dictionary<uint, TypeDefinition>();
         public static List<ItemMemoryInfo> Items { get; } = new List<ItemMemoryInfo>();
-        public static Dictionary<uint, Buff> Buffs { get; } = new Dictionary<uint, Buff>();
+        public static List<Buff> Buffs { get; } = new List<Buff>();
+        public static Dictionary<uint, Buff> BuffMap { get; } = new Dictionary<uint, Buff>();
 
         private static int? _bagOffset;
 
@@ -67,62 +63,28 @@ namespace KoAR.Core
 
         public static void Initialize(string? path = null)
         {
+            var sw = Stopwatch.StartNew();
             Thread.CurrentThread.CurrentCulture = Thread.CurrentThread.CurrentUICulture =
                 CultureInfo.DefaultThreadCurrentCulture = CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
-            var sw = Stopwatch.StartNew();
             path ??= Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
-            TypeDefinitions.AddRange(TypeDefinition.ParseFile(Path.Combine(path, "items.csv")).Select(x => (x.TypeId, x)));
-
-            var effectCsv = Path.Combine(path, "CoreEffects.csv");
-            if (!File.Exists(effectCsv))
+            var fileName = Path.Combine(path, "buff.json");
+            if (!File.Exists(fileName))
             {
-                throw new InvalidOperationException("Cannot find CoreEffects.csv");
+                throw new InvalidOperationException($"Cannot find {Path.GetFileName(fileName)}");
             }
-
-            CoreEffects.AddRange(File.ReadLines(effectCsv).Skip(1).Select(row =>
-            {
-                var parts = row.Split(',');
-                var code = uint.Parse(parts[0], NumberStyles.HexNumber);
-                return (code, new CoreEffectInfo
-                (
-                    code,
-                    Enum.TryParse(parts[1], true, out DamageType damageType) ? damageType : default,
-                    float.Parse(parts[2])
-                ));
-            }));
-            var propertiesXml = Path.Combine(path, "properties.xml");
-            if (!File.Exists(propertiesXml))
-            {
-                throw new InvalidOperationException("Cannot find properties.xml");
-            }
-            using var stream = File.OpenRead(propertiesXml);
-            Effects.AddRange(XDocument.Load(stream).Root
-                .Elements()
-                .Select(element => new EffectInfo
-                (
-                    uint.TryParse(element.Attribute("id").Value, NumberStyles.HexNumber, null, out var parsed) ? parsed : 0u,
-                    element.Value.Trim()
-                )));
-            DedupedEffects.AddRange(Effects
-                .Where(x => x.Code != 0)
-                .GroupBy(x => x.Code)
-                .Select(x => (x.Key, x.First())));
-
-            var buffJson = Path.Combine(path, "buff.json");
-            if (!File.Exists(buffJson))
-            {
-                throw new InvalidOperationException("Cannot find buff.json");
-            }
-            Buffs.AddRange(
-            JsonSerializer.Deserialize<Buff[]>(
-                File.ReadAllBytes(buffJson), new JsonSerializerOptions { 
+            Buffs.AddRange(JsonSerializer.Deserialize<Buff[]>(
+                File.ReadAllBytes(fileName), new JsonSerializerOptions
+                {
                     PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                    Converters = {new JsonStringEnumConverter()} 
-                })
-              .Select(x => (x.Id, x)));
-
+                    Converters = { new JsonStringEnumConverter() }
+                }));
+            BuffMap.AddRange(Buffs.Select(x => (x.Id, x)));
+            if (!File.Exists(fileName = Path.Combine(path, "definitions.csv")))
+            {
+                throw new InvalidOperationException($"Cannot find {Path.GetFileName(fileName)}");
+            }
+            TypeDefinitions.AddRange(TypeDefinition.ParseFile(fileName).Select(x => (x.TypeId, x)));
             Debug.WriteLine(sw.Elapsed);
-            return;
         }
 
         private static int GetBagOffset()
@@ -141,6 +103,9 @@ namespace KoAR.Core
 
             return finalOffset + (inventoryLimitOrder * 12);
         }
+
+        public static Buff GetBuff(uint buffId) => BuffMap.TryGetValue(buffId, out var buff)
+                    ? buff : new Buff { Id = buffId, Name = "Unknown" };
 
         public static int InventorySize
         {
@@ -162,7 +127,7 @@ namespace KoAR.Core
             var itemMemoryLocs = ItemMemoryContainer.ToDictionary(x => x.id, x => (x.offset, x.datalength));
             var coreLocs = CoreEffectContainer.ToDictionary(x => x.id, x => (x.offset, x.datalength));
             Items.Clear();
-            
+
             Stash = Stash.TryCreateStash();
 
             _simTypeOffset = data.IndexOf(typeIdSeq);
@@ -180,7 +145,7 @@ namespace KoAR.Core
 
                 if (TypeDefinitions.TryGetValue(typeId, out var definition))
                 {
-                    var (itemOffset,itemLength) = itemMemoryLocs[id];
+                    var (itemOffset, itemLength) = itemMemoryLocs[id];
                     var (coreOffset, coreLength) = coreLocs[id];
                     Items.Add(new ItemMemoryInfo(ixOfActor + 13, itemOffset, itemLength, coreOffset, coreLength));
                 }
@@ -190,10 +155,11 @@ namespace KoAR.Core
 
         public static void WriteEquipmentBytes(ItemMemoryInfo item, bool forced = false)
         {
-            static int WriteItem(int itemIndex, int oldLength, byte[] bytes)
+            static int WriteItem(int itemIndex, int dataLength, byte[] bytes)
             {
-                Bytes = MemoryUtilities.ReplaceBytes(Bytes, itemIndex, oldLength, bytes);
-                int delta = bytes.Length - oldLength;
+                var prevLength = Bytes.Length;
+                Bytes = MemoryUtilities.ReplaceBytes(Bytes, itemIndex, dataLength, bytes);
+                int delta = Bytes.Length - prevLength;
                 if (delta != 0)
                 {
                     foreach (var item in Items)
@@ -212,7 +178,7 @@ namespace KoAR.Core
             }
 
             var delta = WriteItem(item.CoreEffects.ItemIndex, item.CoreEffects.DataLength, item.CoreEffects.Serialize(forced));
-            if(delta != 0)
+            if (delta != 0)
             {
                 CoreEffectContainer.UpdateDataLength(delta);
             }

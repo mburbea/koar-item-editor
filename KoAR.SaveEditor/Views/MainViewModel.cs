@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
@@ -14,28 +12,27 @@ namespace KoAR.SaveEditor.Views
 {
     public sealed class MainViewModel : NotifierBase
     {
-        private readonly Func<Task<IReadOnlyList<ItemModel>>> _debouncedGetFilteredItems;
         private readonly NotifyingCollection<ItemModel> _items;
         private EquipmentCategory? _categoryFilter;
-        private Element _elementFilter;
+        private int _elementFilter;
         private string _fileName = string.Empty;
         private IReadOnlyList<ItemModel> _filteredItems;
         private string _itemNameFilter = string.Empty;
-        private Rarity _rarityFilter;
+        private int _armorTypeFilter;
+        private int _rarityFilter;
         private ItemModel? _selectedItem;
         private bool _unsavedChanges;
 
         public MainViewModel()
         {
             this._filteredItems = this._items = new NotifyingCollection<ItemModel>();
-            this._debouncedGetFilteredItems = Debounce.Method(this.GetFilteredItems, 200);
             this.OpenFileCommand = new DelegateCommand(this.OpenFile);
             this.ResetFiltersCommand = new DelegateCommand(this.ResetFilters);
             this.ChangeDefinitionCommand = new DelegateCommand<ItemModel>(this.ChangeDefinition);
             this.AddCoreEffectCommand = new DelegateCommand<uint>(this.AddCoreEffect, this.CanAddCoreEffect);
             this.AddEffectCommand = new DelegateCommand<uint>(this.AddEffect, this.CanAddEffect);
-            this.DeleteCoreEffectCommand = new DelegateCommand<uint>(this.DeleteCoreEffect, this.CanDeleteCoreEffect);
-            this.DeleteEffectCommand = new DelegateCommand<uint>(this.DeleteEffect, this.CanDeleteEffect);
+            this.DeleteCoreEffectCommand = new DelegateCommand<Buff>(this.DeleteCoreEffect, this.CanDeleteCoreEffect);
+            this.DeleteEffectCommand = new DelegateCommand<Buff>(this.DeleteEffect, this.CanDeleteEffect);
             this.SaveCommand = new DelegateCommand(this.Save, () => this._unsavedChanges);
             this.AddStashItemCommand = new DelegateCommand(this.AddStashItem, () => Amalur.IsFileOpen && Amalur.Stash != null);
         }
@@ -49,13 +46,37 @@ namespace KoAR.SaveEditor.Views
         public bool? AllItemsUnsellable
         {
             get => this.GetAppliesToAllItems(item => item.IsUnsellable);
-            set => this.SetAppliesToAllItems(item => item.IsUnsellable = value.GetValueOrDefault());
+            set
+            {
+                foreach (ItemModel item in this.FilteredItems)
+                {
+                    item.IsUnsellable = value.GetValueOrDefault();
+                }
+            }
         }
 
         public bool? AllItemsUnstashable
         {
             get => this.GetAppliesToAllItems(item => item.IsUnstashable);
-            set => this.SetAppliesToAllItems(item => item.IsUnstashable = value.GetValueOrDefault());
+            set
+            {
+                foreach (ItemModel item in this.FilteredItems)
+                {
+                    item.IsUnstashable = value.GetValueOrDefault();
+                }
+            }
+        }
+
+        public ArmorType ArmorTypeFilter
+        {
+            get => (ArmorType)this._armorTypeFilter;
+            set
+            {
+                if (this.SetValue(ref this._armorTypeFilter, (int)value))
+                {
+                    this.OnFilterChange();
+                }
+            }
         }
 
         public EquipmentCategory? CategoryFilter
@@ -65,23 +86,23 @@ namespace KoAR.SaveEditor.Views
             {
                 if (this.SetValue(ref this._categoryFilter, value))
                 {
-                    this.OnFilterChange(false);
+                    this.OnFilterChange();
                 }
             }
         }
 
         public DelegateCommand<ItemModel> ChangeDefinitionCommand { get; }
 
-        public DelegateCommand<uint> DeleteCoreEffectCommand { get; }
+        public DelegateCommand<Buff> DeleteCoreEffectCommand { get; }
 
-        public DelegateCommand<uint> DeleteEffectCommand { get; }
+        public DelegateCommand<Buff> DeleteEffectCommand { get; }
 
         public Element ElementFilter
         {
-            get => this._elementFilter;
+            get => (Element)this._elementFilter;
             set
             {
-                if (this.SetValue(ref this._elementFilter, value))
+                if (this.SetValue(ref this._elementFilter, (int)value))
                 {
                     this.OnFilterChange();
                 }
@@ -133,10 +154,10 @@ namespace KoAR.SaveEditor.Views
 
         public Rarity RarityFilter
         {
-            get => this._rarityFilter;
+            get => (Rarity)this._rarityFilter;
             set
             {
-                if (this.SetValue(ref this._rarityFilter, value))
+                if (this.SetValue(ref this._rarityFilter, (int)value))
                 {
                     this.OnFilterChange();
                 }
@@ -200,27 +221,9 @@ namespace KoAR.SaveEditor.Views
             MessageBox.Show($"Save successful! Original save backed up as {this._fileName}.bak.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private void AddCoreEffect(uint code)
-        {
-            if (this.SelectedItem == null)
-            {
-                return;
-            }
-            this.SelectedItem.AddCoreEffect(code);
-            Amalur.WriteEquipmentBytes(this.SelectedItem.Item);
-            this.UnsavedChanges = true;
-        }
+        private void AddCoreEffect(uint code) => this.SelectedItem?.CoreEffects.Add(Amalur.GetBuff(code));
 
-        private void AddEffect(uint code)
-        {
-            if (this.SelectedItem == null)
-            {
-                return;
-            }
-            this.SelectedItem.AddEffect(code);
-            Amalur.WriteEquipmentBytes(this.SelectedItem.Item);
-            this.UnsavedChanges = true;
-        }
+        private void AddEffect(uint code) => this.SelectedItem?.Effects.Add(Amalur.GetBuff(code));
 
         private void AddStashItem()
         {
@@ -246,9 +249,9 @@ namespace KoAR.SaveEditor.Views
 
         private bool CanAddEffect(uint code) => this.SelectedItem != null && code != 0u;
 
-        private bool CanDeleteCoreEffect(uint code) => this.SelectedItem != null;
+        private bool CanDeleteCoreEffect(Buff _) => this.SelectedItem != null;
 
-        private bool CanDeleteEffect(uint code) => this.SelectedItem != null;
+        private bool CanDeleteEffect(Buff _) => this.SelectedItem != null;
 
         private void ChangeDefinition(ItemModel model)
         {
@@ -269,27 +272,9 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        private void DeleteCoreEffect(uint code)
-        {
-            if (this.SelectedItem == null)
-            {
-                return;
-            }
-            this.SelectedItem.DeleteCoreEffect(code);
-            Amalur.WriteEquipmentBytes(this.SelectedItem.Item);
-            this.UnsavedChanges = true;
-        }
+        private void DeleteCoreEffect(Buff buff) => this.SelectedItem?.CoreEffects.Remove(buff);
 
-        private void DeleteEffect(uint code)
-        {
-            if (this.SelectedItem == null)
-            {
-                return;
-            }
-            this.SelectedItem.DeleteEffect(code);
-            Amalur.WriteEquipmentBytes(this.SelectedItem.Item);
-            this.UnsavedChanges = true;
-        }
+        private void DeleteEffect(Buff buff) => this.SelectedItem?.Effects.Remove(buff);
 
         private bool? GetAppliesToAllItems(Func<ItemModel, bool> projection)
         {
@@ -298,33 +283,35 @@ namespace KoAR.SaveEditor.Views
                 return true;
             }
             bool first = projection(this.FilteredItems[0]);
-            if (this.FilteredItems.Skip(1).Select(projection).Any(value => value != first))
-            {
-                return null;
-            }
-            return first;
+            return this.FilteredItems.Skip(1).Select(projection).Any(value => value != first)
+                ? default(bool?)
+                : first;
         }
 
         private IReadOnlyList<ItemModel> GetFilteredItems()
         {
             IEnumerable<ItemModel> items = this.Items;
-            if (this._categoryFilter.HasValue)
+            if (this.RarityFilter != default)
             {
-                items = items.Where(model => model.Category == this._categoryFilter);
+                items = items.Where(model => model.Rarity == this.RarityFilter);
             }
-            if (this._rarityFilter != Rarity.None)
+            if (this.ElementFilter != default)
             {
-                items = items.Where(model => model.Rarity == this._rarityFilter);
+                items = items.Where(model => model.TypeDefinition.Element == this.ElementFilter);
             }
-            if (this._elementFilter != Element.None)
+            if (this.ArmorTypeFilter != default)
             {
-                items = items.Where(model => model.TypeDefinition.Element == this._elementFilter);
+                items = items.Where(model => model.TypeDefinition.ArmorType == this.ArmorTypeFilter);
             }
-            if (this._itemNameFilter.Length != 0)
+            if (this.CategoryFilter.HasValue)
             {
-                items = items.Where(model => model.DisplayName.IndexOf(this._itemNameFilter, StringComparison.OrdinalIgnoreCase) != -1);
+                items = items.Where(model => model.Category == this.CategoryFilter.GetValueOrDefault());
             }
-            return object.Equals(items, this.FilteredItems) ? this.FilteredItems : items.ToList();
+            if (this.ItemNameFilter.Length != 0)
+            {
+                items = items.Where(model => model.DisplayName.IndexOf(this.ItemNameFilter, StringComparison.InvariantCultureIgnoreCase) != -1);
+            }
+            return object.Equals(items, this.Items) ? this.Items : items.ToList();
         }
 
         private void Item_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -347,29 +334,12 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        private void OnFilterChange(bool debounce = true)
+        private void OnFilterChange()
         {
-            void ProcessFilteredItems(IReadOnlyList<ItemModel> items)
-            {
-                this.FilteredItems = items;
-                this.SelectedItem = null;
-                this.OnPropertyChanged(nameof(this.AllItemsUnsellable));
-                this.OnPropertyChanged(nameof(this.AllItemsUnstashable));
-            }
-
-            if (!debounce)
-            {
-                ProcessFilteredItems(this.GetFilteredItems());
-            }
-            else
-            {
-                this._debouncedGetFilteredItems().ContinueWith(
-                    task => ProcessFilteredItems(task.Result),
-                    default,
-                    TaskContinuationOptions.OnlyOnRanToCompletion,
-                    TaskScheduler.FromCurrentSynchronizationContext()
-                );
-            }
+            this.FilteredItems = this.GetFilteredItems();
+            this.SelectedItem = null;
+            this.OnPropertyChanged(nameof(this.AllItemsUnsellable));
+            this.OnPropertyChanged(nameof(this.AllItemsUnstashable));
         }
 
         private void RepopulateItems()
@@ -382,11 +352,12 @@ namespace KoAR.SaveEditor.Views
             }
             using (this._items.CreatePauseEventsScope())
             {
-                foreach (ItemModel item in this._items)
+                for (int index = this._items.Count - 1; index != -1; index--)
                 {
+                    using ItemModel item = this._items[index];
                     PropertyChangedEventManager.RemoveHandler(item, this.Item_PropertyChanged, string.Empty);
+                    this._items.RemoveAt(index);
                 }
-                this._items.Clear();
                 foreach (ItemModel item in Amalur.Items.Select(info => new ItemModel(info)))
                 {
                     PropertyChangedEventManager.AddHandler(item, this.Item_PropertyChanged, string.Empty);
@@ -402,26 +373,19 @@ namespace KoAR.SaveEditor.Views
             {
                 this.OnPropertyChanged(nameof(this.ItemNameFilter));
             }
-            if (this._elementFilter != Element.None)
+            if (Interlocked.Exchange(ref this._elementFilter, default) != default)
             {
-                this._elementFilter = Element.None;
                 this.OnPropertyChanged(nameof(this.ElementFilter));
             }
-            if (this._rarityFilter != Rarity.None)
+            if (Interlocked.Exchange(ref this._rarityFilter, default) != default)
             {
-                this._rarityFilter = Rarity.None;
                 this.OnPropertyChanged(nameof(this.RarityFilter));
             }
-            this.OnFilterChange(false);
-        }
-
-        private void SetAppliesToAllItems(Action<ItemModel> action, [CallerMemberName] string propertyName = "")
-        {
-            foreach (ItemModel item in this.FilteredItems)
+            if (Interlocked.Exchange(ref this._armorTypeFilter, default) != default)
             {
-                action(item);
+                this.OnPropertyChanged(nameof(this.ArmorTypeFilter));
             }
-            this.OnPropertyChanged(propertyName);
+            this.OnFilterChange();
         }
     }
 }

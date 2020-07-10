@@ -58,7 +58,18 @@
                                 </MultiBinding>
                             </Image.Source>
                         </Image>
-                        <views:RarityControl Rarity="{TemplateBinding Rarity}" />
+                        <views:RarityIcon>
+                            <views:RarityIcon.Style>
+                                <Style TargetType="{x:Type views:RarityIcon}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Item, RelativeSource={RelativeSource TemplatedParent}}" Value="{x:Null}">
+                                            <Setter Property="Rarity" Value="{Binding Definition.Rarity, RelativeSource={RelativeSource TemplatedParent}}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                    <Setter Property="Rarity" Value="{Binding Item.Rarity, RelativeSource={RelativeSource TemplatedParent}}" />
+                                </Style>
+                            </views:RarityIcon.Style>
+                        </views:RarityIcon>
                         <TextBlock VerticalAlignment="Center" Margin="2,0">
                             <TextBlock.Style>
                                 <Style TargetType="{x:Type TextBlock}">
@@ -75,9 +86,13 @@
                             <TextBlock.Style>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding HasCustomName, RelativeSource={RelativeSource TemplatedParent}}" Value="True">
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Item, Converter={StaticResource EqualityConverter}, RelativeSource={RelativeSource TemplatedParent}}" Value="False" />
+                                                <Condition Binding="{Binding Item.HasCustomName, RelativeSource={RelativeSource TemplatedParent}}" Value="True" />
+                                            </MultiDataTrigger.Conditions>
                                             <Setter Property="Visibility" Value="Collapsed" />
-                                        </DataTrigger>
+                                        </MultiDataTrigger>
                                         <DataTrigger Binding="{Binding Definition.HasVariants, RelativeSource={RelativeSource TemplatedParent}}" Value="False">
                                             <Setter Property="Visibility" Value="Collapsed" />
                                         </DataTrigger>

@@ -22,6 +22,7 @@
     <PackageProjectUrl>https://github.com/mburbea/koar-item-editor</PackageProjectUrl>
     <RepositoryUrl>https://github.com/mburbea/koar-item-editor</RepositoryUrl>
     <NeutralLanguage>en-US</NeutralLanguage>
+    <UserSecretsId>08a013c8-a2ef-43c0-9e42-9500e36a74d4</UserSecretsId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -103,6 +104,8 @@
     <None Remove="Resources\buffs\primal_dot_amount.png" />
     <None Remove="Resources\buffs\RangedDmgMitigation.png" />
     <None Remove="Resources\buffs\Sagecraft.png" />
+    <None Remove="Resources\buffs\Scourge_damage_amount.png" />
+    <None Remove="Resources\buffs\Scourge_dot_amount.png" />
     <None Remove="Resources\buffs\Sorcery.png" />
     <None Remove="Resources\buffs\SpeedBonus.png" />
     <None Remove="Resources\buffs\Stealth.png" />
@@ -260,6 +263,8 @@
     <Resource Include="Resources\buffs\primal_dot_amount.png" />
     <Resource Include="Resources\buffs\RangedDmgMitigation.png" />
     <Resource Include="Resources\buffs\Sagecraft.png" />
+    <Resource Include="Resources\buffs\Scourge_damage_amount.png" />
+    <Resource Include="Resources\buffs\Scourge_dot_amount.png" />
     <Resource Include="Resources\buffs\Sorcery.png" />
     <Resource Include="Resources\buffs\SpeedBonus.png" />
     <Resource Include="Resources\buffs\Stealth.png" />
@@ -313,32 +318,20 @@
     <Resource Include="Resources\Staff_Lightning.png" />
     <Resource Include="Resources\Staff_Primal.png" />
     <Resource Include="Resources\Torso.png" />
-    <Resource Include="Resources\Bleeding.png" />
-    <Resource Include="Resources\BloodSeeker.png" />
     <Resource Include="Resources\Chakrams.png" />
     <Resource Include="Resources\Copy.png" />
     <Resource Include="Resources\Daggers.png" />
     <Resource Include="Resources\Delete.png" />
     <Resource Include="Resources\Faeblades.png" />
-    <Resource Include="Resources\Fire.png" />
     <Resource Include="Resources\Greatsword.png" />
     <Resource Include="Resources\Hammer.png" />
     <Resource Include="Resources\Help.png" />
-    <Resource Include="Resources\Ice.png" />
-    <Resource Include="Resources\Lightning.png" />
     <Resource Include="Resources\Longbow.png" />
     <Resource Include="Resources\Longsword.png" />
-    <Resource Include="Resources\Magnifying.png" />
     <Resource Include="Resources\MasterCrafted.png" />
     <Resource Include="Resources\Open.png" />
-    <Resource Include="Resources\Physical.png" />
-    <Resource Include="Resources\Piercing.png" />
-    <Resource Include="Resources\Poison.png" />
-    <Resource Include="Resources\Primal.png" />
-    <Resource Include="Resources\Ravenous.png" />
     <Resource Include="Resources\Save.png" />
     <Resource Include="Resources\Sceptre.png" />
-    <Resource Include="Resources\Sharpening.png" />
     <Resource Include="Resources\Shield.png" />
     <Resource Include="Resources\Staff.png" />
     <Resource Include="Resources\Torso_Finesse.png" />
@@ -364,19 +357,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Update="buff.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="buff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="CoreEffects.csv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Items.csv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="properties.xml">
+    <None Update="definitions.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Properties\Settings.settings">

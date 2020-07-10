@@ -188,6 +188,11 @@
                                     <x:Type TypeName="core:Element" />
                                 </ObjectDataProvider.MethodParameters>
                             </ObjectDataProvider>
+                            <ObjectDataProvider x:Key="ArmorTypes" ObjectType="{x:Type s:Enum}" MethodName="GetValues">
+                                <ObjectDataProvider.MethodParameters>
+                                    <x:Type TypeName="core:ArmorType" />
+                                </ObjectDataProvider.MethodParameters>
+                            </ObjectDataProvider>
                         </Grid.Resources>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
@@ -197,25 +202,17 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition />
                             <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="Name:" />
-                        <TextBox Grid.Column="1" Text="{Binding ItemNameFilter, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox Grid.Column="1" Text="{Binding ItemNameFilter, UpdateSourceTrigger=PropertyChanged, Delay=200}" Height="{Binding ActualHeight, ElementName=PART_Rarities}" />
                         <TextBlock Grid.Column="2" Text="Rarity:" />
-                        <ComboBox Grid.Column="3" ItemsSource="{Binding Source={StaticResource Rarities}}" SelectedItem="{Binding RarityFilter}">
+                        <ComboBox x:Name="PART_Rarities" Grid.Column="3" ItemsSource="{Binding Source={StaticResource Rarities}}" SelectedItem="{Binding RarityFilter}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate DataType="{x:Type core:Rarity}">
                                     <StackPanel Orientation="Horizontal" Margin="2">
-                                        <views:RarityControl Rarity="{Binding}" Height="16" Width="16">
-                                            <views:RarityControl.Style>
-                                                <Style TargetType="{x:Type views:RarityControl}">
-                                                    <Style.Triggers>
-                                                        <Trigger Property="Rarity" Value="None">
-                                                            <Setter Property="Visibility" Value="Hidden" />
-                                                        </Trigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </views:RarityControl.Style>
-                                        </views:RarityControl>
+                                        <views:RarityIcon Rarity="{Binding}" Height="16" Width="16" />
                                         <TextBlock VerticalAlignment="Center" Margin="2,0">
                                             <TextBlock.Style>
                                                 <Style TargetType="{x:Type TextBlock}">
@@ -234,30 +231,10 @@
                         </ComboBox>
                         <TextBlock Grid.Column="4" Text="Element:" />
                         <ComboBox Grid.Column="5" ItemsSource="{Binding Source={StaticResource Elements}}" SelectedItem="{Binding ElementFilter}">
-                            <ComboBox.Resources>
-                                <views:BitmapConverter x:Key="BitmapConverter" />
-                            </ComboBox.Resources>
                             <ComboBox.ItemTemplate>
                                 <DataTemplate DataType="{x:Type core:Element}">
                                     <StackPanel Orientation="Horizontal" Margin="2">
-                                        <Image Width="16">
-                                            <Image.Style>
-                                                <Style TargetType="{x:Type Image}">
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Converter={StaticResource EqualityConverter}, ConverterParameter={x:Static core:Element.None}}" Value="False">
-                                                            <Setter Property="Source">
-                                                                <Setter.Value>
-                                                                    <MultiBinding Converter="{StaticResource BitmapConverter}">
-                                                                        <Binding />
-                                                                        <Binding Source="Dot_Amount" />
-                                                                    </MultiBinding>
-                                                                </Setter.Value>
-                                                            </Setter>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Image.Style>
-                                        </Image>
+                                        <views:ElementIcon Element="{Binding}" Height="16" Width="16" />
                                         <TextBlock VerticalAlignment="Center" Margin="2,0">
                                             <TextBlock.Style>
                                                 <Style TargetType="{x:Type TextBlock}">
@@ -274,8 +251,30 @@
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
-
-                        <Button Grid.Column="6" Content="Reset" FocusVisualStyle="{x:Null}" Command="{Binding ResetFiltersCommand}" Margin="2" VerticalAlignment="Center" />
+                        <TextBlock Grid.Column="6" Text="ArmorType:" />
+                        <ComboBox Grid.Column="7" ItemsSource="{Binding Source={StaticResource ArmorTypes}}" SelectedItem="{Binding ArmorTypeFilter}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate DataType="{x:Type core:ArmorType}">
+                                    <StackPanel Orientation="Horizontal" Margin="2,1">
+                                        <views:ArmorTypeIcon ArmorType="{Binding}" Height="18" Width="18" />
+                                        <TextBlock VerticalAlignment="Center" Margin="2,0">
+                                            <TextBlock.Style>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Converter={StaticResource EqualityConverter}, ConverterParameter={x:Static core:ArmorType.None}}" Value="False">
+                                                            <Setter Property="Text" Value="{Binding}" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                    <Setter Property="Text" Value="(All)" />
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <Button Grid.Column="8" Content="Reset" FocusVisualStyle="{x:Null}" Command="{Binding ResetFiltersCommand}" Margin="2" 
+                            Height="{Binding ActualHeight, ElementName=PART_Rarities}" VerticalAlignment="Center" />
                     </Grid>
                 </Expander>
                 <DockPanel Grid.Row="1" Margin="4">
@@ -357,7 +356,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <GroupBox Header="Management" Margin="4">
+                <GroupBox Header="Management" Margin="4,4,4,0">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
@@ -409,10 +408,46 @@
                                 </Style.Triggers>
                             </Style>
                         </StackPanel.Resources>
-                        <views:EffectsControl Margin="4" Header="{Binding SelectedItem}" Effects="{Binding SelectedItem.CoreEffects}" Buffs="{x:Static core:Amalur.Buffs}"
-                            EffectTranslations="{x:Static core:Amalur.CoreEffects}" EffectDefinitions="{Binding Values, Source={x:Static core:Amalur.CoreEffects}}"
+                        <GroupBox Header="Prefix/Suffix" Margin="4,4,4,0">
+                            <GroupBox.Style>
+                                <Style TargetType="{x:Type GroupBox}" BasedOn="{StaticResource {x:Type GroupBox}}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SelectedItem}" Value="{x:Null}">
+                                            <Setter Property="Opacity" Value="0.66" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </GroupBox.Style>
+                            <Grid>
+                                <Grid.Style>
+                                    <Style TargetType="{x:Type Grid}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedItem}" Value="{x:Null}">
+                                                <Setter Property="IsEnabled" Value="False" />
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Grid.Style>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="Prefix:" Margin="2" VerticalAlignment="Center" TextAlignment="Right"/>
+                                <views:BuffSelector Grid.Column="1" Buffs="{x:Static core:Amalur.Buffs}" 
+                                    MinWidth="100" Margin="2" IsEnabled="False" Filter="Prefix" SelectedBuff="{Binding SelectedItem.Prefix}" />
+                                <TextBlock Grid.Row="1" Text="Suffix:" Margin="2" VerticalAlignment="Center" TextAlignment="Right"/>
+                                <views:BuffSelector Grid.Row="1" Grid.Column="1" Buffs="{x:Static core:Amalur.Buffs}" 
+                                    MinWidth="100" Margin="2" IsEnabled="False" Filter="Suffix" SelectedBuff="{Binding SelectedItem.Suffix}" />
+                            </Grid>
+                        </GroupBox>                        
+                        <views:EffectsControl Margin="4,4,4,0" Header="{Binding SelectedItem}" Buffs="{x:Static core:Amalur.Buffs}"
                             AddEffectCommand="{Binding AddCoreEffectCommand}" DeleteEffectCommand="{Binding DeleteCoreEffectCommand}"
-                            UnsupportedFormat="{Binding SelectedItem.UnsupportedFormat}" Capacity="{x:Static core:CoreEffectMemory.MaxCoreEffects}">
+                            BuffsFilter="Item" Effects="{Binding SelectedItem.CoreEffects}" UnsupportedFormat="{Binding SelectedItem.UnsupportedFormat}" Capacity="{x:Static core:CoreEffectMemory.MaxCoreEffects}">
                             <views:EffectsControl.HeaderTemplate>
                                 <DataTemplate DataType="{x:Type views:ItemModel}">
                                     <TextBlock>
@@ -420,19 +455,18 @@
                                             <Style TargetType="{x:Type TextBlock}">
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding}" Value="{x:Null}">
-                                                        <Setter Property="Text" Value="Core Effects:" />
+                                                        <Setter Property="Text" Value="Item Buffs:" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
-                                                <Setter Property="Text" Value="{Binding CoreEffects.Count, Mode=OneWay, StringFormat='Core Effects: ({0})'}" />
+                                                <Setter Property="Text" Value="{Binding CoreEffects.Count, Mode=OneWay, StringFormat='Item Buffs: ({0})'}" />
                                             </Style>
                                         </TextBlock.Style>
                                     </TextBlock>
                                 </DataTemplate>
                             </views:EffectsControl.HeaderTemplate>
                         </views:EffectsControl>
-                        <views:EffectsControl Margin="4" Header="{Binding SelectedItem}" Effects="{Binding SelectedItem.Effects}" Buffs="{x:Static core:Amalur.Buffs}"
-                            EffectTranslations="{x:Static core:Amalur.DedupedEffects}" EffectDefinitions="{x:Static core:Amalur.Effects}"
-                            AddEffectCommand="{Binding AddEffectCommand}" DeleteEffectCommand="{Binding DeleteEffectCommand}">
+                        <views:EffectsControl Margin="4,4,4,0" Header="{Binding SelectedItem}" Effects="{Binding SelectedItem.Effects}"
+                            BuffsFilter="Player" Buffs="{x:Static core:Amalur.Buffs}" AddEffectCommand="{Binding AddEffectCommand}" DeleteEffectCommand="{Binding DeleteEffectCommand}" >
                             <views:EffectsControl.HeaderTemplate>
                                 <DataTemplate DataType="{x:Type views:ItemModel}">
                                     <TextBlock>
@@ -440,10 +474,10 @@
                                             <Style TargetType="{x:Type TextBlock}">
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding}" Value="{x:Null}">
-                                                        <Setter Property="Text" Value="Effects:" />
+                                                        <Setter Property="Text" Value="Player Buffs:" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
-                                                <Setter Property="Text" Value="{Binding Effects.Count, Mode=OneWay, StringFormat='Effects: ({0})'}" />
+                                                <Setter Property="Text" Value="{Binding Effects.Count, Mode=OneWay, StringFormat='Player Buffs: ({0})'}" />
                                             </Style>
                                         </TextBlock.Style>
                                     </TextBlock>

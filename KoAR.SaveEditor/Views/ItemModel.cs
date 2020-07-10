@@ -10,18 +10,25 @@ namespace KoAR.SaveEditor.Views
     /// <summary>
     /// A wrapper class for <see cref="ItemMemoryInfo"/> that implements <see cref="INotifyPropertyChanged"/>.
     /// </summary>
-    public sealed class ItemModel : NotifierBase
+    public sealed class ItemModel : NotifierBase, IDisposable
     {
+        private readonly NotifyingCollection<Buff> _coreEffects;
+        private readonly NotifyingCollection<Buff> _effects;
+
         public ItemModel(ItemMemoryInfo item)
         {
             this.Item = item;
-            this.CoreEffects = new NotifyingCollection<uint>(item.CoreEffects.List);
-            this.Effects = new NotifyingCollection<uint>(item.Effects);
+            this._coreEffects = new NotifyingCollection<Buff>(item.CoreEffects.List);
+            this._coreEffects.CollectionChanged += this.EffectsCollection_CollectionChanged;
+            this._effects = new NotifyingCollection<Buff>(item.Effects);
+            this._effects.CollectionChanged += this.EffectsCollection_CollectionChanged;
         }
+
+        public int AffixCount => (this.Prefix == null ? 0 : 1) + (this.Suffix == null ? 0 : 1);
 
         public EquipmentCategory Category => this.Item.TypeDefinition.Category;
 
-        public IList<uint> CoreEffects { get; }
+        public IList<Buff> CoreEffects => this._coreEffects;
 
         public float CurrentDurability
         {
@@ -36,7 +43,7 @@ namespace KoAR.SaveEditor.Views
             false => this.TypeDefinition.Name,
         };
 
-        public IList<uint> Effects { get; }
+        public IList<Buff> Effects => this._effects;
 
         public bool HasCustomName => this.Item.HasCustomName;
 
@@ -83,16 +90,28 @@ namespace KoAR.SaveEditor.Views
 
         public Buff? Prefix
         {
-            get => Amalur.Buffs.TryGetValue(this.Item.CoreEffects.Prefix, out Buff buff) ? buff : default;
-            set => this.SetItemValue(value?.Id ?? 0, this.Item.CoreEffects.Prefix, value => this.Item.CoreEffects.Prefix = value);
+            get => this.Item.CoreEffects.Prefix;
+            set
+            {
+                if (this.SetItemValue(value, this.Item.CoreEffects.Prefix, value => this.Item.CoreEffects.Prefix = value))
+                {
+                    this.OnPropertyChanged(nameof(this.AffixCount));
+                }
+            }
         }
 
-        public Rarity Rarity => this.TypeDefinition.Rarity;
+        public Rarity Rarity => this.Item.Rarity;
 
         public Buff? Suffix
         {
-            get => Amalur.Buffs.TryGetValue(this.Item.CoreEffects.Suffix, out Buff buff) ? buff : default;
-            set => this.SetItemValue(value?.Id ?? 0, this.Item.CoreEffects.Suffix, value => this.Item.CoreEffects.Suffix = value);
+            get => this.Item.CoreEffects.Suffix;
+            set
+            {
+                if (this.SetItemValue(value, this.Item.CoreEffects.Suffix, value => this.Item.CoreEffects.Suffix = value))
+                {
+                    this.OnPropertyChanged(nameof(this.AffixCount));
+                }
+            }
         }
 
         public TypeDefinition TypeDefinition
@@ -102,6 +121,8 @@ namespace KoAR.SaveEditor.Views
             {
                 this.Item.TypeDefinition = value;
                 this.OnPropertyChanged(string.Empty);
+                this._effects.OnReset();
+                this._coreEffects.OnReset();
             }
         }
 
@@ -109,13 +130,13 @@ namespace KoAR.SaveEditor.Views
 
         internal ItemMemoryInfo Item { get; }
 
-        internal void AddCoreEffect(uint code) => this.CoreEffects.Add(code);
+        public void Dispose()
+        {
+            this._effects.CollectionChanged -= this.EffectsCollection_CollectionChanged;
+            this._coreEffects.CollectionChanged -= this.EffectsCollection_CollectionChanged;
+        }
 
-        internal void AddEffect(uint code) => this.Effects.Add(code);
-
-        internal void DeleteCoreEffect(uint code) => this.CoreEffects.Remove(code);
-
-        internal void DeleteEffect(uint code) => this.Effects.Remove(code);
+        private void EffectsCollection_CollectionChanged(object sender, EventArgs e) => this.OnPropertyChanged(nameof(this.Rarity));
 
         private bool SetItemValue<T>(T value, T currentValue, Action<T> setValue, [CallerMemberName] string propertyName = "")
         {

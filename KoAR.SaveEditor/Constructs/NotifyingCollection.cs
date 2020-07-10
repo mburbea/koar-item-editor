@@ -40,6 +40,13 @@ namespace KoAR.SaveEditor.Constructs
             return new Disposable(this.DecrementPause);
         }
 
+        public void OnReset()
+        {
+            this.OnCollectionChanged(NotifyingCollection<T>._resetArgs);
+            this.OnPropertyChanged(NotifyingCollection<T>._countArgs);
+            this.OnPropertyChanged(NotifyingCollection<T>._indexerArgs);
+        }
+
         protected override void ClearItems()
         {
             if (this.Items.Count == 0)
@@ -101,13 +108,6 @@ namespace KoAR.SaveEditor.Constructs
             {
                 this.PropertyChanged?.Invoke(this, e);
             }
-        }
-
-        private void OnReset()
-        {
-            this.OnCollectionChanged(NotifyingCollection<T>._resetArgs);
-            this.OnPropertyChanged(NotifyingCollection<T>._countArgs);
-            this.OnPropertyChanged(NotifyingCollection<T>._indexerArgs);
         }
     }
 }
