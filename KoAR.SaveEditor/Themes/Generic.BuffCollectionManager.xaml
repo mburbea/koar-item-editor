@@ -227,7 +227,7 @@
                                         <ColumnDefinition />
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
-                                    <views:BuffSelector Margin="2" Grid.ColumnSpan="2" Buffs="{TemplateBinding Buffs}" Filter="{TemplateBinding BuffsFilter}"
+                                    <views:BuffSelector Margin="2" Grid.ColumnSpan="2" Filter="{TemplateBinding BuffsFilter}" Buffs="{TemplateBinding Buffs}"
                                         SelectedBuff="{Binding PendingBuff, RelativeSource={RelativeSource TemplatedParent}}" />
                                     <TextBox Grid.Row="1" VerticalAlignment="Center" Margin="2">
                                         <TextBox.Text>

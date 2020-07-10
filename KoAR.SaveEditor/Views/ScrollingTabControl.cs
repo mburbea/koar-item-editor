@@ -206,14 +206,16 @@ namespace KoAR.SaveEditor.Views
             {
                 return;
             }
+            int index = this.SelectedIndex;
             if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
             {
-                this.SelectedIndex = (this.SelectedIndex == 0 ? this.Items.Count : this.SelectedIndex) - 1;
+                this.SelectedIndex = --index < 0 ? this.Items.Count - 1 : index;
             }
             else
             {
-                this.SelectedIndex = (this.SelectedIndex == this.Items.Count - 1 ? 0 : (this.SelectedIndex + 1));
+                this.SelectedIndex = ++index == this.Items.Count ? 0 : index;
             }
+            e.Handled = true;
         }
     }
 }
