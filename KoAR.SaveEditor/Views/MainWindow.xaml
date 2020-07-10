@@ -434,11 +434,11 @@
                                     <RowDefinition />
                                 </Grid.RowDefinitions>
                                 <TextBlock Text="Prefix:" Margin="2" VerticalAlignment="Center" TextAlignment="Right"/>
-                                <views:BuffSelector Grid.Column="1" Buffs="{x:Static core:Amalur.Buffs}" 
-                                    MinWidth="100" Margin="2" IsEnabled="False" Filter="Prefix" SelectedBuff="{Binding SelectedItem.Prefix}" />
+                                <views:BuffSelector Grid.Column="1" Filter="Prefix" Buffs="{x:Static core:Amalur.Buffs}" 
+                                    MinWidth="100" Margin="2" IsEnabled="False" SelectedBuff="{Binding SelectedItem.Prefix}" />
                                 <TextBlock Grid.Row="1" Text="Suffix:" Margin="2" VerticalAlignment="Center" TextAlignment="Right"/>
-                                <views:BuffSelector Grid.Row="1" Grid.Column="1" Buffs="{x:Static core:Amalur.Buffs}" 
-                                    MinWidth="100" Margin="2" IsEnabled="False" Filter="Suffix" SelectedBuff="{Binding SelectedItem.Suffix}" />
+                                <views:BuffSelector Grid.Row="1" Grid.Column="1" Filter="Suffix" Buffs="{x:Static core:Amalur.Buffs}" 
+                                    MinWidth="100" Margin="2" IsEnabled="False" SelectedBuff="{Binding SelectedItem.Suffix}" />
                             </Grid>
                         </GroupBox>
                         <views:BuffCollectionManager Margin="4,4,4,0" Header="{Binding SelectedItem}" BuffsFilter="Item"
