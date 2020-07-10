@@ -32,14 +32,14 @@ namespace KoAR.Core
 
         public void AddItem(TypeDefinition type)
         {
-            Span<byte> temp = stackalloc byte[25 + type.Effects.Length * 8];
+            Span<byte> temp = stackalloc byte[25 + type.PlayerBuffs.Length * 8];
             MemoryUtilities.Write(temp, 0, type.TypeId | ((ulong)0x03_0A) << 32); // 8
             MemoryUtilities.Write(temp, 10, type.MaxDurability);
             temp[14] = 1;
-            MemoryUtilities.Write(temp, 18, type.Effects.Length);
-            for(int i = 0; i < type.Effects.Length; i++)
+            MemoryUtilities.Write(temp, 18, type.PlayerBuffs.Length);
+            for(int i = 0; i < type.PlayerBuffs.Length; i++)
             {
-                MemoryUtilities.Write(temp,  i * 8 + 22, type.Effects[i].Id | ((ulong)uint.MaxValue) << 32);
+                MemoryUtilities.Write(temp,  i * 8 + 22, type.PlayerBuffs[i].Id | ((ulong)uint.MaxValue) << 32);
             }
             temp[^1] = 0xFF;
             Amalur.Bytes = MemoryUtilities.ReplaceBytes(Amalur.Bytes, Offset + 17, 0, temp);

@@ -5,15 +5,15 @@
         private readonly struct Offset
         {
             public const int DataLength = 13;
-            public const int EffectCount = 21;
-            public const int FirstEffect = EffectCount + 4;
+            public const int BuffCount = 21;
+            public const int FirstBuff = BuffCount + 4;
 
             private readonly int _count;
 
             public Offset(int count) => _count = count;
 
-            public int PostEffect => FirstEffect + _count * 8;
-            public int CurrentDurability => PostEffect + 4;
+            public int PostBuffs => FirstBuff + _count * 8;
+            public int CurrentDurability => PostBuffs + 4;
             public int MaxDurability => CurrentDurability + 4;
             public int SellableFlag => MaxDurability + 8;
             public int HasCustomName => SellableFlag + 2;

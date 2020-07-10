@@ -24,11 +24,11 @@ namespace KoAR.Core
             }
             ItemIndex = offset;
             ItemBytes = Amalur.Bytes.AsSpan(offset, datalength).ToArray();
-            CoreEffects = new CoreEffectMemory(coreEffectOffset, coreEffectDataLength);
-            Effects = new List<Buff>(BuffCount);
-            for (int i = 0; i < Effects.Capacity; i++)
+            ItemBuffs = new ItemBuffMemory(coreEffectOffset, coreEffectDataLength);
+            PlayerBuffs = new List<Buff>(BuffCount);
+            for (int i = 0; i < PlayerBuffs.Capacity; i++)
             {
-                Effects.Add(Amalur.GetBuff(MemoryUtilities.Read<uint>(ItemBytes, Offset.FirstEffect + i * 8)));
+                PlayerBuffs.Add(Amalur.GetBuff(MemoryUtilities.Read<uint>(ItemBytes, Offset.FirstBuff + i * 8)));
             }
             if (HasCustomNameFlag)
             {
@@ -107,7 +107,7 @@ namespace KoAR.Core
         //    }
         //}
 
-        public CoreEffectMemory CoreEffects { get; }
+        public ItemBuffMemory ItemBuffs { get; }
 
         public float CurrentDurability
         {
@@ -121,7 +121,7 @@ namespace KoAR.Core
             set => MemoryUtilities.Write(ItemBytes, Offset.DataLength, value - 17);
         }
 
-        public List<Buff> Effects { get; } = new List<Buff>();
+        public List<Buff> PlayerBuffs { get; } = new List<Buff>();
 
         public bool HasCustomName
         {
@@ -212,9 +212,9 @@ namespace KoAR.Core
 
         public Rarity Rarity => TypeDefinition.Rarity == Rarity.Set
             ? Rarity.Set
-            : Effects.Select(x => x.Rarity)
-                .Concat(CoreEffects.List.Select(x => x.Rarity))
-                .Concat(new[] { CoreEffects.Prefix?.Rarity ?? default, CoreEffects.Suffix?.Rarity ?? default, TypeDefinition.Sockets.Any() ? Rarity.Infrequent : Rarity.Common })
+            : PlayerBuffs.Select(x => x.Rarity)
+                .Concat(ItemBuffs.List.Select(x => x.Rarity))
+                .Concat(new[] { ItemBuffs.Prefix?.Rarity ?? default, ItemBuffs.Suffix?.Rarity ?? default, TypeDefinition.Sockets.Any() ? Rarity.Infrequent : Rarity.Common })
                 .Max();
 
         public string ItemName { get; set; } = string.Empty;
@@ -227,8 +227,8 @@ namespace KoAR.Core
 
         private int BuffCount
         {
-            get => MemoryUtilities.Read<int>(ItemBytes, Offset.EffectCount);
-            set => MemoryUtilities.Write(ItemBytes, Offset.EffectCount, value);
+            get => MemoryUtilities.Read<int>(ItemBytes, Offset.BuffCount);
+            set => MemoryUtilities.Write(ItemBytes, Offset.BuffCount, value);
         }
 
         private Offset Offsets => new Offset(BuffCount);
@@ -261,18 +261,18 @@ namespace KoAR.Core
                 DataLength = ItemBytes.Length;
             }
 
-            if (!forced && Effects.Count == BuffCount)
+            if (!forced && PlayerBuffs.Count == BuffCount)
             {
                 return ItemBytes;
             }
-            var currentLength = Offsets.PostEffect - Offset.FirstEffect;
-            MemoryUtilities.Write(ItemBytes, Offset.EffectCount, Effects.Count);
-            Span<ulong> effectData = stackalloc ulong[Effects.Count];
-            for (int i = 0; i < effectData.Length; i++)
+            var currentLength = Offsets.PostBuffs - Offset.FirstBuff;
+            MemoryUtilities.Write(ItemBytes, Offset.BuffCount, PlayerBuffs.Count);
+            Span<ulong> buffData = stackalloc ulong[PlayerBuffs.Count];
+            for (int i = 0; i < buffData.Length; i++)
             {
-                effectData[i] = Effects[i].Id | (ulong)uint.MaxValue << 32;
+                buffData[i] = PlayerBuffs[i].Id | (ulong)uint.MaxValue << 32;
             }
-            ItemBytes = MemoryUtilities.ReplaceBytes(ItemBytes, Offset.FirstEffect, currentLength, MemoryMarshal.AsBytes(effectData));
+            ItemBytes = MemoryUtilities.ReplaceBytes(ItemBytes, Offset.FirstBuff, currentLength, MemoryMarshal.AsBytes(buffData));
             DataLength = ItemBytes.Length;
             return ItemBytes;
         }
@@ -281,12 +281,12 @@ namespace KoAR.Core
         {
             CurrentDurability = definition.MaxDurability;
             MaxDurability = definition.MaxDurability;
-            CoreEffects.List.Clear();
-            CoreEffects.List.AddRange(definition.CoreEffects);
-            CoreEffects.Prefix = definition.Prefix;
-            CoreEffects.Suffix = definition.Suffix;
-            Effects.Clear();
-            Effects.AddRange(definition.Effects);
+            ItemBuffs.List.Clear();
+            ItemBuffs.List.AddRange(definition.ItemBuffs);
+            ItemBuffs.Prefix = definition.Prefix;
+            ItemBuffs.Suffix = definition.Suffix;
+            PlayerBuffs.Clear();
+            PlayerBuffs.AddRange(definition.PlayerBuffs);
             Level = definition.Level;
         }
     }

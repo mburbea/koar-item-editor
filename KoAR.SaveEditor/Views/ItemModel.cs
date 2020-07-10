@@ -18,9 +18,9 @@ namespace KoAR.SaveEditor.Views
         public ItemModel(ItemMemoryInfo item)
         {
             this.Item = item;
-            this._itemBuffs = new NotifyingCollection<Buff>(item.CoreEffects.List);
+            this._itemBuffs = new NotifyingCollection<Buff>(item.ItemBuffs.List);
             this._itemBuffs.CollectionChanged += this.Buffs_CollectionChanged;
-            this._playerBuffs = new NotifyingCollection<Buff>(item.Effects);
+            this._playerBuffs = new NotifyingCollection<Buff>(item.PlayerBuffs);
             this._playerBuffs.CollectionChanged += this.Buffs_CollectionChanged;
         }
 
@@ -90,10 +90,10 @@ namespace KoAR.SaveEditor.Views
 
         public Buff? Prefix
         {
-            get => this.Item.CoreEffects.Prefix;
+            get => this.Item.ItemBuffs.Prefix;
             set
             {
-                if (this.SetItemValue(value, this.Item.CoreEffects.Prefix, value => this.Item.CoreEffects.Prefix = value))
+                if (this.SetItemValue(value, this.Item.ItemBuffs.Prefix, value => this.Item.ItemBuffs.Prefix = value))
                 {
                     this.OnPropertyChanged(nameof(this.AffixCount));
                 }
@@ -104,10 +104,10 @@ namespace KoAR.SaveEditor.Views
 
         public Buff? Suffix
         {
-            get => this.Item.CoreEffects.Suffix;
+            get => this.Item.ItemBuffs.Suffix;
             set
             {
-                if (this.SetItemValue(value, this.Item.CoreEffects.Suffix, value => this.Item.CoreEffects.Suffix = value))
+                if (this.SetItemValue(value, this.Item.ItemBuffs.Suffix, value => this.Item.ItemBuffs.Suffix = value))
                 {
                     this.OnPropertyChanged(nameof(this.AffixCount));
                 }
@@ -126,7 +126,7 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        public bool UnsupportedFormat => this.Item.CoreEffects.UnsupportedFormat;
+        public bool UnsupportedFormat => this.Item.ItemBuffs.UnsupportedFormat;
 
         internal ItemMemoryInfo Item { get; }
 
