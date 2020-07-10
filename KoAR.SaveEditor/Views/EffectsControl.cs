@@ -120,39 +120,5 @@ namespace KoAR.SaveEditor.Views
         {
             ((EffectsControl)d).PendingEffectId = ((Buff?)e.NewValue)?.Id;
         }
-
-        //private sealed class DisplayTextConverter : IMultiValueConverter
-        //{
-        //    object IMultiValueConverter.Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
-        //    {
-        //        if (values.Length < 3 || !(values[0] is uint code && values[1] is IDictionary translations && values[2] is IReadOnlyDictionary<uint, Buff> buffs))
-        //        {
-        //            return DependencyProperty.UnsetValue;
-        //        }
-        //        if (translations.Contains(code))
-        //        {
-        //            return ((IEffectInfo)translations[code]).DisplayText;
-        //        }
-        //        if (buffs.TryGetValue(code, out Buff buff))
-        //        {
-        //            if (buff.Flavor != null)
-        //            {
-        //                return buff.Flavor;
-        //            }
-        //            if (buff.BuffType != BuffTypes.Suffix && buff.BuffType != BuffTypes.Prefix && buff.BuffType != BuffTypes.Self && buff.Modifier != null)
-        //            {
-        //                return buff.Modifier;
-        //            }
-        //            if (buff.Desc.Length != 0)
-        //            {
-        //                return string.Join("; ", buff.Desc.Select(desc => desc.Text));
-        //            }
-        //            return buff.Name;
-        //        }
-        //        return "Unknown";
-        //    }
-
-        //    object[] IMultiValueConverter.ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture) => throw new NotImplementedException();
-        //}
     }
 }

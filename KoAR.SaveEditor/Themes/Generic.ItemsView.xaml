@@ -7,6 +7,9 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/PresentationFramework.Aero,Version=4.0.0.0,PublicKeyToken=31bf3856ad364e35;component/Themes/Aero.NormalColor.xaml" />
     </ResourceDictionary.MergedDictionaries>
+    <DataTemplate x:Key="BuffToolTipTemplate" DataType="{x:Type core:Buff}">
+        <views:BuffControl Buff="{Binding}" IsExpanded="True" />
+    </DataTemplate>
     <Style TargetType="{x:Type views:ItemsView}">
         <Style.Resources>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
@@ -282,9 +285,21 @@
                                 <GridViewColumn Header="Prefix/Suffix" Width="Auto" views:ItemsView.PropertyName="AffixCount">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate DataType="{x:Type views:ItemModel}">
+                                            <DataTemplate.Resources>
+                                                <Style TargetType="{x:Type ToolTip}" BasedOn="{StaticResource {x:Type ToolTip}}">
+                                                    <Setter Property="ContentTemplate" Value="{StaticResource BuffToolTipTemplate}" />
+                                                </Style>
+                                                <Style TargetType="{x:Type views:BuffIcon}">
+                                                    <Style.Triggers>
+                                                        <Trigger Property="Buff" Value="{x:Null}">
+                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </DataTemplate.Resources>
                                             <StackPanel Orientation="Horizontal">
-                                                <views:BuffIcon Buff="{Binding Prefix}" Margin="1,0" />
-                                                <views:BuffIcon Buff="{Binding Suffix}" Margin="1,0" />
+                                                <views:BuffIcon Buff="{Binding Prefix}" Margin="1,0" ToolTip="{Binding Prefix}" />
+                                                <views:BuffIcon Buff="{Binding Suffix}" Margin="1,0" ToolTip="{Binding Suffix}" />
                                             </StackPanel>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
@@ -300,7 +315,12 @@
                                                 </ItemsControl.ItemsPanel>
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate DataType="{x:Type core:Buff}">
-                                                        <views:BuffIcon Buff="{Binding}" Margin="1,0" />
+                                                        <DataTemplate.Resources>
+                                                            <Style TargetType="{x:Type ToolTip}" BasedOn="{StaticResource {x:Type ToolTip}}">
+                                                                <Setter Property="ContentTemplate" Value="{StaticResource BuffToolTipTemplate}" />
+                                                            </Style>
+                                                        </DataTemplate.Resources>
+                                                        <views:BuffIcon Buff="{Binding}" Margin="1,0" ToolTip="{Binding}" />
                                                     </DataTemplate>
                                                 </ItemsControl.ItemTemplate>
                                             </ItemsControl>
@@ -318,7 +338,12 @@
                                                 </ItemsControl.ItemsPanel>
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate DataType="{x:Type core:Buff}">
-                                                        <views:BuffIcon Buff="{Binding}" Margin="1,0" />
+                                                        <DataTemplate.Resources>
+                                                            <Style TargetType="{x:Type ToolTip}" BasedOn="{StaticResource {x:Type ToolTip}}">
+                                                                <Setter Property="ContentTemplate" Value="{StaticResource BuffToolTipTemplate}" />
+                                                            </Style>
+                                                        </DataTemplate.Resources>
+                                                        <views:BuffIcon Buff="{Binding}" Margin="1,0" ToolTip="{Binding}" />
                                                     </DataTemplate>
                                                 </ItemsControl.ItemTemplate>
                                             </ItemsControl>

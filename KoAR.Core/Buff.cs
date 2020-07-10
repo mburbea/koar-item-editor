@@ -19,11 +19,13 @@ namespace KoAR.Core
 
         public string TitleText => (((BuffTypes.TransientOrAffix & BuffType) == BuffType ? Modifier : Flavor) ?? Name).Replace('\n', '.');
 
-        public string ShortDisplayText => $"{TitleText} [{(Desc.Any() ? string.Join(";", Desc.Select(x => x.Text)) : $"None ({Name})")}]";
+        public string ShortDisplayText => $"{TitleText} [{(Desc.Any() ? string.Join(";", Desc.Select(x => x.Text)) : "None")}]";
     }
 
     public class BuffDescription
     {
+        public static readonly BuffDescription Empty = new BuffDescription { Icon = "Default", Text = "None" };
+
         [JsonPropertyName("param_icon")]
         public string? Icon { get; set; }
         public string? Text { get; set; }

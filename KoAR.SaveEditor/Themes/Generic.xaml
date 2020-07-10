@@ -1,16 +1,17 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
     <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.EffectsControl.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.BuffControl.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.BuffSelector.xaml" />
-        <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.EffectsControl.xaml" />
-        <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.EquipmentCategoryIcon.xaml" />
-        <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.ScrollingTabControl.xaml" />
-        <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.ItemsView.xaml" />
-        <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.BuffIcon.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.BuffDescriptionIcon.xaml" />
+        <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.BuffIcon.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.RarityIcon.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.ElementIcon.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.ArmorTypeIcon.xaml" />
+        <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.EquipmentCategoryIcon.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.TypeDefinitionControl.xaml" />
+        <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.ItemsView.xaml" />
+        
+        <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.ScrollingTabControl.xaml" />
     </ResourceDictionary.MergedDictionaries>    
 </ResourceDictionary>

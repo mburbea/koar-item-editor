@@ -60,6 +60,16 @@ namespace KoAR.SaveEditor.Views
             base.OnClosing(e);
         }
 
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if ((e.Key == Key.D0 || e.Key == Key.NumPad0) && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+            {
+                Settings.Default.ZoomScale = 1d;
+                e.Handled = true;
+            }
+            base.OnKeyDown(e);
+        }
+
         private static void DisplayHelp(object sender, ExecutedRoutedEventArgs e)
         {
             TaskDialog.Show(new TaskDialogOptions

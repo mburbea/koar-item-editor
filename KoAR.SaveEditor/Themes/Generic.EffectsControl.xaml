@@ -9,8 +9,8 @@
     </ResourceDictionary.MergedDictionaries>
     <BitmapImage x:Key="Copy" UriSource="/KoAR.SaveEditor;component/Resources/Copy.png" po:Freeze="True" />
     <BitmapImage x:Key="Delete" UriSource="/KoAR.SaveEditor;component/Resources/Delete.png" po:Freeze="True" />
-    <DataTemplate x:Key="ToolTipTemplate" DataType="{x:Type core:Buff}">
-        <views:BuffControl Buff="{Binding}" Expanded="True" />
+    <DataTemplate x:Key="BuffToolTipTemplate" DataType="{x:Type core:Buff}">
+        <views:BuffControl Buff="{Binding}" IsExpanded="True" />
     </DataTemplate>
     <Style TargetType="{x:Type views:EffectsControl}">
         <Style.Resources>
@@ -189,7 +189,7 @@
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                             </ListBox>
-                            <GroupBox Header="Add Effect:" BorderThickness="1" BorderBrush="LightGray" FocusVisualStyle="{x:Null}">
+                            <GroupBox Header="Add Buff:" BorderThickness="1" BorderBrush="LightGray" FocusVisualStyle="{x:Null}">
                                 <GroupBox.Style>
                                     <Style TargetType="{x:Type GroupBox}">
                                         <Style.Triggers>
@@ -227,9 +227,11 @@
                                         <ColumnDefinition />
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
-                                    <ComboBox Margin="2" Grid.ColumnSpan="2" ItemsSource="{Binding Buffs.Values, RelativeSource={RelativeSource TemplatedParent}}" 
+                                    <views:BuffSelector Margin="2" Grid.ColumnSpan="2" Buffs="{TemplateBinding Buffs}"
+                                        SelectedBuff="{Binding PendingEffect, RelativeSource={RelativeSource TemplatedParent}}" />
+                                    <!--<ComboBox Margin="2" Grid.ColumnSpan="2" ItemsSource="{Binding Buffs.Values, RelativeSource={RelativeSource TemplatedParent}}" 
                                         SelectedItem="{Binding PendingEffect, RelativeSource={RelativeSource TemplatedParent}}"
-                                        FocusVisualStyle="{x:Null}">
+                                        FocusVisualStyle="{x:Null}" TextSearch.TextPath="ShortDisplayText">
                                         <ComboBox.ItemsPanel>
                                             <ItemsPanelTemplate>
                                                 <VirtualizingStackPanel IsItemsHost="True" />
@@ -239,10 +241,11 @@
                                             <DataTemplate DataType="{x:Type core:Buff}">
                                                 <DockPanel>
                                                     <DockPanel.ToolTip>
-                                                        <ToolTip Content="{Binding}" ContentTemplate="{StaticResource ToolTipTemplate}" />
+                                                        <ToolTip Content="{Binding}" ContentTemplate="{StaticResource BuffToolTipTemplate}" />
                                                     </DockPanel.ToolTip>
-                                                    <views:BuffIcon Buff="{Binding}" VerticalAlignment="Center"/>
-                                                    <TextBlock Margin="2,0,0,0" Text="{Binding ShortDisplayText}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+                                                    <views:BuffIcon DockPanel.Dock="Left" Buff="{Binding}" VerticalAlignment="Center" />
+                                                    <views:RarityIcon DockPanel.Dock="Left" Rarity="{Binding Rarity}" VerticalAlignment="Center" Margin="2,0" />
+                                                    <TextBlock Text="{Binding ShortDisplayText}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
                                                 </DockPanel>
                                             </DataTemplate>
                                         </ComboBox.ItemTemplate>
@@ -252,7 +255,7 @@
                                                 <Setter Property="MaxWidth" Value="400" />
                                             </Style>
                                         </ComboBox.ItemContainerStyle>
-                                    </ComboBox>
+                                    </ComboBox>-->
                                     <TextBox Grid.Row="1" VerticalAlignment="Center" Margin="2">
                                         <TextBox.Text>
                                             <Binding Path="PendingEffectId" Converter="{StaticResource HexConverter}" RelativeSource="{RelativeSource TemplatedParent}" />
