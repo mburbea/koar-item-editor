@@ -289,17 +289,7 @@
                         <TabControl.ItemTemplate>
                             <DataTemplate DataType="{x:Type constructs:DataContainer}">
                                 <StackPanel Orientation="Horizontal">
-                                    <views:EquipmentCategoryIcon Category="{Binding Data}" VerticalAlignment="Center">
-                                        <views:EquipmentCategoryIcon.Style>
-                                            <Style TargetType="{x:Type views:EquipmentCategoryIcon}">
-                                                <Style.Triggers>
-                                                    <Trigger Property="Category" Value="{x:Null}">
-                                                        <Setter Property="Visibility" Value="Collapsed" />
-                                                    </Trigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </views:EquipmentCategoryIcon.Style>
-                                    </views:EquipmentCategoryIcon>
+                                    <views:EquipmentCategoryIcon Category="{Binding Data}" VerticalAlignment="Center" />
                                     <TextBlock VerticalAlignment="Center" Margin="2,0">
                                         <TextBlock.Style>
                                             <Style TargetType="{x:Type TextBlock}">
