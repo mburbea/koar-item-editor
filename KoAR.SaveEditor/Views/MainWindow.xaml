@@ -128,7 +128,8 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="{Binding FilteredItems.Count, StringFormat='Count: {0}'}" VerticalAlignment="Center" />
                 <TextBlock Grid.Column="1" Text="{Binding ZoomScale, Source={x:Static p:Settings.Default}, StringFormat='##0%'}" VerticalAlignment="Center" TextAlignment="Right" />
-                <Slider Grid.Column="2" Value="{Binding ZoomScale, Source={x:Static p:Settings.Default}}" FocusVisualStyle="{x:Null}" Margin="4,0,8,0" VerticalAlignment="Center" Minimum="0.25" Maximum="1.75">
+                <Slider Grid.Column="2" Value="{Binding ZoomScale, Source={x:Static p:Settings.Default}}" FocusVisualStyle="{x:Null}" Margin="4,0,8,0" VerticalAlignment="Center" 
+                    Minimum="{x:Static views:MainWindow.MinScaleFactor}" Maximum="{x:Static views:MainWindow.MaxScaleFactor}">
                     <Slider.Resources>
                         <Style TargetType="{x:Type Thumb}" BasedOn="{StaticResource {x:Type Thumb}}">
                             <Setter Property="FocusVisualStyle" Value="{x:Null}" />

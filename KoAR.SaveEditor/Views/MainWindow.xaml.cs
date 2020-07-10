@@ -10,10 +10,14 @@ namespace KoAR.SaveEditor.Views
 {
     partial class MainWindow
     {
+        public const double MaxScaleFactor = 1.75;
+
+        public const double MinScaleFactor = 0.25;
+
         static MainWindow() => CommandManager.RegisterClassCommandBinding(typeof(MainWindow), new CommandBinding(ApplicationCommands.Help, MainWindow.DisplayHelp));
 
         public MainWindow()
-        {            
+        {
             this.InitializeComponent();
             this.Loaded += this.Window_Loaded;
         }
@@ -62,10 +66,16 @@ namespace KoAR.SaveEditor.Views
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            if ((e.Key == Key.D0 || e.Key == Key.NumPad0) && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+            if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
             {
-                Settings.Default.ZoomScale = 1d;
-                e.Handled = true;
+                Settings.Default.ZoomScale = e.Key switch
+                {
+                    Key.D0 => 1d,
+                    Key.NumPad0 => 1d,
+                    Key.OemPlus => Math.Min(MainWindow.MaxScaleFactor, Settings.Default.ZoomScale + 0.05),
+                    Key.OemMinus => Math.Max(MainWindow.MinScaleFactor, Settings.Default.ZoomScale - 0.05),
+                    _ => Settings.Default.ZoomScale,
+                };
             }
             base.OnKeyDown(e);
         }
@@ -84,7 +94,7 @@ namespace KoAR.SaveEditor.Views
 2. When modifying item names, do NOT use special characters.
 
 3. Editing unique items or adding properties beyond the maximum detected will cause your file to not load."
-            }) ;
+            });
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
