@@ -295,20 +295,13 @@
                                                             <Setter Property="Visibility" Value="Collapsed" />
                                                         </Trigger>
                                                     </Style.Triggers>
+                                                    <Setter Property="ToolTip" Value="{Binding Buff, RelativeSource={RelativeSource Self}}" />
                                                 </Style>
                                             </DataTemplate.Resources>
                                             <StackPanel Orientation="Horizontal">
-                                                <views:BuffIcon Margin="1,0" x:Name="Prefix" />
-                                                <views:BuffIcon Margin="1,0" x:Name="Suffix" />
+                                                <views:BuffIcon Margin="1,0" Buff="{Binding Prefix}" />
+                                                <views:BuffIcon Margin="1,0" Buff="{Binding Suffix}" />
                                             </StackPanel>
-                                            <DataTemplate.Triggers>
-                                                <DataTrigger Binding="{Binding Converter={StaticResource EqualityConverter}}" Value="False">
-                                                    <Setter TargetName="Prefix" Property="Buff" Value="{Binding Prefix}" />
-                                                    <Setter TargetName="Prefix" Property="ToolTip" Value="{Binding Prefix}" />
-                                                    <Setter TargetName="Suffix" Property="Buff" Value="{Binding Suffix}" />
-                                                    <Setter TargetName="Suffix" Property="ToolTip" Value="{Binding Suffix}" />
-                                                </DataTrigger>
-                                            </DataTemplate.Triggers>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>

@@ -23,20 +23,20 @@
                                 <CollectionViewSource.SortDescriptions>
                                     <scm:SortDescription PropertyName="ShortDisplayText" />
                                 </CollectionViewSource.SortDescriptions>
-                            </CollectionViewSource>                            
+                            </CollectionViewSource>
                             <CollectionViewSource x:Key="DataContainers">
                                 <CollectionViewSource.Source>
                                     <CompositeCollection>
                                         <CollectionContainer Collection="{Binding Source={x:Static constructs:DataContainer.Empty}, Converter={x:Static constructs:DataContainer.CollectionConverter}}" />
                                         <CollectionContainer Collection="{Binding Source={StaticResource FilteredItems}, Converter={x:Static constructs:DataContainer.CollectionConverter}}" />
                                     </CompositeCollection>
-                                </CollectionViewSource.Source>                                
+                                </CollectionViewSource.Source>
                             </CollectionViewSource>
                         </Border.Resources>
                         <ComboBox x:Name="PART_ComboBox" ItemsSource="{Binding Source={StaticResource DataContainers}}"
                             SelectedValuePath="Data" SelectedValue="{Binding SelectedBuff, RelativeSource={RelativeSource TemplatedParent}}"
                             HorizontalContentAlignment="Stretch" FocusVisualStyle="{x:Null}" TextSearch.TextPath="Data.ShortDisplayText"
-                            ScrollViewer.HorizontalScrollBarVisibility="Disabled" IsSynchronizedWithCurrentItem="False">
+                            ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                             <ComboBox.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <VirtualizingStackPanel IsItemsHost="True" MaxWidth="{Binding ActualWidth, ElementName=PART_ComboBox, Converter={StaticResource MaxWidthConverter}, ConverterParameter=400}" />
@@ -45,9 +45,9 @@
                             <ComboBox.ItemTemplate>
                                 <DataTemplate DataType="{x:Type constructs:DataContainer}">
                                     <DockPanel Margin="0,1" x:Name="Panel">
-                                        <views:RarityIcon DockPanel.Dock="Left" VerticalAlignment="Center" x:Name="RarityIcon" />
-                                        <views:BuffIcon DockPanel.Dock="Left" VerticalAlignment="Center" Margin="2,0" x:Name="BuffIcon" />
-                                        <TextBlock TextTrimming="CharacterEllipsis" VerticalAlignment="Center" x:Name="DisplayText" />
+                                        <views:RarityIcon DockPanel.Dock="Left" VerticalAlignment="Center" Rarity="{Binding Data.Rarity}" />
+                                        <views:BuffIcon DockPanel.Dock="Left" VerticalAlignment="Center" Margin="2,0" Buff="{Binding Data}" />
+                                        <TextBlock TextTrimming="CharacterEllipsis" VerticalAlignment="Center" Text="{Binding Data.ShortDisplayText}" />
                                     </DockPanel>
                                     <DataTemplate.Triggers>
                                         <DataTrigger Binding="{Binding Data, Converter={StaticResource EqualityConverter}}" Value="False">
@@ -56,9 +56,6 @@
                                                     <ToolTip Content="{Binding Data}" ContentTemplate="{StaticResource BuffToolTipTemplate}" />
                                                 </Setter.Value>
                                             </Setter>
-                                            <Setter TargetName="RarityIcon" Property="Rarity" Value="{Binding Data.Rarity}" />
-                                            <Setter TargetName="BuffIcon" Property="Buff" Value="{Binding Data}" />
-                                            <Setter TargetName="DisplayText" Property="Text" Value="{Binding Data.ShortDisplayText}" />
                                         </DataTrigger>
                                     </DataTemplate.Triggers>
                                 </DataTemplate>
@@ -70,14 +67,6 @@
                             </ComboBox.ItemContainerStyle>
                         </ComboBox>
                     </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="Filter" Value="Player">
-                            <Setter TargetName="PART_ComboBox" Property="IsSynchronizedWithCurrentItem" Value="True" />
-                        </Trigger>
-                        <Trigger Property="Filter" Value="Item">
-                            <Setter TargetName="PART_ComboBox" Property="IsSynchronizedWithCurrentItem" Value="True" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

@@ -438,31 +438,11 @@
                                     <RowDefinition />
                                 </Grid.RowDefinitions>
                                 <TextBlock Text="Prefix:" Margin="2" VerticalAlignment="Center" TextAlignment="Right"/>
-                                <views:BuffSelector Grid.Column="1" Buffs="{x:Static core:Amalur.Buffs}" MinWidth="100" Margin="2" IsEnabled="True" Filter="Prefix">
-                                    <views:BuffSelector.Style>
-                                        <Style TargetType="{x:Type views:BuffSelector}">
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding SelectedItem, Converter={StaticResource EqualityConverter}}" Value="False">
-                                                    <Setter Property="SelectedBuff" Value="{Binding SelectedItem.Prefix}" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                            <Setter Property="SelectedBuff" Value="{x:Null}" />
-                                        </Style>
-                                    </views:BuffSelector.Style>
-                                </views:BuffSelector>
+                                <views:BuffSelector Grid.Column="1" Buffs="{x:Static core:Amalur.Buffs}" 
+                                    MinWidth="100" Margin="2" IsEnabled="False" Filter="Prefix" SelectedBuff="{Binding SelectedItem.Prefix}" />
                                 <TextBlock Grid.Row="1" Text="Suffix:" Margin="2" VerticalAlignment="Center" TextAlignment="Right"/>
-                                <views:BuffSelector Grid.Row="1" Grid.Column="1" Buffs="{x:Static core:Amalur.Buffs}" MinWidth="100" Margin="2" IsEnabled="True" Filter="Suffix">
-                                    <views:BuffSelector.Style>
-                                        <Style TargetType="{x:Type views:BuffSelector}">
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding SelectedItem, Converter={StaticResource EqualityConverter}}" Value="False">
-                                                    <Setter Property="SelectedBuff" Value="{Binding SelectedItem.Suffix}" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                            <Setter Property="SelectedBuff" Value="{x:Null}" />
-                                        </Style>
-                                    </views:BuffSelector.Style>
-                                </views:BuffSelector>
+                                <views:BuffSelector Grid.Row="1" Grid.Column="1" Buffs="{x:Static core:Amalur.Buffs}" 
+                                    MinWidth="100" Margin="2" IsEnabled="False" Filter="Suffix" SelectedBuff="{Binding SelectedItem.Suffix}" />
                             </Grid>
                         </GroupBox>                        
                         <views:EffectsControl Margin="4,4,4,0" Header="{Binding SelectedItem}" Buffs="{x:Static core:Amalur.Buffs}"
