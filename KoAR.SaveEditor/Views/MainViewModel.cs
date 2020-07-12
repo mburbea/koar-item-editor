@@ -242,6 +242,7 @@ namespace KoAR.SaveEditor.Views
                 Amalur.Stash.AddItem(viewModel.Definition);
                 this.UnsavedChanges = true;
                 this.OnPropertyChanged(nameof(this.Stash));
+                this.RepopulateItems(regenerate: true);
             }
         }
 
@@ -342,7 +343,7 @@ namespace KoAR.SaveEditor.Views
             this.OnPropertyChanged(nameof(this.AllItemsUnstashable));
         }
 
-        private void RepopulateItems()
+        private void RepopulateItems(bool regenerate = false)
         {
             if (!Amalur.IsFileOpen)
             {
@@ -357,6 +358,10 @@ namespace KoAR.SaveEditor.Views
                     using ItemModel item = this._items[index];
                     PropertyChangedEventManager.RemoveHandler(item, this.Item_PropertyChanged, string.Empty);
                     this._items.RemoveAt(index);
+                }
+                if (regenerate)
+                {
+                    Amalur.GetAllEquipment();
                 }
                 foreach (ItemModel item in Amalur.Items.Select(info => new ItemModel(info)))
                 {
