@@ -242,7 +242,7 @@ namespace KoAR.SaveEditor.Views
                 Amalur.Stash.AddItem(viewModel.Definition);
                 this.UnsavedChanges = true;
                 this.OnPropertyChanged(nameof(this.Stash));
-                this.RepopulateItems(true);
+                this.RepopulateItems(regenerate: true);
             }
         }
 
