@@ -30,10 +30,10 @@ namespace KoAR.Core
                 
         public const int MaxItemBuffs = 7;
 
-        internal ItemBuffMemory(int coreOffset, int coreLength)
+        internal ItemBuffMemory(GameSave gameSave, int coreOffset, int coreLength)
         {
-            ItemIndex = coreOffset;
-            Bytes = Amalur.Bytes.AsSpan(coreOffset, coreLength).ToArray();
+            (GameSave, ItemIndex) = (gameSave, coreOffset);
+            Bytes = gameSave.Bytes.AsSpan(coreOffset, coreLength).ToArray();
             var itemId = MemoryUtilities.Read<uint>(Bytes);
             int count = MemoryUtilities.Read<int>(Bytes, Offsets.BuffCount);
             for (int i = 0; i < count; i++)
@@ -55,6 +55,8 @@ namespace KoAR.Core
             }
         }
 
+        public GameSave GameSave { get; }
+
         internal byte[] Bytes { get; private set; }
         public int ItemIndex { get; internal set; }
         public int DataLength
@@ -67,13 +69,13 @@ namespace KoAR.Core
 
         public Buff? Prefix
         {
-            get => Amalur.BuffMap!.GetOrDefault(MemoryUtilities.Read<uint>(Bytes, Bytes.Length - 8));
+            get => Amalur.BuffMap.GetOrDefault(MemoryUtilities.Read<uint>(Bytes, Bytes.Length - 8));
             set => MemoryUtilities.Write(Bytes, Bytes.Length - 8, value?.Id ?? 0);
         }
 
         public Buff? Suffix
         {
-            get => Amalur.BuffMap!.GetOrDefault(MemoryUtilities.Read<uint>(Bytes, Bytes.Length - 4));
+            get => Amalur.BuffMap.GetOrDefault(MemoryUtilities.Read<uint>(Bytes, Bytes.Length - 4));
             set => MemoryUtilities.Write(Bytes, Bytes.Length - 4, value?.Id ?? 0);
         }
 

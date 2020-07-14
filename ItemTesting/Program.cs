@@ -92,14 +92,14 @@ namespace ItemTesting
         {
             const string path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save3.sav";
             //const string path = @"..\..\..\..\9190114save90.sav";
-            KoAR.Core.Amalur.Initialize(@"..\..\..\..\Koar.SaveEditor\");
-            Amalur.ReadFile(path);
-            foreach(var g in Amalur.Items)
+            Amalur.Initialize(@"..\..\..\..\Koar.SaveEditor\");
+            GameSave gameSave = new GameSave(path);
+            foreach(var item in gameSave.Items)
             {
-                g.PlayerBuffs.Clear();
-                Amalur.WriteEquipmentBytes(g, forced:true);
+                item.PlayerBuffs.Clear();
+                gameSave.WriteEquipmentBytes(item, forced:true);
             }
-            Amalur.SaveFile(path);
+            gameSave.SaveFile();
         }
     }
 }

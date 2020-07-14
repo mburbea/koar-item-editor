@@ -17,6 +17,7 @@ namespace KoAR.SaveEditor.Views
         private EquipmentCategory? _categoryFilter;
         private int _elementFilter;
         private string _fileName = string.Empty;
+        private GameSave? _gameSave;
         private IReadOnlyList<ItemModel> _filteredItems;
         private string _itemNameFilter = string.Empty;
         private int _rarityFilter;
@@ -34,7 +35,7 @@ namespace KoAR.SaveEditor.Views
             this.DeleteItemBuffCommand = new DelegateCommand<Buff>(this.DeleteItemBuff, this.CanDeleteItemBuff);
             this.DeletePlayerBuffCommand = new DelegateCommand<Buff>(this.DeletePlayerBuff, this.CanDeletePlayerBuff);
             this.SaveCommand = new DelegateCommand(this.Save, () => this._unsavedChanges);
-            this.AddStashItemCommand = new DelegateCommand(this.AddStashItem, () => Amalur.IsFileOpen && Amalur.Stash != null);
+            this.AddStashItemCommand = new DelegateCommand(this.AddStashItem, () => this._gameSave?.Stash != null);
         }
 
         public DelegateCommand<uint> AddItemBuffCommand { get; }
@@ -123,14 +124,14 @@ namespace KoAR.SaveEditor.Views
 
         public int InventorySize
         {
-            get => Amalur.IsFileOpen ? Amalur.InventorySize : 0;
+            get => this._gameSave?.InventorySize ?? 0;
             set
             {
-                if (!Amalur.IsFileOpen || value == Amalur.InventorySize)
+                if (this._gameSave == null || value == this._gameSave.InventorySize)
                 {
                     return;
                 }
-                Amalur.InventorySize = value;
+                this._gameSave.InventorySize = value;
                 this.OnPropertyChanged();
                 this.UnsavedChanges = true;
             }
@@ -174,7 +175,7 @@ namespace KoAR.SaveEditor.Views
             set => this.SetValue(ref this._selectedItem, value);
         }
 
-        public Stash? Stash => Amalur.Stash;
+        public Stash? Stash => this._gameSave?.Stash;
 
         public bool UnsavedChanges
         {
@@ -195,7 +196,7 @@ namespace KoAR.SaveEditor.Views
             {
                 return;
             }
-            Amalur.ReadFile(this.FileName = dialog.FileName);
+            this._gameSave = new GameSave(this.FileName = dialog.FileName);
             this.OnPropertyChanged(nameof(this.InventorySize));
             this.RepopulateItems();
             if (this._categoryFilter.HasValue)
@@ -211,11 +212,11 @@ namespace KoAR.SaveEditor.Views
 
         internal void Save()
         {
-            if (!Amalur.IsFileOpen)
+            if (this._gameSave == null)
             {
                 return;
             }
-            Amalur.SaveFile(this._fileName);
+            this._gameSave.SaveFile();
             this.UnsavedChanges = false;
             this.RepopulateItems();
             MessageBox.Show($"Save successful! Original save backed up as {this._fileName}.bak.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -227,7 +228,7 @@ namespace KoAR.SaveEditor.Views
 
         private void AddStashItem()
         {
-            if (!Amalur.IsFileOpen || Amalur.Stash == null)
+            if (this._gameSave?.Stash == null)
             {
                 return;
             }
@@ -239,7 +240,7 @@ namespace KoAR.SaveEditor.Views
             };
             if (view.ShowDialog() == true && viewModel.Definition != null)
             {
-                Amalur.Stash.AddItem(viewModel.Definition);
+                this._gameSave.Stash.AddItem(viewModel.Definition);
                 this.UnsavedChanges = true;
                 this.OnPropertyChanged(nameof(this.Stash));
                 this.RepopulateItems(regenerate: true);
@@ -256,7 +257,7 @@ namespace KoAR.SaveEditor.Views
 
         private void ChangeDefinition(ItemModel model)
         {
-            if (!Amalur.IsFileOpen)
+            if (this._gameSave == null)
             {
                 return;
             }
@@ -269,7 +270,7 @@ namespace KoAR.SaveEditor.Views
             if (view.ShowDialog() == true && viewModel.Definition != null)
             {
                 model.TypeDefinition = viewModel.Definition;
-                Amalur.WriteEquipmentBytes(model.Item, true);
+                this._gameSave.WriteEquipmentBytes(model.Item, true);
             }
         }
 
@@ -317,12 +318,12 @@ namespace KoAR.SaveEditor.Views
 
         private void Item_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (!Amalur.IsFileOpen)
+            if (this._gameSave == null)
             {
                 return;
             }
             ItemModel model = (ItemModel)sender;
-            Amalur.WriteEquipmentBytes(model.Item);
+            this._gameSave.WriteEquipmentBytes(model.Item);
             this.UnsavedChanges = true;
             switch (e.PropertyName)
             {
@@ -345,7 +346,7 @@ namespace KoAR.SaveEditor.Views
 
         private void RepopulateItems(bool regenerate = false)
         {
-            if (!Amalur.IsFileOpen)
+            if (this._gameSave == null)
             {
                 MessageBox.Show("No save file opened!", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Warning);
                 this.OpenFile();
@@ -361,9 +362,9 @@ namespace KoAR.SaveEditor.Views
                 }
                 if (regenerate)
                 {
-                    Amalur.GetAllEquipment();
+                    this._gameSave.GetAllEquipment();
                 }
-                foreach (ItemModel item in Amalur.Items.Select(info => new ItemModel(info)))
+                foreach (ItemModel item in this._gameSave.Items.Select(info => new ItemModel(info)))
                 {
                     PropertyChangedEventManager.AddHandler(item, this.Item_PropertyChanged, string.Empty);
                     this._items.Add(item);
