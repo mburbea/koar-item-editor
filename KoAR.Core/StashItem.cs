@@ -4,54 +4,50 @@ using System.Text;
 
 namespace KoAR.Core
 {
-    public class StashItem
+    public partial class StashItem : IItem
     {
-        public class StashItemBuffMemory
+        private readonly struct Offset
         {
-            private int Offset { get; }
-            public List<Buff> List { get; } = new List<Buff>();
-            
-            public Buff? Prefix
-            {
-                get => null;
-                set { }
-            }
-
-            public Buff? Suffix
-            {
-                get => null;
-                set { }
-            }
-
-        }
-
-        public readonly struct Offsets
-        {
-            readonly int _effectCount;
-            public Offsets(int effectCount) => _effectCount = effectCount;
+            private readonly StashItem _item;
+            public Offset(StashItem item) => _item = item;
             public const int TypeId = 0;
             public const int Durability = 10;
             public const int Quantity = 14;
             public const int BuffCount = 18;
+            public const int FirstBuff = BuffCount + 4;
+            public readonly int PostBuffs => FirstBuff + _item.BuffCount * 8;
+            public readonly int IsStolen => PostBuffs + 1;
+            public readonly int HasCustomName => IsStolen + 1;
+            public readonly int NameLength => HasCustomName + 1;
+            public readonly int Name => NameLength + 4;
+            public readonly int HasItemBuffs => _item.HasCustomName ? NameLength + _item.NameLength + 1 : HasCustomName + 1;
+            public readonly int ItemBuffCount => HasItemBuffs + 3;
+            public readonly int FirstItemBuff => ItemBuffCount + 4;
         }
 
-        public byte[] Bytes { get; } = Array.Empty<byte>();
+        private byte[] Bytes { get; } = Array.Empty<byte>();
         public List<Buff> PlayerBuffs { get; } = new List<Buff>();
 
-        public StashItem(int offset, int datalength)
+        public StashItem(GameSave gameSave, int offset, int datalength)
         {
-            Bytes = Amalur.Bytes.AsSpan(offset, datalength).ToArray();
+            Bytes = gameSave.Bytes.AsSpan(offset, datalength).ToArray();
             PlayerBuffs.Capacity = BuffCount;
+            var firstBuff = Offset.FirstBuff;
             for(int i = 0; i < PlayerBuffs.Capacity; i++)
             {
-                PlayerBuffs.Add(Amalur.GetBuff(MemoryUtilities.Read<uint>(Bytes, Offsets.BuffCount + 4 + i * 8)));
+                PlayerBuffs.Add(Amalur.GetBuff(MemoryUtilities.Read<uint>(Bytes, firstBuff + (i * 8))));
             }
-            if(HasCustomNameFlag == 1)
+            if(HasCustomName)
             {
-                ItemName = Encoding.Default.GetString(Bytes, FirstChar, NameLength);
+                ItemName = Encoding.Default.GetString(Bytes, Offsets.Name, NameLength);
             }
+            ItemBuffs = Offsets.HasItemBuffs != 0xFF ? new ItemBuffMemory(this) : MissingItemBuffMemory.Instance;
         }
 
+        public int ItemOffset { get; }
+
+        private Offset Offsets => new Offset(this);
+        
         public TypeDefinition TypeDefinition
         {
             get => Amalur.TypeDefinitions[MemoryUtilities.Read<uint>(Bytes)];
@@ -59,36 +55,38 @@ namespace KoAR.Core
 
         public float CurrentDurability
         {
-            get => MemoryUtilities.Read<float>(Bytes, Offsets.Durability);
+            get => MemoryUtilities.Read<float>(Bytes, Offset.Durability);
         }
 
         private int BuffCount
         {
-            get => MemoryUtilities.Read<int>(Bytes, Offsets.BuffCount);
+            get => MemoryUtilities.Read<int>(Bytes, Offset.BuffCount);
         }
 
-        public byte HasCustomNameFlag
+        public bool IsStolen
         {
-            get => Bytes[Offsets.BuffCount + BuffCount * 8 + 2];
+            get => Bytes[Offsets.IsStolen] == 1;
         }
+        public bool HasCustomName
+        {
+            get => Bytes[Offsets.HasCustomName] == 1;
+        }
+
 
         private int NameLength
         {
-            get => HasCustomNameFlag != 1 ? -1 : MemoryUtilities.Read<int>(Bytes, Offsets.BuffCount + 4 + BuffCount * 8 + 3);
+            get => MemoryUtilities.Read<int>(Bytes, Offsets.NameLength);
         }
 
-        private int FirstChar
-        {
-            get => MemoryUtilities.Read<int>(Bytes, Offsets.BuffCount + 4 + BuffCount * 8 + 7);
-        }
-
-        private string Name { get; } = "";
-
-        public bool HasCustomName => ItemName != string.Empty;
 
         public string ItemName { get; } = string.Empty;
 
-        public StashItemBuffMemory? ItemBuffs { get; }
+        public IItemBuffMemory ItemBuffs { get; }
 
+        public byte Level => throw new NotImplementedException();
+
+        public float MaxDurability => throw new NotImplementedException();
+
+        public Rarity Rarity => throw new NotImplementedException();
     }
 }

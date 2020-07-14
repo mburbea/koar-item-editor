@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace KoAR.Core
 {
-    public class ItemBuffMemory
+    public class ItemBuffMemory : IItemBuffMemory
     {
         internal static List<(uint itemId, int offset, uint instanceId, bool hasPrefix, bool hasSuffix)> SetOfInstances = new List<(uint, int, uint, bool, bool)>();
         private static class Offsets
@@ -22,11 +22,12 @@ namespace KoAR.Core
             ItemOffset = coreOffset;
             Bytes = gameBytes.AsSpan(coreOffset, coreLength).ToArray();
             var itemId = MemoryUtilities.Read<uint>(Bytes);
-            int count = MemoryUtilities.Read<int>(Bytes, Offsets.BuffCount);
-            for (int i = 0; i < count; i++)
+            List.Capacity = MemoryUtilities.Read<int>(Bytes, Offsets.BuffCount);
+            var firstBuff = Offsets.FirstBuff;
+            for (int i = 0; i < List.Capacity; i++)
             {
-                var instanceId = MemoryUtilities.Read<uint>(Bytes, Offsets.FirstBuff + (i * 16));
-                var buffId = MemoryUtilities.Read<uint>(Bytes, Offsets.FirstBuff + (i * 16) + 4);
+                var instanceId = MemoryUtilities.Read<uint>(Bytes, firstBuff + (i * 16));
+                var buffId = MemoryUtilities.Read<uint>(Bytes, firstBuff + (i * 16) + 4);
                 if (instanceId != GetDefaultInstanceId(i))
                 {
                     UnsupportedFormat = true;
@@ -34,8 +35,8 @@ namespace KoAR.Core
                 }
                 List.Add(Amalur.GetBuff(buffId));
             }
-            var displayCount = MemoryUtilities.Read<int>(Bytes, Offsets.FirstBuff + 4 + (count * 16));
-            if (displayCount != count)
+            var displayCount = MemoryUtilities.Read<int>(Bytes, Offsets.FirstBuff + 4 + (List.Count * 16));
+            if (displayCount != List.Count)
             {
                 UnsupportedFormat = true;
             }
@@ -46,7 +47,7 @@ namespace KoAR.Core
         public bool UnsupportedFormat { get; }
         public List<Buff> List { get; } = new List<Buff>();
 
-        public int DataLength
+        internal int DataLength
         {
             get => MemoryUtilities.Read<int>(Bytes, Offsets.DataLength) + 17;
             set => MemoryUtilities.Write(Bytes, Offsets.DataLength, value - 17);
