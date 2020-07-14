@@ -16,9 +16,8 @@ namespace KoAR.SaveEditor.Views
         private int _armorTypeFilter;
         private EquipmentCategory? _categoryFilter;
         private int _elementFilter;
-        private string _fileName = string.Empty;
-        private GameSave? _gameSave;
         private IReadOnlyList<ItemModel> _filteredItems;
+        private GameSave? _gameSave;
         private string _itemNameFilter = string.Empty;
         private int _rarityFilter;
         private ItemModel? _selectedItem;
@@ -110,11 +109,7 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        public string FileName
-        {
-            get => this._fileName;
-            private set => this.SetValue(ref this._fileName, value);
-        }
+        public string FileName => this._gameSave?.FileName ?? string.Empty;
 
         public IReadOnlyList<ItemModel> FilteredItems
         {
@@ -196,7 +191,8 @@ namespace KoAR.SaveEditor.Views
             {
                 return;
             }
-            this._gameSave = new GameSave(this.FileName = dialog.FileName);
+            this._gameSave = new GameSave(dialog.FileName);
+            this.OnPropertyChanged(nameof(this.FileName));
             this.OnPropertyChanged(nameof(this.InventorySize));
             this.RepopulateItems();
             if (this._categoryFilter.HasValue)
@@ -219,7 +215,7 @@ namespace KoAR.SaveEditor.Views
             this._gameSave.SaveFile();
             this.UnsavedChanges = false;
             this.RepopulateItems();
-            MessageBox.Show($"Save successful! Original save backed up as {this._fileName}.bak.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show($"Save successful! Original save backed up as {this.FileName}.bak.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void AddItemBuff(uint buffId) => this.SelectedItem?.ItemBuffs.Add(Amalur.GetBuff(buffId));
