@@ -15,16 +15,16 @@ namespace KoAR.Core
         public const float DurabilityUpperBound = 100f;
         public const int MinEquipmentLength = 44;
 
-        public ItemMemoryInfo(int typeIdOffset, int offset, int datalength, int coreEffectOffset, int coreEffectDataLength)
+        public ItemMemoryInfo(GameSave gameSave, int typeIdOffset, int offset, int datalength, int coreEffectOffset, int coreEffectDataLength)
         {
-            _typeIdOffset = typeIdOffset;
-            if (Amalur.Bytes[_typeIdOffset + 10] == 1)
+            (_gameSave, _typeIdOffset) = (gameSave, typeIdOffset);
+            if (gameSave.Bytes[_typeIdOffset + 10] == 1)
             {
                 _levelShiftOffset = 8;
             }
             ItemIndex = offset;
-            ItemBytes = Amalur.Bytes.AsSpan(offset, datalength).ToArray();
-            ItemBuffs = new ItemBuffMemory(coreEffectOffset, coreEffectDataLength);
+            ItemBytes = gameSave.Bytes.AsSpan(offset, datalength).ToArray();
+            ItemBuffs = new ItemBuffMemory(gameSave.Bytes, coreEffectOffset, coreEffectDataLength);
             PlayerBuffs = new List<Buff>(BuffCount);
             for (int i = 0; i < PlayerBuffs.Capacity; i++)
             {
@@ -35,6 +35,7 @@ namespace KoAR.Core
                 ItemName = Encoding.Default.GetString(ItemBytes, Offsets.CustomNameText, NameLength);
             }
         }
+
         //private ItemMemoryInfo(ReadOnlySpan<byte> bytes, int itemIndex, int dataLength)
         //{
         //    static EquipmentCategory DetermineEquipmentType(ReadOnlySpan<byte> bytes, Span<byte> buffer)
@@ -168,20 +169,20 @@ namespace KoAR.Core
 
         public TypeDefinition TypeDefinition
         {
-            get => Amalur.TypeDefinitions[MemoryUtilities.Read<uint>(Amalur.Bytes, _typeIdOffset)];
+            get => Amalur.TypeDefinitions[MemoryUtilities.Read<uint>(_gameSave.Bytes, _typeIdOffset)];
             set
             {
-                var oldType = Amalur.TypeDefinitions[MemoryUtilities.Read<uint>(Amalur.Bytes, _typeIdOffset)];
-                MemoryUtilities.Write(Amalur.Bytes, _typeIdOffset, value.TypeId);
-                MemoryUtilities.Write(Amalur.Bytes, _typeIdOffset + 30 + _levelShiftOffset, value.TypeId);
+                var oldType = Amalur.TypeDefinitions[MemoryUtilities.Read<uint>(_gameSave.Bytes, _typeIdOffset)];
+                MemoryUtilities.Write(_gameSave.Bytes, _typeIdOffset, value.TypeId);
+                MemoryUtilities.Write(_gameSave.Bytes, _typeIdOffset + 30 + _levelShiftOffset, value.TypeId);
                 if (oldType.Category == EquipmentCategory.Shield && oldType.ArmorType != value.ArmorType)
                 {
-                    Amalur.Bytes[_typeIdOffset + 14] = value.ArmorType switch
+                    _gameSave.Bytes[_typeIdOffset + 14] = value.ArmorType switch
                     {
                         ArmorType.Finesse => 0xEC,
                         ArmorType.Might => 0xED,
                         ArmorType.Sorcery => 0xEE,
-                        _ => Amalur.Bytes[_typeIdOffset + 14],
+                        _ => _gameSave.Bytes[_typeIdOffset + 14],
                     };
                 }
                 LoadFromDefinition(value);
@@ -190,12 +191,13 @@ namespace KoAR.Core
 
         private readonly int _typeIdOffset;
         private readonly byte _levelShiftOffset;
+        private readonly GameSave _gameSave;
         private int LevelOffset => _typeIdOffset + 14 + _levelShiftOffset;
 
         public byte Level
         {
-            get => Amalur.Bytes[LevelOffset];
-            set => Amalur.Bytes[LevelOffset] = value;
+            get => _gameSave.Bytes[LevelOffset];
+            set => _gameSave.Bytes[LevelOffset] = value;
         }
 
         public byte[] ItemBytes { get; private set; }

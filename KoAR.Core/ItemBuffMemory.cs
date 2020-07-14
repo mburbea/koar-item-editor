@@ -27,13 +27,13 @@ namespace KoAR.Core
             0x0A, 0xC2, 0x4B, 0x00,
             0x71, 0xFF, 0x4B, 0x00
         };
-                
+
         public const int MaxItemBuffs = 7;
 
-        internal ItemBuffMemory(int coreOffset, int coreLength)
+        internal ItemBuffMemory(byte[] gameBytes, int coreOffset, int coreLength)
         {
             ItemIndex = coreOffset;
-            Bytes = Amalur.Bytes.AsSpan(coreOffset, coreLength).ToArray();
+            Bytes = gameBytes.AsSpan(coreOffset, coreLength).ToArray();
             var itemId = MemoryUtilities.Read<uint>(Bytes);
             int count = MemoryUtilities.Read<int>(Bytes, Offsets.BuffCount);
             for (int i = 0; i < count; i++)
@@ -67,13 +67,13 @@ namespace KoAR.Core
 
         public Buff? Prefix
         {
-            get => Amalur.BuffMap!.GetOrDefault(MemoryUtilities.Read<uint>(Bytes, Bytes.Length - 8));
+            get => Amalur.BuffMap.GetOrDefault(MemoryUtilities.Read<uint>(Bytes, Bytes.Length - 8));
             set => MemoryUtilities.Write(Bytes, Bytes.Length - 8, value?.Id ?? 0);
         }
 
         public Buff? Suffix
         {
-            get => Amalur.BuffMap!.GetOrDefault(MemoryUtilities.Read<uint>(Bytes, Bytes.Length - 4));
+            get => Amalur.BuffMap.GetOrDefault(MemoryUtilities.Read<uint>(Bytes, Bytes.Length - 4));
             set => MemoryUtilities.Write(Bytes, Bytes.Length - 4, value?.Id ?? 0);
         }
 

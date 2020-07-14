@@ -17,28 +17,28 @@ namespace KoAR.Core
             public const int FirstItem = 26;
             public const int Count = 18;
         }
+        private readonly GameSave _gameSave;
         private readonly int _offset;
         private readonly ulong _pattern;
 
-        public Container(int offset, ulong pattern) => (_offset, _pattern) = (offset, pattern);
+        public Container(GameSave gameSave, int offset, ulong pattern) => (_gameSave, _offset, _pattern) = (gameSave, offset, pattern);
 
         private int DataLength
         {
-            get => MemoryUtilities.Read<int>(Amalur.Bytes, _offset + Offsets.DataLength);
-            set => MemoryUtilities.Write(Amalur.Bytes, _offset + Offsets.DataLength, value);
+            get => MemoryUtilities.Read<int>(_gameSave.Bytes, _offset + Offsets.DataLength);
+            set => MemoryUtilities.Write(_gameSave.Bytes, _offset + Offsets.DataLength, value);
         }
 
         private int DataLength2
         {
-            get => MemoryUtilities.Read<int>(Amalur.Bytes, _offset + Offsets.DataLength2);
-            set => MemoryUtilities.Write(Amalur.Bytes, _offset + Offsets.DataLength2, value);
+            get => MemoryUtilities.Read<int>(_gameSave.Bytes, _offset + Offsets.DataLength2);
+            set => MemoryUtilities.Write(_gameSave.Bytes, _offset + Offsets.DataLength2, value);
         }
 
         private int Count
         {
-            get => MemoryUtilities.Read<int>(Amalur.Bytes, _offset + Offsets.Count);
+            get => MemoryUtilities.Read<int>(_gameSave.Bytes, _offset + Offsets.Count);
         }
-
 
         public void UpdateDataLength(int delta)
         {
@@ -53,15 +53,15 @@ namespace KoAR.Core
             int datalength;
             while (true)
             {
-                while ((id = BitConverter.ToInt32(Amalur.Bytes, offset)) == 0)
+                while ((id = BitConverter.ToInt32(_gameSave.Bytes, offset)) == 0)
                 {
                     offset += 4;
                 }
-                if (BitConverter.ToUInt64(Amalur.Bytes, offset + 4) != _pattern)
+                if (BitConverter.ToUInt64(_gameSave.Bytes, offset + 4) != _pattern)
                 {
                     break;
                 }
-                datalength = 17 + BitConverter.ToInt32(Amalur.Bytes, offset + 13);
+                datalength = 17 + BitConverter.ToInt32(_gameSave.Bytes, offset + 13);
                 yield return (id, offset, datalength);
                 offset += datalength;
             }
