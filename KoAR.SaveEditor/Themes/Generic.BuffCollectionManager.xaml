@@ -204,15 +204,6 @@
                                                 <Setter Property="Grid.Row" Value="0" />
                                                 <Setter Property="Grid.RowSpan" Value="2" />
                                             </DataTrigger>
-                                            <DataTrigger Value="True">
-                                                <DataTrigger.Binding>
-                                                    <MultiBinding Converter="{StaticResource EqualityConverter}">
-                                                        <Binding Path="Collection.Count" RelativeSource="{RelativeSource TemplatedParent}"/>
-                                                        <Binding Path="Capacity" RelativeSource="{RelativeSource TemplatedParent}"/>
-                                                    </MultiBinding>
-                                                </DataTrigger.Binding>
-                                                <Setter Property="Visibility" Value="Collapsed" />
-                                            </DataTrigger>
                                         </Style.Triggers>
                                         <Setter Property="Margin" Value="0,2,0,0" />
                                         <Setter Property="Grid.Row" Value="1" />

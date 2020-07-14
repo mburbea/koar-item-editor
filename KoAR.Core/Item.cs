@@ -9,21 +9,21 @@ namespace KoAR.Core
     /// <summary>
     /// Equipment Memory Information
     /// </summary>
-    public partial class ItemMemoryInfo
+    public partial class Item
     {
         public const float DurabilityLowerBound = 0f;
         public const float DurabilityUpperBound = 100f;
         public const int MinEquipmentLength = 44;
 
-        public ItemMemoryInfo(GameSave gameSave, int typeIdOffset, int offset, int datalength, int coreEffectOffset, int coreEffectDataLength)
+        public Item(int typeIdOffset, int offset, int datalength, int coreEffectOffset, int coreEffectDataLength)
         {
             (_gameSave, _typeIdOffset) = (gameSave, typeIdOffset);
             if (gameSave.Bytes[_typeIdOffset + 10] == 1)
             {
                 _levelShiftOffset = 8;
             }
-            ItemIndex = offset;
-            ItemBytes = gameSave.Bytes.AsSpan(offset, datalength).ToArray();
+            ItemOffset = offset;
+            ItemBytes = Amalur.Bytes.AsSpan(offset, datalength).ToArray();
             ItemBuffs = new ItemBuffMemory(gameSave.Bytes, coreEffectOffset, coreEffectDataLength);
             PlayerBuffs = new List<Buff>(BuffCount);
             for (int i = 0; i < PlayerBuffs.Capacity; i++)
@@ -204,7 +204,7 @@ namespace KoAR.Core
 
         public uint ItemId => MemoryUtilities.Read<uint>(ItemBytes);
 
-        public int ItemIndex { get; internal set; }
+        public int ItemOffset { get; internal set; }
 
         private int NameLength
         {

@@ -8,14 +8,14 @@ using KoAR.SaveEditor.Constructs;
 namespace KoAR.SaveEditor.Views
 {
     /// <summary>
-    /// A wrapper class for <see cref="ItemMemoryInfo"/> that implements <see cref="INotifyPropertyChanged"/>.
+    /// A wrapper class for <see cref="Core.Item"/> that implements <see cref="INotifyPropertyChanged"/>.
     /// </summary>
     public sealed class ItemModel : NotifierBase, IDisposable
     {
         private readonly NotifyingCollection<Buff> _itemBuffs;
         private readonly NotifyingCollection<Buff> _playerBuffs;
 
-        public ItemModel(ItemMemoryInfo item)
+        public ItemModel(Item item)
         {
             this.Item = item;
             this._itemBuffs = new NotifyingCollection<Buff>(item.ItemBuffs.List);
@@ -59,7 +59,7 @@ namespace KoAR.SaveEditor.Views
 
         public uint ItemId => this.Item.ItemId;
         
-        public int ItemIndex => this.Item.ItemIndex;
+        public int ItemIndex => this.Item.ItemOffset;
 
         public string ItemName
         {
@@ -128,7 +128,7 @@ namespace KoAR.SaveEditor.Views
 
         public bool UnsupportedFormat => this.Item.ItemBuffs.UnsupportedFormat;
 
-        internal ItemMemoryInfo Item { get; }
+        internal Item Item { get; }
 
         public void Dispose()
         {

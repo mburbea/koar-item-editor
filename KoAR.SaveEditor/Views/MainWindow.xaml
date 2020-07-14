@@ -444,7 +444,7 @@
                         <views:BuffCollectionManager Margin="4,4,4,0" Header="{Binding SelectedItem}" BuffsFilter="Item"
                             Buffs="{x:Static core:Amalur.Buffs}" Collection="{Binding SelectedItem.ItemBuffs}" 
                             AddBuffCommand="{Binding AddItemBuffCommand}" DeleteBuffCommand="{Binding DeleteItemBuffCommand}"
-                            UnsupportedFormat="{Binding SelectedItem.UnsupportedFormat}" Capacity="{x:Static core:ItemBuffMemory.MaxItemBuffs}">
+                            UnsupportedFormat="{Binding SelectedItem.UnsupportedFormat}">
                             <views:BuffCollectionManager.HeaderTemplate>
                                 <DataTemplate DataType="{x:Type views:ItemModel}">
                                     <TextBlock>

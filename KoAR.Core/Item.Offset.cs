@@ -1,6 +1,6 @@
 ﻿namespace KoAR.Core
 {
-    partial class ItemMemoryInfo
+    partial class Item
     {
         private readonly struct Offset
         {

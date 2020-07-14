@@ -15,24 +15,11 @@ namespace KoAR.Core
             public const int FirstBuff = BuffCount + 4;
         }
 
-        /// <summary>
-        /// Remember to change <see cref="MaxItemBuffs"/> if max supported item buffs changes.
-        /// </summary>
-        private static ReadOnlySpan<byte> InstanceIds => new byte[] {
-            0x73, 0x8E, 0x57, 0x00,
-            0xAA, 0x6E, 0x58, 0x00,
-            0xF9, 0x03, 0x4B, 0x00,
-            0xF4, 0x43, 0x4B, 0x00,
-            0xEB, 0x87, 0x4B, 0x00,
-            0x0A, 0xC2, 0x4B, 0x00,
-            0x71, 0xFF, 0x4B, 0x00
-        };
-
-        public const int MaxItemBuffs = 7;
+        static uint GetDefaultInstanceId(int index) => (uint)Hasher.GetHash($"selfbuff_{index}");
 
         internal ItemBuffMemory(byte[] gameBytes, int coreOffset, int coreLength)
         {
-            ItemIndex = coreOffset;
+            ItemOffset = coreOffset;
             Bytes = gameBytes.AsSpan(coreOffset, coreLength).ToArray();
             var itemId = MemoryUtilities.Read<uint>(Bytes);
             int count = MemoryUtilities.Read<int>(Bytes, Offsets.BuffCount);
@@ -40,8 +27,7 @@ namespace KoAR.Core
             {
                 var instanceId = MemoryUtilities.Read<uint>(Bytes, Offsets.FirstBuff + (i * 16));
                 var buffId = MemoryUtilities.Read<uint>(Bytes, Offsets.FirstBuff + (i * 16) + 4);
-                var expectedId = i < 7 ? MemoryUtilities.Read<uint>(InstanceIds, i * 4) : 0;
-                if (instanceId != expectedId)
+                if (instanceId != GetDefaultInstanceId(i))
                 {
                     UnsupportedFormat = true;
                     SetOfInstances.Add((itemId, i, instanceId, Prefix != null, Suffix != null));
@@ -56,14 +42,21 @@ namespace KoAR.Core
         }
 
         internal byte[] Bytes { get; private set; }
-        public int ItemIndex { get; internal set; }
+        public int ItemOffset { get; internal set; }
+        public bool UnsupportedFormat { get; }
+        public List<Buff> List { get; } = new List<Buff>();
+
         public int DataLength
         {
             get => MemoryUtilities.Read<int>(Bytes, Offsets.DataLength) + 17;
             set => MemoryUtilities.Write(Bytes, Offsets.DataLength, value - 17);
         }
 
-        public int Count => List.Count;
+        private int Count
+        {
+            get => MemoryUtilities.Read<int>(Bytes, Offsets.BuffCount);
+            set => MemoryUtilities.Write(Bytes, Offsets.BuffCount, value);
+        }
 
         public Buff? Prefix
         {
@@ -77,30 +70,24 @@ namespace KoAR.Core
             set => MemoryUtilities.Write(Bytes, Bytes.Length - 4, value?.Id ?? 0);
         }
 
-        public bool UnsupportedFormat { get; }
-        public List<Buff> List { get; } = new List<Buff>();
-
         internal byte[] Serialize(bool forced = false)
         {
-            int currentCount = MemoryUtilities.Read<int>(Bytes, Offsets.BuffCount);
-            if (!forced && currentCount == Count)
+            if (!forced && List.Count == Count)
             {
                 return Bytes;
             }
             var currentLength = Bytes.Length - 8 - Offsets.FirstBuff;
-            var newCount = List.Count;
-            var prefixes = MemoryMarshal.Cast<byte, uint>(InstanceIds);
-            Span<ulong> buffData = stackalloc ulong[newCount * 3 + 1];
-            for (int i = 0; i < newCount; i++)
+            Span<ulong> buffData = stackalloc ulong[List.Count * 3 + 1];
+            for (int i = 0; i < List.Count; i++)
             {
                 ulong buffId = List[i].Id;
-                buffData[i * 2] = prefixes[i] | buffId << 32;
-                buffData[i * 2 + 1] = ulong.MaxValue;
-                buffData[newCount * 2 + 1 + i] = buffId | ((ulong)uint.MaxValue) << 32;
+                buffData[i * 2] = GetDefaultInstanceId(i) | buffId << 32;
+                buffData[i * 2 + 1] = ulong.MaxValue; // duration, max duration apparently.
+                buffData[List.Count * 2 + 1 + i] = buffId | ((ulong)uint.MaxValue) << 32;
             }
-            buffData[newCount * 2] = ((ulong)newCount) << 32;
+            buffData[List.Count * 2] = ((ulong)List.Count) << 32;
             Bytes = MemoryUtilities.ReplaceBytes(Bytes, Offsets.FirstBuff, currentLength, MemoryMarshal.AsBytes(buffData));
-            MemoryUtilities.Write(Bytes, Offsets.BuffCount, newCount);
+            this.Count = List.Count;
             DataLength = Bytes.Length;
             return Bytes;
         }
