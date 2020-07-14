@@ -4,31 +4,32 @@ namespace KoAR.Core
 {
     public class Stash
     {
-        public GameSave GameSave { get; }
+        private readonly GameSave _gameSave;
+
         public int Offset { get; }
 
-        public Stash(GameSave gameSave, int offset) => (GameSave, Offset) = (gameSave, offset);
+        public Stash(GameSave gameSave, int offset) => (_gameSave, Offset) = (gameSave, offset);
 
         public int DataLength
         {
-            get => MemoryUtilities.Read<int>(GameSave.Bytes, Offset);
+            get => MemoryUtilities.Read<int>(_gameSave.Bytes, Offset);
             private set
             {
-                MemoryUtilities.Write(GameSave.Bytes, Offset, value);
-                MemoryUtilities.Write(GameSave.Bytes, Offset + 9, value - 9);
+                MemoryUtilities.Write(_gameSave.Bytes, Offset, value);
+                MemoryUtilities.Write(_gameSave.Bytes, Offset + 9, value - 9);
             }
         }
 
         public int Count
         {
-            get => MemoryUtilities.Read<int>(GameSave.Bytes, Offset + 13);
-            private set => MemoryUtilities.Write(GameSave.Bytes, Offset + 13, value);
+            get => MemoryUtilities.Read<int>(_gameSave.Bytes, Offset + 13);
+            private set => MemoryUtilities.Write(_gameSave.Bytes, Offset + 13, value);
         }
 
         public uint FirstItemTypeId
         {
-            get => MemoryUtilities.Read<uint>(GameSave.Bytes, Offset + 17);
-            private set => MemoryUtilities.Write(GameSave.Bytes, Offset + 17, value);
+            get => MemoryUtilities.Read<uint>(_gameSave.Bytes, Offset + 17);
+            private set => MemoryUtilities.Write(_gameSave.Bytes, Offset + 17, value);
         }
 
         public void AddItem(TypeDefinition type)
@@ -43,7 +44,7 @@ namespace KoAR.Core
                 MemoryUtilities.Write(temp, i * 8 + 22, type.PlayerBuffs[i].Id | ((ulong)uint.MaxValue) << 32);
             }
             temp[^1] = 0xFF;
-            GameSave.Bytes = MemoryUtilities.ReplaceBytes(GameSave.Bytes, Offset + 17, 0, temp);
+            _gameSave.Bytes = MemoryUtilities.ReplaceBytes(_gameSave.Bytes, Offset + 17, 0, temp);
             DataLength += temp.Length;
             Count++;
         }

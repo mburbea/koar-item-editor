@@ -93,6 +93,28 @@ namespace KoAR.Core
 
         public void WriteEquipmentBytes(ItemMemoryInfo item, bool forced = false)
         {
+            int WriteItem(int itemIndex, int dataLength, byte[] bytes)
+            {
+                var prevLength = Bytes.Length;
+                Bytes = MemoryUtilities.ReplaceBytes(Bytes, itemIndex, dataLength, bytes);
+                int delta = Bytes.Length - prevLength;
+                if (delta != 0)
+                {
+                    foreach (var item in Items)
+                    {
+                        if (item.ItemBuffs.ItemIndex > itemIndex)
+                        {
+                            item.ItemBuffs.ItemIndex += delta;
+                        }
+                        if (item.ItemIndex > itemIndex)
+                        {
+                            item.ItemIndex += delta;
+                        }
+                    }
+                }
+                return delta;
+            }
+
             var delta = WriteItem(item.ItemBuffs.ItemIndex, item.ItemBuffs.DataLength, item.ItemBuffs.Serialize(forced));
             if (delta != 0)
             {
@@ -123,28 +145,6 @@ namespace KoAR.Core
                 : inventoryLimitOffset < Math.Min(curInvCountOffset, increaseAmountOffset) ? 1 : 2;
 
             return finalOffset + (inventoryLimitOrder * 12);
-        }
-
-        private int WriteItem(int itemIndex, int dataLength, byte[] bytes)
-        {
-            var prevLength = Bytes.Length;
-            Bytes = MemoryUtilities.ReplaceBytes(Bytes, itemIndex, dataLength, bytes);
-            int delta = Bytes.Length - prevLength;
-            if (delta != 0)
-            {
-                foreach (var item in Items)
-                {
-                    if (item.ItemBuffs.ItemIndex > itemIndex)
-                    {
-                        item.ItemBuffs.ItemIndex += delta;
-                    }
-                    if (item.ItemIndex > itemIndex)
-                    {
-                        item.ItemIndex += delta;
-                    }
-                }
-            }
-            return delta;
         }
     }
 }

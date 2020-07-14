@@ -27,13 +27,13 @@ namespace KoAR.Core
             0x0A, 0xC2, 0x4B, 0x00,
             0x71, 0xFF, 0x4B, 0x00
         };
-                
+
         public const int MaxItemBuffs = 7;
 
-        internal ItemBuffMemory(GameSave gameSave, int coreOffset, int coreLength)
+        internal ItemBuffMemory(byte[] gameBytes, int coreOffset, int coreLength)
         {
-            (GameSave, ItemIndex) = (gameSave, coreOffset);
-            Bytes = gameSave.Bytes.AsSpan(coreOffset, coreLength).ToArray();
+            ItemIndex = coreOffset;
+            Bytes = gameBytes.AsSpan(coreOffset, coreLength).ToArray();
             var itemId = MemoryUtilities.Read<uint>(Bytes);
             int count = MemoryUtilities.Read<int>(Bytes, Offsets.BuffCount);
             for (int i = 0; i < count; i++)
@@ -54,8 +54,6 @@ namespace KoAR.Core
                 UnsupportedFormat = true;
             }
         }
-
-        public GameSave GameSave { get; }
 
         internal byte[] Bytes { get; private set; }
         public int ItemIndex { get; internal set; }
