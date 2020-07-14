@@ -18,12 +18,12 @@ namespace KoAR.Core
         public ItemMemoryInfo(GameSave gameSave, int typeIdOffset, int offset, int datalength, int coreEffectOffset, int coreEffectDataLength)
         {
             (_gameSave, _typeIdOffset) = (gameSave, typeIdOffset);
-            if (_gameSave.Bytes[_typeIdOffset + 10] == 1)
+            if (gameSave.Bytes[_typeIdOffset + 10] == 1)
             {
                 _levelShiftOffset = 8;
             }
             ItemIndex = offset;
-            ItemBytes = _gameSave.Bytes.AsSpan(offset, datalength).ToArray();
+            ItemBytes = gameSave.Bytes.AsSpan(offset, datalength).ToArray();
             ItemBuffs = new ItemBuffMemory(gameSave.Bytes, coreEffectOffset, coreEffectDataLength);
             PlayerBuffs = new List<Buff>(BuffCount);
             for (int i = 0; i < PlayerBuffs.Capacity; i++)
