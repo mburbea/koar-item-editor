@@ -109,7 +109,7 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        public string FileName => this._gameSave?.FileName ?? string.Empty;
+        public string? FileName => this._gameSave?.FileName;
 
         public IReadOnlyList<ItemModel> FilteredItems
         {
