@@ -361,7 +361,7 @@ namespace KoAR.SaveEditor.Views
                     this._gameSave.GetAllEquipment();
                     this.OnPropertyChanged(nameof(this.Stash));
                 }
-                foreach (ItemModel item in this._gameSave.Items.Select(info => new ItemModel(info)))
+                foreach (ItemModel item in this._gameSave.Items.Select(item => new ItemModel(item)))
                 {
                     PropertyChangedEventManager.AddHandler(item, this.Item_PropertyChanged, string.Empty);
                     this._items.Add(item);
