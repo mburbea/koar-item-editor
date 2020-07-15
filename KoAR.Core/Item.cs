@@ -73,7 +73,6 @@ namespace KoAR.Core
             }
         }
 
-
         public bool IsUnsellable
         {
             get => (ItemBytes[Offsets.SellableFlag] & 0x80) == 0x80;
