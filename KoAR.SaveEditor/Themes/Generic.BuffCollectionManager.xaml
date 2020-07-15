@@ -68,7 +68,7 @@
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             <ListBox x:Name="PART_ListBox" Grid.ColumnSpan="2" BorderBrush="LightGray" ScrollViewer.HorizontalScrollBarVisibility="Disabled" FocusVisualStyle="{x:Null}"
-                                ItemsSource="{TemplateBinding Collection}" AlternationCount="{Binding Collection.Count, RelativeSource={RelativeSource TemplatedParent}}" MaxHeight="250"
+                                ItemsSource="{TemplateBinding Collection}" AlternationCount="2" MaxHeight="250"
                                 VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling" VirtualizingPanel.ScrollUnit="Pixel">
                                 <ListBox.Style>
                                     <Style TargetType="{x:Type ListBox}">
@@ -104,7 +104,6 @@
                                                 </LinearGradientBrush.GradientStops>
                                             </LinearGradientBrush>
                                             <SolidColorBrush x:Key="AlternateRowBrush" Color="#25BCBCBC" po:Freeze="True" />
-                                            <constructs:IntegerIsEvenConverter x:Key="IsEvenConverter" />
                                         </Style.Resources>
                                         <Setter Property="ContextMenu">
                                             <Setter.Value>
@@ -137,9 +136,9 @@
                                                         </Border>
                                                     </Border>
                                                     <ControlTemplate.Triggers>
-                                                        <DataTrigger Binding="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource Self}, Converter={StaticResource IsEvenConverter}}" Value="False">
+                                                        <Trigger Property="ItemsControl.AlternationIndex" Value="1">
                                                             <Setter Property="Background" Value="{StaticResource AlternateRowBrush}"/>
-                                                        </DataTrigger>
+                                                        </Trigger>
                                                         <Trigger Property="IsMouseOver" Value="True">
                                                             <Setter Property="Background" Value="{StaticResource ListItemHoverFill}"/>
                                                             <Setter Property="BorderBrush" Value="#FFCCF0FF"/>
