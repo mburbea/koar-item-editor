@@ -11,7 +11,7 @@ namespace KoAR.Core
 
         private static List<int> GetAllIndices(ReadOnlySpan<byte> data)
         {
-            ReadOnlySpan<byte> itemMarker = new byte[] { 0x0A, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+            ReadOnlySpan<byte> itemMarker = new byte[] { 0x0A, 0x03, 0x00, 0x00, 0x00, 0x00 };
             var results = new List<int>();
             var start = 0;
             int ix = data.IndexOf(itemMarker);
@@ -29,7 +29,7 @@ namespace KoAR.Core
         {
             (_gameSave, _offset) = (gameSave, offset);
             Items.Capacity = Count;            
-            Span<byte> data = _gameSave.Bytes.AsSpan(_offset, DataLength);
+            Span<byte> data = _gameSave.Bytes.AsSpan(_offset, DataLength - 21);
             if (Items.Capacity > 0)
             {
                 var indices = GetAllIndices(data);
@@ -39,7 +39,7 @@ namespace KoAR.Core
                 }
                 if (Items.Count != Items.Capacity)
                 {
-                    Items.Add(new StashItem(gameSave, _offset + indices[^1], DataLength - 21 - indices[^1]));
+                    Items.Add(new StashItem(gameSave, _offset + indices[^1], DataLength - indices[^1]));
                 }
             }
         }
