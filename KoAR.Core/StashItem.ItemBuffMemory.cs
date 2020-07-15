@@ -22,37 +22,28 @@ namespace KoAR.Core
                 }
             }
 
-            private int Count
-            {
-                get => MemoryUtilities.Read<int>(Bytes, Offsets.ItemBuffCount);
-            }
+            private int Count => MemoryUtilities.Read<int>(Bytes, Offsets.ItemBuffCount);
 
             public List<Buff> List { get; } = new List<Buff>();
-            
-            public Buff? Prefix
-            {
-                get => Amalur.BuffMap.GetOrDefault(MemoryUtilities.Read<uint>(Bytes, Bytes.Length - 9));
-            }
 
-            public Buff? Suffix
-            {
-                get => Amalur.BuffMap.GetOrDefault(MemoryUtilities.Read<uint>(Bytes, Bytes.Length - 5));
-            }
+            public Buff? Prefix => Amalur.BuffMap.GetOrDefault(MemoryUtilities.Read<uint>(Bytes, Bytes.Length - 9));
+
+            public Buff? Suffix => Amalur.BuffMap.GetOrDefault(MemoryUtilities.Read<uint>(Bytes, Bytes.Length - 5));
         }
 
         private sealed class MissingItemBuffMemory : IItemBuffMemory
         {
             internal static readonly IItemBuffMemory Instance = new MissingItemBuffMemory();
 
-            private MissingItemBuffMemory()
-            {
-            }
-
             public List<Buff> List { get; } = new List<Buff>();
 
             public Buff? Prefix => null;
 
             public Buff? Suffix => null;
+
+            private MissingItemBuffMemory()
+            {
+            }
         }
     }
 }

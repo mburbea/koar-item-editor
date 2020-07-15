@@ -52,37 +52,18 @@ namespace KoAR.Core
         public int ItemOffset { get; }
 
         private Offset Offsets => new Offset(this);
-        
-        public TypeDefinition TypeDefinition
-        {
-            get => Amalur.TypeDefinitions[MemoryUtilities.Read<uint>(Bytes)];
-        }
 
-        public float CurrentDurability
-        {
-            get => MemoryUtilities.Read<float>(Bytes, Offset.Durability);
-        }
+        public TypeDefinition TypeDefinition => Amalur.TypeDefinitions[MemoryUtilities.Read<uint>(Bytes)];
 
-        private int BuffCount
-        {
-            get => MemoryUtilities.Read<int>(Bytes, Offset.BuffCount);
-        }
+        public float CurrentDurability => MemoryUtilities.Read<float>(Bytes, Offset.Durability);
 
-        public bool IsStolen
-        {
-            get => Bytes[Offsets.IsStolen] == 1;
-        }
-        public bool HasCustomName
-        {
-            get => Bytes[Offsets.HasCustomName] == 1;
-        }
+        private int BuffCount => MemoryUtilities.Read<int>(Bytes, Offset.BuffCount);
 
+        public bool IsStolen => Bytes[Offsets.IsStolen] == 1;
 
-        private int NameLength
-        {
-            get => MemoryUtilities.Read<int>(Bytes, Offsets.NameLength);
-        }
+        public bool HasCustomName => Bytes[Offsets.HasCustomName] == 1;
 
+        private int NameLength => MemoryUtilities.Read<int>(Bytes, Offsets.NameLength);
 
         public string ItemName { get; } = string.Empty;
 
