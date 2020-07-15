@@ -37,10 +37,7 @@ namespace KoAR.Core
                 {
                     Items.Add(new StashItem(gameSave, _offset + indices[i], indices[i + 1] - indices[i]));
                 }
-                if (Items.Count != Items.Capacity)
-                {
-                    Items.Add(new StashItem(gameSave, _offset + indices[^1], DataLength - indices[^1]));
-                }
+                Items.Add(new StashItem(gameSave, _offset + indices[^1], DataLength - indices[^1]));
             }
         }
 

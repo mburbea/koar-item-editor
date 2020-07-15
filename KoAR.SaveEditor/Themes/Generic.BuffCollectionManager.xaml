@@ -14,8 +14,6 @@
     </DataTemplate>
     <Style TargetType="{x:Type views:BuffCollectionManager}">
         <Style.Resources>
-            <constructs:PlusOneConverter x:Key="PlusOneConverter" />
-            <constructs:EqualityConverter x:Key="EqualityConverter" />
             <constructs:HexConverter x:Key="HexConverter" />
             <constructs:NegatedBooleanConverter x:Key="NegatedBooleanConverter" />
             <Style TargetType="{x:Type Button}" x:Key="CommandButtonStyle">

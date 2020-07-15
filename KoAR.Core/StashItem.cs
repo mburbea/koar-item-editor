@@ -25,7 +25,7 @@ namespace KoAR.Core
             public readonly int FirstItemBuff => ItemBuffCount + 4;
         }
 
-        private byte[] Bytes { get; } = Array.Empty<byte>();
+        private byte[] Bytes { get; }
         public List<Buff> PlayerBuffs { get; } = new List<Buff>();
 
         public StashItem(GameSave gameSave, int offset, int datalength)
@@ -41,12 +41,7 @@ namespace KoAR.Core
             {
                 ItemName = Encoding.Default.GetString(Bytes, Offsets.Name, NameLength);
             }
-
-            ItemBuffs = Bytes[Offsets.HasItemBuffs] switch {
-                0x14 => new ItemBuffMemory(this),
-                0xFF => MissingItemBuffMemory.Instance,
-                _ => throw new InvalidOperationException("FUCK YOU"),
-            };
+            ItemBuffs = Bytes[Offsets.HasItemBuffs] == 0x14 ? new ItemBuffMemory(this) : MissingItemBuffMemory.Instance;
         }
 
         public int ItemOffset { get; }

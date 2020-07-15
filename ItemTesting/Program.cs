@@ -95,7 +95,6 @@ namespace ItemTesting
             Amalur.Initialize(@"..\..\..\..\Koar.SaveEditor\");
             GameSave gameSave = new GameSave(path);
 
-            Console.WriteLine(gameSave.Stash.Count);
             Console.WriteLine(gameSave.Stash.Items.Count);
             foreach(var item in gameSave.Stash.Items)
             {
