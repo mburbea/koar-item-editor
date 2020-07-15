@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace KoAR.Core
 {
@@ -6,34 +7,64 @@ namespace KoAR.Core
     {
         private readonly GameSave _gameSave;
 
-        public int Offset { get; }
+        private readonly int _offset;
 
-        public Stash(GameSave gameSave, int offset) => (_gameSave, Offset) = (gameSave, offset);
-
-        public int DataLength
+        private static List<int> GetAllIndices(ReadOnlySpan<byte> data)
         {
-            get => MemoryUtilities.Read<int>(_gameSave.Bytes, Offset);
-            private set
+            ReadOnlySpan<byte> itemMarker = new byte[] { 0x0A, 0x03, 0x00, 0x00, 0x00, 0x00 };
+            var results = new List<int>();
+            var start = 0;
+            int ix = data.IndexOf(itemMarker);
+            while (ix != -1)
             {
-                MemoryUtilities.Write(_gameSave.Bytes, Offset, value);
-                MemoryUtilities.Write(_gameSave.Bytes, Offset + 9, value - 9);
+                results.Add(start + ix - 4);
+                start += ix + itemMarker.Length;
+                var segment = data.Slice(start);
+                ix = segment.IndexOf(itemMarker);
+            }
+            return results;
+        }
+
+        public Stash(GameSave gameSave, int offset)
+        {
+            (_gameSave, _offset) = (gameSave, offset);
+            Items.Capacity = Count;
+            Span<byte> data = _gameSave.Bytes.AsSpan(_offset, DataLength - 21);
+            if (Items.Capacity > 0)
+            {
+                var indices = GetAllIndices(data);
+                for (int i = 0; i < indices.Count - 1; i++)
+                {
+                    Items.Add(new StashItem(gameSave, _offset + indices[i], indices[i + 1] - indices[i]));
+                }
+                Items.Add(new StashItem(gameSave, _offset + indices[^1], DataLength - indices[^1]));
             }
         }
 
-        public int Count
+        public int DataLength
         {
-            get => MemoryUtilities.Read<int>(_gameSave.Bytes, Offset + 13);
-            private set => MemoryUtilities.Write(_gameSave.Bytes, Offset + 13, value);
+            get => MemoryUtilities.Read<int>(_gameSave.Bytes, _offset);
+            private set
+            {
+                MemoryUtilities.Write(_gameSave.Bytes, _offset, value);
+                MemoryUtilities.Write(_gameSave.Bytes, _offset + 9, value - 9);
+            }
         }
 
-        public uint FirstItemTypeId
+        private int Count
         {
-            get => MemoryUtilities.Read<uint>(_gameSave.Bytes, Offset + 17);
-            private set => MemoryUtilities.Write(_gameSave.Bytes, Offset + 17, value);
+            get => MemoryUtilities.Read<int>(_gameSave.Bytes, _offset + 13);
+            set => MemoryUtilities.Write(_gameSave.Bytes, _offset + 13, value);
         }
+
+        public List<StashItem> Items { get; } = new List<StashItem>();
 
         public void AddItem(TypeDefinition type)
         {
+            // Why don't we use the stashitem class? 
+            // 1. Because we don't support mutating them yet
+            // 2. We blow away everything when we do this operation anyway.
+            // 3. We rely on the fact that the game will regenerate the ItemBuff section when the stash spawns the item.
             Span<byte> temp = stackalloc byte[25 + type.PlayerBuffs.Length * 8];
             MemoryUtilities.Write(temp, 0, type.TypeId | ((ulong)0x03_0A) << 32); // 8
             MemoryUtilities.Write(temp, 10, type.MaxDurability);
@@ -44,7 +75,7 @@ namespace KoAR.Core
                 MemoryUtilities.Write(temp, i * 8 + 22, type.PlayerBuffs[i].Id | ((ulong)uint.MaxValue) << 32);
             }
             temp[^1] = 0xFF;
-            _gameSave.Bytes = MemoryUtilities.ReplaceBytes(_gameSave.Bytes, Offset + 17, 0, temp);
+            _gameSave.Bytes = MemoryUtilities.ReplaceBytes(_gameSave.Bytes, _offset + 17, 0, temp);
             DataLength += temp.Length;
             Count++;
         }
@@ -53,7 +84,7 @@ namespace KoAR.Core
         {
             ReadOnlySpan<byte> stashIndicator = new byte[] { 0x00, 0xF5, 0x43, 0xEB, 0x00, 0x02 };
             var offset = gameSave.Bytes.AsSpan().IndexOf(stashIndicator);
-            return offset == -1 ? null : new Stash(gameSave, offset - 3);
+            return offset != -1 ? new Stash(gameSave, offset - 3) : null;
         }
     }
 }

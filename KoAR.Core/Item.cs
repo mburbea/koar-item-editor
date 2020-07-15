@@ -9,104 +9,31 @@ namespace KoAR.Core
     /// <summary>
     /// Equipment Memory Information
     /// </summary>
-    public partial class ItemMemoryInfo
+    public partial class Item : IItem
     {
         public const float DurabilityLowerBound = 0f;
         public const float DurabilityUpperBound = 100f;
         public const int MinEquipmentLength = 44;
 
-        public ItemMemoryInfo(GameSave gameSave, int typeIdOffset, int offset, int datalength, int coreEffectOffset, int coreEffectDataLength)
+        public Item(GameSave gameSave, int typeIdOffset, int offset, int datalength, int coreEffectOffset, int coreEffectDataLength)
         {
-            (_gameSave, _typeIdOffset) = (gameSave, typeIdOffset);
+            (_gameSave, _typeIdOffset, ItemOffset) = (gameSave, typeIdOffset, offset);
             if (gameSave.Bytes[_typeIdOffset + 10] == 1)
             {
                 _levelShiftOffset = 8;
             }
-            ItemIndex = offset;
-            ItemBytes = gameSave.Bytes.AsSpan(offset, datalength).ToArray();
+            ItemBytes = _gameSave.Bytes.AsSpan(offset, datalength).ToArray();
             ItemBuffs = new ItemBuffMemory(gameSave.Bytes, coreEffectOffset, coreEffectDataLength);
             PlayerBuffs = new List<Buff>(BuffCount);
             for (int i = 0; i < PlayerBuffs.Capacity; i++)
             {
                 PlayerBuffs.Add(Amalur.GetBuff(MemoryUtilities.Read<uint>(ItemBytes, Offset.FirstBuff + i * 8)));
             }
-            if (HasCustomNameFlag)
+            if (HasCustomName)
             {
-                ItemName = Encoding.Default.GetString(ItemBytes, Offsets.CustomNameText, NameLength);
+                ItemName = Encoding.Default.GetString(ItemBytes, Offsets.Name, NameLength);
             }
         }
-
-        //private ItemMemoryInfo(ReadOnlySpan<byte> bytes, int itemIndex, int dataLength)
-        //{
-        //    static EquipmentCategory DetermineEquipmentType(ReadOnlySpan<byte> bytes, Span<byte> buffer)
-        //    {
-        //        ReadOnlySpan<byte> weaponTypeSequence = new byte[] { 0xD4, 0x08, 0x46, 0x00, 0x01 };
-        //        ReadOnlySpan<byte> additionalInfoSequence = new byte[] { 0x8D, 0xE3, 0x47, 0x00, 0x02 };
-        //        weaponTypeSequence.CopyTo(buffer.Slice(8));
-        //        var offset = bytes.IndexOf(buffer);
-        //        if (offset == -1)
-        //        {
-        //            return EquipmentCategory.Torso; // Armor doesn't have this section.
-        //        }
-        //        var equipTypeByte = bytes[offset + 13];
-        //        additionalInfoSequence.CopyTo(buffer.Slice(8));
-        //        var aisOffset = bytes.IndexOf(buffer);
-        //        var d = bytes[aisOffset + 17];
-        //        return equipTypeByte switch
-        //        {
-        //            0x14 => EquipmentCategory.Sceptre,
-        //            0x18 => EquipmentCategory.Longbow,
-        //            0x20 when d == 0x00 || d == 0xBC || d == 0x55 || d == 0x56 || d == 0x18 => EquipmentCategory.Longsword,
-        //            0x20 => EquipmentCategory.Greatsword,
-        //            0x24 when d == 0x00 || d == 0x40 || d == 0x41 || d == 0x2C || d == 0xE8 || d == 0x18 => EquipmentCategory.Daggers,
-        //            0x24 => EquipmentCategory.Faeblades,
-        //            0x1C when d == 0x00 || d == 0x18 || d == 0x53 || d == 0x54 => EquipmentCategory.Staff,
-        //            0x1C when d == 0x3E || d == 0x3F || d == 0xEA || d == 0xEB => EquipmentCategory.Chakrams,
-        //            0x1C when d == 0xEC || d == 0x43 || d == 0x7E => EquipmentCategory.Hammer,
-        //            _ => EquipmentCategory.Unknown,
-        //        };
-        //    }
-
-        //    Span<byte> buffer = stackalloc byte[13];
-        //    ItemIndex = itemIndex;
-        //    ItemBytes = bytes.Slice(itemIndex, 17 + MemoryUtilities.Read<int>(bytes, itemIndex + Offset.DataLength)).ToArray();
-        //    bytes.Slice(itemIndex, 8).CopyTo(buffer);
-        //    CoreEffects = new CoreEffectMemory(buffer);
-        //    _typeIdOffset = bytes.IndexOf(buffer.Slice(0, 4)) + 4;
-        //    Effects = new List<uint>(ItemBytes[Offset.EffectCount]);
-        //    for (int i = 0; i < Effects.Capacity; i++)
-        //    {
-        //        Effects.Add(MemoryUtilities.Read<uint>(ItemBytes, Offset.FirstEffect + i * 8));
-        //    }
-        //    Category = TypeId switch // The fate & destiny dlc weapons are stupid and have stupid rules.
-        //    {
-        //        0x1A0E94 => EquipmentCategory.Greatsword, //Rhyderk is stupid.
-        //        0x1D2A03 => EquipmentCategory.Longsword,
-        //        0x1D2A04 => EquipmentCategory.Greatsword,
-        //        0x1D2A05 => EquipmentCategory.Hammer,
-        //        0x1D2A09 => EquipmentCategory.Staff,
-        //        0x1D2A0B => EquipmentCategory.Chakrams,
-        //        0x1D7EE8 => EquipmentCategory.Chakrams,
-        //        0x1D2A07 => EquipmentCategory.Faeblades,
-        //        0x1D2A08 => EquipmentCategory.Daggers,
-        //        _ => EquipmentCategory.Unknown,
-        //    };
-        //    if (bytes[_typeIdOffset + 10] == 1)
-        //    {
-        //        _levelShiftOffset = 8;
-        //        Category = bytes[_typeIdOffset + 14] switch
-        //        {
-        //            0xEC => EquipmentCategory.Buckler,
-        //            0xED => EquipmentCategory.Shield,
-        //            0xEE => EquipmentCategory.Talisman,
-        //            _ => Category,
-        //        };
-        //    }
-        //    if (Category == EquipmentCategory.Unknown)
-        //    {
-        //        Category = DetermineEquipmentType(bytes, buffer);
-        //    }
-        //}
 
         public ItemBuffMemory ItemBuffs { get; }
 
@@ -126,14 +53,16 @@ namespace KoAR.Core
 
         public bool HasCustomName
         {
-            get => ItemName != string.Empty;
+            get => ItemBytes[Offsets.HasCustomName] == 1;
+            private set => ItemBytes[Offsets.HasCustomName] = (byte)(value ? 1 : 0);
         }
 
-        private bool HasCustomNameFlag
+        public bool IsStolen
         {
-            get => ItemBytes[Offsets.HasCustomName] == 1;
-            set => ItemBytes[Offsets.HasCustomName] = (byte)(value ? 1 : 0);
+            get => ItemBytes[Offsets.IsStolen] == 1;
+            set => ItemBytes[Offsets.IsStolen] = (byte)(value ? 1 : 0);
         }
+
 
         public bool IsUnsellable
         {
@@ -204,12 +133,12 @@ namespace KoAR.Core
 
         public uint ItemId => MemoryUtilities.Read<uint>(ItemBytes);
 
-        public int ItemIndex { get; internal set; }
+        public int ItemOffset { get; internal set; }
 
         private int NameLength
         {
-            get => MemoryUtilities.Read<int>(ItemBytes, Offsets.CustomNameLength);
-            set => MemoryUtilities.Write(ItemBytes, Offsets.CustomNameLength, value);
+            get => MemoryUtilities.Read<int>(ItemBytes, Offsets.NameLength);
+            set => MemoryUtilities.Write(ItemBytes, Offsets.NameLength, value);
         }
 
         public Rarity Rarity => TypeDefinition.Rarity == Rarity.Set
@@ -235,30 +164,32 @@ namespace KoAR.Core
 
         private Offset Offsets => new Offset(BuffCount);
 
+        IItemBuffMemory IItem.ItemBuffs => ItemBuffs;
+
         public static bool IsValidDurability(float durability) => durability > DurabilityLowerBound && durability < DurabilityUpperBound;
 
         internal byte[] Serialize(bool forced = false)
         {
-            if (HasCustomNameFlag != HasCustomName
-                || HasCustomNameFlag && ItemName != Encoding.Default.GetString(ItemBytes, Offsets.CustomNameText, NameLength))
+            if (HasCustomName != (ItemName.Length != 0)
+                || HasCustomName && ItemName != Encoding.Default.GetString(ItemBytes, Offsets.Name, NameLength))
             {
                 if (ItemName.Length > 0)
                 {
                     var newBytes = Encoding.Default.GetBytes(ItemName);
-                    if (Offsets.CustomNameText + newBytes.Length != ItemBytes.Length)
+                    if (Offsets.Name + newBytes.Length != ItemBytes.Length)
                     {
-                        var buffer = new byte[Offsets.CustomNameText + newBytes.Length];
-                        ItemBytes.AsSpan(0, Offsets.CustomNameLength).CopyTo(buffer);
+                        var buffer = new byte[Offsets.Name + newBytes.Length];
+                        ItemBytes.AsSpan(0, Offsets.NameLength).CopyTo(buffer);
                         ItemBytes = buffer;
                     }
-                    HasCustomNameFlag = true;
+                    HasCustomName = true;
                     NameLength = newBytes.Length;
-                    newBytes.CopyTo(ItemBytes, Offsets.CustomNameText);
+                    newBytes.CopyTo(ItemBytes, Offsets.Name);
                 }
-                else if (HasCustomNameFlag)
+                else if (HasCustomName)
                 {
-                    ItemBytes = ItemBytes.AsSpan(0, Offsets.CustomNameLength).ToArray();
-                    HasCustomNameFlag = false;
+                    ItemBytes = ItemBytes.AsSpan(0, Offsets.NameLength).ToArray();
+                    HasCustomName = false;
                 }
                 DataLength = ItemBytes.Length;
             }

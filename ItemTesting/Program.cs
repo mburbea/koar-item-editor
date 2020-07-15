@@ -90,16 +90,16 @@ namespace ItemTesting
     {
         static void Main()
         {
-            const string path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save3.sav";
+            const string path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save77.sav";
             //const string path = @"..\..\..\..\9190114save90.sav";
             Amalur.Initialize(@"..\..\..\..\Koar.SaveEditor\");
             GameSave gameSave = new GameSave(path);
-            foreach(var item in gameSave.Items)
+
+            Console.WriteLine(gameSave.Stash.Items.Count);
+            foreach (var item in gameSave.Stash.Items)
             {
-                item.PlayerBuffs.Clear();
-                gameSave.WriteEquipmentBytes(item, forced:true);
+                Console.WriteLine(item.TypeDefinition.Name);
             }
-            gameSave.SaveFile();
         }
     }
 }
@@ -118,7 +118,7 @@ namespace ItemTesting
 //            //Amalur.Stash.AddItem(Amalur.TypeDefinitions[0x1FDF23]);
 //            //Amalur.SaveFile(path);
 //            //return;
-           
+
 
 
 //            //Amalur.WriteEquipmentBytes(chakrams, false);
@@ -184,10 +184,10 @@ namespace ItemTesting
 //                _ => bool.FalseString
 //            }));
 //            return;
-            
+
 //            var rec = lines.ToDictionary(x => (x.typeId, x.name), x => (x.parentId, x.parentName));
 //            var output = new List<string> { "typeId,name,parentId,parentName" };
-            
+
 //            //foreach(var l in lines)
 //            //{
 //            //    if (supers.Contains(l.name))
@@ -197,7 +197,7 @@ namespace ItemTesting
 //            //        continue;
 //            //    }
 //            //    var candidate = (l.typeId, l.name);
-          
+
 //            //    while(rec.TryGetValue(candidate, out candidate))
 //            //    {
 //            //        if (supers.Contains(candidate.name))
@@ -278,7 +278,7 @@ namespace ItemTesting
 //                        .Select(a => new object[] { int.Parse(a[0], NumberStyles.HexNumber), a[0], a[1] }));
 //                }
 //                var qwat = string.Join(',',Amalur.TypeDefinitions[2071806].Effects);
-                
+
 
 //                BulkInsertTable("definitions", Amalur.TypeDefinitions.Values.Select(x => new object[]
 //                 {

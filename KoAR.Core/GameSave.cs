@@ -29,7 +29,7 @@ namespace KoAR.Core
             set => MemoryUtilities.Write(Bytes, _bagOffset ??= GetBagOffset(), value);
         }
 
-        public List<ItemMemoryInfo> Items { get; } = new List<ItemMemoryInfo>();
+        public List<Item> Items { get; } = new List<Item>();
 
         public Stash? Stash { get; private set; }
 
@@ -79,7 +79,7 @@ namespace KoAR.Core
                 {
                     var (itemOffset, itemLength) = itemMemoryLocs[id];
                     var (coreOffset, coreLength) = coreLocs[id];
-                    Items.Add(new ItemMemoryInfo(this, ixOfActor + 13, itemOffset, itemLength, coreOffset, coreLength));
+                    Items.Add(new Item(this, ixOfActor + 13, itemOffset, itemLength, coreOffset, coreLength));
                 }
                 ixOfActor += datalength;
             }
@@ -91,7 +91,7 @@ namespace KoAR.Core
             File.WriteAllBytes(FileName, Bytes);
         }
 
-        public void WriteEquipmentBytes(ItemMemoryInfo item, bool forced = false)
+        public void WriteEquipmentBytes(Item item, bool forced = false)
         {
             int WriteItem(int itemIndex, int dataLength, byte[] bytes)
             {
@@ -102,25 +102,25 @@ namespace KoAR.Core
                 {
                     foreach (var item in Items)
                     {
-                        if (item.ItemBuffs.ItemIndex > itemIndex)
+                        if (item.ItemBuffs.ItemOffset > itemIndex)
                         {
-                            item.ItemBuffs.ItemIndex += delta;
+                            item.ItemBuffs.ItemOffset += delta;
                         }
-                        if (item.ItemIndex > itemIndex)
+                        if (item.ItemOffset > itemIndex)
                         {
-                            item.ItemIndex += delta;
+                            item.ItemOffset += delta;
                         }
                     }
                 }
                 return delta;
             }
 
-            var delta = WriteItem(item.ItemBuffs.ItemIndex, item.ItemBuffs.DataLength, item.ItemBuffs.Serialize(forced));
+            var delta = WriteItem(item.ItemBuffs.ItemOffset, item.ItemBuffs.DataLength, item.ItemBuffs.Serialize(forced));
             if (delta != 0)
             {
                 CoreEffectContainer.UpdateDataLength(delta);
             }
-            var delta2 = WriteItem(item.ItemIndex, item.DataLength, item.Serialize(forced));
+            var delta2 = WriteItem(item.ItemOffset, item.DataLength, item.Serialize(forced));
             if (delta2 != 0)
             {
                 ItemMemoryContainer.UpdateDataLength(delta2);

@@ -23,9 +23,9 @@ namespace KoAR.SaveEditor.Views
             {
                 return new ValidationResult(false, "Durability must be a numeric value.");
             }
-            if (!ItemMemoryInfo.IsValidDurability(durability))
+            if (!Item.IsValidDurability(durability))
             {
-                return new ValidationResult(false, $"Durability must be greater than {ItemMemoryInfo.DurabilityLowerBound} and less than {ItemMemoryInfo.DurabilityUpperBound}.");
+                return new ValidationResult(false, $"Durability must be greater than {Item.DurabilityLowerBound} and less than {Item.DurabilityUpperBound}.");
             }
             return ValidationResult.ValidResult;
         }

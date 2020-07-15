@@ -1,6 +1,6 @@
 ﻿namespace KoAR.Core
 {
-    partial class ItemMemoryInfo
+    partial class Item
     {
         private readonly struct Offset
         {
@@ -16,9 +16,10 @@
             public int CurrentDurability => PostBuffs + 4;
             public int MaxDurability => CurrentDurability + 4;
             public int SellableFlag => MaxDurability + 8;
-            public int HasCustomName => SellableFlag + 2;
-            public int CustomNameLength => HasCustomName + 1;
-            public int CustomNameText => CustomNameLength + 4;
+            public int IsStolen => SellableFlag + 1;
+            public int HasCustomName => IsStolen + 1;
+            public int NameLength => HasCustomName + 1;
+            public int Name => NameLength + 4;
         }
     }
 }
