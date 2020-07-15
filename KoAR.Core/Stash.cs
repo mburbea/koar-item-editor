@@ -28,7 +28,7 @@ namespace KoAR.Core
         public Stash(GameSave gameSave, int offset)
         {
             (_gameSave, _offset) = (gameSave, offset);
-            Items.Capacity = Count;            
+            Items.Capacity = Count;
             Span<byte> data = _gameSave.Bytes.AsSpan(_offset, DataLength - 21);
             if (Items.Capacity > 0)
             {

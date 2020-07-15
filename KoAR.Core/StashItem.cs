@@ -33,11 +33,11 @@ namespace KoAR.Core
             Bytes = gameSave.Bytes.AsSpan(offset, datalength).ToArray();
             PlayerBuffs.Capacity = BuffCount;
             var firstBuff = Offset.FirstBuff;
-            for(int i = 0; i < PlayerBuffs.Capacity; i++)
+            for (int i = 0; i < PlayerBuffs.Capacity; i++)
             {
                 PlayerBuffs.Add(Amalur.GetBuff(MemoryUtilities.Read<uint>(Bytes, firstBuff + (i * 8))));
             }
-            if(HasCustomName)
+            if (HasCustomName)
             {
                 ItemName = Encoding.Default.GetString(Bytes, Offsets.Name, NameLength);
             }

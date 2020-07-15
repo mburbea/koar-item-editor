@@ -96,7 +96,7 @@ namespace ItemTesting
             GameSave gameSave = new GameSave(path);
 
             Console.WriteLine(gameSave.Stash.Items.Count);
-            foreach(var item in gameSave.Stash.Items)
+            foreach (var item in gameSave.Stash.Items)
             {
                 Console.WriteLine(item.TypeDefinition.Name);
             }
@@ -118,7 +118,7 @@ namespace ItemTesting
 //            //Amalur.Stash.AddItem(Amalur.TypeDefinitions[0x1FDF23]);
 //            //Amalur.SaveFile(path);
 //            //return;
-           
+
 
 
 //            //Amalur.WriteEquipmentBytes(chakrams, false);
@@ -184,10 +184,10 @@ namespace ItemTesting
 //                _ => bool.FalseString
 //            }));
 //            return;
-            
+
 //            var rec = lines.ToDictionary(x => (x.typeId, x.name), x => (x.parentId, x.parentName));
 //            var output = new List<string> { "typeId,name,parentId,parentName" };
-            
+
 //            //foreach(var l in lines)
 //            //{
 //            //    if (supers.Contains(l.name))
@@ -197,7 +197,7 @@ namespace ItemTesting
 //            //        continue;
 //            //    }
 //            //    var candidate = (l.typeId, l.name);
-          
+
 //            //    while(rec.TryGetValue(candidate, out candidate))
 //            //    {
 //            //        if (supers.Contains(candidate.name))
@@ -278,7 +278,7 @@ namespace ItemTesting
 //                        .Select(a => new object[] { int.Parse(a[0], NumberStyles.HexNumber), a[0], a[1] }));
 //                }
 //                var qwat = string.Join(',',Amalur.TypeDefinitions[2071806].Effects);
-                
+
 
 //                BulkInsertTable("definitions", Amalur.TypeDefinitions.Values.Select(x => new object[]
 //                 {
