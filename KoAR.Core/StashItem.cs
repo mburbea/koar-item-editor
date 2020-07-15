@@ -16,7 +16,7 @@ namespace KoAR.Core
             public const int BuffCount = 18;
             public const int FirstBuff = BuffCount + 4;
             public readonly int PostBuffs => FirstBuff + _item.BuffCount * 8;
-            public readonly int IsStolen => PostBuffs + 1;
+            public readonly int IsStolen => PostBuffs;
             public readonly int HasCustomName => IsStolen + 1;
             public readonly int NameLength => HasCustomName + 1;
             public readonly int Name => NameLength + 4;
@@ -41,7 +41,7 @@ namespace KoAR.Core
             {
                 ItemName = Encoding.Default.GetString(Bytes, Offsets.Name, NameLength);
             }
-            ItemBuffs = Offsets.HasItemBuffs != 0xFF ? new ItemBuffMemory(this) : MissingItemBuffMemory.Instance;
+            ItemBuffs = Bytes[Offsets.HasItemBuffs] != 0xFF ? new ItemBuffMemory(this) : MissingItemBuffMemory.Instance;
         }
 
         public int ItemOffset { get; }

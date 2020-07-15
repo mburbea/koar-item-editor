@@ -9,26 +9,38 @@ namespace KoAR.Core
 
         private readonly int _offset;
 
-        public Stash(GameSave gameSave, int offset)
+        private static List<int> GetAllIndices(ReadOnlySpan<byte> data)
         {
             ReadOnlySpan<byte> itemMarker = new byte[] { 0x0A, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-            (_gameSave, _offset) = (gameSave, offset);
-            int lastOffset = _offset + 17;
-            Items.Capacity = Count;
-            Span<byte> data = _gameSave.Bytes.AsSpan(0, _offset + DataLength);
-            for(int i = 1; i < Items.Capacity; i++)
+            var results = new List<int>();
+            var start = 0;
+            int ix = data.IndexOf(itemMarker);
+            while (ix != -1)
             {
-                var ix = data.Slice(lastOffset + 4 + itemMarker.Length).IndexOf(itemMarker) - 4;
-                if(ix < 0)
-                {
-                    break; // shouldn't happen.
-                }
-                Items.Add(new StashItem(gameSave, lastOffset, ix));
-                lastOffset += ix;
+                results.Add(start + ix - 4);
+                start += ix + itemMarker.Length;
+                var segment = data.Slice(start);
+                ix = segment.IndexOf(itemMarker);
             }
-            if(Items.Count != Items.Capacity)
+            return results;
+        }
+
+        public Stash(GameSave gameSave, int offset)
+        {
+            (_gameSave, _offset) = (gameSave, offset);
+            Items.Capacity = Count;            
+            Span<byte> data = _gameSave.Bytes.AsSpan(_offset, DataLength);
+            if (Items.Capacity > 0)
             {
-                Items.Add(new StashItem(gameSave, lastOffset, DataLength - 21 - lastOffset));
+                var indices = GetAllIndices(data);
+                for (int i = 0; i < indices.Count - 1; i++)
+                {
+                    Items.Add(new StashItem(gameSave, _offset + indices[i], indices[i + 1] - indices[i]));
+                }
+                if (Items.Count != Items.Capacity)
+                {
+                    Items.Add(new StashItem(gameSave, _offset + indices[^1], DataLength - 21 - indices[^1]));
+                }
             }
         }
 
