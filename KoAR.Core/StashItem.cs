@@ -20,7 +20,7 @@ namespace KoAR.Core
             public readonly int HasCustomName => IsStolen + 1;
             public readonly int NameLength => HasCustomName + 1;
             public readonly int Name => NameLength + 4;
-            public readonly int HasItemBuffs => _item.HasCustomName ? NameLength + _item.NameLength + 1 : HasCustomName + 1;
+            public readonly int HasItemBuffs => _item.HasCustomName ? Name + _item.NameLength : HasCustomName + 1;
             public readonly int ItemBuffCount => HasItemBuffs + 3;
             public readonly int FirstItemBuff => ItemBuffCount + 4;
         }
@@ -41,7 +41,12 @@ namespace KoAR.Core
             {
                 ItemName = Encoding.Default.GetString(Bytes, Offsets.Name, NameLength);
             }
-            ItemBuffs = Bytes[Offsets.HasItemBuffs] != 0xFF ? new ItemBuffMemory(this) : MissingItemBuffMemory.Instance;
+
+            ItemBuffs = Bytes[Offsets.HasItemBuffs] switch {
+                0x14 => new ItemBuffMemory(this),
+                0xFF => MissingItemBuffMemory.Instance,
+                _ => throw new InvalidOperationException("FUCK YOU"),
+            };
         }
 
         public int ItemOffset { get; }
