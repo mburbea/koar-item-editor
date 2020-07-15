@@ -43,6 +43,12 @@ namespace KoAR.SaveEditor.Views
 
         public bool HasCustomName => this.Item.HasCustomName;
 
+        public bool IsStolen
+        {
+            get => this.Item.IsStolen;
+            set => this.SetItemValue(value, this.Item.IsStolen, value => this.Item.IsStolen = value);
+        }
+
         public bool IsUnsellable
         {
             get => this.Item.IsUnsellable;

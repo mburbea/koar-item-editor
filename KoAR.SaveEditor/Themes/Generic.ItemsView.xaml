@@ -254,6 +254,20 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
+                                <GridViewColumn Width="Auto" views:ItemsView.PropertyName="IsStolen">
+                                    <GridViewColumn.Header>
+                                        <StackPanel Orientation="Horizontal">
+                                            <CheckBox Margin="2" FocusVisualStyle="{x:Null}" VerticalAlignment="Center"
+                                                IsChecked="{Binding AllItemsStolen, RelativeSource={RelativeSource TemplatedParent}}" />
+                                            <TextBlock Text="Stolen?" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </GridViewColumn.Header>
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate DataType="{x:Type views:ItemModel}">
+                                            <CheckBox FocusVisualStyle="{x:Null}" HorizontalAlignment="Center" IsChecked="{Binding IsStolen}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
                                 <GridViewColumn Width="Auto" views:ItemsView.PropertyName="IsUnsellable">
                                     <GridViewColumn.Header>
                                         <StackPanel Orientation="Horizontal">

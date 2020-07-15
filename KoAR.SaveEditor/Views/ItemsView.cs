@@ -13,6 +13,9 @@ namespace KoAR.SaveEditor.Views
 {
     public sealed class ItemsView : Control
     {
+        public static readonly DependencyProperty AllItemsStolenProperty = DependencyProperty.Register(nameof(ItemsView.AllItemsStolen), typeof(bool?), typeof(ItemsView),
+            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+
         public static readonly DependencyProperty AllItemsUnsellableProperty = DependencyProperty.Register(nameof(ItemsView.AllItemsUnsellable), typeof(bool?), typeof(ItemsView),
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
@@ -47,6 +50,12 @@ namespace KoAR.SaveEditor.Views
         static ItemsView() => FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(ItemsView), new FrameworkPropertyMetadata(typeof(ItemsView)));
 
         public static DependencyProperty CollectionViewProperty => ItemsView._collectionViewProperty.DependencyProperty;
+
+        public bool? AllItemsStolen
+        {
+            get => (bool?)this.GetValue(ItemsView.AllItemsStolenProperty);
+            set => this.SetValue(ItemsView.AllItemsStolenProperty, value.HasValue ? BooleanBoxes.GetBox(value.Value) : null);
+        }
 
         public bool? AllItemsUnsellable
         {

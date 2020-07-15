@@ -343,7 +343,8 @@
                         </TabControl.ContentTemplate>
                     </views:ScrollingTabControl>
                     <views:ItemsView Items="{Binding FilteredItems}" SelectedItem="{Binding SelectedItem}" AllItemsUnstashable="{Binding AllItemsUnstashable}"
-                        DoubleClickCommand="{Binding ChangeDefinitionCommand}" AllItemsUnsellable="{Binding AllItemsUnsellable}" />
+                        DoubleClickCommand="{Binding ChangeDefinitionCommand}" AllItemsUnsellable="{Binding AllItemsUnsellable}" 
+                        AllItemsStolen="{Binding AllItemsStolen}" />
                 </DockPanel>
             </Grid>
             <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Stretch" Background="{x:Static SystemColors.ControlBrush}" FocusVisualStyle="{x:Null}" />
