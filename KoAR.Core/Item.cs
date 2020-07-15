@@ -59,10 +59,19 @@ namespace KoAR.Core
 
         public bool IsStolen
         {
-            get => ItemBytes[Offsets.IsStolen] == 1;
-            set => ItemBytes[Offsets.IsStolen] = (byte)(value ? 1 : 0);
+            get => (ItemBytes[Offsets.SellableFlag] & 0x08) == 0x08;
+            set
+            {
+                if (value)
+                {
+                    ItemBytes[Offsets.SellableFlag] |= 0x08;
+                }
+                else
+                {
+                    ItemBytes[Offsets.SellableFlag] &= 0xF7;
+                }
+            }
         }
-
 
         public bool IsUnsellable
         {

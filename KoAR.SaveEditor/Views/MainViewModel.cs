@@ -43,6 +43,18 @@ namespace KoAR.SaveEditor.Views
 
         public DelegateCommand AddStashItemCommand { get; }
 
+        public bool? AllItemsStolen
+        {
+            get => this.GetAppliesToAllItems(item => item.IsStolen);
+            set
+            {
+                foreach (ItemModel item in this.FilteredItems)
+                {
+                    item.IsStolen = value.GetValueOrDefault();
+                }
+            }
+        }
+
         public bool? AllItemsUnsellable
         {
             get => this.GetAppliesToAllItems(item => item.IsUnsellable);
@@ -323,6 +335,9 @@ namespace KoAR.SaveEditor.Views
             this.UnsavedChanges = true;
             switch (e.PropertyName)
             {
+                case nameof(ItemModel.IsStolen):
+                    this.OnPropertyChanged(nameof(this.AllItemsStolen));
+                    break;
                 case nameof(ItemModel.IsUnsellable):
                     this.OnPropertyChanged(nameof(this.AllItemsUnsellable));
                     break;
@@ -336,6 +351,7 @@ namespace KoAR.SaveEditor.Views
         {
             this.FilteredItems = this.GetFilteredItems();
             this.SelectedItem = null;
+            this.OnPropertyChanged(nameof(this.AllItemsStolen));
             this.OnPropertyChanged(nameof(this.AllItemsUnsellable));
             this.OnPropertyChanged(nameof(this.AllItemsUnstashable));
         }
