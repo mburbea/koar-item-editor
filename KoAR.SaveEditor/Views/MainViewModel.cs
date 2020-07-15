@@ -359,6 +359,7 @@ namespace KoAR.SaveEditor.Views
                 if (regenerate)
                 {
                     this._gameSave.GetAllEquipment();
+                    this.OnPropertyChanged(nameof(this.Stash));
                 }
                 foreach (ItemModel item in this._gameSave.Items.Select(info => new ItemModel(info)))
                 {

@@ -384,7 +384,7 @@
                                             <Setter Property="TextAlignment" Value="Left" />
                                         </DataTrigger>
                                     </Style.Triggers>
-                                    <Setter Property="Text" Value="{Binding Stash.Count, Mode=OneWay}" />
+                                    <Setter Property="Text" Value="{Binding Stash.Items.Count, Mode=OneWay}" />
                                     <Setter Property="TextAlignment" Value="Right" />
                                 </Style>
                             </TextBox.Style>

@@ -54,10 +54,10 @@ namespace KoAR.Core
             }
         }
 
-        public int Count
+        private int Count
         {
             get => MemoryUtilities.Read<int>(_gameSave.Bytes, _offset + 13);
-            private set => MemoryUtilities.Write(_gameSave.Bytes, _offset + 13, value);
+            set => MemoryUtilities.Write(_gameSave.Bytes, _offset + 13, value);
         }
 
         public List<StashItem> Items { get; } = new List<StashItem>();
