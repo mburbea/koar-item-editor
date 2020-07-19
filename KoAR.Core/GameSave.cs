@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -48,7 +47,6 @@ namespace KoAR.Core
 
         public void GetAllEquipment()
         {
-            Stopwatch sw = Stopwatch.StartNew();
             ReadOnlySpan<byte> typeIdSeq = new byte[] { 0x23, 0xCC, 0x58, 0x00, 0x03 };
             ReadOnlySpan<byte> fileLengthSeq = new byte[8] { 0, 0, 0, 0, 0xA, 0, 0, 0 };
             ReadOnlySpan<byte> ItemEffectMarker = new byte[5] { 0xD3, 0x34, 0x43, 0x00, 0x00 };
@@ -65,17 +63,15 @@ namespace KoAR.Core
             var itemMemoryLocs = ItemMemoryContainer.ToDictionary(x => x.id, x => (x.offset, x.datalength));
             var coreLocs = CoreEffectContainer.ToDictionary(x => x.id, x => (x.offset, x.datalength));
             Items.Clear();
-
             Stash = Stash.TryCreateStash(this);
-
             _simTypeOffset = data.IndexOf(typeIdSeq);
             int ixOfActor = _simTypeOffset + 9;
             int playerActor = 0;
+
             if (BitConverter.ToInt32(Bytes, ixOfActor) == 0)
             {
                 ixOfActor += 4;
             }
-
             while (BitConverter.ToInt32(Bytes, ixOfActor) == 0x00_75_2D_06)
             {
                 var dataLength = 9 + BitConverter.ToInt32(Bytes, ixOfActor + 5);
@@ -101,7 +97,6 @@ namespace KoAR.Core
                     Items.RemoveAt(i);
                 }
             }
-            Debug.WriteLine($"read all items in:{sw.Elapsed}");
         }
 
         public void SaveFile()
