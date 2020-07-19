@@ -48,6 +48,7 @@ namespace KoAR.Core
 
         public void GetAllEquipment()
         {
+            Stopwatch sw = Stopwatch.StartNew();
             ReadOnlySpan<byte> typeIdSeq = new byte[] { 0x23, 0xCC, 0x58, 0x00, 0x03 };
             ReadOnlySpan<byte> fileLengthSeq = new byte[8] { 0, 0, 0, 0, 0xA, 0, 0, 0 };
             ReadOnlySpan<byte> ItemEffectMarker = new byte[5] { 0xD3, 0x34, 0x43, 0x00, 0x00 }; // 26 to first item. 5 to first DL, 13 to second DL. 18 for count
@@ -104,6 +105,7 @@ namespace KoAR.Core
                     Items.RemoveAt(i);
                 }
             }
+            Debug.WriteLine($"read all items in:{sw.Elapsed}");
         }
 
         public void SaveFile()
