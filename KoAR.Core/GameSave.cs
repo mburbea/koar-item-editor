@@ -33,55 +33,69 @@ namespace KoAR.Core
 
         public Stash? Stash { get; private set; }
 
-        private int FileLength
+        internal int FileLength
         {
             get => MemoryUtilities.Read<int>(Bytes, _fileLengthOffset);
-            set => MemoryUtilities.Write<int>(Bytes, _fileLengthOffset, value);
+            set => MemoryUtilities.Write(Bytes, _fileLengthOffset, value);
         }
 
         private int SimtypeSizes
         {
             get => MemoryUtilities.Read<int>(Bytes, _simTypeOffset + 5);
-            set => MemoryUtilities.Write<int>(Bytes, _simTypeOffset + 5, value);
+            set => MemoryUtilities.Write(Bytes, _simTypeOffset + 5, value);
         }
 
         public void GetAllEquipment()
         {
             ReadOnlySpan<byte> typeIdSeq = new byte[] { 0x23, 0xCC, 0x58, 0x00, 0x03 };
             ReadOnlySpan<byte> fileLengthSeq = new byte[8] { 0, 0, 0, 0, 0xA, 0, 0, 0 };
-            ReadOnlySpan<byte> ItemEffectMarker = new byte[5] { 0xD3, 0x34, 0x43, 0x00, 0x00 }; // 26 to first item. 5 to first DL, 13 to second DL. 18 for count
-            ReadOnlySpan<byte> coreEffectMarker = new byte[5] { 0xBB, 0xD5, 0x43, 0x00, 0x00 }; // 26 to first item. 5 to first DL, 13 to second DL. 18 for count
-            ReadOnlySpan<byte> data = Bytes;
+            ReadOnlySpan<byte> ItemEffectMarker = new byte[5] { 0xD3, 0x34, 0x43, 0x00, 0x00 };
+            ReadOnlySpan<byte> coreEffectMarker = new byte[5] { 0xBB, 0xD5, 0x43, 0x00, 0x00 };
+            const int playerHumanMale = 0x0A386D;
+            const int playerHumanFemale = 0x0A386E;
+            const int playerElfMale = 0x0A386F;
+            const int playerElfFemale = 0x0A3870;
 
+            ReadOnlySpan<byte> data = Bytes;
             _fileLengthOffset = data.IndexOf(fileLengthSeq) - 4;
             ItemMemoryContainer = new Container(this, data.IndexOf(ItemEffectMarker), 0x00_24_D5_68_00_00_00_0Bul);
             CoreEffectContainer = new Container(this, data.IndexOf(coreEffectMarker), 0x00_28_60_84_00_00_00_0Bul);
-            var itemMemoryLocs = ItemMemoryContainer.ToDictionary(x => x.id, x => (x.offset, x.datalength));
-            var coreLocs = CoreEffectContainer.ToDictionary(x => x.id, x => (x.offset, x.datalength));
+            var itemMemoryLocs = ItemMemoryContainer.ToDictionary(x => x.id, x => (x.offset, x.dataLength));
+            var coreLocs = CoreEffectContainer.ToDictionary(x => x.id, x => (x.offset, x.dataLength));
             Items.Clear();
-
             Stash = Stash.TryCreateStash(this);
-
             _simTypeOffset = data.IndexOf(typeIdSeq);
             int ixOfActor = _simTypeOffset + 9;
+            int playerActor = 0;
+
             if (BitConverter.ToInt32(Bytes, ixOfActor) == 0)
             {
                 ixOfActor += 4;
             }
-
             while (BitConverter.ToInt32(Bytes, ixOfActor) == 0x00_75_2D_06)
             {
-                var datalength = 9 + BitConverter.ToInt32(Bytes, ixOfActor + 5);
+                var dataLength = 9 + BitConverter.ToInt32(Bytes, ixOfActor + 5);
                 var id = BitConverter.ToInt32(Bytes, ixOfActor + 9);
                 var typeId = BitConverter.ToUInt32(Bytes, ixOfActor + 13);
-
                 if (Amalur.TypeDefinitions.TryGetValue(typeId, out var definition))
                 {
                     var (itemOffset, itemLength) = itemMemoryLocs[id];
                     var (coreOffset, coreLength) = coreLocs[id];
                     Items.Add(new Item(this, ixOfActor + 13, itemOffset, itemLength, coreOffset, coreLength));
                 }
-                ixOfActor += datalength;
+                else if (typeId == playerHumanMale || typeId == playerHumanFemale || typeId == playerElfMale || typeId == playerElfFemale)
+                {
+                        playerActor = id;
+                }
+                ixOfActor += dataLength;
+            }
+            // kinda crappy as we have to find all of them before we can rule out the player actor.
+            for (int i = Items.Count - 1; i > -1; i--)
+            {
+                if (Items[i].Owner != playerActor)
+                {
+                    Items.RemoveAt(i);
+                }
             }
         }
 

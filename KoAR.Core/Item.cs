@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -15,14 +16,14 @@ namespace KoAR.Core
         public const float DurabilityUpperBound = 100f;
         public const int MinEquipmentLength = 44;
 
-        public Item(GameSave gameSave, int typeIdOffset, int offset, int datalength, int coreEffectOffset, int coreEffectDataLength)
+        public Item(GameSave gameSave, int typeIdOffset, int offset, int dataLength, int coreEffectOffset, int coreEffectDataLength)
         {
             (_gameSave, _typeIdOffset, ItemOffset) = (gameSave, typeIdOffset, offset);
             if (gameSave.Bytes[_typeIdOffset + 10] == 1)
             {
                 _levelShiftOffset = 8;
             }
-            ItemBytes = _gameSave.Bytes.AsSpan(offset, datalength).ToArray();
+            ItemBytes = _gameSave.Bytes.AsSpan(offset, dataLength).ToArray();
             ItemBuffs = new ItemBuffMemory(gameSave.Bytes, coreEffectOffset, coreEffectDataLength);
             PlayerBuffs = new List<Buff>(BuffCount);
             for (int i = 0; i < PlayerBuffs.Capacity; i++)
@@ -57,52 +58,30 @@ namespace KoAR.Core
             private set => ItemBytes[Offsets.HasCustomName] = (byte)(value ? 1 : 0);
         }
 
+        private InventoryState State
+        {
+            get => (InventoryState)ItemBytes[Offsets.InventoryState];
+            set => ItemBytes[Offsets.InventoryState] = (byte)value;
+        }
+
+        public int Owner => MemoryUtilities.Read<int>(ItemBytes, Offset.Owner);
+
         public bool IsStolen
         {
-            get => (ItemBytes[Offsets.SellableFlag] & 0x08) == 0x08;
-            set
-            {
-                if (value)
-                {
-                    ItemBytes[Offsets.SellableFlag] |= 0x08;
-                }
-                else
-                {
-                    ItemBytes[Offsets.SellableFlag] &= 0xF7;
-                }
-            }
+            get => (State & InventoryState.Stolen) == InventoryState.Stolen;
+            set => State ^= (InventoryState)(-Unsafe.As<bool, sbyte>(ref value) ^ (byte)State) & InventoryState.Stolen;
         }
 
         public bool IsUnsellable
         {
-            get => (ItemBytes[Offsets.SellableFlag] & 0x80) == 0x80;
-            set
-            {
-                if (value)
-                {
-                    ItemBytes[Offsets.SellableFlag] |= 0x80;
-                }
-                else
-                {
-                    ItemBytes[Offsets.SellableFlag] &= 0x7F;
-                }
-            }
+            get => (State & InventoryState.Unsellable) == InventoryState.Unsellable;
+            set => State ^= (InventoryState)(-Unsafe.As<bool, sbyte>(ref value) ^ (byte)State) & InventoryState.Unsellable;
         }
 
         public bool IsUnstashable
         {
-            get => (ItemBytes[Offsets.SellableFlag] & 0x40) == 0x40;
-            set
-            {
-                if (value)
-                {
-                    ItemBytes[Offsets.SellableFlag] |= 0x40;
-                }
-                else
-                {
-                    ItemBytes[Offsets.SellableFlag] &= 0xBF;
-                }
-            }
+            get => (State & InventoryState.Unstashable) == InventoryState.Unstashable;
+            set => State ^= (InventoryState)(-Unsafe.As<bool, sbyte>(ref value) ^ (byte)State) & InventoryState.Unstashable;
         }
 
         public TypeDefinition TypeDefinition

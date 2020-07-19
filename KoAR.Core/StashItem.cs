@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace KoAR.Core
@@ -64,10 +65,16 @@ namespace KoAR.Core
 
         public IItemBuffMemory ItemBuffs { get; }
 
-        public byte Level => throw new NotImplementedException();
+        public byte Level => TypeDefinition.Level;
 
-        public float MaxDurability => throw new NotImplementedException();
+        public float MaxDurability => TypeDefinition.MaxDurability;
 
-        public Rarity Rarity => throw new NotImplementedException();
+        public Rarity Rarity => TypeDefinition.Rarity == Rarity.Set
+            ? Rarity.Set
+            : PlayerBuffs.Select(x => x.Rarity)
+                .Concat(ItemBuffs.List.Select(x => x.Rarity))
+                .Concat(new[] { ItemBuffs.Prefix?.Rarity ?? default, ItemBuffs.Suffix?.Rarity ?? default, TypeDefinition.Sockets.Any() ? Rarity.Infrequent : Rarity.Common })
+                .Max();
+
     }
 }
