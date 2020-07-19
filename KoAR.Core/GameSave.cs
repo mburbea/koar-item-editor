@@ -60,8 +60,8 @@ namespace KoAR.Core
             _fileLengthOffset = data.IndexOf(fileLengthSeq) - 4;
             ItemMemoryContainer = new Container(this, data.IndexOf(ItemEffectMarker), 0x00_24_D5_68_00_00_00_0Bul);
             CoreEffectContainer = new Container(this, data.IndexOf(coreEffectMarker), 0x00_28_60_84_00_00_00_0Bul);
-            var itemMemoryLocs = ItemMemoryContainer.ToDictionary(x => x.id, x => (x.offset, x.datalength));
-            var coreLocs = CoreEffectContainer.ToDictionary(x => x.id, x => (x.offset, x.datalength));
+            var itemMemoryLocs = ItemMemoryContainer.ToDictionary(x => x.id, x => (x.offset, x.dataLength));
+            var coreLocs = CoreEffectContainer.ToDictionary(x => x.id, x => (x.offset, x.dataLength));
             Items.Clear();
             Stash = Stash.TryCreateStash(this);
             _simTypeOffset = data.IndexOf(typeIdSeq);

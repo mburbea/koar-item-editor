@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace KoAR.Core
 {
-    public readonly struct Container : IEnumerable<(int id, int offset, int datalength)>
+    public readonly struct Container : IEnumerable<(int id, int offset, int dataLength)>
     {
         private static class Offsets
         {
@@ -46,11 +46,11 @@ namespace KoAR.Core
             DataLength2 += delta;
         }
 
-        public IEnumerator<(int id, int offset, int datalength)> GetEnumerator()
+        public IEnumerator<(int id, int offset, int dataLength)> GetEnumerator()
         {
             var offset = _offset + Offsets.FirstItem;
             int id;
-            int datalength;
+            int dataLength;
             while (true)
             {
                 while ((id = BitConverter.ToInt32(_gameSave.Bytes, offset)) == 0)
@@ -61,9 +61,9 @@ namespace KoAR.Core
                 {
                     break;
                 }
-                datalength = 17 + BitConverter.ToInt32(_gameSave.Bytes, offset + 13);
-                yield return (id, offset, datalength);
-                offset += datalength;
+                dataLength = 17 + BitConverter.ToInt32(_gameSave.Bytes, offset + 13);
+                yield return (id, offset, dataLength);
+                offset += dataLength;
             }
         }
 

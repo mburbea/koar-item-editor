@@ -16,14 +16,14 @@ namespace KoAR.Core
         public const float DurabilityUpperBound = 100f;
         public const int MinEquipmentLength = 44;
 
-        public Item(GameSave gameSave, int typeIdOffset, int offset, int datalength, int coreEffectOffset, int coreEffectDataLength)
+        public Item(GameSave gameSave, int typeIdOffset, int offset, int dataLength, int coreEffectOffset, int coreEffectDataLength)
         {
             (_gameSave, _typeIdOffset, ItemOffset) = (gameSave, typeIdOffset, offset);
             if (gameSave.Bytes[_typeIdOffset + 10] == 1)
             {
                 _levelShiftOffset = 8;
             }
-            ItemBytes = _gameSave.Bytes.AsSpan(offset, datalength).ToArray();
+            ItemBytes = _gameSave.Bytes.AsSpan(offset, dataLength).ToArray();
             ItemBuffs = new ItemBuffMemory(gameSave.Bytes, coreEffectOffset, coreEffectDataLength);
             PlayerBuffs = new List<Buff>(BuffCount);
             for (int i = 0; i < PlayerBuffs.Capacity; i++)
@@ -64,10 +64,7 @@ namespace KoAR.Core
             set => ItemBytes[Offsets.InventoryState] = (byte)value;
         }
 
-        public int Owner
-        {
-            get => MemoryUtilities.Read<int>(ItemBytes, Offset.Owner);
-        }
+        public int Owner => MemoryUtilities.Read<int>(ItemBytes, Offset.Owner);
 
         public bool IsStolen
         {
