@@ -61,12 +61,12 @@ namespace KoAR.Core
 
         public void AddItem(TypeDefinition type)
         {
-            // Why don't we use the stashitem class? 
+            // Why don't we use the StashItem class? 
             // 1. Because we don't support mutating them yet
             // 2. We blow away everything when we do this operation anyway.
-            // 3. We rely on the fact that the game will regenerate the ItemBuff section when the stash spawns the item.
+            // 3. We rely on the fact that the game will regenerate the ItemBuff section when the stash spawns the item. (Primarily to avoid thinking about instanceIds...)
             Span<byte> temp = stackalloc byte[25 + type.PlayerBuffs.Length * 8];
-            MemoryUtilities.Write(temp, 0, type.TypeId | ((ulong)0x03_0A) << 32); // 8
+            MemoryUtilities.Write(temp, 0, type.TypeId | ((ulong)0x03_0A) << 32); 
             MemoryUtilities.Write(temp, 10, type.MaxDurability);
             temp[14] = 1;
             MemoryUtilities.Write(temp, 18, type.PlayerBuffs.Length);
