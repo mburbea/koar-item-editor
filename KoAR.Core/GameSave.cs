@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -33,16 +34,16 @@ namespace KoAR.Core
 
         public Stash? Stash { get; private set; }
 
-        private int FileLength
+        internal int FileLength
         {
             get => MemoryUtilities.Read<int>(Bytes, _fileLengthOffset);
-            set => MemoryUtilities.Write<int>(Bytes, _fileLengthOffset, value);
+            set => MemoryUtilities.Write(Bytes, _fileLengthOffset, value);
         }
 
         private int SimtypeSizes
         {
             get => MemoryUtilities.Read<int>(Bytes, _simTypeOffset + 5);
-            set => MemoryUtilities.Write<int>(Bytes, _simTypeOffset + 5, value);
+            set => MemoryUtilities.Write(Bytes, _simTypeOffset + 5, value);
         }
 
         public void GetAllEquipment()
@@ -64,6 +65,7 @@ namespace KoAR.Core
 
             _simTypeOffset = data.IndexOf(typeIdSeq);
             int ixOfActor = _simTypeOffset + 9;
+            int playerActor = 0;
             if (BitConverter.ToInt32(Bytes, ixOfActor) == 0)
             {
                 ixOfActor += 4;
@@ -81,7 +83,26 @@ namespace KoAR.Core
                     var (coreOffset, coreLength) = coreLocs[id];
                     Items.Add(new Item(this, ixOfActor + 13, itemOffset, itemLength, coreOffset, coreLength));
                 }
+                else
+                {
+                    const int playerHumanMale = 0x0A386D;
+                    const int playerHumanFemale = 0x0A386E;
+                    const int playerElfMale = 0x0A386F;
+                    const int playerElfFemale = 0x0A3870;
+                    if (typeId == playerHumanMale || typeId == playerHumanFemale || typeId == playerElfMale || typeId == playerElfFemale)
+                    {
+                        playerActor = id;
+                    }
+                }
                 ixOfActor += datalength;
+            }
+            // kinda crappy as we have to find all of them before we can rule out the player actor.
+            for (int i = Items.Count - 1; i > -1; i--)
+            {
+                if (Items[i].Owner != playerActor)
+                {
+                    Items.RemoveAt(i);
+                }
             }
         }
 

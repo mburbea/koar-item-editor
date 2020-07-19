@@ -9,6 +9,7 @@ namespace KoAR.Core
     {
         public static int GetHash(string value)
         {
+            value.ToLowerInvariant();
             var hashtable = MemoryMarshal.Cast<byte, int>((ReadOnlySpan<byte>)new byte[]
             {
                0x7F,0x00,0x00,0x00,0x2B,0x03,0x00,0x00,0x3D,0x06,0x00,0x00,0x53,0x08,0x00,0x00,0xBD,0x0A,0x00,0x00,0x97,0x12,0x00,0x00,0x97,
@@ -23,7 +24,7 @@ namespace KoAR.Core
             int hash = 0;
             for (int i = value.Length - 1; i > -1; i--)
             {
-                int c = value[i] | 0x20;
+                int c = value[i];
                 hash += (i + 1) * hashtable[c % hashtable.Length] + (c * hashtable[i % hashtable.Length]);
             }
             return hash;

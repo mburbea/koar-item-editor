@@ -78,6 +78,7 @@ namespace KoAR.Core
             _gameSave.Bytes = MemoryUtilities.ReplaceBytes(_gameSave.Bytes, _offset + 17, 0, temp);
             DataLength += temp.Length;
             Count++;
+            _gameSave.FileLength += temp.Length;
         }
 
         public static Stash? TryCreateStash(GameSave gameSave)
