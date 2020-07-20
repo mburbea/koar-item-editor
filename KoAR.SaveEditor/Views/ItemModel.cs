@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Runtime.CompilerServices;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
 
 namespace KoAR.SaveEditor.Views
 {
-    public sealed class ItemModel : ItemModelBase
+    public sealed class ItemModel : ItemModelBase<Item>
     {
         private readonly NotifyingCollection<Buff> _itemBuffs;
         private readonly NotifyingCollection<Buff> _playerBuffs;
@@ -21,27 +22,27 @@ namespace KoAR.SaveEditor.Views
 
         public override float CurrentDurability
         {
-            set => this.SetItemValue(value, this.Item.CurrentDurability, value => this.Item.CurrentDurability = value);
+            get => base.CurrentDurability;
+            set => this.SetItemValue(value);
         }
 
         public override bool IsStolen
         {
-            set => this.SetItemValue(value, this.Item.IsStolen, value => this.Item.IsStolen = value);
+            get => base.IsStolen;
+            set => this.SetItemValue(value);
         }
 
         public bool IsUnsellable
         {
             get => this.Item.IsUnsellable;
-            set => this.SetItemValue(value, this.Item.IsUnsellable, value => this.Item.IsUnsellable = value);
+            set => this.SetItemValue(value);
         }
 
         public bool IsUnstashable
         {
             get => this.Item.IsUnstashable;
-            set => this.SetItemValue(value, this.Item.IsUnstashable, value => this.Item.IsUnstashable = value);
+            set => this.SetItemValue(value);
         }
-
-        public new Item Item => (Item)base.Item;
 
         public override IReadOnlyList<Buff> ItemBuffs => this._itemBuffs;
 
@@ -51,9 +52,10 @@ namespace KoAR.SaveEditor.Views
 
         public override string ItemName
         {
+            get => base.ItemName;
             set
             {
-                if (this.SetItemValue(value, this.Item.ItemName, value => this.Item.ItemName = value))
+                if (this.SetItemValue(value))
                 {
                     this.OnPropertyChanged(nameof(this.HasCustomName));
                     this.OnPropertyChanged(nameof(this.DisplayName));
@@ -63,21 +65,24 @@ namespace KoAR.SaveEditor.Views
 
         public override byte Level
         {
-            set => this.SetItemValue(value, this.Item.Level, value => this.Item.Level = value);
+            get => base.Level;
+            set => this.SetItemValue(value);
         }
 
         public override float MaxDurability
         {
-            set => this.SetItemValue(value, this.Item.MaxDurability, value => this.Item.MaxDurability = value);
+            get => base.MaxDurability;
+            set => this.SetItemValue(value);
         }
 
         public override IReadOnlyList<Buff> PlayerBuffs => this._playerBuffs;
 
         public override Buff? Prefix
         {
+            get => base.Prefix;
             set
             {
-                if (this.SetItemValue(value, this.Item.ItemBuffs.Prefix, value => this.Item.ItemBuffs.Prefix = value))
+                if (this.SetItemValue(value, $"{nameof(this.Item.ItemBuffs)}.{nameof(ItemBuffMemory.Prefix)}"))
                 {
                     this.OnPropertyChanged(nameof(this.AffixCount));
                 }
@@ -88,9 +93,10 @@ namespace KoAR.SaveEditor.Views
 
         public override Buff? Suffix
         {
+            get => base.Suffix;
             set
             {
-                if (this.SetItemValue(value, this.Item.ItemBuffs.Suffix, value => this.Item.ItemBuffs.Suffix = value))
+                if (this.SetItemValue(value, $"{nameof(this.Item.ItemBuffs)}.{nameof(ItemBuffMemory.Suffix)}"))
                 {
                     this.OnPropertyChanged(nameof(this.AffixCount));
                 }
@@ -99,6 +105,7 @@ namespace KoAR.SaveEditor.Views
 
         public override TypeDefinition TypeDefinition
         {
+            get => base.TypeDefinition;
             set
             {
                 this.Item.TypeDefinition = value;

@@ -230,9 +230,9 @@ namespace KoAR.SaveEditor.Views
             MessageBox.Show($"Save successful! Original save backed up as {this.FileName}.bak.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private void AddItemBuff(uint buffId) => this.SelectedItem?.AddItemBuff(Amalur.GetBuff(buffId));
+        private void AddItemBuff(uint buffId) => this._selectedItem?.AddItemBuff(Amalur.GetBuff(buffId));
 
-        private void AddPlayerBuff(uint buffId) => this.SelectedItem?.AddPlayerBuff(Amalur.GetBuff(buffId));
+        private void AddPlayerBuff(uint buffId) => this._selectedItem?.AddPlayerBuff(Amalur.GetBuff(buffId));
 
         private void AddStashItem()
         {
@@ -255,13 +255,13 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        private bool CanAddItemBuff(uint buffId) => this.SelectedItem != null && buffId != 0u;
+        private bool CanAddItemBuff(uint buffId) => this._selectedItem != null && buffId != 0u;
 
-        private bool CanAddPlayerBuff(uint buffId) => this.SelectedItem != null && buffId != 0u;
+        private bool CanAddPlayerBuff(uint buffId) => this._selectedItem != null && buffId != 0u;
 
-        private bool CanDeleteItemBuff(Buff buff) => buff != null && this.SelectedItem != null;
+        private bool CanDeleteItemBuff(Buff buff) => this._selectedItem != null && buff != null;
 
-        private bool CanDeletePlayerBuff(Buff buff) => buff != null && this.SelectedItem != null;
+        private bool CanDeletePlayerBuff(Buff buff) => this._selectedItem != null && buff != null;
 
         private void ChangeDefinition(ItemModel model)
         {
@@ -282,9 +282,9 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        private void DeleteItemBuff(Buff buff) => this.SelectedItem?.RemoveItemBuff(buff);
+        private void DeleteItemBuff(Buff buff) => this._selectedItem?.RemoveItemBuff(buff);
 
-        private void DeletePlayerBuff(Buff buff) => this.SelectedItem?.RemovePlayerBuff(buff);
+        private void DeletePlayerBuff(Buff buff) => this._selectedItem?.RemovePlayerBuff(buff);
 
         private bool? GetAppliesToAllItems(Func<ItemModel, bool> projection)
         {

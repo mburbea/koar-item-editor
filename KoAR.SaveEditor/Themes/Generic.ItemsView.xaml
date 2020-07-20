@@ -110,7 +110,7 @@
                                 </Style.Triggers>
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                                 <Setter Property="constructs:MouseDoubleClick.CommandParameter" Value="{Binding}" />
-                                <Setter Property="constructs:MouseDoubleClick.Command" Value="{Binding DoubleClickCommand, RelativeSource={RelativeSource AncestorType={x:Type views:ItemsView}}}" />
+                                <Setter Property="constructs:MouseDoubleClick.Command" Value="{Binding RowDoubleClickCommand, RelativeSource={RelativeSource AncestorType={x:Type views:ItemsView}}}" />
                                 <Setter Property="views:ItemsView.SelectRowOnClick" Value="{Binding IsVisible, RelativeSource={RelativeSource Self}}" />
                             </Style>
                         </ListView.ItemContainerStyle>

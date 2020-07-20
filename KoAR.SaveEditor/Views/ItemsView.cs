@@ -30,7 +30,7 @@ namespace KoAR.SaveEditor.Views
 
         public static readonly DependencyProperty RowDoubleClickCommandProperty = DependencyProperty.Register(nameof(ItemsView.RowDoubleClickCommand), typeof(ICommand), typeof(ItemsView));
 
-        public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register(nameof(ItemsView.SelectedItem), typeof(ItemModelBase), typeof(ItemsView),
+        public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register(nameof(ItemsView.SelectedItem), typeof(object), typeof(ItemsView),
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         public static readonly DependencyProperty SelectRowOnClickProperty = DependencyProperty.RegisterAttached("SelectRowOnClick", typeof(bool), typeof(ItemsView),
@@ -87,9 +87,9 @@ namespace KoAR.SaveEditor.Views
             set => this.SetValue(ItemsView.RowDoubleClickCommandProperty, value);
         }
 
-        public ItemModelBase? SelectedItem
+        public object? SelectedItem
         {
-            get => (ItemModelBase?)this.GetValue(ItemsView.SelectedItemProperty);
+            get => (object?)this.GetValue(ItemsView.SelectedItemProperty);
             set => this.SetValue(ItemsView.SelectedItemProperty, value);
         }
 
