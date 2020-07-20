@@ -98,6 +98,7 @@ namespace KoAR.SaveEditor.Views
     public abstract class ItemModelBase<TItem> : ItemModelBase
         where TItem : IItem
     {
+        private static readonly PropertyInfo _itemProperty = typeof(ItemModelBase<TItem>).GetProperty(nameof(ItemModelBase<TItem>.Item), BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
 
         protected ItemModelBase(TItem item)
             : base(item)
@@ -112,7 +113,6 @@ namespace KoAR.SaveEditor.Views
         {
             private static readonly MemberExpression _comparerExpression = Expression.Property(null, typeof(EqualityComparer<TValue>).GetProperty(nameof(EqualityComparer<TValue>.Default), BindingFlags.Public | BindingFlags.Static));
             private static readonly MethodInfo _equalsMethod = typeof(EqualityComparer<TValue>).GetMethod(nameof(EqualityComparer<TValue>.Equals), new[] { typeof(TValue), typeof(TValue) });
-            private static readonly PropertyInfo _itemProperty = typeof(ItemModelBase<TItem>).GetProperty(nameof(ItemModelBase<TItem>.Item), BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
             private static readonly Dictionary<string, Func<ItemModelBase<TItem>, TValue, bool>> _setters = new Dictionary<string, Func<ItemModelBase<TItem>, TValue, bool>>();
 
             public static bool SetValue(ItemModelBase<TItem> model, TValue value, string propertyPath)
@@ -132,7 +132,7 @@ namespace KoAR.SaveEditor.Views
                 MemberExpression propertyExpression = properties.Aggregate(
                     Expression.Property(
                         modelParameter,
-                        ValueSetter<TValue>._itemProperty
+                        ItemModelBase<TItem>._itemProperty
                     ),
                     Expression.Property
                 );
