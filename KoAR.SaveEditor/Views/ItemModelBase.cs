@@ -110,10 +110,9 @@ namespace KoAR.SaveEditor.Views
 
         private static class ValueSetter<TValue>
         {
-            private static readonly MemberExpression _comparerExpression = Expression.Property(null, typeof(EqualityComparer<TValue>).GetProperty(nameof(EqualityComparer<TValue>.Default), BindingFlags.Public | BindingFlags.Static));
+            private static readonly PropertyInfo _defaultProperty = typeof(EqualityComparer<TValue>).GetProperty(nameof(EqualityComparer<TValue>.Default), BindingFlags.Public | BindingFlags.Static);
             private static readonly MethodInfo _equalsMethod = typeof(EqualityComparer<TValue>).GetMethod(nameof(EqualityComparer<TValue>.Equals), new[] { typeof(TValue), typeof(TValue) });
             private static readonly Dictionary<string, Func<ItemModelBase<TItem>, TValue, bool>> _setters = new Dictionary<string, Func<ItemModelBase<TItem>, TValue, bool>>();
-
             private static readonly ParameterExpression _valueParameter = Expression.Parameter(typeof(TValue), "value");
 
             public static bool SetValue(ItemModelBase<TItem> model, TValue value, string propertyPath)
@@ -138,7 +137,10 @@ namespace KoAR.SaveEditor.Views
                 Expression<Func<ItemModelBase<TItem>, TValue, bool>> lambdaExpression = Expression.Lambda<Func<ItemModelBase<TItem>, TValue, bool>>(
                     Expression.Condition(
                         Expression.Call(
-                            ValueSetter<TValue>._comparerExpression,
+                            Expression.Property(
+                                null,
+                                ValueSetter<TValue>._defaultProperty
+                            ),
                             ValueSetter<TValue>._equalsMethod,
                             ValueSetter<TValue>._valueParameter,
                             propertyExpression
