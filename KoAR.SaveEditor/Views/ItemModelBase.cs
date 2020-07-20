@@ -11,8 +11,6 @@ namespace KoAR.SaveEditor.Views
 {
     public abstract class ItemModelBase : NotifierBase, IDisposable
     {
-        protected static readonly MethodInfo _onPropertyChangedMethod = typeof(NotifierBase).GetMethod(nameof(ItemModelBase.OnPropertyChanged), BindingFlags.NonPublic | BindingFlags.Instance);
-
         protected ItemModelBase(IItem item) => this.Item = item;
 
         public int AffixCount => (this.Prefix == null ? 0 : 1) + (this.Suffix == null ? 0 : 1);
@@ -99,6 +97,7 @@ namespace KoAR.SaveEditor.Views
         where TItem : IItem
     {
         private static readonly PropertyInfo _itemProperty = typeof(ItemModelBase<TItem>).GetProperty(nameof(ItemModelBase<TItem>.Item), BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+        private static readonly ParameterExpression _modelParameter = Expression.Parameter(typeof(ItemModelBase<TItem>), "model");
 
         protected ItemModelBase(TItem item)
             : base(item)
@@ -115,6 +114,8 @@ namespace KoAR.SaveEditor.Views
             private static readonly MethodInfo _equalsMethod = typeof(EqualityComparer<TValue>).GetMethod(nameof(EqualityComparer<TValue>.Equals), new[] { typeof(TValue), typeof(TValue) });
             private static readonly Dictionary<string, Func<ItemModelBase<TItem>, TValue, bool>> _setters = new Dictionary<string, Func<ItemModelBase<TItem>, TValue, bool>>();
 
+            private static readonly ParameterExpression _valueParameter = Expression.Parameter(typeof(TValue), "value");
+
             public static bool SetValue(ItemModelBase<TItem> model, TValue value, string propertyPath)
             {
                 if (!ValueSetter<TValue>._setters.TryGetValue(propertyPath, out Func<ItemModelBase<TItem>, TValue, bool>? setter))
@@ -126,12 +127,10 @@ namespace KoAR.SaveEditor.Views
 
             private static Func<ItemModelBase<TItem>, TValue, bool> CreateSetter(string propertyPath)
             {
-                ParameterExpression modelParameter = Expression.Parameter(typeof(ItemModelBase<TItem>), "model");
-                ParameterExpression valueParameter = Expression.Parameter(typeof(TValue), "value");
                 string[] properties = propertyPath.Split('.');
                 MemberExpression propertyExpression = properties.Aggregate(
                     Expression.Property(
-                        modelParameter,
+                        ItemModelBase<TItem>._modelParameter,
                         ItemModelBase<TItem>._itemProperty
                     ),
                     Expression.Property
@@ -141,7 +140,7 @@ namespace KoAR.SaveEditor.Views
                         Expression.Call(
                             ValueSetter<TValue>._comparerExpression,
                             ValueSetter<TValue>._equalsMethod,
-                            valueParameter,
+                            ValueSetter<TValue>._valueParameter,
                             propertyExpression
                         ),
                         Expression.Constant(BooleanBoxes.False),
@@ -149,18 +148,18 @@ namespace KoAR.SaveEditor.Views
                             typeof(bool),
                             Expression.Assign(
                                 propertyExpression,
-                                valueParameter
+                                ValueSetter<TValue>._valueParameter
                             ),
                             Expression.Call(
-                                modelParameter,
-                                ItemModelBase._onPropertyChangedMethod,
+                                ItemModelBase<TItem>._modelParameter,
+                                NotifierBase.OnPropertyChangedMethod,
                                 Expression.Constant(properties.Last())
                             ),
                             Expression.Constant(BooleanBoxes.True)
                         )
                     ),
-                    modelParameter,
-                    valueParameter
+                    ItemModelBase<TItem>._modelParameter,
+                    ValueSetter<TValue>._valueParameter
                 );
                 return lambdaExpression.Compile();
             }
