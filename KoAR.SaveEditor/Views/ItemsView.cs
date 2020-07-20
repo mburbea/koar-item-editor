@@ -22,15 +22,15 @@ namespace KoAR.SaveEditor.Views
         public static readonly DependencyProperty AllItemsUnstashableProperty = DependencyProperty.Register(nameof(ItemsView.AllItemsUnstashable), typeof(bool?), typeof(ItemsView),
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
-        public static readonly DependencyProperty DoubleClickCommandProperty = DependencyProperty.Register(nameof(ItemsView.DoubleClickCommand), typeof(ICommand), typeof(ItemsView));
-
-        public static readonly DependencyProperty ItemsProperty = DependencyProperty.Register(nameof(ItemsView.Items), typeof(IList), typeof(ItemsView),
+        public static readonly DependencyProperty ItemsProperty = DependencyProperty.Register(nameof(ItemsView.Items), typeof(IReadOnlyList<ItemModelBase>), typeof(ItemsView),
             new PropertyMetadata(ItemsView.ItemsProperty_ValueChanged));
 
         public static readonly DependencyProperty PropertyNameProperty = DependencyProperty.RegisterAttached("PropertyName", typeof(string), typeof(ItemsView),
             new PropertyMetadata());
 
-        public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register(nameof(ItemsView.SelectedItem), typeof(ItemModel), typeof(ItemsView),
+        public static readonly DependencyProperty RowDoubleClickCommandProperty = DependencyProperty.Register(nameof(ItemsView.RowDoubleClickCommand), typeof(ICommand), typeof(ItemsView));
+
+        public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register(nameof(ItemsView.SelectedItem), typeof(ItemModelBase), typeof(ItemsView),
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         public static readonly DependencyProperty SelectRowOnClickProperty = DependencyProperty.RegisterAttached("SelectRowOnClick", typeof(bool), typeof(ItemsView),
@@ -40,7 +40,7 @@ namespace KoAR.SaveEditor.Views
             new PropertyMetadata());
 
         public static readonly DependencyProperty SortPropertyProperty = DependencyProperty.RegisterAttached(nameof(ItemsView.SortProperty), typeof(string), typeof(ItemsView),
-            new PropertyMetadata(nameof(ItemModel.Level)));
+            new PropertyMetadata(nameof(ItemModelBase.Level)));
 
         private static readonly DependencyPropertyKey _collectionViewProperty = DependencyProperty.RegisterReadOnly(nameof(ItemsView.CollectionView), typeof(CollectionView), typeof(ItemsView),
             new PropertyMetadata(ItemsView.CollectionView_ValueChanged));
@@ -75,21 +75,21 @@ namespace KoAR.SaveEditor.Views
             private set => this.SetValue(ItemsView._collectionViewProperty, value);
         }
 
-        public ICommand? DoubleClickCommand
+        public IReadOnlyList<ItemModelBase>? Items
         {
-            get => (ICommand?)this.GetValue(ItemsView.DoubleClickCommandProperty);
-            set => this.SetValue(ItemsView.DoubleClickCommandProperty, value);
-        }
-
-        public IEnumerable<ItemModel>? Items
-        {
-            get => (IEnumerable<ItemModel>?)this.GetValue(ItemsView.ItemsProperty);
+            get => (IReadOnlyList<ItemModelBase>?)this.GetValue(ItemsView.ItemsProperty);
             set => this.SetValue(ItemsView.ItemsProperty, value);
         }
 
-        public ItemModel? SelectedItem
+        public ICommand? RowDoubleClickCommand
         {
-            get => (ItemModel?)this.GetValue(ItemsView.SelectedItemProperty);
+            get => (ICommand?)this.GetValue(ItemsView.RowDoubleClickCommandProperty);
+            set => this.SetValue(ItemsView.RowDoubleClickCommandProperty, value);
+        }
+
+        public ItemModelBase? SelectedItem
+        {
+            get => (ItemModelBase?)this.GetValue(ItemsView.SelectedItemProperty);
             set => this.SetValue(ItemsView.SelectedItemProperty, value);
         }
 
@@ -198,9 +198,9 @@ namespace KoAR.SaveEditor.Views
             {
                 SortDescriptions =
                 {
-                    new SortDescription(nameof(ItemModel.Category), ListSortDirection.Ascending),
+                    new SortDescription(nameof(ItemModelBase.Category), ListSortDirection.Ascending),
                     new SortDescription(itemsView.SortProperty, itemsView.SortDirection),
-                    new SortDescription(nameof(ItemModel.DisplayName), ListSortDirection.Ascending)
+                    new SortDescription(nameof(ItemModelBase.DisplayName), ListSortDirection.Ascending)
                 }
             };
         }

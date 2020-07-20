@@ -230,9 +230,9 @@ namespace KoAR.SaveEditor.Views
             MessageBox.Show($"Save successful! Original save backed up as {this.FileName}.bak.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private void AddItemBuff(uint buffId) => this.SelectedItem?.ItemBuffs.Add(Amalur.GetBuff(buffId));
+        private void AddItemBuff(uint buffId) => this.SelectedItem?.AddItemBuff(Amalur.GetBuff(buffId));
 
-        private void AddPlayerBuff(uint buffId) => this.SelectedItem?.PlayerBuffs.Add(Amalur.GetBuff(buffId));
+        private void AddPlayerBuff(uint buffId) => this.SelectedItem?.AddPlayerBuff(Amalur.GetBuff(buffId));
 
         private void AddStashItem()
         {
@@ -282,9 +282,9 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        private void DeleteItemBuff(Buff buff) => this.SelectedItem?.ItemBuffs.Remove(buff);
+        private void DeleteItemBuff(Buff buff) => this.SelectedItem?.RemoveItemBuff(buff);
 
-        private void DeletePlayerBuff(Buff buff) => this.SelectedItem?.PlayerBuffs.Remove(buff);
+        private void DeletePlayerBuff(Buff buff) => this.SelectedItem?.RemovePlayerBuff(buff);
 
         private bool? GetAppliesToAllItems(Func<ItemModel, bool> projection)
         {

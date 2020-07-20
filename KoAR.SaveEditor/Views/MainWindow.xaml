@@ -342,7 +342,7 @@
                             <DataTemplate />
                         </TabControl.ContentTemplate>
                     </views:ScrollingTabControl>
-                    <views:ItemsView Items="{Binding FilteredItems}" SelectedItem="{Binding SelectedItem}" DoubleClickCommand="{Binding ChangeDefinitionCommand}"
+                    <views:ItemsView Items="{Binding FilteredItems}" SelectedItem="{Binding SelectedItem}" RowDoubleClickCommand="{Binding ChangeDefinitionCommand}"
                         AllItemsUnstashable="{Binding AllItemsUnstashable}" AllItemsUnsellable="{Binding AllItemsUnsellable}" AllItemsStolen="{Binding AllItemsStolen}" />
                 </DockPanel>
             </Grid>
