@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -74,7 +75,7 @@ namespace KoAR.Core
             _simTypeOffset = data.IndexOf(typeIdSeq);
             int ixOfActor = _simTypeOffset + 9;
             int playerActor = 0;
-            var candidates = new List<(int id, int typeOffset)>();
+            var candidates = new List<(int id, int typeIdOffset, TypeDefinition definition)>();
 
             if (BitConverter.ToInt32(Bytes, ixOfActor) == 0)
             {
@@ -84,15 +85,15 @@ namespace KoAR.Core
             {
                 var dataLength = 9 + BitConverter.ToInt32(Bytes, ixOfActor + 5);
                 var id = BitConverter.ToInt32(Bytes, ixOfActor + 9);
-                var typeOffset = ixOfActor + 13;
-                var typeId = BitConverter.ToUInt32(Bytes, typeOffset);
-                if (Amalur.TypeDefinitions.ContainsKey(typeId))
+                var typeIdOffset = ixOfActor + 13;
+                var typeId = BitConverter.ToUInt32(Bytes, typeIdOffset);
+                if (Amalur.TypeDefinitions.TryGetValue(typeId, out var definition))
                 {
-                    candidates.Add((id, ixOfActor + 9));
+                    candidates.Add((id, typeIdOffset, definition));
                 }
                 else if (Amalur.GemDefinitions.ContainsKey(typeId))
                 {
-                    Gems.Add(id, new Gem(this, typeOffset));
+                    Gems.Add(id, new Gem(this, typeIdOffset));
                 }
                 else if (typeId == playerHumanMale || typeId == playerHumanFemale || typeId == playerElfMale || typeId == playerElfFemale)
                 {
@@ -100,14 +101,19 @@ namespace KoAR.Core
                 }
                 ixOfActor += dataLength;
             }
-            foreach (var (id, typeOffset) in candidates)
+            foreach (var (id, typeIdOffset, definition) in candidates)
             {
                 var (itemOffset, itemLength) = itemMemoryLocs[id];
                 var (itemBuffsOffset, itemBuffsLength) = itemBuffLocs[id];
-                var (itemGemOffset, itemGemsLength) = itemGemLocs[id];
+                var itemGems = ItemGems.Empty;
                 if (BitConverter.ToInt32(Bytes, itemOffset + 17) == playerActor)
                 {
-                    Items.Add(new Item(this, typeOffset, itemOffset, itemLength, itemBuffsOffset, itemBuffsLength, itemGemOffset, itemGemsLength));
+                    if (definition.Sockets.Any())
+                    {
+                        var (itemGemOffset, itemGemsLength) = itemGemLocs[id];
+                        itemGems = new ItemGems(this, itemGemOffset, itemGemsLength);
+                    }
+                    Items.Add(new Item(this, typeIdOffset, itemOffset, itemLength, itemBuffsOffset, itemBuffsLength, itemGems));
                 }
             }
         }

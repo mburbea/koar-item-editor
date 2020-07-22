@@ -16,7 +16,7 @@ namespace KoAR.Core
         public const float DurabilityUpperBound = 100f;
         public const int MinEquipmentLength = 44;
 
-        public Item(GameSave gameSave, int typeIdOffset, int offset, int dataLength, int itemBuffsOffset, int itemBuffsLength, int itemGemsOffset, int itemGemsLength)
+        public Item(GameSave gameSave, int typeIdOffset, int offset, int dataLength, int itemBuffsOffset, int itemBuffsLength, ItemGems itemGem)
         {
             (_gameSave, _typeIdOffset, ItemOffset) = (gameSave, typeIdOffset, offset);
             if (gameSave.Bytes[_typeIdOffset + 10] == 1)
@@ -24,7 +24,7 @@ namespace KoAR.Core
                 _levelShiftOffset = 8;
             }
             ItemBytes = _gameSave.Bytes.AsSpan(offset, dataLength).ToArray();
-            ItemGems = new ItemGems(gameSave, itemGemsOffset, itemGemsLength);
+            ItemGems = itemGem;
             ItemBuffs = new ItemBuffMemory(gameSave, itemBuffsOffset, itemBuffsLength);
             PlayerBuffs = new List<Buff>(BuffCount);
             for (int i = 0; i < PlayerBuffs.Capacity; i++)
