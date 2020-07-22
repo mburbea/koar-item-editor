@@ -10,7 +10,7 @@
     <DataTemplate x:Key="BuffToolTipTemplate" DataType="{x:Type core:Buff}">
         <views:BuffControl Buff="{Binding}" IsExpanded="True" />
     </DataTemplate>
-    <Style TargetType="{x:Type views:ItemsView}">
+    <Style TargetType="{x:Type views:ItemCollectionManager}">
         <Style.Resources>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <constructs:FloatConverter x:Key="SingleConverter" />
@@ -22,7 +22,7 @@
         </Style.Resources>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type views:ItemsView}">
+                <ControlTemplate TargetType="{x:Type views:ItemCollectionManager}">
                     <ControlTemplate.Resources>
                         <SolidColorBrush x:Key="AlternateRowBrush" Color="#25BCBCBC" po:Freeze="True" />
                         <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
@@ -60,7 +60,7 @@
                         <ListView.Resources>
                             <Style TargetType="{x:Type GridViewColumnHeader}" BasedOn="{StaticResource {x:Type GridViewColumnHeader}}">
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Column.(views:ItemsView.PropertyName), Converter={StaticResource StringIsNullOrEmptyConverter}, RelativeSource={RelativeSource Self}}" Value="False">
+                                    <DataTrigger Binding="{Binding Column.(views:ItemCollectionManager.PropertyName), Converter={StaticResource StringIsNullOrEmptyConverter}, RelativeSource={RelativeSource Self}}" Value="False">
                                         <Setter Property="ContentTemplate">
                                             <Setter.Value>
                                                 <DataTemplate>
@@ -70,14 +70,14 @@
                                                             <TextBlock.Style>
                                                                 <Style TargetType="{x:Type TextBlock}">
                                                                     <Style.Triggers>
-                                                                        <DataTrigger Binding="{Binding SortDirection, RelativeSource={RelativeSource AncestorType={x:Type views:ItemsView}}}" Value="Descending">
+                                                                        <DataTrigger Binding="{Binding SortDirection, RelativeSource={RelativeSource AncestorType={x:Type views:ItemCollectionManager}}}" Value="Descending">
                                                                             <Setter Property="Text" Value="▾" />
                                                                         </DataTrigger>
                                                                         <DataTrigger Value="True">
                                                                             <DataTrigger.Binding>
                                                                                 <MultiBinding Converter="{StaticResource EqualityConverter}">
-                                                                                    <Binding Path="SortProperty" RelativeSource="{RelativeSource AncestorType={x:Type views:ItemsView}}" />
-                                                                                    <Binding Path="Column.(views:ItemsView.PropertyName)" RelativeSource="{RelativeSource AncestorType={x:Type GridViewColumnHeader}}" />
+                                                                                    <Binding Path="SortProperty" RelativeSource="{RelativeSource AncestorType={x:Type views:ItemCollectionManager}}" />
+                                                                                    <Binding Path="Column.(views:ItemCollectionManager.PropertyName)" RelativeSource="{RelativeSource AncestorType={x:Type GridViewColumnHeader}}" />
                                                                                 </MultiBinding>
                                                                             </DataTrigger.Binding>
                                                                             <Setter Property="Visibility" Value="Visible" />
@@ -110,8 +110,8 @@
                                 </Style.Triggers>
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                                 <Setter Property="constructs:MouseDoubleClick.CommandParameter" Value="{Binding}" />
-                                <Setter Property="constructs:MouseDoubleClick.Command" Value="{Binding RowDoubleClickCommand, RelativeSource={RelativeSource AncestorType={x:Type views:ItemsView}}}" />
-                                <Setter Property="views:ItemsView.SelectRowOnClick" Value="{Binding IsVisible, RelativeSource={RelativeSource Self}}" />
+                                <Setter Property="constructs:MouseDoubleClick.Command" Value="{Binding RowDoubleClickCommand, RelativeSource={RelativeSource AncestorType={x:Type views:ItemCollectionManager}}}" />
+                                <Setter Property="views:ItemCollectionManager.SelectRowOnClick" Value="{Binding IsVisible, RelativeSource={RelativeSource Self}}" />
                             </Style>
                         </ListView.ItemContainerStyle>
                         <ListView.ContextMenu>
@@ -121,7 +121,7 @@
                         </ListView.ContextMenu>
                         <ListView.View>
                             <GridView AllowsColumnReorder="True">
-                                <GridViewColumn Header="Level" Width="Auto" views:ItemsView.PropertyName="Level">
+                                <GridViewColumn Header="Level" Width="Auto" views:ItemCollectionManager.PropertyName="Level">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate DataType="{x:Type views:ItemModel}">
                                             <Grid>
@@ -151,7 +151,7 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="Name" Width="Auto" views:ItemsView.PropertyName="DisplayName">
+                                <GridViewColumn Header="Name" Width="Auto" views:ItemCollectionManager.PropertyName="DisplayName">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate DataType="{x:Type views:ItemModel}">
                                             <Grid>
@@ -172,7 +172,7 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="Cur Durability" Width="Auto" views:ItemsView.PropertyName="CurrentDurability">
+                                <GridViewColumn Header="Cur Durability" Width="Auto" views:ItemCollectionManager.PropertyName="CurrentDurability">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate DataType="{x:Type views:ItemModel}">
                                             <Grid>
@@ -213,7 +213,7 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="Max Durability" Width="Auto" views:ItemsView.PropertyName="MaxDurability">
+                                <GridViewColumn Header="Max Durability" Width="Auto" views:ItemCollectionManager.PropertyName="MaxDurability">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate DataType="{x:Type views:ItemModel}">
                                             <Grid>
@@ -254,7 +254,7 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Width="Auto" views:ItemsView.PropertyName="IsStolen">
+                                <GridViewColumn Width="Auto" views:ItemCollectionManager.PropertyName="IsStolen">
                                     <GridViewColumn.Header>
                                         <StackPanel Orientation="Horizontal">
                                             <CheckBox Margin="2" FocusVisualStyle="{x:Null}" VerticalAlignment="Center"
@@ -268,7 +268,7 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Width="Auto" views:ItemsView.PropertyName="IsUnsellable">
+                                <GridViewColumn Width="Auto" views:ItemCollectionManager.PropertyName="IsUnsellable">
                                     <GridViewColumn.Header>
                                         <StackPanel Orientation="Horizontal">
                                             <CheckBox Margin="2" FocusVisualStyle="{x:Null}" VerticalAlignment="Center"
@@ -282,7 +282,7 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Width="Auto" views:ItemsView.PropertyName="IsUnstashable">
+                                <GridViewColumn Width="Auto" views:ItemCollectionManager.PropertyName="IsUnstashable">
                                     <GridViewColumn.Header>
                                         <StackPanel Orientation="Horizontal">
                                             <CheckBox Margin="2" FocusVisualStyle="{x:Null}" VerticalAlignment="Center"
@@ -296,7 +296,7 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="Prefix/Suffix" Width="Auto" views:ItemsView.PropertyName="AffixCount">
+                                <GridViewColumn Header="Prefix/Suffix" Width="Auto" views:ItemCollectionManager.PropertyName="AffixCount">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate DataType="{x:Type views:ItemModel}">
                                             <DataTemplate.Resources>
@@ -319,7 +319,7 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="Item Buffs" Width="Auto" views:ItemsView.PropertyName="ItemBuffs.Count">
+                                <GridViewColumn Header="Item Buffs" Width="Auto" views:ItemCollectionManager.PropertyName="ItemBuffs.Count">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate DataType="{x:Type views:ItemModel}">
                                             <ItemsControl ItemsSource="{Binding ItemBuffs}" MinWidth="88">
@@ -342,7 +342,7 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="Player Buffs" Width="Auto" views:ItemsView.PropertyName="PlayerBuffs.Count">
+                                <GridViewColumn Header="Player Buffs" Width="Auto" views:ItemCollectionManager.PropertyName="PlayerBuffs.Count">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate DataType="{x:Type views:ItemModel}">
                                             <ItemsControl ItemsSource="{Binding PlayerBuffs}" MinWidth="88">

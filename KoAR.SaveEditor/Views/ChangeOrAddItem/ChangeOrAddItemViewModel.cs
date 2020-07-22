@@ -5,7 +5,7 @@ using System.Windows;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
 
-namespace KoAR.SaveEditor.Views
+namespace KoAR.SaveEditor.Views.ChangeOrAddItem
 {
     public sealed class ChangeOrAddItemViewModel : NotifierBase
     {
@@ -124,7 +124,7 @@ namespace KoAR.SaveEditor.Views
             {
                 return;
             }
-            Window window = Application.Current.Windows.OfType<ChangeOrAddItemWindow>().Single();
+            Window window = Application.Current.Windows.OfType<ChangeOrAddItemView>().Single();
             window.DialogResult = true;
             window.Close();
         }

@@ -11,7 +11,7 @@
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.ArmorTypeIcon.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.EquipmentCategoryIcon.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.TypeDefinitionControl.xaml" />
-        <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.ItemsView.xaml" />
+        <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.ItemCollectionManager.xaml" />
         <!-- Constructs -->
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.ScrollingTabControl.xaml" />
     </ResourceDictionary.MergedDictionaries>    

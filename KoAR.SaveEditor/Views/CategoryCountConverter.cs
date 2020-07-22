@@ -12,7 +12,7 @@ namespace KoAR.SaveEditor.Views
     {
         object IMultiValueConverter.Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            return values.Length >= 2 && values[0] is EquipmentCategory category && values[1] is IEnumerable<ItemModel> collection
+            return values.Length >= 2 && values[0] is EquipmentCategory category && values[1] is IEnumerable<ItemModelBase> collection
                 ? collection.Count(item => item.Category == category)
                 : DependencyProperty.UnsetValue;
         }

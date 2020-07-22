@@ -6,17 +6,17 @@ using System.Windows.Threading;
 using KoAR.SaveEditor.Properties;
 using TaskDialogInterop;
 
-namespace KoAR.SaveEditor.Views
+namespace KoAR.SaveEditor.Views.Main
 {
-    partial class MainWindow
+    partial class MainView
     {
         public const double MaxScaleFactor = 1.75;
 
         public const double MinScaleFactor = 0.25;
 
-        static MainWindow() => CommandManager.RegisterClassCommandBinding(typeof(MainWindow), new CommandBinding(ApplicationCommands.Help, MainWindow.DisplayHelp));
+        static MainView() => CommandManager.RegisterClassCommandBinding(typeof(MainView), new CommandBinding(ApplicationCommands.Help, MainView.DisplayHelp));
 
-        public MainWindow()
+        public MainView()
         {
             this.InitializeComponent();
             this.Loaded += this.Window_Loaded;
@@ -72,8 +72,8 @@ namespace KoAR.SaveEditor.Views
                 {
                     Key.D0 => 1d,
                     Key.NumPad0 => 1d,
-                    Key.OemPlus => Math.Min(MainWindow.MaxScaleFactor, Settings.Default.ZoomScale + 0.05),
-                    Key.OemMinus => Math.Max(MainWindow.MinScaleFactor, Settings.Default.ZoomScale - 0.05),
+                    Key.OemPlus => Math.Min(MainView.MaxScaleFactor, Settings.Default.ZoomScale + 0.05),
+                    Key.OemMinus => Math.Max(MainView.MinScaleFactor, Settings.Default.ZoomScale - 0.05),
                     _ => Settings.Default.ZoomScale,
                 };
             }
@@ -86,8 +86,8 @@ namespace KoAR.SaveEditor.Views
             {
                 Settings.Default.ZoomScale = Math.Sign(e.Delta) switch
                 {
-                    1 => Math.Min(MainWindow.MaxScaleFactor, Settings.Default.ZoomScale + 0.05),
-                    -1 => Math.Max(MainWindow.MinScaleFactor, Settings.Default.ZoomScale - 0.05),
+                    1 => Math.Min(MainView.MaxScaleFactor, Settings.Default.ZoomScale + 0.05),
+                    -1 => Math.Max(MainView.MinScaleFactor, Settings.Default.ZoomScale - 0.05),
                     _ => Settings.Default.ZoomScale,
                 };
             }

@@ -68,6 +68,8 @@ namespace KoAR.SaveEditor.Views
             set => throw new NotSupportedException();
         }
 
+        public Rarity Rarity => this.Item.Rarity;
+
         public virtual Buff? Suffix
         {
             get => this.Item.ItemBuffs.Suffix;

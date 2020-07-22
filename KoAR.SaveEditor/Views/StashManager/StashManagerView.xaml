@@ -1,0 +1,14 @@
+﻿<Window x:Class="KoAR.SaveEditor.Views.StashManager.StashManagerView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs"
+    xmlns:views="clr-namespace:KoAR.SaveEditor.Views"
+    xmlns:local="clr-namespace:KoAR.SaveEditor.Views.StashManager"
+    mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type local:StashManagerViewModel}}"
+    Title="Stash View" Height="450" Width="800">
+    <Grid>
+        
+    </Grid>
+</Window>

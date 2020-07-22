@@ -89,8 +89,6 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        public Rarity Rarity => this.Item.Rarity;
-
         public override Buff? Suffix
         {
             get => base.Suffix;

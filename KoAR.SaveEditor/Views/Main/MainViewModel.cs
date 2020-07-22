@@ -6,9 +6,10 @@ using System.Threading;
 using System.Windows;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
+using KoAR.SaveEditor.Views.ChangeOrAddItem;
 using Microsoft.Win32;
 
-namespace KoAR.SaveEditor.Views
+namespace KoAR.SaveEditor.Views.Main
 {
     public sealed class MainViewModel : NotifierBase
     {
@@ -241,7 +242,7 @@ namespace KoAR.SaveEditor.Views
                 return;
             }
             ChangeOrAddItemViewModel viewModel = new ChangeOrAddItemViewModel();
-            ChangeOrAddItemWindow view = new ChangeOrAddItemWindow
+            ChangeOrAddItemView view = new ChangeOrAddItemView
             {
                 Owner = Application.Current.MainWindow,
                 DataContext = viewModel
@@ -270,7 +271,7 @@ namespace KoAR.SaveEditor.Views
                 return;
             }
             ChangeOrAddItemViewModel viewModel = new ChangeOrAddItemViewModel(model);
-            ChangeOrAddItemWindow view = new ChangeOrAddItemWindow
+            ChangeOrAddItemView view = new ChangeOrAddItemView
             {
                 Owner = Application.Current.MainWindow,
                 DataContext = viewModel
