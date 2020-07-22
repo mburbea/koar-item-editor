@@ -24,7 +24,7 @@ namespace KoAR.Core
                 _levelShiftOffset = 8;
             }
             ItemBytes = _gameSave.Bytes.AsSpan(offset, dataLength).ToArray();
-            Gems = new ItemGems(gameSave, itemGemsOffset, itemGemsLength);
+            ItemGems = new ItemGems(gameSave, itemGemsOffset, itemGemsLength);
             ItemBuffs = new ItemBuffMemory(gameSave, itemBuffsOffset, itemBuffsLength);
             PlayerBuffs = new List<Buff>(BuffCount);
             for (int i = 0; i < PlayerBuffs.Capacity; i++)
@@ -118,7 +118,7 @@ namespace KoAR.Core
 
         public uint ItemId => MemoryUtilities.Read<uint>(ItemBytes);
 
-        public ItemGems Gems { get; }
+        public ItemGems ItemGems { get; }
 
         public int ItemOffset { get; internal set; }
 
@@ -132,6 +132,7 @@ namespace KoAR.Core
             ? Rarity.Set
             : PlayerBuffs.Select(x => x.Rarity)
                 .Concat(ItemBuffs.List.Select(x => x.Rarity))
+                .Concat(ItemGems.Gems.Select(x=> x.Definition.Buff.Rarity))
                 .Concat(new[] { ItemBuffs.Prefix?.Rarity ?? default, ItemBuffs.Suffix?.Rarity ?? default, TypeDefinition.Sockets.Any() ? Rarity.Infrequent : Rarity.Common })
                 .Max();
 
