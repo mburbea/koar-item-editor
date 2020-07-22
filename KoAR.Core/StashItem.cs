@@ -7,25 +7,6 @@ namespace KoAR.Core
 {
     public partial class StashItem : IItem
     {
-        private readonly struct Offset
-        {
-            private readonly StashItem _item;
-            public Offset(StashItem item) => _item = item;
-            public const int TypeId = 0;
-            public const int Durability = 10;
-            public const int Quantity = 14;
-            public const int BuffCount = 18;
-            public const int FirstBuff = BuffCount + 4;
-            public readonly int PostBuffs => FirstBuff + _item.BuffCount * 8;
-            public readonly int IsStolen => PostBuffs;
-            public readonly int HasCustomName => IsStolen + 1;
-            public readonly int NameLength => HasCustomName + 1;
-            public readonly int Name => NameLength + 4;
-            public readonly int HasItemBuffs => _item.HasCustomName ? Name + _item.NameLength : HasCustomName + 1;
-            public readonly int ItemBuffCount => HasItemBuffs + 3;
-            public readonly int FirstItemBuff => ItemBuffCount + 4;
-        }
-
         private byte[] Bytes { get; }
         public List<Buff> PlayerBuffs { get; } = new List<Buff>();
 
@@ -33,7 +14,7 @@ namespace KoAR.Core
         {
             Bytes = gameSave.Bytes.AsSpan(offset, datalength).ToArray();
             PlayerBuffs.Capacity = BuffCount;
-            var firstBuff = Offset.FirstBuff;
+            var firstBuff = Offsets.FirstBuff;
             for (int i = 0; i < PlayerBuffs.Capacity; i++)
             {
                 PlayerBuffs.Add(Amalur.GetBuff(MemoryUtilities.Read<uint>(Bytes, firstBuff + (i * 8))));
@@ -45,15 +26,17 @@ namespace KoAR.Core
             ItemBuffs = Bytes[Offsets.HasItemBuffs] == 0x14 ? new ItemBuffMemory(this) : MissingItemBuffMemory.Instance;
         }
 
+        internal int DataLength => Bytes.Length;
+
         public int ItemOffset { get; }
 
         private Offset Offsets => new Offset(this);
 
         public TypeDefinition TypeDefinition => Amalur.TypeDefinitions[MemoryUtilities.Read<uint>(Bytes)];
 
-        public float CurrentDurability => MemoryUtilities.Read<float>(Bytes, Offset.Durability);
+        public float CurrentDurability => MemoryUtilities.Read<float>(Bytes, Offsets.Durability);
 
-        private int BuffCount => MemoryUtilities.Read<int>(Bytes, Offset.BuffCount);
+        private int BuffCount => MemoryUtilities.Read<int>(Bytes, Offsets.BuffCount);
 
         public bool IsStolen => Bytes[Offsets.IsStolen] == 1;
 

@@ -4,22 +4,22 @@
     {
         private readonly struct Offset
         {
-            public const int DataLength = 13;
-            public const int Owner = 17;
-            public const int BuffCount = 21;
-            public const int FirstBuff = BuffCount + 4;
+            public readonly int DataLength => 13;
+            public readonly int Owner => 17;
+            public readonly int BuffCount => 21;
+            public readonly int FirstBuff => BuffCount + 4;
 
-            private readonly int _count;
+            private readonly Item _item;
 
-            public Offset(int count) => _count = count;
+            public Offset(Item item) => _item = item;
 
-            public int PostBuffs => FirstBuff + _count * 8; // Pocket, but seems to always be 0.
-            public int CurrentDurability => PostBuffs + 4;
-            public int MaxDurability => CurrentDurability + 4;
-            public int InventoryState => MaxDurability + 8;
-            public int HasCustomName => InventoryState + 2;
-            public int NameLength => HasCustomName + 1;
-            public int Name => NameLength + 4;
+            public readonly int PostBuffs => FirstBuff + _item.BuffCount * 8; // Pocket, but seems to always be 0.
+            public readonly int CurrentDurability => PostBuffs + 4;
+            public readonly int MaxDurability => CurrentDurability + 4;
+            public readonly int InventoryState => MaxDurability + 8;
+            public readonly int HasCustomName => InventoryState + 2;
+            public readonly int NameLength => HasCustomName + 1;
+            public readonly int Name => NameLength + 4;
         }
     }
 }
