@@ -57,7 +57,7 @@ namespace KoAR.Core
         {
             foreach (var line in File.ReadLines(path).Skip(1))
             {
-                if (TryLoadFromRow(line.Split(','), out var definition))
+                if (TryLoadFromRow(line.Split(Amalur.Seperator), out var definition))
                 {
                     yield return definition;
                 }

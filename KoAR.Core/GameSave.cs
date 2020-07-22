@@ -10,8 +10,9 @@ namespace KoAR.Core
         private int? _bagOffset;
         private int _fileLengthOffset;
         private int _simTypeOffset;
-        private Container CoreEffectContainer;
-        private Container ItemMemoryContainer;
+        private Container _itemBuffsContainer;
+        private Container _itemContainer;
+        private Container _itemGemsContainer;
 
         public GameSave(string fileName)
         {
@@ -31,6 +32,8 @@ namespace KoAR.Core
 
         public List<Item> Items { get; } = new List<Item>();
 
+        public Dictionary<int, Gem> Gems { get; } = new Dictionary<int, Gem>();
+
         public Stash? Stash { get; private set; }
 
         internal int FileLength
@@ -49,8 +52,9 @@ namespace KoAR.Core
         {
             ReadOnlySpan<byte> typeIdSeq = new byte[] { 0x23, 0xCC, 0x58, 0x00, 0x03 };
             ReadOnlySpan<byte> fileLengthSeq = new byte[8] { 0, 0, 0, 0, 0xA, 0, 0, 0 };
-            ReadOnlySpan<byte> ItemEffectMarker = new byte[5] { 0xD3, 0x34, 0x43, 0x00, 0x00 };
-            ReadOnlySpan<byte> coreEffectMarker = new byte[5] { 0xBB, 0xD5, 0x43, 0x00, 0x00 };
+            ReadOnlySpan<byte> itemsMarker = new byte[5] { 0xD3, 0x34, 0x43, 0x00, 0x00 };
+            ReadOnlySpan<byte> itemBuffsMarker = new byte[5] { 0xBB, 0xD5, 0x43, 0x00, 0x00 };
+            ReadOnlySpan<byte> itemGemsMarker = new byte[5] { 0x93, 0xCC, 0x80, 0x00, 0x00 };
             const int playerHumanMale = 0x0A386D;
             const int playerHumanFemale = 0x0A386E;
             const int playerElfMale = 0x0A386F;
@@ -58,15 +62,19 @@ namespace KoAR.Core
 
             ReadOnlySpan<byte> data = Bytes;
             _fileLengthOffset = data.IndexOf(fileLengthSeq) - 4;
-            ItemMemoryContainer = new Container(this, data.IndexOf(ItemEffectMarker), 0x00_24_D5_68_00_00_00_0Bul);
-            CoreEffectContainer = new Container(this, data.IndexOf(coreEffectMarker), 0x00_28_60_84_00_00_00_0Bul);
-            var itemMemoryLocs = ItemMemoryContainer.ToDictionary(x => x.id, x => (x.offset, x.dataLength));
-            var coreLocs = CoreEffectContainer.ToDictionary(x => x.id, x => (x.offset, x.dataLength));
+            _itemContainer = new Container(this, data.IndexOf(itemsMarker), 0x00_24_D5_68_00_00_00_0Bul);
+            _itemBuffsContainer = new Container(this, data.IndexOf(itemBuffsMarker), 0x00_28_60_84_00_00_00_0Bul);
+            _itemGemsContainer = new Container(this, data.IndexOf(itemGemsMarker), 0x00_59_36_38_00_00_00_0Bul);
+            var itemMemoryLocs = _itemContainer.ToDictionary(x => x.id, x => (x.offset, x.dataLength));
+            var itemBuffLocs = _itemBuffsContainer.ToDictionary(x => x.id, x => (x.offset, x.dataLength));
+            var itemGemLocs = _itemGemsContainer.ToDictionary(x => x.id, x => (x.offset, x.dataLength));
             Items.Clear();
+            Gems.Clear();
             Stash = Stash.TryCreateStash(this);
             _simTypeOffset = data.IndexOf(typeIdSeq);
             int ixOfActor = _simTypeOffset + 9;
             int playerActor = 0;
+            var candidates = new List<(int id, int typeOffset)>();
 
             if (BitConverter.ToInt32(Bytes, ixOfActor) == 0)
             {
@@ -76,25 +84,30 @@ namespace KoAR.Core
             {
                 var dataLength = 9 + BitConverter.ToInt32(Bytes, ixOfActor + 5);
                 var id = BitConverter.ToInt32(Bytes, ixOfActor + 9);
-                var typeId = BitConverter.ToUInt32(Bytes, ixOfActor + 13);
-                if (Amalur.TypeDefinitions.TryGetValue(typeId, out var definition))
+                var typeOffset = ixOfActor + 13;
+                var typeId = BitConverter.ToUInt32(Bytes, typeOffset);
+                if (Amalur.TypeDefinitions.ContainsKey(typeId))
                 {
-                    var (itemOffset, itemLength) = itemMemoryLocs[id];
-                    var (coreOffset, coreLength) = coreLocs[id];
-                    Items.Add(new Item(this, ixOfActor + 13, itemOffset, itemLength, coreOffset, coreLength));
+                    candidates.Add((id, ixOfActor + 9));
+                }
+                else if (Amalur.GemDefinitions.ContainsKey(typeId))
+                {
+                    Gems.Add(id, new Gem(this, typeOffset));
                 }
                 else if (typeId == playerHumanMale || typeId == playerHumanFemale || typeId == playerElfMale || typeId == playerElfFemale)
                 {
-                        playerActor = id;
+                    playerActor = id;
                 }
                 ixOfActor += dataLength;
             }
-            // kinda crappy as we have to find all of them before we can rule out the player actor.
-            for (int i = Items.Count - 1; i > -1; i--)
+            foreach (var (id, typeOffset) in candidates)
             {
-                if (Items[i].Owner != playerActor)
+                var (itemOffset, itemLength) = itemMemoryLocs[id];
+                var (itemBuffsOffset, itemBuffsLength) = itemBuffLocs[id];
+                var (itemGemOffset, itemGemsLength) = itemGemLocs[id];
+                if (BitConverter.ToInt32(Bytes, itemOffset + 17) == playerActor)
                 {
-                    Items.RemoveAt(i);
+                    Items.Add(new Item(this, typeOffset, itemOffset, itemLength, itemBuffsOffset, itemBuffsLength, itemGemOffset, itemGemsLength));
                 }
             }
         }
@@ -132,16 +145,16 @@ namespace KoAR.Core
             var delta = WriteItem(item.ItemBuffs.ItemOffset, item.ItemBuffs.DataLength, item.ItemBuffs.Serialize(forced));
             if (delta != 0)
             {
-                CoreEffectContainer.UpdateDataLength(delta);
+                _itemBuffsContainer.UpdateDataLength(delta);
             }
             var delta2 = WriteItem(item.ItemOffset, item.DataLength, item.Serialize(forced));
             if (delta2 != 0)
             {
-                ItemMemoryContainer.UpdateDataLength(delta2);
+                _itemContainer.UpdateDataLength(delta2);
             }
 
-            FileLength += (delta + delta2);
-            SimtypeSizes += (delta + delta2);
+            FileLength += delta + delta2;
+            SimtypeSizes += delta + delta2;
         }
 
         private int GetBagOffset()

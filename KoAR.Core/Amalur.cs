@@ -15,6 +15,7 @@ namespace KoAR.Core
     /// </summary>
     public static class Amalur
     {
+        internal static readonly char[] Seperator = { ',' };
         private static void AddRange<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, IEnumerable<(TKey, TValue)> data)
         {
             foreach (var (k, v) in data)
@@ -29,6 +30,7 @@ namespace KoAR.Core
         public static Dictionary<uint, TypeDefinition> TypeDefinitions { get; } = new Dictionary<uint, TypeDefinition>();
         public static List<Buff> Buffs { get; } = new List<Buff>();
         public static Dictionary<uint, Buff> BuffMap { get; } = new Dictionary<uint, Buff>();
+        public static Dictionary<uint, GemDefinition> GemDefinitions { get; } = new Dictionary<uint, GemDefinition>();
 
         public static void Initialize(string? path = null)
         {
@@ -48,6 +50,11 @@ namespace KoAR.Core
                     Converters = { new JsonStringEnumConverter() }
                 }));
             BuffMap.AddRange(Buffs.Select(x => (x.Id, x)));
+            if(!File.Exists(fileName = Path.Combine(path, "gemDefinitions.csv")))
+            {
+                throw new InvalidOperationException($"Cannot find {Path.GetFileName(fileName)}");
+            }
+            GemDefinitions.AddRange(GemDefinition.ParseFile(fileName).Select(x => (x.TypeId, x)));
             if (!File.Exists(fileName = Path.Combine(path, "definitions.csv")))
             {
                 throw new InvalidOperationException($"Cannot find {Path.GetFileName(fileName)}");

@@ -1,0 +1,164 @@
+type_id,name,internal_name,buff_id,socket_type
+510297,Strengthening Gem,Gem_Physical_01,499544,W
+518417,Gem of Decay,Gem_Poison_01,1850755,W
+518418,Gem of Carnage,Gem_Bleeding_01,502306,W
+518439,Scout's Gem,Gem_Piercing_01,499549,W
+518447,Gem of Ice,Gem_Ice_01,499591,W
+518455,Gem of Fire,Gem_Fire_01,499596,W
+518458,Gem of Lightning,Gem_Lightning_01,499741,W
+518473,Gem of Leeching,Gem_LifeLeech_01,1289751,W
+518474,Gem of Voracity,Gem_ManaLeech_01,1289758,W
+518477,Gem of the Seer,Gem_MagicModifier_01,1320429,E
+528152,Invigorating Gem,Gem_Physical_02,499546,W
+528153,Bolstering Gem,Gem_Physical_03,1313735,W
+528154,Seeker's Gem,Gem_Piercing_02,499588,W
+528155,Stalker's Gem,Gem_Piercing_03,1313832,W
+528156,Gem of Bloodthirst,Gem_LifeLeech_02,1289757,W
+528157,Gem of Devouring,Gem_LifeLeech_03,1850767,W
+528158,Gem of Ravening,Gem_ManaLeech_02,1289760,W
+528159,Gem of Ferocity,Gem_ManaLeech_03,1850769,W
+528160,Overwhelming Gem,Gem_TotalDamage_01,1314207,E
+528161,Gem of Dawn,Gem_DayDamage_01,526768,U
+528162,Gem of Light,Gem_DayDamage_02,526790,U
+528163,Gem of Radiance,Gem_DayDamage_03,1851984,U
+528164,Gem of Dusk,Gem_NightDamage_01,526791,U
+528165,Gem of Gloom,Gem_NightDamage_02,526793,U
+528166,Gem of Night,Gem_NightDamage_03,1851999,U
+528170,Gem of Conflagration,Gem_Fire_02,499598,W
+528171,Gem of Combustion,Gem_Fire_03,1313964,W
+528172,Gem of Snow,Gem_Ice_02,499593,W
+528173,Gem of Frost,Gem_Ice_03,1313889,W
+528174,Gem of Thunder,Gem_Lightning_02,499744,W
+528175,Gem of Sparks,Gem_Lightning_03,1314127,W
+528176,Gem of Venom,Gem_Poison_02,1850757,W
+528177,Gem of Putrefication,Gem_Poison_03,1850759,W
+528322,Gem of Hemorrhaging,Gem_Bleeding_02,502304,W
+528323,Gem of Slaughter,Gem_Bleeding_03,1319542,W
+528370,Superior Gem,Gem_ArmorSpecific_01,500425,A
+528371,Exceptional Gem,Gem_ArmorSpecific_02,500426,A
+528377,Flawless Gem,Gem_ArmorSpecific_03,500428,A
+528387,Paramount Gem,Gem_ArmorTotal_01,527082,E
+528397,Gem of Fire Shield,Gem_FireResistance_01,1949697,A
+528402,Gem of Fire Aversion,Gem_FireResistance_02,1949699,A
+528403,Gem of Fire Hindrance,Gem_FireResistance_03,1949700,A
+528404,Gem of Ice Shield,Gem_IceResistance_01,1949692,A
+528405,Gem of Ice Aversion,Gem_IceResistance_02,1949694,A
+528406,Gem of Ice Hindrance,Gem_IceResistance_03,1949695,A
+528407,Gem of Lightning Shield,Gem_LightningResistance_01,1949702,A
+528412,Gem of Lightning Aversion,Gem_LightningResistance_02,1949704,A
+528413,Gem of Lightning Hindrance,Gem_LightningResistance_03,1949705,A
+528422,Gem of Mending,Gem_BleedingResistance_01,502362,A
+528425,Gem of Clotting,Gem_BleedingResistance_02,502365,A
+528427,Gem of Coagulation,Gem_BleedingResistance_03,1850904,A
+528430,Gem of Antivenin,Gem_PoisonResistance_01,2031916,A
+528434,Gem of Remedy,Gem_PoisonResistance_02,2031917,A
+528437,Gem of Elixir,Gem_PoisonResistance_03,2031918,A
+528500,Diviner's Gem,Gem_ManaIncrease_01,501538,U
+528502,Augur's Gem,Gem_ManaIncrease_02,501540,U
+528505,Mage's Gem,Gem_ManaIncrease_03,1852051,U
+528506,Crusader's Gem,Gem_HealthIncrease_01,501567,U
+528507,Paladin's Gem,Gem_HealthIncrease_02,501571,U
+528511,Templar's Gem,Gem_HealthIncrease_03,1852024,U
+528517,Soothing Gem,Gem_HealthRegen_01,501573,U
+528524,Revitalizing Gem,Gem_HealthRegen_02,501582,U
+528533,Renewing Gem,Gem_HealthRegen_03,501584,U
+528538,Stimulating Gem,Gem_ManaRegen_01,501587,U
+528539,Restoring Gem,Gem_ManaRegen_02,501590,U
+528548,Infusing Gem,Gem_ManaRegen_03,501591,U
+528933,Gem of Skill,Gem_CriticalChance_01,502384,U
+528942,Gem of Accuracy,Gem_CriticalChance_02,502387,U
+528943,Gem of Precision,Gem_CriticalChance_03,1851062,U
+528947,Assailant's Gem,Gem_HighLifeDamage_01,527125,U
+528949,Invader's Gem,Gem_HighLifeDamage_02,527133,U
+528950,Conqueror's Gem,Gem_HighLifeDamage_03,1851944,U
+528975,Bully's Gem,Gem_LowLifeDamage_01,527136,U
+528976,Oppressor's Gem,Gem_LowLifeDamage_02,534412,U
+528977,Tormentor's Gem,Gem_LowLifeDamage_03,1851946,U
+528995,Gem of Bounty,Gem_GoldDrop_01,527189,E
+528996,Gem of Achievement,Gem_XPIncrease_01,527181,E
+529022,Gem of Expansion,Gem_XPIncrease_02,527186,E
+529023,Gem of Ascendance,Gem_XPIncrease_03,527187,E
+529024,Gem of Prosperity,Gem_GoldDrop_02,527190,E
+529025,Gem of Wealth,Gem_GoldDrop_03,527191,E
+557388,Gem of Stupefication,Gem_Stun_03,499764,U
+557389,Gem of Disorientation,Gem_Stun_02,499763,U
+557390,Gem of Confusion,Gem_Stun_01,499757,U
+565043,Gem of Shifting,Gem_PhysicalResistance_01,505377,A
+565370,Gem of Phasing,Gem_PhysicalResistance_02,505384,A
+565371,Gem of Displacing,Gem_PhysicalResistance_03,1850913,A
+1643434,Gem of Enlightenment,Gem_Epic_AllAbilities_03,1642776,E
+1643436,Rogue's Gem,Gem_Epic_FinesseAbilities_03,1642773,E
+1643437,Warrior's Gem,Gem_Epic_MightAbilities_03,1642775,E
+1643438,Sorcerer's Gem,Gem_Epic_SorceryAbilities_03,1642774,E
+1643439,Gem of Opulence,Gem_Epic_GoldDrop_03,1642769,E
+1643440,Gem of Magic Resonance,Gem_Epic_MagicDamage_03,1642768,E
+1643441,Gem of Unrivaled Vitality,Gem_Epic_ManaAndHealth_03,1642771,E
+1643443,Gem of Summer's Vengeance,Gem_Epic_Retaliatory_DoT_Fire_03,1642778,E
+1643444,Gem of Winter's Vengeance,Gem_Epic_Retaliatory_DoT_Ice_03,1642779,E
+1643445,Gem of Tempest's Vengeance,Gem_Epic_Retaliatory_DoT_Lightning_03,1642780,E
+1643446,Gem of Plague's Vengeance,Gem_Epic_Retaliatory_DoT_Poison_03,1642781,E
+1643447,Gem of Paralyzing Vengeance,Gem_Epic_Retaliatory_DoT_Stun_03,1642782,E
+1643449,Gem of the Assiduous,Gem_Epic_XPGained_03,1642770,E
+1643891,Gem of the Subjugator,Gem_Epic_DamageAndDefense_03,1643890,E
+1730711,Gem of Cultivation,Gem_Epic_AllAbilities_01,1730870,E
+1730712,Gem of Wisdom,Gem_Epic_AllAbilities_02,1730871,E
+1730715,Gem of the Vanquisher,Gem_Epic_DamageAndDefense_01,1730865,E
+1730716,Gem of the Conqueror,Gem_Epic_DamageAndDefense_02,1730866,E
+1730717,Rascal's Gem,Gem_Epic_FinesseAbilities_01,1730863,E
+1730718,Outlaw's Gem,Gem_Epic_FinesseAbilities_02,1730864,E
+1730719,Gem of Abundance,Gem_Epic_GoldDrop_01,1730916,E
+1730721,Gem of Affluence,Gem_Epic_GoldDrop_02,1730917,E
+1730722,Gem of Mystic Sonority,Gem_Epic_MagicDamage_01,1730861,E
+1730723,Gem of Magic Amplification,Gem_Epic_MagicDamage_02,1730862,E
+1730725,Gem of Attenuation,Gem_Epic_ManaAndHealth_01,1730859,E
+1730726,Gem of Mitigation,Gem_Epic_ManaAndHealth_02,1730860,E
+1730727,Scrapper's Gem,Gem_Epic_MightAbilities_01,1730855,E
+1730728,Fighter's Gem,Gem_Epic_MightAbilities_02,1730856,E
+1730729,Gem of Fiery Reprisal,Gem_Epic_Retaliatory_DoT_Fire_01,1730891,E
+1730730,Gem of Infernal Retribution,Gem_Epic_Retaliatory_DoT_Fire_02,1730854,E
+1730731,Gem of Icy Reprisal,Gem_Epic_Retaliatory_DoT_Ice_01,1730853,E
+1730732,Gem of Frozen Retribution,Gem_Epic_Retaliatory_DoT_Ice_02,1730935,E
+1730734,Gem of Shocking Reprisal,Gem_Epic_Retaliatory_DoT_Lightning_01,1730851,E
+1730736,Gem of Electrifying Retribution,Gem_Epic_Retaliatory_DoT_Lightning_02,1730852,E
+1730737,Gem of Infectious Reprisal,Gem_Epic_Retaliatory_DoT_Poison_01,1730849,E
+1730738,Gem of Pestilential Retribution,Gem_Epic_Retaliatory_DoT_Poison_02,1730850,E
+1730739,Gem of Arresting Reprisal,Gem_Epic_Retaliatory_DoT_Stun_01,1730847,E
+1730740,Gem of Debilitating Retribution,Gem_Epic_Retaliatory_DoT_Stun_02,1730848,E
+1730742,Magician's Gem,Gem_Epic_SorceryAbilities_01,1730845,E
+1730743,Wizard's Gem,Gem_Epic_SorceryAbilities_02,1730846,E
+1730744,Gem of the Attentive,Gem_Epic_XPGained_01,1730843,E
+1730745,Gem of the Diligent,Gem_Epic_XPGained_02,1730844,E
+1731115,Gem of Transfiguration,Gem_Epic_ManaCostDecrease_01,1730857,E
+1731116,Gem of Reclamation,Gem_Epic_ManaCostDecrease_02,1730858,E
+1731117,Gem of Abatement,Gem_Epic_ManaCostDecrease_03,1642777,E
+1822035,Farraglen's Gem,Gem_Unique01,1822095,W
+1890331,Gem of Protection,Gem_ElementalResistance_01,1949707,A
+1890332,Gem of Refuge,Gem_ElementalResistance_02,1949709,A
+1890333,Gem of Shelter,Gem_ElementalResistance_03,1949710,A
+1903486,Gem of Incineration,Gem_Fire_04,1850750,W
+1903487,Gem of Winter,Gem_Ice_04,1850751,W
+1903488,Gem of Tempest,Gem_Lightning_04,1850752,W
+1903489,Gem of Gluttony,Gem_ManaLeech_04,1850770,W
+1903491,Galvanizing Gem,Gem_Physical_04,1313737,W
+1903493,Gem of Rot,Gem_Poison_04,1850761,W
+1903514,Saboteur's Gem,Gem_Piercing_04,1313834,W
+1903518,Gem of Bloodletting,Gem_LifeLeech_04,1850768,W
+1903526,Gem of Staggering,Gem_Stun_04,1883482,U
+1903527,Rejuvenating Gem,Gem_ManaRegen_04,501592,U
+1903529,Oracle's Gem,Gem_ManaIncrease_04,1852052,U
+1903530,Hero's Gem,Gem_HealthIncrease_04,1852025,U
+1903531,Regenerating Gem,Gem_HealthRegen_04,501585,U
+1903551,Gem of Haven,Gem_ElementalResistance_04,1949711,A
+1903552,Gem of Fire Attenuation,Gem_FireResistance_04,1949701,A
+1903553,Gem of Ice Attenuation,Gem_IceResistance_04,1949696,A
+1903554,Gem of Lightning Attenuation,Gem_LightningResistance_04,1949706,A
+1903555,Gem of Tempering,Gem_PhysicalResistance_04,1850914,A
+1903567,Rigid Gem,Gem_ArmorFlat_01,500437,A
+1903622,Shielded Gem,Gem_ArmorFlat_02,500439,A
+1903689,Tempered Gem,Gem_ArmorFlat_03,1319231,A
+1903690,Impregnable Gem,Gem_ArmorFlat_04,1850887,A
+1903699,Gem of the Enlightened,Gem_Epic_XPGained_04,1903714,E
+1910306,Gem of Justice,Gem_CriticalDamage_01,527108,W
+1910307,Gem of Magnitude,Gem_CriticalDamage_02,527115,W
+1910308,Gem of Amplitude,Gem_CriticalDamage_03,1851458,W
+2036042,Gem of Antidote,Gem_PoisonResistance_04,2031919,A

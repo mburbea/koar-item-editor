@@ -17,10 +17,10 @@ namespace KoAR.Core
 
         static uint GetDefaultInstanceId(int index) => (uint)Hasher.GetHash($"selfbuff_{index}");
 
-        internal ItemBuffMemory(byte[] gameBytes, int coreOffset, int coreLength)
+        internal ItemBuffMemory(GameSave gameSave, int itemOffset, int dataLength)
         {
-            ItemOffset = coreOffset;
-            Bytes = gameBytes.AsSpan(coreOffset, coreLength).ToArray();
+            ItemOffset = itemOffset;
+            Bytes = gameSave.Bytes.AsSpan(itemOffset, dataLength).ToArray();
             var itemId = MemoryUtilities.Read<uint>(Bytes);
             List.Capacity = MemoryUtilities.Read<int>(Bytes, Offsets.BuffCount);
             var firstBuff = Offsets.FirstBuff;
