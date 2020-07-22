@@ -58,26 +58,26 @@ namespace KoAR.Core
             private set => ItemBytes[Offsets.HasCustomName] = (byte)(value ? 1 : 0);
         }
 
-        private ref byte State => ref ItemBytes[Offsets.InventoryState];
+        private ref InventoryState State => ref Unsafe.As<byte, InventoryState>(ref ItemBytes[Offsets.InventoryState]);
 
         public int Owner => MemoryUtilities.Read<int>(ItemBytes, Offsets.Owner);
 
         public bool IsStolen
         {
             get => (State & InventoryState.Stolen) == InventoryState.Stolen;
-            set => State = (byte)(State & ~InventoryState.Stolen | -Unsafe.As<bool, byte>(ref value) & InventoryState.Stolen);
+            set => State = value ? State | InventoryState.Stolen : State & ~InventoryState.Stolen;
         }
 
         public bool IsUnsellable
         {
-            get => (State & InventoryState.Unsellable) == InventoryState.Unsellable; 
-            set => State = (byte)(State & ~InventoryState.Unsellable | -Unsafe.As<bool, byte>(ref value) & InventoryState.Unsellable);
+            get => (State & InventoryState.Unsellable) == InventoryState.Unsellable;
+            set => State = value ? State | InventoryState.Unsellable : State & ~InventoryState.Unsellable;
         }
 
         public bool IsUnstashable
         {
             get => (State & InventoryState.Unstashable) == InventoryState.Unstashable;
-            set => State = (byte)(State & ~InventoryState.Unstashable | -Unsafe.As<bool, byte>(ref value) & InventoryState.Unstashable);
+            set => State = value ? State | InventoryState.Unstashable : State & ~InventoryState.Unstashable;
         }
 
         public TypeDefinition TypeDefinition
