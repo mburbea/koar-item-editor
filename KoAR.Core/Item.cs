@@ -28,7 +28,7 @@ namespace KoAR.Core
             PlayerBuffs = new List<Buff>(BuffCount);
             for (int i = 0; i < PlayerBuffs.Capacity; i++)
             {
-                PlayerBuffs.Add(Amalur.GetBuff(MemoryUtilities.Read<uint>(ItemBytes, Offset.FirstBuff + i * 8)));
+                PlayerBuffs.Add(Amalur.GetBuff(MemoryUtilities.Read<uint>(ItemBytes, Offsets.FirstBuff + i * 8)));
             }
             if (HasCustomName)
             {
@@ -46,8 +46,8 @@ namespace KoAR.Core
 
         internal int DataLength
         {
-            get => MemoryUtilities.Read<int>(ItemBytes, Offset.DataLength) + 17;
-            set => MemoryUtilities.Write(ItemBytes, Offset.DataLength, value - 17);
+            get => MemoryUtilities.Read<int>(ItemBytes, Offsets.DataLength) + 17;
+            set => MemoryUtilities.Write(ItemBytes, Offsets.DataLength, value - 17);
         }
 
         public List<Buff> PlayerBuffs { get; } = new List<Buff>();
@@ -58,30 +58,26 @@ namespace KoAR.Core
             private set => ItemBytes[Offsets.HasCustomName] = (byte)(value ? 1 : 0);
         }
 
-        private InventoryState State
-        {
-            get => (InventoryState)ItemBytes[Offsets.InventoryState];
-            set => ItemBytes[Offsets.InventoryState] = (byte)value;
-        }
+        private ref InventoryState State => ref Unsafe.As<byte, InventoryState>(ref ItemBytes[Offsets.InventoryState]);
 
-        public int Owner => MemoryUtilities.Read<int>(ItemBytes, Offset.Owner);
+        public int Owner => MemoryUtilities.Read<int>(ItemBytes, Offsets.Owner);
 
         public bool IsStolen
         {
             get => (State & InventoryState.Stolen) == InventoryState.Stolen;
-            set => State ^= (InventoryState)(-Unsafe.As<bool, sbyte>(ref value) ^ (byte)State) & InventoryState.Stolen;
+            set => State = value ? State | InventoryState.Stolen : State & ~InventoryState.Stolen;
         }
 
         public bool IsUnsellable
         {
             get => (State & InventoryState.Unsellable) == InventoryState.Unsellable;
-            set => State ^= (InventoryState)(-Unsafe.As<bool, sbyte>(ref value) ^ (byte)State) & InventoryState.Unsellable;
+            set => State = value ? State | InventoryState.Unsellable : State & ~InventoryState.Unsellable;
         }
 
         public bool IsUnstashable
         {
             get => (State & InventoryState.Unstashable) == InventoryState.Unstashable;
-            set => State ^= (InventoryState)(-Unsafe.As<bool, sbyte>(ref value) ^ (byte)State) & InventoryState.Unstashable;
+            set => State = value ? State | InventoryState.Unstashable : State & ~InventoryState.Unstashable;
         }
 
         public TypeDefinition TypeDefinition
@@ -117,7 +113,7 @@ namespace KoAR.Core
             set => _gameSave.Bytes[LevelOffset] = value;
         }
 
-        public byte[] ItemBytes { get; private set; }
+        internal byte[] ItemBytes { get; private set; }
 
         public uint ItemId => MemoryUtilities.Read<uint>(ItemBytes);
 
@@ -146,11 +142,11 @@ namespace KoAR.Core
 
         private int BuffCount
         {
-            get => MemoryUtilities.Read<int>(ItemBytes, Offset.BuffCount);
-            set => MemoryUtilities.Write(ItemBytes, Offset.BuffCount, value);
+            get => MemoryUtilities.Read<int>(ItemBytes, Offsets.BuffCount);
+            set => MemoryUtilities.Write(ItemBytes, Offsets.BuffCount, value);
         }
 
-        private Offset Offsets => new Offset(BuffCount);
+        private Offset Offsets => new Offset(this);
 
         IItemBuffMemory IItem.ItemBuffs => ItemBuffs;
 
@@ -186,14 +182,14 @@ namespace KoAR.Core
             {
                 return ItemBytes;
             }
-            var currentLength = Offsets.PostBuffs - Offset.FirstBuff;
-            MemoryUtilities.Write(ItemBytes, Offset.BuffCount, PlayerBuffs.Count);
+            var currentLength = Offsets.PostBuffs - Offsets.FirstBuff;
+            MemoryUtilities.Write(ItemBytes, Offsets.BuffCount, PlayerBuffs.Count);
             Span<ulong> buffData = stackalloc ulong[PlayerBuffs.Count];
             for (int i = 0; i < buffData.Length; i++)
             {
                 buffData[i] = PlayerBuffs[i].Id | (ulong)uint.MaxValue << 32;
             }
-            ItemBytes = MemoryUtilities.ReplaceBytes(ItemBytes, Offset.FirstBuff, currentLength, MemoryMarshal.AsBytes(buffData));
+            ItemBytes = MemoryUtilities.ReplaceBytes(ItemBytes, Offsets.FirstBuff, currentLength, MemoryMarshal.AsBytes(buffData));
             DataLength = ItemBytes.Length;
             return ItemBytes;
         }

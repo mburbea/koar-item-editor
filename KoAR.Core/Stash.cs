@@ -81,6 +81,15 @@ namespace KoAR.Core
             _gameSave.FileLength += temp.Length;
         }
 
+        public void DeleteItem(StashItem item)
+        {
+            var itemLength = item.DataLength;
+            _gameSave.Bytes = MemoryUtilities.ReplaceBytes(_gameSave.Bytes, item.ItemOffset, itemLength, Array.Empty<byte>());
+            Count--;
+            DataLength -= itemLength;
+            _gameSave.FileLength -= itemLength;
+        }
+
         public static Stash? TryCreateStash(GameSave gameSave)
         {
             ReadOnlySpan<byte> stashIndicator = new byte[] { 0x00, 0xF5, 0x43, 0xEB, 0x00, 0x02 };
