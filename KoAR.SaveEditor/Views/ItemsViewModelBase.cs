@@ -17,7 +17,7 @@ namespace KoAR.SaveEditor.Views
         private IReadOnlyList<TItemModel> _filteredItems;
         private string _itemNameFilter = string.Empty;
         private int _rarityFilter;
-        private TItemModel _selectedItem;
+        private TItemModel? _selectedItem;
 
         protected ItemsViewModelBase()
         {
@@ -106,11 +106,37 @@ namespace KoAR.SaveEditor.Views
             this.FilteredItems = this.GetFilteredItems();
             this.SelectedItem = null;
             this.OnPropertyChanged(nameof(this.AllItemsStolen));
-            this.OnPropertyChanged(nameof(this.AllItemsUnsellable));
-            this.OnPropertyChanged(nameof(this.AllItemsUnstashable));
         }
 
+        /// <summary>
+        /// Resets the <see cref="CategoryFilter"/> property without re-filtering items.
+        /// </summary>
+        protected void ResetCategoryFilter()
+        {
+            if (this._categoryFilter.HasValue)
+            {
+                this._categoryFilter = default;
+                this.OnPropertyChanged(nameof(this.CategoryFilter));
+            }
+        }
 
+        public virtual bool? AllItemsStolen
+        {
+            get => this.GetAppliesToAllItems(item => item.IsStolen);
+            set => throw new NotSupportedException();
+        }
+
+        protected bool? GetAppliesToAllItems(Func<TItemModel, bool> projection)
+        {
+            if (this.FilteredItems.Count == 0)
+            {
+                return true;
+            }
+            bool first = projection(this.FilteredItems[0]);
+            return this.FilteredItems.Skip(1).Select(projection).Any(value => value != first)
+                ? default(bool?)
+                : first;
+        }
 
         private IReadOnlyList<TItemModel> GetFilteredItems()
         {
