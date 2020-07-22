@@ -84,7 +84,7 @@ namespace KoAR.Core
         public void DeleteItem(StashItem item)
         {
             var itemLength = item.DataLength;
-            MemoryUtilities.ReplaceBytes(_gameSave.Bytes, item.ItemOffset, itemLength, Array.Empty<byte>());
+            _gameSave.Bytes = MemoryUtilities.ReplaceBytes(_gameSave.Bytes, item.ItemOffset, itemLength, Array.Empty<byte>());
             Count--;
             DataLength -= itemLength;
             _gameSave.FileLength -= itemLength;
