@@ -82,7 +82,7 @@
                                 BorderThickness="0" Padding="0" Grid.Column="1" FocusVisualStyle="{x:Null}" Margin="0,0,0,-1">
                                 <TabPanel x:Name="PART_HeaderPanel" IsItemsHost="True" KeyboardNavigation.TabIndex="1" Margin="0,2,0,0" />
                             </ScrollViewer>
-                            <RepeatButton Grid.Column="2" x:Name="PART_RightButton" Margin="0,0,1,0" />
+                            <RepeatButton Grid.Column="2" x:Name="PART_RightButton" />
                         </Grid>
                         <Border x:Name="PART_ContentPanel" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" 
                             KeyboardNavigation.DirectionalNavigation="Contained" Grid.Row="1" KeyboardNavigation.TabIndex="2" KeyboardNavigation.TabNavigation="Local" Canvas.ZIndex="0">
