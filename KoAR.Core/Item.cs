@@ -16,7 +16,7 @@ namespace KoAR.Core
         public const float DurabilityUpperBound = 100f;
         public const int MinEquipmentLength = 44;
 
-        public Item(GameSave gameSave, int typeIdOffset, int offset, int dataLength, int coreEffectOffset, int coreEffectDataLength)
+        public Item(GameSave gameSave, int typeIdOffset, int offset, int dataLength, int itemBuffsOffset, int itemBuffsLength, int itemGemsOffset, int itemGemsLength)
         {
             (_gameSave, _typeIdOffset, ItemOffset) = (gameSave, typeIdOffset, offset);
             if (gameSave.Bytes[_typeIdOffset + 10] == 1)
@@ -24,7 +24,8 @@ namespace KoAR.Core
                 _levelShiftOffset = 8;
             }
             ItemBytes = _gameSave.Bytes.AsSpan(offset, dataLength).ToArray();
-            ItemBuffs = new ItemBuffMemory(gameSave.Bytes, coreEffectOffset, coreEffectDataLength);
+            ItemGems = new ItemGems(gameSave, itemGemsOffset, itemGemsLength);
+            ItemBuffs = new ItemBuffMemory(gameSave, itemBuffsOffset, itemBuffsLength);
             PlayerBuffs = new List<Buff>(BuffCount);
             for (int i = 0; i < PlayerBuffs.Capacity; i++)
             {
@@ -117,6 +118,8 @@ namespace KoAR.Core
 
         public uint ItemId => MemoryUtilities.Read<uint>(ItemBytes);
 
+        public ItemGems ItemGems { get; }
+
         public int ItemOffset { get; internal set; }
 
         private int NameLength
@@ -129,6 +132,7 @@ namespace KoAR.Core
             ? Rarity.Set
             : PlayerBuffs.Select(x => x.Rarity)
                 .Concat(ItemBuffs.List.Select(x => x.Rarity))
+                .Concat(ItemGems.Gems.OfType<Gem>().Select(x => x.Definition.Buff.Rarity))
                 .Concat(new[] { ItemBuffs.Prefix?.Rarity ?? default, ItemBuffs.Suffix?.Rarity ?? default, TypeDefinition.Sockets.Any() ? Rarity.Infrequent : Rarity.Common })
                 .Max();
 

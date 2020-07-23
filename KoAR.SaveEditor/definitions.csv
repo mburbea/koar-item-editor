@@ -1,4 +1,4 @@
-category,typeId,level,name,internal_name,durability,rarity,sockets,element,armorType,prefix,suffix,coreEffects,effects,IsScaling
+category,typeId,level,name,internal_name,durability,rarity,sockets,element,armorType,prefix,suffix,coreEffects,effects,IsScaling,exclusion_reason
 Chakrams,1FDFE9,44,The Song,chakrams_SorceryPack_01_v,25,Unique,,Ice,None,0,0,1FF537,1FF519,True
 Chakrams,1FDFE8,42,The Song,chakrams_SorceryPack_01_u,25,Unique,,Ice,None,0,0,1FF536,1FF519,True
 Chakrams,1FDFE7,40,The Song,chakrams_SorceryPack_01_t,25,Unique,,Ice,None,0,0,1FF535,1FF519,True
@@ -1225,7 +1225,7 @@ Feet,085902,2,Leather Boots,rogue_common01b_feet_sockets_01,17,Infrequent,A,None
 Feet,08190A,2,Leather Boots,rogue_common01b_feet,17,Common,,None,Finesse,0,0,,081EDE,False
 Feet,08190F,1,Crude Leather Boots,rogue_common01a_feet,17,Common,,None,Finesse,0,0,,081EDE,False
 Feet,0A1BC0,0,Buru's Boots,QuestItem_TR06_BurusBoots,25,Common,,None,None,0,0,,0ABA71,False
-Feet,06C18B,0,Ravensfeet,QuestItem_SQ07_Ravensfeet,100,Unique,,None,None,0,0,,0661A5,False
+Feet,06C18B,0,Ravensfeet,QuestItem_SQ07_Ravensfeet,100,Unique,,None,None,0,0,,0661A5,False,Missing ItemGems section
 Feet,082F56,1,Greaves,PARENT_warrior_feet,30,Common,,None,Might,0,0,,1D1E84,False
 Feet,082F5A,1,Boots,PARENT_rogue_feet,25,Common,,None,Finesse,0,0,,081EDE,False
 Feet,082F5F,1,Shoes,PARENT_mage_feet,20,Common,,None,Sorcery,0,0,,05E7D8,False
@@ -4340,7 +4340,7 @@ Necklace,1E98F0,10,Whale Tooth Pendant,amulet_dlc1_unique01_a,100,Unique,,None,N
 Necklace,0A0C16,0,Rithen Amulet,QuestItem_TR06_Amulet,100,Common,,None,None,0,0,,,False
 Necklace,09EABC,1,Rithen Amulet,QuestItem_TR05_Amulet,100,Common,,None,None,0,0,,,False
 Necklace,152F6C,27,Royal Seal of Ansilla,QuestItem_SQ116_HouseSeal,100,Common,,None,None,0,0,,,True
-Necklace,1A69DF,0,Murghan Charm,QuestItem_SQ103_MurghanCharm,100,Common,,None,None,0,0,,,False
+Necklace,1A69DF,0,Murghan Charm,QuestItem_SQ103_MurghanCharm,100,Common,,None,None,0,0,,,False,,Missing ItemGems section
 Necklace,073577,14,Pendant of Warmth,QuestItem_SA04_PendantOfWarmth,100,Common,,None,None,0,0,,0AB204,False
 Necklace,13F3EE,14,Heartstone,QuestItem_FP01_Heartstone_Empty,100,Common,,None,None,0,0,,,False
 Necklace,0934D1,14,Heartstone,QuestItem_FP01_Heartstone,100,Unique,,None,None,0,0,,06619F089759089785,False
@@ -4743,7 +4743,7 @@ Ring,06B368,5,Copper Ring,ring_common01a,100,Common,,None,None,0,0,,,True
 Ring,0C705F,5,Skoria Family Ring,QuestItem_SQ53_SkoriaRing,100,Common,,None,None,0,0,,,False
 Ring,08271D,4,Enconeg's Ring,QuestItem_SQ15_Ring,100,Common,,None,None,0,0,,,False
 Ring,1862F1,0,Ring of Fyragnos,QuestItem_SQ143_FyragnosRing,100,Common,,None,None,0,0,,,False
-Ring,071561,0,House of Ballads Ring,QuestItem_HM01_SignetRing,100,Unique,,None,None,0,0,,06618D,False
+Ring,071561,0,House of Ballads Ring,QuestItem_HM01_SignetRing,100,Unique,,None,None,0,0,,06618D,False,Missing ItemGems section
 Ring,0B355F,0,Ratofer's Ring,QuestItem_FFQ18_Ring,100,Common,,None,None,0,0,,,False
 Ring,1455A6,0,A Maiden' s Ring,QuestItem_FFQ04_MaidensRing,100,Common,,None,None,0,0,,,False
 Ring,082F65,1,Ring,PARENT_ring,100,Common,,None,None,0,0,,,False
