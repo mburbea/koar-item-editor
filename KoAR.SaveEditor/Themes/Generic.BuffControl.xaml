@@ -4,7 +4,7 @@
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs"
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/PresentationFramework.Aero,Version=4.0.0.0,PublicKeyToken=31bf3856ad364e35;component/Themes/Aero.NormalColor.xaml" />
+        <ResourceDictionary Source="/PresentationFramework.Aero;component/Themes/Aero.NormalColor.xaml" />
     </ResourceDictionary.MergedDictionaries>
     <constructs:ArrayConverter x:Key="ArrayConverter" />
     <constructs:EqualityConverter x:Key="EqualityConverter" />

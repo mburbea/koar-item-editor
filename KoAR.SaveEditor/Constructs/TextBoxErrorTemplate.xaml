@@ -1,0 +1,19 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/PresentationFramework.Aero;component/Themes/Aero.NormalColor.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+    <ControlTemplate x:Key="TextBoxErrorTemplate">
+        <Border BorderBrush="Red" BorderThickness="1">
+            <Grid>
+                <Polygon Fill="Red" Margin="0,2,2,0" Points="10,10 10,0 0,0" VerticalAlignment="Top" HorizontalAlignment="Right"
+                    Tag="{Binding AdornedElement.(Validation.Errors)/ErrorContent, ElementName=PART_Adorner}" Cursor="Hand">
+                    <Polygon.ToolTip>
+                        <ToolTip Content="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}" BorderThickness="1" Foreground="White" Background="#CC1212" />
+                    </Polygon.ToolTip>
+                </Polygon>
+                <AdornedElementPlaceholder x:Name="PART_Adorner" />
+            </Grid>
+        </Border>
+    </ControlTemplate>
+</ResourceDictionary>

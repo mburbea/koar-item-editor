@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Threading;
 using System.Windows;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
@@ -14,21 +13,16 @@ namespace KoAR.SaveEditor.Views.Main
     public sealed class MainViewModel : NotifierBase
     {
         private readonly NotifyingCollection<ItemModel> _items;
-        private int _armorTypeFilter;
-        private EquipmentCategory? _categoryFilter;
-        private int _elementFilter;
         private IReadOnlyList<ItemModel> _filteredItems;
         private GameSave? _gameSave;
-        private string _itemNameFilter = string.Empty;
-        private int _rarityFilter;
         private ItemModel? _selectedItem;
         private bool _unsavedChanges;
 
         public MainViewModel()
         {
             this._filteredItems = this._items = new NotifyingCollection<ItemModel>();
+            this.ItemFilters.FilterChange += this.ItemFilters_FilterChange;
             this.OpenFileCommand = new DelegateCommand(this.OpenFile);
-            this.ResetFiltersCommand = new DelegateCommand(this.ResetFilters);
             this.ChangeDefinitionCommand = new DelegateCommand<ItemModel>(this.ChangeDefinition);
             this.AddItemBuffCommand = new DelegateCommand<uint>(this.AddItemBuff, this.CanAddItemBuff);
             this.AddPlayerBuffCommand = new DelegateCommand<uint>(this.AddPlayerBuff, this.CanAddPlayerBuff);
@@ -80,47 +74,11 @@ namespace KoAR.SaveEditor.Views.Main
             }
         }
 
-        public ArmorType ArmorTypeFilter
-        {
-            get => (ArmorType)this._armorTypeFilter;
-            set
-            {
-                if (this.SetValue(ref this._armorTypeFilter, (int)value))
-                {
-                    this.OnFilterChange();
-                }
-            }
-        }
-
-        public EquipmentCategory? CategoryFilter
-        {
-            get => this._categoryFilter;
-            set
-            {
-                if (this.SetValue(ref this._categoryFilter, value))
-                {
-                    this.OnFilterChange();
-                }
-            }
-        }
-
         public DelegateCommand<ItemModel> ChangeDefinitionCommand { get; }
 
         public DelegateCommand<Buff> DeleteItemBuffCommand { get; }
 
         public DelegateCommand<Buff> DeletePlayerBuffCommand { get; }
-
-        public Element ElementFilter
-        {
-            get => (Element)this._elementFilter;
-            set
-            {
-                if (this.SetValue(ref this._elementFilter, (int)value))
-                {
-                    this.OnFilterChange();
-                }
-            }
-        }
 
         public string? FileName => this._gameSave?.FileName;
 
@@ -145,35 +103,11 @@ namespace KoAR.SaveEditor.Views.Main
             }
         }
 
-        public string ItemNameFilter
-        {
-            get => this._itemNameFilter;
-            set
-            {
-                if (this.SetValue(ref this._itemNameFilter, value))
-                {
-                    this.OnFilterChange();
-                }
-            }
-        }
+        public ItemFilters ItemFilters { get; } = new ItemFilters();
 
         public IReadOnlyList<ItemModel> Items => this._items;
 
         public DelegateCommand OpenFileCommand { get; }
-
-        public Rarity RarityFilter
-        {
-            get => (Rarity)this._rarityFilter;
-            set
-            {
-                if (this.SetValue(ref this._rarityFilter, (int)value))
-                {
-                    this.OnFilterChange();
-                }
-            }
-        }
-
-        public DelegateCommand ResetFiltersCommand { get; }
 
         public DelegateCommand SaveCommand { get; }
 
@@ -208,12 +142,7 @@ namespace KoAR.SaveEditor.Views.Main
             this.OnPropertyChanged(nameof(this.FileName));
             this.OnPropertyChanged(nameof(this.InventorySize));
             this.RepopulateItems();
-            if (this._categoryFilter.HasValue)
-            {
-                this._categoryFilter = default;
-                this.OnPropertyChanged(nameof(this.CategoryFilter));
-            }
-            this.ResetFilters();
+            this.ItemFilters.ResetFilters(true);
             this.OnPropertyChanged(nameof(this.Stash));
             this._unsavedChanges = false;
             this.OnPropertyChanged(nameof(this.UnsavedChanges));
@@ -299,32 +228,6 @@ namespace KoAR.SaveEditor.Views.Main
                 : first;
         }
 
-        private IReadOnlyList<ItemModel> GetFilteredItems()
-        {
-            IEnumerable<ItemModel> items = this.Items;
-            if (this.RarityFilter != default)
-            {
-                items = items.Where(model => model.Rarity == this.RarityFilter);
-            }
-            if (this.ElementFilter != default)
-            {
-                items = items.Where(model => model.TypeDefinition.Element == this.ElementFilter);
-            }
-            if (this.ArmorTypeFilter != default)
-            {
-                items = items.Where(model => model.TypeDefinition.ArmorType == this.ArmorTypeFilter);
-            }
-            if (this.CategoryFilter.HasValue)
-            {
-                items = items.Where(model => model.Category == this.CategoryFilter.GetValueOrDefault());
-            }
-            if (this.ItemNameFilter.Length != 0)
-            {
-                items = items.Where(model => model.DisplayName.IndexOf(this.ItemNameFilter, StringComparison.InvariantCultureIgnoreCase) != -1);
-            }
-            return object.Equals(items, this.Items) ? this.Items : items.ToList();
-        }
-
         private void Item_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (this._gameSave == null)
@@ -348,9 +251,11 @@ namespace KoAR.SaveEditor.Views.Main
             }
         }
 
+        private void ItemFilters_FilterChange(object? sender, EventArgs e) => this.OnFilterChange();
+
         private void OnFilterChange()
         {
-            this.FilteredItems = this.GetFilteredItems();
+            this.FilteredItems = this.ItemFilters.GetFilteredItems(this.Items);
             this.SelectedItem = null;
             this.OnPropertyChanged(nameof(this.AllItemsStolen));
             this.OnPropertyChanged(nameof(this.AllItemsUnsellable));
@@ -383,27 +288,6 @@ namespace KoAR.SaveEditor.Views.Main
                     PropertyChangedEventManager.AddHandler(item, this.Item_PropertyChanged, string.Empty);
                     this._items.Add(item);
                 }
-            }
-            this.OnFilterChange();
-        }
-
-        private void ResetFilters()
-        {
-            if (Interlocked.Exchange(ref this._itemNameFilter, string.Empty).Length != 0)
-            {
-                this.OnPropertyChanged(nameof(this.ItemNameFilter));
-            }
-            if (Interlocked.Exchange(ref this._elementFilter, default) != default)
-            {
-                this.OnPropertyChanged(nameof(this.ElementFilter));
-            }
-            if (Interlocked.Exchange(ref this._rarityFilter, default) != default)
-            {
-                this.OnPropertyChanged(nameof(this.RarityFilter));
-            }
-            if (Interlocked.Exchange(ref this._armorTypeFilter, default) != default)
-            {
-                this.OnPropertyChanged(nameof(this.ArmorTypeFilter));
             }
             this.OnFilterChange();
         }

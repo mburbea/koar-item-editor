@@ -5,7 +5,8 @@
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views"
     xmlns:core="clr-namespace:KoAR.Core;assembly=KoAR.Core">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/PresentationFramework.Aero,Version=4.0.0.0,PublicKeyToken=31bf3856ad364e35;component/Themes/Aero.NormalColor.xaml" />
+        <ResourceDictionary Source="/PresentationFramework.Aero;component/Themes/Aero.NormalColor.xaml" />
+        <ResourceDictionary Source="/KoAR.SaveEditor;component/Constructs/TextBoxErrorTemplate.xaml" />
     </ResourceDictionary.MergedDictionaries>
     <DataTemplate x:Key="BuffToolTipTemplate" DataType="{x:Type core:Buff}">
         <views:BuffControl Buff="{Binding}" IsExpanded="True" />
@@ -31,24 +32,7 @@
                                     <Setter Property="constructs:ValidatingPropertyBehavior.ValidatingProperty" Value="{x:Static TextBox.TextProperty}" />
                                 </Trigger>
                             </Style.Triggers>
-                            <Setter Property="Validation.ErrorTemplate">
-                                <Setter.Value>
-                                    <ControlTemplate>
-                                        <Border BorderBrush="Red" BorderThickness="1">
-                                            <Grid>
-                                                <Polygon Fill="Red" Margin="0,2,2,0" Points="10,10 10,0 0,0" VerticalAlignment="Top" HorizontalAlignment="Right"
-                                                    Tag="{Binding AdornedElement.(Validation.Errors)/ErrorContent, ElementName=PART_Adorner}" Cursor="Hand">
-                                                    <Polygon.ToolTip>
-                                                        <ToolTip Content="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}" 
-                                                            BorderThickness="1" Foreground="White" Background="Red" />
-                                                    </Polygon.ToolTip>
-                                                </Polygon>
-                                                <AdornedElementPlaceholder x:Name="PART_Adorner" />
-                                            </Grid>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
+                            <Setter Property="Validation.ErrorTemplate" Value="{StaticResource TextBoxErrorTemplate}" />
                             <Setter Property="Visibility" Value="Collapsed" />
                             <Setter Property="constructs:TextBoxUpdateSource.UpdateOnEnter" Value="{Binding IsVisible, RelativeSource={RelativeSource Self}}" />
                         </Style>

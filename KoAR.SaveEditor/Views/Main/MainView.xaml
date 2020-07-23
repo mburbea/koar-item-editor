@@ -14,40 +14,25 @@
     Width="1366" Height="768" WindowStartupLocation="CenterScreen" 
     Icon="/app.ico" ResizeMode="CanResizeWithGrip">
     <Window.Resources>
-        <ObjectDataProvider x:Key="ViewModel" ObjectType="{x:Type local:MainViewModel}" />
-        <constructs:NegatedBooleanConverter x:Key="NegatedBooleanConverter" />
-        <constructs:StringIsNullOrEmptyConverter x:Key="StringIsNullOrEmptyConverter" />
-        <constructs:LittleEndianConverter x:Key="LittleEndianConverter" />
-        <constructs:EqualityConverter x:Key="EqualityConverter" />
-        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-            <Setter Property="Validation.ErrorTemplate">
-                <Setter.Value>
-                    <ControlTemplate>
-                        <Border BorderBrush="Red" BorderThickness="1">
-                            <Grid>
-                                <Polygon Fill="Red" Margin="0,2,2,0" Points="10,10 10,0 0,0" VerticalAlignment="Top" HorizontalAlignment="Right"
-                                    Tag="{Binding AdornedElement.(Validation.Errors)/ErrorContent, ElementName=PART_Adorner}" Cursor="Hand">
-                                    <Polygon.ToolTip>
-                                        <ToolTip Content="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}" BorderThickness="1" Foreground="White" Background="Red" />
-                                    </Polygon.ToolTip>
-                                </Polygon>
-                                <AdornedElementPlaceholder x:Name="PART_Adorner" />
-                            </Grid>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <ObjectDataProvider x:Key="Categories" ObjectType="{x:Type s:Enum}" MethodName="GetValues">
-            <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="core:EquipmentCategory" />
-            </ObjectDataProvider.MethodParameters>
-        </ObjectDataProvider>
-        <CompositeCollection x:Key="CategoryContainers">
-            <CollectionContainer Collection="{Binding Source={x:Static constructs:DataContainer.Empty}, Converter={x:Static constructs:DataContainer.CollectionConverter}}" />
-            <CollectionContainer Collection="{Binding Source={StaticResource Categories}, Converter={x:Static constructs:DataContainer.CollectionConverter}}" />
-        </CompositeCollection>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/KoAR.SaveEditor;component/Constructs/TextBoxErrorTemplate.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <ObjectDataProvider x:Key="ViewModel" ObjectType="{x:Type local:MainViewModel}" />
+            <constructs:NegatedBooleanConverter x:Key="NegatedBooleanConverter" />
+            <constructs:StringIsNullOrEmptyConverter x:Key="StringIsNullOrEmptyConverter" />
+            <constructs:LittleEndianConverter x:Key="LittleEndianConverter" />
+            <constructs:EqualityConverter x:Key="EqualityConverter" />
+            <ObjectDataProvider x:Key="Categories" ObjectType="{x:Type s:Enum}" MethodName="GetValues">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="core:EquipmentCategory" />
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+            <CompositeCollection x:Key="CategoryContainers">
+                <CollectionContainer Collection="{Binding Source={x:Static constructs:DataContainer.Empty}, Converter={x:Static constructs:DataContainer.CollectionConverter}}" />
+                <CollectionContainer Collection="{Binding Source={StaticResource Categories}, Converter={x:Static constructs:DataContainer.CollectionConverter}}" />
+            </CompositeCollection>
+        </ResourceDictionary>
     </Window.Resources>
     <Window.DataContext>
         <Binding Source="{StaticResource ViewModel}" />
@@ -144,7 +129,13 @@
                 </Slider>
             </Grid>
         </Border>
-        <Grid Grid.IsSharedSizeScope="True">
+        <Grid>
+            <Grid.Resources>
+                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    <Setter Property="Validation.ErrorTemplate" Value="{StaticResource TextBoxErrorTemplate}" />
+                </Style>
+            </Grid.Resources>
             <Grid.Style>
                 <Style TargetType="{x:Type Grid}">
                     <Style.Triggers>
@@ -164,7 +155,61 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Grid>
+                <Grid.Resources>
+                    <DataTemplate x:Key="EmptyTemplate" DataType="{x:Type constructs:DataContainer}" />
+                    <DataTemplate x:Key="CategoryContainerTemplate" DataType="{x:Type constructs:DataContainer}">
+                        <StackPanel Orientation="Horizontal">
+                            <views:EquipmentCategoryIcon Category="{Binding Data}" VerticalAlignment="Center" />
+                            <TextBlock VerticalAlignment="Center" Margin="2,0">
+                                <TextBlock.Style>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Style.Resources>
+                                            <views:TitleCaseWordsConverter x:Key="TitleCaseWordsConverter" />
+                                        </Style.Resources>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type TabItem}}}" Value="True">
+                                                <Setter Property="FontWeight" Value="SemiBold" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Data}" Value="{x:Null}">
+                                                <Setter Property="Text" Value="All" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                        <Setter Property="Text" Value="{Binding Data, Converter={StaticResource TitleCaseWordsConverter}}" />
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                            <TextBlock VerticalAlignment="Center">
+                                <TextBlock.Style>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Style.Resources>
+                                            <views:CategoryCountConverter x:Key="CategoryCountConverter" />
+                                        </Style.Resources>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type TabItem}}}" Value="True">
+                                                <Setter Property="FontWeight" Value="SemiBold" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Data}" Value="{x:Null}">
+                                                <Setter Property="Text" Value="{Binding Items.Count, Source={StaticResource ViewModel}, StringFormat='({0})'}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                        <Setter Property="Text">
+                                            <Setter.Value>
+                                                <MultiBinding Converter="{StaticResource CategoryCountConverter}" StringFormat="({0})">
+                                                    <Binding Path="Data" />
+                                                    <Binding Path="Items" Source="{StaticResource ViewModel}" />
+                                                    <!-- Used to retrigger binding after loading file -->
+                                                    <Binding Path="Items.Count" Source="{StaticResource ViewModel}" />
+                                                </MultiBinding>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </Grid.Resources>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition />
                 </Grid.RowDefinitions>
@@ -213,9 +258,9 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="Name:" />
-                        <TextBox Grid.Column="1" Text="{Binding ItemNameFilter, UpdateSourceTrigger=PropertyChanged, Delay=200}" Height="{Binding ActualHeight, ElementName=PART_Rarities}" />
+                        <TextBox Grid.Column="1" Text="{Binding ItemFilters.ItemName, UpdateSourceTrigger=PropertyChanged, Delay=200}" Height="{Binding ActualHeight, ElementName=PART_Rarities}" />
                         <TextBlock Grid.Column="2" Text="Rarity:" />
-                        <ComboBox x:Name="PART_Rarities" Grid.Column="3" ItemsSource="{Binding Source={StaticResource Rarities}}" SelectedItem="{Binding RarityFilter}">
+                        <ComboBox x:Name="PART_Rarities" Grid.Column="3" ItemsSource="{Binding Source={StaticResource Rarities}}" SelectedItem="{Binding ItemFilters.Rarity}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate DataType="{x:Type core:Rarity}">
                                     <StackPanel Orientation="Horizontal" Margin="2">
@@ -237,7 +282,7 @@
                             </ComboBox.ItemTemplate>
                         </ComboBox>
                         <TextBlock Grid.Column="4" Text="Element:" />
-                        <ComboBox Grid.Column="5" ItemsSource="{Binding Source={StaticResource Elements}}" SelectedItem="{Binding ElementFilter}">
+                        <ComboBox Grid.Column="5" ItemsSource="{Binding Source={StaticResource Elements}}" SelectedItem="{Binding ItemFilters.Element}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate DataType="{x:Type core:Element}">
                                     <StackPanel Orientation="Horizontal" Margin="2">
@@ -259,7 +304,7 @@
                             </ComboBox.ItemTemplate>
                         </ComboBox>
                         <TextBlock Grid.Column="6" Text="ArmorType:" />
-                        <ComboBox Grid.Column="7" ItemsSource="{Binding Source={StaticResource ArmorTypes}}" SelectedItem="{Binding ArmorTypeFilter}">
+                        <ComboBox Grid.Column="7" ItemsSource="{Binding Source={StaticResource ArmorTypes}}" SelectedItem="{Binding ItemFilters.ArmorType}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate DataType="{x:Type core:ArmorType}">
                                     <StackPanel Orientation="Horizontal" Margin="2,1">
@@ -280,69 +325,14 @@
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
-                        <Button Grid.Column="8" Content="Reset" FocusVisualStyle="{x:Null}" Command="{Binding ResetFiltersCommand}" Margin="2" 
+                        <Button Grid.Column="8" Content="Reset" FocusVisualStyle="{x:Null}" Command="{Binding ItemFilters.ResetFiltersCommand}" Margin="2" 
                             Height="{Binding ActualHeight, ElementName=PART_Rarities}" VerticalAlignment="Center" />
                     </Grid>
                 </Expander>
-                <DockPanel Grid.Row="1" Margin="4">
-                    <DockPanel.Resources>
-                        <DataTemplate x:Key="EmptyTemplate" DataType="{x:Type constructs:DataContainer}" />
-                        <DataTemplate x:Key="CategoryContainerTemplate" DataType="{x:Type constructs:DataContainer}">
-                            <StackPanel Orientation="Horizontal">
-                                <views:EquipmentCategoryIcon Category="{Binding Data}" VerticalAlignment="Center" />
-                                <TextBlock VerticalAlignment="Center" Margin="2,0">
-                                    <TextBlock.Style>
-                                        <Style TargetType="{x:Type TextBlock}">
-                                            <Style.Resources>
-                                                <views:TitleCaseWordsConverter x:Key="TitleCaseWordsConverter" />
-                                            </Style.Resources>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type TabItem}}}" Value="True">
-                                                    <Setter Property="FontWeight" Value="SemiBold" />
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding Data}" Value="{x:Null}">
-                                                    <Setter Property="Text" Value="All" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                            <Setter Property="Text" Value="{Binding Data, Converter={StaticResource TitleCaseWordsConverter}}" />
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
-                                <TextBlock VerticalAlignment="Center">
-                                    <TextBlock.Style>
-                                        <Style TargetType="{x:Type TextBlock}">
-                                            <Style.Resources>
-                                                <views:CategoryCountConverter x:Key="CategoryCountConverter" />
-                                            </Style.Resources>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type TabItem}}}" Value="True">
-                                                    <Setter Property="FontWeight" Value="SemiBold" />
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding Data}" Value="{x:Null}">
-                                                    <Setter Property="Text" Value="{Binding Items.Count, Source={StaticResource ViewModel}, StringFormat='({0})'}" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                            <Setter Property="Text">
-                                                <Setter.Value>
-                                                    <MultiBinding Converter="{StaticResource CategoryCountConverter}" StringFormat="({0})">
-                                                        <Binding Path="Data" />
-                                                        <Binding Path="Items" Source="{StaticResource ViewModel}" />
-                                                        <!-- Used to retrigger binding after loading file -->
-                                                        <Binding Path="Items.Count" Source="{StaticResource ViewModel}" />
-                                                    </MultiBinding>
-                                                </Setter.Value>
-                                            </Setter>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
-                            </StackPanel>
-                        </DataTemplate>
-                    </DockPanel.Resources>
-                    <views:ScrollingTabControl DockPanel.Dock="Top" SelectedValuePath="Data" VerticalContentAlignment="Stretch" ContentTemplate="{StaticResource EmptyTemplate}"
-                        ItemsSource="{Binding Source={StaticResource CategoryContainers}}" SelectedValue="{Binding CategoryFilter}" ItemTemplate="{StaticResource CategoryContainerTemplate}" />
-                    <views:ItemCollectionManager Items="{Binding FilteredItems}" SelectedItem="{Binding SelectedItem}" RowDoubleClickCommand="{Binding ChangeDefinitionCommand}"
-                        AllItemsUnstashable="{Binding AllItemsUnstashable}" AllItemsUnsellable="{Binding AllItemsUnsellable}" AllItemsStolen="{Binding AllItemsStolen}" />
-                </DockPanel>
+                <views:ScrollingTabControl Grid.Row="1" Margin="4,0" SelectedValuePath="Data" VerticalContentAlignment="Stretch" ContentTemplate="{StaticResource EmptyTemplate}"
+                    ItemsSource="{Binding Source={StaticResource CategoryContainers}}" SelectedValue="{Binding ItemFilters.Category}" ItemTemplate="{StaticResource CategoryContainerTemplate}" />
+                <views:ItemCollectionManager Grid.Row="2" Margin="4,0,4,4" Items="{Binding FilteredItems}" SelectedItem="{Binding SelectedItem}" RowDoubleClickCommand="{Binding ChangeDefinitionCommand}"
+                    AllItemsUnstashable="{Binding AllItemsUnstashable}" AllItemsUnsellable="{Binding AllItemsUnsellable}" AllItemsStolen="{Binding AllItemsStolen}" />
             </Grid>
             <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Stretch" Background="{x:Static SystemColors.ControlBrush}" FocusVisualStyle="{x:Null}" />
             <Grid Grid.Column="2">

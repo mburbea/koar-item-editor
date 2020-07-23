@@ -10,7 +10,7 @@ namespace KoAR.SaveEditor.Views.Main
 {
     partial class MainView
     {
-        public const double MaxScaleFactor = 1.75;
+        public const double MaxScaleFactor = 3.75;
 
         public const double MinScaleFactor = 0.25;
 

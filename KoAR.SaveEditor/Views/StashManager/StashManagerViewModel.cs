@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using KoAR.Core;
-using KoAR.SaveEditor.Constructs;
+﻿using KoAR.Core;
 
 namespace KoAR.SaveEditor.Views.StashManager
 {
-    public sealed class StashManagerViewModel : ItemsViewModelBase<StashItemModel>
+    public sealed class StashManagerViewModel 
     {
         public StashManagerViewModel(GameSave gameSave, Stash stash)
         {

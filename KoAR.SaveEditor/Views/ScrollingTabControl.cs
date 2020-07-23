@@ -94,7 +94,7 @@ namespace KoAR.SaveEditor.Views
             {
                 return;
             }
-            double offset = Math.Max(this._scrollViewer.HorizontalOffset - this._headerPanel.Margin.Left, 0d);
+            double offset = Math.Max(this._scrollViewer.HorizontalOffset - this._headerPanel.Margin.Left - 2d, 0d);
             TabItem? leftItem = this.GetItemByOffset(offset);
             if (leftItem != null)
             {
@@ -108,7 +108,7 @@ namespace KoAR.SaveEditor.Views
             {
                 return;
             }
-            double offset = Math.Min(this._scrollViewer.HorizontalOffset + this._scrollViewer.ViewportWidth + this._headerPanel.Margin.Left, this._scrollViewer.ExtentWidth);
+            double offset = Math.Min(this._scrollViewer.HorizontalOffset + this._scrollViewer.ViewportWidth + this._headerPanel.Margin.Left + 2d, this._scrollViewer.ExtentWidth);
             TabItem? rightItem = this.GetItemByOffset(offset);
             if (rightItem != null)
             {

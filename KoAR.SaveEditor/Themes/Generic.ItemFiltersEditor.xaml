@@ -1,0 +1,41 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:core="clr-namespace:KoAR.Core;assembly=KoAR.Core"
+    xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs"
+    xmlns:views="clr-namespace:KoAR.SaveEditor.Views"
+    xmlns:themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
+    xmlns:s="clr-namespace:System;assembly=mscorlib">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/PresentationFramework.Aero;component/Themes/Aero.NormalColor.xaml" />
+        <ResourceDictionary Source="/KoAR.SaveEditor;component/Constructs/TextBoxErrorTemplate.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+    <Style TargetType="{x:Type views:ItemFiltersEditor}">
+        <Style.Resources>
+            <themes:ButtonChrome x:Key="_chrome" />
+            <ObjectDataProvider x:Key="Rarities" ObjectType="{x:Type s:Enum}" MethodName="GetValues">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="core:Rarity" />
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+            <ObjectDataProvider x:Key="Elements" ObjectType="{x:Type s:Enum}" MethodName="GetValues">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="core:Element" />
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+            <ObjectDataProvider x:Key="ArmorTypes" ObjectType="{x:Type s:Enum}" MethodName="GetValues">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="core:ArmorType" />
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+            <CompositeCollection x:Key="CategoryContainers">
+                <CollectionContainer Collection="{Binding Source={x:Static constructs:DataContainer.Empty}, Converter={x:Static constructs:DataContainer.CollectionConverter}}" />
+                <CollectionContainer Collection="{Binding Source={StaticResource Categories}, Converter={x:Static constructs:DataContainer.CollectionConverter}}" />
+            </CompositeCollection>
+            <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                <Setter Property="Validation.ErrorTemplate" Value="{StaticResource TextBoxErrorTemplate}" />
+            </Style>
+        </Style.Resources>
+        <Setter Property="Focusable" Value="False" />
+    </Style>
+</ResourceDictionary>
