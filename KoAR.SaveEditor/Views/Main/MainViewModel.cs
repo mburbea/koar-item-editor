@@ -6,6 +6,7 @@ using System.Windows;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
 using KoAR.SaveEditor.Views.ChangeOrAddItem;
+using KoAR.SaveEditor.Views.StashManager;
 using Microsoft.Win32;
 
 namespace KoAR.SaveEditor.Views.Main
@@ -29,18 +30,16 @@ namespace KoAR.SaveEditor.Views.Main
             this.DeleteItemBuffCommand = new DelegateCommand<Buff>(this.DeleteItemBuff, this.CanDeleteItemBuff);
             this.DeletePlayerBuffCommand = new DelegateCommand<Buff>(this.DeletePlayerBuff, this.CanDeletePlayerBuff);
             this.SaveCommand = new DelegateCommand(this.Save, () => this._unsavedChanges);
-            this.AddStashItemCommand = new DelegateCommand(this.AddStashItem, () => this._gameSave?.Stash != null);
+            this.OpenStashManagerCommand = new DelegateCommand(this.OpenStashManager, () => this._gameSave?.Stash != null);
         }
 
         public DelegateCommand<uint> AddItemBuffCommand { get; }
 
         public DelegateCommand<uint> AddPlayerBuffCommand { get; }
 
-        public DelegateCommand AddStashItemCommand { get; }
-
         public bool? AllItemsStolen
         {
-            get => this.GetAppliesToAllItems(item => item.IsStolen);
+            get => this.Items.GetAppliesToAll(item => item.IsStolen);
             set
             {
                 foreach (ItemModel item in this.FilteredItems)
@@ -52,7 +51,7 @@ namespace KoAR.SaveEditor.Views.Main
 
         public bool? AllItemsUnsellable
         {
-            get => this.GetAppliesToAllItems(item => item.IsUnsellable);
+            get => this.Items.GetAppliesToAll(item => item.IsUnsellable);
             set
             {
                 foreach (ItemModel item in this.FilteredItems)
@@ -64,7 +63,7 @@ namespace KoAR.SaveEditor.Views.Main
 
         public bool? AllItemsUnstashable
         {
-            get => this.GetAppliesToAllItems(item => item.IsUnstashable);
+            get => this.Items.GetAppliesToAll(item => item.IsUnstashable);
             set
             {
                 foreach (ItemModel item in this.FilteredItems)
@@ -109,6 +108,8 @@ namespace KoAR.SaveEditor.Views.Main
 
         public DelegateCommand OpenFileCommand { get; }
 
+        public DelegateCommand OpenStashManagerCommand { get; }
+
         public DelegateCommand SaveCommand { get; }
 
         public ItemModel? SelectedItem
@@ -125,6 +126,18 @@ namespace KoAR.SaveEditor.Views.Main
             private set => this.SetValue(ref this._unsavedChanges, value);
         }
 
+        internal void AddStashItem(TypeDefinition typeDefinition)
+        {
+            if (this._gameSave?.Stash == null)
+            {
+                return;
+            }
+            this._gameSave.Stash.AddItem(typeDefinition);
+            this.OnPropertyChanged(nameof(this.Stash));
+            this.RepopulateItems(regenerate: true);
+            this.UnsavedChanges = true;
+        }
+
         internal void OpenFile()
         {
             OpenFileDialog dialog = new OpenFileDialog
@@ -132,9 +145,9 @@ namespace KoAR.SaveEditor.Views.Main
                 Title = "Open Save File...",
                 DefaultExt = ".sav",
                 Filter = "Save Files (*.sav)|*.sav",
-                CheckFileExists = true
+                CheckFileExists = true,
             };
-            if (dialog.ShowDialog() != true)
+            if (dialog.ShowDialog(Application.Current.MainWindow) != true)
             {
                 return;
             }
@@ -147,6 +160,8 @@ namespace KoAR.SaveEditor.Views.Main
             this._unsavedChanges = false;
             this.OnPropertyChanged(nameof(this.UnsavedChanges));
         }
+
+        internal void RegisterUnsavedChange() => this.UnsavedChanges = true;
 
         internal void Save()
         {
@@ -163,27 +178,6 @@ namespace KoAR.SaveEditor.Views.Main
         private void AddItemBuff(uint buffId) => this._selectedItem?.AddItemBuff(Amalur.GetBuff(buffId));
 
         private void AddPlayerBuff(uint buffId) => this._selectedItem?.AddPlayerBuff(Amalur.GetBuff(buffId));
-
-        private void AddStashItem()
-        {
-            if (this._gameSave?.Stash == null)
-            {
-                return;
-            }
-            ChangeOrAddItemViewModel viewModel = new ChangeOrAddItemViewModel();
-            ChangeOrAddItemView view = new ChangeOrAddItemView
-            {
-                Owner = Application.Current.MainWindow,
-                DataContext = viewModel
-            };
-            if (view.ShowDialog() == true && viewModel.Definition != null)
-            {
-                this._gameSave.Stash.AddItem(viewModel.Definition);
-                this.UnsavedChanges = true;
-                this.OnPropertyChanged(nameof(this.Stash));
-                this.RepopulateItems(regenerate: true);
-            }
-        }
 
         private bool CanAddItemBuff(uint buffId) => this._selectedItem != null && buffId != 0u;
 
@@ -215,18 +209,6 @@ namespace KoAR.SaveEditor.Views.Main
         private void DeleteItemBuff(Buff buff) => this._selectedItem?.RemoveItemBuff(buff);
 
         private void DeletePlayerBuff(Buff buff) => this._selectedItem?.RemovePlayerBuff(buff);
-
-        private bool? GetAppliesToAllItems(Func<ItemModel, bool> projection)
-        {
-            if (this.FilteredItems.Count == 0)
-            {
-                return true;
-            }
-            bool first = projection(this.FilteredItems[0]);
-            return this.FilteredItems.Skip(1).Select(projection).Any(value => value != first)
-                ? default(bool?)
-                : first;
-        }
 
         private void Item_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -260,6 +242,17 @@ namespace KoAR.SaveEditor.Views.Main
             this.OnPropertyChanged(nameof(this.AllItemsStolen));
             this.OnPropertyChanged(nameof(this.AllItemsUnsellable));
             this.OnPropertyChanged(nameof(this.AllItemsUnstashable));
+        }
+
+        private void OpenStashManager()
+        {
+            using StashManagerViewModel viewModel = new StashManagerViewModel(this);
+            StashManagerView view = new StashManagerView
+            {
+                Owner = Application.Current.MainWindow,
+                DataContext = viewModel
+            };
+            view.ShowDialog();
         }
 
         private void RepopulateItems(bool regenerate = false)

@@ -37,7 +37,7 @@
                             <Setter Property="constructs:TextBoxUpdateSource.UpdateOnEnter" Value="{Binding IsVisible, RelativeSource={RelativeSource Self}}" />
                         </Style>
                     </ControlTemplate.Resources>
-                    <ListView x:Name="PART_ListView" ItemsSource="{Binding CollectionView, RelativeSource={RelativeSource TemplatedParent}}" 
+                    <ListView x:Name="PART_ListView" ItemsSource="{TemplateBinding CollectionView}" 
                         SelectedItem="{Binding SelectedItem, RelativeSource={RelativeSource TemplatedParent}}" VirtualizingPanel.IsVirtualizing="True"
                         BorderBrush="LightGray" SelectionMode="Single" FocusVisualStyle="{x:Null}" VirtualizingPanel.ScrollUnit="Pixel"
                         TextSearch.TextPath="ItemId" AlternationCount="2">
@@ -107,7 +107,7 @@
                             <GridView AllowsColumnReorder="True">
                                 <GridViewColumn Header="Level" Width="Auto" views:ItemCollectionManager.PropertyName="Level">
                                     <GridViewColumn.CellTemplate>
-                                        <DataTemplate DataType="{x:Type views:ItemModel}">
+                                        <DataTemplate DataType="{x:Type views:ItemModelBase}">
                                             <Grid>
                                                 <TextBlock Text="{Binding Level}" TextAlignment="Right">
                                                     <TextBlock.Style>
@@ -137,7 +137,7 @@
                                 </GridViewColumn>
                                 <GridViewColumn Header="Name" Width="Auto" views:ItemCollectionManager.PropertyName="DisplayName">
                                     <GridViewColumn.CellTemplate>
-                                        <DataTemplate DataType="{x:Type views:ItemModel}">
+                                        <DataTemplate DataType="{x:Type views:ItemModelBase}">
                                             <Grid>
                                                 <views:TypeDefinitionControl Item="{Binding}">
                                                     <views:TypeDefinitionControl.Style>
@@ -158,7 +158,7 @@
                                 </GridViewColumn>
                                 <GridViewColumn Header="Cur Durability" Width="Auto" views:ItemCollectionManager.PropertyName="CurrentDurability">
                                     <GridViewColumn.CellTemplate>
-                                        <DataTemplate DataType="{x:Type views:ItemModel}">
+                                        <DataTemplate DataType="{x:Type views:ItemModelBase}">
                                             <Grid>
                                                 <Grid.Style>
                                                     <Style TargetType="{x:Type Grid}">
@@ -199,7 +199,7 @@
                                 </GridViewColumn>
                                 <GridViewColumn Header="Max Durability" Width="Auto" views:ItemCollectionManager.PropertyName="MaxDurability">
                                     <GridViewColumn.CellTemplate>
-                                        <DataTemplate DataType="{x:Type views:ItemModel}">
+                                        <DataTemplate DataType="{x:Type views:ItemModelBase}">
                                             <Grid>
                                                 <Grid.Style>
                                                     <Style TargetType="{x:Type Grid}">
@@ -242,13 +242,15 @@
                                     <GridViewColumn.Header>
                                         <StackPanel Orientation="Horizontal">
                                             <CheckBox Margin="2" FocusVisualStyle="{x:Null}" VerticalAlignment="Center"
-                                                IsChecked="{Binding AllItemsStolen, RelativeSource={RelativeSource TemplatedParent}}" />
+                                                IsChecked="{Binding AllItemsStolen, RelativeSource={RelativeSource TemplatedParent}}" 
+                                                IsEnabled="{Binding IsStash, RelativeSource={RelativeSource AncestorType={x:Type views:ItemCollectionManager}}, Converter={StaticResource NegatedBooleanConverter}}" />
                                             <TextBlock Text="Stolen?" VerticalAlignment="Center" />
                                         </StackPanel>
                                     </GridViewColumn.Header>
                                     <GridViewColumn.CellTemplate>
-                                        <DataTemplate DataType="{x:Type views:ItemModel}">
-                                            <CheckBox FocusVisualStyle="{x:Null}" HorizontalAlignment="Center" IsChecked="{Binding IsStolen}" />
+                                        <DataTemplate DataType="{x:Type views:ItemModelBase}">
+                                            <CheckBox FocusVisualStyle="{x:Null}" HorizontalAlignment="Center" IsChecked="{Binding IsStolen}" 
+                                                IsEnabled="{Binding IsStash, RelativeSource={RelativeSource AncestorType={x:Type views:ItemCollectionManager}}, Converter={StaticResource NegatedBooleanConverter}}" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
@@ -256,13 +258,15 @@
                                     <GridViewColumn.Header>
                                         <StackPanel Orientation="Horizontal">
                                             <CheckBox Margin="2" FocusVisualStyle="{x:Null}" VerticalAlignment="Center"
-                                                IsChecked="{Binding AllItemsUnsellable, Converter={StaticResource NegatedBooleanConverter}, RelativeSource={RelativeSource TemplatedParent}}" />
+                                                IsChecked="{Binding AllItemsUnsellable, Converter={StaticResource NegatedBooleanConverter}, RelativeSource={RelativeSource TemplatedParent}}" 
+                                                IsEnabled="{Binding IsStash, RelativeSource={RelativeSource AncestorType={x:Type views:ItemCollectionManager}}, Converter={StaticResource NegatedBooleanConverter}}" />
                                             <TextBlock Text="Sellable?" VerticalAlignment="Center" />
                                         </StackPanel>
                                     </GridViewColumn.Header>
                                     <GridViewColumn.CellTemplate>
-                                        <DataTemplate DataType="{x:Type views:ItemModel}">
-                                            <CheckBox FocusVisualStyle="{x:Null}" HorizontalAlignment="Center" IsChecked="{Binding IsUnsellable, Converter={StaticResource NegatedBooleanConverter}}" />
+                                        <DataTemplate DataType="{x:Type views:ItemModelBase}">
+                                            <CheckBox FocusVisualStyle="{x:Null}" HorizontalAlignment="Center" IsChecked="{Binding IsUnsellable, Converter={StaticResource NegatedBooleanConverter}}" 
+                                                IsEnabled="{Binding IsStash, RelativeSource={RelativeSource AncestorType={x:Type views:ItemCollectionManager}}, Converter={StaticResource NegatedBooleanConverter}}" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
@@ -270,19 +274,21 @@
                                     <GridViewColumn.Header>
                                         <StackPanel Orientation="Horizontal">
                                             <CheckBox Margin="2" FocusVisualStyle="{x:Null}" VerticalAlignment="Center"
-                                                IsChecked="{Binding AllItemsUnstashable, Converter={StaticResource NegatedBooleanConverter}, RelativeSource={RelativeSource TemplatedParent}}" />
+                                                IsChecked="{Binding AllItemsUnstashable, Converter={StaticResource NegatedBooleanConverter}, RelativeSource={RelativeSource TemplatedParent}}" 
+                                                IsEnabled="{Binding IsStash, RelativeSource={RelativeSource AncestorType={x:Type views:ItemCollectionManager}}, Converter={StaticResource NegatedBooleanConverter}}" />
                                             <TextBlock Text="Stashable?" VerticalAlignment="Center" />
                                         </StackPanel>
                                     </GridViewColumn.Header>
                                     <GridViewColumn.CellTemplate>
-                                        <DataTemplate DataType="{x:Type views:ItemModel}">
-                                            <CheckBox FocusVisualStyle="{x:Null}" HorizontalAlignment="Center" IsChecked="{Binding IsUnstashable, Converter={StaticResource NegatedBooleanConverter}}" />
+                                        <DataTemplate DataType="{x:Type views:ItemModelBase}">
+                                            <CheckBox FocusVisualStyle="{x:Null}" HorizontalAlignment="Center" IsChecked="{Binding IsUnstashable, Converter={StaticResource NegatedBooleanConverter}}" 
+                                                IsEnabled="{Binding IsStash, RelativeSource={RelativeSource AncestorType={x:Type views:ItemCollectionManager}}, Converter={StaticResource NegatedBooleanConverter}}" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
                                 <GridViewColumn Header="Prefix/Suffix" Width="Auto" views:ItemCollectionManager.PropertyName="AffixCount">
                                     <GridViewColumn.CellTemplate>
-                                        <DataTemplate DataType="{x:Type views:ItemModel}">
+                                        <DataTemplate DataType="{x:Type views:ItemModelBase}">
                                             <DataTemplate.Resources>
                                                 <Style TargetType="{x:Type ToolTip}" BasedOn="{StaticResource {x:Type ToolTip}}">
                                                     <Setter Property="ContentTemplate" Value="{StaticResource BuffToolTipTemplate}" />
@@ -305,7 +311,7 @@
                                 </GridViewColumn>
                                 <GridViewColumn Header="Item Buffs" Width="Auto" views:ItemCollectionManager.PropertyName="ItemBuffs.Count">
                                     <GridViewColumn.CellTemplate>
-                                        <DataTemplate DataType="{x:Type views:ItemModel}">
+                                        <DataTemplate DataType="{x:Type views:ItemModelBase}">
                                             <ItemsControl ItemsSource="{Binding ItemBuffs}" MinWidth="88">
                                                 <ItemsControl.ItemsPanel>
                                                     <ItemsPanelTemplate>
@@ -328,7 +334,7 @@
                                 </GridViewColumn>
                                 <GridViewColumn Header="Player Buffs" Width="Auto" views:ItemCollectionManager.PropertyName="PlayerBuffs.Count">
                                     <GridViewColumn.CellTemplate>
-                                        <DataTemplate DataType="{x:Type views:ItemModel}">
+                                        <DataTemplate DataType="{x:Type views:ItemModelBase}">
                                             <ItemsControl ItemsSource="{Binding PlayerBuffs}" MinWidth="88">
                                                 <ItemsControl.ItemsPanel>
                                                     <ItemsPanelTemplate>

@@ -9,6 +9,8 @@ namespace KoAR.SaveEditor.Views.ChangeOrAddItem
 {
     public sealed class ChangeOrAddItemViewModel : NotifierBase
     {
+        private static readonly EquipmentCategory _firstCategory = ((EquipmentCategory[])Enum.GetValues(typeof(EquipmentCategory)))[0];
+
         private ArmorType _armorTypeFilter;
         private EquipmentCategory _category;
         private TypeDefinition? _definition;
@@ -19,7 +21,7 @@ namespace KoAR.SaveEditor.Views.ChangeOrAddItem
         public ChangeOrAddItemViewModel(ItemModel? item = null)
         {
             this._definition = (this.Item = item)?.TypeDefinition ?? Amalur.TypeDefinitions.Values.First();
-            this._category = item?.Category ?? default;
+            this._category = item?.Category ?? ChangeOrAddItemViewModel._firstCategory;
             this.ProcessCommand = new DelegateCommand(this.Process, this.CanProcess);
             this.OnFilterChanged();
         }

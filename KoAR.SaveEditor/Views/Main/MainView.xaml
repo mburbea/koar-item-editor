@@ -17,9 +17,6 @@
                 <ResourceDictionary Source="/KoAR.SaveEditor;component/Constructs/TextBoxErrorTemplate.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <ObjectDataProvider x:Key="ViewModel" ObjectType="{x:Type local:MainViewModel}" />
-            <constructs:NegatedBooleanConverter x:Key="NegatedBooleanConverter" />
-            <constructs:StringIsNullOrEmptyConverter x:Key="StringIsNullOrEmptyConverter" />
-            <constructs:LittleEndianConverter x:Key="LittleEndianConverter" />
         </ResourceDictionary>
     </Window.Resources>
     <Window.DataContext>
@@ -32,6 +29,9 @@
     </Window.InputBindings>
     <Window.Style>
         <Style TargetType="{x:Type Window}" BasedOn="{StaticResource {x:Type Window}}">
+            <Style.Resources>
+                <constructs:StringIsNullOrEmptyConverter x:Key="StringIsNullOrEmptyConverter" />
+            </Style.Resources>
             <Style.Triggers>
                 <DataTrigger Binding="{Binding FileName, Converter={StaticResource StringIsNullOrEmptyConverter}}" Value="False">
                     <Setter Property="Title" Value="{Binding FileName, StringFormat='{}{0} - KoAR Save Editor'}" />
@@ -47,8 +47,13 @@
             <Setter Property="Title" Value="KoAR Save Editor" />
         </Style>
     </Window.Style>
-    <DockPanel>
-        <Border DockPanel.Dock="Top" Background="Transparent" BorderBrush="{x:Static SystemColors.ActiveBorderBrush}" BorderThickness="0,0,0,1">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Border Background="Transparent" BorderBrush="{x:Static SystemColors.ActiveBorderBrush}" BorderThickness="0,0,0,1">
             <Border.Resources>
                 <Style TargetType="{x:Type Button}">
                     <Setter Property="Template">
@@ -89,26 +94,7 @@
                 <Button ToolTip="Help" Command="Help" Tag="{StaticResource Help}" />
             </StackPanel>
         </Border>
-        <Border DockPanel.Dock="Bottom" Background="{x:Static SystemColors.ControlBrush}" Padding="4">
-            <Grid>
-                <Grid.Style>
-                    <Style TargetType="{x:Type Grid}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding FileName}" Value="{x:Null}">
-                                <Setter Property="Visibility" Value="Hidden" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Grid.Style>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="150" />
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="{Binding FilteredItems.Count, StringFormat='Count: {0}'}" VerticalAlignment="Center" />
-                <views:ZoomScaler Grid.Column="1" Target="{Binding ElementName=PART_MainGrid}" VerticalAlignment="Center" />
-            </Grid>
-        </Border>
-        <Grid x:Name="PART_MainGrid">
+        <Grid x:Name="PART_MainGrid" Grid.Row="1">
             <Grid.Resources>
                 <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
                     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
@@ -130,13 +116,13 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <Grid>
+            <Grid Margin="4">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <views:ItemFiltersEditor Margin="4,4,4,0" Items="{Binding Items}" ItemFilters="{Binding ItemFilters}" />
-                <views:ItemCollectionManager Grid.Row="2" Margin="4,0,4,4" Items="{Binding FilteredItems}" SelectedItem="{Binding SelectedItem}" RowDoubleClickCommand="{Binding ChangeDefinitionCommand}"
+                <views:ItemFiltersEditor Items="{Binding Items}" ItemFilters="{Binding ItemFilters}" />
+                <views:ItemCollectionManager Grid.Row="1" Items="{Binding FilteredItems}" SelectedItem="{Binding SelectedItem}" RowDoubleClickCommand="{Binding ChangeDefinitionCommand}"
                     AllItemsUnstashable="{Binding AllItemsUnstashable}" AllItemsUnsellable="{Binding AllItemsUnsellable}" AllItemsStolen="{Binding AllItemsStolen}" />
             </Grid>
             <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Stretch" Background="{x:Static SystemColors.ControlBrush}" FocusVisualStyle="{x:Null}" />
@@ -182,7 +168,7 @@
                                 </Style>
                             </TextBox.Style>
                         </TextBox>
-                        <Button Grid.Row="1" Grid.Column="2" Margin="2" Command="{Binding AddStashItemCommand}" Content="_Add Item" FocusVisualStyle="{x:Null}" />
+                        <Button Grid.Row="1" Grid.Column="2" Margin="2" Command="{Binding OpenStashManagerCommand}" Content="Stash Manager" FocusVisualStyle="{x:Null}" />
                     </Grid>
                 </GroupBox>
                 <ScrollViewer Grid.Row="1" FocusVisualStyle="{x:Null}" Margin="0,0,4,4" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
@@ -279,5 +265,24 @@
                 </ScrollViewer>
             </Grid>
         </Grid>
-    </DockPanel>
+        <Border Grid.Row="2" Background="{x:Static SystemColors.ControlBrush}" Padding="4">
+            <Grid>
+                <Grid.Style>
+                    <Style TargetType="{x:Type Grid}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding FileName}" Value="{x:Null}">
+                                <Setter Property="Visibility" Value="Hidden" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="150" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{Binding FilteredItems.Count, StringFormat='Count: {0}'}" VerticalAlignment="Center" />
+                <views:ZoomScaler Grid.Column="1" Target="{Binding ElementName=PART_MainGrid}" VerticalAlignment="Center" />
+            </Grid>
+        </Border>
+    </Grid>
 </Window>

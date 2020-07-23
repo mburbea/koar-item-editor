@@ -23,9 +23,10 @@ namespace KoAR.SaveEditor.Views
 
         private static void AttachToTarget(FrameworkElement target)
         {
-            if (!target.IsInitialized)
+            Window? window = target as Window ?? Window.GetWindow(target);
+            if (window == null)
             {
-                target.Initialized += ZoomScaler.Target_Initialized;
+                target.Loaded += ZoomScaler.Target_Loaded;
                 return;
             }
             ScaleTransform transform = new ScaleTransform();
@@ -33,29 +34,43 @@ namespace KoAR.SaveEditor.Views
             BindingOperations.SetBinding(transform, ScaleTransform.ScaleXProperty, binding);
             BindingOperations.SetBinding(transform, ScaleTransform.ScaleYProperty, binding);
             target.LayoutTransform = transform;
-            if (PresentationSource.FromVisual(target)?.RootVisual is UIElement rootElement)
-            {
-                rootElement.AddHandler(UIElement.PreviewKeyDownEvent, new KeyEventHandler(ZoomScaler.RootElement_PreviewKeyDown));
-                rootElement.AddHandler(UIElement.PreviewMouseWheelEvent, new MouseWheelEventHandler(ZoomScaler.RootElement_PreviewMouseWheel));
-            }
+            window.AddHandler(UIElement.PreviewKeyDownEvent, new KeyEventHandler(ZoomScaler.Window_PreviewKeyDown));
+            window.AddHandler(UIElement.PreviewMouseWheelEvent, new MouseWheelEventHandler(ZoomScaler.Window_PreviewMouseWheel));
         }
 
         private static void DetachFromTarget(FrameworkElement target)
         {
-            if (!target.IsInitialized)
+            Window? window = target as Window ?? Window.GetWindow(target);
+            if (window == null)
             {
-                target.Initialized -= ZoomScaler.Target_Initialized;
+                target.Loaded -= ZoomScaler.Target_Loaded;
                 return;
             }
             target.LayoutTransform = null;
-            if (PresentationSource.FromVisual(target)?.RootVisual is UIElement rootElement)
+            window.RemoveHandler(UIElement.PreviewKeyDownEvent, new KeyEventHandler(ZoomScaler.Window_PreviewKeyDown));
+            window.RemoveHandler(UIElement.PreviewMouseWheelEvent, new MouseWheelEventHandler(ZoomScaler.Window_PreviewMouseWheel));
+        }
+
+        private static void Target_Loaded(object sender, RoutedEventArgs e)
+        {
+            FrameworkElement target = (FrameworkElement)sender;
+            target.Loaded -= ZoomScaler.Target_Loaded;
+            ZoomScaler.AttachToTarget(target);
+        }
+
+        private static void TargetProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (e.OldValue != null)
             {
-                rootElement.RemoveHandler(UIElement.PreviewKeyDownEvent, new KeyEventHandler(ZoomScaler.RootElement_PreviewKeyDown));
-                rootElement.RemoveHandler(UIElement.PreviewMouseWheelEvent, new MouseWheelEventHandler(ZoomScaler.RootElement_PreviewMouseWheel));
+                ZoomScaler.DetachFromTarget((FrameworkElement)e.OldValue);
+            }
+            if (e.NewValue != null)
+            {
+                ZoomScaler.AttachToTarget((FrameworkElement)e.NewValue);
             }
         }
 
-        private static void RootElement_PreviewKeyDown(object sender, KeyEventArgs e)
+        private static void Window_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if ((Keyboard.Modifiers & ModifierKeys.Control) != ModifierKeys.Control)
             {
@@ -71,7 +86,7 @@ namespace KoAR.SaveEditor.Views
             };
         }
 
-        private static void RootElement_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        private static void Window_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             if ((Keyboard.Modifiers & ModifierKeys.Control) != ModifierKeys.Control)
             {
@@ -83,25 +98,6 @@ namespace KoAR.SaveEditor.Views
                 -1 => Math.Max(Settings.Default.MinZoomScale, Settings.Default.ZoomScale - 0.05),
                 _ => Settings.Default.ZoomScale,
             };
-        }
-
-        private static void Target_Initialized(object sender, EventArgs e)
-        {
-            FrameworkElement target = (FrameworkElement)sender;
-            target.Initialized -= ZoomScaler.Target_Initialized;
-            ZoomScaler.AttachToTarget(target);
-        }
-
-        private static void TargetProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if (e.OldValue != null)
-            {
-                ZoomScaler.DetachFromTarget((FrameworkElement)e.OldValue);
-            }
-            if (e.NewValue != null)
-            {
-                ZoomScaler.AttachToTarget((FrameworkElement)e.NewValue);
-            }
         }
     }
 }
