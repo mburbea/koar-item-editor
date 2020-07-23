@@ -105,15 +105,10 @@ namespace KoAR.Core
             {
                 var (itemOffset, itemLength) = itemMemoryLocs[id];
                 var (itemBuffsOffset, itemBuffsLength) = itemBuffLocs[id];
-                var itemGems = ItemGems.Empty;
+                var (itemGemsOffset, itemGemsLength) = itemGemLocs[id];
                 if (BitConverter.ToInt32(Bytes, itemOffset + 17) == playerActor)
                 {
-                    if (definition.Sockets.Any())
-                    {
-                        var (itemGemOffset, itemGemsLength) = itemGemLocs[id];
-                        itemGems = new ItemGems(this, itemGemOffset, itemGemsLength);
-                    }
-                    Items.Add(new Item(this, typeIdOffset, itemOffset, itemLength, itemBuffsOffset, itemBuffsLength, itemGems));
+                    Items.Add(new Item(this, typeIdOffset, itemOffset, itemLength, itemBuffsOffset, itemBuffsLength, itemGemsOffset, itemGemsLength));
                 }
             }
         }

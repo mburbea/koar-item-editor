@@ -50,7 +50,7 @@ namespace KoAR.Core
                     Converters = { new JsonStringEnumConverter() }
                 }));
             BuffMap.AddRange(Buffs.Select(x => (x.Id, x)));
-            if(!File.Exists(fileName = Path.Combine(path, "gemDefinitions.csv")))
+            if (!File.Exists(fileName = Path.Combine(path, "gemDefinitions.csv")))
             {
                 throw new InvalidOperationException($"Cannot find {Path.GetFileName(fileName)}");
             }

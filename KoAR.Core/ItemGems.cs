@@ -7,7 +7,6 @@ namespace KoAR.Core
 {
     public class ItemGems
     {
-        internal static ItemGems Empty { get; } =  new ItemGems();
         private static class Offsets
         {
             public const int DataLength = 13;
@@ -29,10 +28,6 @@ namespace KoAR.Core
             {
                 Gems[i] = gameSave.Gems.GetOrDefault(gemIds[i]);
             }
-        }
-
-        private ItemGems()
-        {
         }
 
         private int DataLength
