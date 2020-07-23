@@ -10,10 +10,6 @@ namespace KoAR.SaveEditor.Views.Main
 {
     partial class MainView
     {
-        public const double MaxScaleFactor = 3.75;
-
-        public const double MinScaleFactor = 0.25;
-
         static MainView() => CommandManager.RegisterClassCommandBinding(typeof(MainView), new CommandBinding(ApplicationCommands.Help, MainView.DisplayHelp));
 
         public MainView()
@@ -62,36 +58,6 @@ namespace KoAR.SaveEditor.Views.Main
                 }
             }
             base.OnClosing(e);
-        }
-
-        protected override void OnKeyDown(KeyEventArgs e)
-        {
-            if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
-            {
-                Settings.Default.ZoomScale = e.Key switch
-                {
-                    Key.D0 => 1d,
-                    Key.NumPad0 => 1d,
-                    Key.OemPlus => Math.Min(MainView.MaxScaleFactor, Settings.Default.ZoomScale + 0.05),
-                    Key.OemMinus => Math.Max(MainView.MinScaleFactor, Settings.Default.ZoomScale - 0.05),
-                    _ => Settings.Default.ZoomScale,
-                };
-            }
-            base.OnKeyDown(e);
-        }
-
-        protected override void OnPreviewMouseWheel(MouseWheelEventArgs e)
-        {
-            if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
-            {
-                Settings.Default.ZoomScale = Math.Sign(e.Delta) switch
-                {
-                    1 => Math.Min(MainView.MaxScaleFactor, Settings.Default.ZoomScale + 0.05),
-                    -1 => Math.Max(MainView.MinScaleFactor, Settings.Default.ZoomScale - 0.05),
-                    _ => Settings.Default.ZoomScale,
-                };
-            }
-            base.OnPreviewMouseWheel(e);
         }
 
         private static void DisplayHelp(object sender, ExecutedRoutedEventArgs e)

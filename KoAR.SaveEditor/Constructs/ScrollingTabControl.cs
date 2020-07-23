@@ -6,7 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
-namespace KoAR.SaveEditor.Views
+namespace KoAR.SaveEditor.Constructs
 {
     public sealed class ScrollingTabControl : TabControl
     {
@@ -64,17 +64,16 @@ namespace KoAR.SaveEditor.Views
 
         private TabItem? GetItemByOffset(double offset)
         {
-            List<TabItem> tabItems = this.GetTabItems().ToList();
-            double width = default;
-            foreach (TabItem tabItem in tabItems)
+            TabItem? last = default;
+            double width = 0d;
+            foreach (TabItem tabItem in this.GetTabItems())
             {
-                if (width + tabItem.ActualWidth >= offset)
+                if ((width += (last = tabItem).ActualWidth) >= offset)
                 {
                     return tabItem;
                 }
-                width += tabItem.ActualWidth;
             }
-            return tabItems.LastOrDefault();
+            return last;
         }
 
         private IEnumerable<TabItem> GetTabItems()
@@ -94,11 +93,11 @@ namespace KoAR.SaveEditor.Views
             {
                 return;
             }
-            double offset = Math.Max(this._scrollViewer.HorizontalOffset - this._headerPanel.Margin.Left - 2d, 0d);
-            TabItem? leftItem = this.GetItemByOffset(offset);
-            if (leftItem != null)
+            double offset = Math.Max(this._scrollViewer.HorizontalOffset - 2d, 0d);
+            TabItem? tabItem = this.GetItemByOffset(offset);
+            if (tabItem != null)
             {
-                this.ScrollToItem(leftItem);
+                this.ScrollToItem(tabItem);
             }
         }
 
@@ -108,44 +107,28 @@ namespace KoAR.SaveEditor.Views
             {
                 return;
             }
-            double offset = Math.Min(this._scrollViewer.HorizontalOffset + this._scrollViewer.ViewportWidth + this._headerPanel.Margin.Left + 2d, this._scrollViewer.ExtentWidth);
-            TabItem? rightItem = this.GetItemByOffset(offset);
-            if (rightItem != null)
+            double offset = Math.Min(this._scrollViewer.HorizontalOffset + this._scrollViewer.ViewportWidth + 2d, this._scrollViewer.ExtentWidth);
+            TabItem? tabItem = this.GetItemByOffset(offset);
+            if (tabItem != null)
             {
-                this.ScrollToItem(rightItem);
+                this.ScrollToItem(tabItem);
             }
         }
 
-        private void ScrollToItem(TabItem tabItem)
+        private void ScrollToItem(TabItem item)
         {
-            if (this._scrollViewer == null || this._headerPanel == null)
+            if (this._scrollViewer == null)
             {
                 return;
             }
-            double leftItemsWidth = 0d;
-            bool anySelected = false;
-            foreach (TabItem leftItem in this.GetTabItems().TakeWhile(item => item != tabItem))
+            double precedingItemsWidth = this.GetTabItems().TakeWhile(tabItem => tabItem != item).Sum(tabItem => tabItem.ActualWidth);
+            if (precedingItemsWidth + item.ActualWidth > this._scrollViewer.HorizontalOffset + this._scrollViewer.ViewportWidth)
             {
-                anySelected = anySelected || leftItem.IsSelected;
-                leftItemsWidth += leftItem.ActualWidth;
+                this._scrollViewer.ScrollToHorizontalOffset(precedingItemsWidth + item.ActualWidth - this._scrollViewer.ViewportWidth);
             }
-            if (leftItemsWidth + tabItem.ActualWidth > this._scrollViewer.HorizontalOffset + this._scrollViewer.ViewportWidth)
+            else if (precedingItemsWidth < this._scrollViewer.HorizontalOffset)
             {
-                double offset = leftItemsWidth + tabItem.ActualWidth - this._scrollViewer.ViewportWidth;
-                if (anySelected || tabItem.IsSelected)
-                {
-                    offset += this._headerPanel.Margin.Left + this._headerPanel.Margin.Right;
-                }
-                this._scrollViewer.ScrollToHorizontalOffset(offset);
-            }
-            else if (leftItemsWidth < this._scrollViewer.HorizontalOffset)
-            {
-                double offset = leftItemsWidth;
-                if (anySelected)
-                {
-                    offset -= (this._headerPanel.Margin.Left + this._headerPanel.Margin.Right);
-                }
-                this._scrollViewer.ScrollToHorizontalOffset(offset);
+                this._scrollViewer.ScrollToHorizontalOffset(precedingItemsWidth);
             }
         }
 

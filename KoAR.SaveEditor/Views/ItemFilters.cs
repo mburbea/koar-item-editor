@@ -10,7 +10,7 @@ namespace KoAR.SaveEditor.Views
     public sealed class ItemFilters : NotifierBase
     {
         private int _armorType;
-        private EquipmentCategory? _category;
+        private int _category;
         private int _element;
         private string _itemName = string.Empty;
         private int _rarity;
@@ -34,12 +34,12 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        public EquipmentCategory? Category
+        public EquipmentCategory Category
         {
-            get => this._category;
+            get => (EquipmentCategory)this._category;
             set
             {
-                if (this.SetValue(ref this._category, value))
+                if (this.SetValue(ref this._category, (int)value))
                 {
                     this.OnFilterChange();
                 }
@@ -100,7 +100,7 @@ namespace KoAR.SaveEditor.Views
             {
                 collection = collection.Where(model => model.TypeDefinition.ArmorType == this.ArmorType);
             }
-            if (this.Category.HasValue)
+            if (this.Category!=default)
             {
                 collection = collection.Where(model => model.Category == this.Category);
             }
@@ -129,9 +129,8 @@ namespace KoAR.SaveEditor.Views
             {
                 this.OnPropertyChanged(nameof(this.ArmorType));
             }
-            if (resetCategory && this._category.HasValue)
+            if (resetCategory && Interlocked.Exchange(ref this._category, default) != default)
             {
-                this._category = default;
                 this.OnPropertyChanged(nameof(this.Category));
             }
             this.OnFilterChange();

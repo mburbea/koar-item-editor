@@ -31,7 +31,8 @@ namespace KoAR.SaveEditor.Views
                 foreach (object value in values.Where(value => value != null))
                 {
                     string text = value.ToString();
-                    if (value is Enum && text == "None")
+                    // This test only works for us because we know that the enums that are passed to this converter are backed by Int32.
+                    if (value is Enum && (int)value == default)
                     {
                         continue;
                     }

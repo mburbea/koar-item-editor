@@ -10,7 +10,7 @@ namespace KoAR.SaveEditor
         [STAThread]
         private static void Main()
         {
-            Type.GetTypeCode(typeof(PlatformCulture)); // Only needed due to support WPF loading of Aero dll.
+            Type.GetTypeCode(typeof(PlatformCulture)); // Needed to enforce loading of PresentationFramework.Aero.dll before initializing App.
             Amalur.Initialize();
             App app = new App();
             app.InitializeComponent();

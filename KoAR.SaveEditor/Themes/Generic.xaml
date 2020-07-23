@@ -1,7 +1,5 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
     <ResourceDictionary.MergedDictionaries>
-        <!-- Aero -->
-        <ResourceDictionary Source="/PresentationFramework.Aero;component/Themes/Aero.NormalColor.xaml" />
         <!-- Views -->
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.BuffCollectionManager.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.BuffControl.xaml" />
@@ -15,6 +13,7 @@
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.EquipmentCategoryIcon.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.TypeDefinitionControl.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.ItemCollectionManager.xaml" />
+        <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.ZoomScaler.xaml" />
         <!-- Constructs -->
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.ScrollingTabControl.xaml" />
     </ResourceDictionary.MergedDictionaries>

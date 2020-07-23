@@ -2,11 +2,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
     xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
-    xmlns:local="clr-namespace:KoAR.SaveEditor.Views">
+    xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/PresentationFramework.Aero;component/Themes/Aero.NormalColor.xaml" />
     </ResourceDictionary.MergedDictionaries>
-    <Style TargetType="{x:Type local:ScrollingTabControl}">
+    <Style TargetType="{x:Type constructs:ScrollingTabControl}">
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="ItemContainerStyle">
             <Setter.Value>
@@ -17,7 +17,7 @@
         </Setter>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type local:ScrollingTabControl}">
+                <ControlTemplate TargetType="{x:Type constructs:ScrollingTabControl}">
                     <Grid ClipToBounds="True" SnapsToDevicePixels="True" KeyboardNavigation.TabNavigation="Local">
                         <Grid.Resources>
                             <LinearGradientBrush x:Key="ButtonNormalBackground" po:Freeze="True" StartPoint="0,0" EndPoint="0,1">

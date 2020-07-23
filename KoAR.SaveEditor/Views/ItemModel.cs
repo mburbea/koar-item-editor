@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Runtime.CompilerServices;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
 
@@ -82,7 +81,7 @@ namespace KoAR.SaveEditor.Views
             get => base.Prefix;
             set
             {
-                if (this.SetItemValue(value, $"{nameof(this.Item.ItemBuffs)}.{nameof(ItemBuffMemory.Prefix)}"))
+                if (this.SetItemValue(value, $"{nameof(IItem.ItemBuffs)}.{nameof(this.Prefix)}"))
                 {
                     this.OnPropertyChanged(nameof(this.AffixCount));
                 }
@@ -94,7 +93,7 @@ namespace KoAR.SaveEditor.Views
             get => base.Suffix;
             set
             {
-                if (this.SetItemValue(value, $"{nameof(this.Item.ItemBuffs)}.{nameof(ItemBuffMemory.Suffix)}"))
+                if (this.SetItemValue(value, $"{nameof(IItem.ItemBuffs)}.{nameof(this.Suffix)}"))
                 {
                     this.OnPropertyChanged(nameof(this.AffixCount));
                 }

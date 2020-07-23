@@ -8,7 +8,6 @@
     xmlns:local="clr-namespace:KoAR.SaveEditor.Views.Main"
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs" 
     xmlns:core="clr-namespace:KoAR.Core;assembly=KoAR.Core"
-    xmlns:p="clr-namespace:KoAR.SaveEditor.Properties"
     xmlns:s="clr-namespace:System;assembly=mscorlib"
     mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type local:MainViewModel}}"
     Width="1366" Height="768" WindowStartupLocation="CenterScreen" 
@@ -19,18 +18,20 @@
                 <ResourceDictionary Source="/KoAR.SaveEditor;component/Constructs/TextBoxErrorTemplate.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <ObjectDataProvider x:Key="ViewModel" ObjectType="{x:Type local:MainViewModel}" />
+            <constructs:ArrayConverter x:Key="ArrayConverter" />
             <constructs:NegatedBooleanConverter x:Key="NegatedBooleanConverter" />
             <constructs:StringIsNullOrEmptyConverter x:Key="StringIsNullOrEmptyConverter" />
             <constructs:LittleEndianConverter x:Key="LittleEndianConverter" />
-            <constructs:EqualityConverter x:Key="EqualityConverter" />
-            <ObjectDataProvider x:Key="Categories" ObjectType="{x:Type s:Enum}" MethodName="GetValues">
+            <constructs:EqualityConverter x:Key="EqualityConverter" />            
+            <core:EquipmentCategory x:Key="AllCategory">0</core:EquipmentCategory>
+            <ObjectDataProvider x:Key="CategoryValues" ObjectType="{x:Type s:Enum}" MethodName="GetValues">
                 <ObjectDataProvider.MethodParameters>
                     <x:Type TypeName="core:EquipmentCategory" />
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
-            <CompositeCollection x:Key="CategoryContainers">
-                <CollectionContainer Collection="{Binding Source={x:Static constructs:DataContainer.Empty}, Converter={x:Static constructs:DataContainer.CollectionConverter}}" />
-                <CollectionContainer Collection="{Binding Source={StaticResource Categories}, Converter={x:Static constructs:DataContainer.CollectionConverter}}" />
+            <CompositeCollection x:Key="Categories">
+                <CollectionContainer Collection="{Binding Source={StaticResource AllCategory}, Converter={StaticResource ArrayConverter}}" />
+                <CollectionContainer Collection="{Binding Source={StaticResource CategoryValues}}" />
             </CompositeCollection>
         </ResourceDictionary>
     </Window.Resources>
@@ -114,22 +115,13 @@
                 </Grid.Style>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="120" />
+                    <ColumnDefinition Width="150" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="{Binding FilteredItems.Count, StringFormat='Count: {0}'}" VerticalAlignment="Center" />
-                <TextBlock Grid.Column="1" Text="{Binding ZoomScale, Source={x:Static p:Settings.Default}, StringFormat='##0%'}" VerticalAlignment="Center" TextAlignment="Right" />
-                <Slider Grid.Column="2" Value="{Binding ZoomScale, Source={x:Static p:Settings.Default}}" FocusVisualStyle="{x:Null}" Margin="4,0,8,0" VerticalAlignment="Center" 
-                    Minimum="{x:Static local:MainView.MinScaleFactor}" Maximum="{x:Static local:MainView.MaxScaleFactor}">
-                    <Slider.Resources>
-                        <Style TargetType="{x:Type Thumb}" BasedOn="{StaticResource {x:Type Thumb}}">
-                            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                        </Style>
-                    </Slider.Resources>
-                </Slider>
+                <views:ZoomScaler Grid.Column="1" Target="{Binding ElementName=PART_MainGrid}" />
             </Grid>
         </Border>
-        <Grid>
+        <Grid x:Name="PART_MainGrid">
             <Grid.Resources>
                 <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
                     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
@@ -146,9 +138,6 @@
                     </Style.Triggers>
                 </Style>
             </Grid.Style>
-            <Grid.LayoutTransform>
-                <ScaleTransform ScaleX="{Binding ZoomScale, Source={x:Static p:Settings.Default}}" ScaleY="{Binding ZoomScale, Source={x:Static p:Settings.Default}}" />
-            </Grid.LayoutTransform>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*" />
                 <ColumnDefinition Width="Auto" />
@@ -156,10 +145,10 @@
             </Grid.ColumnDefinitions>
             <Grid>
                 <Grid.Resources>
-                    <DataTemplate x:Key="EmptyTemplate" DataType="{x:Type constructs:DataContainer}" />
-                    <DataTemplate x:Key="CategoryContainerTemplate" DataType="{x:Type constructs:DataContainer}">
+                    <DataTemplate x:Key="EmptyTemplate" DataType="{x:Type core:EquipmentCategory}" />
+                    <DataTemplate x:Key="CategoryContainerTemplate" DataType="{x:Type core:EquipmentCategory}">
                         <StackPanel Orientation="Horizontal">
-                            <views:EquipmentCategoryIcon Category="{Binding Data}" VerticalAlignment="Center" />
+                            <views:EquipmentCategoryIcon Category="{Binding}" VerticalAlignment="Center" />
                             <TextBlock VerticalAlignment="Center" Margin="2,0">
                                 <TextBlock.Style>
                                     <Style TargetType="{x:Type TextBlock}">
@@ -170,11 +159,11 @@
                                             <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type TabItem}}}" Value="True">
                                                 <Setter Property="FontWeight" Value="SemiBold" />
                                             </DataTrigger>
-                                            <DataTrigger Binding="{Binding Data}" Value="{x:Null}">
+                                            <DataTrigger Binding="{Binding}" Value="{StaticResource AllCategory}">
                                                 <Setter Property="Text" Value="All" />
                                             </DataTrigger>
                                         </Style.Triggers>
-                                        <Setter Property="Text" Value="{Binding Data, Converter={StaticResource TitleCaseWordsConverter}}" />
+                                        <Setter Property="Text" Value="{Binding Converter={StaticResource TitleCaseWordsConverter}}" />
                                     </Style>
                                 </TextBlock.Style>
                             </TextBlock>
@@ -188,14 +177,14 @@
                                             <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type TabItem}}}" Value="True">
                                                 <Setter Property="FontWeight" Value="SemiBold" />
                                             </DataTrigger>
-                                            <DataTrigger Binding="{Binding Data}" Value="{x:Null}">
+                                            <DataTrigger Binding="{Binding}" Value="{StaticResource AllCategory}">
                                                 <Setter Property="Text" Value="{Binding Items.Count, Source={StaticResource ViewModel}, StringFormat='({0})'}" />
                                             </DataTrigger>
                                         </Style.Triggers>
                                         <Setter Property="Text">
                                             <Setter.Value>
                                                 <MultiBinding Converter="{StaticResource CategoryCountConverter}" StringFormat="({0})">
-                                                    <Binding Path="Data" />
+                                                    <Binding />
                                                     <Binding Path="Items" Source="{StaticResource ViewModel}" />
                                                     <!-- Used to retrigger binding after loading file -->
                                                     <Binding Path="Items.Count" Source="{StaticResource ViewModel}" />
@@ -329,8 +318,8 @@
                             Height="{Binding ActualHeight, ElementName=PART_Rarities}" VerticalAlignment="Center" />
                     </Grid>
                 </Expander>
-                <views:ScrollingTabControl Grid.Row="1" Margin="4,0" SelectedValuePath="Data" VerticalContentAlignment="Stretch" ContentTemplate="{StaticResource EmptyTemplate}"
-                    ItemsSource="{Binding Source={StaticResource CategoryContainers}}" SelectedValue="{Binding ItemFilters.Category}" ItemTemplate="{StaticResource CategoryContainerTemplate}" />
+                <constructs:ScrollingTabControl Grid.Row="1" Margin="4,0" VerticalContentAlignment="Stretch" ContentTemplate="{StaticResource EmptyTemplate}"
+                    ItemsSource="{Binding Source={StaticResource Categories}}" SelectedItem="{Binding ItemFilters.Category}" ItemTemplate="{StaticResource CategoryContainerTemplate}" />
                 <views:ItemCollectionManager Grid.Row="2" Margin="4,0,4,4" Items="{Binding FilteredItems}" SelectedItem="{Binding SelectedItem}" RowDoubleClickCommand="{Binding ChangeDefinitionCommand}"
                     AllItemsUnstashable="{Binding AllItemsUnstashable}" AllItemsUnsellable="{Binding AllItemsUnsellable}" AllItemsStolen="{Binding AllItemsStolen}" />
             </Grid>

@@ -11,6 +11,8 @@ namespace KoAR.SaveEditor.Views
 {
     public abstract class ItemModelBase : NotifierBase, IDisposable
     {
+        protected static readonly char[] _propertyTokens = { '.' };
+
         protected ItemModelBase(IItem item) => this.Item = item;
 
         public int AffixCount => (this.Prefix == null ? 0 : 1) + (this.Suffix == null ? 0 : 1);
@@ -128,13 +130,12 @@ namespace KoAR.SaveEditor.Views
 
             private static Func<ItemModelBase<TItem>, TValue, bool> CreateSetter(string propertyPath)
             {
-                string[] properties = propertyPath.Split('.');
-                MemberExpression propertyExpression = properties.Aggregate(
+                MemberExpression propertyExpression = propertyPath.Split(ItemModelBase._propertyTokens).Aggregate(
                     Expression.Property(
                         ItemModelBase<TItem>._modelParameter,
                         ItemModelBase<TItem>._itemProperty
                     ),
-                    Expression.Property
+                    (expression, property) => Expression.Property(expression, property)
                 );
                 Expression<Func<ItemModelBase<TItem>, TValue, bool>> lambdaExpression = Expression.Lambda<Func<ItemModelBase<TItem>, TValue, bool>>(
                     Expression.Condition(
@@ -149,7 +150,6 @@ namespace KoAR.SaveEditor.Views
                         ),
                         Expression.Constant(BooleanBoxes.False),
                         Expression.Block(
-                            typeof(bool),
                             Expression.Assign(
                                 propertyExpression,
                                 ValueSetter<TValue>._valueParameter
@@ -157,7 +157,7 @@ namespace KoAR.SaveEditor.Views
                             Expression.Call(
                                 ItemModelBase<TItem>._modelParameter,
                                 NotifierBase.OnPropertyChangedMethod,
-                                Expression.Constant(properties.Last())
+                                Expression.Constant(propertyExpression.Member.Name)
                             ),
                             Expression.Constant(BooleanBoxes.True)
                         )
