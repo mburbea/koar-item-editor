@@ -23,7 +23,7 @@ namespace KoAR.Core
             ItemOffset = itemOffset;
             Bytes = gameSave.Bytes.AsSpan(itemOffset, dataLength).ToArray();
             Span<int> gemIds = MemoryMarshal.Cast<byte, int>(Bytes.AsSpan(Offsets.FirstGem));
-            Gems = gemIds.Length == 0 ? Gems : new Gem[gemIds.Length];
+            Gems = gemIds.Length == 0 ? Array.Empty<Gem>() : new Gem[gemIds.Length];
             for (int i = 0; i < gemIds.Length; i++)
             {
                 Gems[i] = gameSave.Gems.GetOrDefault(gemIds[i]);
@@ -38,6 +38,6 @@ namespace KoAR.Core
 
         private int SocketCount => MemoryUtilities.Read<int>(Bytes, Offsets.GemCount);
 
-        public Gem?[] Gems { get; } = Array.Empty<Gem>();
+        public Gem?[] Gems { get; }
     }
 }
