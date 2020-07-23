@@ -12,7 +12,7 @@ namespace KoAR.SaveEditor.Views
     {
         public static readonly DependencyProperty DefinitionProperty = DependencyProperty.Register(nameof(TypeDefinitionControl.Definition), typeof(TypeDefinition), typeof(TypeDefinitionControl));
 
-        public static readonly DependencyProperty ItemProperty = DependencyProperty.Register(nameof(TypeDefinitionControl.Item), typeof(ItemModel), typeof(TypeDefinitionControl),
+        public static readonly DependencyProperty ItemProperty = DependencyProperty.Register(nameof(TypeDefinitionControl.Item), typeof(ItemModelBase), typeof(TypeDefinitionControl),
             new PropertyMetadata(TypeDefinitionControl.ItemProperty_ValueChanged));
 
         public static readonly IValueConverter SocketTextConverter = new SocketLabelConverter();
@@ -25,9 +25,9 @@ namespace KoAR.SaveEditor.Views
             set => this.SetValue(TypeDefinitionControl.DefinitionProperty, value);
         }
 
-        public ItemModel? Item
+        public ItemModelBase? Item
         {
-            get => (ItemModel?)this.GetValue(TypeDefinitionControl.ItemProperty);
+            get => (ItemModelBase?)this.GetValue(TypeDefinitionControl.ItemProperty);
             set => this.SetValue(TypeDefinitionControl.ItemProperty, value);
         }
 
@@ -36,10 +36,10 @@ namespace KoAR.SaveEditor.Views
             TypeDefinitionControl control = (TypeDefinitionControl)d;
             if (e.OldValue != null)
             {
-                ItemModel oldItem = (ItemModel)e.OldValue;
+                ItemModelBase oldItem = (ItemModelBase)e.OldValue;
                 PropertyChangedEventManager.RemoveHandler(oldItem, control.Item_TypeDefinitionChanged, nameof(oldItem.TypeDefinition));
             }
-            ItemModel? item = (ItemModel)e.NewValue;
+            ItemModelBase? item = (ItemModelBase)e.NewValue;
             if (item != null)
             {
                 control.Definition = item.TypeDefinition;
@@ -47,7 +47,7 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        private void Item_TypeDefinitionChanged(object sender, EventArgs e) => this.Definition = ((ItemModel)sender).TypeDefinition;
+        private void Item_TypeDefinitionChanged(object sender, EventArgs e) => this.Definition = ((ItemModelBase)sender).TypeDefinition;
 
         private sealed class SocketLabelConverter : IValueConverter
         {
