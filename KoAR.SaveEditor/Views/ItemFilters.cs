@@ -94,11 +94,11 @@ namespace KoAR.SaveEditor.Views
             }
             if (this.Element != default)
             {
-                collection = collection.Where(model => model.TypeDefinition.Element == this.Element);
+                collection = collection.Where(model => model.Definition.Element == this.Element);
             }
             if (this.ArmorType != default)
             {
-                collection = collection.Where(model => model.TypeDefinition.ArmorType == this.ArmorType);
+                collection = collection.Where(model => model.Definition.ArmorType == this.ArmorType);
             }
             if (this.Category!=default)
             {

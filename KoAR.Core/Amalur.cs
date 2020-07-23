@@ -27,7 +27,7 @@ namespace KoAR.Core
         internal static TValue? GetOrDefault<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key) where TValue : class =>
             dictionary.TryGetValue(key, out TValue? res) ? res : default;
 
-        public static Dictionary<uint, TypeDefinition> TypeDefinitions { get; } = new Dictionary<uint, TypeDefinition>();
+        public static Dictionary<uint, ItemDefinition> ItemDefinitions { get; } = new Dictionary<uint, ItemDefinition>();
         public static List<Buff> Buffs { get; } = new List<Buff>();
         public static Dictionary<uint, Buff> BuffMap { get; } = new Dictionary<uint, Buff>();
         public static Dictionary<uint, GemDefinition> GemDefinitions { get; } = new Dictionary<uint, GemDefinition>();
@@ -59,7 +59,7 @@ namespace KoAR.Core
             {
                 throw new InvalidOperationException($"Cannot find {Path.GetFileName(fileName)}");
             }
-            TypeDefinitions.AddRange(TypeDefinition.ParseFile(fileName).Select(x => (x.TypeId, x)));
+            ItemDefinitions.AddRange(ItemDefinition.ParseFile(fileName).Select(x => (x.TypeId, x)));
             Debug.WriteLine(sw.Elapsed);
         }
 

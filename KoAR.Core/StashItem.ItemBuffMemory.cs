@@ -13,9 +13,9 @@ namespace KoAR.Core
             public ItemBuffMemory(StashItem stashItem)
             {
                 _stashItem = stashItem;
-                List.Capacity = Count;
+                int count = Count;
                 var firstBuff = Offsets.FirstItemBuff;
-                for(int i = 0; i < List.Capacity; i++)
+                for(int i = 0; i < count; i++)
                 {
                     var buffId = MemoryUtilities.Read<uint>(Bytes, firstBuff + (i * 16) + 4);
                     List.Add(Amalur.GetBuff(buffId));
@@ -24,26 +24,11 @@ namespace KoAR.Core
 
             private int Count => MemoryUtilities.Read<int>(Bytes, Offsets.ItemBuffCount);
 
-            public List<Buff> List { get; } = new List<Buff>();
+            public IList<Buff> List { get; } = new List<Buff>();
 
             public Buff? Prefix => Amalur.BuffMap.GetOrDefault(MemoryUtilities.Read<uint>(Bytes, Bytes.Length - 9));
 
             public Buff? Suffix => Amalur.BuffMap.GetOrDefault(MemoryUtilities.Read<uint>(Bytes, Bytes.Length - 5));
-        }
-
-        private sealed class MissingItemBuffMemory : IItemBuffMemory
-        {
-            internal static readonly IItemBuffMemory Instance = new MissingItemBuffMemory();
-
-            public List<Buff> List { get; } = new List<Buff>();
-
-            public Buff? Prefix => null;
-
-            public Buff? Suffix => null;
-
-            private MissingItemBuffMemory()
-            {
-            }
         }
     }
 }

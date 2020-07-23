@@ -81,12 +81,12 @@ namespace KoAR.Core
             set => State = value ? State | InventoryState.Unstashable : State & ~InventoryState.Unstashable;
         }
 
-        public TypeDefinition TypeDefinition
+        public ItemDefinition Definition
         {
-            get => Amalur.TypeDefinitions[MemoryUtilities.Read<uint>(_gameSave.Bytes, _typeIdOffset)];
+            get => Amalur.ItemDefinitions[MemoryUtilities.Read<uint>(_gameSave.Bytes, _typeIdOffset)];
             set
             {
-                var oldType = Amalur.TypeDefinitions[MemoryUtilities.Read<uint>(_gameSave.Bytes, _typeIdOffset)];
+                var oldType = Amalur.ItemDefinitions[MemoryUtilities.Read<uint>(_gameSave.Bytes, _typeIdOffset)];
                 MemoryUtilities.Write(_gameSave.Bytes, _typeIdOffset, value.TypeId);
                 MemoryUtilities.Write(_gameSave.Bytes, _typeIdOffset + 30 + _levelShiftOffset, value.TypeId);
                 if (oldType.Category == EquipmentCategory.Shield && oldType.ArmorType != value.ArmorType)
@@ -128,12 +128,12 @@ namespace KoAR.Core
             set => MemoryUtilities.Write(ItemBytes, Offsets.NameLength, value);
         }
 
-        public Rarity Rarity => TypeDefinition.Rarity == Rarity.Set
+        public Rarity Rarity => Definition.Rarity == Rarity.Set
             ? Rarity.Set
             : PlayerBuffs.Select(x => x.Rarity)
                 .Concat(ItemBuffs.List.Select(x => x.Rarity))
                 .Concat(ItemGems.Gems.OfType<Gem>().Select(x => x.Definition.Buff.Rarity))
-                .Concat(new[] { ItemBuffs.Prefix?.Rarity ?? default, ItemBuffs.Suffix?.Rarity ?? default, TypeDefinition.Sockets.Any() ? Rarity.Infrequent : Rarity.Common })
+                .Concat(new[] { ItemBuffs.Prefix?.Rarity ?? default, ItemBuffs.Suffix?.Rarity ?? default, Definition.Sockets.Any() ? Rarity.Infrequent : Rarity.Common })
                 .Max();
 
         public string ItemName { get; set; } = string.Empty;
@@ -198,14 +198,17 @@ namespace KoAR.Core
             return ItemBytes;
         }
 
-        internal void LoadFromDefinition(TypeDefinition definition)
+        internal void LoadFromDefinition(ItemDefinition definition)
         {
             CurrentDurability = definition.MaxDurability;
             MaxDurability = definition.MaxDurability;
             ItemBuffs.List.Clear();
-            ItemBuffs.List.AddRange(definition.ItemBuffs);
-            ItemBuffs.Prefix = definition.Prefix;
-            ItemBuffs.Suffix = definition.Suffix;
+            foreach(var buff in definition.ItemBuffs.List)
+            {
+                ItemBuffs.List.Add(buff);
+            }
+            ItemBuffs.Prefix = definition.ItemBuffs.Prefix;
+            ItemBuffs.Suffix = definition.ItemBuffs.Suffix;
             PlayerBuffs.Clear();
             PlayerBuffs.AddRange(definition.PlayerBuffs);
             Level = definition.Level;

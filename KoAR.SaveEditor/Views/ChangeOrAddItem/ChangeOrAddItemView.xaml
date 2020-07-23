@@ -201,7 +201,7 @@
                 </ItemsPanelTemplate>
             </ComboBox.ItemsPanel>
             <ComboBox.ItemTemplate>
-                <DataTemplate DataType="{x:Type core:TypeDefinition}">
+                <DataTemplate DataType="{x:Type core:ItemDefinition}">
                     <views:TypeDefinitionControl Definition="{Binding}" />
                 </DataTemplate>
             </ComboBox.ItemTemplate>

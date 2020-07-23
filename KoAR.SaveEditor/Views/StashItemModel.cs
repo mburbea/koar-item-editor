@@ -10,7 +10,7 @@ namespace KoAR.SaveEditor.Views
         {
         }
         
-        public override IReadOnlyList<Buff> ItemBuffs => this.Item.ItemBuffs.List;
+        public override IReadOnlyList<Buff> ItemBuffs => (IReadOnlyList<Buff>)this.Item.ItemBuffs.List;
         public override IReadOnlyList<Buff> PlayerBuffs => this.Item.PlayerBuffs;
         public override bool UnsupportedFormat => false;
     }

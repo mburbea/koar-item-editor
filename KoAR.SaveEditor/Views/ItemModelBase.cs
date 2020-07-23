@@ -17,7 +17,7 @@ namespace KoAR.SaveEditor.Views
 
         public int AffixCount => (this.Prefix == null ? 0 : 1) + (this.Suffix == null ? 0 : 1);
 
-        public EquipmentCategory Category => this.Item.TypeDefinition.Category;
+        public EquipmentCategory Category => this.Item.Definition.Category;
 
         public virtual float CurrentDurability
         {
@@ -28,8 +28,8 @@ namespace KoAR.SaveEditor.Views
         public string DisplayName => this.HasCustomName switch
         {
             true => this.ItemName,
-            false when this.TypeDefinition.AffixableName && (this.Prefix ?? this.Suffix) != null => $"{this.Prefix?.Modifier} {this.TypeDefinition.CategoryDisplayName} {this.Suffix?.Modifier}".Trim(),
-            false => this.TypeDefinition.Name,
+            false when this.Definition.AffixableName && (this.Prefix ?? this.Suffix) != null => $"{this.Prefix?.Modifier} {this.Definition.CategoryDisplayName} {this.Suffix?.Modifier}".Trim(),
+            false => this.Definition.Name,
         };
 
         public bool HasCustomName => this.Item.HasCustomName;
@@ -78,9 +78,9 @@ namespace KoAR.SaveEditor.Views
             set => throw new NotSupportedException();
         }
 
-        public virtual TypeDefinition TypeDefinition
+        public virtual ItemDefinition Definition
         {
-            get => this.Item.TypeDefinition;
+            get => this.Item.Definition;
             set => throw new NotSupportedException();
         }
 

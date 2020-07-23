@@ -26,7 +26,7 @@
                             <Image.ToolTip>
                                 <ToolTip Content="{TemplateBinding Definition}">
                                     <ToolTip.ContentTemplate>
-                                        <DataTemplate DataType="{x:Type core:TypeDefinition}">
+                                        <DataTemplate DataType="{x:Type core:ItemDefinition}">
                                             <TextBlock>
                                                 <TextBlock.Style>
                                                     <Style TargetType="{x:Type TextBlock}">

@@ -98,7 +98,7 @@ namespace ItemTesting
             Console.WriteLine(gameSave.Stash.Items.Count);
             foreach (var item in gameSave.Stash.Items)
             {
-                Console.WriteLine(item.TypeDefinition.Name);
+                Console.WriteLine(item.Definition.Name);
             }
         }
     }

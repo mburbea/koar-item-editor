@@ -59,7 +59,7 @@ namespace KoAR.Core
 
         public List<StashItem> Items { get; } = new List<StashItem>();
 
-        public void AddItem(TypeDefinition type)
+        public void AddItem(ItemDefinition type)
         {
             // Why don't we use the StashItem class? 
             // 1. Because we don't support mutating them yet

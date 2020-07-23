@@ -13,14 +13,14 @@ namespace KoAR.SaveEditor.Views.ChangeOrAddItem
 
         private ArmorType _armorTypeFilter;
         private EquipmentCategory _category;
-        private TypeDefinition? _definition;
-        private IEnumerable<TypeDefinition>? _definitions;
+        private ItemDefinition? _definition;
+        private IEnumerable<ItemDefinition>? _definitions;
         private Element _elementFilter;
         private Rarity _rarityFilter;
 
         public ChangeOrAddItemViewModel(ItemModel? item = null)
         {
-            this._definition = (this.Item = item)?.TypeDefinition ?? Amalur.TypeDefinitions.Values.First();
+            this._definition = (this.Item = item)?.Definition ?? Amalur.ItemDefinitions.Values.First();
             this._category = item?.Category ?? ChangeOrAddItemViewModel._firstCategory;
             this.ProcessCommand = new DelegateCommand(this.Process, this.CanProcess);
             this.OnFilterChanged();
@@ -56,13 +56,13 @@ namespace KoAR.SaveEditor.Views.ChangeOrAddItem
             }
         }
 
-        public TypeDefinition? Definition
+        public ItemDefinition? Definition
         {
             get => this._definition;
             set => this.SetValue(ref this._definition, value);
         }
 
-        public IEnumerable<TypeDefinition>? Definitions
+        public IEnumerable<ItemDefinition>? Definitions
         {
             get => this._definitions;
             private set => this.SetValue(ref this._definitions, value);
@@ -100,7 +100,7 @@ namespace KoAR.SaveEditor.Views.ChangeOrAddItem
 
         private void OnFilterChanged()
         {
-            IEnumerable<TypeDefinition> definitions = Amalur.TypeDefinitions.Values.Where(item => item.Category == this._category);
+            IEnumerable<ItemDefinition> definitions = Amalur.ItemDefinitions.Values.Where(item => item.Category == this._category);
             if (this._elementFilter != default)
             {
                 definitions = definitions.Where(item => item.Element == this._elementFilter);

@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace KoAR.Core
 {
-    public class TypeDefinition
+    public class ItemDefinition
     {
         private static bool TryParseBuffList(string value, [NotNullWhen(true)] out Buff[]? buffs)
         {
@@ -29,7 +29,7 @@ namespace KoAR.Core
             return true;
         }
 
-        private static bool TryLoadFromRow(string[] entries, [NotNullWhen(true)] out TypeDefinition? definition)
+        private static bool TryLoadFromRow(string[] entries, [NotNullWhen(true)] out ItemDefinition? definition)
         {
             definition = null;
             if (entries.Length != 15
@@ -48,12 +48,12 @@ namespace KoAR.Core
             {
                 return false;
             }
-            definition = new TypeDefinition(category, typeId, level, entries[3], entries[4], maxDurability, rarity, entries[7], 
-                element, armorType, Amalur.GetBuff(prefix), Amalur.GetBuff(suffix), itemBuffs, playerBuffs, hasVariants);
+            definition = new ItemDefinition(category, typeId, level, entries[3], entries[4], maxDurability, rarity, entries[7], 
+                element, armorType, Amalur.BuffMap.GetOrDefault(prefix), Amalur.BuffMap.GetOrDefault(suffix), itemBuffs, playerBuffs, hasVariants);
             return true;
         }
 
-        internal static IEnumerable<TypeDefinition> ParseFile(string path)
+        internal static IEnumerable<ItemDefinition> ParseFile(string path)
         {
             foreach (var line in File.ReadLines(path).Skip(1))
             {
@@ -64,7 +64,7 @@ namespace KoAR.Core
             }
         }
 
-        internal TypeDefinition(EquipmentCategory category, uint typeId, byte level, string name, string internalName, float maxDurability, Rarity rarity,
+        internal ItemDefinition(EquipmentCategory category, uint typeId, byte level, string name, string internalName, float maxDurability, Rarity rarity,
             string sockets, Element element, ArmorType armorType, Buff? prefix, Buff? suffix, Buff[] itemBuffs, Buff[] playerBuffs, bool hasVariants)
         {
             Category = category;
@@ -77,11 +77,13 @@ namespace KoAR.Core
             Sockets = sockets;
             ArmorType = armorType;
             Element = element;
-            ItemBuffs = itemBuffs;
             PlayerBuffs = playerBuffs;
-            Prefix = prefix;
-            Suffix = suffix;
             HasVariants = hasVariants;
+            ItemBuffs = itemBuffs.Length == 0 && prefix is null && suffix is null
+                ? ItemDefinitionBuffMemory.Empty
+                : new ItemDefinitionBuffMemory(itemBuffs, prefix, suffix);
+            
+
             // merchant search is case sensitive to avoid affixing the Merchant's hat.
             IsMerchant = InternalName.Contains("merchant");
             AffixableName = IsMerchant || internalName.IndexOf("common", StringComparison.OrdinalIgnoreCase) != -1;
@@ -97,33 +99,31 @@ namespace KoAR.Core
         public string Sockets { get; }
         public Element Element { get; }
         public ArmorType ArmorType { get; }
-        public Buff[] ItemBuffs { get; }
         public Buff[] PlayerBuffs { get; }
-        public Buff? Prefix { get; }
-        public Buff? Suffix { get; }
         public bool AffixableName { get; }
         public bool HasVariants { get; }
         public bool IsMerchant { get; }
+        public IItemBuffMemory ItemBuffs { get; }
 
         public string CategoryDisplayName => this switch
         {
-            TypeDefinition { ArmorType: ArmorType.Finesse, Category: EquipmentCategory.Hat } => "Hood",
-            TypeDefinition { ArmorType: ArmorType.Finesse, Category: EquipmentCategory.Feet } => "Boots",
-            TypeDefinition { ArmorType: ArmorType.Finesse, Category: EquipmentCategory.Hands } => "Gloves",
-            TypeDefinition { ArmorType: ArmorType.Finesse, Category: EquipmentCategory.Legs } => "Leggings",
-            TypeDefinition { ArmorType: ArmorType.Finesse, Category: EquipmentCategory.Torso } => "Armor",
-            TypeDefinition { ArmorType: ArmorType.Finesse, Category: EquipmentCategory.Shield } => "Buckler",
-            TypeDefinition { ArmorType: ArmorType.Might, Category: EquipmentCategory.Hat } => "Helm",
-            TypeDefinition { ArmorType: ArmorType.Might, Category: EquipmentCategory.Feet } => "Greaves",
-            TypeDefinition { ArmorType: ArmorType.Might, Category: EquipmentCategory.Hands } => "Gauntlets",
-            TypeDefinition { ArmorType: ArmorType.Might, Category: EquipmentCategory.Legs } => "Chausses",
-            TypeDefinition { ArmorType: ArmorType.Might, Category: EquipmentCategory.Torso } => "Cuirass",
-            TypeDefinition { ArmorType: ArmorType.Might, Category: EquipmentCategory.Shield } => "Kite Shield",
-            TypeDefinition { ArmorType: ArmorType.Sorcery, Category: EquipmentCategory.Hat } => "Cowl",
-            TypeDefinition { ArmorType: ArmorType.Sorcery, Category: EquipmentCategory.Feet } => "Shoes",
-            TypeDefinition { ArmorType: ArmorType.Sorcery, Category: EquipmentCategory.Hands } => "Handwraps",
-            TypeDefinition { ArmorType: ArmorType.Sorcery, Category: EquipmentCategory.Robes } => "Robes",
-            TypeDefinition { ArmorType: ArmorType.Sorcery, Category: EquipmentCategory.Shield } => "Talisman",
+            ItemDefinition { ArmorType: ArmorType.Finesse, Category: EquipmentCategory.Hat } => "Hood",
+            ItemDefinition { ArmorType: ArmorType.Finesse, Category: EquipmentCategory.Feet } => "Boots",
+            ItemDefinition { ArmorType: ArmorType.Finesse, Category: EquipmentCategory.Hands } => "Gloves",
+            ItemDefinition { ArmorType: ArmorType.Finesse, Category: EquipmentCategory.Legs } => "Leggings",
+            ItemDefinition { ArmorType: ArmorType.Finesse, Category: EquipmentCategory.Torso } => "Armor",
+            ItemDefinition { ArmorType: ArmorType.Finesse, Category: EquipmentCategory.Shield } => "Buckler",
+            ItemDefinition { ArmorType: ArmorType.Might, Category: EquipmentCategory.Hat } => "Helm",
+            ItemDefinition { ArmorType: ArmorType.Might, Category: EquipmentCategory.Feet } => "Greaves",
+            ItemDefinition { ArmorType: ArmorType.Might, Category: EquipmentCategory.Hands } => "Gauntlets",
+            ItemDefinition { ArmorType: ArmorType.Might, Category: EquipmentCategory.Legs } => "Chausses",
+            ItemDefinition { ArmorType: ArmorType.Might, Category: EquipmentCategory.Torso } => "Cuirass",
+            ItemDefinition { ArmorType: ArmorType.Might, Category: EquipmentCategory.Shield } => "Kite Shield",
+            ItemDefinition { ArmorType: ArmorType.Sorcery, Category: EquipmentCategory.Hat } => "Cowl",
+            ItemDefinition { ArmorType: ArmorType.Sorcery, Category: EquipmentCategory.Feet } => "Shoes",
+            ItemDefinition { ArmorType: ArmorType.Sorcery, Category: EquipmentCategory.Hands } => "Handwraps",
+            ItemDefinition { ArmorType: ArmorType.Sorcery, Category: EquipmentCategory.Robes } => "Robes",
+            ItemDefinition { ArmorType: ArmorType.Sorcery, Category: EquipmentCategory.Shield } => "Talisman",
             _ => Category.ToString()
         };
     }

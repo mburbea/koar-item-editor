@@ -75,7 +75,7 @@ namespace KoAR.Core
             _simTypeOffset = data.IndexOf(typeIdSeq);
             int ixOfActor = _simTypeOffset + 9;
             int playerActor = 0;
-            var candidates = new List<(int id, int typeIdOffset, TypeDefinition definition)>();
+            var candidates = new List<(int id, int typeIdOffset, ItemDefinition definition)>();
 
             if (BitConverter.ToInt32(Bytes, ixOfActor) == 0)
             {
@@ -87,7 +87,7 @@ namespace KoAR.Core
                 var id = BitConverter.ToInt32(Bytes, ixOfActor + 9);
                 var typeIdOffset = ixOfActor + 13;
                 var typeId = BitConverter.ToUInt32(Bytes, typeIdOffset);
-                if (Amalur.TypeDefinitions.TryGetValue(typeId, out var definition))
+                if (Amalur.ItemDefinitions.TryGetValue(typeId, out var definition))
                 {
                     candidates.Add((id, typeIdOffset, definition));
                 }

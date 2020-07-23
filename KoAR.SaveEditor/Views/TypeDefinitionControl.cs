@@ -10,7 +10,7 @@ namespace KoAR.SaveEditor.Views
 {
     public sealed class TypeDefinitionControl : Control
     {
-        public static readonly DependencyProperty DefinitionProperty = DependencyProperty.Register(nameof(TypeDefinitionControl.Definition), typeof(TypeDefinition), typeof(TypeDefinitionControl));
+        public static readonly DependencyProperty DefinitionProperty = DependencyProperty.Register(nameof(TypeDefinitionControl.Definition), typeof(ItemDefinition), typeof(TypeDefinitionControl));
 
         public static readonly DependencyProperty ItemProperty = DependencyProperty.Register(nameof(TypeDefinitionControl.Item), typeof(ItemModelBase), typeof(TypeDefinitionControl),
             new PropertyMetadata(TypeDefinitionControl.ItemProperty_ValueChanged));
@@ -19,9 +19,9 @@ namespace KoAR.SaveEditor.Views
 
         static TypeDefinitionControl() => FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(TypeDefinitionControl), new FrameworkPropertyMetadata(typeof(TypeDefinitionControl)));
 
-        public TypeDefinition? Definition
+        public ItemDefinition? Definition
         {
-            get => (TypeDefinition?)this.GetValue(TypeDefinitionControl.DefinitionProperty);
+            get => (ItemDefinition?)this.GetValue(TypeDefinitionControl.DefinitionProperty);
             set => this.SetValue(TypeDefinitionControl.DefinitionProperty, value);
         }
 
@@ -37,17 +37,17 @@ namespace KoAR.SaveEditor.Views
             if (e.OldValue != null)
             {
                 ItemModelBase oldItem = (ItemModelBase)e.OldValue;
-                PropertyChangedEventManager.RemoveHandler(oldItem, control.Item_TypeDefinitionChanged, nameof(oldItem.TypeDefinition));
+                PropertyChangedEventManager.RemoveHandler(oldItem, control.Item_TypeDefinitionChanged, nameof(oldItem.Definition));
             }
             ItemModelBase? item = (ItemModelBase)e.NewValue;
             if (item != null)
             {
-                control.Definition = item.TypeDefinition;
-                PropertyChangedEventManager.AddHandler(item, control.Item_TypeDefinitionChanged, nameof(item.TypeDefinition));
+                control.Definition = item.Definition;
+                PropertyChangedEventManager.AddHandler(item, control.Item_TypeDefinitionChanged, nameof(item.Definition));
             }
         }
 
-        private void Item_TypeDefinitionChanged(object sender, EventArgs e) => this.Definition = ((ItemModelBase)sender).TypeDefinition;
+        private void Item_TypeDefinitionChanged(object sender, EventArgs e) => this.Definition = ((ItemModelBase)sender).Definition;
 
         private sealed class SocketLabelConverter : IValueConverter
         {

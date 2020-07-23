@@ -100,12 +100,12 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        public override TypeDefinition TypeDefinition
+        public override ItemDefinition Definition
         {
-            get => base.TypeDefinition;
+            get => base.Definition;
             set
             {
-                this.Item.TypeDefinition = value;
+                this.Item.Definition = value;
                 this.OnPropertyChanged(string.Empty);
                 this._playerBuffs.OnReset();
                 this._itemBuffs.OnReset();

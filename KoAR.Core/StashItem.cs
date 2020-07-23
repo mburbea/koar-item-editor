@@ -23,7 +23,7 @@ namespace KoAR.Core
             {
                 ItemName = Encoding.Default.GetString(Bytes, Offsets.Name, NameLength);
             }
-            ItemBuffs = Bytes[Offsets.HasItemBuffs] == 0x14 ? new ItemBuffMemory(this) : MissingItemBuffMemory.Instance;
+            ItemBuffs = Bytes[Offsets.HasItemBuffs] == 0x14 ? new ItemBuffMemory(this) : Definition.ItemBuffs;
         }
 
         internal int DataLength => Bytes.Length;
@@ -32,7 +32,7 @@ namespace KoAR.Core
 
         private Offset Offsets => new Offset(this);
 
-        public TypeDefinition TypeDefinition => Amalur.TypeDefinitions[MemoryUtilities.Read<uint>(Bytes)];
+        public ItemDefinition Definition => Amalur.ItemDefinitions[MemoryUtilities.Read<uint>(Bytes)];
 
         public float CurrentDurability => MemoryUtilities.Read<float>(Bytes, Offsets.Durability);
 
@@ -48,15 +48,15 @@ namespace KoAR.Core
 
         public IItemBuffMemory ItemBuffs { get; }
 
-        public byte Level => TypeDefinition.Level;
+        public byte Level => Definition.Level;
 
-        public float MaxDurability => TypeDefinition.MaxDurability;
+        public float MaxDurability => Definition.MaxDurability;
 
-        public Rarity Rarity => TypeDefinition.Rarity == Rarity.Set
+        public Rarity Rarity => Definition.Rarity == Rarity.Set
             ? Rarity.Set
             : PlayerBuffs.Select(x => x.Rarity)
                 .Concat(ItemBuffs.List.Select(x => x.Rarity))
-                .Concat(new[] { ItemBuffs.Prefix?.Rarity ?? default, ItemBuffs.Suffix?.Rarity ?? default, TypeDefinition.Sockets.Any() ? Rarity.Infrequent : Rarity.Common })
+                .Concat(new[] { ItemBuffs.Prefix?.Rarity ?? default, ItemBuffs.Suffix?.Rarity ?? default, Definition.Sockets.Any() ? Rarity.Infrequent : Rarity.Common })
                 .Max();
 
     }

@@ -126,7 +126,7 @@ namespace KoAR.SaveEditor.Views.Main
             private set => this.SetValue(ref this._unsavedChanges, value);
         }
 
-        internal void AddStashItem(TypeDefinition typeDefinition)
+        internal void AddStashItem(ItemDefinition typeDefinition)
         {
             if (this._gameSave?.Stash == null)
             {
@@ -201,7 +201,7 @@ namespace KoAR.SaveEditor.Views.Main
             };
             if (view.ShowDialog() == true && viewModel.Definition != null)
             {
-                model.TypeDefinition = viewModel.Definition;
+                model.Definition = viewModel.Definition;
                 this._gameSave.WriteEquipmentBytes(model.Item, true);
             }
         }
