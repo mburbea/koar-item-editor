@@ -40,8 +40,7 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <views:ItemFiltersEditor Items="{Binding Items}" ItemFilters="{Binding ItemFilters}" />
-                <views:ItemCollectionManager Grid.Row="1" Items="{Binding FilteredItems}" SelectedItem="{Binding SelectedItem}" RowDoubleClickCommand="{Binding ChangeDefinitionCommand}"
-                    AllItemsStolen="{Binding AllItemsStolen, Mode=OneWay}" />
+                <views:ItemCollectionManager Grid.Row="1" Items="{Binding FilteredItems}" SelectedItem="{Binding SelectedItem}" AllItemsStolen="{Binding AllItemsStolen, Mode=OneWay}" />
             </Grid>
             <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Stretch" Background="{x:Static SystemColors.ControlBrush}" FocusVisualStyle="{x:Null}" />
             <Grid Grid.Column="2">
@@ -56,22 +55,8 @@
                             <ColumnDefinition />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition />
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
-                        <TextBlock Text="Inv Size:" Margin="2" VerticalAlignment="Center" TextAlignment="Right"/>
-                        <TextBox Grid.Column="1" MinWidth="100" Margin="2" TextAlignment="Right" Grid.ColumnSpan="2">
-                            <TextBox.Text>
-                                <Binding Path="InventorySize" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
-                                    <Binding.ValidationRules>
-                                        <constructs:RegexValidationRule Pattern="^\d+$" />
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </TextBox.Text>
-                        </TextBox>
-                        <TextBlock Grid.Row="1" Text="Stash Count:" Margin="2" VerticalAlignment="Center" TextAlignment="Right"/>
-                        <TextBox Grid.Row="1" Grid.Column="1" MinWidth="100" Margin="2" IsReadOnly="True" Background="{x:Static SystemColors.ControlBrush}">
+                        <TextBlock Text="Stash Count:" Margin="2" VerticalAlignment="Center" TextAlignment="Right"/>
+                        <TextBox Grid.Column="1" MinWidth="100" Margin="2" IsReadOnly="True" Background="{x:Static SystemColors.ControlBrush}">
                             <TextBox.Style>
                                 <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
                                     <Style.Triggers>
@@ -86,7 +71,7 @@
                                 </Style>
                             </TextBox.Style>
                         </TextBox>
-                        <Button Grid.Row="1" Grid.Column="2" Margin="2" Command="{Binding AddStashItemCommand}" Content="_Add Item" FocusVisualStyle="{x:Null}" />
+                        <Button Grid.Column="2" Margin="2" Command="{Binding AddStashItemCommand}" Content="_Add Item" FocusVisualStyle="{x:Null}" />
                     </Grid>
                 </GroupBox>
                 <ScrollViewer Grid.Row="1" FocusVisualStyle="{x:Null}" Margin="0,0,4,4" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">

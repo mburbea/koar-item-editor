@@ -25,10 +25,10 @@ namespace KoAR.SaveEditor.Views
 
         public static readonly DependencyProperty CollectionViewProperty;
 
-        public static readonly DependencyProperty IsStashProperty;
-
         public static readonly DependencyProperty ItemsProperty = DependencyProperty.Register(nameof(ItemCollectionManager.Items), typeof(IReadOnlyList<ItemModelBase>), typeof(ItemCollectionManager),
             new PropertyMetadata(ItemCollectionManager.ItemsProperty_ValueChanged));
+
+        public static readonly DependencyProperty ModeProperty;
 
         public static readonly DependencyProperty PropertyNameProperty = DependencyProperty.RegisterAttached("PropertyName", typeof(string), typeof(ItemCollectionManager),
             new PropertyMetadata());
@@ -47,19 +47,19 @@ namespace KoAR.SaveEditor.Views
         public static readonly DependencyProperty SortPropertyProperty = DependencyProperty.RegisterAttached(nameof(ItemCollectionManager.SortProperty), typeof(string), typeof(ItemCollectionManager),
             new PropertyMetadata(nameof(ItemModelBase.Level)));
 
-        private static readonly DependencyPropertyKey _collectionViewProperty = DependencyProperty.RegisterReadOnly(nameof(ItemCollectionManager.CollectionView), typeof(CollectionView), typeof(ItemCollectionManager),
+        private static readonly DependencyPropertyKey _collectionViewPropertyKey = DependencyProperty.RegisterReadOnly(nameof(ItemCollectionManager.CollectionView), typeof(CollectionView), typeof(ItemCollectionManager),
             new PropertyMetadata(ItemCollectionManager.CollectionView_ValueChanged));
 
-        private static readonly DependencyPropertyKey _isStashPropertyKey = DependencyProperty.RegisterReadOnly(nameof(ItemCollectionManager.IsStash), typeof(bool), typeof(ItemCollectionManager),
-            new PropertyMetadata(BooleanBoxes.False));
+        private static readonly DependencyPropertyKey _modePropertyKey = DependencyProperty.RegisterReadOnly(nameof(ItemCollectionManager.Mode), typeof(ManagementMode), typeof(ItemCollectionManager),
+            new PropertyMetadata());
 
         private ListView? _listView;
 
         static ItemCollectionManager()
         {
             FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(ItemCollectionManager), new FrameworkPropertyMetadata(typeof(ItemCollectionManager)));
-            ItemCollectionManager.CollectionViewProperty = ItemCollectionManager._collectionViewProperty.DependencyProperty;
-            ItemCollectionManager.IsStashProperty = ItemCollectionManager._isStashPropertyKey.DependencyProperty;
+            ItemCollectionManager.CollectionViewProperty = ItemCollectionManager._collectionViewPropertyKey.DependencyProperty;
+            ItemCollectionManager.ModeProperty = ItemCollectionManager._modePropertyKey.DependencyProperty;
         }
 
         public bool? AllItemsStolen
@@ -83,19 +83,19 @@ namespace KoAR.SaveEditor.Views
         public ICollectionView? CollectionView
         {
             get => (ICollectionView?)this.GetValue(ItemCollectionManager.CollectionViewProperty);
-            private set => this.SetValue(ItemCollectionManager._collectionViewProperty, value);
-        }
-
-        public bool IsStash
-        {
-            get => (bool)this.GetValue(ItemCollectionManager.IsStashProperty);
-            private set => this.SetValue(ItemCollectionManager._isStashPropertyKey, BooleanBoxes.GetBox(value));
+            private set => this.SetValue(ItemCollectionManager._collectionViewPropertyKey, value);
         }
 
         public IReadOnlyList<ItemModelBase>? Items
         {
             get => (IReadOnlyList<ItemModelBase>?)this.GetValue(ItemCollectionManager.ItemsProperty);
             set => this.SetValue(ItemCollectionManager.ItemsProperty, value);
+        }
+
+        public ManagementMode Mode
+        {
+            get => (ManagementMode)this.GetValue(ItemCollectionManager.ModeProperty);
+            private set => this.SetValue(ItemCollectionManager._modePropertyKey, value);
         }
 
         public ICommand? RowDoubleClickCommand
@@ -211,7 +211,7 @@ namespace KoAR.SaveEditor.Views
         private static void ItemsProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             ItemCollectionManager itemsView = (ItemCollectionManager)d;
-            itemsView.IsStash = e.NewValue is IEnumerable<StashItemModel>;
+            itemsView.Mode = e.NewValue is IEnumerable<ItemModelBase<StashItem>> ? ManagementMode.StashItem : ManagementMode.Item;
             itemsView.CollectionView = e.NewValue == null ? null : new ListCollectionView((IList)e.NewValue)
             {
                 SortDescriptions =
@@ -237,6 +237,12 @@ namespace KoAR.SaveEditor.Views
             {
                 WeakEventManager<UIElement, RoutedEventArgs>.AddHandler(element, nameof(UIElement.PreviewMouseLeftButtonDown), ItemCollectionManager.Element_PreviewMouseLeftButtonDown);
             }
+        }
+
+        public enum ManagementMode
+        {
+            Item = 0,
+            StashItem = 1
         }
     }
 }

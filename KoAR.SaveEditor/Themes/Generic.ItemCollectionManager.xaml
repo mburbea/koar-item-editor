@@ -11,16 +11,14 @@
     <DataTemplate x:Key="BuffToolTipTemplate" DataType="{x:Type core:Buff}">
         <views:BuffControl Buff="{Binding}" IsExpanded="True" />
     </DataTemplate>
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    <constructs:FloatConverter x:Key="SingleConverter" />
+    <constructs:EqualityConverter x:Key="EqualityConverter" />
+    <constructs:StringIsNullOrEmptyConverter x:Key="StringIsNullOrEmptyConverter" />
+    <constructs:NegatedBooleanConverter x:Key="NegatedBooleanConverter" />
+    <constructs:HexConverter x:Key="HexConverter" />
+    <constructs:LittleEndianConverter x:Key="LittleEndianConverter" />
     <Style TargetType="{x:Type views:ItemCollectionManager}">
-        <Style.Resources>
-            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-            <constructs:FloatConverter x:Key="SingleConverter" />
-            <constructs:EqualityConverter x:Key="EqualityConverter" />
-            <constructs:StringIsNullOrEmptyConverter x:Key="StringIsNullOrEmptyConverter" />
-            <constructs:NegatedBooleanConverter x:Key="NegatedBooleanConverter" />
-            <constructs:HexConverter x:Key="HexConverter" />
-            <constructs:LittleEndianConverter x:Key="LittleEndianConverter" />
-        </Style.Resources>
         <Setter Property="Focusable" Value="False" />
         <Setter Property="Template">
             <Setter.Value>
@@ -43,6 +41,7 @@
                         BorderBrush="LightGray" SelectionMode="Single" FocusVisualStyle="{x:Null}" VirtualizingPanel.ScrollUnit="Pixel"
                         TextSearch.TextPath="ItemId" AlternationCount="2">
                         <ListView.Resources>
+                            <constructs:TransportObject x:Key="Mode" Value="{Binding Mode,RelativeSource={RelativeSource AncestorType={x:Type views:ItemCollectionManager}}}" />
                             <Style TargetType="{x:Type GridViewColumnHeader}" BasedOn="{StaticResource {x:Type GridViewColumnHeader}}">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding Column.(views:ItemCollectionManager.PropertyName), Converter={StaticResource StringIsNullOrEmptyConverter}, RelativeSource={RelativeSource Self}}" Value="False">
@@ -100,8 +99,8 @@
                             </Style>
                         </ListView.ItemContainerStyle>
                         <ListView.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Command="{x:Static constructs:ListViewAutoSize.AutoSizeCommand}" />
+                            <ContextMenu FocusVisualStyle="{x:Null}">
+                                <MenuItem Command="{x:Static constructs:ListViewAutoSize.AutoSizeCommand}" FocusVisualStyle="{x:Null}" />
                             </ContextMenu>
                         </ListView.ContextMenu>
                         <ListView.View>
@@ -114,15 +113,33 @@
                                                     <TextBlock.Style>
                                                         <Style TargetType="{x:Type TextBlock}">
                                                             <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True">
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True" />
+                                                                        <Condition Binding="{Binding Value, Source={StaticResource Mode}}" Value="Item" />
+                                                                    </MultiDataTrigger.Conditions>
                                                                     <Setter Property="Visibility" Value="Collapsed" />
-                                                                </DataTrigger>
+                                                                </MultiDataTrigger>
                                                             </Style.Triggers>
                                                         </Style>
                                                     </TextBlock.Style>
                                                 </TextBlock>
-                                                <TextBox TextAlignment="Right" Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                    constructs:TextBoxSelect.SelectOnFocus="{Binding IsVisible, RelativeSource={RelativeSource Self}}">
+                                                <TextBox TextAlignment="Right">
+                                                    <TextBox.Style>
+                                                        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+                                                            <Style.Triggers>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True" />
+                                                                        <Condition Binding="{Binding Value, Source={StaticResource Mode}}" Value="Item" />
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="Visibility" Value="Visible" />
+                                                                    <Setter Property="constructs:TextBoxSelect.SelectOnFocus" Value="True" />
+                                                                </MultiDataTrigger>
+                                                            </Style.Triggers>
+                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                        </Style>
+                                                    </TextBox.Style>
                                                     <TextBox.Text>
                                                         <Binding Path="Level">
                                                             <Binding.ValidationRules>
@@ -144,15 +161,18 @@
                                                     <views:ItemDefinitionControl.Style>
                                                         <Style TargetType="{x:Type views:ItemDefinitionControl}">
                                                             <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True">
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True" />
+                                                                        <Condition Binding="{Binding Value, Source={StaticResource Mode}}" Value="Item" />
+                                                                    </MultiDataTrigger.Conditions>
                                                                     <Setter Property="Visibility" Value="Collapsed" />
-                                                                </DataTrigger>
+                                                                </MultiDataTrigger>
                                                             </Style.Triggers>
                                                         </Style>
                                                     </views:ItemDefinitionControl.Style>
                                                 </views:ItemDefinitionControl>
-                                                <TextBox VerticalAlignment="Center" Margin="1,0" constructs:TextBoxSelect.SelectOnFocus="{Binding IsVisible, RelativeSource={RelativeSource Self}}"
-                                                    Text="{Binding ItemName}" Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                <TextBox VerticalAlignment="Center" Margin="1,0" Text="{Binding ItemName}">
                                                     <views:Watermarking.ContentTemplate>
                                                         <DataTemplate>
                                                             <TextBlock Text="{Binding}" FontStyle="Italic" />
@@ -161,6 +181,14 @@
                                                     <TextBox.Style>
                                                         <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
                                                             <Style.Triggers>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True" />
+                                                                        <Condition Binding="{Binding Value, Source={StaticResource Mode}}" Value="Item" />
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="Visibility" Value="Visible" />
+                                                                    <Setter Property="constructs:TextBoxSelect.SelectOnFocus" Value="True" />
+                                                                </MultiDataTrigger>
                                                                 <MultiTrigger>
                                                                     <MultiTrigger.Conditions>
                                                                         <Condition Property="IsVisible" Value="True" />
@@ -169,6 +197,7 @@
                                                                     <Setter Property="views:Watermarking.Content" Value="{Binding Definition.Name}" />
                                                                 </MultiTrigger>
                                                             </Style.Triggers>
+                                                            <Setter Property="Visibility" Value="Collapsed" />
                                                         </Style>
                                                     </TextBox.Style>
                                                 </TextBox>
@@ -196,15 +225,33 @@
                                                     <TextBlock.Style>
                                                         <Style TargetType="{x:Type TextBlock}">
                                                             <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True">
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True" />
+                                                                        <Condition Binding="{Binding Value, Source={StaticResource Mode}}" Value="Item" />
+                                                                    </MultiDataTrigger.Conditions>
                                                                     <Setter Property="Visibility" Value="Collapsed" />
-                                                                </DataTrigger>
+                                                                </MultiDataTrigger>
                                                             </Style.Triggers>
                                                         </Style>
                                                     </TextBlock.Style>
                                                 </TextBlock>
-                                                <TextBox TextAlignment="Right" Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                    constructs:TextBoxSelect.SelectOnFocus="{Binding IsVisible, RelativeSource={RelativeSource Self}}">
+                                                <TextBox TextAlignment="Right">
+                                                    <TextBox.Style>
+                                                        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+                                                            <Style.Triggers>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True" />
+                                                                        <Condition Binding="{Binding Value, Source={StaticResource Mode}}" Value="Item" />
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="Visibility" Value="Visible" />
+                                                                    <Setter Property="constructs:TextBoxSelect.SelectOnFocus" Value="True" />
+                                                                </MultiDataTrigger>
+                                                            </Style.Triggers>
+                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                        </Style>
+                                                    </TextBox.Style>
                                                     <TextBox.Text>
                                                         <Binding Path="CurrentDurability" Converter="{StaticResource SingleConverter}">
                                                             <Binding.ValidationRules>
@@ -217,7 +264,7 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="Max Durability" Width="Auto" views:ItemCollectionManager.PropertyName="MaxDurability">
+                                <GridViewColumn Header="Max Durability" Width="Auto" views:ItemCollectionManager.PropertyName="MaxDurability" >
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate DataType="{x:Type views:ItemModelBase}">
                                             <Grid>
@@ -237,15 +284,33 @@
                                                     <TextBlock.Style>
                                                         <Style TargetType="{x:Type TextBlock}">
                                                             <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True">
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True" />
+                                                                        <Condition Binding="{Binding Value, Source={StaticResource Mode}}" Value="Item" />
+                                                                    </MultiDataTrigger.Conditions>
                                                                     <Setter Property="Visibility" Value="Collapsed" />
-                                                                </DataTrigger>
+                                                                </MultiDataTrigger>
                                                             </Style.Triggers>
                                                         </Style>
                                                     </TextBlock.Style>
                                                 </TextBlock>
-                                                <TextBox TextAlignment="Right" Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                    constructs:TextBoxSelect.SelectOnFocus="{Binding IsVisible, RelativeSource={RelativeSource Self}}">
+                                                <TextBox TextAlignment="Right">
+                                                    <TextBox.Style>
+                                                        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+                                                            <Style.Triggers>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True" />
+                                                                        <Condition Binding="{Binding Value, Source={StaticResource Mode}}" Value="Item" />
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="Visibility" Value="Visible" />
+                                                                    <Setter Property="constructs:TextBoxSelect.SelectOnFocus" Value="True" />
+                                                                </MultiDataTrigger>
+                                                            </Style.Triggers>
+                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                        </Style>
+                                                    </TextBox.Style>
                                                     <TextBox.Text>
                                                         <Binding Path="MaxDurability" Converter="{StaticResource SingleConverter}">
                                                             <Binding.ValidationRules>
@@ -262,47 +327,101 @@
                                     <GridViewColumn.Header>
                                         <StackPanel Orientation="Horizontal">
                                             <CheckBox Margin="2" FocusVisualStyle="{x:Null}" VerticalAlignment="Center"
-                                                IsChecked="{Binding AllItemsStolen, RelativeSource={RelativeSource TemplatedParent}}" 
-                                                IsEnabled="{Binding IsStash, RelativeSource={RelativeSource AncestorType={x:Type views:ItemCollectionManager}}, Converter={StaticResource NegatedBooleanConverter}}" />
+                                                IsChecked="{Binding AllItemsStolen, RelativeSource={RelativeSource TemplatedParent}}">
+                                                <CheckBox.Style>
+                                                    <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Value, Source={StaticResource Mode}}" Value="StashItem">
+                                                                <Setter Property="IsEnabled" Value="False" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </CheckBox.Style>
+                                            </CheckBox>
                                             <TextBlock Text="Stolen?" VerticalAlignment="Center" />
                                         </StackPanel>
                                     </GridViewColumn.Header>
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate DataType="{x:Type views:ItemModelBase}">
-                                            <CheckBox FocusVisualStyle="{x:Null}" HorizontalAlignment="Center" IsChecked="{Binding IsStolen}" 
-                                                IsEnabled="{Binding IsStash, RelativeSource={RelativeSource AncestorType={x:Type views:ItemCollectionManager}}, Converter={StaticResource NegatedBooleanConverter}}" />
+                                            <CheckBox FocusVisualStyle="{x:Null}" HorizontalAlignment="Center" IsChecked="{Binding IsStolen}">
+                                                <CheckBox.Style>
+                                                    <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Value, Source={StaticResource Mode}}" Value="StashItem">
+                                                                <Setter Property="IsEnabled" Value="False" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </CheckBox.Style>
+                                            </CheckBox>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Width="Auto" views:ItemCollectionManager.PropertyName="IsUnsellable">
+                                <GridViewColumn Width="Auto" views:ItemCollectionManager.PropertyName="IsUnsellable" 
+                                    constructs:ColumnVisibility.IsHidden="{Binding Value, Source={StaticResource Mode}, Converter={StaticResource EqualityConverter}, ConverterParameter={x:Static views:ItemCollectionManager+ManagementMode.StashItem}}">
                                     <GridViewColumn.Header>
                                         <StackPanel Orientation="Horizontal">
-                                            <CheckBox Margin="2" FocusVisualStyle="{x:Null}" VerticalAlignment="Center"
-                                                IsChecked="{Binding AllItemsUnsellable, Converter={StaticResource NegatedBooleanConverter}, RelativeSource={RelativeSource TemplatedParent}}" 
-                                                IsEnabled="{Binding IsStash, RelativeSource={RelativeSource AncestorType={x:Type views:ItemCollectionManager}}, Converter={StaticResource NegatedBooleanConverter}}" />
+                                            <CheckBox Margin="2" FocusVisualStyle="{x:Null}" VerticalAlignment="Center">
+                                                <CheckBox.Style>
+                                                    <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Value, Source={StaticResource Mode}}" Value="Item">
+                                                                <Setter Property="IsChecked" Value="{Binding AllItemsUnsellable, Converter={StaticResource NegatedBooleanConverter}, RelativeSource={RelativeSource TemplatedParent}}" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </CheckBox.Style>
+                                            </CheckBox>
                                             <TextBlock Text="Sellable?" VerticalAlignment="Center" />
                                         </StackPanel>
                                     </GridViewColumn.Header>
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate DataType="{x:Type views:ItemModelBase}">
-                                            <CheckBox FocusVisualStyle="{x:Null}" HorizontalAlignment="Center" IsChecked="{Binding IsUnsellable, Converter={StaticResource NegatedBooleanConverter}}" 
-                                                IsEnabled="{Binding IsStash, RelativeSource={RelativeSource AncestorType={x:Type views:ItemCollectionManager}}, Converter={StaticResource NegatedBooleanConverter}}" />
+                                            <CheckBox FocusVisualStyle="{x:Null}" HorizontalAlignment="Center">
+                                                <CheckBox.Style>
+                                                    <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Value, Source={StaticResource Mode}}" Value="Item">
+                                                                <Setter Property="IsChecked" Value="{Binding IsUnsellable, Converter={StaticResource NegatedBooleanConverter}}" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </CheckBox.Style>
+                                            </CheckBox>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Width="Auto" views:ItemCollectionManager.PropertyName="IsUnstashable">
+                                <GridViewColumn Width="Auto" views:ItemCollectionManager.PropertyName="IsUnstashable" 
+                                    constructs:ColumnVisibility.IsHidden="{Binding Value, Source={StaticResource Mode}, Converter={StaticResource EqualityConverter}, ConverterParameter={x:Static views:ItemCollectionManager+ManagementMode.StashItem}}">
                                     <GridViewColumn.Header>
                                         <StackPanel Orientation="Horizontal">
-                                            <CheckBox Margin="2" FocusVisualStyle="{x:Null}" VerticalAlignment="Center"
-                                                IsChecked="{Binding AllItemsUnstashable, Converter={StaticResource NegatedBooleanConverter}, RelativeSource={RelativeSource TemplatedParent}}" 
-                                                IsEnabled="{Binding IsStash, RelativeSource={RelativeSource AncestorType={x:Type views:ItemCollectionManager}}, Converter={StaticResource NegatedBooleanConverter}}" />
+                                            <CheckBox Margin="2" FocusVisualStyle="{x:Null}" VerticalAlignment="Center">
+                                                <CheckBox.Style>
+                                                    <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Value, Source={StaticResource Mode}}" Value="Item">
+                                                                <Setter Property="IsChecked" Value="{Binding AllItemsUnstashable, Converter={StaticResource NegatedBooleanConverter}, RelativeSource={RelativeSource TemplatedParent}}" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </CheckBox.Style>
+                                            </CheckBox>
                                             <TextBlock Text="Stashable?" VerticalAlignment="Center" />
                                         </StackPanel>
                                     </GridViewColumn.Header>
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate DataType="{x:Type views:ItemModelBase}">
-                                            <CheckBox FocusVisualStyle="{x:Null}" HorizontalAlignment="Center" IsChecked="{Binding IsUnstashable, Converter={StaticResource NegatedBooleanConverter}}" 
-                                                IsEnabled="{Binding IsStash, RelativeSource={RelativeSource AncestorType={x:Type views:ItemCollectionManager}}, Converter={StaticResource NegatedBooleanConverter}}" />
+                                            <CheckBox FocusVisualStyle="{x:Null}" HorizontalAlignment="Center">
+                                                <CheckBox.Style>
+                                                    <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Value, Source={StaticResource Mode}}" Value="Item">
+                                                                <Setter Property="IsChecked" Value="{Binding IsUnstashable, Converter={StaticResource NegatedBooleanConverter}}" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </CheckBox.Style>
+                                            </CheckBox>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>

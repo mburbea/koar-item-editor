@@ -98,6 +98,7 @@ namespace KoAR.SaveEditor.Views
                     Content = content,
                     ContentTemplate = contentTemplate,
                     Opacity = 0.5,
+                    VerticalAlignment= VerticalAlignment.Center,
                     Margin = new Thickness(
                         this.AdornedElement.Margin.Left + this.AdornedElement.Padding.Left,
                         this.AdornedElement.Margin.Top + this.AdornedElement.Padding.Top,
