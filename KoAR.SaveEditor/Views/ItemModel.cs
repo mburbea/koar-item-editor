@@ -25,6 +25,18 @@ namespace KoAR.SaveEditor.Views
             set => this.SetItemValue(value);
         }
 
+        public override ItemDefinition Definition
+        {
+            get => base.Definition;
+            set
+            {
+                this.Item.Definition = value;
+                this.OnPropertyChanged(string.Empty);
+                this._playerBuffs.OnReset();
+                this._itemBuffs.OnReset();
+            }
+        }
+
         public override bool IsStolen
         {
             get => base.IsStolen;
@@ -97,18 +109,6 @@ namespace KoAR.SaveEditor.Views
                 {
                     this.OnPropertyChanged(nameof(this.AffixCount));
                 }
-            }
-        }
-
-        public override ItemDefinition Definition
-        {
-            get => base.Definition;
-            set
-            {
-                this.Item.Definition = value;
-                this.OnPropertyChanged(string.Empty);
-                this._playerBuffs.OnReset();
-                this._itemBuffs.OnReset();
             }
         }
 

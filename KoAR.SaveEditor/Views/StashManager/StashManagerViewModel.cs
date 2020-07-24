@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Windows;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
@@ -83,11 +82,9 @@ namespace KoAR.SaveEditor.Views.StashManager
         {
             using (this._items.CreatePauseEventsScope())
             {
+                this._items.ForEach(item => item.Dispose());
                 this._items.Clear();
-                foreach (StashItem item in this.Stash.Items)
-                {
-                    this._items.Add(new StashItemModel(item));
-                }
+                this.Stash.Items.ForEach(item => this._items.Add(new StashItemModel(item)));
             }
             this.OnFilterChange();
         }

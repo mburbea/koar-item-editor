@@ -98,7 +98,7 @@ namespace KoAR.SaveEditor.Views.Main
                 }
                 this._gameSave.InventorySize = value;
                 this.OnPropertyChanged();
-                this.UnsavedChanges = true;
+                this.RegisterUnsavedChange();
             }
         }
 
@@ -135,7 +135,7 @@ namespace KoAR.SaveEditor.Views.Main
             this._gameSave.Stash.AddItem(definition);
             this.OnPropertyChanged(nameof(this.Stash));
             this.RepopulateItems(regenerate: true);
-            this.UnsavedChanges = true;
+            this.RegisterUnsavedChange();
         }
 
         internal void OpenFile()
@@ -218,7 +218,7 @@ namespace KoAR.SaveEditor.Views.Main
             }
             ItemModel model = (ItemModel)sender;
             this._gameSave.WriteEquipmentBytes(model.Item);
-            this.UnsavedChanges = true;
+            this.RegisterUnsavedChange();
             switch (e.PropertyName)
             {
                 case nameof(ItemModel.IsStolen):

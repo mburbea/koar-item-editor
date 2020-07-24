@@ -151,8 +151,27 @@
                                                         </Style>
                                                     </views:ItemDefinitionControl.Style>
                                                 </views:ItemDefinitionControl>
-                                                <TextBox VerticalAlignment="Center" Margin="1,0" constructs:TextBoxSelect.SelectOnFocus="{Binding IsVisible, RelativeSource={RelativeSource Self}}" 
-                                                    Text="{Binding ItemName}" Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                                <TextBox VerticalAlignment="Center" Margin="1,0" constructs:TextBoxSelect.SelectOnFocus="{Binding IsVisible, RelativeSource={RelativeSource Self}}"
+                                                    Text="{Binding ItemName}" Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                    <views:Watermarking.ContentTemplate>
+                                                        <DataTemplate>
+                                                            <TextBlock Text="{Binding}" FontStyle="Italic" />
+                                                        </DataTemplate>
+                                                    </views:Watermarking.ContentTemplate>
+                                                    <TextBox.Style>
+                                                        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+                                                            <Style.Triggers>
+                                                                <MultiTrigger>
+                                                                    <MultiTrigger.Conditions>
+                                                                        <Condition Property="IsVisible" Value="True" />
+                                                                        <Condition Property="Text" Value="" />
+                                                                    </MultiTrigger.Conditions>
+                                                                    <Setter Property="views:Watermarking.Content" Value="{Binding Definition.Name}" />
+                                                                </MultiTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBox.Style>
+                                                </TextBox>
                                             </Grid>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>

@@ -17,7 +17,7 @@ namespace KoAR.SaveEditor.Views
 
         public ItemFilters()
         {
-            this.ResetFiltersCommand = new DelegateCommand(() => this.ResetFilters());
+            this.ResetFiltersCommand = new DelegateCommand(() => this.ResetFilters(resetCategory: false));
         }
 
         public event EventHandler? FilterChange;
@@ -82,6 +82,9 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
+        /// <summary>
+        /// Command to reset all filters.  An optional parameter indicates whether or not to also reset the filter on <see cref="Category"/>.
+        /// </summary>
         public DelegateCommand ResetFiltersCommand { get; }
 
         public IReadOnlyList<TItem> GetFilteredItems<TItem>(IReadOnlyList<TItem> items)
@@ -100,7 +103,7 @@ namespace KoAR.SaveEditor.Views
             {
                 collection = collection.Where(model => model.Definition.ArmorType == this.ArmorType);
             }
-            if (this.Category!=default)
+            if (this.Category != default)
             {
                 collection = collection.Where(model => model.Category == this.Category);
             }
@@ -111,7 +114,7 @@ namespace KoAR.SaveEditor.Views
             return object.Equals(collection, items) ? items : collection.ToList();
         }
 
-        public void ResetFilters(bool resetCategory = false)
+        public void ResetFilters(bool resetCategory)
         {
             if (Interlocked.Exchange(ref this._itemName, string.Empty).Length != 0)
             {

@@ -1,19 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace KoAR.SaveEditor.Views
 {
     public static class AppliesToAll
     {
-        public static bool? GetAppliesToAll<T>(this IReadOnlyCollection<T> items, Func<T, bool> projection)
+        public static bool? GetAppliesToAll<T>(this IReadOnlyList<T> items, Func<T, bool> projection)
         {
             if (items.Count == 0)
             {
                 return true;
             }
-            bool first = projection(items.First());
-            return items.Skip(1).Select(projection).Any(value => value != first) ? default(bool?) : first;
+            bool first = projection(items[0]);
+            for (int index = 1; index < items.Count; index++)
+            {
+                if (projection(items[index]) != first)
+                {
+                    return null;
+                }
+            }
+            return first;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
@@ -9,29 +10,32 @@ namespace KoAR.SaveEditor.Views.ChangeOrAddItem
 {
     public sealed class ChangeOrAddItemViewModel : NotifierBase
     {
-        private static readonly EquipmentCategory _firstCategory = ((EquipmentCategory[])Enum.GetValues(typeof(EquipmentCategory)))[0];
+        /// <summary>
+        /// <see cref="EquipmentCategory" /> enumeration does not start at 0.  Instead of just using default, gets the first category.
+        /// </summary>
+        private static readonly EquipmentCategory _defaultCategory = ((EquipmentCategory[])Enum.GetValues(typeof(EquipmentCategory)))[0];
 
-        private ArmorType _armorTypeFilter;
+        private int _armorTypeFilter;
         private EquipmentCategory _category;
         private ItemDefinition? _definition;
         private IEnumerable<ItemDefinition>? _definitions;
-        private Element _elementFilter;
-        private Rarity _rarityFilter;
+        private int _elementFilter;
+        private int _rarityFilter;
 
-        public ChangeOrAddItemViewModel(ItemModel? item = null)
+        public ChangeOrAddItemViewModel(ItemModelBase? item = null)
         {
             this._definition = (this.Item = item)?.Definition ?? Amalur.ItemDefinitions.Values.First();
-            this._category = item?.Category ?? ChangeOrAddItemViewModel._firstCategory;
+            this._category = item?.Category ?? ChangeOrAddItemViewModel._defaultCategory;
             this.ProcessCommand = new DelegateCommand(this.Process, this.CanProcess);
             this.OnFilterChanged();
         }
 
         public ArmorType ArmorTypeFilter
         {
-            get => this._armorTypeFilter;
+            get => (ArmorType)this._armorTypeFilter;
             set
             {
-                if (this.SetValue(ref this._armorTypeFilter, value))
+                if (this.SetValue(ref this._armorTypeFilter, (int)value))
                 {
                     this.OnFilterChanged();
                 }
@@ -45,12 +49,18 @@ namespace KoAR.SaveEditor.Views.ChangeOrAddItem
             {
                 if (this.SetValue(ref this._category, value))
                 {
-                    this._rarityFilter = default;
-                    this.OnPropertyChanged(nameof(this.RarityFilter));
-                    this._elementFilter = default;
-                    this.OnPropertyChanged(nameof(this.ElementFilter));
-                    this._armorTypeFilter = default;
-                    this.OnPropertyChanged(nameof(this.ArmorTypeFilter));
+                    if (Interlocked.Exchange(ref this._rarityFilter, default) != default)
+                    {
+                        this.OnPropertyChanged(nameof(this.RarityFilter));
+                    }
+                    if (Interlocked.Exchange(ref this._elementFilter, default) != default)
+                    {
+                        this.OnPropertyChanged(nameof(this.ElementFilter));
+                    }
+                    if (Interlocked.Exchange(ref this._armorTypeFilter, default) != default)
+                    {
+                        this.OnPropertyChanged(nameof(this.ArmorTypeFilter));
+                    }
                     this.OnFilterChanged();
                 }
             }
@@ -70,26 +80,26 @@ namespace KoAR.SaveEditor.Views.ChangeOrAddItem
 
         public Element ElementFilter
         {
-            get => this._elementFilter;
+            get => (Element)this._elementFilter;
             set
             {
-                if (this.SetValue(ref this._elementFilter, value))
+                if (this.SetValue(ref this._elementFilter, (int)value))
                 {
                     this.OnFilterChanged();
                 }
             }
         }
 
-        public ItemModel? Item { get; }
+        public ItemModelBase? Item { get; }
 
         public DelegateCommand ProcessCommand { get; }
 
         public Rarity RarityFilter
         {
-            get => this._rarityFilter;
+            get => (Rarity)this._rarityFilter;
             set
             {
-                if (this.SetValue(ref this._rarityFilter, value))
+                if (this.SetValue(ref this._rarityFilter, (int)value))
                 {
                     this.OnFilterChanged();
                 }
@@ -103,15 +113,15 @@ namespace KoAR.SaveEditor.Views.ChangeOrAddItem
             IEnumerable<ItemDefinition> definitions = Amalur.ItemDefinitions.Values.Where(item => item.Category == this._category);
             if (this._elementFilter != default)
             {
-                definitions = definitions.Where(item => item.Element == this._elementFilter);
+                definitions = definitions.Where(item => item.Element == this.ElementFilter);
             }
             if (this._armorTypeFilter != default)
             {
-                definitions = definitions.Where(item => item.ArmorType == this._armorTypeFilter);
+                definitions = definitions.Where(item => item.ArmorType == this.ArmorTypeFilter);
             }
             if (this._rarityFilter != default)
             {
-                definitions = definitions.Where(item => item.Rarity == this._rarityFilter);
+                definitions = definitions.Where(item => item.Rarity == this.RarityFilter);
             }
             this.Definitions = definitions.ToArray();
             if (this._definition == null || !this.Definitions.Contains(this._definition))
