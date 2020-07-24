@@ -5,7 +5,7 @@
     xmlns:core="clr-namespace:KoAR.Core;assembly=KoAR.Core"
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs"
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views">
-    <Style TargetType="{x:Type views:TypeDefinitionControl}">
+    <Style TargetType="{x:Type views:ItemDefinitionControl}">
         <Style.Resources>
             <views:BitmapConverter x:Key="BitmapConverter" />
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
@@ -20,7 +20,7 @@
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type views:TypeDefinitionControl}">
+                <ControlTemplate TargetType="{x:Type views:ItemDefinitionControl}">
                     <StackPanel Orientation="Horizontal">
                         <Image Height="24" SnapsToDevicePixels="True" VerticalAlignment="Center" Margin="2,0">
                             <Image.ToolTip>
@@ -113,7 +113,7 @@
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate DataType="{x:Type s:Char}">
                                     <Image Width="18" SnapsToDevicePixels="True" VerticalAlignment="Center" Margin="1,0"
-                                        ToolTip="{Binding Converter={x:Static views:TypeDefinitionControl.SocketTextConverter}}"
+                                        ToolTip="{Binding Converter={x:Static views:ItemDefinitionControl.SocketTextConverter}}"
                                         Source="{Binding Converter={StaticResource BitmapConverter}}" />
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>

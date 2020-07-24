@@ -140,17 +140,17 @@
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate DataType="{x:Type views:ItemModelBase}">
                                             <Grid>
-                                                <views:TypeDefinitionControl Item="{Binding}">
-                                                    <views:TypeDefinitionControl.Style>
-                                                        <Style TargetType="{x:Type views:TypeDefinitionControl}">
+                                                <views:ItemDefinitionControl Item="{Binding}">
+                                                    <views:ItemDefinitionControl.Style>
+                                                        <Style TargetType="{x:Type views:ItemDefinitionControl}">
                                                             <Style.Triggers>
                                                                 <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True">
                                                                     <Setter Property="Visibility" Value="Collapsed" />
                                                                 </DataTrigger>
                                                             </Style.Triggers>
                                                         </Style>
-                                                    </views:TypeDefinitionControl.Style>
-                                                </views:TypeDefinitionControl>
+                                                    </views:ItemDefinitionControl.Style>
+                                                </views:ItemDefinitionControl>
                                                 <TextBox VerticalAlignment="Center" Margin="1,0" constructs:TextBoxSelect.SelectOnFocus="{Binding IsVisible, RelativeSource={RelativeSource Self}}" 
                                                     Text="{Binding ItemName}" Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                             </Grid>

@@ -8,46 +8,46 @@ using KoAR.Core;
 
 namespace KoAR.SaveEditor.Views
 {
-    public sealed class TypeDefinitionControl : Control
+    public sealed class ItemDefinitionControl : Control
     {
-        public static readonly DependencyProperty DefinitionProperty = DependencyProperty.Register(nameof(TypeDefinitionControl.Definition), typeof(ItemDefinition), typeof(TypeDefinitionControl));
+        public static readonly DependencyProperty DefinitionProperty = DependencyProperty.Register(nameof(ItemDefinitionControl.Definition), typeof(ItemDefinition), typeof(ItemDefinitionControl));
 
-        public static readonly DependencyProperty ItemProperty = DependencyProperty.Register(nameof(TypeDefinitionControl.Item), typeof(ItemModelBase), typeof(TypeDefinitionControl),
-            new PropertyMetadata(TypeDefinitionControl.ItemProperty_ValueChanged));
+        public static readonly DependencyProperty ItemProperty = DependencyProperty.Register(nameof(ItemDefinitionControl.Item), typeof(ItemModelBase), typeof(ItemDefinitionControl),
+            new PropertyMetadata(ItemDefinitionControl.ItemProperty_ValueChanged));
 
         public static readonly IValueConverter SocketTextConverter = new SocketLabelConverter();
 
-        static TypeDefinitionControl() => FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(TypeDefinitionControl), new FrameworkPropertyMetadata(typeof(TypeDefinitionControl)));
+        static ItemDefinitionControl() => FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(ItemDefinitionControl), new FrameworkPropertyMetadata(typeof(ItemDefinitionControl)));
 
         public ItemDefinition? Definition
         {
-            get => (ItemDefinition?)this.GetValue(TypeDefinitionControl.DefinitionProperty);
-            set => this.SetValue(TypeDefinitionControl.DefinitionProperty, value);
+            get => (ItemDefinition?)this.GetValue(ItemDefinitionControl.DefinitionProperty);
+            set => this.SetValue(ItemDefinitionControl.DefinitionProperty, value);
         }
 
         public ItemModelBase? Item
         {
-            get => (ItemModelBase?)this.GetValue(TypeDefinitionControl.ItemProperty);
-            set => this.SetValue(TypeDefinitionControl.ItemProperty, value);
+            get => (ItemModelBase?)this.GetValue(ItemDefinitionControl.ItemProperty);
+            set => this.SetValue(ItemDefinitionControl.ItemProperty, value);
         }
 
         private static void ItemProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            TypeDefinitionControl control = (TypeDefinitionControl)d;
+            ItemDefinitionControl control = (ItemDefinitionControl)d;
             if (e.OldValue != null)
             {
                 ItemModelBase oldItem = (ItemModelBase)e.OldValue;
-                PropertyChangedEventManager.RemoveHandler(oldItem, control.Item_TypeDefinitionChanged, nameof(oldItem.Definition));
+                PropertyChangedEventManager.RemoveHandler(oldItem, control.Item_DefinitionChanged, nameof(oldItem.Definition));
             }
             ItemModelBase? item = (ItemModelBase)e.NewValue;
             if (item != null)
             {
                 control.Definition = item.Definition;
-                PropertyChangedEventManager.AddHandler(item, control.Item_TypeDefinitionChanged, nameof(item.Definition));
+                PropertyChangedEventManager.AddHandler(item, control.Item_DefinitionChanged, nameof(item.Definition));
             }
         }
 
-        private void Item_TypeDefinitionChanged(object sender, EventArgs e) => this.Definition = ((ItemModelBase)sender).Definition;
+        private void Item_DefinitionChanged(object sender, EventArgs e) => this.Definition = ((ItemModelBase)sender).Definition;
 
         private sealed class SocketLabelConverter : IValueConverter
         {

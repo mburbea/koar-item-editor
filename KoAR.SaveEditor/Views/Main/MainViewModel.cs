@@ -126,13 +126,13 @@ namespace KoAR.SaveEditor.Views.Main
             private set => this.SetValue(ref this._unsavedChanges, value);
         }
 
-        internal void AddStashItem(ItemDefinition typeDefinition)
+        internal void AddStashItem(ItemDefinition definition)
         {
             if (this._gameSave?.Stash == null)
             {
                 return;
             }
-            this._gameSave.Stash.AddItem(typeDefinition);
+            this._gameSave.Stash.AddItem(definition);
             this.OnPropertyChanged(nameof(this.Stash));
             this.RepopulateItems(regenerate: true);
             this.UnsavedChanges = true;
