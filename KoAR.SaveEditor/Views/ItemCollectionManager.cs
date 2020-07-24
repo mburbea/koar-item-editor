@@ -25,6 +25,8 @@ namespace KoAR.SaveEditor.Views
 
         public static readonly DependencyProperty CollectionViewProperty;
 
+        public static readonly DependencyProperty DeleteItemCommandProperty = DependencyProperty.Register(nameof(ItemCollectionManager.DeleteItemCommand), typeof(ICommand), typeof(ItemCollectionManager));
+
         public static readonly DependencyProperty ItemsProperty = DependencyProperty.Register(nameof(ItemCollectionManager.Items), typeof(IReadOnlyList<ItemModelBase>), typeof(ItemCollectionManager),
             new PropertyMetadata(ItemCollectionManager.ItemsProperty_ValueChanged));
 
@@ -84,6 +86,12 @@ namespace KoAR.SaveEditor.Views
         {
             get => (ICollectionView?)this.GetValue(ItemCollectionManager.CollectionViewProperty);
             private set => this.SetValue(ItemCollectionManager._collectionViewPropertyKey, value);
+        }
+
+        public ICommand? DeleteItemCommand
+        {
+            get => (ICommand?)this.GetValue(ItemCollectionManager.DeleteItemCommandProperty);
+            set => this.SetValue(ItemCollectionManager.DeleteItemCommandProperty, value);
         }
 
         public IReadOnlyList<ItemModelBase>? Items

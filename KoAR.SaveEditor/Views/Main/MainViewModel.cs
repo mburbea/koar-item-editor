@@ -138,6 +138,18 @@ namespace KoAR.SaveEditor.Views.Main
             this.RegisterUnsavedChange();
         }
 
+        internal void DeleteStashItem(StashItem item)
+        {
+            if (this._gameSave?.Stash == null)
+            {
+                return;
+            }
+            this._gameSave.Stash.DeleteItem(item);
+            this.OnPropertyChanged(nameof(this.Stash));
+            this.RepopulateItems(regenerate: true);
+            this.RegisterUnsavedChange();
+        }
+
         internal void OpenFile()
         {
             OpenFileDialog dialog = new OpenFileDialog

@@ -22,12 +22,15 @@ namespace KoAR.SaveEditor.Views.StashManager
             this._mainViewModel = mainViewModel;
             this.ItemFilters.FilterChange += this.ItemFilters_FilterChange;
             this.RepopulateItems();
-            this.AddStashItemCommand = new DelegateCommand(this.AddStashItem);
+            this.AddItemCommand = new DelegateCommand(this.AddItem);
+            this.DeleteItemCommand = new DelegateCommand<StashItemModel>(this.DeleteItem);
         }
 
-        public DelegateCommand AddStashItemCommand { get; }
+        public DelegateCommand AddItemCommand { get; }
 
         public bool? AllItemsStolen => this.FilteredItems.GetAppliesToAll(item => item.IsStolen);
+
+        public DelegateCommand<StashItemModel> DeleteItemCommand { get; }
 
         public IReadOnlyList<StashItemModel> FilteredItems
         {
@@ -52,7 +55,7 @@ namespace KoAR.SaveEditor.Views.StashManager
             this.ItemFilters.FilterChange -= this.ItemFilters_FilterChange;
         }
 
-        private void AddStashItem()
+        private void AddItem()
         {
             ChangeOrAddItemViewModel viewModel = new ChangeOrAddItemViewModel();
             ChangeOrAddItemView view = new ChangeOrAddItemView
@@ -65,6 +68,13 @@ namespace KoAR.SaveEditor.Views.StashManager
                 return;
             }
             this._mainViewModel.AddStashItem(viewModel.Definition);
+            this.OnPropertyChanged(nameof(this.Stash));
+            this.RepopulateItems();
+        }
+
+        private void DeleteItem(StashItemModel model)
+        {
+            this._mainViewModel.DeleteStashItem(model.Item);
             this.OnPropertyChanged(nameof(this.Stash));
             this.RepopulateItems();
         }
