@@ -154,7 +154,7 @@ namespace KoAR.Core
 
         IItemBuffMemory IItem.ItemBuffs => ItemBuffs;
 
-        public static bool IsValidDurability(float durability) => durability > DurabilityLowerBound && durability < DurabilityUpperBound;
+        public static bool IsValidDurability(float durability) => durability >= DurabilityLowerBound && durability <= DurabilityUpperBound;
 
         internal byte[] Serialize(bool forced = false)
         {
