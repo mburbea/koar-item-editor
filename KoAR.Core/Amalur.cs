@@ -38,29 +38,23 @@ namespace KoAR.Core
             Thread.CurrentThread.CurrentCulture = Thread.CurrentThread.CurrentUICulture =
                 CultureInfo.DefaultThreadCurrentCulture = CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
             path ??= Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
-            var fileName = Path.Combine(path, "buff.json");
-            if (!File.Exists(fileName))
+            Buffs.AddRange(JsonSerializer.Deserialize<Buff[]>(File.ReadAllBytes(GetPath("buffs.json")), new JsonSerializerOptions
             {
-                throw new InvalidOperationException($"Cannot find {Path.GetFileName(fileName)}");
-            }
-            Buffs.AddRange(JsonSerializer.Deserialize<Buff[]>(
-                File.ReadAllBytes(fileName), new JsonSerializerOptions
-                {
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                    Converters = { new JsonStringEnumConverter() }
-                }));
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                Converters = { new JsonStringEnumConverter() }
+            }));
             BuffMap.AddRange(Buffs.Select(x => (x.Id, x)));
-            if (!File.Exists(fileName = Path.Combine(path, "gemDefinitions.csv")))
-            {
-                throw new InvalidOperationException($"Cannot find {Path.GetFileName(fileName)}");
-            }
-            GemDefinitions.AddRange(GemDefinition.ParseFile(fileName).Select(x => (x.TypeId, x)));
-            if (!File.Exists(fileName = Path.Combine(path, "definitions.csv")))
-            {
-                throw new InvalidOperationException($"Cannot find {Path.GetFileName(fileName)}");
-            }
-            ItemDefinitions.AddRange(ItemDefinition.ParseFile(fileName).Select(x => (x.TypeId, x)));
+            GemDefinitions.AddRange(GemDefinition.ParseFile(GetPath("gemDefinitions.csv")).Select(x => (x.TypeId, x)));
+            ItemDefinitions.AddRange(ItemDefinition.ParseFile(GetPath("definitions.csv")).Select(x => (x.TypeId, x)));
             Debug.WriteLine(sw.Elapsed);
+
+            string GetPath(string fileName)
+            {
+                var filePath = Path.Combine(path, fileName);
+                return File.Exists(filePath)
+                    ? filePath
+                    : throw new InvalidOperationException($"Cannot find {fileName}");
+            }
         }
 
         public static Buff GetBuff(uint buffId) => BuffMap.TryGetValue(buffId, out var buff)

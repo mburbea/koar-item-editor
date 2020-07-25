@@ -358,7 +358,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Update="buff.json">
+    <None Update="buffs.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="definitions.csv">
