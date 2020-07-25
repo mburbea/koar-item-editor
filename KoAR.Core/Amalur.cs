@@ -35,9 +35,9 @@ namespace KoAR.Core
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 Converters = { new JsonStringEnumConverter() }
             }));
-            AddData(BuffMap, Buffs, buff => buff.Id);
-            AddData(GemDefinitions, GemDefinition.ParseFile(GetPath("gemDefinitions.csv")), gemDef => gemDef.TypeId);
-            AddData(ItemDefinitions, ItemDefinition.ParseFile(GetPath("definitions.csv")), itemDef => itemDef.TypeId);
+            BuffMap.AddRange(Buffs, buff => buff.Id);
+            GemDefinitions.AddRange(GemDefinition.ParseFile(GetPath("gemDefinitions.csv")), gemDef => gemDef.TypeId);
+            ItemDefinitions.AddRange(ItemDefinition.ParseFile(GetPath("definitions.csv")), itemDef => itemDef.TypeId);
             Debug.WriteLine(sw.Elapsed);
 
             string GetPath(string fileName)
@@ -47,17 +47,17 @@ namespace KoAR.Core
                     ? filePath
                     : throw new InvalidOperationException($"Cannot find {fileName}");
             }
-
-            static void AddData<TKey, TData>(Dictionary<TKey, TData> dictionary, IEnumerable<TData> data, Func<TData, TKey> getKey)
-            {
-                foreach (var datum in data)
-                {
-                    dictionary.Add(getKey(datum), datum);
-                }
-            }
         }
 
         internal static TValue? GetOrDefault<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key)
             where TValue : class => dictionary.TryGetValue(key, out TValue? res) ? res : default;
+
+        private static void AddRange<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, IEnumerable<TValue> values, Func<TValue, TKey> getKey)
+        {
+            foreach (var value in values)
+            {
+                dictionary.Add(getKey(value), value);
+            }
+        }
     }
 }
