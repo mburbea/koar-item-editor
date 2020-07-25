@@ -16,21 +16,17 @@ namespace KoAR.Core
     public static class Amalur
     {
         internal static readonly char[] Seperator = { ',' };
-        private static void AddRange<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, IEnumerable<(TKey, TValue)> data)
-        {
-            foreach (var (k, v) in data)
-            {
-                dictionary.Add(k, v);
-            }
-        }
 
-        internal static TValue? GetOrDefault<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key) where TValue : class =>
-            dictionary.TryGetValue(key, out TValue? res) ? res : default;
+        internal static TValue? GetOrDefault<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key)
+            where TValue : class => dictionary.TryGetValue(key, out TValue? res) ? res : default;
 
         public static Dictionary<uint, ItemDefinition> ItemDefinitions { get; } = new Dictionary<uint, ItemDefinition>();
         public static List<Buff> Buffs { get; } = new List<Buff>();
         public static Dictionary<uint, Buff> BuffMap { get; } = new Dictionary<uint, Buff>();
         public static Dictionary<uint, GemDefinition> GemDefinitions { get; } = new Dictionary<uint, GemDefinition>();
+
+        public static Buff GetBuff(uint buffId) =>
+            BuffMap.TryGetValue(buffId, out var buff) ? buff : new Buff { Id = buffId, Name = "Unknown" };
 
         public static void Initialize(string? path = null)
         {
@@ -43,9 +39,9 @@ namespace KoAR.Core
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 Converters = { new JsonStringEnumConverter() }
             }));
-            BuffMap.AddRange(Buffs.Select(x => (x.Id, x)));
-            GemDefinitions.AddRange(GemDefinition.ParseFile(GetPath("gemDefinitions.csv")).Select(x => (x.TypeId, x)));
-            ItemDefinitions.AddRange(ItemDefinition.ParseFile(GetPath("definitions.csv")).Select(x => (x.TypeId, x)));
+            AddValues(BuffMap, Buffs, buff => buff.Id);
+            AddValues(GemDefinitions, GemDefinition.ParseFile(GetPath("gemDefinitions.csv")), gem => gem.TypeId);
+            AddValues(ItemDefinitions, ItemDefinition.ParseFile(GetPath("definitions.csv")), def => def.TypeId);
             Debug.WriteLine(sw.Elapsed);
 
             string GetPath(string fileName)
@@ -55,9 +51,14 @@ namespace KoAR.Core
                     ? filePath
                     : throw new InvalidOperationException($"Cannot find {fileName}");
             }
-        }
 
-        public static Buff GetBuff(uint buffId) => BuffMap.TryGetValue(buffId, out var buff)
-                    ? buff : new Buff { Id = buffId, Name = "Unknown" };
+            static void AddValues<TKey, TValue>(Dictionary<TKey, TValue> dictionary, IEnumerable<TValue> data, Func<TValue, TKey> getKey)
+            {
+                foreach (var value in data)
+                {
+                    dictionary.Add(getKey(value), value);
+                }
+            }
+        }
     }
 }
