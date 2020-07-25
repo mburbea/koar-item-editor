@@ -26,37 +26,11 @@ namespace KoAR.SaveEditor.Views.Main
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            MainViewModel viewModel = (MainViewModel)this.DataContext;
-            if (viewModel.UnsavedChanges)
-            {
-                TaskDialogResult result = TaskDialog.Show(new TaskDialogOptions
-                {
-                    MainInstruction = "Unsaved Changes Detected!",
-                    Content = "Changed were made to the equipment that have not been saved.",
-                    Owner = this,
-                    CommandButtons = new[]
-                    {
-                        "Quit without saving.",
-                        "Save before closing.\nFile will be saved and then the application will close.",
-                        "Cancel.\nApplication will not close."
-                    },
-                    DefaultButtonIndex = 0,
-                    Title = "KoAR Save Editor",
-                    MainIcon = VistaTaskDialogIcon.Warning,
-                    AllowDialogCancellation = true,
-                    FooterText = " " // Dialog looks a bit weird without a footer.
-                });
-                switch (result.CommandButtonResult)
-                {
-                    case null:
-                    case 2:
-                        e.Cancel = true;
-                        break;
-                    case 1:
-                        viewModel.Save();
-                        break;
-                }
-            }
+            e.Cancel = ((MainViewModel)this.DataContext).CancelDueToUnsavedChanges(
+                "Quit without saving.",
+                "Save before closing.\nFile will be saved and then the application will close.",
+                "Application will not close."
+            );
             base.OnClosing(e);
         }
 

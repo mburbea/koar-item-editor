@@ -8,6 +8,7 @@ using KoAR.SaveEditor.Constructs;
 using KoAR.SaveEditor.Views.ChangeOrAddItem;
 using KoAR.SaveEditor.Views.StashManager;
 using Microsoft.Win32;
+using TaskDialogInterop;
 
 namespace KoAR.SaveEditor.Views.Main
 {
@@ -126,6 +127,41 @@ namespace KoAR.SaveEditor.Views.Main
             private set => this.SetValue(ref this._unsavedChanges, value);
         }
 
+        public bool CancelDueToUnsavedChanges(string proceedText, string saveText, string cancelDescription)
+        {
+            if (!this.UnsavedChanges)
+            {
+                return false;
+            }
+            TaskDialogResult result = TaskDialog.Show(new TaskDialogOptions
+            {
+                MainInstruction = "Unsaved Changes Detected!",
+                Content = "Changed were made to the equipment that have not been saved.",
+                Owner = Application.Current.MainWindow,
+                CommandButtons = new[]
+                {
+                    proceedText,
+                    saveText,
+                    $"Cancel.\n{cancelDescription}"
+                },
+                DefaultButtonIndex = 0,
+                Title = "KoAR Save Editor",
+                MainIcon = VistaTaskDialogIcon.Warning,
+                AllowDialogCancellation = true,
+                FooterText = " " // Dialog looks a bit weird without a footer.
+            });
+            switch (result.CommandButtonResult)
+            {
+                case 0:
+                    return false;
+                case 1:
+                    this.Save();
+                    return false;
+                default:
+                    return true;
+            }
+        }
+
         internal void AddStashItem(ItemDefinition definition)
         {
             if (this._gameSave?.Stash == null)
@@ -159,7 +195,11 @@ namespace KoAR.SaveEditor.Views.Main
                 Filter = "Save Files (*.sav)|*.sav",
                 CheckFileExists = true,
             };
-            if (dialog.ShowDialog(Application.Current.MainWindow) != true)
+            if (dialog.ShowDialog(Application.Current.MainWindow) != true || this.CancelDueToUnsavedChanges(
+                $"Ignore.\nLoad \"{dialog.FileName}\" without saving the current file.",
+                $"Save before loading.\nCurrent file will be saved and then \"{dialog.FileName}\" will be loaded.",
+                "Proceed with the current file."
+            ))
             {
                 return;
             }
