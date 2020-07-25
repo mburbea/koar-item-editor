@@ -40,14 +40,6 @@ namespace KoAR.SaveEditor.Constructs
             return new Disposable(this.DecrementPause);
         }
 
-        public void ForEach(Action<T> action)
-        {
-            foreach (T item in this.Items)
-            {
-                action(item);
-            }
-        }
-
         public void OnReset()
         {
             this.OnCollectionChanged(NotifyingCollection<T>._resetArgs);

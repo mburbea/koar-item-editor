@@ -92,9 +92,15 @@ namespace KoAR.SaveEditor.Views.StashManager
         {
             using (this._items.CreatePauseEventsScope())
             {
-                this._items.ForEach(item => item.Dispose());
-                this._items.Clear();
-                this.Stash.Items.ForEach(item => this._items.Add(new StashItemModel(item)));
+                for (int index = this._items.Count - 1; index != -1; index--)
+                {
+                    using StashItemModel item = this._items[index];
+                    this._items.RemoveAt(index);
+                }
+                foreach (StashItemModel item in this.Stash.Items.Select(item => new StashItemModel(item)))
+                {
+                    this._items.Add(item);
+                }
             }
             this.OnFilterChange();
         }
