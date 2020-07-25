@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -130,6 +129,10 @@ namespace KoAR.Core
                 {
                     foreach (var item in Items)
                     {
+                        if(item.ItemGems.ItemOffset > itemIndex)
+                        {
+                            item.ItemGems.ItemOffset += delta;
+                        }
                         if (item.ItemBuffs.ItemOffset > itemIndex)
                         {
                             item.ItemBuffs.ItemOffset += delta;

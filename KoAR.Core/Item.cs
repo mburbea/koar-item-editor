@@ -132,7 +132,7 @@ namespace KoAR.Core
             ? Rarity.Set
             : PlayerBuffs.Select(x => x.Rarity)
                 .Concat(ItemBuffs.List.Select(x => x.Rarity))
-                .Concat(ItemGems.Gems.OfType<Gem>().Select(x => x.Definition.Buff.Rarity))
+                .Concat(ItemGems.Gems.Select(x => x.Definition.Buff.Rarity))
                 .Concat(new[] { ItemBuffs.Prefix?.Rarity ?? default, ItemBuffs.Suffix?.Rarity ?? default, Definition.Sockets.Any() ? Rarity.Infrequent : Rarity.Common })
                 .Max();
 

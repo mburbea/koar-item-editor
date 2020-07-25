@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace KoAR.Core
+﻿namespace KoAR.Core
 {
     // since this is an internal enum, I've switched to constants as it made the code less annoying.
     internal enum InventoryState : byte
