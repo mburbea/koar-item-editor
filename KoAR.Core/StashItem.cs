@@ -12,6 +12,7 @@ namespace KoAR.Core
 
         public StashItem(GameSave gameSave, int offset, int datalength)
         {
+            ItemOffset = offset;
             Bytes = gameSave.Bytes.AsSpan(offset, datalength).ToArray();
             PlayerBuffs.Capacity = BuffCount;
             var firstBuff = Offsets.FirstBuff;
