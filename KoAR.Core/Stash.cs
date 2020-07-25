@@ -29,7 +29,7 @@ namespace KoAR.Core
         {
             (_gameSave, _offset) = (gameSave, offset);
             Items.Capacity = Count;
-            Span<byte> data = _gameSave.Bytes.AsSpan(_offset, DataLength - 21);
+            Span<byte> data = _gameSave.Bytes.AsSpan(_offset, DataLength);
             if (Items.Capacity > 0)
             {
                 var indices = GetAllIndices(data);
@@ -43,11 +43,11 @@ namespace KoAR.Core
 
         public int DataLength
         {
-            get => MemoryUtilities.Read<int>(_gameSave.Bytes, _offset);
+            get => MemoryUtilities.Read<int>(_gameSave.Bytes, _offset) - 17;
             private set
             {
-                MemoryUtilities.Write(_gameSave.Bytes, _offset, value);
-                MemoryUtilities.Write(_gameSave.Bytes, _offset + 9, value - 9);
+                MemoryUtilities.Write(_gameSave.Bytes, _offset, value + 17);
+                MemoryUtilities.Write(_gameSave.Bytes, _offset + 9, value - 9 + 17);
             }
         }
 
