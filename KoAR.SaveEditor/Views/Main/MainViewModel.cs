@@ -127,6 +127,18 @@ namespace KoAR.SaveEditor.Views.Main
             private set => this.SetValue(ref this._unsavedChanges, value);
         }
 
+        public void AddStashItem(ItemDefinition definition)
+        {
+            if (this._gameSave?.Stash == null)
+            {
+                return;
+            }
+            this._gameSave.Stash.AddItem(definition);
+            this.OnPropertyChanged(nameof(this.Stash));
+            this.RepopulateItems(regenerate: true);
+            this.RegisterUnsavedChange();
+        }
+
         public bool CancelDueToUnsavedChanges(string proceedText, string saveText, string cancelDescription)
         {
             if (!this.UnsavedChanges)
@@ -162,19 +174,7 @@ namespace KoAR.SaveEditor.Views.Main
             }
         }
 
-        internal void AddStashItem(ItemDefinition definition)
-        {
-            if (this._gameSave?.Stash == null)
-            {
-                return;
-            }
-            this._gameSave.Stash.AddItem(definition);
-            this.OnPropertyChanged(nameof(this.Stash));
-            this.RepopulateItems(regenerate: true);
-            this.RegisterUnsavedChange();
-        }
-
-        internal void DeleteStashItem(StashItem item)
+        public void DeleteStashItem(StashItem item)
         {
             if (this._gameSave?.Stash == null)
             {
@@ -186,7 +186,7 @@ namespace KoAR.SaveEditor.Views.Main
             this.RegisterUnsavedChange();
         }
 
-        internal void OpenFile()
+        public void OpenFile()
         {
             OpenFileDialog dialog = new OpenFileDialog
             {
@@ -213,9 +213,7 @@ namespace KoAR.SaveEditor.Views.Main
             this.OnPropertyChanged(nameof(this.UnsavedChanges));
         }
 
-        internal void RegisterUnsavedChange() => this.UnsavedChanges = true;
-
-        internal void Save()
+        public void Save()
         {
             if (this._gameSave == null)
             {
@@ -306,6 +304,8 @@ namespace KoAR.SaveEditor.Views.Main
             };
             view.ShowDialog();
         }
+
+        private void RegisterUnsavedChange() => this.UnsavedChanges = true;
 
         private void RepopulateItems(bool regenerate = false)
         {
