@@ -139,7 +139,7 @@ namespace KoAR.SaveEditor.Views.Main
             this.RegisterUnsavedChange();
         }
 
-        public bool CancelDueToUnsavedChanges(string proceedText, string saveText, string cancelDescription)
+        public bool CancelDueToUnsavedChanges(string proceedText, string saveProceedText, string cancelDescription)
         {
             if (!this.UnsavedChanges)
             {
@@ -153,7 +153,7 @@ namespace KoAR.SaveEditor.Views.Main
                 CommandButtons = new[]
                 {
                     proceedText,
-                    saveText,
+                    saveProceedText,
                     $"Cancel.\n{cancelDescription}"
                 },
                 DefaultButtonIndex = 0,
@@ -164,14 +164,13 @@ namespace KoAR.SaveEditor.Views.Main
             });
             switch (result.CommandButtonResult)
             {
-                case 0:
+                case 0: // Proceed.
                     return false;
-                case 1:
+                case 1: // Save & Proceed.
                     this.Save();
                     return false;
-                default:
-                    return true;
             }
+            return true; // Cancel.
         }
 
         public void DeleteStashItem(StashItem item)
