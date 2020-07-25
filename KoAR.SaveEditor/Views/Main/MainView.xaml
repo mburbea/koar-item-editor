@@ -22,9 +22,14 @@
     <Window.DataContext>
         <Binding Source="{StaticResource ViewModel}" />
     </Window.DataContext>
+    <Window.CommandBindings>
+        <CommandBinding Command="Help" Executed="Help_Executed" />
+        <CommandBinding Command="Open" Executed="Open_Executed" />
+        <CommandBinding Command="Save" Executed="Save_Executed" CanExecute="Save_CanExecute" />
+    </Window.CommandBindings>
     <Window.InputBindings>
-        <KeyBinding Gesture="CTRL+O" Command="{Binding OpenFileCommand}" />
-        <KeyBinding Gesture="CTRL+S" Command="{Binding SaveCommand}" />
+        <KeyBinding Gesture="CTRL+O" Command="Open" />
+        <KeyBinding Gesture="CTRL+S" Command="Save" />
         <KeyBinding Key="F1" Command="Help" />
     </Window.InputBindings>
     <Window.Style>
@@ -89,8 +94,8 @@
                 <BitmapImage UriSource="/KoAR.SaveEditor;component/Resources/Help.png" x:Key="Help" po:Freeze="True" />
             </Border.Resources>
             <StackPanel Orientation="Horizontal">
-                <Button ToolTip="Open File..." Command="{Binding OpenFileCommand}" Tag="{StaticResource Open}" />
-                <Button ToolTip="Save" Command="{Binding SaveCommand}" Tag="{StaticResource Save}" />
+                <Button ToolTip="Open File..." Command="Open" Tag="{StaticResource Open}" />
+                <Button ToolTip="Save" Command="Save" Tag="{StaticResource Save}" />
                 <Button ToolTip="Help" Command="Help" Tag="{StaticResource Help}" />
             </StackPanel>
         </Border>

@@ -24,14 +24,16 @@ namespace KoAR.SaveEditor.Views.Main
         {
             this._filteredItems = this._items = new NotifyingCollection<ItemModel>();
             this.ItemFilters.FilterChange += this.ItemFilters_FilterChange;
-            this.OpenFileCommand = new DelegateCommand(this.OpenFile);
             this.ChangeDefinitionCommand = new DelegateCommand<ItemModel>(this.ChangeDefinition);
             this.AddItemBuffCommand = new DelegateCommand<uint>(this.AddItemBuff, this.CanAddItemBuff);
             this.AddPlayerBuffCommand = new DelegateCommand<uint>(this.AddPlayerBuff, this.CanAddPlayerBuff);
             this.DeleteItemBuffCommand = new DelegateCommand<Buff>(this.DeleteItemBuff, this.CanDeleteItemBuff);
             this.DeletePlayerBuffCommand = new DelegateCommand<Buff>(this.DeletePlayerBuff, this.CanDeletePlayerBuff);
-            this.SaveCommand = new DelegateCommand(this.Save, () => this._unsavedChanges);
             this.OpenStashManagerCommand = new DelegateCommand(this.OpenStashManager, () => this._gameSave?.Stash != null);
+            if (!(bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(Window)).DefaultValue)
+            {
+                Application.Current.Activated += this.Application_Activated;
+            }
         }
 
         public DelegateCommand<uint> AddItemBuffCommand { get; }
@@ -107,11 +109,7 @@ namespace KoAR.SaveEditor.Views.Main
 
         public IReadOnlyList<ItemModel> Items => this._items;
 
-        public DelegateCommand OpenFileCommand { get; }
-
         public DelegateCommand OpenStashManagerCommand { get; }
-
-        public DelegateCommand SaveCommand { get; }
 
         public ItemModel? SelectedItem
         {
@@ -167,7 +165,7 @@ namespace KoAR.SaveEditor.Views.Main
                 case 0: // Proceed.
                     return false;
                 case 1: // Save & Proceed.
-                    this.Save();
+                    this.SaveFile();
                     return false;
             }
             return true; // Cancel.
@@ -212,7 +210,7 @@ namespace KoAR.SaveEditor.Views.Main
             this.OnPropertyChanged(nameof(this.UnsavedChanges));
         }
 
-        public void Save()
+        public void SaveFile()
         {
             if (this._gameSave == null)
             {
@@ -221,12 +219,20 @@ namespace KoAR.SaveEditor.Views.Main
             this._gameSave.SaveFile();
             this.UnsavedChanges = false;
             this.RepopulateItems();
-            MessageBox.Show($"Save successful! Original save backed up as {this.FileName}.bak.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(Application.Current.MainWindow, $"Save successful! Original save backed up as {this.FileName}.bak.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void AddItemBuff(uint buffId) => this._selectedItem?.AddItemBuff(Amalur.GetBuff(buffId));
 
         private void AddPlayerBuff(uint buffId) => this._selectedItem?.AddPlayerBuff(Amalur.GetBuff(buffId));
+
+        private void Application_Activated(object sender, EventArgs e)
+        {
+            Application application = (Application)sender;
+            application.Activated -= this.Application_Activated;
+            application.MainWindow.Closing += this.MainWindow_Closing;
+            application.Dispatcher.InvokeAsync(this.OpenFile);
+        }
 
         private bool CanAddItemBuff(uint buffId) => this._selectedItem != null && buffId != 0u;
 
@@ -236,13 +242,13 @@ namespace KoAR.SaveEditor.Views.Main
 
         private bool CanDeletePlayerBuff(Buff buff) => this._selectedItem != null && buff != null;
 
-        private void ChangeDefinition(ItemModel model)
+        private void ChangeDefinition(ItemModel item)
         {
             if (this._gameSave == null)
             {
                 return;
             }
-            ChangeOrAddItemViewModel viewModel = new ChangeOrAddItemViewModel(model);
+            ChangeOrAddItemViewModel viewModel = new ChangeOrAddItemViewModel(item);
             ChangeOrAddItemView view = new ChangeOrAddItemView
             {
                 Owner = Application.Current.MainWindow,
@@ -250,8 +256,8 @@ namespace KoAR.SaveEditor.Views.Main
             };
             if (view.ShowDialog() == true && viewModel.Definition != null)
             {
-                model.Definition = viewModel.Definition;
-                this._gameSave.WriteEquipmentBytes(model.Item, true);
+                item.Definition = viewModel.Definition;
+                this._gameSave.WriteEquipmentBytes(item.Item, true);
             }
         }
 
@@ -283,6 +289,15 @@ namespace KoAR.SaveEditor.Views.Main
         }
 
         private void ItemFilters_FilterChange(object? sender, EventArgs e) => this.OnFilterChange();
+
+        private void MainWindow_Closing(object sender, CancelEventArgs e)
+        {
+            e.Cancel = this.CancelDueToUnsavedChanges(
+                "Quit without saving.",
+                "Save before closing.\nFile will be saved and then the application will close.",
+                "Application will not close."
+            );
+        }
 
         private void OnFilterChange()
         {
