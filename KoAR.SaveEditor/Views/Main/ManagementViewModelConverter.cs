@@ -6,19 +6,19 @@ using System.Windows.Data;
 
 namespace KoAR.SaveEditor.Views.Main
 {
-    public sealed class ManagementViewModelConverter : IValueConverter
+    public sealed class ManagementViewModelConverter : IMultiValueConverter
     {
         [return: MaybeNull]
-        object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        object IMultiValueConverter.Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (parameter is MainWindowViewModel mainWindowViewModel && value is ManagementMode mode)
+            if (values.Length >= 2 && values[0] is MainWindowViewModel viewModel && values[1] is ManagementMode mode)
             {
-                return mode == ManagementMode.Inventory ? (object?)mainWindowViewModel.InventoryManager : mainWindowViewModel.StashManager;
+                return mode == ManagementMode.Inventory ? (object?)viewModel.InventoryManager : viewModel.StashManager;
             }
             return DependencyProperty.UnsetValue;
         }
 
-        object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        object[] IMultiValueConverter.ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }

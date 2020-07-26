@@ -6,9 +6,10 @@
     xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views"
     xmlns:local="clr-namespace:KoAR.SaveEditor.Views.Main"
+    xmlns:sm="clr-namespace:KoAR.SaveEditor.Views.StashManager"
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs" 
-    xmlns:themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
-    xmlns:s="clr-namespace:System;assembly=mscorlib"
+    xmlns:s="clr-namespace:System;assembly=mscorlib" 
+    xmlns:aero="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
     mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type local:MainWindowViewModel}}"
     Width="1366" Height="768" WindowStartupLocation="CenterScreen" 
     Icon="/app.ico" ResizeMode="CanResizeWithGrip">
@@ -23,7 +24,6 @@
                     <x:Type TypeName="local:ManagementMode" />
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
-            <constructs:StringIsNullOrEmptyConverter x:Key="StringIsNullOrEmptyConverter" />
             <constructs:IsNullConverter x:Key="IsNullConverter" />
             <local:ManagementViewModelConverter x:Key="ManagementViewModelConverter" />
         </ResourceDictionary>
@@ -135,12 +135,12 @@
                             </LinearGradientBrush.GradientStops>
                         </LinearGradientBrush>
                     </Popup.Resources>
-                    <themes:SystemDropShadowChrome Name="Shdw" Margin="0,0,5,5" Color="#71000000" SnapsToDevicePixels="True" CornerRadius="2">
+                    <aero:SystemDropShadowChrome Name="Shdw" Margin="0,0,5,5" Color="#71000000" SnapsToDevicePixels="True" CornerRadius="2">
                         <Border BorderThickness="1" BorderBrush="#767676" Background="{StaticResource Background}" Padding="4,5" CornerRadius="2">
                             <views:ZoomScaler HorizontalAlignment="Right" Grid.Column="3" Width="200" Foreground="#575757"
                                 Target="{Binding ElementName=PART_TabControl}" VerticalAlignment="Center" />
                         </Border>
-                    </themes:SystemDropShadowChrome>
+                    </aero:SystemDropShadowChrome>
                 </Popup>
             </StackPanel>
         </Border>
@@ -150,7 +150,7 @@
             <TabControl.Style>
                 <Style TargetType="{x:Type TabControl}" BasedOn="{StaticResource {x:Type TabControl}}">
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding FileName}" Value="{x:Null}">
+                        <DataTrigger Binding="{Binding GameSave}" Value="{x:Null}">
                             <Setter Property="IsEnabled" Value="False" />
                             <Setter Property="Opacity" Value="0.5" />
                         </DataTrigger>
@@ -160,18 +160,27 @@
             <TabControl.ItemTemplate>
                 <DataTemplate DataType="{x:Type local:ManagementMode}">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding}" VerticalAlignment="Center" Margin="2" />
-                        <TextBlock Tag="{Binding Converter={StaticResource ManagementViewModelConverter}, ConverterParameter={StaticResource ViewModel}}" VerticalAlignment="Center" Margin="2">
-                            <TextBlock.Style>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Style.Triggers>
-                                        <Trigger Property="Tag" Value="{x:Null}">
-                                            <Setter Property="Text" Value="" />
-                                        </Trigger>
-                                    </Style.Triggers>
-                                    <Setter Property="Text" Value="{Binding Tag.Items.Count, RelativeSource={RelativeSource Self}}" />
-                                </Style>
-                            </TextBlock.Style>
+                        <TextBlock VerticalAlignment="Center" Margin="2">                            
+                            <Run Text="{Binding Mode=OneTime}" />
+                            <Run>
+                                <Run.Tag>
+                                    <MultiBinding Converter="{StaticResource ManagementViewModelConverter}">
+                                        <Binding Source="{StaticResource ViewModel}" />
+                                        <Binding />
+                                        <!-- Used to retrigger converter -->
+                                        <Binding Path="GameSave" Source="{StaticResource ViewModel}" />
+                                    </MultiBinding>
+                                </Run.Tag>
+                                <Run.Style>
+                                    <Style TargetType="{x:Type Run}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}, Converter={StaticResource IsNullConverter}}" Value="False">
+                                                <Setter Property="Text" Value="{Binding Tag.Items.Count, RelativeSource={RelativeSource Self}, StringFormat='({0})', Mode=OneWay}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Run.Style>
+                            </Run>
                         </TextBlock>
                     </StackPanel>
                 </DataTemplate>
@@ -179,21 +188,33 @@
             <TabControl.ItemContainerStyle>
                 <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource {x:Type TabItem}}">
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding Header, RelativeSource={RelativeSource Self}, Converter={StaticResource ManagementViewModelConverter}, ConverterParameter={StaticResource ViewModel}}" Value="{x:Null}">
+                        <Trigger Property="Tag" Value="{x:Null}">
                             <Setter Property="IsEnabled" Value="False" />
-                        </DataTrigger>
+                        </Trigger>
                     </Style.Triggers>
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    <Setter Property="Tag">
+                        <Setter.Value>
+                            <MultiBinding Converter="{StaticResource ManagementViewModelConverter}">
+                                <Binding Source="{StaticResource ViewModel}" />
+                                <Binding Path="Header" RelativeSource="{RelativeSource Self}" />
+                                <!-- Used to retrigger converter -->
+                                <Binding Path="GameSave" Source="{StaticResource ViewModel}" />
+                            </MultiBinding>
+                        </Setter.Value>
+                    </Setter>
                 </Style>
             </TabControl.ItemContainerStyle>
-            <!--
-            <TabControl.ContentTemplate>
-                <DataTemplate>
-                    <Grid>
-
-                    </Grid>
-                </DataTemplate>
-            </TabControl.ContentTemplate>
-            -->
+            <TabControl.ContentTemplateSelector>
+                <constructs:KeyedDataTemplateSelector>
+                    <DataTemplate x:Key="{x:Static local:ManagementMode.Inventory}">
+                        <TextBlock Text="{Binding}" />
+                    </DataTemplate>
+                    <DataTemplate x:Key="{x:Static local:ManagementMode.Stash}">
+                        <sm:StashManagerControl DataContext="{Binding StashManager, Source={StaticResource ViewModel}}"/>
+                    </DataTemplate>
+                </constructs:KeyedDataTemplateSelector>
+            </TabControl.ContentTemplateSelector>
         </TabControl>
     </DockPanel>
 </Window>

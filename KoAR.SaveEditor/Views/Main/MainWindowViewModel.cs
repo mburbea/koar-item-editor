@@ -29,11 +29,7 @@ namespace KoAR.SaveEditor.Views.Main
 
         public event EventHandler? RepopulateItemsRequested;
 
-        public GameSave? GameSave
-        {
-            get => this._gameSave;
-            private set => this.SetValue(ref this._gameSave, value);
-        }
+        public GameSave? GameSave => this._gameSave;
 
         public bool HasUnsavedChanges
         {
@@ -89,9 +85,10 @@ namespace KoAR.SaveEditor.Views.Main
                 return;
             }
             this.HasUnsavedChanges = false;
-            this.GameSave = new GameSave(dialog.FileName);
+            this._gameSave = new GameSave(dialog.FileName);
             this.InventoryManager = new InventoryManagerViewModel(this);
-            this.StashManager = this.GameSave.Stash == null ? default : new StashManagerViewModel(this);
+            this.StashManager = this._gameSave.Stash == null ? default : new StashManagerViewModel(this);
+            this.OnPropertyChanged(nameof(this.GameSave));
             this.Mode = default;
         }
 
