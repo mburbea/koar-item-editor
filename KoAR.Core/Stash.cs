@@ -67,7 +67,7 @@ namespace KoAR.Core
 
         public List<StashItem> Items { get; } = new List<StashItem>();
 
-        public void AddItem(ItemDefinition type)
+        public StashItem AddItem(ItemDefinition type)
         {
             // Why don't we use the StashItem class? 
             // 1. Because we don't support mutating them yet
@@ -90,6 +90,7 @@ namespace KoAR.Core
             Items.Add(new StashItem(_gameSave, offset, temp.Length));
             _gameSave.UpdateOffsets(offset, temp.Length);
             _gameSave.UpdateDataLengths(offset, temp.Length);
+            return Items[^1];
         }
 
         public void DeleteItem(StashItem item)
