@@ -234,7 +234,7 @@ namespace KoAR.Core
                         if (gems[i].Definition.SocketType == socket)
                         {
                             gem = gems[i];
-                            (gems[0], gems[i]) = (gems[i], gems[0]);
+                            (gems[start], gems[i]) = (gems[i], gems[start]);
                             start++;
                             break;
                         }
