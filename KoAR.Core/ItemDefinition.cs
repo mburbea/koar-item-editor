@@ -65,7 +65,7 @@ namespace KoAR.Core
         }
 
         internal ItemDefinition(EquipmentCategory category, uint typeId, byte level, string name, string internalName, float maxDurability, Rarity rarity,
-            string sockets, Element element, ArmorType armorType, Buff? prefix, Buff? suffix, Buff[] itemBuffs, Buff[] playerBuffs, bool hasVariants)
+            string socketTypes, Element element, ArmorType armorType, Buff? prefix, Buff? suffix, Buff[] itemBuffs, Buff[] playerBuffs, bool hasVariants)
         {
             Category = category;
             TypeId = typeId;
@@ -74,7 +74,7 @@ namespace KoAR.Core
             InternalName = internalName;
             MaxDurability = maxDurability;
             Rarity = rarity;
-            Sockets = sockets;
+            SocketTypes = socketTypes;
             ArmorType = armorType;
             Element = element;
             PlayerBuffs = playerBuffs;
@@ -94,7 +94,7 @@ namespace KoAR.Core
         public string InternalName { get; }
         public float MaxDurability { get; }
         public Rarity Rarity { get; }
-        public string Sockets { get; }
+        public string SocketTypes { get; }
         public Element Element { get; }
         public ArmorType ArmorType { get; }
         public Buff[] PlayerBuffs { get; }
@@ -103,7 +103,7 @@ namespace KoAR.Core
         public bool IsMerchant { get; }
         public IItemBuffMemory ItemBuffs { get; }
 
-        public IEnumerable<GemSocket> GetGemSockets() => Sockets.Select(socket => new GemSocket(socket));
+        public IEnumerable<Socket> GetSockets() => SocketTypes.Select(socket => new Socket(socket));
 
         public string CategoryDisplayName => this switch
         {

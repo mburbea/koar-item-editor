@@ -12,17 +12,18 @@ namespace KoAR.SaveEditor.Views
         public static readonly DependencyProperty DefinitionProperty = DependencyProperty.Register(nameof(ItemDefinitionControl.Definition), typeof(ItemDefinition), typeof(ItemDefinitionControl),
             new PropertyMetadata(ItemDefinitionControl.Definition_ValueChanged));
 
-        public static readonly DependencyProperty GemSocketsProperty;
+        public static readonly DependencyProperty SocketsProperty;
 
         public static readonly DependencyProperty ItemProperty = DependencyProperty.Register(nameof(ItemDefinitionControl.Item), typeof(ItemModelBase), typeof(ItemDefinitionControl),
             new PropertyMetadata(ItemDefinitionControl.ItemProperty_ValueChanged));
 
-        private static readonly DependencyPropertyKey _gemSocketsPropertyKey = DependencyProperty.RegisterReadOnly(nameof(GemSockets), typeof(IEnumerable<GemSocket>), typeof(ItemDefinitionControl), new PropertyMetadata());
+        private static readonly DependencyPropertyKey _socketsPropertyKey = DependencyProperty.RegisterReadOnly(nameof(Sockets), typeof(IEnumerable<Socket>), typeof(ItemDefinitionControl), 
+            new PropertyMetadata());
 
         static ItemDefinitionControl()
         {
-            GemSocketsProperty = _gemSocketsPropertyKey.DependencyProperty;
             FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(ItemDefinitionControl), new FrameworkPropertyMetadata(typeof(ItemDefinitionControl)));
+            ItemDefinitionControl.SocketsProperty = ItemDefinitionControl._socketsPropertyKey.DependencyProperty;
         }
 
         public ItemDefinition? Definition
@@ -31,10 +32,10 @@ namespace KoAR.SaveEditor.Views
             set => this.SetValue(ItemDefinitionControl.DefinitionProperty, value);
         }
 
-        public IEnumerable<GemSocket>? GemSockets
+        public IEnumerable<Socket>? Sockets
         {
-            get => (IEnumerable<GemSocket>?)this.GetValue(ItemDefinitionControl.GemSocketsProperty);
-            private set => this.SetValue(ItemDefinitionControl._gemSocketsPropertyKey, value);
+            get => (IEnumerable<Socket>?)this.GetValue(ItemDefinitionControl.SocketsProperty);
+            private set => this.SetValue(ItemDefinitionControl._socketsPropertyKey, value);
         }
 
         public ItemModelBase? Item
@@ -48,7 +49,7 @@ namespace KoAR.SaveEditor.Views
             ItemDefinitionControl control = (ItemDefinitionControl)d;
             if (control.Item == null)
             {
-                control.GemSockets = ((ItemDefinition?)e.NewValue)?.GetGemSockets();
+                control.Sockets = ((ItemDefinition?)e.NewValue)?.GetSockets();
             }
         }
 
@@ -65,19 +66,17 @@ namespace KoAR.SaveEditor.Views
             {
                 control.Definition = item.Definition;
                 PropertyChangedEventManager.AddHandler(item, control.Item_DefinitionChanged, nameof(item.Definition));
-                control.GemSockets = item.Item.GetGemSockets();
+                control.Sockets = item.Item.GetSockets();
             }
             else
             {
-                control.GemSockets = null;
+                control.Sockets = null;
             }
         }
 
         private void Item_DefinitionChanged(object sender, EventArgs e)
         {
             this.Definition = ((ItemModelBase)sender).Definition;
-        }
-
-        
+        }        
     }
 }

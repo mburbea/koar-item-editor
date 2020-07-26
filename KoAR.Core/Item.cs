@@ -134,7 +134,7 @@ namespace KoAR.Core
             : PlayerBuffs.Select(x => x.Rarity)
                 .Concat(ItemBuffs.List.Select(x => x.Rarity))
                 .Concat(ItemGems.Gems.Select(x => x.Definition.Buff.Rarity))
-                .Concat(new[] { ItemBuffs.Prefix?.Rarity ?? default, ItemBuffs.Suffix?.Rarity ?? default, Definition.Sockets.Any() ? Rarity.Infrequent : Rarity.Common })
+                .Concat(new[] { ItemBuffs.Prefix?.Rarity ?? default, ItemBuffs.Suffix?.Rarity ?? default, Definition.SocketTypes.Any() ? Rarity.Infrequent : Rarity.Common })
                 .Max();
 
         public string ItemName { get; set; } = string.Empty;
@@ -215,16 +215,16 @@ namespace KoAR.Core
             Level = definition.Level;
         }
 
-        public IEnumerable<GemSocket> GetGemSockets()
+        public IEnumerable<Socket> GetSockets()
         {
             return ItemGems.Gems.Length switch
             {
-                0 => Definition.GetGemSockets(),
-                1 when Definition.Sockets.Length == 1 => new[] { new GemSocket(Definition.Sockets[0], ItemGems.Gems[0]) }, // trivial case.
-                _ => Inner(Definition.Sockets, ItemGems.Gems.AsSpan().ToArray())
+                0 => Definition.GetSockets(),
+                1 when Definition.SocketTypes.Length == 1 => new[] { new Socket(Definition.SocketTypes[0], ItemGems.Gems[0]) }, // trivial case.
+                _ => Inner(Definition.SocketTypes, ItemGems.Gems.AsSpan().ToArray())
             };
 
-            static IEnumerable<GemSocket> Inner(string sockets, Gem[] gems)
+            static IEnumerable<Socket> Inner(string sockets, Gem[] gems)
             {
                 int start = 0;
                 foreach (var socket in sockets)
@@ -240,7 +240,7 @@ namespace KoAR.Core
                             break;
                         }
                     }
-                    yield return new GemSocket(socket, gem);
+                    yield return new Socket(socket, gem);
                 }
             }
         }
