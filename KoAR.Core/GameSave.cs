@@ -8,8 +8,8 @@ namespace KoAR.Core
     public sealed class GameSave
     {
         private int? _bagOffset;
-        private int _fileLengthOffset;
-        private int _simTypeOffset;
+        private int[] _dataLengthOffsets;
+        
         private Container _itemBuffsContainer;
         private Container _itemContainer;
         private Container _itemGemsContainer;
@@ -36,20 +36,20 @@ namespace KoAR.Core
 
         public Stash? Stash { get; private set; }
 
-        internal int FileLength
+        internal void UpdateDataLengths(int delta)
         {
-            get => MemoryUtilities.Read<int>(Bytes, _fileLengthOffset);
-            set => MemoryUtilities.Write(Bytes, _fileLengthOffset, value);
+            foreach(var offset in _dataLengthOffsets)
+            {
+                var oldVal = MemoryUtilities.Read<int>(Bytes, offset);
+                MemoryUtilities.Write(Bytes, offset, delta + oldVal);
+            }
         }
-
-        private int SimtypeSizes
-        {
-            get => MemoryUtilities.Read<int>(Bytes, _simTypeOffset + 5);
-            set => MemoryUtilities.Write(Bytes, _simTypeOffset + 5, value);
-        }
+        
 
         public void GetAllEquipment()
         {
+            ReadOnlySpan<byte> unknownLength = new byte[] { 0x0C, 0xAE, 0x32, 0x00, 0x00 };
+            ReadOnlySpan<byte> unknownLength2 = new byte[] { 0xF7, 0x5D, 0x3C, 0x00, 0x0A };
             ReadOnlySpan<byte> typeIdSeq = new byte[] { 0x23, 0xCC, 0x58, 0x00, 0x03 };
             ReadOnlySpan<byte> fileLengthSeq = new byte[8] { 0, 0, 0, 0, 0xA, 0, 0, 0 };
             ReadOnlySpan<byte> itemsMarker = new byte[5] { 0xD3, 0x34, 0x43, 0x00, 0x00 };
@@ -61,7 +61,13 @@ namespace KoAR.Core
             const int playerElfFemale = 0x0A3870;
 
             ReadOnlySpan<byte> data = Bytes;
-            _fileLengthOffset = data.IndexOf(fileLengthSeq) - 4;
+            _dataLengthOffsets = new[]{
+                data.IndexOf(fileLengthSeq) - 4,
+                data.IndexOf(unknownLength) + 5,
+                data.IndexOf(unknownLength2) + 5,
+                data.IndexOf(typeIdSeq) + 5,
+
+            };
             _itemContainer = new Container(this, data.IndexOf(itemsMarker), 0x00_24_D5_68_00_00_00_0Bul);
             _itemBuffsContainer = new Container(this, data.IndexOf(itemBuffsMarker), 0x00_28_60_84_00_00_00_0Bul);
             _itemGemsContainer = new Container(this, data.IndexOf(itemGemsMarker), 0x00_59_36_38_00_00_00_0Bul);
@@ -71,8 +77,7 @@ namespace KoAR.Core
             Items.Clear();
             Gems.Clear();
             Stash = Stash.TryCreateStash(this);
-            _simTypeOffset = data.IndexOf(typeIdSeq);
-            int ixOfActor = _simTypeOffset + 9;
+            int ixOfActor = _dataLengthOffsets[^1] + 4;
             int playerActor = 0;
             var candidates = new List<(int id, int typeIdOffset, ItemDefinition definition)>();
 
@@ -150,15 +155,17 @@ namespace KoAR.Core
             if (delta != 0)
             {
                 _itemBuffsContainer.UpdateDataLength(delta);
+                _itemGemsContainer = _itemGemsContainer.UpdateOffset(delta);
             }
             var delta2 = WriteItem(item.ItemOffset, item.DataLength, item.Serialize(forced));
             if (delta2 != 0)
             {
                 _itemContainer.UpdateDataLength(delta2);
+                _itemBuffsContainer = _itemBuffsContainer.UpdateOffset(delta2);
+                _itemGemsContainer = _itemGemsContainer.UpdateOffset(delta2);
             }
 
-            FileLength += delta + delta2;
-            SimtypeSizes += delta + delta2;
+            UpdateDataLengths(delta + delta2);
         }
 
         private int GetBagOffset()
