@@ -33,8 +33,10 @@
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding Buff, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource EqualityConverter}}" Value="False">
                                         <Setter Property="ItemsSource" Value="{Binding Buff, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource ArrayConverter}}" />
+                                        <Setter Property="Visibility" Value="Visible" />
                                     </DataTrigger>
                                 </Style.Triggers>
+                                <Setter Property="Visibility" Value="Collapsed" />
                             </Style>
                         </TreeView.Style>
                         <TreeView.ItemContainerStyle>

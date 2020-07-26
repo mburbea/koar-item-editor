@@ -8,6 +8,7 @@
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.BuffIcon.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.RarityIcon.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.ElementIcon.xaml" />
+        <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.SocketIcon.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.ArmorTypeIcon.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.ItemFiltersEditor.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.EquipmentCategoryIcon.xaml" />

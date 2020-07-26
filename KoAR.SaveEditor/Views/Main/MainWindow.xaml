@@ -60,7 +60,7 @@
         </Style>
     </Window.Style>
     <DockPanel>
-        <Border Background="Transparent" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" DockPanel.Dock="Top" BorderThickness="0,0,0,1">
+        <Border Background="Transparent" DockPanel.Dock="Top">
             <StackPanel Margin="4,1" Orientation="Horizontal">
                 <StackPanel.Resources>
                     <ScaleTransform x:Key="ScaleTransform" ScaleX="0.85" ScaleY="0.85" po:Freeze="True" />
@@ -146,8 +146,8 @@
             </StackPanel>
         </Border>
         <TabControl x:Name="PART_TabControl" ItemsSource="{Binding Source={StaticResource Modes}}" SelectedItem="{Binding Mode}" FocusVisualStyle="{x:Null}" 
-            Margin="4,4,4,8" TabStripPlacement="Bottom" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
-            constructs:TabContent.Persist="{Binding IsVisible, RelativeSource={RelativeSource Self}}">
+            Margin="0,0,0,4" TabStripPlacement="Bottom" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="0,1"
+            constructs:TabContent.Persist="{Binding IsVisible, RelativeSource={RelativeSource Self}}" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}">
             <TabControl.Style>
                 <Style TargetType="{x:Type TabControl}" BasedOn="{StaticResource {x:Type TabControl}}">
                     <Style.Triggers>
@@ -191,6 +191,9 @@
                     <Style.Triggers>
                         <Trigger Property="Tag" Value="{x:Null}">
                             <Setter Property="IsEnabled" Value="False" />
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
                         </Trigger>
                     </Style.Triggers>
                     <Setter Property="FocusVisualStyle" Value="{x:Null}" />

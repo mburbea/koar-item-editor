@@ -1,23 +1,30 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
-using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using KoAR.Core;
 
 namespace KoAR.SaveEditor.Views
 {
     public sealed class ItemDefinitionControl : Control
     {
-        public static readonly DependencyProperty DefinitionProperty = DependencyProperty.Register(nameof(ItemDefinitionControl.Definition), typeof(ItemDefinition), typeof(ItemDefinitionControl));
+        public static readonly DependencyProperty DefinitionProperty = DependencyProperty.Register(nameof(ItemDefinitionControl.Definition), typeof(ItemDefinition), typeof(ItemDefinitionControl),
+            new PropertyMetadata(ItemDefinitionControl.Definition_ValueChanged));
+
+        public static readonly DependencyProperty SocketsProperty;
 
         public static readonly DependencyProperty ItemProperty = DependencyProperty.Register(nameof(ItemDefinitionControl.Item), typeof(ItemModelBase), typeof(ItemDefinitionControl),
             new PropertyMetadata(ItemDefinitionControl.ItemProperty_ValueChanged));
 
-        public static readonly IValueConverter SocketTextConverter = new SocketLabelConverter();
+        private static readonly DependencyPropertyKey _socketsPropertyKey = DependencyProperty.RegisterReadOnly(nameof(Sockets), typeof(IEnumerable<Socket>), typeof(ItemDefinitionControl), 
+            new PropertyMetadata());
 
-        static ItemDefinitionControl() => FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(ItemDefinitionControl), new FrameworkPropertyMetadata(typeof(ItemDefinitionControl)));
+        static ItemDefinitionControl()
+        {
+            FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(ItemDefinitionControl), new FrameworkPropertyMetadata(typeof(ItemDefinitionControl)));
+            ItemDefinitionControl.SocketsProperty = ItemDefinitionControl._socketsPropertyKey.DependencyProperty;
+        }
 
         public ItemDefinition? Definition
         {
@@ -25,10 +32,25 @@ namespace KoAR.SaveEditor.Views
             set => this.SetValue(ItemDefinitionControl.DefinitionProperty, value);
         }
 
+        public IEnumerable<Socket>? Sockets
+        {
+            get => (IEnumerable<Socket>?)this.GetValue(ItemDefinitionControl.SocketsProperty);
+            private set => this.SetValue(ItemDefinitionControl._socketsPropertyKey, value);
+        }
+
         public ItemModelBase? Item
         {
             get => (ItemModelBase?)this.GetValue(ItemDefinitionControl.ItemProperty);
             set => this.SetValue(ItemDefinitionControl.ItemProperty, value);
+        }
+
+        private static void Definition_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ItemDefinitionControl control = (ItemDefinitionControl)d;
+            if (control.Item == null)
+            {
+                control.Sockets = ((ItemDefinition?)e.NewValue)?.GetSockets();
+            }
         }
 
         private static void ItemProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -44,25 +66,19 @@ namespace KoAR.SaveEditor.Views
             {
                 control.Definition = item.Definition;
                 PropertyChangedEventManager.AddHandler(item, control.Item_DefinitionChanged, nameof(item.Definition));
+                control.Sockets = item.Item.GetSockets();
+            }
+            else
+            {
+                control.Sockets = null;
             }
         }
 
-        private void Item_DefinitionChanged(object sender, EventArgs e) => this.Definition = ((ItemModelBase)sender).Definition;
-
-        private sealed class SocketLabelConverter : IValueConverter
+        private void Item_DefinitionChanged(object sender, EventArgs e)
         {
-            object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture) => $"{SocketLabelConverter.GetPrefix(value)} Socket";
-
-            object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
-
-            private static string GetPrefix(object value) => value switch
-            {
-                'W' => "Weapon",
-                'A' => "Armor",
-                'U' => "Utility",
-                'E' => "Epic",
-                _ => string.Empty
-            };
-        }
+            ItemModelBase item = (ItemModelBase)sender;
+            this.Definition = item.Definition;
+            this.Sockets = item.Item.GetSockets();
+        }        
     }
 }

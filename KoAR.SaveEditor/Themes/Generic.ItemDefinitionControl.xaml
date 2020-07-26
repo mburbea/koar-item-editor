@@ -104,17 +104,15 @@
                         <Image Height="24" SnapsToDevicePixels="True" VerticalAlignment="Center" Margin="2,0" ToolTip="Merchant Item"
                             Source="{Binding Source={StaticResource Merchant}, Converter={StaticResource BitmapConverter}}"
                             Visibility="{Binding Definition.IsMerchant, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                        <ItemsControl ItemsSource="{Binding Definition.Sockets, RelativeSource={RelativeSource TemplatedParent}}" VerticalAlignment="Center">
+                        <ItemsControl ItemsSource="{TemplateBinding Sockets}" VerticalAlignment="Center">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <StackPanel Orientation="Horizontal" IsItemsHost="True" />
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
-                                <DataTemplate DataType="{x:Type s:Char}">
-                                    <Image Width="18" SnapsToDevicePixels="True" VerticalAlignment="Center" Margin="1,0"
-                                        ToolTip="{Binding Converter={x:Static views:ItemDefinitionControl.SocketTextConverter}}"
-                                        Source="{Binding Converter={StaticResource BitmapConverter}}" />
+                                <DataTemplate DataType="{x:Type core:Socket}">
+                                    <views:SocketIcon Socket="{Binding}" Margin="1,0" />
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>

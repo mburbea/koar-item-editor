@@ -14,6 +14,6 @@ namespace KoAR.Core
         List<Buff> PlayerBuffs { get; }
         Rarity Rarity { get; }
         ItemDefinition Definition { get; }
-        IEnumerable<GemSocket> GetGemSockets();
+        IEnumerable<Socket> GetSockets();
     }
 }
