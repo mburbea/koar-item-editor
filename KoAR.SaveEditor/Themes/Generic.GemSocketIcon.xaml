@@ -3,5 +3,25 @@
                     xmlns:views="clr-namespace:KoAR.SaveEditor.Views">
     <Style TargetType="{x:Type views:GemSocketIcon}">
         <Setter Property="Focusable" Value="False" />
-    </Style>
-</ResourceDictionary>
+        <Setter Property="Width" Value="18" />
+        <Setter Property="Height" Value="18" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type views:GemSocketIcon}">
+                    <Image x:Name="PART_Image" Height="{TemplateBinding Height}" Width="{TemplateBinding Width}">
+                        <Image.Source>
+                            <MultiBinding Converter="{StaticResource BitmapConverter}">
+                                <Binding Path="GemSocket.SocketType" Source="{RelativeSource TemplatedParent}" />
+                            </MultiBinding>
+                        </Image.Source>
+                    </Image>
+                    <!--<ControlTemplate.Triggers>
+                        <Trigger Property="PART_GEM" Value="None">
+                            <Setter TargetName="PART_Image" Property="Visibility" Value="Hidden" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>-->
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style></ResourceDictionary>
