@@ -107,10 +107,10 @@ namespace ItemTesting
             GameSave gameSave = new GameSave(@"..\..\..\..\9190114save84.sav");
             Console.WriteLine($"Stash item count at load:{gameSave.Stash.Items.Count}");
             gameSave.Stash.AddItem(Amalur.ItemDefinitions.Values.First());
-            gameSave.GetAllEquipment(); // Reload stash
+            //gameSave.GetAllEquipment(); // Reload stash
             Console.WriteLine($"Stash item count after add:{gameSave.Stash.Items.Count}");
             gameSave.Stash.DeleteItem(gameSave.Stash.Items.First());
-            gameSave.GetAllEquipment(); // Resload stash
+            //gameSave.GetAllEquipment(); // Resload stash
             Console.WriteLine($"Stash item count after delete:{gameSave.Stash.Items.Count}");
             Console.ReadLine();
         }

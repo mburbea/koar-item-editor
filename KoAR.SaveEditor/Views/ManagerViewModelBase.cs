@@ -20,7 +20,7 @@ namespace KoAR.SaveEditor.Views
         {
             this._modelProjection = modelProjection;
             this._filteredItems = this._items = new NotifyingCollection<TItemModel>();
-            (this.MainWindowViewModel = mainWindowViewModel).RepopulateItemsRequested += this.MainWindowViewModel_RepopulateItemsRequested;
+            this.MainWindowViewModel = mainWindowViewModel;
             (this.ItemFilters = new ItemFilters()).FilterChange += this.ItemFilters_FilterChange;
             this.RepopulateItems();
         }
@@ -56,7 +56,6 @@ namespace KoAR.SaveEditor.Views
                 this.DetachEvents(item);
             }
             this.ItemFilters.FilterChange -= this.ItemFilters_FilterChange;
-            this.MainWindowViewModel.RepopulateItemsRequested -= this.MainWindowViewModel_RepopulateItemsRequested;
         }
 
         protected void AddItem(TItemModel item)

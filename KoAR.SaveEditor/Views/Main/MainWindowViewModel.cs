@@ -26,8 +26,6 @@ namespace KoAR.SaveEditor.Views.Main
             }
         }
 
-        public event EventHandler? RepopulateItemsRequested;
-
         public GameSave? GameSave
         {
             get;
@@ -100,11 +98,6 @@ namespace KoAR.SaveEditor.Views.Main
             this.HasUnsavedChanges = true;
         }
 
-        public void RequestRepopulateItems()
-        {
-            this.RepopulateItemsRequested?.Invoke(this, EventArgs.Empty);
-        }
-
         public void SaveFile()
         {
             if (this.GameSave == null)
@@ -114,18 +107,6 @@ namespace KoAR.SaveEditor.Views.Main
             this.GameSave.SaveFile();
             this.HasUnsavedChanges = false;
             MessageBox.Show(Application.Current.MainWindow, $"Save successful! Original save backed up as {this.GameSave.FileName}.bak.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
-            this.RequestRepopulateItems();
-        }
-
-        internal void RegisterDrasticChange()
-        {
-            if (this.GameSave == null)
-            {
-                return;
-            }
-            this.RegisterUnsavedChange();
-            this.GameSave.GetAllEquipment();
-            this.RequestRepopulateItems();
         }
 
         private void Application_Activated(object sender, EventArgs e)

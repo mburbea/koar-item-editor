@@ -48,7 +48,7 @@ namespace KoAR.Core
             }
         }
 
-        public void GetAllEquipment()
+        private void GetAllEquipment()
         {
             ReadOnlySpan<byte> unknownLengthSeq = new byte[] { 0x0C, 0xAE, 0x32, 0x00, 0x00 };
             ReadOnlySpan<byte> unknownLengthSeq2 = new byte[] { 0xF7, 0x5D, 0x3C, 0x00, 0x0A };
