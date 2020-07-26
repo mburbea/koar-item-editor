@@ -147,7 +147,7 @@
         </Border>
         <TabControl x:Name="PART_TabControl" ItemsSource="{Binding Source={StaticResource Modes}}" SelectedItem="{Binding Mode}" FocusVisualStyle="{x:Null}" 
             Margin="4,4,4,8" TabStripPlacement="Bottom" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
-            constructs:TabContent.Persist="{Binding IsVisible, RelativeSource={RelativeSource Self}}">
+            constructs:TabContent.Persist="{Binding IsVisible, RelativeSource={RelativeSource Self}}" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}">
             <TabControl.Style>
                 <Style TargetType="{x:Type TabControl}" BasedOn="{StaticResource {x:Type TabControl}}">
                     <Style.Triggers>

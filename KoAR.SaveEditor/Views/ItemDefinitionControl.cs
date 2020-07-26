@@ -76,7 +76,9 @@ namespace KoAR.SaveEditor.Views
 
         private void Item_DefinitionChanged(object sender, EventArgs e)
         {
-            this.Definition = ((ItemModelBase)sender).Definition;
+            ItemModelBase item = (ItemModelBase)sender;
+            this.Definition = item.Definition;
+            this.Sockets = item.Item.GetSockets();
         }        
     }
 }
