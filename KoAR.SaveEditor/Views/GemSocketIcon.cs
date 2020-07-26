@@ -8,7 +8,7 @@ namespace KoAR.SaveEditor.Views
     {
         public static readonly DependencyProperty GemSocketProperty = DependencyProperty.Register(nameof(GemSocketIcon.GemSocket), typeof(GemSocket), typeof(GemSocketIcon));
 
-        static GemSocketIcon() => FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(GemSocketIcon), new FrameworkPropertyMetadata(typeof(GemSocketIcon));
+        static GemSocketIcon() => FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(GemSocketIcon), new FrameworkPropertyMetadata(typeof(GemSocketIcon)));
 
         public GemSocket GemSocket
         {
