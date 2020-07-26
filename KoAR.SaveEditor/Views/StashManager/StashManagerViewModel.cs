@@ -24,12 +24,6 @@ namespace KoAR.SaveEditor.Views.StashManager
 
         protected override IReadOnlyCollection<StashItem> GameItems => this.Stash.Items;
 
-        protected override void OnRepopulateItemsRequested()
-        {
-            this.OnPropertyChanged(nameof(this.Stash));
-            base.OnRepopulateItemsRequested();
-        }
-
         private void AddItem()
         {
             ChangeOrAddItemViewModel viewModel = new ChangeOrAddItemViewModel();
@@ -42,8 +36,6 @@ namespace KoAR.SaveEditor.Views.StashManager
             {
                 return;
             }
-            //this.Stash.AddItem(viewModel.Definition);
-            //this.MainWindowViewModel.RegisterDrasticChange();
             StashItem stashItem = this.Stash.AddItem(viewModel.Definition);
             this.AddItem(new StashItemModel(stashItem));
             this.MainWindowViewModel.RegisterUnsavedChange();
@@ -51,8 +43,6 @@ namespace KoAR.SaveEditor.Views.StashManager
 
         private void DeleteItem(StashItemModel model)
         {
-            //this.Stash.DeleteItem(model.Item);
-            //this.MainWindowViewModel.RegisterDrasticChange();
             this.RemoveItem(model);
             this.MainWindowViewModel.RegisterUnsavedChange();
         }

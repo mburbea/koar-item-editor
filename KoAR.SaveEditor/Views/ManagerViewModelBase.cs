@@ -90,8 +90,6 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        protected virtual void OnRepopulateItemsRequested() => this.RepopulateItems();
-
         protected void RemoveItem(TItemModel item)
         {
             this.RemoveItemAt(this._items.IndexOf(item));
@@ -123,7 +121,5 @@ namespace KoAR.SaveEditor.Views
         private void Item_PropertyChanged(object sender, PropertyChangedEventArgs e) => this.OnItemPropertyChanged((TItemModel)sender, e.PropertyName);
 
         private void ItemFilters_FilterChange(object sender, EventArgs e) => this.OnFilterChange();
-
-        private void MainWindowViewModel_RepopulateItemsRequested(object sender, EventArgs e) => this.OnRepopulateItemsRequested();
     }
 }
