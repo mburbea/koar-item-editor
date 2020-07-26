@@ -39,7 +39,7 @@ namespace KoAR.SaveEditor.Views.InventoryManager
 
         public bool? AllItemsUnsellable
         {
-            get => this.FilteredItems.GetAppliesToAll(item => item.IsUnsellable);
+            get => this.GetSelectAllCheckBoxValue(item => item.IsUnsellable);
             set
             {
                 foreach (ItemModel item in this.FilteredItems)
@@ -51,7 +51,7 @@ namespace KoAR.SaveEditor.Views.InventoryManager
 
         public bool? AllItemsUnstashable
         {
-            get => this.FilteredItems.GetAppliesToAll(item => item.IsUnstashable);
+            get => this.GetSelectAllCheckBoxValue(item => item.IsUnstashable);
             set
             {
                 foreach (ItemModel item in this.FilteredItems)

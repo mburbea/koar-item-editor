@@ -25,7 +25,7 @@ namespace KoAR.SaveEditor.Views
             this.RepopulateItems();
         }
 
-        public bool? AllItemsStolen => this.FilteredItems.GetAppliesToAll(item => item.IsStolen);
+        public bool? AllItemsStolen => this.GetSelectAllCheckBoxValue(item => item.IsStolen);
 
         public IReadOnlyList<TItemModel> FilteredItems
         {
@@ -67,6 +67,23 @@ namespace KoAR.SaveEditor.Views
         protected virtual void AttachEvents(TItemModel item)
         {
             PropertyChangedEventManager.AddHandler(item, this.Item_PropertyChanged, string.Empty);
+        }
+
+        protected bool? GetSelectAllCheckBoxValue(Func<TItemModel, bool> projection)
+        {
+            if (this.FilteredItems.Count == 0)
+            {
+                return true;
+            }
+            bool first = projection(this.FilteredItems[0]);
+            for (int index = 1; index < this.FilteredItems.Count; index++)
+            {
+                if (projection(this.FilteredItems[index]) != first)
+                {
+                    return null;
+                }
+            }
+            return first;
         }
 
         protected virtual void DetachEvents(TItemModel item)
