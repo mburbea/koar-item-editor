@@ -32,6 +32,7 @@ namespace KoAR.SaveEditor.Constructs
         private static readonly DataTemplate _contentTemplate = TabContent.CreateContentTemplate();
 
         private static readonly DependencyPropertyDescriptor _contentTemplateDescriptor = DependencyPropertyDescriptor.FromProperty(TabControl.ContentTemplateProperty, typeof(TabControl));
+        private static readonly DependencyPropertyDescriptor _contentTemplateSelectorDescriptor = DependencyPropertyDescriptor.FromProperty(TabControl.ContentTemplateSelectorProperty, typeof(TabControl));
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static ContentManager? GetContentManager(TabControl tabControl)
@@ -128,23 +129,29 @@ namespace KoAR.SaveEditor.Constructs
             }
             if ((bool)e.NewValue)
             {
-                if (tabControl.ContentTemplate != null)
+                if (tabControl.ContentTemplate != null || tabControl.ContentTemplateSelector != null)
                 {
-                    throw new InvalidOperationException($"{nameof(TabControl)}.{nameof(TabControl.ContentTemplate)} must be null");
+                    throw new InvalidOperationException($"{nameof(TabControl.ContentTemplate)} and {nameof(TabControl.ContentTemplateSelector)} must be null when Persist is true.");
                 }
                 tabControl.ContentTemplate = TabContent._contentTemplate;
-                TabContent._contentTemplateDescriptor.AddValueChanged(tabControl, TabControl_ContentTemplateChanged);
+                TabContent._contentTemplateDescriptor.AddValueChanged(tabControl, TabContent.TabControl_ContentTemplatePropertiesChanged);
+                TabContent._contentTemplateSelectorDescriptor.AddValueChanged(tabControl, TabContent.TabControl_ContentTemplatePropertiesChanged);
             }
             else
             {
-                TabContent._contentTemplateDescriptor.RemoveValueChanged(tabControl, TabControl_ContentTemplateChanged);
+                TabContent._contentTemplateDescriptor.RemoveValueChanged(tabControl, TabContent.TabControl_ContentTemplatePropertiesChanged);
+                TabContent._contentTemplateSelectorDescriptor.RemoveValueChanged(tabControl, TabContent.TabControl_ContentTemplatePropertiesChanged);
                 tabControl.ContentTemplate = null;
+                using (TabContent.GetContentManager(tabControl))
+                {
+                    TabContent.SetContentManager(tabControl, null);
+                }
             }
+        }
 
-            static void TabControl_ContentTemplateChanged(object sender, EventArgs e)
-            {
-                throw new InvalidOperationException($"Can not assign to { nameof(TabControl) }.{ nameof(TabControl.ContentTemplate)} when {nameof(TabContent)}.Persist is true.");
-            }
+        private static void TabControl_ContentTemplatePropertiesChanged(object sender, EventArgs e)
+        {
+            throw new InvalidOperationException($"Can not assign to {nameof(TabControl.ContentTemplate)} or {nameof(TabControl.ContentTemplateSelector)} when Persist is true.");
         }
 
         private static void TabControlProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

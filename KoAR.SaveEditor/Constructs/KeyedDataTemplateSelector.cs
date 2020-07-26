@@ -30,7 +30,7 @@ namespace KoAR.SaveEditor.Constructs
         [MaybeNull]
         public object this[object key]
         {
-            get => this._dictionary.TryGetValue(key, out DataTemplate? value) ? value : default;
+            get => this.GetDataTemplate(key);
             set => ((IDictionary)this._dictionary)[key] = value;
         }
 
@@ -48,11 +48,17 @@ namespace KoAR.SaveEditor.Constructs
 
         public void Remove(object key) => this._dictionary.Remove(key);
 
-        public override DataTemplate SelectTemplate(object item, DependencyObject container)
+        [return: NotNullIfNotNull("defaultTemplate")]
+        private DataTemplate? GetDataTemplate(object item, DataTemplate? defaultTemplate = default)
         {
             return item == null || !this._dictionary.TryGetValue(item, out DataTemplate? dataTemplate)
-                ? KeyedDataTemplateSelector._emptyDataTemplate
+                ? defaultTemplate
                 : dataTemplate;
+        }
+
+        public override DataTemplate SelectTemplate(object item, DependencyObject container)
+        {
+            return this.GetDataTemplate(item, KeyedDataTemplateSelector._emptyDataTemplate);
         }
     }
 }

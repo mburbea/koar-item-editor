@@ -26,7 +26,7 @@ namespace KoAR.SaveEditor.Views
         protected override void OnInitialized(EventArgs e)
         {
             base.OnInitialized(e);
-            this.CommandBindings.Add(new CommandBinding(ZoomScaler.ResetZoomCommand, ZoomScaler.ResetZoomCommand_Executed, ZoomScaler.ResetZoomCommand_CanExecute));
+            this.CommandBindings.Add(new CommandBinding(ZoomScaler.ResetZoomCommand, ZoomScaler.ResetZoomCommand_Executed));
         }
 
         private static void AttachToTarget(FrameworkElement target)
@@ -57,11 +57,6 @@ namespace KoAR.SaveEditor.Views
             target.LayoutTransform = null;
             window.RemoveHandler(UIElement.PreviewKeyDownEvent, new KeyEventHandler(ZoomScaler.Window_PreviewKeyDown));
             window.RemoveHandler(UIElement.PreviewMouseWheelEvent, new MouseWheelEventHandler(ZoomScaler.Window_PreviewMouseWheel));
-        }
-
-        private static void ResetZoomCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = Settings.Default.ZoomScale != 1d;
         }
 
         private static void ResetZoomCommand_Executed(object sender, ExecutedRoutedEventArgs e)

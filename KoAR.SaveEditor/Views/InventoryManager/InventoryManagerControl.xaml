@@ -9,8 +9,14 @@
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs" 
     xmlns:core="clr-namespace:KoAR.Core;assembly=KoAR.Core"
     mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type local:InventoryManagerViewModel}}">
-
-    <Grid x:Name="PART_MainGrid" Grid.Row="1">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/KoAR.SaveEditor;component/Constructs/TextBoxErrorTemplate.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
         <Grid.Resources>
             <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
                 <Setter Property="FocusVisualStyle" Value="{x:Null}" />
@@ -44,10 +50,6 @@
                         <ColumnDefinition />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
                     <TextBlock Text="Inv Size:" Margin="2" VerticalAlignment="Center" TextAlignment="Right"/>
                     <TextBox Grid.Column="1" MinWidth="100" Margin="2" TextAlignment="Right" Grid.ColumnSpan="2">
                         <TextBox.Text>
@@ -58,23 +60,6 @@
                             </Binding>
                         </TextBox.Text>
                     </TextBox>
-                    <TextBlock Grid.Row="1" Text="Stash Count:" Margin="2" VerticalAlignment="Center" TextAlignment="Right"/>
-                    <TextBox Grid.Row="1" Grid.Column="1" MinWidth="100" Margin="2" IsReadOnly="True" Background="{x:Static SystemColors.ControlBrush}">
-                        <TextBox.Style>
-                            <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Stash}" Value="{x:Null}">
-                                        <Setter Property="Text" Value="(No Stash)" />
-                                        <Setter Property="IsEnabled" Value="False" />
-                                        <Setter Property="TextAlignment" Value="Left" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                                <Setter Property="Text" Value="{Binding Stash.Items.Count, Mode=OneWay}" />
-                                <Setter Property="TextAlignment" Value="Right" />
-                            </Style>
-                        </TextBox.Style>
-                    </TextBox>
-                    <Button Grid.Row="1" Grid.Column="2" Margin="2" Command="{Binding OpenStashManagerCommand}" Content="Stash Manager" FocusVisualStyle="{x:Null}" />
                 </Grid>
             </GroupBox>
             <ScrollViewer Grid.Row="1" FocusVisualStyle="{x:Null}" Margin="0,0,4,4" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">

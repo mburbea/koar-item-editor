@@ -6,6 +6,7 @@
     xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views"
     xmlns:local="clr-namespace:KoAR.SaveEditor.Views.Main"
+    xmlns:im="clr-namespace:KoAR.SaveEditor.Views.InventoryManager"
     xmlns:sm="clr-namespace:KoAR.SaveEditor.Views.StashManager"
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs" 
     xmlns:s="clr-namespace:System;assembly=mscorlib" 
@@ -208,7 +209,7 @@
             <constructs:TabContent.TemplateSelector>
                 <constructs:KeyedDataTemplateSelector>
                     <DataTemplate x:Key="{x:Static local:ManagementMode.Inventory}">
-                        <TextBlock Text="{Binding}" />
+                        <im:InventoryManagerControl DataContext="{Binding InventoryManager, Source={StaticResource ViewModel}}" />
                     </DataTemplate>
                     <DataTemplate x:Key="{x:Static local:ManagementMode.Stash}">
                         <sm:StashManagerControl DataContext="{Binding StashManager, Source={StaticResource ViewModel}}" />

@@ -13,7 +13,6 @@ namespace KoAR.SaveEditor.Views.Main
 {
     public sealed class MainWindowViewModel : NotifierBase
     {
-        private GameSave? _gameSave;
         private bool _hasUnsavedChanges;
         private InventoryManagerViewModel? _inventoryManager;
         private ManagementMode _mode;
@@ -29,7 +28,11 @@ namespace KoAR.SaveEditor.Views.Main
 
         public event EventHandler? RepopulateItemsRequested;
 
-        public GameSave? GameSave => this._gameSave;
+        public GameSave? GameSave
+        {
+            get;
+            private set;
+        }
 
         public bool HasUnsavedChanges
         {
@@ -85,9 +88,9 @@ namespace KoAR.SaveEditor.Views.Main
                 return;
             }
             this.HasUnsavedChanges = false;
-            this._gameSave = new GameSave(dialog.FileName);
+            this.GameSave = new GameSave(dialog.FileName);
             this.InventoryManager = new InventoryManagerViewModel(this);
-            this.StashManager = this._gameSave.Stash == null ? default : new StashManagerViewModel(this);
+            this.StashManager = this.GameSave.Stash == null ? default : new StashManagerViewModel(this);
             this.OnPropertyChanged(nameof(this.GameSave));
             this.Mode = default;
         }
@@ -97,26 +100,32 @@ namespace KoAR.SaveEditor.Views.Main
             this.HasUnsavedChanges = true;
         }
 
+        public void RequestRepopulateItems()
+        {
+            this.RepopulateItemsRequested?.Invoke(this, EventArgs.Empty);
+        }
+
         public void SaveFile()
         {
-            if (this._gameSave == null)
+            if (this.GameSave == null)
             {
                 return;
             }
-            this._gameSave.SaveFile();
+            this.GameSave.SaveFile();
             this.HasUnsavedChanges = false;
-            MessageBox.Show(Application.Current.MainWindow, $"Save successful! Original save backed up as {this._gameSave.FileName}.bak.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(Application.Current.MainWindow, $"Save successful! Original save backed up as {this.GameSave.FileName}.bak.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
+            this.RequestRepopulateItems();
         }
 
         internal void RegisterDrasticChange()
         {
-            if (this._gameSave == null)
+            if (this.GameSave == null)
             {
                 return;
             }
             this.RegisterUnsavedChange();
-            this._gameSave.GetAllEquipment();
-            this.RepopulateItemsRequested?.Invoke(this, EventArgs.Empty);
+            this.GameSave.GetAllEquipment();
+            this.RequestRepopulateItems();
         }
 
         private void Application_Activated(object sender, EventArgs e)
