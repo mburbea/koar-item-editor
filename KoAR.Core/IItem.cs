@@ -13,6 +13,6 @@ namespace KoAR.Core
         float MaxDurability { get; }
         List<Buff> PlayerBuffs { get; }
         Rarity Rarity { get; }
-        TypeDefinition TypeDefinition { get; }
+        ItemDefinition Definition { get; }
     }
 }

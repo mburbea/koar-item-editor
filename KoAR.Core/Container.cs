@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KoAR.Core
 {
@@ -18,26 +14,26 @@ namespace KoAR.Core
             public const int Count = 18;
         }
         private readonly GameSave _gameSave;
-        private readonly int _offset;
+        public int Offset { get; }
         private readonly ulong _pattern;
 
-        public Container(GameSave gameSave, int offset, ulong pattern) => (_gameSave, _offset, _pattern) = (gameSave, offset, pattern);
+        public Container(GameSave gameSave, int offset, ulong pattern) => (_gameSave, Offset, _pattern) = (gameSave, offset, pattern);
 
         private int DataLength
         {
-            get => MemoryUtilities.Read<int>(_gameSave.Bytes, _offset + Offsets.DataLength);
-            set => MemoryUtilities.Write(_gameSave.Bytes, _offset + Offsets.DataLength, value);
+            get => MemoryUtilities.Read<int>(_gameSave.Bytes, Offset + Offsets.DataLength);
+            set => MemoryUtilities.Write(_gameSave.Bytes, Offset + Offsets.DataLength, value);
         }
 
         private int DataLength2
         {
-            get => MemoryUtilities.Read<int>(_gameSave.Bytes, _offset + Offsets.DataLength2);
-            set => MemoryUtilities.Write(_gameSave.Bytes, _offset + Offsets.DataLength2, value);
+            get => MemoryUtilities.Read<int>(_gameSave.Bytes, Offset + Offsets.DataLength2);
+            set => MemoryUtilities.Write(_gameSave.Bytes, Offset + Offsets.DataLength2, value);
         }
 
         private int Count
         {
-            get => MemoryUtilities.Read<int>(_gameSave.Bytes, _offset + Offsets.Count);
+            get => MemoryUtilities.Read<int>(_gameSave.Bytes, Offset + Offsets.Count);
         }
 
         public void UpdateDataLength(int delta)
@@ -48,7 +44,7 @@ namespace KoAR.Core
 
         public IEnumerator<(int id, int offset, int dataLength)> GetEnumerator()
         {
-            var offset = _offset + Offsets.FirstItem;
+            var offset = Offset + Offsets.FirstItem;
             int id;
             int dataLength;
             while (true)
@@ -66,6 +62,8 @@ namespace KoAR.Core
                 offset += dataLength;
             }
         }
+
+        public Container UpdateOffset(int offset, int delta) => Offset > offset ? new Container(_gameSave, Offset + delta, _pattern) : this;
 
         IEnumerator IEnumerable.GetEnumerator()
         {

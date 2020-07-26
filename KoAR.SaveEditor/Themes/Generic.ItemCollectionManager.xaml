@@ -1,0 +1,558 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+    xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs"
+    xmlns:views="clr-namespace:KoAR.SaveEditor.Views"
+    xmlns:core="clr-namespace:KoAR.Core;assembly=KoAR.Core">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/PresentationFramework.Aero;component/Themes/Aero.NormalColor.xaml" />
+        <ResourceDictionary Source="/KoAR.SaveEditor;component/Constructs/TextBoxErrorTemplate.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+    <DataTemplate x:Key="BuffToolTipTemplate" DataType="{x:Type core:Buff}">
+        <views:BuffControl Buff="{Binding}" IsExpanded="True" />
+    </DataTemplate>
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    <constructs:FloatConverter x:Key="SingleConverter" />
+    <constructs:EqualityConverter x:Key="EqualityConverter" />
+    <constructs:StringIsNullOrEmptyConverter x:Key="StringIsNullOrEmptyConverter" />
+    <constructs:NegatedBooleanConverter x:Key="NegatedBooleanConverter" />
+    <constructs:HexConverter x:Key="HexConverter" />
+    <constructs:LittleEndianConverter x:Key="LittleEndianConverter" />
+    <constructs:IsNullConverter x:Key="IsNullConverter" />
+    <constructs:GrayscaleConverter x:Key="GrayscaleConverter" />
+    <BitmapImage x:Key="Delete" UriSource="/KoAR.SaveEditor;component/Resources/Delete.png" po:Freeze="True" />
+    <Style TargetType="{x:Type views:ItemCollectionManager}">
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type views:ItemCollectionManager}">
+                    <ControlTemplate.Resources>
+                        <SolidColorBrush x:Key="AlternateRowBrush" Color="#25BCBCBC" po:Freeze="True" />
+                        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+                            <Style.Triggers>
+                                <Trigger Property="IsVisible" Value="True">
+                                    <Setter Property="constructs:ValidatingPropertyBehavior.ValidatingProperty" Value="{x:Static TextBox.TextProperty}" />
+                                </Trigger>
+                            </Style.Triggers>
+                            <Setter Property="Validation.ErrorTemplate" Value="{StaticResource TextBoxErrorTemplate}" />
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Setter Property="constructs:TextBoxUpdateSource.UpdateOnEnter" Value="{Binding IsVisible, RelativeSource={RelativeSource Self}}" />
+                        </Style>
+                    </ControlTemplate.Resources>
+                    <ListView x:Name="PART_ListView" ItemsSource="{TemplateBinding CollectionView}" 
+                        SelectedItem="{Binding SelectedItem, RelativeSource={RelativeSource TemplatedParent}}" VirtualizingPanel.IsVirtualizing="True"
+                        BorderBrush="LightGray" SelectionMode="Single" FocusVisualStyle="{x:Null}" VirtualizingPanel.ScrollUnit="Pixel"
+                        TextSearch.TextPath="ItemId" AlternationCount="2">
+                        <ListView.Resources>
+                            <constructs:TransportObject x:Key="Mode" Value="{Binding Mode, RelativeSource={RelativeSource AncestorType={x:Type views:ItemCollectionManager}}}" />
+                            <constructs:TransportObject x:Key="DeleteItemCommand" Value="{Binding DeleteItemCommand, RelativeSource={RelativeSource AncestorType={x:Type views:ItemCollectionManager}}}" />
+                            <Style TargetType="{x:Type GridViewColumnHeader}" BasedOn="{StaticResource {x:Type GridViewColumnHeader}}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Column.(views:ItemCollectionManager.PropertyName), Converter={StaticResource StringIsNullOrEmptyConverter}, RelativeSource={RelativeSource Self}}" Value="False">
+                                        <Setter Property="ContentTemplate">
+                                            <Setter.Value>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <ContentControl Content="{Binding}" FocusVisualStyle="{x:Null}" />
+                                                        <TextBlock FontFamily="Segoe UI Symbol">
+                                                            <TextBlock.Style>
+                                                                <Style TargetType="{x:Type TextBlock}">
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding SortDirection, RelativeSource={RelativeSource AncestorType={x:Type views:ItemCollectionManager}}}" Value="Descending">
+                                                                            <Setter Property="Text" Value="▾" />
+                                                                        </DataTrigger>
+                                                                        <DataTrigger Value="True">
+                                                                            <DataTrigger.Binding>
+                                                                                <MultiBinding Converter="{StaticResource EqualityConverter}">
+                                                                                    <Binding Path="SortProperty" RelativeSource="{RelativeSource AncestorType={x:Type views:ItemCollectionManager}}" />
+                                                                                    <Binding Path="Column.(views:ItemCollectionManager.PropertyName)" RelativeSource="{RelativeSource AncestorType={x:Type GridViewColumnHeader}}" />
+                                                                                </MultiBinding>
+                                                                            </DataTrigger.Binding>
+                                                                            <Setter Property="Visibility" Value="Visible" />
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                    <Setter Property="Text" Value="▴" />
+                                                                    <Setter Property="Visibility" Value="Hidden" />
+                                                                </Style>
+                                                            </TextBlock.Style>
+                                                        </TextBlock>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListView.Resources>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListViewItem}">
+                                <Style.Triggers>
+                                    <MultiTrigger>
+                                        <MultiTrigger.Conditions>
+                                            <Condition Property="ItemsControl.AlternationIndex" Value="1" />
+                                            <Condition Property="IsSelected" Value="False" />
+                                            <Condition Property="IsMouseOver" Value="False" />
+                                        </MultiTrigger.Conditions>
+                                        <Setter Property="Background" Value="{StaticResource AlternateRowBrush}" />
+                                    </MultiTrigger>
+                                </Style.Triggers>
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                <Setter Property="constructs:MouseDoubleClick.CommandParameter" Value="{Binding}" />
+                                <Setter Property="constructs:MouseDoubleClick.Command" Value="{Binding RowDoubleClickCommand, RelativeSource={RelativeSource AncestorType={x:Type views:ItemCollectionManager}}}" />
+                                <Setter Property="views:ItemCollectionManager.SelectRowOnClick" Value="{Binding IsVisible, RelativeSource={RelativeSource Self}}" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ContextMenu>
+                            <ContextMenu FocusVisualStyle="{x:Null}">
+                                <MenuItem Command="{x:Static constructs:ListViewAutoSize.AutoSizeCommand}" FocusVisualStyle="{x:Null}" />
+                            </ContextMenu>
+                        </ListView.ContextMenu>
+                        <ListView.View>
+                            <GridView AllowsColumnReorder="True">
+                                <GridViewColumn Header="Delete" Width="Auto" constructs:ColumnVisibility.IsHidden="{Binding Value, Source={StaticResource DeleteItemCommand}, Converter={StaticResource IsNullConverter}}">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate DataType="{x:Type views:ItemModelBase}">
+                                            <Button CommandParameter="{Binding}" Command="{Binding Value, Source={StaticResource DeleteItemCommand}}">
+                                                <Button.Style>
+                                                    <Style TargetType="{x:Type Button}">
+                                                        <Setter Property="Template">
+                                                            <Setter.Value>
+                                                                <ControlTemplate TargetType="{x:Type Button}">
+                                                                    <ControlTemplate.Resources>
+                                                                        <constructs:GrayscaleConverter x:Key="GrayscaleConverter" />
+                                                                    </ControlTemplate.Resources>
+                                                                    <Image x:Name="Icon" Width="16" Source="{StaticResource Delete}" Cursor="Hand" />
+                                                                    <ControlTemplate.Triggers>
+                                                                        <MultiTrigger>
+                                                                            <MultiTrigger.Conditions>
+                                                                                <Condition Property="IsPressed" Value="False" />
+                                                                                <Condition Property="IsMouseOver" Value="False" />
+                                                                            </MultiTrigger.Conditions>
+                                                                            <Setter Property="Source" TargetName="Icon" Value="{Binding Source={StaticResource Delete}, Converter={StaticResource GrayscaleConverter}}" />
+                                                                            <Setter TargetName="Icon" Property="OpacityMask">
+                                                                                <Setter.Value>
+                                                                                    <ImageBrush ImageSource="{StaticResource Delete}" po:Freeze="True"/>
+                                                                                </Setter.Value>
+                                                                            </Setter>
+                                                                        </MultiTrigger>
+                                                                        <Trigger Property="IsEnabled" Value="False">
+                                                                            <Setter Property="Opacity" Value="0.25" />
+                                                                        </Trigger>
+                                                                        <Trigger Property="IsPressed" Value="True">
+                                                                            <Setter Property="RenderTransform">
+                                                                                <Setter.Value>
+                                                                                    <ScaleTransform ScaleX="0.85" ScaleY="0.85" po:Freeze="True" />
+                                                                                </Setter.Value>
+                                                                            </Setter>
+                                                                        </Trigger>
+                                                                    </ControlTemplate.Triggers>
+                                                                </ControlTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                                        <Setter Property="Margin" Value="2" />
+                                                        <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
+                                                    </Style>
+                                                </Button.Style>
+                                            </Button>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Level" Width="Auto" views:ItemCollectionManager.PropertyName="Level">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate DataType="{x:Type views:ItemModelBase}">
+                                            <Grid>
+                                                <TextBlock Text="{Binding Level}" TextAlignment="Right">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="{x:Type TextBlock}">
+                                                            <Style.Triggers>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True" />
+                                                                        <Condition Binding="{Binding Value, Source={StaticResource Mode}}" Value="Item" />
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                                </MultiDataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                                <TextBox TextAlignment="Right">
+                                                    <TextBox.Style>
+                                                        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+                                                            <Style.Triggers>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True" />
+                                                                        <Condition Binding="{Binding Value, Source={StaticResource Mode}}" Value="Item" />
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="Visibility" Value="Visible" />
+                                                                    <Setter Property="constructs:TextBoxSelect.SelectOnFocus" Value="True" />
+                                                                </MultiDataTrigger>
+                                                            </Style.Triggers>
+                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                        </Style>
+                                                    </TextBox.Style>
+                                                    <TextBox.Text>
+                                                        <Binding Path="Level">
+                                                            <Binding.ValidationRules>
+                                                                <constructs:ValueRequiredValidationRule />
+                                                                <constructs:RangeValidationRule Min="0" Max="255" NumberStyle="Integer"/>
+                                                            </Binding.ValidationRules>
+                                                        </Binding>
+                                                    </TextBox.Text>
+                                                </TextBox>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Name" Width="Auto" views:ItemCollectionManager.PropertyName="DisplayName">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate DataType="{x:Type views:ItemModelBase}">
+                                            <Grid>
+                                                <views:ItemDefinitionControl Item="{Binding}">
+                                                    <views:ItemDefinitionControl.Style>
+                                                        <Style TargetType="{x:Type views:ItemDefinitionControl}">
+                                                            <Style.Triggers>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True" />
+                                                                        <Condition Binding="{Binding Value, Source={StaticResource Mode}}" Value="Item" />
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                                </MultiDataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </views:ItemDefinitionControl.Style>
+                                                </views:ItemDefinitionControl>
+                                                <TextBox VerticalAlignment="Center" Margin="1,0" Text="{Binding ItemName}">
+                                                    <views:Watermarking.ContentTemplate>
+                                                        <DataTemplate>
+                                                            <TextBlock Text="{Binding}" FontStyle="Italic" />
+                                                        </DataTemplate>
+                                                    </views:Watermarking.ContentTemplate>
+                                                    <TextBox.Style>
+                                                        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+                                                            <Style.Triggers>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True" />
+                                                                        <Condition Binding="{Binding Value, Source={StaticResource Mode}}" Value="Item" />
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="Visibility" Value="Visible" />
+                                                                    <Setter Property="constructs:TextBoxSelect.SelectOnFocus" Value="True" />
+                                                                </MultiDataTrigger>
+                                                                <MultiTrigger>
+                                                                    <MultiTrigger.Conditions>
+                                                                        <Condition Property="IsVisible" Value="True" />
+                                                                        <Condition Property="Text" Value="" />
+                                                                    </MultiTrigger.Conditions>
+                                                                    <Setter Property="views:Watermarking.Content" Value="{Binding Definition.Name}" />
+                                                                </MultiTrigger>
+                                                            </Style.Triggers>
+                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                        </Style>
+                                                    </TextBox.Style>
+                                                </TextBox>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Cur Durability" Width="Auto" views:ItemCollectionManager.PropertyName="CurrentDurability">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate DataType="{x:Type views:ItemModelBase}">
+                                            <Grid>
+                                                <Grid.Style>
+                                                    <Style TargetType="{x:Type Grid}">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Category}" Value="Ring">
+                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Category}" Value="Necklace">
+                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Grid.Style>
+                                                <TextBlock Text="{Binding CurrentDurability, StringFormat='0.####'}" TextAlignment="Right">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="{x:Type TextBlock}">
+                                                            <Style.Triggers>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True" />
+                                                                        <Condition Binding="{Binding Value, Source={StaticResource Mode}}" Value="Item" />
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                                </MultiDataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                                <TextBox TextAlignment="Right">
+                                                    <TextBox.Style>
+                                                        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+                                                            <Style.Triggers>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True" />
+                                                                        <Condition Binding="{Binding Value, Source={StaticResource Mode}}" Value="Item" />
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="Visibility" Value="Visible" />
+                                                                    <Setter Property="constructs:TextBoxSelect.SelectOnFocus" Value="True" />
+                                                                </MultiDataTrigger>
+                                                            </Style.Triggers>
+                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                        </Style>
+                                                    </TextBox.Style>
+                                                    <TextBox.Text>
+                                                        <Binding Path="CurrentDurability" Converter="{StaticResource SingleConverter}">
+                                                            <Binding.ValidationRules>
+                                                                <views:DurabilityValidationRule />
+                                                            </Binding.ValidationRules>
+                                                        </Binding>
+                                                    </TextBox.Text>
+                                                </TextBox>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Max Durability" Width="Auto" views:ItemCollectionManager.PropertyName="MaxDurability" >
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate DataType="{x:Type views:ItemModelBase}">
+                                            <Grid>
+                                                <Grid.Style>
+                                                    <Style TargetType="{x:Type Grid}">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Category}" Value="Ring">
+                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Category}" Value="Necklace">
+                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Grid.Style>
+                                                <TextBlock Text="{Binding MaxDurability, StringFormat='0.####'}" TextAlignment="Right">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="{x:Type TextBlock}">
+                                                            <Style.Triggers>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True" />
+                                                                        <Condition Binding="{Binding Value, Source={StaticResource Mode}}" Value="Item" />
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                                </MultiDataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                                <TextBox TextAlignment="Right">
+                                                    <TextBox.Style>
+                                                        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+                                                            <Style.Triggers>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True" />
+                                                                        <Condition Binding="{Binding Value, Source={StaticResource Mode}}" Value="Item" />
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="Visibility" Value="Visible" />
+                                                                    <Setter Property="constructs:TextBoxSelect.SelectOnFocus" Value="True" />
+                                                                </MultiDataTrigger>
+                                                            </Style.Triggers>
+                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                        </Style>
+                                                    </TextBox.Style>
+                                                    <TextBox.Text>
+                                                        <Binding Path="MaxDurability" Converter="{StaticResource SingleConverter}">
+                                                            <Binding.ValidationRules>
+                                                                <views:DurabilityValidationRule />
+                                                            </Binding.ValidationRules>
+                                                        </Binding>
+                                                    </TextBox.Text>
+                                                </TextBox>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Width="Auto" views:ItemCollectionManager.PropertyName="IsStolen">
+                                    <GridViewColumn.Header>
+                                        <StackPanel Orientation="Horizontal">
+                                            <CheckBox Margin="2" FocusVisualStyle="{x:Null}" VerticalAlignment="Center"
+                                                IsChecked="{Binding AllItemsStolen, RelativeSource={RelativeSource TemplatedParent}}">
+                                                <CheckBox.Style>
+                                                    <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Value, Source={StaticResource Mode}}" Value="StashItem">
+                                                                <Setter Property="IsEnabled" Value="False" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </CheckBox.Style>
+                                            </CheckBox>
+                                            <TextBlock Text="Stolen?" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </GridViewColumn.Header>
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate DataType="{x:Type views:ItemModelBase}">
+                                            <CheckBox FocusVisualStyle="{x:Null}" HorizontalAlignment="Center" IsChecked="{Binding IsStolen}">
+                                                <CheckBox.Style>
+                                                    <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Value, Source={StaticResource Mode}}" Value="StashItem">
+                                                                <Setter Property="IsEnabled" Value="False" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </CheckBox.Style>
+                                            </CheckBox>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Width="Auto" views:ItemCollectionManager.PropertyName="IsUnsellable" 
+                                    constructs:ColumnVisibility.IsHidden="{Binding Value, Source={StaticResource Mode}, Converter={StaticResource EqualityConverter}, ConverterParameter={x:Static views:ItemCollectionManager+ManagementMode.StashItem}}">
+                                    <GridViewColumn.Header>
+                                        <StackPanel Orientation="Horizontal">
+                                            <CheckBox Margin="2" FocusVisualStyle="{x:Null}" VerticalAlignment="Center">
+                                                <CheckBox.Style>
+                                                    <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Value, Source={StaticResource Mode}}" Value="Item">
+                                                                <Setter Property="IsChecked" Value="{Binding AllItemsUnsellable, Converter={StaticResource NegatedBooleanConverter}, RelativeSource={RelativeSource TemplatedParent}}" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </CheckBox.Style>
+                                            </CheckBox>
+                                            <TextBlock Text="Sellable?" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </GridViewColumn.Header>
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate DataType="{x:Type views:ItemModelBase}">
+                                            <CheckBox FocusVisualStyle="{x:Null}" HorizontalAlignment="Center">
+                                                <CheckBox.Style>
+                                                    <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Value, Source={StaticResource Mode}}" Value="Item">
+                                                                <Setter Property="IsChecked" Value="{Binding IsUnsellable, Converter={StaticResource NegatedBooleanConverter}}" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </CheckBox.Style>
+                                            </CheckBox>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Width="Auto" views:ItemCollectionManager.PropertyName="IsUnstashable" 
+                                    constructs:ColumnVisibility.IsHidden="{Binding Value, Source={StaticResource Mode}, Converter={StaticResource EqualityConverter}, ConverterParameter={x:Static views:ItemCollectionManager+ManagementMode.StashItem}}">
+                                    <GridViewColumn.Header>
+                                        <StackPanel Orientation="Horizontal">
+                                            <CheckBox Margin="2" FocusVisualStyle="{x:Null}" VerticalAlignment="Center">
+                                                <CheckBox.Style>
+                                                    <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Value, Source={StaticResource Mode}}" Value="Item">
+                                                                <Setter Property="IsChecked" Value="{Binding AllItemsUnstashable, Converter={StaticResource NegatedBooleanConverter}, RelativeSource={RelativeSource TemplatedParent}}" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </CheckBox.Style>
+                                            </CheckBox>
+                                            <TextBlock Text="Stashable?" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </GridViewColumn.Header>
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate DataType="{x:Type views:ItemModelBase}">
+                                            <CheckBox FocusVisualStyle="{x:Null}" HorizontalAlignment="Center">
+                                                <CheckBox.Style>
+                                                    <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Value, Source={StaticResource Mode}}" Value="Item">
+                                                                <Setter Property="IsChecked" Value="{Binding IsUnstashable, Converter={StaticResource NegatedBooleanConverter}}" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </CheckBox.Style>
+                                            </CheckBox>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Prefix/Suffix" Width="Auto" views:ItemCollectionManager.PropertyName="AffixCount">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate DataType="{x:Type views:ItemModelBase}">
+                                            <DataTemplate.Resources>
+                                                <Style TargetType="{x:Type ToolTip}" BasedOn="{StaticResource {x:Type ToolTip}}">
+                                                    <Setter Property="ContentTemplate" Value="{StaticResource BuffToolTipTemplate}" />
+                                                </Style>
+                                                <Style TargetType="{x:Type views:BuffIcon}">
+                                                    <Style.Triggers>
+                                                        <Trigger Property="Buff" Value="{x:Null}">
+                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                    <Setter Property="ToolTip" Value="{Binding Buff, RelativeSource={RelativeSource Self}}" />
+                                                </Style>
+                                            </DataTemplate.Resources>
+                                            <StackPanel Orientation="Horizontal">
+                                                <views:BuffIcon Margin="1,0" Buff="{Binding Prefix}" />
+                                                <views:BuffIcon Margin="1,0" Buff="{Binding Suffix}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Item Buffs" Width="Auto" views:ItemCollectionManager.PropertyName="ItemBuffs.Count">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate DataType="{x:Type views:ItemModelBase}">
+                                            <ItemsControl ItemsSource="{Binding ItemBuffs}" MinWidth="88">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel Orientation="Horizontal" />
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate DataType="{x:Type core:Buff}">
+                                                        <DataTemplate.Resources>
+                                                            <Style TargetType="{x:Type ToolTip}" BasedOn="{StaticResource {x:Type ToolTip}}">
+                                                                <Setter Property="ContentTemplate" Value="{StaticResource BuffToolTipTemplate}" />
+                                                            </Style>
+                                                        </DataTemplate.Resources>
+                                                        <views:BuffIcon Buff="{Binding}" Margin="1,0" ToolTip="{Binding}" />
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Player Buffs" Width="Auto" views:ItemCollectionManager.PropertyName="PlayerBuffs.Count">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate DataType="{x:Type views:ItemModelBase}">
+                                            <ItemsControl ItemsSource="{Binding PlayerBuffs}" MinWidth="88">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel Orientation="Horizontal" />
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate DataType="{x:Type core:Buff}">
+                                                        <DataTemplate.Resources>
+                                                            <Style TargetType="{x:Type ToolTip}" BasedOn="{StaticResource {x:Type ToolTip}}">
+                                                                <Setter Property="ContentTemplate" Value="{StaticResource BuffToolTipTemplate}" />
+                                                            </Style>
+                                                        </DataTemplate.Resources>
+                                                        <views:BuffIcon Buff="{Binding}" Margin="1,0" ToolTip="{Binding}" />
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

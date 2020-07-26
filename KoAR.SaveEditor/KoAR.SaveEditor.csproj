@@ -191,6 +191,7 @@
     <None Remove="Resources\Unknown.png" />
     <None Remove="Resources\Utility_Socket.png" />
     <None Remove="Resources\Weapon_Socket.jpg" />
+    <None Remove="Resources\Zoom.png" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="WPFTaskDialog" Version="1.7.1" />
@@ -336,9 +337,11 @@
     <Resource Include="Resources\categories\Staff.png" />
     <Resource Include="Resources\categories\Torso_Finesse.png" />
     <Resource Include="Resources\Unknown.png" />
+    <Resource Include="Resources\Zoom.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xaml" />
@@ -357,7 +360,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Update="buff.json">
+    <None Update="buffs.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="definitions.csv">

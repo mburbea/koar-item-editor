@@ -4,7 +4,7 @@ namespace KoAR.Core
 {
     public interface IItemBuffMemory
     {
-        List<Buff> List { get; }
+        IList<Buff> List { get; }
         Buff? Prefix { get; }
         Buff? Suffix { get; }
     }

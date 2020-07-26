@@ -28,13 +28,14 @@ namespace KoAR.SaveEditor.Views
             if (values != null)
             {
                 List<string> list = new List<string>(values.Length);
-                foreach (object value in values.Where(value => value != null))
+                foreach (object value in values)
                 {
-                    string text = value.ToString();
-                    if (value is Enum && text == "None")
+                    if (value == null || value is Enum && value.GetHashCode() == 0)
                     {
+                        // This tests for null and All/None in the various enumerations.
                         continue;
                     }
+                    string text = value.ToString();
                     list.Add(list.Count == 0 ? text : $"{list.Last()}_{text}");
                 }
                 for (int index = list.Count - 1; index != -1; index--)

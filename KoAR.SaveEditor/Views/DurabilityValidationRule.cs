@@ -25,7 +25,7 @@ namespace KoAR.SaveEditor.Views
             }
             if (!Item.IsValidDurability(durability))
             {
-                return new ValidationResult(false, $"Durability must be greater than {Item.DurabilityLowerBound} and less than {Item.DurabilityUpperBound}.");
+                return new ValidationResult(false, $"Durability must be between {Item.DurabilityLowerBound} and {Item.DurabilityUpperBound}.");
             }
             return ValidationResult.ValidResult;
         }

@@ -1,78 +1,72 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+﻿using System.Collections.Generic;
+using System.Collections.Specialized;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
 
 namespace KoAR.SaveEditor.Views
 {
-    /// <summary>
-    /// A wrapper class for <see cref="Core.Item"/> that implements <see cref="INotifyPropertyChanged"/>.
-    /// </summary>
-    public sealed class ItemModel : NotifierBase, IDisposable
+    public sealed class ItemModel : ItemModelBase<Item>
     {
         private readonly NotifyingCollection<Buff> _itemBuffs;
         private readonly NotifyingCollection<Buff> _playerBuffs;
 
         public ItemModel(Item item)
+            : base(item)
         {
-            this.Item = item;
             this._itemBuffs = new NotifyingCollection<Buff>(item.ItemBuffs.List);
             this._itemBuffs.CollectionChanged += this.Buffs_CollectionChanged;
             this._playerBuffs = new NotifyingCollection<Buff>(item.PlayerBuffs);
             this._playerBuffs.CollectionChanged += this.Buffs_CollectionChanged;
         }
 
-        public int AffixCount => (this.Prefix == null ? 0 : 1) + (this.Suffix == null ? 0 : 1);
-
-        public EquipmentCategory Category => this.Item.TypeDefinition.Category;
-
-        public float CurrentDurability
+        public override float CurrentDurability
         {
-            get => this.Item.CurrentDurability;
-            set => this.SetItemValue(value, this.Item.CurrentDurability, value => this.Item.CurrentDurability = value);
+            get => base.CurrentDurability;
+            set => this.SetItemValue(value);
         }
 
-        public string DisplayName => this.HasCustomName switch
+        public override ItemDefinition Definition
         {
-            true => this.ItemName,
-            false when this.TypeDefinition.AffixableName && (this.Prefix ?? this.Suffix) != null => $"{this.Prefix?.Modifier} {this.TypeDefinition.CategoryDisplayName} {this.Suffix?.Modifier}".Trim(),
-            false => this.TypeDefinition.Name,
-        };
+            get => base.Definition;
+            set
+            {
+                this.Item.Definition = value;
+                this.OnPropertyChanged(string.Empty);
+                this._playerBuffs.OnReset();
+                this._itemBuffs.OnReset();
+            }
+        }
 
-        public bool HasCustomName => this.Item.HasCustomName;
-
-        public bool IsStolen
+        public override bool IsStolen
         {
-            get => this.Item.IsStolen;
-            set => this.SetItemValue(value, this.Item.IsStolen, value => this.Item.IsStolen = value);
+            get => base.IsStolen;
+            set => this.SetItemValue(value);
         }
 
         public bool IsUnsellable
         {
             get => this.Item.IsUnsellable;
-            set => this.SetItemValue(value, this.Item.IsUnsellable, value => this.Item.IsUnsellable = value);
+            set => this.SetItemValue(value);
         }
 
         public bool IsUnstashable
         {
             get => this.Item.IsUnstashable;
-            set => this.SetItemValue(value, this.Item.IsUnstashable, value => this.Item.IsUnstashable = value);
+            set => this.SetItemValue(value);
         }
 
-        public IList<Buff> ItemBuffs => this._itemBuffs;
+        public override IReadOnlyList<Buff> ItemBuffs => this._itemBuffs;
 
         public uint ItemId => this.Item.ItemId;
-        
+
         public int ItemIndex => this.Item.ItemOffset;
 
-        public string ItemName
+        public override string ItemName
         {
-            get => this.Item.ItemName;
+            get => base.ItemName;
             set
             {
-                if (this.SetItemValue(value, this.Item.ItemName, value => this.Item.ItemName = value))
+                if (this.SetItemValue(value))
                 {
                     this.OnPropertyChanged(nameof(this.HasCustomName));
                     this.OnPropertyChanged(nameof(this.DisplayName));
@@ -80,79 +74,61 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        public byte Level
+        public override byte Level
         {
-            get => this.Item.Level;
-            set => this.SetItemValue(value, this.Item.Level, value => this.Item.Level = value);
+            get => base.Level;
+            set => this.SetItemValue(value);
         }
 
-        public float MaxDurability
+        public override float MaxDurability
         {
-            get => this.Item.MaxDurability;
-            set => this.SetItemValue(value, this.Item.MaxDurability, value => this.Item.MaxDurability = value);
+            get => base.MaxDurability;
+            set => this.SetItemValue(value);
         }
 
-        public IList<Buff> PlayerBuffs => this._playerBuffs;
+        public override IReadOnlyList<Buff> PlayerBuffs => this._playerBuffs;
 
-        public Buff? Prefix
+        public override Buff? Prefix
         {
-            get => this.Item.ItemBuffs.Prefix;
+            get => base.Prefix;
             set
             {
-                if (this.SetItemValue(value, this.Item.ItemBuffs.Prefix, value => this.Item.ItemBuffs.Prefix = value))
+                if (this.SetItemValue(value, $"{nameof(IItem.ItemBuffs)}.{nameof(this.Prefix)}"))
                 {
                     this.OnPropertyChanged(nameof(this.AffixCount));
                 }
             }
         }
 
-        public Rarity Rarity => this.Item.Rarity;
-
-        public Buff? Suffix
+        public override Buff? Suffix
         {
-            get => this.Item.ItemBuffs.Suffix;
+            get => base.Suffix;
             set
             {
-                if (this.SetItemValue(value, this.Item.ItemBuffs.Suffix, value => this.Item.ItemBuffs.Suffix = value))
+                if (this.SetItemValue(value, $"{nameof(IItem.ItemBuffs)}.{nameof(this.Suffix)}"))
                 {
                     this.OnPropertyChanged(nameof(this.AffixCount));
                 }
             }
         }
 
-        public TypeDefinition TypeDefinition
-        {
-            get => this.Item.TypeDefinition;
-            set
-            {
-                this.Item.TypeDefinition = value;
-                this.OnPropertyChanged(string.Empty);
-                this._playerBuffs.OnReset();
-                this._itemBuffs.OnReset();
-            }
-        }
+        public override bool UnsupportedFormat => this.Item.ItemBuffs.UnsupportedFormat;
 
-        public bool UnsupportedFormat => this.Item.ItemBuffs.UnsupportedFormat;
+        public void AddItemBuff(Buff buff) => this._itemBuffs.Add(buff);
 
-        internal Item Item { get; }
+        public void AddPlayerBuff(Buff buff) => this._playerBuffs.Add(buff);
 
-        public void Dispose()
+        public void RemoveItemBuff(Buff buff) => this._itemBuffs.Remove(buff);
+
+        public void RemovePlayerBuff(Buff buff) => this._playerBuffs.Remove(buff);
+
+        protected override void Dispose(bool disposing)
         {
             this._playerBuffs.CollectionChanged -= this.Buffs_CollectionChanged;
             this._itemBuffs.CollectionChanged -= this.Buffs_CollectionChanged;
+            base.Dispose(disposing);
         }
 
-        private void Buffs_CollectionChanged(object sender, EventArgs e) => this.OnPropertyChanged(nameof(this.Rarity));
-
-        private bool SetItemValue<T>(T value, T currentValue, Action<T> setValue, [CallerMemberName] string propertyName = "")
-        {
-            if (EqualityComparer<T>.Default.Equals(value, currentValue))
-            {
-                return false;
-            }
-            setValue(value);
-            this.OnPropertyChanged(propertyName);
-            return true;
-        }
+        private void Buffs_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) => this.OnPropertyChanged(nameof(this.Rarity));
     }
 }

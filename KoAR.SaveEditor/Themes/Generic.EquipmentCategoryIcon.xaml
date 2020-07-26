@@ -4,9 +4,10 @@
     <Style TargetType="{x:Type views:EquipmentCategoryIcon}">
         <Style.Triggers>
             <Trigger Property="Category" Value="{x:Null}">
-                <Setter Property="Visibility" Value="Collapsed" />
+                <Setter Property="Visibility" Value="Hidden" />
             </Trigger>
         </Style.Triggers>
+        <Setter Property="Focusable" Value="False" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type views:EquipmentCategoryIcon}">
@@ -14,7 +15,7 @@
                         <views:TitleCaseWordsConverter x:Key="TitleCaseWordsConverter" />
                         <views:BitmapConverter x:Key="BitmapConverter" />
                     </ControlTemplate.Resources>
-                    <Image Margin="1,0" x:Name="PART_Image" Width="24" SnapsToDevicePixels="True" 
+                    <Image Margin="1,0" x:Name="PART_Image" Height="24" SnapsToDevicePixels="True" 
                         Source="{Binding Category, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BitmapConverter}}"
                         ToolTip="{Binding Category, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource TitleCaseWordsConverter}}" />
                 </ControlTemplate>

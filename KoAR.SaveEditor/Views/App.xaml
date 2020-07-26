@@ -1,11 +1,11 @@
 ﻿<Application x:Class="KoAR.SaveEditor.Views.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    StartupUri="MainWindow.xaml">
+    StartupUri="Main/MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/PresentationFramework.Aero,Version=4.0.0.0,PublicKeyToken=31bf3856ad364e35;component/Themes/Aero.NormalColor.xaml" />
+                <ResourceDictionary Source="/PresentationFramework.Aero;component/Themes/Aero.NormalColor.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

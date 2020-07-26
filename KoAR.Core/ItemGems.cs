@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Text;
 
 namespace KoAR.Core
 {
@@ -14,30 +11,33 @@ namespace KoAR.Core
             public const int FirstGem = 21;
         }
 
-        internal byte[] Bytes { get; set; } = Array.Empty<byte>();
-
+        private readonly GameSave _gameSave;
         internal int ItemOffset { get; set; }
 
         public ItemGems(GameSave gameSave, int itemOffset, int dataLength)
         {
-            ItemOffset = itemOffset;
-            Bytes = gameSave.Bytes.AsSpan(itemOffset, dataLength).ToArray();
-            Span<int> gemIds = MemoryMarshal.Cast<byte, int>(Bytes.AsSpan(Offsets.FirstGem));
-            Gems = gemIds.Length == 0 ? Array.Empty<Gem>() : new Gem[gemIds.Length];
-            for (int i = 0; i < gemIds.Length; i++)
+            (_gameSave, ItemOffset) = (gameSave, itemOffset);
+            Gems = GemCount > 0 ? new Gem[GemCount] : Array.Empty<Gem>();
+            for (int i = 0; i < Gems.Length; i++)
             {
-                Gems[i] = gameSave.Gems.GetOrDefault(gemIds[i]);
+                Gems[i] = gameSave.Gems[this[Offsets.FirstGem + i * 4]];
+            }
+            if (DataLength != dataLength)
+            {
+                throw new InvalidOperationException();
             }
         }
 
-        private int DataLength
+        private int this[int index]
         {
-            get => MemoryUtilities.Read<int>(Bytes, Offsets.DataLength);
-            set => MemoryUtilities.Write(Bytes, Offsets.DataLength, value);
+            get => MemoryUtilities.Read<int>(_gameSave.Bytes, ItemOffset + index);
+            set => MemoryUtilities.Write(_gameSave.Bytes, ItemOffset + index, value);
         }
 
-        private int SocketCount => MemoryUtilities.Read<int>(Bytes, Offsets.GemCount);
+        private int DataLength => this[Offsets.DataLength] + 17;
 
-        public Gem?[] Gems { get; }
+        private int GemCount => this[Offsets.GemCount];
+
+        public Gem[] Gems { get; }
     }
 }

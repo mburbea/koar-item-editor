@@ -29,7 +29,7 @@ namespace KoAR.SaveEditor.Constructs
         {
             foreach (GridViewColumn column in view.Columns)
             {
-                if (ListViewAutoSize.GetSkipAutoSize(column))
+                if (ListViewAutoSize.GetSkipAutoSize(column) || column.Width == 0d)
                 {
                     continue;
                 }

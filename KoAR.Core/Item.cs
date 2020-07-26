@@ -18,8 +18,8 @@ namespace KoAR.Core
 
         public Item(GameSave gameSave, int typeIdOffset, int offset, int dataLength, int itemBuffsOffset, int itemBuffsLength, int itemGemsOffset, int itemGemsLength)
         {
-            (_gameSave, _typeIdOffset, ItemOffset) = (gameSave, typeIdOffset, offset);
-            if (gameSave.Bytes[_typeIdOffset + 10] == 1)
+            (_gameSave, TypeIdOffset, ItemOffset) = (gameSave, typeIdOffset, offset);
+            if (gameSave.Bytes[TypeIdOffset + 10] == 1)
             {
                 _levelShiftOffset = 8;
             }
@@ -81,32 +81,32 @@ namespace KoAR.Core
             set => State = value ? State | InventoryState.Unstashable : State & ~InventoryState.Unstashable;
         }
 
-        public TypeDefinition TypeDefinition
+        public ItemDefinition Definition
         {
-            get => Amalur.TypeDefinitions[MemoryUtilities.Read<uint>(_gameSave.Bytes, _typeIdOffset)];
+            get => Amalur.ItemDefinitions[MemoryUtilities.Read<uint>(_gameSave.Bytes, TypeIdOffset)];
             set
             {
-                var oldType = Amalur.TypeDefinitions[MemoryUtilities.Read<uint>(_gameSave.Bytes, _typeIdOffset)];
-                MemoryUtilities.Write(_gameSave.Bytes, _typeIdOffset, value.TypeId);
-                MemoryUtilities.Write(_gameSave.Bytes, _typeIdOffset + 30 + _levelShiftOffset, value.TypeId);
+                var oldType = Amalur.ItemDefinitions[MemoryUtilities.Read<uint>(_gameSave.Bytes, TypeIdOffset)];
+                MemoryUtilities.Write(_gameSave.Bytes, TypeIdOffset, value.TypeId);
+                MemoryUtilities.Write(_gameSave.Bytes, TypeIdOffset + 30 + _levelShiftOffset, value.TypeId);
                 if (oldType.Category == EquipmentCategory.Shield && oldType.ArmorType != value.ArmorType)
                 {
-                    _gameSave.Bytes[_typeIdOffset + 14] = value.ArmorType switch
+                    _gameSave.Bytes[TypeIdOffset + 14] = value.ArmorType switch
                     {
                         ArmorType.Finesse => 0xEC,
                         ArmorType.Might => 0xED,
                         ArmorType.Sorcery => 0xEE,
-                        _ => _gameSave.Bytes[_typeIdOffset + 14],
+                        _ => _gameSave.Bytes[TypeIdOffset + 14],
                     };
                 }
                 LoadFromDefinition(value);
             }
         }
 
-        private readonly int _typeIdOffset;
+        
         private readonly byte _levelShiftOffset;
         private readonly GameSave _gameSave;
-        private int LevelOffset => _typeIdOffset + 14 + _levelShiftOffset;
+        private int LevelOffset => TypeIdOffset + 14 + _levelShiftOffset;
 
         public byte Level
         {
@@ -121,6 +121,7 @@ namespace KoAR.Core
         public ItemGems ItemGems { get; }
 
         public int ItemOffset { get; internal set; }
+        internal int TypeIdOffset { get; set; }
 
         private int NameLength
         {
@@ -128,12 +129,12 @@ namespace KoAR.Core
             set => MemoryUtilities.Write(ItemBytes, Offsets.NameLength, value);
         }
 
-        public Rarity Rarity => TypeDefinition.Rarity == Rarity.Set
+        public Rarity Rarity => Definition.Rarity == Rarity.Set
             ? Rarity.Set
             : PlayerBuffs.Select(x => x.Rarity)
                 .Concat(ItemBuffs.List.Select(x => x.Rarity))
-                .Concat(ItemGems.Gems.OfType<Gem>().Select(x => x.Definition.Buff.Rarity))
-                .Concat(new[] { ItemBuffs.Prefix?.Rarity ?? default, ItemBuffs.Suffix?.Rarity ?? default, TypeDefinition.Sockets.Any() ? Rarity.Infrequent : Rarity.Common })
+                .Concat(ItemGems.Gems.Select(x => x.Definition.Buff.Rarity))
+                .Concat(new[] { ItemBuffs.Prefix?.Rarity ?? default, ItemBuffs.Suffix?.Rarity ?? default, Definition.Sockets.Any() ? Rarity.Infrequent : Rarity.Common })
                 .Max();
 
         public string ItemName { get; set; } = string.Empty;
@@ -154,7 +155,7 @@ namespace KoAR.Core
 
         IItemBuffMemory IItem.ItemBuffs => ItemBuffs;
 
-        public static bool IsValidDurability(float durability) => durability > DurabilityLowerBound && durability < DurabilityUpperBound;
+        public static bool IsValidDurability(float durability) => durability >= DurabilityLowerBound && durability <= DurabilityUpperBound;
 
         internal byte[] Serialize(bool forced = false)
         {
@@ -198,14 +199,17 @@ namespace KoAR.Core
             return ItemBytes;
         }
 
-        internal void LoadFromDefinition(TypeDefinition definition)
+        internal void LoadFromDefinition(ItemDefinition definition)
         {
             CurrentDurability = definition.MaxDurability;
             MaxDurability = definition.MaxDurability;
             ItemBuffs.List.Clear();
-            ItemBuffs.List.AddRange(definition.ItemBuffs);
-            ItemBuffs.Prefix = definition.Prefix;
-            ItemBuffs.Suffix = definition.Suffix;
+            foreach(var buff in definition.ItemBuffs.List)
+            {
+                ItemBuffs.List.Add(buff);
+            }
+            ItemBuffs.Prefix = definition.ItemBuffs.Prefix;
+            ItemBuffs.Suffix = definition.ItemBuffs.Suffix;
             PlayerBuffs.Clear();
             PlayerBuffs.AddRange(definition.PlayerBuffs);
             Level = definition.Level;

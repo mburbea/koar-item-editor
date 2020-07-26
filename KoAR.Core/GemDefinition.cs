@@ -6,7 +6,7 @@ namespace KoAR.Core
 {
     public class GemDefinition
     {
-        public GemDefinition(uint typeId, string name, string internalName, uint buffId, char socketType)
+        private GemDefinition(uint typeId, string name, string internalName, uint buffId, char socketType)
         {
             TypeId = typeId;
             Name = name;
@@ -16,8 +16,8 @@ namespace KoAR.Core
         }
 
         public uint TypeId { get; }
-        public string Name { get; set; } = string.Empty;
-        public string InternalName { get; set; } = string.Empty;
+        public string Name { get; set; }
+        public string InternalName { get; set; }
         public Buff Buff { get; set; }
         public char SocketType { get; set; }
 
@@ -25,7 +25,7 @@ namespace KoAR.Core
         {
             foreach (var line in File.ReadLines(path).Skip(1))
             {
-                var parts = line.Split(Amalur.Seperator);
+                var parts = line.Split(Amalur.Separator);
                 yield return new GemDefinition(
                     typeId: uint.Parse(parts[0]),
                     name: parts[1],

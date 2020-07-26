@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Linq;
 
 namespace KoAR.Core
 {
@@ -22,9 +21,9 @@ namespace KoAR.Core
             ItemOffset = itemOffset;
             Bytes = gameSave.Bytes.AsSpan(itemOffset, dataLength).ToArray();
             var itemId = MemoryUtilities.Read<uint>(Bytes);
-            List.Capacity = MemoryUtilities.Read<int>(Bytes, Offsets.BuffCount);
+            var count = Count;
             var firstBuff = Offsets.FirstBuff;
-            for (int i = 0; i < List.Capacity; i++)
+            for (int i = 0; i < count; i++)
             {
                 var instanceId = MemoryUtilities.Read<uint>(Bytes, firstBuff + (i * 16));
                 var buffId = MemoryUtilities.Read<uint>(Bytes, firstBuff + (i * 16) + 4);
@@ -45,7 +44,7 @@ namespace KoAR.Core
         internal byte[] Bytes { get; private set; }
         public int ItemOffset { get; internal set; }
         public bool UnsupportedFormat { get; }
-        public List<Buff> List { get; } = new List<Buff>();
+        public IList<Buff> List { get; } = new List<Buff>();
 
         internal int DataLength
         {

@@ -88,18 +88,31 @@ namespace ItemTesting
     //        }
     static class Program
     {
+        //static void Main()
+        //{
+        //    const string path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save77.sav";
+        //    //const string path = @"..\..\..\..\9190114save90.sav";
+        //    Amalur.Initialize(@"..\..\..\..\Koar.SaveEditor\");
+        //    GameSave gameSave = new GameSave(path);
+
+        //    Console.WriteLine(gameSave.Stash.Items.Count);
+        //    foreach (var item in gameSave.Stash.Items)
+        //    {
+        //        Console.WriteLine(item.Definition.Name);
+        //    }
+        //}
         static void Main()
         {
-            const string path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save77.sav";
-            //const string path = @"..\..\..\..\9190114save90.sav";
             Amalur.Initialize(@"..\..\..\..\Koar.SaveEditor\");
-            GameSave gameSave = new GameSave(path);
-
-            Console.WriteLine(gameSave.Stash.Items.Count);
-            foreach (var item in gameSave.Stash.Items)
-            {
-                Console.WriteLine(item.TypeDefinition.Name);
-            }
+            GameSave gameSave = new GameSave(@"..\..\..\..\9190114save84.sav");
+            Console.WriteLine($"Stash item count at load:{gameSave.Stash.Items.Count}");
+            gameSave.Stash.AddItem(Amalur.ItemDefinitions.Values.First());
+            //gameSave.GetAllEquipment(); // Reload stash
+            Console.WriteLine($"Stash item count after add:{gameSave.Stash.Items.Count}");
+            gameSave.Stash.DeleteItem(gameSave.Stash.Items.First());
+            //gameSave.GetAllEquipment(); // Resload stash
+            Console.WriteLine($"Stash item count after delete:{gameSave.Stash.Items.Count}");
+            Console.ReadLine();
         }
     }
 }

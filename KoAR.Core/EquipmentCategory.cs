@@ -2,7 +2,7 @@
 {
     public enum EquipmentCategory
     {
-        Hat,
+        Hat = 1,
         Torso,
         Robes,
         Legs,

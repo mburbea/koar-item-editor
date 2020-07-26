@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace KoAR.SaveEditor.Constructs
 {
     public abstract class NotifierBase : INotifyPropertyChanged
     {
+        internal static MethodInfo OnPropertyChangedMethod { get; } = typeof(NotifierBase).GetMethod(nameof(NotifierBase.OnPropertyChanged), BindingFlags.NonPublic | BindingFlags.Instance);
+
         protected NotifierBase()
         {
         }
