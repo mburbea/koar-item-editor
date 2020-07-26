@@ -5,6 +5,14 @@ namespace KoAR.Core
 {
     public class Stash
     {
+        private static class Offsets
+        {
+            public const int DataLength = 0;
+            public const int DataLength2 = 9;
+            public const int Count = 13;
+            public const int FirstItem = 17;
+        }
+
         private readonly GameSave _gameSave;
 
         private readonly int _offset;
@@ -47,14 +55,14 @@ namespace KoAR.Core
             private set
             {
                 MemoryUtilities.Write(_gameSave.Bytes, _offset, value + 17);
-                MemoryUtilities.Write(_gameSave.Bytes, _offset + 9, value - 9 + 17);
+                MemoryUtilities.Write(_gameSave.Bytes, _offset + Offsets.DataLength2, value - Offsets.DataLength2 + 17);
             }
         }
 
         private int Count
         {
-            get => MemoryUtilities.Read<int>(_gameSave.Bytes, _offset + 13);
-            set => MemoryUtilities.Write(_gameSave.Bytes, _offset + 13, value);
+            get => MemoryUtilities.Read<int>(_gameSave.Bytes, _offset + Offsets.Count);
+            set => MemoryUtilities.Write(_gameSave.Bytes, _offset + Offsets.Count, value);
         }
 
         public List<StashItem> Items { get; } = new List<StashItem>();
@@ -66,7 +74,7 @@ namespace KoAR.Core
             // 2. We blow away everything when we do this operation anyway.
             // 3. We rely on the fact that the game will regenerate the ItemBuff section when the stash spawns the item. (Primarily to avoid thinking about instanceIds...)
             Span<byte> temp = stackalloc byte[25 + type.PlayerBuffs.Length * 8];
-            MemoryUtilities.Write(temp, 0, type.TypeId | ((ulong)0x03_0A) << 32); 
+            MemoryUtilities.Write(temp, 0, type.TypeId | ((ulong)0x03_0A) << 32);
             MemoryUtilities.Write(temp, 10, type.MaxDurability);
             temp[14] = 1;
             MemoryUtilities.Write(temp, 18, type.PlayerBuffs.Length);
@@ -75,19 +83,24 @@ namespace KoAR.Core
                 MemoryUtilities.Write(temp, i * 8 + 22, type.PlayerBuffs[i].Id | ((ulong)uint.MaxValue) << 32);
             }
             temp[^1] = 0xFF;
-            _gameSave.Bytes = MemoryUtilities.ReplaceBytes(_gameSave.Bytes, _offset + 17, 0, temp);
+            var offset = _offset + Offsets.FirstItem;
+            _gameSave.Bytes = MemoryUtilities.ReplaceBytes(_gameSave.Bytes, offset, 0, temp);
             DataLength += temp.Length;
             Count++;
-            _gameSave.UpdateDataLengths(temp.Length);
+            Items.Add(new StashItem(_gameSave, offset, temp.Length));
+            _gameSave.UpdateOffsets(offset, temp.Length);
+            _gameSave.UpdateDataLengths(offset, temp.Length);
         }
 
         public void DeleteItem(StashItem item)
         {
             var itemLength = item.DataLength;
+            Items.Remove(item);
             _gameSave.Bytes = MemoryUtilities.ReplaceBytes(_gameSave.Bytes, item.ItemOffset, itemLength, Array.Empty<byte>());
             Count--;
             DataLength -= itemLength;
-            _gameSave.UpdateDataLengths( -itemLength);
+            _gameSave.UpdateOffsets(item.ItemOffset, -itemLength);
+            _gameSave.UpdateDataLengths(item.ItemOffset, -itemLength);
         }
 
         public static Stash? TryCreateStash(GameSave gameSave)

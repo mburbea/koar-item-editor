@@ -29,7 +29,7 @@ namespace KoAR.Core
 
         internal int DataLength => Bytes.Length;
 
-        public int ItemOffset { get; }
+        internal int ItemOffset { get; set; }
 
         private Offset Offsets => new Offset(this);
 
@@ -59,6 +59,5 @@ namespace KoAR.Core
                 .Concat(ItemBuffs.List.Select(x => x.Rarity))
                 .Concat(new[] { ItemBuffs.Prefix?.Rarity ?? default, ItemBuffs.Suffix?.Rarity ?? default, Definition.Sockets.Any() ? Rarity.Infrequent : Rarity.Common })
                 .Max();
-
     }
 }
