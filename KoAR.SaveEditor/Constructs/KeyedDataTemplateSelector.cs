@@ -9,11 +9,9 @@ namespace KoAR.SaveEditor.Constructs
 {
     public sealed class KeyedDataTemplateSelector : DataTemplateSelector, IDictionary
     {
-        private readonly Dictionary<object, DataTemplate> _dictionary = new Dictionary<object, DataTemplate>();
+        private static readonly DataTemplate _emptyDataTemplate = new DataTemplate();
 
-        public KeyedDataTemplateSelector()
-        {
-        }
+        private readonly Dictionary<object, DataTemplate> _dictionary = new Dictionary<object, DataTemplate>();
 
         public int Count => this._dictionary.Count;
 
@@ -52,7 +50,9 @@ namespace KoAR.SaveEditor.Constructs
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            return this._dictionary.TryGetValue(item, out DataTemplate? value) ? value : new DataTemplate();
+            return item == null || !this._dictionary.TryGetValue(item, out DataTemplate? dataTemplate)
+                ? KeyedDataTemplateSelector._emptyDataTemplate
+                : dataTemplate;
         }
     }
 }

@@ -146,7 +146,7 @@
         </Border>
         <TabControl x:Name="PART_TabControl" ItemsSource="{Binding Source={StaticResource Modes}}" SelectedItem="{Binding Mode}" FocusVisualStyle="{x:Null}" 
             Margin="4,4,4,8" TabStripPlacement="Bottom" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
-            Panel.ZIndex="200">
+            constructs:TabContent.Persist="{Binding IsVisible, RelativeSource={RelativeSource Self}}">
             <TabControl.Style>
                 <Style TargetType="{x:Type TabControl}" BasedOn="{StaticResource {x:Type TabControl}}">
                     <Style.Triggers>
@@ -205,16 +205,16 @@
                     </Setter>
                 </Style>
             </TabControl.ItemContainerStyle>
-            <TabControl.ContentTemplateSelector>
+            <constructs:TabContent.TemplateSelector>
                 <constructs:KeyedDataTemplateSelector>
                     <DataTemplate x:Key="{x:Static local:ManagementMode.Inventory}">
                         <TextBlock Text="{Binding}" />
                     </DataTemplate>
                     <DataTemplate x:Key="{x:Static local:ManagementMode.Stash}">
-                        <sm:StashManagerControl DataContext="{Binding StashManager, Source={StaticResource ViewModel}}"/>
+                        <sm:StashManagerControl DataContext="{Binding StashManager, Source={StaticResource ViewModel}}" />
                     </DataTemplate>
                 </constructs:KeyedDataTemplateSelector>
-            </TabControl.ContentTemplateSelector>
+            </constructs:TabContent.TemplateSelector>
         </TabControl>
     </DockPanel>
 </Window>
