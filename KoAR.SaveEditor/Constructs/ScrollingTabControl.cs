@@ -185,7 +185,7 @@ namespace KoAR.SaveEditor.Constructs
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (this.Items.IsEmpty || e.Key != Key.Tab || (Keyboard.Modifiers & ModifierKeys.Control) != ModifierKeys.Control)
+            if (!this.IsVisible || this.Items.IsEmpty || e.Key != Key.Tab || (Keyboard.Modifiers & ModifierKeys.Control) != ModifierKeys.Control)
             {
                 return;
             }
