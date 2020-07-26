@@ -59,5 +59,7 @@ namespace KoAR.Core
                 .Concat(ItemBuffs.List.Select(x => x.Rarity))
                 .Concat(new[] { ItemBuffs.Prefix?.Rarity ?? default, ItemBuffs.Suffix?.Rarity ?? default, Definition.Sockets.Any() ? Rarity.Infrequent : Rarity.Common })
                 .Max();
+
+        public IEnumerable<GemSocket> GetGemSockets() => Definition.GetGemSockets();
     }
 }
