@@ -9,7 +9,7 @@ namespace KoAR.Core
     {
         private byte[] Bytes { get; }
         public List<Buff> PlayerBuffs { get; } = new List<Buff>();
-        
+
         public StashItem(GameSave gameSave, int offset, int datalength)
         {
             ItemOffset = offset;

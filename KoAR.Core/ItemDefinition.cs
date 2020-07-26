@@ -103,7 +103,7 @@ namespace KoAR.Core
         public bool IsMerchant { get; }
         public IItemBuffMemory ItemBuffs { get; }
 
-        public IEnumerable<GemSocket> GetGemSockets() => Sockets.Select(socket => new GemSocket(socket, null));
+        public IEnumerable<GemSocket> GetGemSockets() => Sockets.Select(socket => new GemSocket(socket));
 
         public string CategoryDisplayName => this switch
         {

@@ -103,7 +103,7 @@ namespace KoAR.Core
             }
         }
 
-        
+
         private readonly byte _levelShiftOffset;
         private readonly GameSave _gameSave;
         private int LevelOffset => TypeIdOffset + 14 + _levelShiftOffset;
@@ -204,7 +204,7 @@ namespace KoAR.Core
             CurrentDurability = definition.MaxDurability;
             MaxDurability = definition.MaxDurability;
             ItemBuffs.List.Clear();
-            foreach(var buff in definition.ItemBuffs.List)
+            foreach (var buff in definition.ItemBuffs.List)
             {
                 ItemBuffs.List.Add(buff);
             }
@@ -220,16 +220,17 @@ namespace KoAR.Core
             return ItemGems.Gems.Length switch
             {
                 0 => Definition.GetGemSockets(),
-                1 when Definition.Sockets.Length == 1 => new[] {new GemSocket(Definition.Sockets[0], ItemGems.Gems[0])}, // trivial case.
+                1 when Definition.Sockets.Length == 1 => new[] { new GemSocket(Definition.Sockets[0], ItemGems.Gems[0]) }, // trivial case.
                 _ => Inner(Definition.Sockets, ItemGems.Gems.AsSpan().ToArray())
             };
 
-            static IEnumerable<GemSocket> Inner(string sockets, Gem[] gems) {
+            static IEnumerable<GemSocket> Inner(string sockets, Gem[] gems)
+            {
                 int start = 0;
                 foreach (var socket in sockets)
                 {
                     Gem? gem = null;
-                    for(int i = start; i < gems.Length; i++)
+                    for (int i = start; i < gems.Length; i++)
                     {
                         if (gems[i].Definition.SocketType == socket)
                         {
