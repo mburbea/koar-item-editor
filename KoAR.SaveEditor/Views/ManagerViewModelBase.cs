@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
 using KoAR.SaveEditor.Views.Main;
@@ -60,20 +59,15 @@ namespace KoAR.SaveEditor.Views
             this.MainWindowViewModel.RepopulateItemsRequested -= this.MainWindowViewModel_RepopulateItemsRequested;
         }
 
+        protected void AddItem(TItemModel item)
+        {
+            this.AttachEvents(item);
+            this._items.Add(item);
+        }
+
         protected virtual void AttachEvents(TItemModel item)
         {
             PropertyChangedEventManager.AddHandler(item, this.Item_PropertyChanged, string.Empty);
-        }
-
-        private void Item_PropertyChanged(object sender, PropertyChangedEventArgs e) => this.OnItemPropertyChanged((TItemModel)sender, e.PropertyName);
-
-        protected virtual void OnItemPropertyChanged(TItemModel item, string propertyName)
-        {
-            this.MainWindowViewModel.RegisterUnsavedChange();
-            if (propertyName == nameof(ItemModelBase.IsStolen))
-            {
-                this.OnPropertyChanged(nameof(this.AllItemsStolen));
-            }
         }
 
         protected virtual void DetachEvents(TItemModel item)
@@ -88,28 +82,48 @@ namespace KoAR.SaveEditor.Views
             this.OnPropertyChanged(nameof(this.AllItemsStolen));
         }
 
+        protected virtual void OnItemPropertyChanged(TItemModel item, string propertyName)
+        {
+            this.MainWindowViewModel.RegisterUnsavedChange();
+            if (propertyName == nameof(ItemModelBase.IsStolen))
+            {
+                this.OnPropertyChanged(nameof(this.AllItemsStolen));
+            }
+        }
+
+        protected virtual void OnRepopulateItemsRequested() => this.RepopulateItems();
+
+        protected void RemoveItem(TItemModel item)
+        {
+            this.RemoveItemAt(this._items.IndexOf(item));
+        }
+
+        protected void RemoveItemAt(int index)
+        {
+            using TItemModel item = this._items[index];
+            this.DetachEvents(item);
+            this._items.RemoveAt(index);
+        }
+
         protected void RepopulateItems()
         {
             using (this._items.CreatePauseEventsScope())
             {
                 for (int index = this._items.Count - 1; index != -1; index--)
                 {
-                    using TItemModel item = this._items[index];
-                    this.DetachEvents(item);
-                    this._items.RemoveAt(index);
+                    this.RemoveItemAt(index);
                 }
-                foreach (TItemModel item in this.GameItems.Select(this._modelProjection))
+                foreach (TItem item in this.GameItems)
                 {
-                    this.AttachEvents(item);
-                    this._items.Add(item);
+                    this.AddItem(this._modelProjection(item));
                 }
             }
             this.OnFilterChange();
         }
 
-        private void ItemFilters_FilterChange(object sender, EventArgs e) => this.OnFilterChange();
+        private void Item_PropertyChanged(object sender, PropertyChangedEventArgs e) => this.OnItemPropertyChanged((TItemModel)sender, e.PropertyName);
 
-        protected virtual void OnRepopulateItemsRequested() => this.RepopulateItems();
+        private void ItemFilters_FilterChange(object sender, EventArgs e) => this.OnFilterChange();
 
         private void MainWindowViewModel_RepopulateItemsRequested(object sender, EventArgs e) => this.OnRepopulateItemsRequested();
     }

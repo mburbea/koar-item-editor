@@ -42,14 +42,19 @@ namespace KoAR.SaveEditor.Views.StashManager
             {
                 return;
             }
-            this.Stash.AddItem(viewModel.Definition);
-            this.MainWindowViewModel.RegisterDrasticChange();
+            //this.Stash.AddItem(viewModel.Definition);
+            //this.MainWindowViewModel.RegisterDrasticChange();
+            StashItem stashItem = this.Stash.AddItem(viewModel.Definition);
+            this.AddItem(new StashItemModel(stashItem));
+            this.MainWindowViewModel.RegisterUnsavedChange();
         }
 
         private void DeleteItem(StashItemModel model)
         {
-            this.Stash.DeleteItem(model.Item);
-            this.MainWindowViewModel.RegisterDrasticChange();
+            //this.Stash.DeleteItem(model.Item);
+            //this.MainWindowViewModel.RegisterDrasticChange();
+            this.RemoveItem(model);
+            this.MainWindowViewModel.RegisterUnsavedChange();
         }
     }
 }
