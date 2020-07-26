@@ -20,7 +20,11 @@ namespace KoAR.Core
             Gems =  GemCount > 0  ? new Gem[GemCount] : Array.Empty<Gem>();
             for (int i = 0; i < Gems.Length; i++)
             {
-                Gems[i] = gameSave.Gems.GetOrDefault(this[Offsets.FirstGem + i * 4])!;
+                Gems[i] = gameSave.Gems[this[Offsets.FirstGem + i * 4]];
+            }
+            if(DataLength != dataLength)
+            {
+                throw new InvalidOperationException();
             }
         }
 
@@ -30,7 +34,7 @@ namespace KoAR.Core
             set => MemoryUtilities.Write(_gameSave.Bytes, ItemOffset + index, value);
         }
 
-        private int DataLength => this[Offsets.DataLength];
+        private int DataLength => this[Offsets.DataLength] + 17;
 
         private int GemCount => this[Offsets.GemCount];
 
