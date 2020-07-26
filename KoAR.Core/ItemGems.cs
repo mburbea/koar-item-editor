@@ -17,12 +17,12 @@ namespace KoAR.Core
         public ItemGems(GameSave gameSave, int itemOffset, int dataLength)
         {
             (_gameSave, ItemOffset) = (gameSave, itemOffset);
-            Gems =  GemCount > 0  ? new Gem[GemCount] : Array.Empty<Gem>();
+            Gems = GemCount > 0 ? new Gem[GemCount] : Array.Empty<Gem>();
             for (int i = 0; i < Gems.Length; i++)
             {
                 Gems[i] = gameSave.Gems[this[Offsets.FirstGem + i * 4]];
             }
-            if(DataLength != dataLength)
+            if (DataLength != dataLength)
             {
                 throw new InvalidOperationException();
             }
