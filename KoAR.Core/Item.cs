@@ -18,8 +18,8 @@ namespace KoAR.Core
 
         public Item(GameSave gameSave, int typeIdOffset, int offset, int dataLength, int itemBuffsOffset, int itemBuffsLength, int itemGemsOffset, int itemGemsLength)
         {
-            (_gameSave, _typeIdOffset, ItemOffset) = (gameSave, typeIdOffset, offset);
-            if (gameSave.Bytes[_typeIdOffset + 10] == 1)
+            (_gameSave, TypeIdOffset, ItemOffset) = (gameSave, typeIdOffset, offset);
+            if (gameSave.Bytes[TypeIdOffset + 10] == 1)
             {
                 _levelShiftOffset = 8;
             }
@@ -83,30 +83,30 @@ namespace KoAR.Core
 
         public ItemDefinition Definition
         {
-            get => Amalur.ItemDefinitions[MemoryUtilities.Read<uint>(_gameSave.Bytes, _typeIdOffset)];
+            get => Amalur.ItemDefinitions[MemoryUtilities.Read<uint>(_gameSave.Bytes, TypeIdOffset)];
             set
             {
-                var oldType = Amalur.ItemDefinitions[MemoryUtilities.Read<uint>(_gameSave.Bytes, _typeIdOffset)];
-                MemoryUtilities.Write(_gameSave.Bytes, _typeIdOffset, value.TypeId);
-                MemoryUtilities.Write(_gameSave.Bytes, _typeIdOffset + 30 + _levelShiftOffset, value.TypeId);
+                var oldType = Amalur.ItemDefinitions[MemoryUtilities.Read<uint>(_gameSave.Bytes, TypeIdOffset)];
+                MemoryUtilities.Write(_gameSave.Bytes, TypeIdOffset, value.TypeId);
+                MemoryUtilities.Write(_gameSave.Bytes, TypeIdOffset + 30 + _levelShiftOffset, value.TypeId);
                 if (oldType.Category == EquipmentCategory.Shield && oldType.ArmorType != value.ArmorType)
                 {
-                    _gameSave.Bytes[_typeIdOffset + 14] = value.ArmorType switch
+                    _gameSave.Bytes[TypeIdOffset + 14] = value.ArmorType switch
                     {
                         ArmorType.Finesse => 0xEC,
                         ArmorType.Might => 0xED,
                         ArmorType.Sorcery => 0xEE,
-                        _ => _gameSave.Bytes[_typeIdOffset + 14],
+                        _ => _gameSave.Bytes[TypeIdOffset + 14],
                     };
                 }
                 LoadFromDefinition(value);
             }
         }
 
-        private readonly int _typeIdOffset;
+        
         private readonly byte _levelShiftOffset;
         private readonly GameSave _gameSave;
-        private int LevelOffset => _typeIdOffset + 14 + _levelShiftOffset;
+        private int LevelOffset => TypeIdOffset + 14 + _levelShiftOffset;
 
         public byte Level
         {
@@ -121,6 +121,7 @@ namespace KoAR.Core
         public ItemGems ItemGems { get; }
 
         public int ItemOffset { get; internal set; }
+        internal int TypeIdOffset { get; set; }
 
         private int NameLength
         {

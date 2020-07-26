@@ -157,6 +157,10 @@ namespace KoAR.Core
                     {
                         item.ItemOffset += delta;
                     }
+                    if (item.TypeIdOffset > itemOffset)
+                    {
+                        item.TypeIdOffset += delta;
+                    }
                 }
             }
         }
