@@ -214,5 +214,34 @@ namespace KoAR.Core
             PlayerBuffs.AddRange(definition.PlayerBuffs);
             Level = definition.Level;
         }
+
+        public IEnumerable<GemSocket> GetGemSockets()
+        {
+            return ItemGems.Gems.Length switch
+            {
+                0 => Definition.GetGemSockets(),
+                1 when Definition.Sockets.Length == 1 => new[] {new GemSocket(Definition.Sockets[0], ItemGems.Gems[0])}, // trivial case.
+                _ => Inner(Definition.Sockets, ItemGems.Gems.AsSpan().ToArray())
+            };
+
+            static IEnumerable<GemSocket> Inner(string sockets, Gem[] gems) {
+                int start = 0;
+                foreach (var socket in sockets)
+                {
+                    Gem? gem = null;
+                    for(int i = start; i < gems.Length; i++)
+                    {
+                        if (gems[i].Definition.SocketType == socket)
+                        {
+                            gem = gems[i];
+                            (gems[0], gems[i]) = (gems[i], gems[0]);
+                            start++;
+                            break;
+                        }
+                    }
+                    yield return new GemSocket(socket, gem);
+                }
+            }
+        }
     }
 }

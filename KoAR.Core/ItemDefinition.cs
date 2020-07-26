@@ -48,7 +48,7 @@ namespace KoAR.Core
             {
                 return false;
             }
-            definition = new ItemDefinition(category, typeId, level, entries[3], entries[4], maxDurability, rarity, entries[7], 
+            definition = new ItemDefinition(category, typeId, level, entries[3], entries[4], maxDurability, rarity, entries[7],
                 element, armorType, Amalur.BuffMap.GetOrDefault(prefix), Amalur.BuffMap.GetOrDefault(suffix), itemBuffs, playerBuffs, hasVariants);
             return true;
         }
@@ -82,8 +82,6 @@ namespace KoAR.Core
             ItemBuffs = itemBuffs.Length == 0 && prefix is null && suffix is null
                 ? ItemDefinitionBuffMemory.Empty
                 : new ItemDefinitionBuffMemory(itemBuffs, prefix, suffix);
-            
-
             // merchant search is case sensitive to avoid affixing the Merchant's hat.
             IsMerchant = InternalName.Contains("merchant");
             AffixableName = IsMerchant || internalName.IndexOf("common", StringComparison.OrdinalIgnoreCase) != -1;
@@ -104,6 +102,8 @@ namespace KoAR.Core
         public bool HasVariants { get; }
         public bool IsMerchant { get; }
         public IItemBuffMemory ItemBuffs { get; }
+
+        public IEnumerable<GemSocket> GetGemSockets() => Sockets.Select(socket => new GemSocket(socket, null));
 
         public string CategoryDisplayName => this switch
         {
