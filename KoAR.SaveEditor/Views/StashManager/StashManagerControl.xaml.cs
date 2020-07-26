@@ -10,16 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace KoAR.SaveEditor.Views.StashManager
 {
     /// <summary>
-    /// Interaction logic for StashView.xaml
+    /// Interaction logic for StashManagerControl.xaml
     /// </summary>
-    public partial class StashManagerView : Window
+    public partial class StashManagerControl : UserControl
     {
-        public StashManagerView()
+        public StashManagerControl()
         {
             InitializeComponent();
         }

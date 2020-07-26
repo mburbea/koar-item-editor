@@ -12,7 +12,7 @@ using TaskDialogInterop;
 
 namespace KoAR.SaveEditor.Views.Main
 {
-    public sealed class MainViewModel : NotifierBase
+    public sealed class MainOLDViewModel : NotifierBase
     {
         private readonly NotifyingCollection<ItemModel> _items;
         private IReadOnlyList<ItemModel> _filteredItems;
@@ -20,7 +20,7 @@ namespace KoAR.SaveEditor.Views.Main
         private ItemModel? _selectedItem;
         private bool _unsavedChanges;
 
-        public MainViewModel()
+        public MainOLDViewModel()
         {
             this._filteredItems = this._items = new NotifyingCollection<ItemModel>();
             this.ItemFilters.FilterChange += this.ItemFilters_FilterChange;
@@ -42,7 +42,7 @@ namespace KoAR.SaveEditor.Views.Main
 
         public bool? AllItemsStolen
         {
-            get => this.Items.GetAppliesToAll(item => item.IsStolen);
+            get => this.FilteredItems.GetAppliesToAll(item => item.IsStolen);
             set
             {
                 foreach (ItemModel item in this.FilteredItems)
@@ -54,7 +54,7 @@ namespace KoAR.SaveEditor.Views.Main
 
         public bool? AllItemsUnsellable
         {
-            get => this.Items.GetAppliesToAll(item => item.IsUnsellable);
+            get => this.FilteredItems.GetAppliesToAll(item => item.IsUnsellable);
             set
             {
                 foreach (ItemModel item in this.FilteredItems)
@@ -66,7 +66,7 @@ namespace KoAR.SaveEditor.Views.Main
 
         public bool? AllItemsUnstashable
         {
-            get => this.Items.GetAppliesToAll(item => item.IsUnstashable);
+            get => this.FilteredItems.GetAppliesToAll(item => item.IsUnstashable);
             set
             {
                 foreach (ItemModel item in this.FilteredItems)
@@ -310,6 +310,7 @@ namespace KoAR.SaveEditor.Views.Main
 
         private void OpenStashManager()
         {
+            /*
             using StashManagerViewModel viewModel = new StashManagerViewModel(this);
             StashManagerView view = new StashManagerView
             {
@@ -317,6 +318,7 @@ namespace KoAR.SaveEditor.Views.Main
                 DataContext = viewModel
             };
             view.ShowDialog();
+            */
         }
 
         private void RegisterUnsavedChange() => this.UnsavedChanges = true;

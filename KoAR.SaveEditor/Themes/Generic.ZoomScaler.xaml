@@ -7,13 +7,17 @@
     </ResourceDictionary.MergedDictionaries>
     <Style TargetType="{x:Type views:ZoomScaler}">
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-        <Setter Property="MinWidth" Value="100" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type views:ZoomScaler}">
-                    <DockPanel>
-                        <TextBlock DockPanel.Dock="Left" Text="{Binding ZoomScale, Source={x:Static p:Settings.Default}, StringFormat='##0%'}" VerticalAlignment="Center" TextAlignment="Right" />
-                        <Slider Value="{Binding ZoomScale, Source={x:Static p:Settings.Default}}" FocusVisualStyle="{x:Null}" Margin="4,0,0,0" VerticalAlignment="Center" 
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto "/>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding ZoomScale, Source={x:Static p:Settings.Default}, StringFormat='##0%'}" VerticalAlignment="Center" TextAlignment="Right" />
+                        <Slider Grid.Column="1" Value="{Binding ZoomScale, Source={x:Static p:Settings.Default}}" FocusVisualStyle="{x:Null}" Margin="4,0" VerticalAlignment="Center" 
                             Minimum="{Binding MinZoomScale, Mode=OneTime, Source={x:Static p:Settings.Default}}" Maximum="{Binding MaxZoomScale, Mode=OneTime, Source={x:Static p:Settings.Default}}">
                             <Slider.Resources>
                                 <Style TargetType="{x:Type Thumb}" BasedOn="{StaticResource {x:Type Thumb}}">
@@ -21,7 +25,8 @@
                                 </Style>
                             </Slider.Resources>
                         </Slider>
-                    </DockPanel>
+                        <Button Command="{x:Static views:ZoomScaler.ResetZoomCommand}" Style="{StaticResource {x:Type Button}}" Grid.Column="2" FocusVisualStyle="{x:Null}" IsDefault="True" Content="Reset" />
+                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

@@ -10,6 +10,8 @@ namespace KoAR.SaveEditor.Views
 {
     public sealed class ZoomScaler : Control
     {
+        public static readonly RoutedCommand ResetZoomCommand = new RoutedCommand("Reset Zoom", typeof(ZoomScaler));
+
         public static readonly DependencyProperty TargetProperty = DependencyProperty.Register(nameof(ZoomScaler.Target), typeof(FrameworkElement), typeof(ZoomScaler),
             new PropertyMetadata(null, ZoomScaler.TargetProperty_ValueChanged));
 
@@ -19,6 +21,12 @@ namespace KoAR.SaveEditor.Views
         {
             get => (FrameworkElement?)this.GetValue(ZoomScaler.TargetProperty);
             set => this.SetValue(ZoomScaler.TargetProperty, value);
+        }
+
+        protected override void OnInitialized(EventArgs e)
+        {
+            base.OnInitialized(e);
+            this.CommandBindings.Add(new CommandBinding(ZoomScaler.ResetZoomCommand, ZoomScaler.ResetZoomCommand_Executed, ZoomScaler.ResetZoomCommand_CanExecute));
         }
 
         private static void AttachToTarget(FrameworkElement target)
@@ -49,6 +57,16 @@ namespace KoAR.SaveEditor.Views
             target.LayoutTransform = null;
             window.RemoveHandler(UIElement.PreviewKeyDownEvent, new KeyEventHandler(ZoomScaler.Window_PreviewKeyDown));
             window.RemoveHandler(UIElement.PreviewMouseWheelEvent, new MouseWheelEventHandler(ZoomScaler.Window_PreviewMouseWheel));
+        }
+
+        private static void ResetZoomCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = Settings.Default.ZoomScale != 1d;
+        }
+
+        private static void ResetZoomCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            Settings.Default.ZoomScale = 1d;
         }
 
         private static void Target_Loaded(object sender, RoutedEventArgs e)

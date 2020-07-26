@@ -25,7 +25,7 @@ namespace KoAR.Core
         {
             foreach (var line in File.ReadLines(path).Skip(1))
             {
-                var parts = line.Split(Amalur.Seperator);
+                var parts = line.Split(Amalur.Separator);
                 yield return new GemDefinition(
                     typeId: uint.Parse(parts[0]),
                     name: parts[1],

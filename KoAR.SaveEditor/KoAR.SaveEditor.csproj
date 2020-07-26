@@ -191,6 +191,7 @@
     <None Remove="Resources\Unknown.png" />
     <None Remove="Resources\Utility_Socket.png" />
     <None Remove="Resources\Weapon_Socket.jpg" />
+    <None Remove="Resources\Zoom.png" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="WPFTaskDialog" Version="1.7.1" />
@@ -336,6 +337,7 @@
     <Resource Include="Resources\categories\Staff.png" />
     <Resource Include="Resources\categories\Torso_Finesse.png" />
     <Resource Include="Resources\Unknown.png" />
+    <Resource Include="Resources\Zoom.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />

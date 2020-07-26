@@ -5,16 +5,26 @@ using TaskDialogInterop;
 
 namespace KoAR.SaveEditor.Views.Main
 {
-    partial class MainView
+    partial class MainWindow
     {
-        public MainView() => this.InitializeComponent();
+        public MainWindow() => this.InitializeComponent();
 
-        private MainViewModel ViewModel => (MainViewModel)this.DataContext;
+        private MainWindowViewModel ViewModel => (MainWindowViewModel)this.DataContext;
 
         protected override void OnClosed(EventArgs e)
         {
             Settings.Default.Save();
             base.OnClosed(e);
+        }
+
+        protected override void OnPreviewKeyDown(KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape && this.ZoomPopup.IsOpen)
+            {
+                this.ZoomPopup.IsOpen = false;
+                e.Handled = true;
+            }
+            base.OnPreviewKeyDown(e);
         }
 
         private void Help_Executed(object sender, ExecutedRoutedEventArgs e) => TaskDialog.Show(new TaskDialogOptions
@@ -33,7 +43,7 @@ namespace KoAR.SaveEditor.Views.Main
 
         private void Open_Executed(object sender, ExecutedRoutedEventArgs e) => this.ViewModel.OpenFile();
 
-        private void Save_CanExecute(object sender, CanExecuteRoutedEventArgs e) => e.CanExecute = this.ViewModel.UnsavedChanges;
+        private void Save_CanExecute(object sender, CanExecuteRoutedEventArgs e) => e.CanExecute = this.ViewModel.HasUnsavedChanges;
 
         private void Save_Executed(object sender, ExecutedRoutedEventArgs e) => this.ViewModel.SaveFile();
     }

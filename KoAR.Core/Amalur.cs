@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Text.Json;
@@ -14,15 +15,14 @@ namespace KoAR.Core
     /// </summary>
     public static class Amalur
     {
-        internal static readonly char[] Seperator = { ',' };
+        internal static char[] Separator { get; } =  { ',' };
 
         public static Dictionary<uint, Buff> BuffMap { get; } = new Dictionary<uint, Buff>();
         public static List<Buff> Buffs { get; } = new List<Buff>();
         public static Dictionary<uint, GemDefinition> GemDefinitions { get; } = new Dictionary<uint, GemDefinition>();
         public static Dictionary<uint, ItemDefinition> ItemDefinitions { get; } = new Dictionary<uint, ItemDefinition>();
 
-        public static Buff GetBuff(uint buffId) =>
-            BuffMap.TryGetValue(buffId, out var buff) ? buff : new Buff { Id = buffId, Name = "Unknown" };
+        public static Buff GetBuff(uint buffId) => BuffMap.GetOrDefault(buffId, new Buff { Id = buffId, Name = "Unknown" });
 
         public static void Initialize(string? path = null)
         {
@@ -49,8 +49,9 @@ namespace KoAR.Core
             }
         }
 
-        internal static TValue? GetOrDefault<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key)
-            where TValue : class => dictionary.TryGetValue(key, out TValue? res) ? res : default;
+        [return: MaybeNull, NotNullIfNotNull("defaultValue")]
+        internal static TValue GetOrDefault<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key, TValue? defaultValue = default)
+            where TValue : class => dictionary.TryGetValue(key, out TValue res) ? res : defaultValue;
 
         private static void AddRange<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, IEnumerable<TValue> values, Func<TValue, TKey> getKey)
         {
