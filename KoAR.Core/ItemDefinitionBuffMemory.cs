@@ -15,5 +15,4 @@ namespace KoAR.Core
 
         public Buff? Suffix { get; }
     }
-
 }
