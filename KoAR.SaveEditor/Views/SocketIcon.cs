@@ -46,11 +46,7 @@ namespace KoAR.SaveEditor.Views
 
         private sealed class SocketPrefixConverter : IValueConverter
         {
-            object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture) => $"{SocketPrefixConverter.GetPrefix(value)} Socket";
-
-            object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
-
-            private static string GetPrefix(object value) => value switch
+            object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture) => value switch
             {
                 'W' => "Weapon",
                 'A' => "Armor",
@@ -58,6 +54,8 @@ namespace KoAR.SaveEditor.Views
                 'E' => "Epic",
                 _ => string.Empty
             };
+
+            object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
         }
     }
 }
