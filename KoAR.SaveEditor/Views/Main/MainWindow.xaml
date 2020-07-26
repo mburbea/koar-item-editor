@@ -24,6 +24,7 @@
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
             <constructs:StringIsNullOrEmptyConverter x:Key="StringIsNullOrEmptyConverter" />
+            <constructs:IsNullConverter x:Key="IsNullConverter" />
             <local:ManagementViewModelConverter x:Key="ManagementViewModelConverter" />
         </ResourceDictionary>
     </Window.Resources>
@@ -43,15 +44,15 @@
     <Window.Style>
         <Style TargetType="{x:Type Window}" BasedOn="{StaticResource {x:Type Window}}">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding FileName, Converter={StaticResource StringIsNullOrEmptyConverter}}" Value="False">
-                    <Setter Property="Title" Value="{Binding FileName, StringFormat='{}{0} - KoAR Save Editor'}" />
+                <DataTrigger Binding="{Binding GameSave, Converter={StaticResource IsNullConverter}}" Value="False">
+                    <Setter Property="Title" Value="{Binding GameSave.FileName, StringFormat='{}{0} - KoAR Save Editor'}" />
                 </DataTrigger>
                 <MultiDataTrigger>
                     <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding FileName, Converter={StaticResource StringIsNullOrEmptyConverter}}" Value="False" />
+                        <Condition Binding="{Binding GameSave, Converter={StaticResource IsNullConverter}}" Value="False" />
                         <Condition Binding="{Binding HasUnsavedChanges}" Value="True" />
                     </MultiDataTrigger.Conditions>
-                    <Setter Property="Title" Value="{Binding FileName, StringFormat='* {0} - KoAR Save Editor'}" />
+                    <Setter Property="Title" Value="{Binding GameSave.FileName, StringFormat='* {0} - KoAR Save Editor'}" />
                 </MultiDataTrigger>
             </Style.Triggers>
             <Setter Property="Title" Value="KoAR Save Editor" />
