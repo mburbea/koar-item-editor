@@ -30,7 +30,6 @@ namespace KoAR.SaveEditor.Constructs
             new PropertyMetadata());
 
         private static readonly DataTemplate _contentTemplate = TabContent.CreateContentTemplate();
-
         private static readonly DependencyPropertyDescriptor _contentTemplateDescriptor = DependencyPropertyDescriptor.FromProperty(TabControl.ContentTemplateProperty, typeof(TabControl));
         private static readonly DependencyPropertyDescriptor _contentTemplateSelectorDescriptor = DependencyPropertyDescriptor.FromProperty(TabControl.ContentTemplateSelectorProperty, typeof(TabControl));
 
