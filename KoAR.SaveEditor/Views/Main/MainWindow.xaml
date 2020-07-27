@@ -146,7 +146,7 @@
             </StackPanel>
         </Border>
         <TabControl x:Name="PART_TabControl" ItemsSource="{Binding Source={StaticResource Modes}}" SelectedItem="{Binding Mode}" FocusVisualStyle="{x:Null}" 
-            Margin="0,0,0,4" TabStripPlacement="Bottom" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="0,1"
+            Margin="-1,0,-1,4" TabStripPlacement="Bottom" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="1"
             constructs:TabContent.Persist="{Binding IsVisible, RelativeSource={RelativeSource Self}}" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}">
             <TabControl.Style>
                 <Style TargetType="{x:Type TabControl}" BasedOn="{StaticResource {x:Type TabControl}}">
@@ -191,9 +191,6 @@
                     <Style.Triggers>
                         <Trigger Property="Tag" Value="{x:Null}">
                             <Setter Property="IsEnabled" Value="False" />
-                        </Trigger>
-                        <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
                         </Trigger>
                     </Style.Triggers>
                     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
