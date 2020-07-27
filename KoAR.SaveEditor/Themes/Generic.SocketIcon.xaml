@@ -24,7 +24,7 @@
                                                 <RowDefinition />
                                                 <RowDefinition Height="Auto" />
                                             </Grid.RowDefinitions>
-                                            <TextBlock>
+                                            <TextBlock Margin="0,1">
                                                 <TextBlock.Style>
                                                     <Style TargetType="{x:Type TextBlock}">
                                                         <Style.Triggers>
