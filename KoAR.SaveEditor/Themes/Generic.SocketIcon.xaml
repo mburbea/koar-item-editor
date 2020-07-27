@@ -24,24 +24,26 @@
                                                 <RowDefinition />
                                                 <RowDefinition Height="Auto" />
                                             </Grid.RowDefinitions>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition />
-                                                <ColumnDefinition Width="Auto" />
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock Text="{Binding SocketType, Converter={x:Static views:SocketIcon.PrefixConverter}}" Margin="0.5,1" />
-                                            <TextBlock Grid.Column="1" Margin="1">
+                                            <TextBlock>
                                                 <TextBlock.Style>
                                                     <Style TargetType="{x:Type TextBlock}">
                                                         <Style.Triggers>
                                                             <DataTrigger Binding="{Binding Gem, Converter={StaticResource IsNullConverter}}" Value="False">
-                                                                <Setter Property="Text" Value="{Binding Gem.Definition.Name, StringFormat='Gem: {0}'}" />
+                                                                <Setter Property="Text">
+                                                                    <Setter.Value>
+                                                                        <MultiBinding StringFormat="{}{0} Socket - {1}">
+                                                                            <Binding Path="SocketType" Converter="{x:Static views:SocketIcon.PrefixConverter}" />
+                                                                            <Binding Path="Gem.Definition.Name" />
+                                                                        </MultiBinding>
+                                                                    </Setter.Value>
+                                                                </Setter>
                                                             </DataTrigger>
                                                         </Style.Triggers>
-                                                        <Setter Property="Text" Value="Socket" />
+                                                        <Setter Property="Text" Value="{Binding SocketType, Converter={x:Static views:SocketIcon.PrefixConverter}, StringFormat='{}{0} Socket'}" />
                                                     </Style>
                                                 </TextBlock.Style>
                                             </TextBlock>
-                                            <views:BuffControl Grid.Row="1" Grid.ColumnSpan="2" IsExpanded="True"> 
+                                            <views:BuffControl Grid.Row="1" IsExpanded="True"> 
                                                 <views:BuffControl.Style>
                                                     <Style TargetType="{x:Type views:BuffControl}">
                                                         <Style.Triggers>
