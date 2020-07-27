@@ -6,23 +6,22 @@
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/PresentationFramework.Aero;component/Themes/Aero.NormalColor.xaml" />
+        <ResourceDictionary Source="/KoAR.SaveEditor;component/Views/Templates/BuffTemplate.xaml" />
     </ResourceDictionary.MergedDictionaries>
     <BitmapImage x:Key="Copy" UriSource="/KoAR.SaveEditor;component/Resources/Copy.png" po:Freeze="True" />
     <BitmapImage x:Key="Delete" UriSource="/KoAR.SaveEditor;component/Resources/Delete.png" po:Freeze="True" />
+    <constructs:HexConverter x:Key="HexConverter" />
+    <constructs:NegatedBooleanConverter x:Key="NegatedBooleanConverter" />
+    <constructs:GrayscaleConverter x:Key="GrayscaleConverter" />
     <DataTemplate x:Key="BuffToolTipTemplate" DataType="{x:Type core:Buff}">
         <views:BuffControl Buff="{Binding}" IsExpanded="True" />
     </DataTemplate>
     <Style TargetType="{x:Type views:BuffCollectionManager}">
         <Style.Resources>
-            <constructs:HexConverter x:Key="HexConverter" />
-            <constructs:NegatedBooleanConverter x:Key="NegatedBooleanConverter" />
             <Style TargetType="{x:Type Button}" x:Key="CommandButtonStyle">
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type Button}">
-                            <ControlTemplate.Resources>
-                                <constructs:GrayscaleConverter x:Key="GrayscaleConverter" />
-                            </ControlTemplate.Resources>
                             <Image x:Name="Icon" Width="16" Source="{TemplateBinding Tag}" Cursor="Hand" />
                             <ControlTemplate.Triggers>
                                 <MultiTrigger>
@@ -67,6 +66,109 @@
                                 <RowDefinition />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
+                            <TreeView Grid.ColumnSpan="2" BorderBrush="LightGray" ScrollViewer.HorizontalScrollBarVisibility="Disabled" FocusVisualStyle="{x:Null}" Height="150"
+                                ItemsSource="{TemplateBinding Collection}" AlternationCount="2" Foreground="{TemplateBinding Foreground}" ItemTemplate="{StaticResource BuffTemplate}">
+                                <TreeView.Style>
+                                    <Style TargetType="{x:Type TreeView}" BasedOn="{StaticResource {x:Type TreeView}}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Collection, RelativeSource={RelativeSource TemplatedParent}}" Value="{x:Null}">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Collection.Count, RelativeSource={RelativeSource TemplatedParent}}" Value="0">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TreeView.Style>
+                                <TreeView.ItemContainerStyle>
+                                    <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}">
+                                        <Style.Resources>
+                                            <LinearGradientBrush x:Key="ItemHoverFill" EndPoint="0,1" po:Freeze="True">
+                                                <LinearGradientBrush.GradientStops>
+                                                    <GradientStop Color="#FFF1FBFF" />
+                                                    <GradientStop Color="#FFD5F1FE" Offset="1"/>
+                                                </LinearGradientBrush.GradientStops>
+                                            </LinearGradientBrush>
+                                            <LinearGradientBrush x:Key="ItemSelectedFill" EndPoint="0,1" po:Freeze="True">
+                                                <LinearGradientBrush.GradientStops>
+                                                    <GradientStop Color="#FFD9F4FF" />
+                                                    <GradientStop Color="#FF9BDDFB" Offset="1"/>
+                                                </LinearGradientBrush.GradientStops>
+                                            </LinearGradientBrush>
+                                            <LinearGradientBrush x:Key="ItemSelectedHoverFill" EndPoint="0,1" po:Freeze="True">
+                                                <LinearGradientBrush.GradientStops>
+                                                    <GradientStop Color="#FFEAF9FF" />
+                                                    <GradientStop Color="#FFC9EDFD" Offset="1"/>
+                                                </LinearGradientBrush.GradientStops>
+                                            </LinearGradientBrush>
+                                            <SolidColorBrush x:Key="AlternateRowBrush" Color="#25BCBCBC" po:Freeze="True" />
+                                            <PathGeometry x:Key="Geometry" po:Freeze="True">
+                                                <PathGeometry.Figures>
+                                                    <PathFigureCollection>
+                                                        <PathFigure IsFilled="True" IsClosed="True">
+                                                            <PathFigure.Segments>
+                                                                <PathSegmentCollection>
+                                                                    <LineSegment Point="0 6" />
+                                                                    <LineSegment Point="6 0" />
+                                                                </PathSegmentCollection>
+                                                            </PathFigure.Segments>
+                                                        </PathFigure>
+                                                    </PathFigureCollection>
+                                                </PathGeometry.Figures>
+                                            </PathGeometry>
+                                            <Style TargetType="{x:Type ToggleButton}" x:Key="ExpandButtonStyle">
+                                                <Setter Property="Focusable" Value="False" />
+                                                <Setter Property="Width" Value="16" />
+                                                <Setter Property="Height" Value="16" />
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                                            <Border>
+                                                                <Path Data="{StaticResource Geometry}">
+                                                                    <Path.RenderTransform>
+                                                                        <RotateTransform Angle="135" CenterX="3" CenterY="3" />
+                                                                    </Path.RenderTransform>
+                                                                </Path>
+                                                            </Border>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </Style.Resources>
+                                        <Setter Property="Focusable" Value="False" />
+                                        <Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type TreeView}}}" />
+                                        <!--<Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="{x:Type TreeViewItem}">
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition MinWidth="19" Width="Auto" />
+                                                            <ColumnDefinition Width="Auto" />
+                                                            <ColumnDefinition />
+                                                            <ColumnDefinition Width="Auto" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="Auto" />
+                                                            <RowDefinition />
+                                                        </Grid.RowDefinitions>
+                                                        <ToggleButton x:Name="PART_Expander" Style="{StaticResource ToggleButtonStyle}" ClickMode="Press"
+                                                            IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" />
+                                                        <Border Grid.Column="1" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                                                            BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+                                                            <ContentPresenter ContentSource="Header" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                                        </Border>
+                                                        <ItemsPresenter x:Name="PART_ItemsPresenter" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" />
+                                                    </Grid>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Setter Property="Background" Value="{StaticResource ItemSelectedFill}" />
+                                        <Setter Property="ItemContainerStyle" Value="{StaticResource {x:Type TreeViewItem}}" />-->
+                                    </Style>
+                                </TreeView.ItemContainerStyle>
+                            </TreeView>
+                            <!--
                             <ListBox x:Name="PART_ListBox" Grid.ColumnSpan="2" BorderBrush="LightGray" ScrollViewer.HorizontalScrollBarVisibility="Disabled" FocusVisualStyle="{x:Null}"
                                 ItemsSource="{TemplateBinding Collection}" AlternationCount="2" MaxHeight="250"
                                 VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling" VirtualizingPanel.ScrollUnit="Pixel">
@@ -196,6 +298,7 @@
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                             </ListBox>
+                            -->
                             <GroupBox Header="Add Buff:" BorderThickness="1" BorderBrush="LightGray" FocusVisualStyle="{x:Null}">
                                 <GroupBox.Style>
                                     <Style TargetType="{x:Type GroupBox}">

@@ -6,7 +6,7 @@
     xmlns:s="clr-namespace:System;assembly=mscorlib">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/PresentationFramework.Aero;component/Themes/Aero.NormalColor.xaml" />
-        <ResourceDictionary Source="/KoAR.SaveEditor;component/Constructs/TextBoxErrorTemplate.xaml" />
+        <ResourceDictionary Source="/KoAR.SaveEditor;component/Views/Templates/TextBoxErrorTemplate.xaml" />
     </ResourceDictionary.MergedDictionaries>
     <constructs:ArrayConverter x:Key="ArrayConverter" />
     <constructs:EqualityConverter x:Key="EqualityConverter" />

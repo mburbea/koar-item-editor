@@ -96,15 +96,17 @@ namespace KoAR.SaveEditor.Views
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            if (this.Template.FindName("PART_ListBox", this) is ListBox listBox)
+            if (this.Template.FindName("PART_TreeView", this) is TreeView treeView)
             {
-                listBox.CommandBindings.Add(new CommandBinding(ApplicationCommands.Copy, BuffCollectionManager.CopyCommand_Executed));
+                treeView.CommandBindings.Add(new CommandBinding(ApplicationCommands.Copy, BuffCollectionManager.CopyCommand_Executed));
             }
         }
 
         private static void CopyCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            Clipboard.SetText(((Buff)((ListBox)sender).ItemContainerGenerator.ItemFromContainer((ListBoxItem)e.OriginalSource)).Id.ToString("X6"));
+            TreeViewItem item = (TreeViewItem)e.OriginalSource;
+            Buff buff = (Buff)(item.Parent is TreeViewItem parent ? parent.Header : item.Header);
+            Clipboard.SetText(buff.Id.ToString("X6"));
             e.Handled = true;
         }
 

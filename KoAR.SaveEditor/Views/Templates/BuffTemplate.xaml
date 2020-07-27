@@ -1,0 +1,21 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:core="clr-namespace:KoAR.Core;assembly=KoAR.Core" 
+    xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs" xmlns:views="clr-namespace:KoAR.SaveEditor.Views">
+    <constructs:ArrayConverter x:Key="ArrayConverter" />
+    <views:BuffDescriptionsConverter x:Key="BuffDescriptionsConverter" />
+    <DataTemplate x:Key="BuffDescriptionTemplate" DataType="{x:Type core:BuffDescription}">
+        <StackPanel ToolTip="{Binding Text}" Margin="0,1" Orientation="Horizontal">
+            <views:BuffDescriptionIcon Description="{Binding}" VerticalAlignment="Center" />
+            <TextBlock Text="{Binding Text}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" Margin="2,0,0,0" />
+        </StackPanel>
+    </DataTemplate>
+    <HierarchicalDataTemplate x:Key="BuffTemplate" DataType="{x:Type core:Buff}"
+        ItemsSource="{Binding Converter={StaticResource BuffDescriptionsConverter}}" ItemTemplate="{StaticResource BuffDescriptionTemplate}">
+        <StackPanel ToolTip="{Binding TitleText}" Margin="0,1" Orientation="Horizontal">
+            <views:RarityIcon Rarity="{Binding Rarity}" VerticalAlignment="Center" />
+            <TextBlock Text="{Binding TitleText}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" Margin="2,0,0,0" />
+        </StackPanel>
+    </HierarchicalDataTemplate>    
+</ResourceDictionary>
+ 

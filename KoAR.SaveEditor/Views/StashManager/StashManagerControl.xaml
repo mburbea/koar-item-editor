@@ -10,7 +10,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/KoAR.SaveEditor;component/Constructs/TextBoxErrorTemplate.xaml" />
+                <ResourceDictionary Source="/KoAR.SaveEditor;component/Views/Templates/TextBoxErrorTemplate.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -120,7 +120,7 @@
                         Buffs="{x:Static core:Amalur.Buffs}" Collection="{Binding SelectedItem.ItemBuffs}" 
                         UnsupportedFormat="{Binding SelectedItem.UnsupportedFormat}">
                         <views:BuffCollectionManager.HeaderTemplate>
-                            <DataTemplate DataType="{x:Type views:ItemModel}">
+                            <DataTemplate DataType="{x:Type views:ItemModelBase}">
                                 <TextBlock>
                                     <TextBlock.Style>
                                         <Style TargetType="{x:Type TextBlock}">
@@ -139,7 +139,7 @@
                     <views:BuffCollectionManager Margin="4,4,4,0" Header="{Binding SelectedItem}" BuffsFilter="Player" 
                         Buffs="{x:Static core:Amalur.Buffs}" Collection="{Binding SelectedItem.PlayerBuffs}">
                         <views:BuffCollectionManager.HeaderTemplate>
-                            <DataTemplate DataType="{x:Type views:ItemModel}">
+                            <DataTemplate DataType="{x:Type views:ItemModelBase}">
                                 <TextBlock>
                                     <TextBlock.Style>
                                         <Style TargetType="{x:Type TextBlock}">
