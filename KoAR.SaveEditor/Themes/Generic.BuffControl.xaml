@@ -27,7 +27,8 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type views:BuffControl}">
-                    <TreeView HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" FocusVisualStyle="{x:Null}" BorderThickness="0" Background="Transparent">
+                    <TreeView HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                        Foreground="{TemplateBinding Foreground}" FocusVisualStyle="{x:Null}" BorderThickness="0" Background="Transparent">
                         <TreeView.Style>
                             <Style TargetType="{x:Type TreeView}" BasedOn="{StaticResource {x:Type TreeView}}">
                                 <Style.Triggers>
@@ -70,6 +71,7 @@
                                 </Style.Triggers>
                                 <Setter Property="Margin" Value="-18,0,0,0" />
                                 <Setter Property="Focusable" Value="False" />
+                                <Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type TreeView}}}" />
                             </Style>
                         </TreeView.ItemContainerStyle>
                     </TreeView>
