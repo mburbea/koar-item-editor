@@ -4,7 +4,7 @@ using KoAR.Core;
 
 namespace KoAR.SaveEditor.Views
 {
-    public class ArmorTypeIcon : Control
+    public sealed class ArmorTypeIcon : Control
     {
         public static readonly DependencyProperty ArmorTypeProperty = DependencyProperty.Register(nameof(ArmorTypeIcon.ArmorType), typeof(ArmorType), typeof(ArmorTypeIcon),
             new PropertyMetadata(ArmorType.None));
