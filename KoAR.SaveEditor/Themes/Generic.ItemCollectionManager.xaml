@@ -412,7 +412,7 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
                                 <GridViewColumn Width="Auto" views:ItemCollectionManager.PropertyName="IsUnsellable" 
-                                    constructs:ColumnVisibility.IsHidden="{Binding Value, Source={StaticResource Mode}, Converter={StaticResource EqualityConverter}, ConverterParameter={x:Static views:ItemCollectionManager+ManagementMode.StashItem}}">
+                                    constructs:ColumnVisibility.IsHidden="{Binding Value, Source={StaticResource Mode}, Converter={StaticResource EqualityConverter}, ConverterParameter={x:Static views:ManagementMode.Stash}}">
                                     <GridViewColumn.Header>
                                         <StackPanel Orientation="Horizontal">
                                             <CheckBox Margin="2" FocusVisualStyle="{x:Null}" VerticalAlignment="Center">
@@ -430,7 +430,7 @@
                                         </StackPanel>
                                     </GridViewColumn.Header>
                                     <GridViewColumn.CellTemplate>
-                                        <DataTemplate DataType="{x:Type views:ItemModelBase}">
+                                        <DataTemplate DataType="{x:Type views:ItemModel}">
                                             <CheckBox FocusVisualStyle="{x:Null}" HorizontalAlignment="Center">
                                                 <CheckBox.Style>
                                                     <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
@@ -446,7 +446,7 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
                                 <GridViewColumn Width="Auto" views:ItemCollectionManager.PropertyName="IsUnstashable" 
-                                    constructs:ColumnVisibility.IsHidden="{Binding Value, Source={StaticResource Mode}, Converter={StaticResource EqualityConverter}, ConverterParameter={x:Static views:ItemCollectionManager+ManagementMode.StashItem}}">
+                                    constructs:ColumnVisibility.IsHidden="{Binding Value, Source={StaticResource Mode}, Converter={StaticResource EqualityConverter}, ConverterParameter={x:Static views:ManagementMode.Stash}}">
                                     <GridViewColumn.Header>
                                         <StackPanel Orientation="Horizontal">
                                             <CheckBox Margin="2" FocusVisualStyle="{x:Null}" VerticalAlignment="Center">
@@ -464,7 +464,7 @@
                                         </StackPanel>
                                     </GridViewColumn.Header>
                                     <GridViewColumn.CellTemplate>
-                                        <DataTemplate DataType="{x:Type views:ItemModelBase}">
+                                        <DataTemplate DataType="{x:Type views:ItemModel}">
                                             <CheckBox FocusVisualStyle="{x:Null}" HorizontalAlignment="Center">
                                                 <CheckBox.Style>
                                                     <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">

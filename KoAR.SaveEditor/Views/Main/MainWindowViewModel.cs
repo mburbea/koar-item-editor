@@ -85,12 +85,12 @@ namespace KoAR.SaveEditor.Views.Main
             {
                 return;
             }
-            this.HasUnsavedChanges = false;
             this.GameSave = new GameSave(dialog.FileName);
             this.InventoryManager = new InventoryManagerViewModel(this);
-            this.StashManager = this.GameSave.Stash == null ? default : new StashManagerViewModel(this);
-            this.OnPropertyChanged(nameof(this.GameSave));
-            this.Mode = default;
+            this.StashManager = this.GameSave.Stash != null ? new StashManagerViewModel(this) : default;
+            this.OnPropertyChanged(nameof(this.GameSave)); // Notifying the change is explicitly done after the view models are set.
+            this.HasUnsavedChanges = false;
+            this.Mode = ManagementMode.Inventory;
         }
 
         public void RegisterUnsavedChange()

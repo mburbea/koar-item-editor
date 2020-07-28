@@ -1,4 +1,4 @@
-﻿namespace KoAR.SaveEditor.Views.Main
+﻿namespace KoAR.SaveEditor.Views
 {
     public enum ManagementMode
     {

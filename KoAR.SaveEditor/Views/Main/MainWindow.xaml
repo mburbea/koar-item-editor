@@ -22,7 +22,7 @@
             <ObjectDataProvider x:Key="ViewModel" ObjectType="{x:Type local:MainWindowViewModel}" />
             <ObjectDataProvider x:Key="Modes" ObjectType="{x:Type s:Enum}" MethodName="GetValues">
                 <ObjectDataProvider.MethodParameters>
-                    <x:Type TypeName="local:ManagementMode" />
+                    <x:Type TypeName="views:ManagementMode" />
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
             <constructs:IsNullConverter x:Key="IsNullConverter" />
@@ -159,7 +159,7 @@
                 </Style>
             </TabControl.Style>
             <TabControl.ItemTemplate>
-                <DataTemplate DataType="{x:Type local:ManagementMode}">
+                <DataTemplate DataType="{x:Type views:ManagementMode}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock VerticalAlignment="Center" Margin="2">                            
                             <Run Text="{Binding Mode=OneTime}" />
@@ -208,10 +208,10 @@
             </TabControl.ItemContainerStyle>
             <constructs:TabContent.TemplateSelector>
                 <constructs:KeyedDataTemplateSelector>
-                    <DataTemplate x:Key="{x:Static local:ManagementMode.Inventory}">
+                    <DataTemplate x:Key="{x:Static views:ManagementMode.Inventory}">
                         <im:InventoryManagerControl DataContext="{Binding InventoryManager, Source={StaticResource ViewModel}}" />
                     </DataTemplate>
-                    <DataTemplate x:Key="{x:Static local:ManagementMode.Stash}">
+                    <DataTemplate x:Key="{x:Static views:ManagementMode.Stash}">
                         <sm:StashManagerControl DataContext="{Binding StashManager, Source={StaticResource ViewModel}}" />
                     </DataTemplate>
                 </constructs:KeyedDataTemplateSelector>

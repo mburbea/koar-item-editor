@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.Linq;
 using System.Windows;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
@@ -9,10 +7,10 @@ using KoAR.SaveEditor.Views.Main;
 
 namespace KoAR.SaveEditor.Views.InventoryManager
 {
-    public sealed class InventoryManagerViewModel : ManagerViewModelBase<Item, ItemModel>
+    public sealed class InventoryManagerViewModel : ManagerViewModelBase<ItemModel>
     {
         public InventoryManagerViewModel(MainWindowViewModel mainWindowViewModel)
-            : base(mainWindowViewModel, item => new ItemModel(item))
+            : base(mainWindowViewModel, ManagementMode.Inventory, gameSave => gameSave.Items.Select(item => new ItemModel(item)))
         {
             this.AddItemBuffCommand = new DelegateCommand<uint>(this.AddItemBuff, this.CanAddItemBuff);
             this.AddPlayerBuffCommand = new DelegateCommand<uint>(this.AddPlayerBuff, this.CanAddPlayerBuff);
@@ -82,8 +80,6 @@ namespace KoAR.SaveEditor.Views.InventoryManager
             }
         }
 
-        protected override IReadOnlyCollection<Item> GameItems => this.GameSave.Items;
-
         protected override void OnFilterChange()
         {
             base.OnFilterChange();
@@ -140,10 +136,5 @@ namespace KoAR.SaveEditor.Views.InventoryManager
         private void DeleteItemBuff(Buff buff) => this.SelectedItem?.RemoveItemBuff(buff);
 
         private void DeletePlayerBuff(Buff buff) => this.SelectedItem?.RemovePlayerBuff(buff);
-
-        private void Item_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
