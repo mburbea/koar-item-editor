@@ -23,9 +23,9 @@
                                     <MultiDataTrigger>
                                         <MultiDataTrigger.Conditions>
                                             <Condition Binding="{Binding Buff, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource EqualityConverter}}" Value="False" />
-                                            <Condition Binding="{Binding Buff.Desc.Length, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource EqualityConverter}, ConverterParameter={StaticResource Zero}}" Value="False" />
+                                            <Condition Binding="{Binding Buff.Descriptions.Length, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource EqualityConverter}, ConverterParameter={StaticResource Zero}}" Value="False" />
                                         </MultiDataTrigger.Conditions>
-                                        <Setter Property="Description" Value="{Binding Buff.Desc/, RelativeSource={RelativeSource TemplatedParent}}" />
+                                        <Setter Property="Description" Value="{Binding Buff.Descriptions/, RelativeSource={RelativeSource TemplatedParent}}" />
                                     </MultiDataTrigger>
                                 </Style.Triggers>
                             </Style>

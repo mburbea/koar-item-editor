@@ -15,11 +15,12 @@ namespace KoAR.Core
         public BuffTypes BuffType { get; set; }
         [JsonPropertyName("apply_type")]
         public ApplyType ApplyType { get; set; }
-        public BuffDescription[] Desc { get; set; } = Array.Empty<BuffDescription>();
+        [JsonPropertyName("desc")]
+        public BuffDescription[] Descriptions { get; set; } = Array.Empty<BuffDescription>();
 
         public string TitleText => (((BuffTypes.TransientOrAffix & BuffType) == BuffType ? Modifier : Flavor) ?? Name).Replace('\n', '.');
 
-        public string ShortDisplayText => $"{TitleText} [{(Desc.Any() ? string.Join(";", Desc.Select(x => x.Text)) : "None")}]";
+        public string ShortDisplayText => $"{TitleText} [{(Descriptions.Any() ? string.Join(";", Descriptions.Select(x => x.Text)) : "None")}]";
     }
 
     public class BuffDescription

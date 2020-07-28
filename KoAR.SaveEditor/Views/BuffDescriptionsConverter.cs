@@ -12,11 +12,11 @@ namespace KoAR.SaveEditor.Views
 
         object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is Buff buff)
+            if (!(value is Buff buff))
             {
-                return buff.Desc.Length != 0 ? buff.Desc : BuffDescriptionsConverter._empty;
+                return DependencyProperty.UnsetValue;
             }
-            return DependencyProperty.UnsetValue;
+            return buff.Descriptions.Length != 0 ? buff.Descriptions : BuffDescriptionsConverter._empty;
         }
 
         object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();

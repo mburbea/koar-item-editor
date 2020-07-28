@@ -105,7 +105,7 @@ namespace KoAR.SaveEditor.Views
         private static void CopyCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             TreeViewItem item = (TreeViewItem)e.OriginalSource;
-            Buff buff = (Buff)(item.Parent is TreeViewItem parent ? parent.Header : item.Header);
+            Buff buff = (Buff)ItemsControl.ItemsControlFromItemContainer(item).ItemContainerGenerator.ItemFromContainer(item);
             Clipboard.SetText(buff.Id.ToString("X6"));
             e.Handled = true;
         }
