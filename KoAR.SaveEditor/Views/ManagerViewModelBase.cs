@@ -15,15 +15,11 @@ namespace KoAR.SaveEditor.Views
         private IReadOnlyList<TItem> _filteredItems;
         private TItem? _selectedItem;
 
-        protected ManagerViewModelBase(
-            MainWindowViewModel mainWindowViewModel,
-            ManagementMode managementMode,
-            Func<GameSave, IEnumerable<TItem>> modelsProjection
-        )
+        protected ManagerViewModelBase(MainWindowViewModel mainWindowViewModel, ManagementMode managementMode, Func<GameSave, IEnumerable<TItem>> itemsProjection)
         {
-            this._itemsProjection = modelsProjection;
             this.MainWindowViewModel = mainWindowViewModel;
             this.ManagementMode = managementMode;
+            this._itemsProjection = itemsProjection;
             this._filteredItems = this._items = new NotifyingCollection<TItem>();
             (this.ItemFilters = new ItemFilters()).FilterChange += this.ItemFilters_FilterChange;
             this.RepopulateItems();
@@ -68,15 +64,9 @@ namespace KoAR.SaveEditor.Views
             this._items.Add(item);
         }
 
-        protected virtual void AttachEvents(TItem item)
-        {
-            PropertyChangedEventManager.AddHandler(item, this.Item_PropertyChanged, string.Empty);
-        }
+        protected virtual void AttachEvents(TItem item) => PropertyChangedEventManager.AddHandler(item, this.Item_PropertyChanged, string.Empty);
 
-        protected virtual void DetachEvents(TItem item)
-        {
-            PropertyChangedEventManager.RemoveHandler(item, this.Item_PropertyChanged, string.Empty);
-        }
+        protected virtual void DetachEvents(TItem item) => PropertyChangedEventManager.RemoveHandler(item, this.Item_PropertyChanged, string.Empty);
 
         protected bool? GetSelectAllCheckBoxValue(Func<TItem, bool> projection)
         {
