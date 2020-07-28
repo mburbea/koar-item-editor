@@ -17,7 +17,7 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/KoAR.SaveEditor;component/Constructs/TextBoxErrorTemplate.xaml" />
+                <ResourceDictionary Source="/KoAR.SaveEditor;component/Views/Templates/TextBoxErrorTemplate.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <ObjectDataProvider x:Key="ViewModel" ObjectType="{x:Type local:MainWindowViewModel}" />
             <ObjectDataProvider x:Key="Modes" ObjectType="{x:Type s:Enum}" MethodName="GetValues">

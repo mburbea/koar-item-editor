@@ -6,23 +6,22 @@
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/PresentationFramework.Aero;component/Themes/Aero.NormalColor.xaml" />
+        <ResourceDictionary Source="/KoAR.SaveEditor;component/Views/Templates/BuffTemplate.xaml" />
     </ResourceDictionary.MergedDictionaries>
     <BitmapImage x:Key="Copy" UriSource="/KoAR.SaveEditor;component/Resources/Copy.png" po:Freeze="True" />
     <BitmapImage x:Key="Delete" UriSource="/KoAR.SaveEditor;component/Resources/Delete.png" po:Freeze="True" />
+    <constructs:HexConverter x:Key="HexConverter" />
+    <constructs:NegatedBooleanConverter x:Key="NegatedBooleanConverter" />
+    <constructs:GrayscaleConverter x:Key="GrayscaleConverter" />
     <DataTemplate x:Key="BuffToolTipTemplate" DataType="{x:Type core:Buff}">
         <views:BuffControl Buff="{Binding}" IsExpanded="True" />
     </DataTemplate>
     <Style TargetType="{x:Type views:BuffCollectionManager}">
         <Style.Resources>
-            <constructs:HexConverter x:Key="HexConverter" />
-            <constructs:NegatedBooleanConverter x:Key="NegatedBooleanConverter" />
             <Style TargetType="{x:Type Button}" x:Key="CommandButtonStyle">
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type Button}">
-                            <ControlTemplate.Resources>
-                                <constructs:GrayscaleConverter x:Key="GrayscaleConverter" />
-                            </ControlTemplate.Resources>
                             <Image x:Name="Icon" Width="16" Source="{TemplateBinding Tag}" Cursor="Hand" />
                             <ControlTemplate.Triggers>
                                 <MultiTrigger>
@@ -37,6 +36,9 @@
                                         </Setter.Value>
                                     </Setter>
                                 </MultiTrigger>
+                                <Trigger Property="Command" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </Trigger>
                                 <Trigger Property="IsEnabled" Value="False">
                                     <Setter Property="Opacity" Value="0.25" />
                                 </Trigger>
@@ -67,11 +69,10 @@
                                 <RowDefinition />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <ListBox x:Name="PART_ListBox" Grid.ColumnSpan="2" BorderBrush="LightGray" ScrollViewer.HorizontalScrollBarVisibility="Disabled" FocusVisualStyle="{x:Null}"
-                                ItemsSource="{TemplateBinding Collection}" AlternationCount="2" MaxHeight="250"
-                                VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling" VirtualizingPanel.ScrollUnit="Pixel">
-                                <ListBox.Style>
-                                    <Style TargetType="{x:Type ListBox}">
+                            <TreeView x:Name="PART_TreeView" Grid.ColumnSpan="2" BorderBrush="LightGray" ScrollViewer.HorizontalScrollBarVisibility="Disabled" FocusVisualStyle="{x:Null}" Height="150"
+                                ItemsSource="{TemplateBinding Collection}" AlternationCount="2" Foreground="{TemplateBinding Foreground}" ItemTemplate="{StaticResource BuffTemplate}">
+                                <TreeView.Style>
+                                    <Style TargetType="{x:Type TreeView}" BasedOn="{StaticResource {x:Type TreeView}}">
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding Collection, RelativeSource={RelativeSource TemplatedParent}}" Value="{x:Null}">
                                                 <Setter Property="Visibility" Value="Collapsed" />
@@ -81,121 +82,137 @@
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
-                                </ListBox.Style>
-                                <ListBox.ItemContainerStyle>
-                                    <Style TargetType="{x:Type ListBoxItem}">
+                                </TreeView.Style>
+                                <TreeView.ItemContainerStyle>
+                                    <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}">
                                         <Style.Resources>
-                                            <LinearGradientBrush x:Key="ListItemHoverFill" EndPoint="0,1" po:Freeze="True">
+                                            <LinearGradientBrush x:Key="ItemHoverFill" EndPoint="0,1" po:Freeze="True">
                                                 <LinearGradientBrush.GradientStops>
                                                     <GradientStop Color="#FFF1FBFF" />
                                                     <GradientStop Color="#FFD5F1FE" Offset="1"/>
                                                 </LinearGradientBrush.GradientStops>
                                             </LinearGradientBrush>
-                                            <LinearGradientBrush x:Key="ListItemSelectedFill" EndPoint="0,1" po:Freeze="True">
-                                                <LinearGradientBrush.GradientStops>
-                                                    <GradientStop Color="#FFD9F4FF" />
-                                                    <GradientStop Color="#FF9BDDFB" Offset="1"/>
-                                                </LinearGradientBrush.GradientStops>
-                                            </LinearGradientBrush>
-                                            <LinearGradientBrush x:Key="ListItemSelectedHoverFill" EndPoint="0,1" po:Freeze="True">
-                                                <LinearGradientBrush.GradientStops>
-                                                    <GradientStop Color="#FFEAF9FF" />
-                                                    <GradientStop Color="#FFC9EDFD" Offset="1"/>
-                                                </LinearGradientBrush.GradientStops>
-                                            </LinearGradientBrush>
                                             <SolidColorBrush x:Key="AlternateRowBrush" Color="#25BCBCBC" po:Freeze="True" />
+                                            <PathGeometry x:Key="Geometry" po:Freeze="True">
+                                                <PathGeometry.Figures>
+                                                    <PathFigureCollection>
+                                                        <PathFigure IsFilled="True" IsClosed="True">
+                                                            <PathFigure.Segments>
+                                                                <PathSegmentCollection>
+                                                                    <LineSegment Point="0 6" />
+                                                                    <LineSegment Point="6 0" />
+                                                                </PathSegmentCollection>
+                                                            </PathFigure.Segments>
+                                                        </PathFigure>
+                                                    </PathFigureCollection>
+                                                </PathGeometry.Figures>
+                                            </PathGeometry>
+                                            <Style TargetType="{x:Type ToggleButton}" x:Key="ExpandButtonStyle">
+                                                <Setter Property="Focusable" Value="False" />
+                                                <Setter Property="Width" Value="16" />
+                                                <Setter Property="Height" Value="16" />
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                                            <Border Width="16" Height="16" Background="Transparent" Padding="5">
+                                                                <Path x:Name="PART_Path" Data="{StaticResource Geometry}" Fill="Transparent" Stroke="#989898">
+                                                                    <Path.RenderTransform>
+                                                                        <RotateTransform Angle="135" CenterX="3" CenterY="3" />
+                                                                    </Path.RenderTransform>
+                                                                </Path>
+                                                            </Border>
+                                                            <ControlTemplate.Triggers>
+                                                                <Trigger Property="IsChecked" Value="True">
+                                                                    <Setter TargetName="PART_Path" Property="RenderTransform">
+                                                                        <Setter.Value>
+                                                                            <RotateTransform Angle="180" CenterX="3" CenterY="3" />
+                                                                        </Setter.Value>
+                                                                    </Setter>
+                                                                    <Setter TargetName="PART_Path" Property="Fill" Value="#595959" />
+                                                                    <Setter TargetName="PART_Path" Property="Stroke" Value="#262626" />
+                                                                </Trigger>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter TargetName="PART_Path" Property="Fill" Value="Transparent" />
+                                                                    <Setter TargetName="PART_Path" Property="Stroke" Value="#1BBBFA" />
+                                                                </Trigger>
+                                                                <MultiTrigger>
+                                                                    <MultiTrigger.Conditions>
+                                                                        <Condition Property="IsMouseOver" Value="True" />
+                                                                        <Condition Property="IsChecked" Value="True" />
+                                                                    </MultiTrigger.Conditions>
+                                                                    <Setter TargetName="PART_Path" Property="Fill" Value="#262626" />
+                                                                    <Setter TargetName="PART_Path" Property="Stroke" Value="#595959" />
+                                                                </MultiTrigger>
+                                                            </ControlTemplate.Triggers>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
                                         </Style.Resources>
-                                        <Setter Property="ContextMenu">
+                                        <Setter Property="Focusable" Value="False" />
+                                        <Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type TreeView}}}" />
+                                        <Setter Property="ItemContainerStyle">
                                             <Setter.Value>
-                                                <ContextMenu>
-                                                    <MenuItem Command="Copy" CommandTarget="{Binding PlacementTarget, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}" />
-                                                </ContextMenu>
+                                                <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}">
+                                                    <Setter Property="Focusable" Value="False" />
+                                                    <Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type TreeView}}}" />
+                                                    <Setter Property="Margin" Value="-16,0,0,0" />
+                                                </Style>
                                             </Setter.Value>
                                         </Setter>
-                                        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-                                        <Setter Property="Background" Value="Transparent"/>
-                                        <Setter Property="Focusable" Value="False" />
-                                        <Setter Property="BorderBrush" Value="Transparent"/>
-                                        <Setter Property="BorderThickness" Value="1"/>
-                                        <Setter Property="Margin" Value="0,0,0,1"/>
-                                        <Setter Property="Padding" Value="5,2"/>
-                                        <Setter Property="VerticalContentAlignment" Value="Center"/>
                                         <Setter Property="Template">
                                             <Setter.Value>
-                                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                                    <Border BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" CornerRadius="2" SnapsToDevicePixels="True">
-                                                        <Border Name="InnerBorder" CornerRadius="1" BorderThickness="1">
-                                                            <Grid>
-                                                                <Grid.RowDefinitions>
-                                                                    <RowDefinition MaxHeight="11"/>
-                                                                    <RowDefinition/>
-                                                                </Grid.RowDefinitions>
-                                                                <Rectangle Name="UpperHighlight" Visibility="Collapsed" Fill="#75FFFFFF"/>
-                                                                <ContentPresenter Grid.RowSpan="2" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                                                            </Grid>
-                                                        </Border>
+                                                <ControlTemplate TargetType="{x:Type TreeViewItem}">
+                                                    <Border x:Name="BD" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" CornerRadius="2">
+                                                        <Grid x:Name="PART_Grid">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition MinWidth="19" Width="Auto" />
+                                                                <ColumnDefinition />
+                                                                <ColumnDefinition Width="Auto" />
+                                                            </Grid.ColumnDefinitions>
+                                                            <Grid.RowDefinitions>
+                                                                <RowDefinition Height="Auto" />
+                                                                <RowDefinition Height="Auto" />
+                                                                <RowDefinition />
+                                                            </Grid.RowDefinitions>
+                                                            <Rectangle Name="UpperHighlight" Visibility="Collapsed" Fill="#75FFFFFF" Grid.ColumnSpan="3" />
+                                                            <ToggleButton Grid.RowSpan="2" x:Name="PART_Expander" Style="{StaticResource ExpandButtonStyle}" ClickMode="Press"
+                                                                IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" />
+                                                            <Border Grid.RowSpan="2" Grid.Column="1" Padding="0,2" ClipToBounds="True">
+                                                                <ContentPresenter ContentSource="Header" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                                            </Border>                                                            
+                                                            <Border Grid.RowSpan="2" Grid.Column="2" Padding="2">
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <Button Style="{StaticResource CommandButtonStyle}" Tag="{StaticResource Copy}" Command="Copy" ToolTip="Copy"
+                                                                        CommandTarget="{Binding RelativeSource={RelativeSource AncestorType={x:Type TreeViewItem}}}" />
+                                                                    <Button Style="{StaticResource CommandButtonStyle}" Tag="{StaticResource Delete}" CommandParameter="{TemplateBinding Header}"
+                                                                        IsEnabled="{Binding UnsupportedFormat, RelativeSource={RelativeSource AncestorType={x:Type views:BuffCollectionManager}}, Converter={StaticResource NegatedBooleanConverter}}"
+                                                                        Command="{Binding DeleteBuffCommand, RelativeSource={RelativeSource AncestorType={x:Type views:BuffCollectionManager}}}" />
+                                                                </StackPanel>
+                                                            </Border>
+                                                            <ItemsPresenter x:Name="PART_ItemsPresenter" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" />
+                                                        </Grid>
                                                     </Border>
                                                     <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsExpanded" Value="False">
+                                                            <Setter TargetName="PART_ItemsPresenter" Property="Visibility" Value="Collapsed" />
+                                                        </Trigger>
                                                         <Trigger Property="ItemsControl.AlternationIndex" Value="1">
                                                             <Setter Property="Background" Value="{StaticResource AlternateRowBrush}"/>
                                                         </Trigger>
                                                         <Trigger Property="IsMouseOver" Value="True">
-                                                            <Setter Property="Background" Value="{StaticResource ListItemHoverFill}"/>
-                                                            <Setter Property="BorderBrush" Value="#FFCCF0FF"/>
-                                                            <Setter TargetName="UpperHighlight" Property="Visibility" Value="Visible"/>
-                                                        </Trigger>
-                                                        <Trigger Property="IsSelected" Value="True">
-                                                            <Setter Property="Background" Value="{StaticResource ListItemSelectedFill}"/>
+                                                            <Setter Property="Background" Value="{StaticResource ItemHoverFill}"/>
                                                             <Setter Property="BorderBrush" Value="#FF98DDFB"/>
-                                                            <Setter TargetName="InnerBorder" Property="BorderBrush" Value="#80FFFFFF"/>
                                                             <Setter TargetName="UpperHighlight" Property="Visibility" Value="Visible"/>
-                                                            <Setter TargetName="UpperHighlight" Property="Fill" Value="#40FFFFFF"/>
-                                                        </Trigger>
-                                                        <MultiTrigger>
-                                                            <MultiTrigger.Conditions>
-                                                                <Condition Property="IsSelected" Value="True"/>
-                                                                <Condition Property="IsMouseOver" Value="True"/>
-                                                            </MultiTrigger.Conditions>
-                                                            <Setter Property="Background" Value="{StaticResource ListItemSelectedHoverFill}"/>
-                                                            <Setter Property="BorderBrush" Value="#FF98DDFB"/>
-                                                        </MultiTrigger>
-                                                        <Trigger Property="IsEnabled" Value="False">
-                                                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
                                                         </Trigger>
                                                     </ControlTemplate.Triggers>
                                                 </ControlTemplate>
                                             </Setter.Value>
                                         </Setter>
                                     </Style>
-                                </ListBox.ItemContainerStyle>
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate DataType="{x:Type core:Buff}">
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition />
-                                                <ColumnDefinition Width="Auto" />
-                                                <ColumnDefinition Width="Auto" />
-                                            </Grid.ColumnDefinitions>
-                                            <views:BuffControl Buff="{Binding}" />
-                                            <Button Grid.Column="1" Style="{StaticResource CommandButtonStyle}" Tag="{StaticResource Copy}" CommandTarget="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}"
-                                                Command="Copy" ToolTip="Copy" />
-                                            <Button Grid.Column="2" Tag="{StaticResource Delete}" CommandParameter="{Binding}" 
-                                                IsEnabled="{Binding UnsupportedFormat, RelativeSource={RelativeSource AncestorType={x:Type views:BuffCollectionManager}}, Converter={StaticResource NegatedBooleanConverter}}"
-                                                Command="{Binding DeleteBuffCommand, RelativeSource={RelativeSource AncestorType={x:Type views:BuffCollectionManager}}}" ToolTip="Delete">
-                                                <Button.Style>
-                                                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource CommandButtonStyle}">
-                                                        <Style.Triggers>
-                                                            <Trigger Property="Command" Value="{x:Null}">
-                                                                <Setter Property="Visibility" Value="Collapsed" />
-                                                            </Trigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Button.Style>
-                                            </Button>
-                                        </Grid>
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>
+                                </TreeView.ItemContainerStyle>
+                            </TreeView>
                             <GroupBox Header="Add Buff:" BorderThickness="1" BorderBrush="LightGray" FocusVisualStyle="{x:Null}">
                                 <GroupBox.Style>
                                     <Style TargetType="{x:Type GroupBox}">
