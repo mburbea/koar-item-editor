@@ -3,6 +3,9 @@
     xmlns:core="clr-namespace:KoAR.Core;assembly=KoAR.Core"
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views" 
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/KoAR.SaveEditor;component/Views/Templates/BuffToolTipTemplate.xaml" />
+    </ResourceDictionary.MergedDictionaries>
     <views:BitmapConverter x:Key="BitmapConverter" />
     <constructs:IsNullConverter x:Key="IsNullConverter" />
     <Style TargetType="{x:Type views:SocketIcon}">
@@ -43,17 +46,19 @@
                                                     </Style>
                                                 </TextBlock.Style>
                                             </TextBlock>
-                                            <views:BuffControl Grid.Row="1" IsExpanded="True"> 
-                                                <views:BuffControl.Style>
-                                                    <Style TargetType="{x:Type views:BuffControl}">
+                                            <ContentControl Grid.Row="1" Content="{Binding Gem.Definition.Buff}">
+                                                <ContentControl.Style>
+                                                    <Style TargetType="{x:Type ContentControl}">
                                                         <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding Gem, Converter={StaticResource IsNullConverter}}" Value="False">
-                                                                <Setter Property="Buff" Value="{Binding Gem.Definition.Buff}" />
+                                                            <DataTrigger Binding="{Binding Content, RelativeSource={RelativeSource Self}, Converter={StaticResource IsNullConverter}}" Value="False">
+                                                                <Setter Property="Visibility" Value="Visible" />
+                                                                <Setter Property="ContentTemplate" Value="{StaticResource BuffToolTipTemplate}" />
                                                             </DataTrigger>
                                                         </Style.Triggers>
+                                                        <Setter Property="Visibility" Value="Collapsed" />
                                                     </Style>
-                                                </views:BuffControl.Style>
-                                            </views:BuffControl>
+                                                </ContentControl.Style>
+                                            </ContentControl>
                                         </Grid>
                                     </DataTemplate>
                                 </ToolTip.ContentTemplate>

@@ -6,12 +6,10 @@
     xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/PresentationFramework.Aero;component/Themes/Aero.NormalColor.xaml" />
+        <ResourceDictionary Source="/KoAR.SaveEditor;component/Views/Templates/BuffToolTipTemplate.xaml" />
     </ResourceDictionary.MergedDictionaries>
     <constructs:EqualityConverter x:Key="EqualityConverter" />
     <constructs:ComboPanelMaxWidthConverter x:Key="MaxWidthConverter" />
-    <DataTemplate x:Key="BuffToolTipTemplate" DataType="{x:Type core:Buff}">
-        <views:BuffControl Buff="{Binding}" IsExpanded="True" />
-    </DataTemplate>
     <Style TargetType="{x:Type views:BuffSelector}">
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="Template">

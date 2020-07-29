@@ -2,7 +2,6 @@
     <ResourceDictionary.MergedDictionaries>
         <!-- Views -->
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.BuffCollectionManager.xaml" />
-        <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.BuffControl.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.BuffSelector.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.BuffDescriptionIcon.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.BuffIcon.xaml" />

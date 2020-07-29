@@ -7,10 +7,8 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/PresentationFramework.Aero;component/Themes/Aero.NormalColor.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Views/Templates/TextBoxErrorTemplate.xaml" />
+        <ResourceDictionary Source="/KoAR.SaveEditor;component/Views/Templates/BuffToolTipTemplate.xaml" />
     </ResourceDictionary.MergedDictionaries>
-    <DataTemplate x:Key="BuffToolTipTemplate" DataType="{x:Type core:Buff}">
-        <views:BuffControl Buff="{Binding}" IsExpanded="True" />
-    </DataTemplate>
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     <constructs:FloatConverter x:Key="SingleConverter" />
     <constructs:EqualityConverter x:Key="EqualityConverter" />
