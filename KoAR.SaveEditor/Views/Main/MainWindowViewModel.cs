@@ -4,6 +4,7 @@ using System.Threading;
 using System.Windows;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
+using KoAR.SaveEditor.Updates;
 using KoAR.SaveEditor.Views.InventoryManager;
 using KoAR.SaveEditor.Views.StashManager;
 using Microsoft.Win32;
@@ -20,6 +21,7 @@ namespace KoAR.SaveEditor.Views.Main
 
         public MainWindowViewModel()
         {
+            this.UpdateService = (UpdateService?)Application.Current.TryFindResource(typeof(UpdateService));
             if (!(bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(Window)).DefaultValue)
             {
                 Application.Current.Activated += this.Application_Activated;
@@ -67,6 +69,8 @@ namespace KoAR.SaveEditor.Views.Main
                 }
             }
         }
+
+        public UpdateService? UpdateService { get; }
 
         public void OpenFile()
         {
