@@ -54,6 +54,7 @@ namespace KoAR.SaveEditor.Views
             foreach (TItem item in this._items)
             {
                 this.DetachEvents(item);
+                item.Dispose();
             }
             this.ItemFilters.FilterChange -= this.ItemFilters_FilterChange;
         }

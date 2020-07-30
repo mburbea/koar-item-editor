@@ -219,7 +219,7 @@ namespace KoAR.SaveEditor.Views
         private static void ItemsProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             ItemCollectionManager itemsView = (ItemCollectionManager)d;
-            itemsView.Mode = e.NewValue is IEnumerable<ItemModelBase<StashItem>> ? ManagementMode.Stash : ManagementMode.Inventory;
+            itemsView.Mode = e.NewValue is IEnumerable<ItemModelBase<StashItem>> ? ManagementMode.Stash : default;
             itemsView.CollectionView = e.NewValue == null ? null : new ListCollectionView((IList)e.NewValue)
             {
                 SortDescriptions =

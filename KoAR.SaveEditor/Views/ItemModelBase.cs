@@ -11,6 +11,7 @@ namespace KoAR.SaveEditor.Views
 {
     public abstract class ItemModelBase : NotifierBase, IDisposable
     {
+        protected static readonly MethodInfo _onPropertyChangedMethod = typeof(NotifierBase).GetMethod(nameof(ItemModelBase.OnPropertyChanged), BindingFlags.NonPublic | BindingFlags.Instance);
         protected static readonly char[] _propertyTokens = { '.' };
 
         protected ItemModelBase(IItem item) => this.Item = item;
@@ -110,7 +111,10 @@ namespace KoAR.SaveEditor.Views
 
         public new TItem Item => (TItem)base.Item;
 
-        protected bool SetItemValue<TValue>(TValue value, [CallerMemberName] string propertyPath = "") => ValueSetter<TValue>.SetValue(this, value, propertyPath);
+        protected bool SetItemValue<TValue>(TValue value, [CallerMemberName] string propertyPath = "", [CallerMemberName] string propertyName = "")
+        {
+            return ValueSetter<TValue>.SetValue(this, value, propertyPath, propertyName);
+        }
 
         private static class ValueSetter<TValue>
         {
@@ -119,23 +123,23 @@ namespace KoAR.SaveEditor.Views
             private static readonly Dictionary<string, Func<ItemModelBase<TItem>, TValue, bool>> _setters = new Dictionary<string, Func<ItemModelBase<TItem>, TValue, bool>>();
             private static readonly ParameterExpression _valueParameter = Expression.Parameter(typeof(TValue), "value");
 
-            public static bool SetValue(ItemModelBase<TItem> model, TValue value, string propertyPath)
+            public static bool SetValue(ItemModelBase<TItem> model, TValue value, string propertyPath, string propertyName)
             {
-                if (!ValueSetter<TValue>._setters.TryGetValue(propertyPath, out Func<ItemModelBase<TItem>, TValue, bool>? setter))
+                if (!ValueSetter<TValue>._setters.TryGetValue(propertyName, out Func<ItemModelBase<TItem>, TValue, bool>? setter))
                 {
-                    ValueSetter<TValue>._setters.Add(propertyPath, setter = ValueSetter<TValue>.CreateSetter(propertyPath));
+                    ValueSetter<TValue>._setters.Add(propertyName, setter = ValueSetter<TValue>.CreateSetter(propertyPath, propertyName));
                 }
                 return setter(model, value);
             }
 
-            private static Func<ItemModelBase<TItem>, TValue, bool> CreateSetter(string propertyPath)
+            private static Func<ItemModelBase<TItem>, TValue, bool> CreateSetter(string propertyPath, string propertyName)
             {
                 MemberExpression propertyExpression = propertyPath.Split(ItemModelBase._propertyTokens).Aggregate(
                     Expression.Property(
                         ItemModelBase<TItem>._modelParameter,
                         ItemModelBase<TItem>._itemProperty
                     ),
-                    (expression, property) => Expression.Property(expression, property)
+                    Expression.Property
                 );
                 Expression<Func<ItemModelBase<TItem>, TValue, bool>> lambdaExpression = Expression.Lambda<Func<ItemModelBase<TItem>, TValue, bool>>(
                     Expression.Condition(
@@ -145,8 +149,8 @@ namespace KoAR.SaveEditor.Views
                                 ValueSetter<TValue>._defaultProperty
                             ),
                             ValueSetter<TValue>._equalsMethod,
-                            ValueSetter<TValue>._valueParameter,
-                            propertyExpression
+                            propertyExpression,
+                            ValueSetter<TValue>._valueParameter
                         ),
                         Expression.Constant(BooleanBoxes.False),
                         Expression.Block(
@@ -156,8 +160,8 @@ namespace KoAR.SaveEditor.Views
                             ),
                             Expression.Call(
                                 ItemModelBase<TItem>._modelParameter,
-                                NotifierBase.OnPropertyChangedMethod,
-                                Expression.Constant(propertyExpression.Member.Name)
+                                ItemModelBase._onPropertyChangedMethod,
+                                Expression.Constant(propertyName)
                             ),
                             Expression.Constant(BooleanBoxes.True)
                         )
