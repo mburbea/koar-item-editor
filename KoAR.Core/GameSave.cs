@@ -36,6 +36,8 @@ namespace KoAR.Core
 
         public Stash? Stash { get; private set; }
 
+        public List<QuestItem> QuestItems { get; } = new List<QuestItem>();
+
         internal void UpdateDataLengths(int itemOffset, int delta)
         {
             foreach (var offset in _dataLengthOffsets)
@@ -68,20 +70,22 @@ namespace KoAR.Core
                 data.IndexOf(unknownLengthSeq) + 5,
                 data.IndexOf(unknownLengthSeq2) + 5,
                 data.IndexOf(typeIdSeq) + 5,
-
             };
+
             _itemContainer = new Container(this, data.IndexOf(itemsMarker), 0x00_24_D5_68_00_00_00_0Bul);
             _itemBuffsContainer = new Container(this, data.IndexOf(itemBuffsMarker), 0x00_28_60_84_00_00_00_0Bul);
             _itemGemsContainer = new Container(this, data.IndexOf(itemGemsMarker), 0x00_59_36_38_00_00_00_0Bul);
             var itemMemoryLocs = _itemContainer.ToDictionary(x => x.id, x => (x.offset, x.dataLength));
             var itemBuffLocs = _itemBuffsContainer.ToDictionary(x => x.id, x => (x.offset, x.dataLength));
             var itemGemLocs = _itemGemsContainer.ToDictionary(x => x.id, x => (x.offset, x.dataLength));
+            QuestItems.Clear();
             Items.Clear();
             Gems.Clear();
             Stash = Stash.TryCreateStash(this);
             int ixOfActor = _dataLengthOffsets[^1] + 4;
             int playerActor = 0;
-            var candidates = new List<(int id, int typeIdOffset, ItemDefinition definition)>();
+            var candidates = new List<(int id, int typeIdOffset)>();
+            var questItemCandidates = new List<(int id, QuestItemDefinition questItemDefinition)>();
 
             if (BitConverter.ToInt32(Bytes, ixOfActor) == 0)
             {
@@ -93,9 +97,9 @@ namespace KoAR.Core
                 var id = BitConverter.ToInt32(Bytes, ixOfActor + 9);
                 var typeIdOffset = ixOfActor + 13;
                 var typeId = BitConverter.ToUInt32(Bytes, typeIdOffset);
-                if (Amalur.ItemDefinitions.TryGetValue(typeId, out var definition))
+                if (Amalur.ItemDefinitions.ContainsKey(typeId))
                 {
-                    candidates.Add((id, typeIdOffset, definition));
+                    candidates.Add((id, typeIdOffset));
                 }
                 else if (Amalur.GemDefinitions.ContainsKey(typeId))
                 {
@@ -105,9 +109,13 @@ namespace KoAR.Core
                 {
                     playerActor = id;
                 }
+                else if (Amalur.QuestItemDefinitions.TryGetValue(typeId, out var questItemDefinition))
+                {
+                    questItemCandidates.Add((id, questItemDefinition));
+                }
                 ixOfActor += dataLength;
             }
-            foreach (var (id, typeIdOffset, definition) in candidates)
+            foreach (var (id, typeIdOffset) in candidates)
             {
                 var (itemOffset, itemLength) = itemMemoryLocs[id];
                 var (itemBuffsOffset, itemBuffsLength) = itemBuffLocs[id];
@@ -115,6 +123,15 @@ namespace KoAR.Core
                 if (BitConverter.ToInt32(Bytes, itemOffset + 17) == playerActor)
                 {
                     Items.Add(new Item(this, typeIdOffset, itemOffset, itemLength, itemBuffsOffset, itemBuffsLength, itemGemsOffset, itemGemsLength));
+                }
+            }
+            foreach (var (id, questItemDef) in questItemCandidates)
+            {
+                var (itemOffset, itemLength) = itemMemoryLocs[id];
+                var inventoryState = (InventoryState)Bytes[itemOffset + itemLength - 3];
+                if (BitConverter.ToInt32(Bytes, itemOffset + 17) == playerActor && ((InventoryState.Unsellable & inventoryState) != 0))
+                {
+                    QuestItems.Add(new QuestItem(this, questItemDef, itemOffset + itemLength - 3));
                 }
             }
         }
@@ -160,6 +177,13 @@ namespace KoAR.Core
                     if (item.TypeIdOffset > itemOffset)
                     {
                         item.TypeIdOffset += delta;
+                    }
+                }
+                foreach (var questItem in QuestItems)
+                {
+                    if (questItem.Offset > itemOffset)
+                    {
+                        questItem.Offset += delta;
                     }
                 }
             }

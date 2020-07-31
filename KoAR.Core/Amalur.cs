@@ -10,17 +10,14 @@ using System.Threading;
 
 namespace KoAR.Core
 {
-    /// <summary>
-    /// Archive Operation for Kingdoms of Amalur(supports 1.0.0.2)
-    /// </summary>
     public static class Amalur
     {
-        internal static char[] Separator { get; } =  { ',' };
-
+        internal static char[] Separator { get; } = { ',' };
         public static Dictionary<uint, Buff> BuffMap { get; } = new Dictionary<uint, Buff>();
         public static List<Buff> Buffs { get; } = new List<Buff>();
         public static Dictionary<uint, GemDefinition> GemDefinitions { get; } = new Dictionary<uint, GemDefinition>();
         public static Dictionary<uint, ItemDefinition> ItemDefinitions { get; } = new Dictionary<uint, ItemDefinition>();
+        public static Dictionary<uint, QuestItemDefinition> QuestItemDefinitions { get; } = new Dictionary<uint, QuestItemDefinition>();
 
         public static Buff GetBuff(uint buffId) => BuffMap.GetOrDefault(buffId, new Buff { Id = buffId, Name = "Unknown" });
 
@@ -30,14 +27,16 @@ namespace KoAR.Core
             Thread.CurrentThread.CurrentCulture = Thread.CurrentThread.CurrentUICulture =
                 CultureInfo.DefaultThreadCurrentCulture = CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
             path ??= Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
-            Buffs.AddRange(JsonSerializer.Deserialize<Buff[]>(File.ReadAllBytes(GetPath("buffs.json")), new JsonSerializerOptions
+            var serializationOptions = new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 Converters = { new JsonStringEnumConverter() }
-            }));
+            };
+            Buffs.AddRange(JsonSerializer.Deserialize<Buff[]>(File.ReadAllBytes(GetPath("buffs.json")), serializationOptions));
             BuffMap.AddRange(Buffs, buff => buff.Id);
-            GemDefinitions.AddRange(GemDefinition.ParseFile(GetPath("gemDefinitions.csv")), gemDef => gemDef.TypeId);
-            ItemDefinitions.AddRange(ItemDefinition.ParseFile(GetPath("definitions.csv")), itemDef => itemDef.TypeId);
+            GemDefinitions.AddRange(GemDefinition.ParseFile(GetPath("gemDefinitions.csv")), def => def.TypeId);
+            ItemDefinitions.AddRange(ItemDefinition.ParseFile(GetPath("definitions.csv")), def => def.TypeId);
+            QuestItemDefinitions.AddRange(JsonSerializer.Deserialize<QuestItemDefinition[]>(File.ReadAllBytes(GetPath("questItemDefinitions.json")), serializationOptions), def => def.Id);
             Debug.WriteLine(sw.Elapsed);
 
             string GetPath(string fileName)
