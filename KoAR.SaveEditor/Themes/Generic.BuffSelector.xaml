@@ -14,7 +14,7 @@
     <Style TargetType="{x:Type views:BuffSelector}">
         <Style.Triggers>
             <Trigger Property="scm:DesignerProperties.IsInDesignMode" Value="False">
-                <Setter Property="Buffs" Value="{x:Static core:Amalur.Buffs}" />
+                <Setter Property="Buffs" Value="{Binding Values, Source={x:Static core:Amalur.Buffs}}" />
             </Trigger>
         </Style.Triggers>
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />

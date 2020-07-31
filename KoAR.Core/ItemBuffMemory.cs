@@ -60,13 +60,13 @@ namespace KoAR.Core
 
         public Buff? Prefix
         {
-            get => Amalur.BuffMap.GetOrDefault(MemoryUtilities.Read<uint>(Bytes, Bytes.Length - 8));
+            get => Amalur.Buffs.GetOrDefault(MemoryUtilities.Read<uint>(Bytes, Bytes.Length - 8));
             set => MemoryUtilities.Write(Bytes, Bytes.Length - 8, value?.Id ?? 0);
         }
 
         public Buff? Suffix
         {
-            get => Amalur.BuffMap.GetOrDefault(MemoryUtilities.Read<uint>(Bytes, Bytes.Length - 4));
+            get => Amalur.Buffs.GetOrDefault(MemoryUtilities.Read<uint>(Bytes, Bytes.Length - 4));
             set => MemoryUtilities.Write(Bytes, Bytes.Length - 4, value?.Id ?? 0);
         }
 

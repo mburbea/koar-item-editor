@@ -49,7 +49,7 @@ namespace KoAR.Core
                 return false;
             }
             definition = new ItemDefinition(category, typeId, level, entries[3], entries[4], maxDurability, rarity, entries[7],
-                element, armorType, Amalur.BuffMap.GetOrDefault(prefix), Amalur.BuffMap.GetOrDefault(suffix), itemBuffs, playerBuffs, hasVariants);
+                element, armorType, Amalur.Buffs.GetOrDefault(prefix), Amalur.Buffs.GetOrDefault(suffix), itemBuffs, playerBuffs, hasVariants);
             return true;
         }
 

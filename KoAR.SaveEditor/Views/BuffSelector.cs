@@ -8,7 +8,7 @@ namespace KoAR.SaveEditor.Views
 {
     public sealed class BuffSelector : Control
     {
-        public static readonly DependencyProperty BuffsProperty = DependencyProperty.Register(nameof(BuffSelector.Buffs), typeof(IReadOnlyList<Buff>), typeof(BuffSelector),
+        public static readonly DependencyProperty BuffsProperty = DependencyProperty.Register(nameof(BuffSelector.Buffs), typeof(IReadOnlyCollection<Buff>), typeof(BuffSelector),
             new PropertyMetadata(BuffSelector.BuffsProperty_ValueChanged));
 
         public static readonly DependencyProperty FilterProperty = DependencyProperty.Register(nameof(BuffSelector.Filter), typeof(BuffsFilter), typeof(BuffSelector),
@@ -28,9 +28,9 @@ namespace KoAR.SaveEditor.Views
             BuffSelector.FilteredItemsProperty = BuffSelector._filteredItemsPropertyKey.DependencyProperty;
         }
 
-        public IReadOnlyList<Buff>? Buffs
+        public IReadOnlyCollection<Buff>? Buffs
         {
-            get => (IReadOnlyList<Buff>?)this.GetValue(BuffSelector.BuffsProperty);
+            get => (IReadOnlyCollection<Buff>?)this.GetValue(BuffSelector.BuffsProperty);
             set => this.SetValue(BuffSelector.BuffsProperty, value);
         }
 
@@ -55,7 +55,7 @@ namespace KoAR.SaveEditor.Views
         private static void BuffsProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             BuffSelector selector = (BuffSelector)d;
-            selector.FilteredItems = e.NewValue == null ? null : ((IReadOnlyList<Buff>)e.NewValue).Where(buff => selector.Filter.Matches(buff)).ToList();
+            selector.FilteredItems = e.NewValue == null ? null : ((IEnumerable<Buff>)e.NewValue).Where(buff => selector.Filter.Matches(buff)).ToList();
         }
 
         private static void FilterProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

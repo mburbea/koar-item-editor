@@ -23,8 +23,7 @@ namespace KoAR.Core
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 Converters = { new JsonStringEnumConverter() }
             };
-            Buffs = JsonSerializer.Deserialize<Buff[]>(File.ReadAllBytes(GetPath("buffs.json")), jsonOptions);
-            BuffMap = Buffs.ToDictionary(buff => buff.Id);
+            Buffs = JsonSerializer.Deserialize<Buff[]>(File.ReadAllBytes(GetPath("buffs.json")), jsonOptions).ToDictionary(buff => buff.Id);
             GemDefinitions = GemDefinition.ParseFile(GetPath("gemDefinitions.csv")).ToDictionary(def => def.TypeId);
             ItemDefinitions = ItemDefinition.ParseFile(GetPath("definitions.csv")).ToDictionary(def => def.TypeId);
             QuestItemDefinitions = JsonSerializer.Deserialize<QuestItemDefinition[]>(File.ReadAllBytes(GetPath("questItemDefinitions.json")), jsonOptions).ToDictionary(def => def.Id);
@@ -39,15 +38,14 @@ namespace KoAR.Core
             }
         }
 
-        public static IReadOnlyDictionary<uint, Buff> BuffMap { get; }
-        public static IReadOnlyList<Buff> Buffs { get; }
+        public static IReadOnlyDictionary<uint, Buff> Buffs { get; }
         public static IReadOnlyDictionary<uint, GemDefinition> GemDefinitions { get; }
         public static IReadOnlyDictionary<uint, ItemDefinition> ItemDefinitions { get; }
         public static IReadOnlyDictionary<uint, QuestItemDefinition> QuestItemDefinitions { get; }
 
         internal static char[] Separator { get; } = { ',' };
 
-        public static Buff GetBuff(uint buffId) => BuffMap.GetOrDefault(buffId, new Buff { Id = buffId, Name = "Unknown" });
+        public static Buff GetBuff(uint buffId) => Buffs.GetOrDefault(buffId, new Buff { Id = buffId, Name = "Unknown" });
 
         [return: MaybeNull, NotNullIfNotNull("defaultValue")]
         internal static TValue GetOrDefault<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key, TValue? defaultValue = default)
