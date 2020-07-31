@@ -1,12 +1,13 @@
 ﻿using System;
 
-namespace KoAR.SaveEditor.Updates
+namespace KoAR.SaveEditor.Views.Updates
 {
     public readonly struct UpdateInfo : IEquatable<UpdateInfo>
     {
-        public UpdateInfo(string version, string body, string zipFileUrl, long fileSize)
+        public UpdateInfo(string version, DateTime publishedAt, string body, string zipFileUrl, int fileSize)
         {
             this.Version = version;
+            this.PublishedAt = publishedAt;
             this.Body = body;
             this.ZipFileUrl = zipFileUrl;
             this.FileSize = fileSize;
@@ -14,9 +15,11 @@ namespace KoAR.SaveEditor.Updates
 
         public string Body { get; }
 
-        public long FileSize { get; }
+        public int FileSize { get; }
 
-        public bool IsEmpty => this.FileSize == default;
+        public bool IsEmpty => this.PublishedAt == default;
+
+        public DateTime PublishedAt { get; }
 
         public string Version { get; }
 
@@ -28,12 +31,10 @@ namespace KoAR.SaveEditor.Updates
 
         public override bool Equals(object obj) => obj is UpdateInfo other && this.Equals(other);
 
-        public bool Equals(UpdateInfo other)
-        {
-            return this.Version == other.Version && this.Body == other.Body &&
-                this.ZipFileUrl == other.ZipFileUrl && this.FileSize == other.FileSize;
-        }
+        public bool Equals(UpdateInfo other) => this.GetValues().Equals(other.GetValues());
 
-        public override int GetHashCode() => (this.Version, this.Body, this.ZipFileUrl, this.FileSize).GetHashCode();
+        public override int GetHashCode() => this.GetValues().GetHashCode();
+
+        private (string, DateTime, string, string, int) GetValues() => (this.Version, this.PublishedAt, this.Body, this.ZipFileUrl, this.FileSize);
     }
 }

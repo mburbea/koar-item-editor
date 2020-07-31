@@ -2,13 +2,12 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
-using KoAR.SaveEditor.Updates;
 using KoAR.SaveEditor.Views.InventoryManager;
 using KoAR.SaveEditor.Views.StashManager;
+using KoAR.SaveEditor.Views.Updates;
 using Microsoft.Win32;
 using TaskDialogInterop;
 
@@ -118,7 +117,7 @@ namespace KoAR.SaveEditor.Views.Main
         {
             Application application = (Application)sender;
             application.Activated -= this.Application_Activated;
-            application.MainWindow.Closing += this.MainWindow_Closing;            
+            application.MainWindow.Closing += this.MainWindow_Closing;
             try
             {
                 using CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
@@ -127,7 +126,9 @@ namespace KoAR.SaveEditor.Views.Main
             }
             catch (OperationCanceledException)
             {
-                
+            }
+            if (!Debugger.IsAttached)
+            {
             }
             await application.Dispatcher.InvokeAsync(this.OpenFile);
         }

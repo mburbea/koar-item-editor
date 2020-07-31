@@ -9,21 +9,23 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace KoAR.SaveEditor.Updates
+namespace KoAR.SaveEditor.Views.Updates
 {
     public sealed class UpdateService
     {
-        private readonly string _currentVersion = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
-        private readonly JsonSerializerOptions _options = new JsonSerializerOptions
+        private static readonly JsonSerializerOptions _options = new JsonSerializerOptions
         {
             PropertyNamingPolicy = JsonSnakeCaseNamingPolicy.Instance,
             DictionaryKeyPolicy = JsonSnakeCaseNamingPolicy.Instance
         };
-        private UpdateInfo _updateInfo;
+
+        private UpdateInfo? _updateInfo;
 
         public event EventHandler? UpdateChanged;
 
-        public UpdateInfo Update
+        public string CurrentVersion { get; } = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+
+        public UpdateInfo? Update
         {
             get => this._updateInfo;
             private set
@@ -41,11 +43,11 @@ namespace KoAR.SaveEditor.Updates
         {
             try
             {
-                Release info = await this.GetLatestReleaseAsync(cancellationToken).ConfigureAwait(false);
+                Release info = await UpdateService.GetLatestReleaseAsync(cancellationToken).ConfigureAwait(false);
                 ReleaseAsset? asset;
-                if (info.Version != this._currentVersion && (asset = info.GetZipFileAsset()) != null)
+                if (this.CurrentVersion != info.Version && (asset = info.GetZipFileAsset()) != null)
                 {
-                    this.Update = new UpdateInfo(info.Version, info.Body, asset.BrowserDownloadUrl, asset.Size);
+                    this.Update = new UpdateInfo(info.Version, info.PublishedAt.ToLocalTime(), info.Body, asset.BrowserDownloadUrl, asset.Size);
                 }
             }
             catch
@@ -53,7 +55,7 @@ namespace KoAR.SaveEditor.Updates
             }
         }
 
-        private async Task<Release> GetLatestReleaseAsync(CancellationToken cancellationToken)
+        private static async Task<Release> GetLatestReleaseAsync(CancellationToken cancellationToken)
         {
             HttpWebRequest request = WebRequest.CreateHttp("https://api.github.com/repos/mburbea/koar-item-editor/releases/latest");
             request.UserAgent = request.Accept = "application/vnd.github.v3+json";
@@ -61,7 +63,7 @@ namespace KoAR.SaveEditor.Updates
             cancellationToken.ThrowIfCancellationRequested();
             using Stream stream = response.GetResponseStream();
             cancellationToken.ThrowIfCancellationRequested();
-            return await JsonSerializer.DeserializeAsync<Release>(stream, this._options).ConfigureAwait(false);
+            return await JsonSerializer.DeserializeAsync<Release>(stream, UpdateService._options).ConfigureAwait(false);
         }
 
         private sealed class JsonSnakeCaseNamingPolicy : JsonNamingPolicy
@@ -149,7 +151,7 @@ namespace KoAR.SaveEditor.Updates
 
             public bool IsZipFile => this.ContentType == "application/zip";
 
-            public long Size { get; set; }
+            public int Size { get; set; }
         }
     }
 }
