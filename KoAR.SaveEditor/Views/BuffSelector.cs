@@ -55,18 +55,15 @@ namespace KoAR.SaveEditor.Views
         private static void BuffsProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             BuffSelector selector = (BuffSelector)d;
-            selector.FilteredItems = e.NewValue == null ? null : ((IEnumerable<Buff>)e.NewValue).Where(buff => selector.Filter.Matches(buff)).ToList();
+            selector.FilteredItems = BuffSelector.GetFilteredItems((IEnumerable<Buff>?)e.NewValue, selector.Filter);
         }
 
         private static void FilterProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             BuffSelector selector = (BuffSelector)d;
-            if (selector.Buffs == null)
-            {
-                return;
-            }
-            BuffsFilter filter = (BuffsFilter)e.NewValue;
-            selector.FilteredItems = selector.Buffs.Where(buff => filter.Matches(buff)).ToList();
+            selector.FilteredItems = BuffSelector.GetFilteredItems(selector.Buffs, (BuffsFilter)e.NewValue);
         }
+
+        private static IReadOnlyList<Buff>? GetFilteredItems(IEnumerable<Buff>? buffs, BuffsFilter filter) => buffs?.Where(buff => filter.Matches(buff)).ToList();
     }
 }
