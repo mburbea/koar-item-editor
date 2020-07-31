@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
@@ -21,7 +23,6 @@ namespace KoAR.SaveEditor.Views.Main
 
         public MainWindowViewModel()
         {
-            this.UpdateService = (UpdateService?)Application.Current.TryFindResource(typeof(UpdateService));
             if (!(bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(Window)).DefaultValue)
             {
                 Application.Current.Activated += this.Application_Activated;
@@ -70,7 +71,7 @@ namespace KoAR.SaveEditor.Views.Main
             }
         }
 
-        public UpdateService? UpdateService { get; }
+        public UpdateService UpdateService { get; } = (UpdateService)Application.Current.TryFindResource(typeof(UpdateService));
 
         public void OpenFile()
         {
@@ -113,12 +114,22 @@ namespace KoAR.SaveEditor.Views.Main
             MessageBox.Show(Application.Current.MainWindow, $"Save successful! Original save backed up as {this.GameSave.FileName}.bak.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private void Application_Activated(object sender, EventArgs e)
+        private async void Application_Activated(object sender, EventArgs e)
         {
             Application application = (Application)sender;
             application.Activated -= this.Application_Activated;
-            application.MainWindow.Closing += this.MainWindow_Closing;
-            application.Dispatcher.InvokeAsync(this.OpenFile);
+            application.MainWindow.Closing += this.MainWindow_Closing;            
+            try
+            {
+                using CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+                cancellationTokenSource.CancelAfter(2500);
+                await this.UpdateService.CheckForUpdatesAsync(cancellationTokenSource.Token).ConfigureAwait(false);
+            }
+            catch (OperationCanceledException)
+            {
+                
+            }
+            await application.Dispatcher.InvokeAsync(this.OpenFile);
         }
 
         private bool CancelDueToUnsavedChanges(string proceedText, string saveProceedText, string cancelDescription)
