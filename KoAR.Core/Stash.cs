@@ -43,9 +43,15 @@ namespace KoAR.Core
                 var indices = GetAllIndices(data);
                 for (int i = 0; i < indices.Count - 1; i++)
                 {
-                    Items.Add(new StashItem(gameSave, _offset + indices[i], indices[i + 1] - indices[i]));
+                    if (Amalur.ItemDefinitions.ContainsKey(MemoryUtilities.Read<uint>(_gameSave.Bytes, _offset + indices[i])))
+                    {
+                        Items.Add(new StashItem(gameSave, _offset + indices[i], indices[i + 1] - indices[i]));
+                    }
                 }
-                Items.Add(new StashItem(gameSave, _offset + indices[^1], DataLength - indices[^1]));
+                if (Amalur.ItemDefinitions.ContainsKey(MemoryUtilities.Read<uint>(_gameSave.Bytes, _offset + indices[^1])))
+                {
+                    Items.Add(new StashItem(gameSave, _offset + indices[^1], DataLength - indices[^1]));
+                }
             }
         }
 
