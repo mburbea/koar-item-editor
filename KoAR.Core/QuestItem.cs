@@ -7,12 +7,8 @@ namespace KoAR.Core
         private readonly GameSave _gameSave;
         private readonly QuestItemDefinition _definition;
 
-        public QuestItem(GameSave gameSave, QuestItemDefinition definition, int offset)
-        {
-            _gameSave = gameSave;
-            Offset = offset;
-            _definition = definition;
-        }
+        public QuestItem(GameSave gameSave, QuestItemDefinition definition, int offset) => 
+            (_gameSave, _definition, Offset) = (gameSave, definition, offset);
 
         internal int Offset { get; set; }
 

@@ -34,9 +34,9 @@ namespace KoAR.Core
             };
             Buffs.AddRange(JsonSerializer.Deserialize<Buff[]>(File.ReadAllBytes(GetPath("buffs.json")), serializationOptions));
             BuffMap.AddRange(Buffs, buff => buff.Id);
-            GemDefinitions.AddRange(GemDefinition.ParseFile(GetPath("gemDefinitions.csv")), gemDef => gemDef.TypeId);
-            ItemDefinitions.AddRange(ItemDefinition.ParseFile(GetPath("definitions.csv")), itemDef => itemDef.TypeId);
-            QuestItemDefinitions.AddRange(JsonSerializer.Deserialize<QuestItemDefinition[]>(File.ReadAllBytes(GetPath("questItemDefinitions.json")), serializationOptions), questItemDef => questItemDef.Id);
+            GemDefinitions.AddRange(GemDefinition.ParseFile(GetPath("gemDefinitions.csv")), def => def.TypeId);
+            ItemDefinitions.AddRange(ItemDefinition.ParseFile(GetPath("definitions.csv")), def => def.TypeId);
+            QuestItemDefinitions.AddRange(JsonSerializer.Deserialize<QuestItemDefinition[]>(File.ReadAllBytes(GetPath("questItemDefinitions.json")), serializationOptions), def => def.Id);
             Debug.WriteLine(sw.Elapsed);
 
             string GetPath(string fileName)
