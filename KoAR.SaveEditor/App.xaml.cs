@@ -9,7 +9,6 @@ namespace KoAR.SaveEditor
         static App()
         {
             Type.GetTypeCode(typeof(PlatformCulture)); // Needed to enforce loading of PresentationFramework.Aero.dll before initializing App.
-            Amalur.Initialize();
         }
     }
 }
