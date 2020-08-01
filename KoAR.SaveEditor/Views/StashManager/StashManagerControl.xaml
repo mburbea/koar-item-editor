@@ -5,7 +5,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views"
     xmlns:local="clr-namespace:KoAR.SaveEditor.Views.StashManager"
-    xmlns:core="clr-namespace:KoAR.Core;assembly=KoAR.Core"
     mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type local:StashManagerViewModel}}">
     <UserControl.Resources>
         <ResourceDictionary>

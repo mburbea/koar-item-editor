@@ -194,6 +194,7 @@
     <None Remove="Resources\Zoom.png" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Markdown.Xaml" Version="1.0.0" />
     <PackageReference Include="WPFTaskDialog" Version="1.7.1" />
   </ItemGroup>
   <ItemGroup>

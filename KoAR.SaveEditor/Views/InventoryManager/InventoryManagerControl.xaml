@@ -6,7 +6,6 @@
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views"
     xmlns:local="clr-namespace:KoAR.SaveEditor.Views.InventoryManager"
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs" 
-    xmlns:core="clr-namespace:KoAR.Core;assembly=KoAR.Core"
     mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type local:InventoryManagerViewModel}}">
     <UserControl.Resources>
         <ResourceDictionary>

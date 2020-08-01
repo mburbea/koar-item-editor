@@ -97,10 +97,7 @@ namespace KoAR.SaveEditor.Views.Main
             this.Mode = ManagementMode.Inventory;
         }
 
-        public void RegisterUnsavedChange()
-        {
-            this.HasUnsavedChanges = true;
-        }
+        public void RegisterUnsavedChange() => this.HasUnsavedChanges = true;
 
         public void SaveFile()
         {
@@ -111,6 +108,12 @@ namespace KoAR.SaveEditor.Views.Main
             this.GameSave.SaveFile();
             this.HasUnsavedChanges = false;
             MessageBox.Show(Application.Current.MainWindow, $"Save successful! Original save backed up as {this.GameSave.FileName}.bak.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private static bool OpenUpdateWindow()
+        {
+            UpdateWindow window = new UpdateWindow { Owner = Application.Current.MainWindow };
+            return window.ShowDialog().GetValueOrDefault();
         }
 
         private async void Application_Activated(object sender, EventArgs e)
@@ -127,10 +130,10 @@ namespace KoAR.SaveEditor.Views.Main
             catch (OperationCanceledException)
             {
             }
-            if (!Debugger.IsAttached)
+            if (Debugger.IsAttached || !this.UpdateService.Update.HasValue || !application.Dispatcher.Invoke(MainWindowViewModel.OpenUpdateWindow))
             {
+                await application.Dispatcher.InvokeAsync(this.OpenFile);
             }
-            await application.Dispatcher.InvokeAsync(this.OpenFile);
         }
 
         private bool CancelDueToUnsavedChanges(string proceedText, string saveProceedText, string cancelDescription)

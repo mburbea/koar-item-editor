@@ -16,5 +16,6 @@
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.ZoomScaler.xaml" />
         <!-- Constructs -->
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.ScrollingTabControl.xaml" />
+        <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.StatefulProgressBar.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
