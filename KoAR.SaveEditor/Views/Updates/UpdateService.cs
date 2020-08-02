@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using KoAR.SaveEditor.Constructs;
 
 namespace KoAR.SaveEditor.Views.Updates
 {
@@ -21,9 +22,23 @@ namespace KoAR.SaveEditor.Views.Updates
 
         private UpdateInfo? _updateInfo;
 
+        public UpdateService()
+            : this(interval: 250)
+        {
+        }
+
+        public UpdateService(int interval)
+        {
+            this.Interval = interval;
+        }
+
+        public event EventHandler<EventArgs<DownloadProgress>>? DownloadProgress;
+
         public event EventHandler? UpdateChanged;
 
         public string CurrentVersion { get; } = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+
+        public int Interval { get; }
 
         public UpdateInfo? Update
         {
@@ -55,6 +70,51 @@ namespace KoAR.SaveEditor.Views.Updates
             }
         }
 
+        public async Task DownloadUpdateAsync(string targetFileName, CancellationToken cancellationToken = default)
+        {
+            if (!this.Update.HasValue)
+            {
+                return;
+            }
+            UpdateInfo update = this.Update.Value;
+            int bytesTransferred = 0, bytesPerInterval = 0;
+            using Timer timer = new Timer(OnTick, null, 0, this.Interval);
+            try
+            {
+                HttpWebRequest request = WebRequest.CreateHttp(update.ZipFileUrl);
+                using WebResponse response = await request.GetResponseAsync().ConfigureAwait(false);
+                cancellationToken.ThrowIfCancellationRequested();
+                using Stream stream = response.GetResponseStream();
+                using FileStream fileStream = File.Create(targetFileName);
+                byte[] buffer = new byte[8192];
+                while (bytesTransferred < update.FileSize)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    int count = await stream.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false);
+                    //await Task.Delay(10).ConfigureAwait(false);
+                    cancellationToken.ThrowIfCancellationRequested();
+                    await fileStream.WriteAsync(buffer, 0, count).ConfigureAwait(false);
+                    bytesTransferred += count;
+                    bytesPerInterval += count;
+                }
+                timer.Change(Timeout.Infinite, Timeout.Infinite);
+                this.OnDownloadProgress(new DownloadProgress(bytesTransferred, default));
+            }
+            catch (Exception e)
+            {
+                timer.Change(Timeout.Infinite, Timeout.Infinite);
+                this.OnDownloadProgress(e);
+                throw;
+            }
+
+            void OnTick(object _)
+            {
+                DownloadProgress progress = new DownloadProgress(bytesTransferred, bytesPerInterval * 1000d / this.Interval);
+                bytesPerInterval = 0;
+                this.OnDownloadProgress(progress);
+            }
+        }
+
         private static async Task<Release> GetLatestReleaseAsync(CancellationToken cancellationToken)
         {
             HttpWebRequest request = WebRequest.CreateHttp("https://api.github.com/repos/mburbea/koar-item-editor/releases/latest");
@@ -65,6 +125,8 @@ namespace KoAR.SaveEditor.Views.Updates
             cancellationToken.ThrowIfCancellationRequested();
             return await JsonSerializer.DeserializeAsync<Release>(stream, UpdateService._options).ConfigureAwait(false);
         }
+
+        private void OnDownloadProgress(DownloadProgress data) => this.DownloadProgress?.Invoke(this, new EventArgs<DownloadProgress>(data));
 
         private sealed class JsonSnakeCaseNamingPolicy : JsonNamingPolicy
         {

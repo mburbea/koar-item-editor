@@ -17,6 +17,7 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/KoAR.SaveEditor;component/Views/Templates/DownloadIndicatorTemplate.xaml" />
                 <ResourceDictionary Source="/KoAR.SaveEditor;component/Views/Templates/TextBoxErrorTemplate.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <ObjectDataProvider x:Key="ViewModel" ObjectType="{x:Type local:MainWindowViewModel}" />
@@ -32,19 +33,9 @@
     <Window.DataContext>
         <Binding Source="{StaticResource ViewModel}" />
     </Window.DataContext>
-    <Window.CommandBindings>
-        <CommandBinding Command="Help" Executed="Help_Executed" />
-        <CommandBinding Command="Open" Executed="Open_Executed" />
-        <CommandBinding Command="Save" Executed="Save_Executed" CanExecute="Save_CanExecute" />
-    </Window.CommandBindings>
-    <Window.InputBindings>
-        <KeyBinding Gesture="CTRL+O" Command="Open" />
-        <KeyBinding Gesture="CTRL+S" Command="Save" />
-        <KeyBinding Key="F1" Command="Help" />
-    </Window.InputBindings>
     <Window.Style>
         <Style TargetType="{x:Type Window}" BasedOn="{StaticResource {x:Type Window}}">
-            <Style.Triggers>
+            <Style.Triggers>                
                 <DataTrigger Binding="{Binding GameSave, Converter={StaticResource IsNullConverter}}" Value="False">
                     <Setter Property="Title" Value="{Binding GameSave.FileName, StringFormat='{}{0} - KoAR Save Editor'}" />
                 </DataTrigger>
@@ -59,6 +50,22 @@
             <Setter Property="Title" Value="KoAR Save Editor" />
         </Style>
     </Window.Style>
+    <constructs:TaskbarItemInfoOverlay.ContentTemplate>
+        <StaticResource ResourceKey="DownloadIndicatorTemplate" />
+    </constructs:TaskbarItemInfoOverlay.ContentTemplate>
+    <constructs:TaskbarItemInfoOverlay.Content>
+        <Binding Path="UpdateService.Update" Source="{StaticResource ViewModel}" />
+    </constructs:TaskbarItemInfoOverlay.Content>
+    <Window.CommandBindings>
+        <CommandBinding Command="Help" Executed="Help_Executed" />
+        <CommandBinding Command="Open" Executed="Open_Executed" />
+        <CommandBinding Command="Save" Executed="Save_Executed" CanExecute="Save_CanExecute" />
+    </Window.CommandBindings>
+    <Window.InputBindings>
+        <KeyBinding Gesture="CTRL+O" Command="Open" />
+        <KeyBinding Gesture="CTRL+S" Command="Save" />
+        <KeyBinding Key="F1" Command="Help" />
+    </Window.InputBindings>
     <DockPanel>
         <Border Background="Transparent" DockPanel.Dock="Top">
             <StackPanel Margin="4,1" Orientation="Horizontal">
