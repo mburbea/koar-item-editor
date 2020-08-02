@@ -4,12 +4,11 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:KoAR.SaveEditor.Views.QuestItems"
-    xmlns:sc="clr-namespace:System.ComponentModel;assembly=WindowsBase"
-    xmlns:views="clr-namespace:KoAR.SaveEditor.Views" 
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs"
+    xmlns:sc="clr-namespace:System.ComponentModel;assembly=WindowsBase"
     mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type local:QuestItemsWindowViewModel}}"
     WindowStartupLocation="CenterOwner" Title="Quest Items - KoAR Save Editor" 
-    Height="450" Width="500">
+    Height="450" Width="500" ResizeMode="NoResize">
     <Window.Resources>
         <CollectionViewSource x:Key="FilteredItems" Source="{Binding FilteredItems}">
             <CollectionViewSource.SortDescriptions>
@@ -52,7 +51,12 @@
                 </TextBox.Style>
             </TextBox>
             <Button Grid.Column="2" Content="Reset" Command="{Binding ResetFiltersCommand}" Margin="2" />
-            <ListView Grid.Row="1" Grid.ColumnSpan="3" Margin="2" ItemsSource="{Binding Source={StaticResource FilteredItems}}">
+            <ListView Grid.Row="1" Grid.ColumnSpan="3" Margin="2" ItemsSource="{Binding Source={StaticResource FilteredItems}}" SelectionMode="Single">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <Setter Property="constructs:ItemSelection.SelectItemOnClick" Value="{Binding IsVisible, RelativeSource={RelativeSource Self}}" />
+                    </Style>
+                </ListView.ItemContainerStyle>
                 <ListView.View>
                     <GridView AllowsColumnReorder="True">
                         <GridViewColumn Width="Auto" Header="Name" DisplayMemberBinding="{Binding Name}" />
