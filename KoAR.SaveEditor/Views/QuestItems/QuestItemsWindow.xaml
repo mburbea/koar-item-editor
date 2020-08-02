@@ -59,7 +59,7 @@
                 </ListView.ItemContainerStyle>
                 <ListView.View>
                     <GridView AllowsColumnReorder="True">
-                        <GridViewColumn Width="Auto" Header="Name" DisplayMemberBinding="{Binding Name}" />
+                        <GridViewColumn Width="350" Header="Name" DisplayMemberBinding="{Binding Name}" />
                         <GridViewColumn Width="Auto">
                             <GridViewColumn.Header>
                                 <StackPanel Orientation="Horizontal">
