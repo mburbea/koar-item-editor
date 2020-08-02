@@ -51,7 +51,8 @@
                 </TextBox.Style>
             </TextBox>
             <Button Grid.Column="2" Content="Reset" Command="{Binding ResetFiltersCommand}" Margin="2" FocusVisualStyle="{x:Null}" />
-            <ListView Grid.Row="1" Grid.ColumnSpan="3" Margin="2" ItemsSource="{Binding Source={StaticResource FilteredItems}}" SelectionMode="Single">
+            <ListView Grid.Row="1" Grid.ColumnSpan="3" Margin="2" ItemsSource="{Binding Source={StaticResource FilteredItems}}" 
+                SelectionMode="Single" ScrollViewer.HorizontalScrollBarVisibility="Disabled" FocusVisualStyle="{x:Null}">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="{x:Type ListViewItem}">
                         <Setter Property="constructs:ItemSelection.SelectItemOnClick" Value="{Binding IsVisible, RelativeSource={RelativeSource Self}}" />
@@ -59,7 +60,7 @@
                 </ListView.ItemContainerStyle>
                 <ListView.View>
                     <GridView AllowsColumnReorder="True">
-                        <GridViewColumn Width="350" Header="Name" DisplayMemberBinding="{Binding Name}" />
+                        <GridViewColumn Width="375" Header="Name" DisplayMemberBinding="{Binding Name}" />
                         <GridViewColumn Width="Auto">
                             <GridViewColumn.Header>
                                 <StackPanel Orientation="Horizontal">
