@@ -1,11 +1,13 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
+using KoAR.SaveEditor.Properties;
 using KoAR.SaveEditor.Views.InventoryManager;
 using KoAR.SaveEditor.Views.StashManager;
 using KoAR.SaveEditor.Views.Updates;
@@ -94,6 +96,7 @@ namespace KoAR.SaveEditor.Views.Main
                 DefaultExt = ".sav",
                 Filter = "Save Files (*.sav)|*.sav",
                 CheckFileExists = true,
+                InitialDirectory = Settings.Default.LastDirectory ?? Amalur.FindSaveGameDirectory()
             };
             if (dialog.ShowDialog(Application.Current.MainWindow) != true || this.CancelDueToUnsavedChanges(
                 $"Ignore.\nLoad \"{dialog.FileName}\" without saving the current file.",
@@ -104,6 +107,7 @@ namespace KoAR.SaveEditor.Views.Main
                 return;
             }
             this.GameSave = new GameSave(dialog.FileName);
+            Settings.Default.LastDirectory = Path.GetDirectoryName(dialog.FileName);
             this.InventoryManager = new InventoryManagerViewModel(this);
             this.StashManager = this.GameSave.Stash != null ? new StashManagerViewModel(this) : default;
             this.OnPropertyChanged(nameof(this.GameSave)); // Notifying the change is explicitly done after the view models are set.

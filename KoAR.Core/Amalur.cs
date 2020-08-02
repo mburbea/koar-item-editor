@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
@@ -46,5 +46,13 @@ namespace KoAR.Core
         [return: MaybeNull, NotNullIfNotNull("defaultValue")]
         internal static TValue GetOrDefault<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key, TValue? defaultValue = default)
             where TValue : class => dictionary.TryGetValue(key, out TValue res) ? res : defaultValue;
+
+        public static string? FindSaveGameDirectory()
+        {
+            var directory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Steam", "userdata");
+            return Directory.Exists(directory) && Directory.GetDirectories(directory) is string[] { Length: 1 } userDirs && Directory.Exists(directory = Path.Combine(userDirs[0], "102500", "remote"))
+                ? directory
+                : null;
+        }
     }
 }
