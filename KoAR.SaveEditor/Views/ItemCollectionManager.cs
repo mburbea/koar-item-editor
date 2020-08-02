@@ -40,9 +40,6 @@ namespace KoAR.SaveEditor.Views
         public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register(nameof(ItemCollectionManager.SelectedItem), typeof(object), typeof(ItemCollectionManager),
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
-        public static readonly DependencyProperty SelectRowOnClickProperty = DependencyProperty.RegisterAttached("SelectRowOnClick", typeof(bool), typeof(ItemCollectionManager),
-            new PropertyMetadata(BooleanBoxes.False, ItemCollectionManager.SelectRowOnClickProperty_ValueChanged));
-
         public static readonly DependencyProperty SortDirectionProperty = DependencyProperty.RegisterAttached(nameof(ItemCollectionManager.SortDirection), typeof(ListSortDirection), typeof(ItemCollectionManager),
             new PropertyMetadata());
 
@@ -132,17 +129,7 @@ namespace KoAR.SaveEditor.Views
 
         public static string? GetPropertyName(GridViewColumn column) => (string?)column?.GetValue(ItemCollectionManager.PropertyNameProperty);
 
-        public static bool GetSelectRowOnClick(UIElement? element)
-        {
-            return element != null && (bool)element.GetValue(ItemCollectionManager.SelectRowOnClickProperty);
-        }
-
         public static void SetPropertyName(GridViewColumn column, string? value) => column?.SetValue(ItemCollectionManager.PropertyNameProperty, value);
-
-        public static void SetSelectRowOnClick(UIElement? element, bool value)
-        {
-            element?.SetValue(ItemCollectionManager.SelectRowOnClickProperty, BooleanBoxes.GetBox(value));
-        }
 
         public override void OnApplyTemplate()
         {
@@ -206,16 +193,6 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        private static void Element_PreviewMouseLeftButtonDown(object sender, RoutedEventArgs e)
-        {
-            FrameworkElement element = (FrameworkElement)sender;
-            ListViewItem? item = element as ListViewItem ?? element.FindVisualTreeAncestor<ListViewItem>();
-            if (item != null)
-            {
-                item.IsSelected = true;
-            }
-        }
-
         private static void ItemsProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             ItemCollectionManager itemsView = (ItemCollectionManager)d;
@@ -229,22 +206,6 @@ namespace KoAR.SaveEditor.Views
                     new SortDescription(nameof(ItemModelBase.DisplayName), ListSortDirection.Ascending)
                 }
             };
-        }
-
-        private static void SelectRowOnClickProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if (!(d is UIElement element))
-            {
-                return;
-            }
-            if ((bool)e.OldValue)
-            {
-                WeakEventManager<UIElement, RoutedEventArgs>.RemoveHandler(element, nameof(UIElement.PreviewMouseLeftButtonDown), ItemCollectionManager.Element_PreviewMouseLeftButtonDown);
-            }
-            if ((bool)e.NewValue)
-            {
-                WeakEventManager<UIElement, RoutedEventArgs>.AddHandler(element, nameof(UIElement.PreviewMouseLeftButtonDown), ItemCollectionManager.Element_PreviewMouseLeftButtonDown);
-            }
         }
     }
 }

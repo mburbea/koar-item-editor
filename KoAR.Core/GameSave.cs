@@ -129,7 +129,7 @@ namespace KoAR.Core
             {
                 var (itemOffset, itemLength) = itemMemoryLocs[id];
                 var inventoryState = (InventoryState)Bytes[itemOffset + itemLength - 3];
-                if (BitConverter.ToInt32(Bytes, itemOffset + 17) == playerActor && ((InventoryState.Unsellable & inventoryState) != 0))
+                if (BitConverter.ToInt32(Bytes, itemOffset + 17) == playerActor)
                 {
                     QuestItems.Add(new QuestItem(this, questItemDef, itemOffset + itemLength - 3));
                 }

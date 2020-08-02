@@ -5,7 +5,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
 
-namespace KoAR.SaveEditor.Views
+namespace KoAR.SaveEditor.Constructs
 {
     public static class Watermarking
     {

@@ -97,7 +97,7 @@
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                                 <Setter Property="constructs:MouseDoubleClick.CommandParameter" Value="{Binding}" />
                                 <Setter Property="constructs:MouseDoubleClick.Command" Value="{Binding RowDoubleClickCommand, RelativeSource={RelativeSource AncestorType={x:Type views:ItemCollectionManager}}}" />
-                                <Setter Property="views:ItemCollectionManager.SelectRowOnClick" Value="{Binding IsVisible, RelativeSource={RelativeSource Self}}" />
+                                <Setter Property="constructs:ItemSelection.SelectItemOnClick" Value="{Binding IsVisible, RelativeSource={RelativeSource Self}}" />
                             </Style>
                         </ListView.ItemContainerStyle>
                         <ListView.ContextMenu>
@@ -225,11 +225,11 @@
                                                     </views:ItemDefinitionControl.Style>
                                                 </views:ItemDefinitionControl>
                                                 <TextBox VerticalAlignment="Center" Margin="1,0" Text="{Binding ItemName}">
-                                                    <views:Watermarking.ContentTemplate>
+                                                    <constructs:Watermarking.ContentTemplate>
                                                         <DataTemplate>
                                                             <TextBlock Text="{Binding}" FontStyle="Italic" />
                                                         </DataTemplate>
-                                                    </views:Watermarking.ContentTemplate>
+                                                    </constructs:Watermarking.ContentTemplate>
                                                     <TextBox.Style>
                                                         <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
                                                             <Style.Triggers>
@@ -246,7 +246,7 @@
                                                                         <Condition Property="IsVisible" Value="True" />
                                                                         <Condition Property="Text" Value="" />
                                                                     </MultiTrigger.Conditions>
-                                                                    <Setter Property="views:Watermarking.Content" Value="{Binding Definition.Name}" />
+                                                                    <Setter Property="constructs:Watermarking.Content" Value="{Binding Definition.Name}" />
                                                                 </MultiTrigger>
                                                             </Style.Triggers>
                                                             <Setter Property="Visibility" Value="Collapsed" />

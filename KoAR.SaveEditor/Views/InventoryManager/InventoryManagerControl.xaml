@@ -48,8 +48,12 @@
                         <ColumnDefinition />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
                     <TextBlock Text="Inv Size:" Margin="2" VerticalAlignment="Center" TextAlignment="Right"/>
-                    <TextBox Grid.Column="1" MinWidth="100" Margin="2" TextAlignment="Right" Grid.ColumnSpan="2">
+                    <TextBox Grid.Column="1" Grid.ColumnSpan="2" MinWidth="100" Margin="2" TextAlignment="Right">
                         <TextBox.Text>
                             <Binding Path="InventorySize" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                                 <Binding.ValidationRules>
@@ -58,6 +62,11 @@
                             </Binding>
                         </TextBox.Text>
                     </TextBox>
+                    <TextBlock Grid.Row="1" Text="Quest Items:" Margin="2" VerticalAlignment="Center" TextAlignment="Right"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" TextAlignment="Right" Margin="2" IsReadOnly="True" FocusVisualStyle="{x:Null}"
+                        Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" Text="{Binding QuestItemCount, Mode=OneWay}" />
+                    <Button Grid.Row="1" Grid.Column="2" Content="Manage" Margin="2" FocusVisualStyle="{x:Null}" 
+                        Command="{Binding OpenQuestItemsWindowCommand}" />
                 </Grid>
             </GroupBox>
             <ScrollViewer Grid.Row="1" FocusVisualStyle="{x:Null}" Margin="0,0,4,4" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
