@@ -53,9 +53,11 @@ namespace KoAR.Core
             return true;
         }
 
-        internal static IEnumerable<ItemDefinition> ParseFile(string path)
+        internal static IEnumerable<ItemDefinition> ParseFile(Stream stream)
         {
-            foreach (var line in File.ReadLines(path).Skip(1))
+            using var reader = new StreamReader(stream);
+            reader.ReadLine();
+            while (reader.ReadLine() is string line)
             {
                 if (TryLoadFromRow(line.Split(Amalur.Separator), out var definition))
                 {

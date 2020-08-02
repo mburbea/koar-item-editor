@@ -103,7 +103,6 @@ namespace ItemTesting
         //}
         static void Main()
         {
-            Amalur.DataDirectory.Path = @"..\..\..\..\Koar.SaveEditor\";
             GameSave gameSave = new GameSave(@"..\..\..\..\9190114save84.sav");
             Console.WriteLine($"Stash item count at load:{gameSave.Stash.Items.Count}");
             gameSave.Stash.AddItem(Amalur.ItemDefinitions.Values.First());

@@ -6,7 +6,7 @@ try {
 	Stop-Process -id $editorPid;
 	Wait-Process -id $editorPid;
 	Expand-Archive -Path $zipFile -DestinationPath $directory -Force;
-	& $executable;
+	Start-Procsss -WorkingDirectory $directory -FilePath $executable;
 }
 catch {
 	Write-Host "An error occurred:";

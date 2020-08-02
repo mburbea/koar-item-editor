@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
@@ -15,7 +15,8 @@ namespace KoAR.Core
     {
         static Amalur()
         {
-            var sw = Stopwatch.StartNew();
+            static Stream GetStream(string name) => Assembly.GetExecutingAssembly().GetManifestResourceStream($"{typeof(Amalur).Namespace}.Data.{name}");
+
             Thread.CurrentThread.CurrentCulture = Thread.CurrentThread.CurrentUICulture =
                 CultureInfo.DefaultThreadCurrentCulture = CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
             var jsonOptions = new JsonSerializerOptions
@@ -23,19 +24,14 @@ namespace KoAR.Core
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 Converters = { new JsonStringEnumConverter() }
             };
-            Buffs = JsonSerializer.Deserialize<Buff[]>(File.ReadAllBytes(GetPath("buffs.json")), jsonOptions).ToDictionary(buff => buff.Id);
-            GemDefinitions = GemDefinition.ParseFile(GetPath("gemDefinitions.csv")).ToDictionary(def => def.TypeId);
-            ItemDefinitions = ItemDefinition.ParseFile(GetPath("definitions.csv")).ToDictionary(def => def.TypeId);
-            QuestItemDefinitions = JsonSerializer.Deserialize<QuestItemDefinition[]>(File.ReadAllBytes(GetPath("questItemDefinitions.json")), jsonOptions).ToDictionary(def => def.Id);
-            Debug.WriteLine(sw.Elapsed);
-
-            static string GetPath(string fileName)
-            {
-                var filePath = Path.Combine(Amalur.DataDirectory.Path, fileName);
-                return File.Exists(filePath)
-                    ? filePath
-                    : throw new InvalidOperationException($"Cannot find {fileName}");
-            }
+            using var buffsStream = GetStream("buffs.json");
+            Buffs = JsonSerializer.DeserializeAsync<Buff[]>(buffsStream, jsonOptions).Result.ToDictionary(buff => buff.Id);
+            using var questItemsStream = GetStream("questItemDefinitions.json");
+            QuestItemDefinitions = JsonSerializer.DeserializeAsync<QuestItemDefinition[]>(questItemsStream, jsonOptions).Result.ToDictionary(def => def.Id);
+            using var gemsStream = GetStream("gemDefinitions.csv");
+            GemDefinitions = GemDefinition.ParseFile(gemsStream).ToDictionary(def => def.TypeId);
+            using var itemsStream = GetStream("definitions.csv");
+            ItemDefinitions = ItemDefinition.ParseFile(itemsStream).ToDictionary(def => def.TypeId);
         }
 
         public static IReadOnlyDictionary<uint, Buff> Buffs { get; }
@@ -50,10 +46,5 @@ namespace KoAR.Core
         [return: MaybeNull, NotNullIfNotNull("defaultValue")]
         internal static TValue GetOrDefault<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key, TValue? defaultValue = default)
             where TValue : class => dictionary.TryGetValue(key, out TValue res) ? res : defaultValue;
-
-        public static class DataDirectory
-        {
-            public static string Path { get; set; } = ".";
-        }
     }
 }
