@@ -17,44 +17,43 @@ namespace KoAR.SaveEditor.Constructs
         public static readonly DependencyProperty ContentTemplateSelectorProperty = DependencyProperty.RegisterAttached("ContentTemplateSelector", typeof(DataTemplateSelector), typeof(TaskbarItemInfoOverlay),
             new PropertyMetadata(TaskbarItemInfoOverlay.OnPropertyChanged));
 
-        public static object? GetContent(Window window)
+        public static object? GetContent(TaskbarItemInfo info)
         {
-            return window?.GetValue(TaskbarItemInfoOverlay.ContentProperty);
+            return info?.GetValue(TaskbarItemInfoOverlay.ContentProperty);
         }
 
-        public static DataTemplate? GetContentTemplate(Window window)
+        public static DataTemplate? GetContentTemplate(TaskbarItemInfo info)
         {
-            return (DataTemplate?)window?.GetValue(TaskbarItemInfoOverlay.ContentTemplateProperty);
+            return (DataTemplate?)info?.GetValue(TaskbarItemInfoOverlay.ContentTemplateProperty);
         }
 
-        public static DataTemplateSelector? GetContentTemplateSelector(Window window)
+        public static DataTemplateSelector? GetContentTemplateSelector(TaskbarItemInfo info)
         {
-            return (DataTemplateSelector?)window?.GetValue(TaskbarItemInfoOverlay.ContentTemplateSelectorProperty);
+            return (DataTemplateSelector?)info?.GetValue(TaskbarItemInfoOverlay.ContentTemplateSelectorProperty);
         }
 
-        public static void SetContent(Window window, object? value)
+        public static void SetContent(TaskbarItemInfo info, object? value)
         {
-            window?.SetValue(TaskbarItemInfoOverlay.ContentProperty, value);
+            info?.SetValue(TaskbarItemInfoOverlay.ContentProperty, value);
         }
 
-        public static void SetContentTemplate(Window window, DataTemplate? value)
+        public static void SetContentTemplate(TaskbarItemInfo info, DataTemplate? value)
         {
-            window?.SetValue(TaskbarItemInfoOverlay.ContentTemplateProperty, value);
+            info?.SetValue(TaskbarItemInfoOverlay.ContentTemplateProperty, value);
         }
 
-        public static void SetContentTemplateSelector(Window window, DataTemplateSelector? value)
+        public static void SetContentTemplateSelector(TaskbarItemInfo info, DataTemplateSelector? value)
         {
-            window?.SetValue(TaskbarItemInfoOverlay.ContentTemplateSelectorProperty, value);
+            info?.SetValue(TaskbarItemInfoOverlay.ContentTemplateSelectorProperty, value);
         }
 
         private static void OnPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (!(d is Window window))
+            if (!(d is TaskbarItemInfo info))
             {
                 return;
             }
-            TaskbarItemInfo info = window.TaskbarItemInfo ??= new TaskbarItemInfo();
-            object? content = TaskbarItemInfoOverlay.GetContent(window);
+            object? content = TaskbarItemInfoOverlay.GetContent(info);
             if (content == null)
             {
                 info.Overlay = null;
@@ -63,8 +62,8 @@ namespace KoAR.SaveEditor.Constructs
             UIElement element = new ContentPresenter
             {
                 Content = content,
-                ContentTemplate = TaskbarItemInfoOverlay.GetContentTemplate(window),
-                ContentTemplateSelector = TaskbarItemInfoOverlay.GetContentTemplateSelector(window)
+                ContentTemplate = TaskbarItemInfoOverlay.GetContentTemplate(info),
+                ContentTemplateSelector = TaskbarItemInfoOverlay.GetContentTemplateSelector(info)
             };
             element.Arrange(new Rect(0, 0, 16, 16));
             RenderTargetBitmap bitmap = new RenderTargetBitmap(16, 16, 96, 96, PixelFormats.Pbgra32);
