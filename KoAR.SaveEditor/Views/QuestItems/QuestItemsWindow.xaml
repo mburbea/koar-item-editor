@@ -50,7 +50,7 @@
                     </Style>
                 </TextBox.Style>
             </TextBox>
-            <Button Grid.Column="2" Content="Reset" Command="{Binding ResetFiltersCommand}" Margin="2" />
+            <Button Grid.Column="2" Content="Reset" Command="{Binding ResetFiltersCommand}" Margin="2" FocusVisualStyle="{x:Null}" />
             <ListView Grid.Row="1" Grid.ColumnSpan="3" Margin="2" ItemsSource="{Binding Source={StaticResource FilteredItems}}" SelectionMode="Single">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="{x:Type ListViewItem}">
