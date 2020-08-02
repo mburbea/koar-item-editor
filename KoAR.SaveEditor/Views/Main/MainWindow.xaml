@@ -58,10 +58,9 @@
         <TaskbarItemInfo constructs:TaskbarItemInfoOverlay.ContentTemplate="{StaticResource DownloadIndicatorTemplate}"
             constructs:TaskbarItemInfoOverlay.Content="{Binding UpdateService.Update, Source={StaticResource ViewModel}}">
             <TaskbarItemInfo.ThumbButtonInfos>
-                <ThumbButtonInfo Command="Open" ImageSource="{StaticResource Open}" Description="Open File..." 
+                <ThumbButtonInfo Command="Open" ImageSource="{StaticResource Open}" Description="Open File..." DismissWhenClicked="True"
                     CommandTarget="{Binding MainWindow, Source={x:Static Application.Current}}" />
-                <ThumbButtonInfo IsBackgroundVisible="False" IsInteractive="False" />
-                <ThumbButtonInfo Command="Help" ImageSource="{StaticResource Help}" Description="Help" 
+                <ThumbButtonInfo Command="Help" ImageSource="{StaticResource Help}" Description="Help" DismissWhenClicked="True"
                     CommandTarget="{Binding MainWindow, Source={x:Static Application.Current}}" />
             </TaskbarItemInfo.ThumbButtonInfos>
         </TaskbarItemInfo>
