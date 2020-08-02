@@ -65,9 +65,6 @@ namespace KoAR.Core
 
         public Container UpdateOffset(int offset, int delta) => Offset > offset ? new Container(_gameSave, Offset + delta, _pattern) : this;
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return this.GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
     }
 }

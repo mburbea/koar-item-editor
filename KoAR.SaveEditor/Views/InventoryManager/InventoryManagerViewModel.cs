@@ -4,6 +4,7 @@ using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
 using KoAR.SaveEditor.Views.ChangeOrAddItem;
 using KoAR.SaveEditor.Views.Main;
+using KoAR.SaveEditor.Views.QuestItems;
 
 namespace KoAR.SaveEditor.Views.InventoryManager
 {
@@ -17,6 +18,7 @@ namespace KoAR.SaveEditor.Views.InventoryManager
             this.ChangeDefinitionCommand = new DelegateCommand<ItemModel>(this.ChangeDefinition);
             this.DeleteItemBuffCommand = new DelegateCommand<Buff>(this.DeleteItemBuff, this.CanDeleteItemBuff);
             this.DeletePlayerBuffCommand = new DelegateCommand<Buff>(this.DeletePlayerBuff, this.CanDeletePlayerBuff);
+            this.OpenQuestItemsWindowCommand = new DelegateCommand(this.OpenQuestItemsWindow);
         }
 
         public DelegateCommand<uint> AddItemBuffCommand { get; }
@@ -37,7 +39,7 @@ namespace KoAR.SaveEditor.Views.InventoryManager
 
         public bool? AllItemsUnsellable
         {
-            get => this.GetSelectAllCheckBoxValue(item => item.IsUnsellable);
+            get => this.FilteredItems.GetSelectAllCheckBoxValue(item => item.IsUnsellable);
             set
             {
                 foreach (ItemModel item in this.FilteredItems)
@@ -49,7 +51,7 @@ namespace KoAR.SaveEditor.Views.InventoryManager
 
         public bool? AllItemsUnstashable
         {
-            get => this.GetSelectAllCheckBoxValue(item => item.IsUnstashable);
+            get => this.FilteredItems.GetSelectAllCheckBoxValue(item => item.IsUnstashable);
             set
             {
                 foreach (ItemModel item in this.FilteredItems)
@@ -79,6 +81,10 @@ namespace KoAR.SaveEditor.Views.InventoryManager
                 this.MainWindowViewModel.RegisterUnsavedChange();
             }
         }
+
+        public DelegateCommand OpenQuestItemsWindowCommand { get; }
+
+        public int QuestItemCount => this.GameSave.QuestItems.Count;
 
         protected override void OnFilterChange()
         {
@@ -136,5 +142,16 @@ namespace KoAR.SaveEditor.Views.InventoryManager
         private void DeleteItemBuff(Buff buff) => this.SelectedItem?.RemoveItemBuff(buff);
 
         private void DeletePlayerBuff(Buff buff) => this.SelectedItem?.RemovePlayerBuff(buff);
+
+        private void OpenQuestItemsWindow()
+        {
+            using QuestItemsWindowViewModel viewModel = new QuestItemsWindowViewModel(this.MainWindowViewModel);
+            QuestItemsWindow window = new QuestItemsWindow
+            {
+                DataContext = viewModel,
+                Owner = Application.Current.MainWindow,
+            };
+            window.ShowDialog();
+        }
     }
 }
