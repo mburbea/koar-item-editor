@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -16,7 +15,6 @@ namespace KoAR.Core
     {
         static Amalur()
         {
-            var sw = Stopwatch.StartNew();
             Thread.CurrentThread.CurrentCulture = Thread.CurrentThread.CurrentUICulture =
                 CultureInfo.DefaultThreadCurrentCulture = CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
             var jsonOptions = new JsonSerializerOptions
@@ -24,25 +22,17 @@ namespace KoAR.Core
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 Converters = { new JsonStringEnumConverter() }
             };
-            using (var buffsStream = GetStream("buffs.json"))
-            {
-                using var reader = new StreamReader(buffsStream);
-                Buffs = JsonSerializer.Deserialize<Buff[]>(reader.ReadToEnd(), jsonOptions).ToDictionary(buff => buff.Id);
-            }
-            using (var gemsStream = GetStream("gemDefinitions.csv"))
-            {
-                GemDefinitions = GemDefinition.ParseFile(gemsStream).ToDictionary(def => def.TypeId);
-            }
-            using (var itemsStream = GetStream("definitions.csv"))
-            {
-                ItemDefinitions = ItemDefinition.ParseFile(itemsStream).ToDictionary(def => def.TypeId);
-            }
-            using (var questItemsStream = GetStream("questItemDefinitions.json"))
-            {
-                using var reader = new StreamReader(questItemsStream);
-                QuestItemDefinitions = JsonSerializer.Deserialize<QuestItemDefinition[]>(reader.ReadToEnd(), jsonOptions).ToDictionary(def => def.Id);
-            }
-            Debug.WriteLine(sw.Elapsed);
+            using var buffsStream = GetStream("buffs.json");
+            Buffs = JsonSerializer.DeserializeAsync<Buff[]>(buffsStream, jsonOptions).Result.ToDictionary(buff => buff.Id);
+
+            using var questItemsStream = GetStream("questItemDefinitions.json");
+            QuestItemDefinitions = JsonSerializer.DeserializeAsync<QuestItemDefinition[]>(questItemsStream, jsonOptions).Result.ToDictionary(def => def.Id);
+
+            using var gemsStream = GetStream("gemDefinitions.csv");
+            GemDefinitions = GemDefinition.ParseFile(gemsStream).ToDictionary(def => def.TypeId);
+
+            using var itemsStream = GetStream("definitions.csv");
+            ItemDefinitions = ItemDefinition.ParseFile(itemsStream).ToDictionary(def => def.TypeId);
 
             static Stream GetStream(string name) => Assembly.GetExecutingAssembly().GetManifestResourceStream($"{typeof(Amalur).Namespace}.Data.{name}");
         }
