@@ -92,7 +92,6 @@ namespace KoAR.SaveEditor.Views.Updates
                     cancellationToken.ThrowIfCancellationRequested();
                     int count = await stream.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false);
                     cancellationToken.ThrowIfCancellationRequested();
-                    await Task.Delay(1).ConfigureAwait(false);
                     await fileStream.WriteAsync(buffer, 0, count).ConfigureAwait(false);
                     bytesTransferred += count;
                     bytesPerInterval += count;

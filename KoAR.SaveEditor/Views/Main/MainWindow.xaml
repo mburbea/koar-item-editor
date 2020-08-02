@@ -35,7 +35,7 @@
     </Window.DataContext>
     <Window.Style>
         <Style TargetType="{x:Type Window}" BasedOn="{StaticResource {x:Type Window}}">
-            <Style.Triggers>                
+            <Style.Triggers>
                 <DataTrigger Binding="{Binding GameSave, Converter={StaticResource IsNullConverter}}" Value="False">
                     <Setter Property="Title" Value="{Binding GameSave.FileName, StringFormat='{}{0} - KoAR Save Editor'}" />
                 </DataTrigger>
@@ -71,11 +71,11 @@
             <StackPanel Margin="4,1" Orientation="Horizontal">
                 <StackPanel.Resources>
                     <ScaleTransform x:Key="ScaleTransform" ScaleX="0.85" ScaleY="0.85" po:Freeze="True" />
-                    <Style TargetType="{x:Type Button}">
+                    <Style TargetType="{x:Type Button}" x:Key="ToolButtonStyle">
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type Button}">
-                                    <Border x:Name="BD" BorderBrush="Transparent" BorderThickness="1" CornerRadius="2">
+                                    <Border x:Name="BD" BorderBrush="Transparent" Background="Transparent" BorderThickness="1" CornerRadius="2">
                                         <Image Width="18" Source="{TemplateBinding Tag}" />
                                     </Border>
                                     <ControlTemplate.Triggers>
@@ -102,8 +102,8 @@
                     <BitmapImage UriSource="/KoAR.SaveEditor;component/Resources/Help.png" x:Key="Help" po:Freeze="True" />
                     <BitmapImage UriSource="/KoAR.SaveEditor;component/Resources/Zoom.png" x:Key="Zoom" po:Freeze="True" />
                 </StackPanel.Resources>
-                <Button ToolTip="Open File..." Command="Open" Tag="{StaticResource Open}" />
-                <Button ToolTip="Save" Command="Save" Tag="{StaticResource Save}" />
+                <Button ToolTip="Open File..." Command="Open" Style="{StaticResource ToolButtonStyle}" Tag="{StaticResource Open}" />
+                <Button ToolTip="Save" Command="Save" Style="{StaticResource ToolButtonStyle}" Tag="{StaticResource Save}" />
                 <ToggleButton x:Name="OpenZoomPopup" FocusVisualStyle="{x:Null}" ToolTip="Zoom" Margin="2" VerticalAlignment="Center">
                     <ToggleButton.Style>
                         <Style TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource {x:Type ToggleButton}}">
@@ -132,7 +132,84 @@
                         </Style>
                     </ToggleButton.Style>
                 </ToggleButton>
-                <Button ToolTip="Help" Command="Help" Tag="{StaticResource Help}" />
+                <Button>
+                    <Button.Resources>
+                        <DataTemplate x:Key="LoadingTemplate" DataType="{x:Type s:Boolean}">
+                            <constructs:LoadingIndicator  Width="18" Height="18" IsLoading="{Binding}" />
+                        </DataTemplate>
+                    </Button.Resources>
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding UpdateService.Update}" Value="{x:Null}">
+                                    <Setter Property="Content" Value="{Binding IsCheckingForUpdate}" />
+                                    <Setter Property="ContentTemplate" Value="{StaticResource LoadingTemplate}" />
+                                    <Setter Property="Command" Value="{Binding CheckForUpdateCommand}" />
+                                    <Setter Property="ToolTip" Value="Check For Update" />
+                                </DataTrigger>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding UpdateService.Update}" Value="{x:Null}" />
+                                        <Condition Binding="{Binding IsCheckingForUpdate}" Value="True" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="ToolTip" Value="Checking For Update..." />
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <Border x:Name="BD" Background="Transparent" BorderBrush="Transparent" BorderThickness="1" CornerRadius="2">
+                                            <Viewbox Height="18" Width="18" StretchDirection="Both">
+                                                <ContentPresenter x:Name="PART_ContentPresenter" />
+                                            </Viewbox>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="ContentTemplate" Value="{StaticResource DownloadIndicatorTemplate}">
+                                                <Setter TargetName="PART_ContentPresenter" Property="Opacity" Value="0.7" />
+                                            </Trigger>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="BD" Property="BorderBrush" Value="LightGray" />
+                                            </Trigger>
+                                            <Trigger Property="IsPressed" Value="True">
+                                                <Setter Property="RenderTransform">
+                                                    <Setter.Value>
+                                                        <ScaleTransform ScaleX="0.85" ScaleY="0.85" po:Freeze="True" />
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
+                            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                            <Setter Property="Margin" Value="2" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                            <Setter Property="ContentTemplate" Value="{StaticResource DownloadIndicatorTemplate}" />
+                            <Setter Property="Content" Value="True" />
+                            <Setter Property="ToolTip" Value="Update Available" />
+                            <Setter Property="Command" Value="{Binding OpenUpdateWindowCommand}" />
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <Button ToolTip="Help" Command="Help" Style="{StaticResource ToolButtonStyle}"  Tag="{StaticResource Help}" />
                 <Popup x:Name="ZoomPopup" PlacementTarget="{Binding ElementName=OpenZoomPopup}" PopupAnimation="Fade" StaysOpen="False" AllowsTransparency="True" 
                     IsOpen="{Binding IsChecked, ElementName=OpenZoomPopup}">
                     <Popup.Resources>
