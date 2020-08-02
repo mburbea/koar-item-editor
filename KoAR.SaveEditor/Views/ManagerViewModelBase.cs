@@ -7,27 +7,27 @@ using KoAR.SaveEditor.Views.Main;
 
 namespace KoAR.SaveEditor.Views
 {
-    public abstract class ManagerViewModelBase<TItem, TItemModel> : NotifierBase, IDisposable
-        where TItem : IItem
-        where TItemModel : ItemModelBase<TItem>
+    public abstract class ManagerViewModelBase<TItem> : NotifierBase, IDisposable
+        where TItem : ItemModelBase
     {
-        private readonly NotifyingCollection<TItemModel> _items;
-        private readonly Func<TItem, TItemModel> _modelProjection;
-        private IReadOnlyList<TItemModel> _filteredItems;
-        private TItemModel? _selectedItem;
+        private readonly NotifyingCollection<TItem> _items;
+        private readonly Func<GameSave, IEnumerable<TItem>> _itemsProjection;
+        private IReadOnlyList<TItem> _filteredItems;
+        private TItem? _selectedItem;
 
-        protected ManagerViewModelBase(MainWindowViewModel mainWindowViewModel, Func<TItem, TItemModel> modelProjection)
+        protected ManagerViewModelBase(MainWindowViewModel mainWindowViewModel, ManagementMode managementMode, Func<GameSave, IEnumerable<TItem>> itemsProjection)
         {
-            this._modelProjection = modelProjection;
-            this._filteredItems = this._items = new NotifyingCollection<TItemModel>();
             this.MainWindowViewModel = mainWindowViewModel;
+            this.ManagementMode = managementMode;
+            this._itemsProjection = itemsProjection;
+            this._filteredItems = this._items = new NotifyingCollection<TItem>();
             (this.ItemFilters = new ItemFilters()).FilterChange += this.ItemFilters_FilterChange;
             this.RepopulateItems();
         }
 
         public bool? AllItemsStolen => this.GetSelectAllCheckBoxValue(item => item.IsStolen);
 
-        public IReadOnlyList<TItemModel> FilteredItems
+        public IReadOnlyList<TItem> FilteredItems
         {
             get => this._filteredItems;
             private set => this.SetValue(ref this._filteredItems, value);
@@ -37,39 +37,39 @@ namespace KoAR.SaveEditor.Views
 
         public ItemFilters ItemFilters { get; }
 
-        public IReadOnlyList<TItemModel> Items => this._items;
+        public IReadOnlyList<TItem> Items => this._items;
 
-        public TItemModel? SelectedItem
+        public ManagementMode ManagementMode { get; }
+
+        public TItem? SelectedItem
         {
             get => this._selectedItem;
             set => this.SetValue(ref this._selectedItem, value);
         }
 
-        protected abstract IReadOnlyCollection<TItem> GameItems { get; }
-
         protected MainWindowViewModel MainWindowViewModel { get; }
 
         public virtual void Dispose()
         {
-            foreach (TItemModel item in this._items)
+            foreach (TItem item in this._items)
             {
                 this.DetachEvents(item);
+                item.Dispose();
             }
             this.ItemFilters.FilterChange -= this.ItemFilters_FilterChange;
         }
 
-        protected void AddItem(TItemModel item)
+        protected void AddItem(TItem item)
         {
             this.AttachEvents(item);
             this._items.Add(item);
         }
 
-        protected virtual void AttachEvents(TItemModel item)
-        {
-            PropertyChangedEventManager.AddHandler(item, this.Item_PropertyChanged, string.Empty);
-        }
+        protected virtual void AttachEvents(TItem item) => PropertyChangedEventManager.AddHandler(item, this.Item_PropertyChanged, string.Empty);
 
-        protected bool? GetSelectAllCheckBoxValue(Func<TItemModel, bool> projection)
+        protected virtual void DetachEvents(TItem item) => PropertyChangedEventManager.RemoveHandler(item, this.Item_PropertyChanged, string.Empty);
+
+        protected bool? GetSelectAllCheckBoxValue(Func<TItem, bool> projection)
         {
             if (this.FilteredItems.Count == 0)
             {
@@ -86,11 +86,6 @@ namespace KoAR.SaveEditor.Views
             return first;
         }
 
-        protected virtual void DetachEvents(TItemModel item)
-        {
-            PropertyChangedEventManager.RemoveHandler(item, this.Item_PropertyChanged, string.Empty);
-        }
-
         protected virtual void OnFilterChange()
         {
             this.FilteredItems = this.ItemFilters.GetFilteredItems(this.Items);
@@ -98,7 +93,7 @@ namespace KoAR.SaveEditor.Views
             this.OnPropertyChanged(nameof(this.AllItemsStolen));
         }
 
-        protected virtual void OnItemPropertyChanged(TItemModel item, string propertyName)
+        protected virtual void OnItemPropertyChanged(TItem item, string propertyName)
         {
             this.MainWindowViewModel.RegisterUnsavedChange();
             if (propertyName == nameof(ItemModelBase.IsStolen))
@@ -107,17 +102,7 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        protected void RemoveItem(TItemModel item)
-        {
-            this.RemoveItemAt(this._items.IndexOf(item));
-        }
-
-        protected void RemoveItemAt(int index)
-        {
-            using TItemModel item = this._items[index];
-            this.DetachEvents(item);
-            this._items.RemoveAt(index);
-        }
+        protected void RemoveItem(TItem item) => this.RemoveItemAt(this._items.IndexOf(item));
 
         protected void RepopulateItems()
         {
@@ -127,16 +112,23 @@ namespace KoAR.SaveEditor.Views
                 {
                     this.RemoveItemAt(index);
                 }
-                foreach (TItem item in this.GameItems)
+                foreach (TItem item in this._itemsProjection(this.GameSave))
                 {
-                    this.AddItem(this._modelProjection(item));
+                    this.AddItem(item);
                 }
             }
             this.OnFilterChange();
         }
 
-        private void Item_PropertyChanged(object sender, PropertyChangedEventArgs e) => this.OnItemPropertyChanged((TItemModel)sender, e.PropertyName);
+        private void Item_PropertyChanged(object sender, PropertyChangedEventArgs e) => this.OnItemPropertyChanged((TItem)sender, e.PropertyName);
 
         private void ItemFilters_FilterChange(object sender, EventArgs e) => this.OnFilterChange();
+
+        private void RemoveItemAt(int index)
+        {
+            using TItem item = this._items[index];
+            this.DetachEvents(item);
+            this._items.RemoveAt(index);
+        }
     }
 }

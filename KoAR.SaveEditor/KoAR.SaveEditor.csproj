@@ -192,8 +192,10 @@
     <None Remove="Resources\Utility_Socket.png" />
     <None Remove="Resources\Weapon_Socket.jpg" />
     <None Remove="Resources\Zoom.png" />
+    <None Remove="Views\Updates\update.ps1" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Markdown.Xaml" Version="1.0.0" />
     <PackageReference Include="WPFTaskDialog" Version="1.7.1" />
   </ItemGroup>
   <ItemGroup>
@@ -338,6 +340,7 @@
     <Resource Include="Resources\categories\Torso_Finesse.png" />
     <Resource Include="Resources\Unknown.png" />
     <Resource Include="Resources\Zoom.png" />
+    <Resource Include="Views\Updates\update.ps1" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -364,10 +367,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="definitions.csv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="gemDefinitions.csv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

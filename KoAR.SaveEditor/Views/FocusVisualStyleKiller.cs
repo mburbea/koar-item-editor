@@ -5,8 +5,8 @@ namespace KoAR.SaveEditor.Views
 {
     public static class FocusVisualStyleKiller
     {
-        public static readonly DependencyProperty KillProperty = DependencyProperty.RegisterAttached("Kill", typeof(bool?), typeof(FocusVisualStyleKiller),
-            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.Inherits, FocusVisualStyleKiller.KillProperty_ValueChanged));
+        public static readonly DependencyProperty KillProperty = DependencyProperty.RegisterAttached("Kill", typeof(bool), typeof(FocusVisualStyleKiller),
+            new FrameworkPropertyMetadata(BooleanBoxes.False, FrameworkPropertyMetadataOptions.Inherits, FocusVisualStyleKiller.KillProperty_ValueChanged));
 
         public static bool GetKill(FrameworkElement element) => element != null && (bool)element.GetValue(FocusVisualStyleKiller.KillProperty);
 
@@ -14,7 +14,7 @@ namespace KoAR.SaveEditor.Views
 
         private static void KillProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is FrameworkElement element && e.NewValue is true)
+            if (d is FrameworkElement element && (bool)e.NewValue)
             {
                 element.FocusVisualStyle = null;
             }

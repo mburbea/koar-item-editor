@@ -26,9 +26,9 @@ namespace KoAR.Core
 
             public IList<Buff> List { get; } = new List<Buff>();
 
-            public Buff? Prefix => Amalur.BuffMap.GetOrDefault(MemoryUtilities.Read<uint>(Bytes, Bytes.Length - 9));
+            public Buff? Prefix => Amalur.Buffs.GetOrDefault(MemoryUtilities.Read<uint>(Bytes, Bytes.Length - 9));
 
-            public Buff? Suffix => Amalur.BuffMap.GetOrDefault(MemoryUtilities.Read<uint>(Bytes, Bytes.Length - 5));
+            public Buff? Suffix => Amalur.Buffs.GetOrDefault(MemoryUtilities.Read<uint>(Bytes, Bytes.Length - 5));
         }
     }
 }

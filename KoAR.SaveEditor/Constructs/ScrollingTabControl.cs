@@ -48,12 +48,10 @@ namespace KoAR.SaveEditor.Constructs
                 this._scrollViewer.Loaded += this.ScrollViewer_Loaded;
                 this._scrollViewer.ScrollChanged += this.ScrollViewer_ScrollChanged;
             }
-            if (this._window != null)
+            if (this._window == null && (this._window = Window.GetWindow(this)) != null)
             {
-                return;
+                this._window.PreviewKeyDown += this.Window_PreviewKeyDown;
             }
-            this._window = Window.GetWindow(this);
-            this._window.PreviewKeyDown += this.Window_PreviewKeyDown;
         }
 
         protected override void OnSelectionChanged(SelectionChangedEventArgs e)

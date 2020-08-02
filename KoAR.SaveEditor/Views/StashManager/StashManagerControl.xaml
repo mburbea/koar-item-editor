@@ -5,7 +5,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views"
     xmlns:local="clr-namespace:KoAR.SaveEditor.Views.StashManager"
-    xmlns:core="clr-namespace:KoAR.Core;assembly=KoAR.Core"
     mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type local:StashManagerViewModel}}">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -109,15 +108,14 @@
                                 <RowDefinition />
                             </Grid.RowDefinitions>
                             <TextBlock Text="Prefix:" Margin="2" VerticalAlignment="Center" TextAlignment="Right"/>
-                            <views:BuffSelector Grid.Column="1" Filter="Prefix" Buffs="{x:Static core:Amalur.Buffs}" 
+                            <views:BuffSelector Grid.Column="1" Filter="Prefix"
                                 MinWidth="100" Margin="2" IsEnabled="False" SelectedBuff="{Binding SelectedItem.Prefix}" />
                             <TextBlock Grid.Row="1" Text="Suffix:" Margin="2" VerticalAlignment="Center" TextAlignment="Right"/>
-                            <views:BuffSelector Grid.Row="1" Grid.Column="1" Filter="Suffix" Buffs="{x:Static core:Amalur.Buffs}" 
+                            <views:BuffSelector Grid.Row="1" Grid.Column="1" Filter="Suffix"
                                 MinWidth="100" Margin="2" IsEnabled="False" SelectedBuff="{Binding SelectedItem.Suffix}" />
                         </Grid>
                     </GroupBox>
-                    <views:BuffCollectionManager Margin="4,4,4,0" Header="{Binding SelectedItem}" BuffsFilter="Item"
-                        Buffs="{x:Static core:Amalur.Buffs}" Collection="{Binding SelectedItem.ItemBuffs}" 
+                    <views:BuffCollectionManager Margin="4,4,4,0" Header="{Binding SelectedItem}" BuffsFilter="Item" Collection="{Binding SelectedItem.ItemBuffs}" 
                         UnsupportedFormat="{Binding SelectedItem.UnsupportedFormat}">
                         <views:BuffCollectionManager.HeaderTemplate>
                             <DataTemplate DataType="{x:Type views:ItemModelBase}">
@@ -136,8 +134,7 @@
                             </DataTemplate>
                         </views:BuffCollectionManager.HeaderTemplate>
                     </views:BuffCollectionManager>
-                    <views:BuffCollectionManager Margin="4,4,4,0" Header="{Binding SelectedItem}" BuffsFilter="Player" 
-                        Buffs="{x:Static core:Amalur.Buffs}" Collection="{Binding SelectedItem.PlayerBuffs}">
+                    <views:BuffCollectionManager Margin="4,4,4,0" Header="{Binding SelectedItem}" BuffsFilter="Player" Collection="{Binding SelectedItem.PlayerBuffs}">
                         <views:BuffCollectionManager.HeaderTemplate>
                             <DataTemplate DataType="{x:Type views:ItemModelBase}">
                                 <TextBlock>

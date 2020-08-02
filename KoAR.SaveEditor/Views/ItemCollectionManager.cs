@@ -219,7 +219,7 @@ namespace KoAR.SaveEditor.Views
         private static void ItemsProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             ItemCollectionManager itemsView = (ItemCollectionManager)d;
-            itemsView.Mode = e.NewValue is IEnumerable<ItemModelBase<StashItem>> ? ManagementMode.StashItem : ManagementMode.Item;
+            itemsView.Mode = e.NewValue is IEnumerable<ItemModelBase<StashItem>> ? ManagementMode.Stash : default;
             itemsView.CollectionView = e.NewValue == null ? null : new ListCollectionView((IList)e.NewValue)
             {
                 SortDescriptions =
@@ -245,12 +245,6 @@ namespace KoAR.SaveEditor.Views
             {
                 WeakEventManager<UIElement, RoutedEventArgs>.AddHandler(element, nameof(UIElement.PreviewMouseLeftButtonDown), ItemCollectionManager.Element_PreviewMouseLeftButtonDown);
             }
-        }
-
-        public enum ManagementMode
-        {
-            Item = 0,
-            StashItem = 1
         }
     }
 }

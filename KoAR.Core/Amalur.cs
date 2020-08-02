@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
@@ -12,52 +13,47 @@ namespace KoAR.Core
 {
     public static class Amalur
     {
-        internal static char[] Separator { get; } = { ',' };
-        public static Dictionary<uint, Buff> BuffMap { get; } = new Dictionary<uint, Buff>();
-        public static List<Buff> Buffs { get; } = new List<Buff>();
-        public static Dictionary<uint, GemDefinition> GemDefinitions { get; } = new Dictionary<uint, GemDefinition>();
-        public static Dictionary<uint, ItemDefinition> ItemDefinitions { get; } = new Dictionary<uint, ItemDefinition>();
-        public static Dictionary<uint, QuestItemDefinition> QuestItemDefinitions { get; } = new Dictionary<uint, QuestItemDefinition>();
-
-        public static Buff GetBuff(uint buffId) => BuffMap.GetOrDefault(buffId, new Buff { Id = buffId, Name = "Unknown" });
-
-        public static void Initialize(string? path = null)
+        static Amalur()
         {
             var sw = Stopwatch.StartNew();
             Thread.CurrentThread.CurrentCulture = Thread.CurrentThread.CurrentUICulture =
                 CultureInfo.DefaultThreadCurrentCulture = CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
-            path ??= Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
-            var serializationOptions = new JsonSerializerOptions
+            var jsonOptions = new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 Converters = { new JsonStringEnumConverter() }
             };
-            Buffs.AddRange(JsonSerializer.Deserialize<Buff[]>(File.ReadAllBytes(GetPath("buffs.json")), serializationOptions));
-            BuffMap.AddRange(Buffs, buff => buff.Id);
-            GemDefinitions.AddRange(GemDefinition.ParseFile(GetPath("gemDefinitions.csv")), def => def.TypeId);
-            ItemDefinitions.AddRange(ItemDefinition.ParseFile(GetPath("definitions.csv")), def => def.TypeId);
-            QuestItemDefinitions.AddRange(JsonSerializer.Deserialize<QuestItemDefinition[]>(File.ReadAllBytes(GetPath("questItemDefinitions.json")), serializationOptions), def => def.Id);
+            Buffs = JsonSerializer.Deserialize<Buff[]>(File.ReadAllBytes(GetPath("buffs.json")), jsonOptions).ToDictionary(buff => buff.Id);
+            GemDefinitions = GemDefinition.ParseFile(GetPath("gemDefinitions.csv")).ToDictionary(def => def.TypeId);
+            ItemDefinitions = ItemDefinition.ParseFile(GetPath("definitions.csv")).ToDictionary(def => def.TypeId);
+            QuestItemDefinitions = JsonSerializer.Deserialize<QuestItemDefinition[]>(File.ReadAllBytes(GetPath("questItemDefinitions.json")), jsonOptions).ToDictionary(def => def.Id);
             Debug.WriteLine(sw.Elapsed);
 
-            string GetPath(string fileName)
+            static string GetPath(string fileName)
             {
-                var filePath = Path.Combine(path, fileName);
+                var filePath = Path.Combine(Amalur.DataDirectory.Path, fileName);
                 return File.Exists(filePath)
                     ? filePath
                     : throw new InvalidOperationException($"Cannot find {fileName}");
             }
         }
 
+        public static IReadOnlyDictionary<uint, Buff> Buffs { get; }
+        public static IReadOnlyDictionary<uint, GemDefinition> GemDefinitions { get; }
+        public static IReadOnlyDictionary<uint, ItemDefinition> ItemDefinitions { get; }
+        public static IReadOnlyDictionary<uint, QuestItemDefinition> QuestItemDefinitions { get; }
+
+        internal static char[] Separator { get; } = { ',' };
+
+        public static Buff GetBuff(uint buffId) => Buffs.GetOrDefault(buffId, new Buff { Id = buffId, Name = "Unknown" });
+
         [return: MaybeNull, NotNullIfNotNull("defaultValue")]
-        internal static TValue GetOrDefault<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key, TValue? defaultValue = default)
+        internal static TValue GetOrDefault<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key, TValue? defaultValue = default)
             where TValue : class => dictionary.TryGetValue(key, out TValue res) ? res : defaultValue;
 
-        private static void AddRange<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, IEnumerable<TValue> values, Func<TValue, TKey> getKey)
+        public static class DataDirectory
         {
-            foreach (var value in values)
-            {
-                dictionary.Add(getKey(value), value);
-            }
+            public static string Path { get; set; } = ".";
         }
     }
 }

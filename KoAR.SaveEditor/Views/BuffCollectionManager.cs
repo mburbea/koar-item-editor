@@ -13,8 +13,6 @@ namespace KoAR.SaveEditor.Views
 
         public static readonly DependencyProperty BuffsFilterProperty = DependencyProperty.Register(nameof(BuffCollectionManager.BuffsFilter), typeof(BuffsFilter), typeof(BuffCollectionManager));
 
-        public static readonly DependencyProperty BuffsProperty = DependencyProperty.Register(nameof(BuffCollectionManager.Buffs), typeof(IReadOnlyList<Buff>), typeof(BuffCollectionManager));
-
         public static readonly DependencyProperty CollectionProperty = DependencyProperty.Register(nameof(BuffCollectionManager.Collection), typeof(IReadOnlyCollection<Buff>), typeof(BuffCollectionManager));
 
         public static readonly DependencyProperty DeleteBuffCommandProperty = DependencyProperty.Register(nameof(BuffCollectionManager.DeleteBuffCommand), typeof(ICommand), typeof(BuffCollectionManager));
@@ -37,12 +35,6 @@ namespace KoAR.SaveEditor.Views
         {
             get => (ICommand?)this.GetValue(BuffCollectionManager.AddBuffCommandProperty);
             set => this.SetValue(BuffCollectionManager.AddBuffCommandProperty, value);
-        }
-
-        public IReadOnlyList<Buff>? Buffs
-        {
-            get => (IReadOnlyList<Buff>?)this.GetValue(BuffCollectionManager.BuffsProperty);
-            set => this.SetValue(BuffCollectionManager.BuffsProperty, value);
         }
 
         public BuffsFilter BuffsFilter

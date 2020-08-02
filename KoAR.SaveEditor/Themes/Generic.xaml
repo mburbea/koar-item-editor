@@ -2,7 +2,6 @@
     <ResourceDictionary.MergedDictionaries>
         <!-- Views -->
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.BuffCollectionManager.xaml" />
-        <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.BuffControl.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.BuffSelector.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.BuffDescriptionIcon.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.BuffIcon.xaml" />
@@ -16,6 +15,8 @@
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.ItemCollectionManager.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.ZoomScaler.xaml" />
         <!-- Constructs -->
+        <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.LoadingIndicator.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.ScrollingTabControl.xaml" />
+        <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.StatefulProgressBar.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 using System.Windows;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
@@ -7,10 +7,10 @@ using KoAR.SaveEditor.Views.Main;
 
 namespace KoAR.SaveEditor.Views.StashManager
 {
-    public sealed class StashManagerViewModel : ManagerViewModelBase<StashItem, StashItemModel>
+    public sealed class StashManagerViewModel : ManagerViewModelBase<StashItemModel>
     {
         public StashManagerViewModel(MainWindowViewModel mainWindowViewModel)
-            : base(mainWindowViewModel, stashItem => new StashItemModel(stashItem))
+            : base(mainWindowViewModel, ManagementMode.Stash, gameSave => gameSave.Stash!.Items.Select(item => new StashItemModel(item)))
         {
             this.AddItemCommand = new DelegateCommand(this.AddItem);
             this.DeleteItemCommand = new DelegateCommand<StashItemModel>(this.DeleteItem);
@@ -21,8 +21,6 @@ namespace KoAR.SaveEditor.Views.StashManager
         public DelegateCommand<StashItemModel> DeleteItemCommand { get; }
 
         public Stash Stash => this.GameSave.Stash!;
-
-        protected override IReadOnlyCollection<StashItem> GameItems => this.Stash.Items;
 
         private void AddItem()
         {
@@ -41,9 +39,9 @@ namespace KoAR.SaveEditor.Views.StashManager
             this.MainWindowViewModel.RegisterUnsavedChange();
         }
 
-        private void DeleteItem(StashItemModel model)
+        private void DeleteItem(StashItemModel item)
         {
-            this.RemoveItem(model);
+            this.RemoveItem(item);
             this.MainWindowViewModel.RegisterUnsavedChange();
         }
     }

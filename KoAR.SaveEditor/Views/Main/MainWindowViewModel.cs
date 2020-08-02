@@ -1,11 +1,14 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Threading;
 using System.Windows;
+using System.Windows.Threading;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
 using KoAR.SaveEditor.Views.InventoryManager;
 using KoAR.SaveEditor.Views.StashManager;
+using KoAR.SaveEditor.Views.Updates;
 using Microsoft.Win32;
 using TaskDialogInterop;
 
@@ -13,18 +16,23 @@ namespace KoAR.SaveEditor.Views.Main
 {
     public sealed class MainWindowViewModel : NotifierBase
     {
+        private readonly Dispatcher _dispatcher = Dispatcher.CurrentDispatcher;
         private bool _hasUnsavedChanges;
         private InventoryManagerViewModel? _inventoryManager;
+        private bool _isCheckingForUpdate;
         private ManagementMode _mode;
         private StashManagerViewModel? _stashManager;
 
         public MainWindowViewModel()
         {
+            this.CheckForUpdateCommand = new DelegateCommand(this.CheckForUpdate, () => !this._isCheckingForUpdate);
             if (!(bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(Window)).DefaultValue)
             {
                 Application.Current.Activated += this.Application_Activated;
             }
         }
+
+        public DelegateCommand CheckForUpdateCommand { get; }
 
         public GameSave? GameSave
         {
@@ -50,11 +58,19 @@ namespace KoAR.SaveEditor.Views.Main
             }
         }
 
+        public bool IsCheckingForUpdate
+        {
+            get => this._isCheckingForUpdate;
+            private set => this.SetValue(ref this._isCheckingForUpdate, value);
+        }
+
         public ManagementMode Mode
         {
             get => this._mode;
             set => this.SetValue(ref this._mode, value);
         }
+
+        public DelegateCommand OpenUpdateWindowCommand { get; } = new DelegateCommand(() => MainWindowViewModel.OpenUpdateWindow());
 
         public StashManagerViewModel? StashManager
         {
@@ -67,6 +83,8 @@ namespace KoAR.SaveEditor.Views.Main
                 }
             }
         }
+
+        public UpdateService UpdateService { get; } = (UpdateService)Application.Current.TryFindResource(typeof(UpdateService));
 
         public void OpenFile()
         {
@@ -85,18 +103,15 @@ namespace KoAR.SaveEditor.Views.Main
             {
                 return;
             }
-            this.HasUnsavedChanges = false;
             this.GameSave = new GameSave(dialog.FileName);
             this.InventoryManager = new InventoryManagerViewModel(this);
-            this.StashManager = this.GameSave.Stash == null ? default : new StashManagerViewModel(this);
-            this.OnPropertyChanged(nameof(this.GameSave));
-            this.Mode = default;
+            this.StashManager = this.GameSave.Stash != null ? new StashManagerViewModel(this) : default;
+            this.OnPropertyChanged(nameof(this.GameSave)); // Notifying the change is explicitly done after the view models are set.
+            this.HasUnsavedChanges = false;
+            this.Mode = ManagementMode.Inventory;
         }
 
-        public void RegisterUnsavedChange()
-        {
-            this.HasUnsavedChanges = true;
-        }
+        public void RegisterUnsavedChange() => this.HasUnsavedChanges = true;
 
         public void SaveFile()
         {
@@ -109,12 +124,30 @@ namespace KoAR.SaveEditor.Views.Main
             MessageBox.Show(Application.Current.MainWindow, $"Save successful! Original save backed up as {this.GameSave.FileName}.bak.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private void Application_Activated(object sender, EventArgs e)
+        private static bool OpenUpdateWindow()
+        {
+            UpdateWindow window = new UpdateWindow { Owner = Application.Current.MainWindow };
+            return window.ShowDialog().GetValueOrDefault();
+        }
+
+        private async void Application_Activated(object sender, EventArgs e)
         {
             Application application = (Application)sender;
             application.Activated -= this.Application_Activated;
             application.MainWindow.Closing += this.MainWindow_Closing;
-            application.Dispatcher.InvokeAsync(this.OpenFile);
+            try
+            {
+                using CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+                cancellationTokenSource.CancelAfter(2500);
+                await this.UpdateService.CheckForUpdatesAsync(cancellationTokenSource.Token).ConfigureAwait(false);
+            }
+            catch (OperationCanceledException)
+            {
+            }
+            if (Debugger.IsAttached || !this.UpdateService.Update.HasValue || !application.Dispatcher.Invoke(MainWindowViewModel.OpenUpdateWindow))
+            {
+                await application.Dispatcher.InvokeAsync(this.OpenFile);
+            }
         }
 
         private bool CancelDueToUnsavedChanges(string proceedText, string saveProceedText, string cancelDescription)
@@ -149,6 +182,29 @@ namespace KoAR.SaveEditor.Views.Main
                     return false;
             }
             return true; // Cancel.
+        }
+
+        private async void CheckForUpdate()
+        {
+            try
+            {
+                this.IsCheckingForUpdate = true;
+                using CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+                cancellationTokenSource.CancelAfter(15000); // 15s
+                await this.UpdateService.CheckForUpdatesAsync(cancellationTokenSource.Token).ConfigureAwait(false);
+            }
+            catch
+            {
+                // Do Nothing.
+            }
+            finally
+            {
+                this.IsCheckingForUpdate = false;
+                if (this.UpdateService.Update.HasValue)
+                {
+                    this._dispatcher.Invoke(MainWindowViewModel.OpenUpdateWindow);
+                }
+            }
         }
 
         private void MainWindow_Closing(object sender, CancelEventArgs e)

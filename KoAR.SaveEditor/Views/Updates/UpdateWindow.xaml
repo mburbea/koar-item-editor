@@ -1,0 +1,141 @@
+﻿<Window x:Class="KoAR.SaveEditor.Views.Updates.UpdateWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:KoAR.SaveEditor.Views.Updates"
+    xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs"
+    xmlns:md="clr-namespace:Markdown.Xaml;assembly=Markdown.Xaml"
+    xmlns:s="clr-namespace:System;assembly=mscorlib" 
+    mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type local:UpdateViewModel}}"
+    Icon="/app.ico" Title="Update Available - KoAR Save Editor" ResizeMode="NoResize"
+    Width="500" SizeToContent="Height" WindowStartupLocation="CenterOwner">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/KoAR.SaveEditor;component/Views/Templates/DownloadIndicatorTemplate.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <ObjectDataProvider x:Key="ViewModel" ObjectType="{x:Type local:UpdateViewModel}" />
+        </ResourceDictionary>
+    </Window.Resources>
+    <Window.DataContext>
+        <Binding Source="{StaticResource ViewModel}" />
+    </Window.DataContext>
+    <Grid Margin="6">
+        <Grid.Resources>
+            <md:TextToFlowDocumentConverter x:Key="TextToFlowDocumentConverter" />
+            <local:TimeSpanConverter x:Key="TimeSpanConverter" />
+            <local:ByteGroupsConverter x:Key="ByteGroupsConverter" />
+            <constructs:EqualityConverter x:Key="EqualityConverter" />
+            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                <Setter Property="MinWidth" Value="175" />
+                <Setter Property="Margin" Value="2" />
+            </Style>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Row="0" Text="Current Version:" TextAlignment="Right" FontWeight="SemiBold" Margin="2" />
+        <TextBlock Grid.Row="0" Grid.Column="1" Margin="2" Text="{Binding UpdateService.CurrentVersion, StringFormat='v{0}'}"/>
+        <TextBlock Grid.Row="1" Text="Update Version:" TextAlignment="Right" FontWeight="SemiBold" Margin="2" />
+        <TextBlock Grid.Row="1" Grid.Column="1" Margin="2" Text="{Binding Update.Version, StringFormat='v{0}'}" />
+        <TextBlock Grid.Row="2" Text="Update Released:" TextAlignment="Right" FontWeight="SemiBold" Margin="2" />
+        <TextBlock Grid.Row="2" Grid.Column="1" Margin="2">
+            <TextBlock.Text>
+                <MultiBinding Converter="{StaticResource TimeSpanConverter}" StringFormat="{}{0} ago" Mode="OneTime">
+                    <Binding Source="{x:Static s:DateTime.Now}" />
+                    <Binding Path="Update.PublishedAt" />
+                </MultiBinding>
+            </TextBlock.Text>
+        </TextBlock>
+        <TextBlock Grid.Row="3" Text="Release Notes:" TextAlignment="Right" FontWeight="SemiBold" Margin="2" VerticalAlignment="Top" />
+        <RichTextBox Grid.Row="3" Grid.Column="1" FocusVisualStyle="{x:Null}" IsReadOnly="True" Margin="2" Height="150"
+            local:UpdateWindow.Document="{Binding Update.Body, Converter={StaticResource TextToFlowDocumentConverter}}" />
+        <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Margin="2">
+            <StackPanel.Style>
+                <Style TargetType="{x:Type StackPanel}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding BytesTransferred}" Value="{x:Null}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </StackPanel.Style>
+            <constructs:StatefulProgressBar Minimum="0" Maximum="{Binding Update.FileSize}" Height="24" Value="{Binding BytesTransferred, Mode=OneWay, TargetNullValue=0}">
+                <constructs:StatefulProgressBar.Style>
+                    <Style TargetType="{x:Type constructs:StatefulProgressBar}">
+                        <Style.Triggers>
+                            <Trigger Property="Value" Value="0">
+                                <Setter Property="IsIndeterminate" Value="True" />
+                            </Trigger>
+                            <DataTrigger Binding="{Binding Error}" Value="{x:Null}">
+                                <Setter Property="State" Value="Default" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                        <Setter Property="State" Value="Error" />
+                    </Style>
+                </constructs:StatefulProgressBar.Style>
+            </constructs:StatefulProgressBar>
+            <TextBlock Margin="0,2">
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Error, Converter={StaticResource EqualityConverter}}" Value="False">
+                                <Setter Property="Text" Value="{Binding Error.Message, StringFormat='Error: {0}'}" />
+                                <Setter Property="Foreground" Value="Red" />
+                            </DataTrigger>
+                            <DataTrigger Value="True">
+                                <DataTrigger.Binding>
+                                    <MultiBinding Converter="{StaticResource EqualityConverter}">
+                                        <Binding Path="BytesTransferred" />
+                                        <Binding Path="Update.FileSize" />
+                                    </MultiBinding>
+                                </DataTrigger.Binding>
+                                <Setter Property="Text" Value="Preparing to update..." />
+                            </DataTrigger>
+                        </Style.Triggers>
+                        <Setter Property="Text">
+                            <Setter.Value>
+                                <MultiBinding StringFormat="Transferred: {0} out of {1}; Current Speed: {2}/s">
+                                    <Binding Path="BytesTransferred" Converter="{StaticResource ByteGroupsConverter}" />
+                                    <Binding Path="Update.FileSize" Converter="{StaticResource ByteGroupsConverter}" />
+                                    <Binding Path="Speed" Converter="{StaticResource ByteGroupsConverter}" />
+                                </MultiBinding>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Margin="2" HorizontalAlignment="Center" Orientation="Horizontal">
+            <Button Command="{Binding DownloadCommand}" IsDefault="True">
+                <StackPanel Orientation="Horizontal">
+                    <ContentPresenter Content="-" ContentTemplate="{StaticResource DownloadIndicatorTemplate}" VerticalAlignment="Center">
+                        <ContentPresenter.Style>
+                            <Style TargetType="{x:Type ContentPresenter}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsEnabled, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" Value="False">
+                                        <Setter Property="Opacity" Value="0.25" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                                <Setter Property="Opacity" Value="0.75" />
+                            </Style>
+                        </ContentPresenter.Style>
+                    </ContentPresenter>
+                    <TextBlock Text="Download" VerticalAlignment="Center" Margin="2,0" />
+                </StackPanel>
+            </Button>
+            <Button Content="Close" Command="{Binding CancelCommand}" />
+        </StackPanel>        
+    </Grid>
+</Window>

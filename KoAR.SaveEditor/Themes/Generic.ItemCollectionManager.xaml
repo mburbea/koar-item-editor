@@ -7,10 +7,8 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/PresentationFramework.Aero;component/Themes/Aero.NormalColor.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Views/Templates/TextBoxErrorTemplate.xaml" />
+        <ResourceDictionary Source="/KoAR.SaveEditor;component/Views/Templates/BuffToolTipTemplate.xaml" />
     </ResourceDictionary.MergedDictionaries>
-    <DataTemplate x:Key="BuffToolTipTemplate" DataType="{x:Type core:Buff}">
-        <views:BuffControl Buff="{Binding}" IsExpanded="True" />
-    </DataTemplate>
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     <constructs:FloatConverter x:Key="SingleConverter" />
     <constructs:EqualityConverter x:Key="EqualityConverter" />
@@ -170,7 +168,7 @@
                                                                 <MultiDataTrigger>
                                                                     <MultiDataTrigger.Conditions>
                                                                         <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True" />
-                                                                        <Condition Binding="{Binding Value, Source={StaticResource Mode}}" Value="Item" />
+                                                                        <Condition Binding="{Binding Value, Source={StaticResource Mode}}" Value="Inventory" />
                                                                     </MultiDataTrigger.Conditions>
                                                                     <Setter Property="Visibility" Value="Collapsed" />
                                                                 </MultiDataTrigger>
@@ -185,7 +183,7 @@
                                                                 <MultiDataTrigger>
                                                                     <MultiDataTrigger.Conditions>
                                                                         <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True" />
-                                                                        <Condition Binding="{Binding Value, Source={StaticResource Mode}}" Value="Item" />
+                                                                        <Condition Binding="{Binding Value, Source={StaticResource Mode}}" Value="Inventory" />
                                                                     </MultiDataTrigger.Conditions>
                                                                     <Setter Property="Visibility" Value="Visible" />
                                                                     <Setter Property="constructs:TextBoxSelect.SelectOnFocus" Value="True" />
@@ -218,7 +216,7 @@
                                                                 <MultiDataTrigger>
                                                                     <MultiDataTrigger.Conditions>
                                                                         <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True" />
-                                                                        <Condition Binding="{Binding Value, Source={StaticResource Mode}}" Value="Item" />
+                                                                        <Condition Binding="{Binding Value, Source={StaticResource Mode}}" Value="Inventory" />
                                                                     </MultiDataTrigger.Conditions>
                                                                     <Setter Property="Visibility" Value="Collapsed" />
                                                                 </MultiDataTrigger>
@@ -238,7 +236,7 @@
                                                                 <MultiDataTrigger>
                                                                     <MultiDataTrigger.Conditions>
                                                                         <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True" />
-                                                                        <Condition Binding="{Binding Value, Source={StaticResource Mode}}" Value="Item" />
+                                                                        <Condition Binding="{Binding Value, Source={StaticResource Mode}}" Value="Inventory" />
                                                                     </MultiDataTrigger.Conditions>
                                                                     <Setter Property="Visibility" Value="Visible" />
                                                                     <Setter Property="constructs:TextBoxSelect.SelectOnFocus" Value="True" />
@@ -282,7 +280,7 @@
                                                                 <MultiDataTrigger>
                                                                     <MultiDataTrigger.Conditions>
                                                                         <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True" />
-                                                                        <Condition Binding="{Binding Value, Source={StaticResource Mode}}" Value="Item" />
+                                                                        <Condition Binding="{Binding Value, Source={StaticResource Mode}}" Value="Inventory" />
                                                                     </MultiDataTrigger.Conditions>
                                                                     <Setter Property="Visibility" Value="Collapsed" />
                                                                 </MultiDataTrigger>
@@ -297,7 +295,7 @@
                                                                 <MultiDataTrigger>
                                                                     <MultiDataTrigger.Conditions>
                                                                         <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True" />
-                                                                        <Condition Binding="{Binding Value, Source={StaticResource Mode}}" Value="Item" />
+                                                                        <Condition Binding="{Binding Value, Source={StaticResource Mode}}" Value="Inventory" />
                                                                     </MultiDataTrigger.Conditions>
                                                                     <Setter Property="Visibility" Value="Visible" />
                                                                     <Setter Property="constructs:TextBoxSelect.SelectOnFocus" Value="True" />
@@ -341,7 +339,7 @@
                                                                 <MultiDataTrigger>
                                                                     <MultiDataTrigger.Conditions>
                                                                         <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True" />
-                                                                        <Condition Binding="{Binding Value, Source={StaticResource Mode}}" Value="Item" />
+                                                                        <Condition Binding="{Binding Value, Source={StaticResource Mode}}" Value="Inventory" />
                                                                     </MultiDataTrigger.Conditions>
                                                                     <Setter Property="Visibility" Value="Collapsed" />
                                                                 </MultiDataTrigger>
@@ -356,7 +354,7 @@
                                                                 <MultiDataTrigger>
                                                                     <MultiDataTrigger.Conditions>
                                                                         <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True" />
-                                                                        <Condition Binding="{Binding Value, Source={StaticResource Mode}}" Value="Item" />
+                                                                        <Condition Binding="{Binding Value, Source={StaticResource Mode}}" Value="Inventory" />
                                                                     </MultiDataTrigger.Conditions>
                                                                     <Setter Property="Visibility" Value="Visible" />
                                                                     <Setter Property="constructs:TextBoxSelect.SelectOnFocus" Value="True" />
@@ -385,7 +383,7 @@
                                                 <CheckBox.Style>
                                                     <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
                                                         <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding Value, Source={StaticResource Mode}}" Value="StashItem">
+                                                            <DataTrigger Binding="{Binding Value, Source={StaticResource Mode}}" Value="Stash">
                                                                 <Setter Property="IsEnabled" Value="False" />
                                                             </DataTrigger>
                                                         </Style.Triggers>
@@ -401,7 +399,7 @@
                                                 <CheckBox.Style>
                                                     <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
                                                         <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding Value, Source={StaticResource Mode}}" Value="StashItem">
+                                                            <DataTrigger Binding="{Binding Value, Source={StaticResource Mode}}" Value="Stash">
                                                                 <Setter Property="IsEnabled" Value="False" />
                                                             </DataTrigger>
                                                         </Style.Triggers>
@@ -412,14 +410,14 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
                                 <GridViewColumn Width="Auto" views:ItemCollectionManager.PropertyName="IsUnsellable" 
-                                    constructs:ColumnVisibility.IsHidden="{Binding Value, Source={StaticResource Mode}, Converter={StaticResource EqualityConverter}, ConverterParameter={x:Static views:ItemCollectionManager+ManagementMode.StashItem}}">
+                                    constructs:ColumnVisibility.IsHidden="{Binding Value, Source={StaticResource Mode}, Converter={StaticResource EqualityConverter}, ConverterParameter={x:Static views:ManagementMode.Stash}}">
                                     <GridViewColumn.Header>
                                         <StackPanel Orientation="Horizontal">
                                             <CheckBox Margin="2" FocusVisualStyle="{x:Null}" VerticalAlignment="Center">
                                                 <CheckBox.Style>
                                                     <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
                                                         <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding Value, Source={StaticResource Mode}}" Value="Item">
+                                                            <DataTrigger Binding="{Binding Value, Source={StaticResource Mode}}" Value="Inventory">
                                                                 <Setter Property="IsChecked" Value="{Binding AllItemsUnsellable, Converter={StaticResource NegatedBooleanConverter}, RelativeSource={RelativeSource TemplatedParent}}" />
                                                             </DataTrigger>
                                                         </Style.Triggers>
@@ -430,12 +428,12 @@
                                         </StackPanel>
                                     </GridViewColumn.Header>
                                     <GridViewColumn.CellTemplate>
-                                        <DataTemplate DataType="{x:Type views:ItemModelBase}">
+                                        <DataTemplate DataType="{x:Type views:ItemModel}">
                                             <CheckBox FocusVisualStyle="{x:Null}" HorizontalAlignment="Center">
                                                 <CheckBox.Style>
                                                     <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
                                                         <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding Value, Source={StaticResource Mode}}" Value="Item">
+                                                            <DataTrigger Binding="{Binding Value, Source={StaticResource Mode}}" Value="Inventory">
                                                                 <Setter Property="IsChecked" Value="{Binding IsUnsellable, Converter={StaticResource NegatedBooleanConverter}}" />
                                                             </DataTrigger>
                                                         </Style.Triggers>
@@ -446,14 +444,14 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
                                 <GridViewColumn Width="Auto" views:ItemCollectionManager.PropertyName="IsUnstashable" 
-                                    constructs:ColumnVisibility.IsHidden="{Binding Value, Source={StaticResource Mode}, Converter={StaticResource EqualityConverter}, ConverterParameter={x:Static views:ItemCollectionManager+ManagementMode.StashItem}}">
+                                    constructs:ColumnVisibility.IsHidden="{Binding Value, Source={StaticResource Mode}, Converter={StaticResource EqualityConverter}, ConverterParameter={x:Static views:ManagementMode.Stash}}">
                                     <GridViewColumn.Header>
                                         <StackPanel Orientation="Horizontal">
                                             <CheckBox Margin="2" FocusVisualStyle="{x:Null}" VerticalAlignment="Center">
                                                 <CheckBox.Style>
                                                     <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
                                                         <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding Value, Source={StaticResource Mode}}" Value="Item">
+                                                            <DataTrigger Binding="{Binding Value, Source={StaticResource Mode}}" Value="Inventory">
                                                                 <Setter Property="IsChecked" Value="{Binding AllItemsUnstashable, Converter={StaticResource NegatedBooleanConverter}, RelativeSource={RelativeSource TemplatedParent}}" />
                                                             </DataTrigger>
                                                         </Style.Triggers>
@@ -464,12 +462,12 @@
                                         </StackPanel>
                                     </GridViewColumn.Header>
                                     <GridViewColumn.CellTemplate>
-                                        <DataTemplate DataType="{x:Type views:ItemModelBase}">
+                                        <DataTemplate DataType="{x:Type views:ItemModel}">
                                             <CheckBox FocusVisualStyle="{x:Null}" HorizontalAlignment="Center">
                                                 <CheckBox.Style>
                                                     <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
                                                         <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding Value, Source={StaticResource Mode}}" Value="Item">
+                                                            <DataTrigger Binding="{Binding Value, Source={StaticResource Mode}}" Value="Inventory">
                                                                 <Setter Property="IsChecked" Value="{Binding IsUnstashable, Converter={StaticResource NegatedBooleanConverter}}" />
                                                             </DataTrigger>
                                                         </Style.Triggers>
