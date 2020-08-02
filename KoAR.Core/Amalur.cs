@@ -15,6 +15,8 @@ namespace KoAR.Core
     {
         static Amalur()
         {
+            static Stream GetStream(string name) => Assembly.GetExecutingAssembly().GetManifestResourceStream($"{typeof(Amalur).Namespace}.Data.{name}");
+
             Thread.CurrentThread.CurrentCulture = Thread.CurrentThread.CurrentUICulture =
                 CultureInfo.DefaultThreadCurrentCulture = CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
             var jsonOptions = new JsonSerializerOptions
@@ -24,17 +26,12 @@ namespace KoAR.Core
             };
             using var buffsStream = GetStream("buffs.json");
             Buffs = JsonSerializer.DeserializeAsync<Buff[]>(buffsStream, jsonOptions).Result.ToDictionary(buff => buff.Id);
-
             using var questItemsStream = GetStream("questItemDefinitions.json");
             QuestItemDefinitions = JsonSerializer.DeserializeAsync<QuestItemDefinition[]>(questItemsStream, jsonOptions).Result.ToDictionary(def => def.Id);
-
             using var gemsStream = GetStream("gemDefinitions.csv");
             GemDefinitions = GemDefinition.ParseFile(gemsStream).ToDictionary(def => def.TypeId);
-
             using var itemsStream = GetStream("definitions.csv");
             ItemDefinitions = ItemDefinition.ParseFile(itemsStream).ToDictionary(def => def.TypeId);
-
-            static Stream GetStream(string name) => Assembly.GetExecutingAssembly().GetManifestResourceStream($"{typeof(Amalur).Namespace}.Data.{name}");
         }
 
         public static IReadOnlyDictionary<uint, Buff> Buffs { get; }
