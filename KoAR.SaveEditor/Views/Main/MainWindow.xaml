@@ -192,23 +192,6 @@
                         </Style>
                     </Button.Style>
                 </Button>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                 <Button ToolTip="Help" Command="Help" Style="{StaticResource ToolButtonStyle}"  Tag="{StaticResource Help}" />
                 <Popup x:Name="ZoomPopup" PlacementTarget="{Binding ElementName=OpenZoomPopup}" PopupAnimation="Fade" StaysOpen="False" AllowsTransparency="True" 
                     IsOpen="{Binding IsChecked, ElementName=OpenZoomPopup}">
