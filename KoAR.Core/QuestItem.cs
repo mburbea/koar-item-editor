@@ -16,8 +16,6 @@ namespace KoAR.Core
 
         public string Name => _definition.Name;
 
-        public string InternalName => _definition.InternalName;
-
         public bool IsUnsellable
         {
             get => (State & InventoryState.Unsellable) == InventoryState.Unsellable;

@@ -64,7 +64,7 @@
                     </TextBox>
                     <TextBlock Grid.Row="1" Text="Quest Items:" Margin="2" VerticalAlignment="Center" TextAlignment="Right"/>
                     <TextBox Grid.Row="1" Grid.Column="1" TextAlignment="Right" Margin="2" IsReadOnly="True" FocusVisualStyle="{x:Null}"
-                        Background="{x:Static SystemColors.ControlBrush}" Text="{Binding QuestItemCount, Mode=OneWay}" />
+                        Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" Text="{Binding QuestItemCount, Mode=OneWay}" />
                     <Button Grid.Row="1" Grid.Column="2" Content="Manage" Margin="2" FocusVisualStyle="{x:Null}" 
                         Command="{Binding OpenQuestItemsWindowCommand}" />
                 </Grid>

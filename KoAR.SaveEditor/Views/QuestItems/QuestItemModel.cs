@@ -11,8 +11,6 @@ namespace KoAR.SaveEditor.Views.QuestItems
 
         public event EventHandler? IsUnsellableChanged;
 
-        public string InternalName => this._item.InternalName;
-
         public bool IsUnsellable
         {
             get => this._item.IsUnsellable;

@@ -9,72 +9,97 @@
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs"
     mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type local:QuestItemsWindowViewModel}}"
     WindowStartupLocation="CenterOwner" Title="Quest Items - KoAR Save Editor" 
-    Height="450" Width="450">
+    Height="450" Width="500">
     <Window.Resources>
         <CollectionViewSource x:Key="FilteredItems" Source="{Binding FilteredItems}">
             <CollectionViewSource.SortDescriptions>
                 <sc:SortDescription PropertyName="Name" />
             </CollectionViewSource.SortDescriptions>
         </CollectionViewSource>
+        <constructs:EqualityConverter x:Key="EqualityConverter" />
         <constructs:NegatedBooleanConverter x:Key="NegatedBooleanConverter" />
     </Window.Resources>
-    <Grid Margin="4">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition />
-            <ColumnDefinition Width="Auto" />
-        </Grid.ColumnDefinitions>
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
             <RowDefinition />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <TextBlock Text="Filter:" Margin="4,2,2,2" VerticalAlignment="Center" />
-        <TextBox Grid.Column="1" Text="{Binding NameFilter, UpdateSourceTrigger=PropertyChanged}" Margin="2" VerticalAlignment="Center">
-            <constructs:Watermarking.ContentTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding}" FontStyle="Italic" />
-                </DataTemplate>
-            </constructs:Watermarking.ContentTemplate>
-            <TextBox.Style>
-                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-                    <Style.Triggers>
-                        <Trigger Property="Text" Value="">
-                            <Setter Property="constructs:Watermarking.Content" Value="Name" />
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </TextBox.Style>
-        </TextBox>
-        <Button Grid.Column="2" Content="Reset" Command="{Binding ResetFiltersCommand}" Margin="2" />
-        <ListView Grid.Row="1" Grid.ColumnSpan="3" Margin="2" ItemsSource="{Binding Source={StaticResource FilteredItems}}">
-            <ListView.View>
-                <GridView AllowsColumnReorder="True">
-                    <GridViewColumn Width="Auto" Header="Name">
-                        <GridViewColumn.DisplayMemberBinding>
-                            <MultiBinding StringFormat="{}{0} ({1})">
-                                <Binding Path="Name" />
-                                <Binding Path="InternalName" />
-                            </MultiBinding>
-                        </GridViewColumn.DisplayMemberBinding>
-                    </GridViewColumn>
-                    <GridViewColumn Width="Auto">
-                        <GridViewColumn.Header>
-                            <StackPanel Orientation="Horizontal">
-                                <CheckBox Margin="2" FocusVisualStyle="{x:Null}" VerticalAlignment="Center" 
+        <Grid Margin="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <TextBlock Text="Filter:" Margin="4,2,2,2" VerticalAlignment="Center" />
+            <TextBox Grid.Column="1" Text="{Binding NameFilter, UpdateSourceTrigger=PropertyChanged}" Margin="2" VerticalAlignment="Center">
+                <constructs:Watermarking.ContentTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" FontStyle="Italic" />
+                    </DataTemplate>
+                </constructs:Watermarking.ContentTemplate>
+                <TextBox.Style>
+                    <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+                        <Style.Triggers>
+                            <Trigger Property="Text" Value="">
+                                <Setter Property="constructs:Watermarking.Content" Value="Name" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+            <Button Grid.Column="2" Content="Reset" Command="{Binding ResetFiltersCommand}" Margin="2" />
+            <ListView Grid.Row="1" Grid.ColumnSpan="3" Margin="2" ItemsSource="{Binding Source={StaticResource FilteredItems}}">
+                <ListView.View>
+                    <GridView AllowsColumnReorder="True">
+                        <GridViewColumn Width="Auto" Header="Name" DisplayMemberBinding="{Binding Name}" />
+                        <GridViewColumn Width="Auto">
+                            <GridViewColumn.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <CheckBox Margin="2" FocusVisualStyle="{x:Null}" VerticalAlignment="Center" 
                                     IsChecked="{Binding AllItemsUnsellable, Converter={StaticResource NegatedBooleanConverter}}" />
-                                <TextBlock Text="Sellable?" VerticalAlignment="Center" />
-                            </StackPanel>
-                        </GridViewColumn.Header>
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate DataType="{x:Type local:QuestItemModel}">
-                                <CheckBox FocusVisualStyle="{x:Null}" HorizontalAlignment="Center" IsChecked="{Binding IsUnsellable, Converter={StaticResource NegatedBooleanConverter}}" />
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
-        </ListView>
-        
+                                    <TextBlock Text="Sellable?" VerticalAlignment="Center" />
+                                </StackPanel>
+                            </GridViewColumn.Header>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate DataType="{x:Type local:QuestItemModel}">
+                                    <CheckBox FocusVisualStyle="{x:Null}" HorizontalAlignment="Center" IsChecked="{Binding IsUnsellable, Converter={StaticResource NegatedBooleanConverter}}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Grid>
+        <Border Grid.Row="1" Grid.ColumnSpan="3" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" Padding="6">
+            <TextBlock Foreground="#5D5D5D">
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Style.Triggers>
+                            <DataTrigger Value="False">
+                                <DataTrigger.Binding>
+                                    <MultiBinding Converter="{StaticResource EqualityConverter}">
+                                        <Binding Path="FilteredItems" />
+                                        <Binding Path="Items" />
+                                    </MultiBinding>
+                                </DataTrigger.Binding>
+                                <Setter Property="Text">
+                                    <Setter.Value>
+                                        <MultiBinding StringFormat="Items: {0}/{1}">
+                                            <Binding Path="FilteredItems.Count" />
+                                            <Binding Path="Items.Count" />
+                                        </MultiBinding>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                        <Setter Property="Text" Value="{Binding Items.Count, StringFormat='Items: {0}'}" />
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+        </Border>
     </Grid>
 </Window>
