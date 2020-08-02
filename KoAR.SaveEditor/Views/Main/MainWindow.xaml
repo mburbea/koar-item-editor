@@ -165,7 +165,7 @@
                                     <ControlTemplate TargetType="{x:Type Button}">
                                         <Border x:Name="BD" Background="Transparent" BorderBrush="Transparent" BorderThickness="1" CornerRadius="2">
                                             <Viewbox Height="18" Width="18" StretchDirection="Both">
-                                                <ContentPresenter x:Name="PART_ContentPresenter" />
+                                                <ContentPresenter />
                                             </Viewbox>
                                         </Border>
                                         <ControlTemplate.Triggers>
