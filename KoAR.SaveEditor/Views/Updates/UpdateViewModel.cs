@@ -118,7 +118,7 @@ namespace KoAR.SaveEditor.Views.Updates
             Process.Start(new ProcessStartInfo
             {
                 WorkingDirectory = Path.GetTempPath(),
-                UseShellExecute = true,
+                UseShellExecute = false,
                 FileName = "powershell.exe",
                 Arguments = $"-ExecutionPolicy Bypass -File \"{Path.GetFileName(scriptFileName)}\" {Process.GetCurrentProcess().Id} \"{Path.GetFileName(this._tempFileName)}\"",
             }).WaitForExit();

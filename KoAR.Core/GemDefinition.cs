@@ -21,9 +21,11 @@ namespace KoAR.Core
         public Buff Buff { get; set; }
         public char SocketType { get; set; }
 
-        internal static IEnumerable<GemDefinition> ParseFile(string path)
+        internal static IEnumerable<GemDefinition> ParseFile(Stream stream)
         {
-            foreach (var line in File.ReadLines(path).Skip(1))
+            using var reader = new StreamReader(stream);
+            reader.ReadLine();
+            while (reader.ReadLine() is string line)
             {
                 var parts = line.Split(Amalur.Separator);
                 yield return new GemDefinition(
