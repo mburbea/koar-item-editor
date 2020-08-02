@@ -89,7 +89,7 @@ namespace KoAR.SaveEditor.Views.QuestItems
 
         private void ResetFilters()
         {
-            if (Interlocked.Exchange(ref this._nameFilter, string.Empty).Length == 0)
+            if (Interlocked.Exchange(ref this._nameFilter, string.Empty).Length != 0)
             {
                 this.OnPropertyChanged(nameof(this.NameFilter));
             }
