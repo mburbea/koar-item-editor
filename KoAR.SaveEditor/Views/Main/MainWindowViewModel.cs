@@ -96,7 +96,7 @@ namespace KoAR.SaveEditor.Views.Main
                 DefaultExt = ".sav",
                 Filter = "Save Files (*.sav)|*.sav",
                 CheckFileExists = true,
-                InitialDirectory = Settings.Default.LastDirectory ??= Amalur.FindSaveGameDirectory()
+                InitialDirectory = Settings.Default.LastDirectory ?? Amalur.FindSaveGameDirectory()
             };
             if (dialog.ShowDialog(Application.Current.MainWindow) != true || this.CancelDueToUnsavedChanges(
                 $"Ignore.\nLoad \"{dialog.FileName}\" without saving the current file.",

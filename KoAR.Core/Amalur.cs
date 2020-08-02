@@ -49,13 +49,10 @@ namespace KoAR.Core
 
         public static string? FindSaveGameDirectory()
         {
-            var steamPath = Path.Combine(Environment.GetFolderPath(Environment.Is64BitOperatingSystem ? Environment.SpecialFolder.ProgramFilesX86 : Environment.SpecialFolder.ProgramFiles), "Steam", "userdata");
-            if (Directory.Exists(steamPath) && Directory.GetDirectories(steamPath) is string[] { Length: 1 } userDirs)
-            {
-                var retVal = Path.Combine(userDirs[0], "102500", "remote");
-                return Directory.Exists(retVal) ? retVal : null;
-            }
-            return null;
+            var directory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Steam", "userdata");
+            return Directory.Exists(directory) && Directory.GetDirectories(directory) is string[] { Length: 1 } userDirs && Directory.Exists(directory = Path.Combine(userDirs[0], "102500", "remote"))
+                ? directory
+                : null;
         }
     }
 }
