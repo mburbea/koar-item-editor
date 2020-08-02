@@ -28,6 +28,10 @@
             </ObjectDataProvider>
             <constructs:IsNullConverter x:Key="IsNullConverter" />
             <local:ManagementViewModelConverter x:Key="ManagementViewModelConverter" />
+            <BitmapImage UriSource="/KoAR.SaveEditor;component/Resources/Open.png" x:Key="Open" po:Freeze="True" />
+            <BitmapImage UriSource="/KoAR.SaveEditor;component/Resources/Save.png" x:Key="Save" po:Freeze="True" />
+            <BitmapImage UriSource="/KoAR.SaveEditor;component/Resources/Help.png" x:Key="Help" po:Freeze="True" />
+            <BitmapImage UriSource="/KoAR.SaveEditor;component/Resources/Zoom.png" x:Key="Zoom" po:Freeze="True" />
         </ResourceDictionary>
     </Window.Resources>
     <Window.DataContext>
@@ -50,12 +54,18 @@
             <Setter Property="Title" Value="KoAR Save Editor" />
         </Style>
     </Window.Style>
-    <constructs:TaskbarItemInfoOverlay.ContentTemplate>
-        <StaticResource ResourceKey="DownloadIndicatorTemplate" />
-    </constructs:TaskbarItemInfoOverlay.ContentTemplate>
-    <constructs:TaskbarItemInfoOverlay.Content>
-        <Binding Path="UpdateService.Update" Source="{StaticResource ViewModel}" />
-    </constructs:TaskbarItemInfoOverlay.Content>
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo constructs:TaskbarItemInfoOverlay.ContentTemplate="{StaticResource DownloadIndicatorTemplate}"
+            constructs:TaskbarItemInfoOverlay.Content="{Binding UpdateService.Update, Source={StaticResource ViewModel}}">
+            <TaskbarItemInfo.ThumbButtonInfos>
+                <ThumbButtonInfo Command="Open" ImageSource="{StaticResource Open}" Description="Open File..." 
+                    CommandTarget="{Binding MainWindow, Source={x:Static Application.Current}}" />
+                <ThumbButtonInfo IsBackgroundVisible="False" IsInteractive="False" />
+                <ThumbButtonInfo Command="Help" ImageSource="{StaticResource Help}" Description="Help" 
+                    CommandTarget="{Binding MainWindow, Source={x:Static Application.Current}}" />
+            </TaskbarItemInfo.ThumbButtonInfos>
+        </TaskbarItemInfo>
+    </Window.TaskbarItemInfo>
     <Window.CommandBindings>
         <CommandBinding Command="Help" Executed="Help_Executed" />
         <CommandBinding Command="Open" Executed="Open_Executed" />
@@ -97,10 +107,6 @@
                         <Setter Property="Margin" Value="2" />
                         <Setter Property="VerticalAlignment" Value="Center" />
                     </Style>
-                    <BitmapImage UriSource="/KoAR.SaveEditor;component/Resources/Open.png" x:Key="Open" po:Freeze="True" />
-                    <BitmapImage UriSource="/KoAR.SaveEditor;component/Resources/Save.png" x:Key="Save" po:Freeze="True" />
-                    <BitmapImage UriSource="/KoAR.SaveEditor;component/Resources/Help.png" x:Key="Help" po:Freeze="True" />
-                    <BitmapImage UriSource="/KoAR.SaveEditor;component/Resources/Zoom.png" x:Key="Zoom" po:Freeze="True" />
                 </StackPanel.Resources>
                 <Button ToolTip="Open File..." Command="Open" Style="{StaticResource ToolButtonStyle}" Tag="{StaticResource Open}" />
                 <Button ToolTip="Save" Command="Save" Style="{StaticResource ToolButtonStyle}" Tag="{StaticResource Save}" />
@@ -164,9 +170,6 @@
                                             </Viewbox>
                                         </Border>
                                         <ControlTemplate.Triggers>
-                                            <Trigger Property="ContentTemplate" Value="{StaticResource DownloadIndicatorTemplate}">
-                                                <Setter TargetName="PART_ContentPresenter" Property="Opacity" Value="0.7" />
-                                            </Trigger>
                                             <Trigger Property="IsMouseOver" Value="True">
                                                 <Setter TargetName="BD" Property="BorderBrush" Value="LightGray" />
                                             </Trigger>

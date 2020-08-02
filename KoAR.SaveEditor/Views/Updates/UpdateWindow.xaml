@@ -128,7 +128,6 @@
                                         <Setter Property="Opacity" Value="0.25" />
                                     </DataTrigger>
                                 </Style.Triggers>
-                                <Setter Property="Opacity" Value="0.75" />
                             </Style>
                         </ContentPresenter.Style>
                     </ContentPresenter>

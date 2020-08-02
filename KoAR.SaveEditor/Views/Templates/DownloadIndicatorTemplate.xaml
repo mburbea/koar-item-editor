@@ -2,9 +2,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <DataTemplate x:Key="DownloadIndicatorTemplate">
         <Grid Width="16" Height="16">
-            <Ellipse Fill="DarkGreen" Stroke="White" StrokeThickness="0.5" />
+            <Ellipse Fill="White" Stroke="White" StrokeThickness="0.5" />
+            <Ellipse Fill="#C2006400" Stroke="Transparent" StrokeThickness="0.5" />
             <Viewbox Height="12" Width="12" StretchDirection="Both" Stretch="Uniform" VerticalAlignment="Center" HorizontalAlignment="Center" SnapsToDevicePixels="True">
-                <TextBlock Text="➤" TextAlignment="Center" Foreground="White" FontWeight="SemiBold" VerticalAlignment="Center">
+                <TextBlock Text="➤" TextAlignment="Center" Foreground="White" VerticalAlignment="Center">
                     <TextBlock.LayoutTransform>
                         <RotateTransform Angle="90" />
                     </TextBlock.LayoutTransform>
