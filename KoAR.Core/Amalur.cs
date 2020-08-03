@@ -23,8 +23,8 @@ namespace KoAR.Core
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 Converters = { new JsonStringEnumConverter() }
             };
-            using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream($"{typeof(Amalur).Namespace}.Data.zip");
-            using var archive = new ZipArchive(stream, ZipArchiveMode.Read);
+            using var zipStream = Assembly.GetExecutingAssembly().GetManifestResourceStream($"{typeof(Amalur).Namespace}.Data.zip");
+            using var archive = new ZipArchive(zipStream, ZipArchiveMode.Read);
             using var buffsStream = archive.GetEntry("buffs.json").Open();
             Buffs = JsonSerializer.DeserializeAsync<Buff[]>(buffsStream, jsonOptions).Result.ToDictionary(buff => buff.Id);
             using var questItemsStream = archive.GetEntry("questItemDefinitions.json").Open();
