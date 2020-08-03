@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
@@ -15,8 +16,6 @@ namespace KoAR.Core
     {
         static Amalur()
         {
-            static Stream GetStream(string name) => Assembly.GetExecutingAssembly().GetManifestResourceStream($"{typeof(Amalur).Namespace}.Data.{name}");
-
             Thread.CurrentThread.CurrentCulture = Thread.CurrentThread.CurrentUICulture =
                 CultureInfo.DefaultThreadCurrentCulture = CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
             var jsonOptions = new JsonSerializerOptions
@@ -24,13 +23,15 @@ namespace KoAR.Core
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 Converters = { new JsonStringEnumConverter() }
             };
-            using var buffsStream = GetStream("buffs.json");
+            using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream($"{typeof(Amalur).Namespace}.Data.zip");
+            using var archive = new ZipArchive(stream, ZipArchiveMode.Read);
+            using var buffsStream = archive.GetEntry("buffs.json").Open();
             Buffs = JsonSerializer.DeserializeAsync<Buff[]>(buffsStream, jsonOptions).Result.ToDictionary(buff => buff.Id);
-            using var questItemsStream = GetStream("questItemDefinitions.json");
+            using var questItemsStream = archive.GetEntry("questItemDefinitions.json").Open();
             QuestItemDefinitions = JsonSerializer.DeserializeAsync<QuestItemDefinition[]>(questItemsStream, jsonOptions).Result.ToDictionary(def => def.Id);
-            using var gemsStream = GetStream("gemDefinitions.csv");
+            using var gemsStream = archive.GetEntry("gemDefinitions.csv").Open();
             GemDefinitions = GemDefinition.ParseFile(gemsStream).ToDictionary(def => def.TypeId);
-            using var itemsStream = GetStream("definitions.csv");
+            using var itemsStream = archive.GetEntry("definitions.csv").Open();
             ItemDefinitions = ItemDefinition.ParseFile(itemsStream).ToDictionary(def => def.TypeId);
         }
 

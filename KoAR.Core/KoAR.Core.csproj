@@ -20,24 +20,10 @@
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="Data\buffs.json" />
-    <None Remove="Data\definitions.csv" />
-    <None Remove="Data\gemDefinitions.csv" />
-    <None Remove="Data\questItemDefinitions.json" />
+    <None Remove="Data.zip" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Data\buffs.json">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Data\definitions.csv">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Data\gemDefinitions.csv">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Data\questItemDefinitions.json">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Data.zip" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="IndexRange" Version="1.0.0" />
