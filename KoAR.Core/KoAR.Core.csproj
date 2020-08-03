@@ -30,7 +30,7 @@
     <PackageReference Include="System.Memory" Version="4.5.4" />
     <PackageReference Include="System.Text.Json" Version="4.7.2" />
   </ItemGroup>
-  <Target Name="ZipData" BeforeTargets="Build">
+  <Target Name="ZipData" BeforeTargets="BeforeBuild">
     <ZipDirectory SourceDirectory="$(MSBuildProjectDirectory)\Data" DestinationFile="$(MSBuildProjectDirectory)\Data.zip" Overwrite="true" />
   </Target>
   <Target Name="CleanUp" AfterTargets="Build">
