@@ -1,11 +1,5 @@
 *.sav
 
-######
-## Zip File in Build Process
-######
-
-KoAR.Core/Data.zip
-
 #################
 ## Eclipse
 #################

@@ -33,4 +33,7 @@
   <Target Name="ZipData" BeforeTargets="Build">
     <ZipDirectory SourceDirectory="$(MSBuildProjectDirectory)\Data" DestinationFile="$(MSBuildProjectDirectory)\Data.zip" Overwrite="true" />
   </Target>
+  <Target Name="CleanUp" AfterTargets="Build">
+    <WriteLinesToFile File="$(MSBuildProjectDirectory)\Data.zip" Lines="" Overwrite="True" />
+  </Target>
 </Project>
