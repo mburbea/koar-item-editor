@@ -20,28 +20,20 @@
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="Data\buffs.json" />
-    <None Remove="Data\definitions.csv" />
-    <None Remove="Data\gemDefinitions.csv" />
-    <None Remove="Data\questItemDefinitions.json" />
+    <None Remove="Data.zip" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Data\buffs.json">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Data\definitions.csv">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Data\gemDefinitions.csv">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Data\questItemDefinitions.json">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Data.zip" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="IndexRange" Version="1.0.0" />
     <PackageReference Include="System.Memory" Version="4.5.4" />
     <PackageReference Include="System.Text.Json" Version="4.7.2" />
   </ItemGroup>
+  <Target Name="ZipData" BeforeTargets="BeforeBuild">
+    <ZipDirectory SourceDirectory="$(MSBuildProjectDirectory)\Data" DestinationFile="$(MSBuildProjectDirectory)\Data.zip" Overwrite="true" />
+  </Target>
+  <Target Name="CleanUp" AfterTargets="Build">
+    <WriteLinesToFile File="$(MSBuildProjectDirectory)\Data.zip" Lines="" Overwrite="True" />
+  </Target>
 </Project>
