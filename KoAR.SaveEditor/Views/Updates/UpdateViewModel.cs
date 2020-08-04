@@ -63,6 +63,7 @@ namespace KoAR.SaveEditor.Views.Updates
             this.UpdateService.DownloadProgress -= this.UpdateService_DownloadProgress;
             if (this.DialogResult == true)
             {
+                return;
             }
             if (this._downloadTask == null)
             {
