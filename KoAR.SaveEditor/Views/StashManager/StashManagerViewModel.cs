@@ -42,6 +42,7 @@ namespace KoAR.SaveEditor.Views.StashManager
         private void DeleteItem(StashItemModel item)
         {
             this.RemoveItem(item);
+            this.Stash.DeleteItem(item.Item);
             this.MainWindowViewModel.RegisterUnsavedChange();
         }
     }
