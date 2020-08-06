@@ -21,7 +21,7 @@ namespace KoAR.SaveEditor.Views.Updates
             DictionaryKeyPolicy = JsonSnakeCaseNamingPolicy.Instance
         };
 
-        private IRelease? _update;
+        private Release? _update;
 
         public UpdateService()
             : this(interval: 250)
@@ -41,7 +41,7 @@ namespace KoAR.SaveEditor.Views.Updates
 
         public int Interval { get; }
 
-        public IRelease? Update
+        public Release? Update
         {
             get => this._update;
             private set
@@ -76,7 +76,7 @@ namespace KoAR.SaveEditor.Views.Updates
             using Timer timer = new Timer(OnTick, null, 0, this.Interval);
             try
             {
-                IReleaseAsset asset = this.Update.Assets[0];
+                ReleaseAsset asset = this.Update.Assets[0];
                 HttpWebRequest request = WebRequest.CreateHttp(asset.BrowserDownloadUrl);
                 using WebResponse response = await request.GetResponseAsync().ConfigureAwait(false);
                 cancellationToken.ThrowIfCancellationRequested();
@@ -181,34 +181,6 @@ namespace KoAR.SaveEditor.Views.Updates
                 }
                 return builder.ToString();
             }
-        }
-
-        private sealed class Release : IRelease
-        {
-            public ReleaseAsset[] Assets { get; set; } = Array.Empty<ReleaseAsset>();
-
-            IReadOnlyList<IReleaseAsset> IRelease.Assets => this.Assets;
-
-            public string Body { get; set; } = string.Empty;
-
-            public DateTime PublishedAt { get; set; }
-
-            public string TagName { get; set; } = string.Empty;
-
-            public string Version => this.TagName.Length == 0 ? string.Empty : this.TagName.Substring(1);
-
-            public ReleaseAsset? GetZipFileAsset() => this.Assets.FirstOrDefault(asset => asset.IsZipFile);
-        }
-
-        private sealed class ReleaseAsset : IReleaseAsset
-        {
-            public string BrowserDownloadUrl { get; set; } = string.Empty;
-
-            public string ContentType { get; set; } = string.Empty;
-
-            public bool IsZipFile => this.ContentType == "application/zip";
-
-            public int Size { get; set; }
         }
     }
 }
