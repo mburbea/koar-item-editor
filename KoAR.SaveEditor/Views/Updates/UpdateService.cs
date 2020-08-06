@@ -46,10 +46,6 @@ namespace KoAR.SaveEditor.Views.Updates
             get => this._update;
             private set
             {
-                if (this._update == value)
-                {
-                    return;
-                }
                 this._update = value;
                 this.UpdateChanged?.Invoke(this, EventArgs.Empty);
             }
@@ -59,11 +55,10 @@ namespace KoAR.SaveEditor.Views.Updates
         {
             try
             {
-                Release info = await UpdateService.GetLatestReleaseAsync(cancellationToken).ConfigureAwait(false);
-                ReleaseAsset? asset;
-                if (this.CurrentVersion != info.Version && (asset = info.GetZipFileAsset()) != null && asset.Equals(info.Assets[0]))
+                Release release = await UpdateService.GetLatestReleaseAsync(cancellationToken).ConfigureAwait(false);
+                if (this.CurrentVersion != release.Version && release.Assets.Length != 0 && release.Assets[0].Equals(release.GetZipFileAsset()))
                 {
-                    this.Update = info;
+                    this.Update = release;
                 }
             }
             catch
