@@ -54,7 +54,7 @@ namespace KoAR.SaveEditor.Views.Updates
             set => this.SetValue(ref this._speed, value);
         }
 
-        public UpdateInfo Update => this.UpdateService.Update.GetValueOrDefault();
+        public IRelease? Update => this.UpdateService.Update;
 
         public UpdateService UpdateService { get; } = (UpdateService)Application.Current.TryFindResource(typeof(UpdateService));
 

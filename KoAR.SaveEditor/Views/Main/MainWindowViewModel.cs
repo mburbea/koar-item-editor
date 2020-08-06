@@ -148,7 +148,7 @@ namespace KoAR.SaveEditor.Views.Main
             catch (OperationCanceledException)
             {
             }
-            if (Debugger.IsAttached || !this.UpdateService.Update.HasValue || !application.Dispatcher.Invoke(MainWindowViewModel.OpenUpdateWindow))
+            if (Debugger.IsAttached || this.UpdateService.Update == null || !application.Dispatcher.Invoke(MainWindowViewModel.OpenUpdateWindow))
             {
                 await application.Dispatcher.InvokeAsync(this.OpenFile);
             }
@@ -204,7 +204,7 @@ namespace KoAR.SaveEditor.Views.Main
             finally
             {
                 this.IsCheckingForUpdate = false;
-                if (this.UpdateService.Update.HasValue)
+                if (this.UpdateService.Update != null)
                 {
                     this._dispatcher.Invoke(MainWindowViewModel.OpenUpdateWindow);
                 }

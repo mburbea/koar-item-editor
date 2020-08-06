@@ -71,7 +71,7 @@
                     </Style.Triggers>
                 </Style>
             </StackPanel.Style>
-            <constructs:StatefulProgressBar Minimum="0" Maximum="{Binding Update.FileSize}" Height="24" Value="{Binding BytesTransferred, Mode=OneWay, TargetNullValue=0}">
+            <constructs:StatefulProgressBar Minimum="0" Maximum="{Binding Update.Assets/Size}" Height="24" Value="{Binding BytesTransferred, Mode=OneWay, TargetNullValue=0}">
                 <constructs:StatefulProgressBar.Style>
                     <Style TargetType="{x:Type constructs:StatefulProgressBar}">
                         <Style.Triggers>
@@ -98,7 +98,7 @@
                                 <DataTrigger.Binding>
                                     <MultiBinding Converter="{StaticResource EqualityConverter}">
                                         <Binding Path="BytesTransferred" />
-                                        <Binding Path="Update.FileSize" />
+                                        <Binding Path="Update.Assets/Size" />
                                     </MultiBinding>
                                 </DataTrigger.Binding>
                                 <Setter Property="Text" Value="Preparing to update..." />
@@ -108,7 +108,7 @@
                             <Setter.Value>
                                 <MultiBinding StringFormat="Transferred: {0} out of {1}; Current Speed: {2}/s">
                                     <Binding Path="BytesTransferred" Converter="{StaticResource ByteGroupsConverter}" />
-                                    <Binding Path="Update.FileSize" Converter="{StaticResource ByteGroupsConverter}" />
+                                    <Binding Path="Update.Assets/Size" Converter="{StaticResource ByteGroupsConverter}" />
                                     <Binding Path="Speed" Converter="{StaticResource ByteGroupsConverter}" />
                                 </MultiBinding>
                             </Setter.Value>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -20,7 +21,7 @@ namespace KoAR.SaveEditor.Views.Updates
             DictionaryKeyPolicy = JsonSnakeCaseNamingPolicy.Instance
         };
 
-        private UpdateInfo? _updateInfo;
+        private IRelease? _update;
 
         public UpdateService()
             : this(interval: 250)
@@ -40,16 +41,16 @@ namespace KoAR.SaveEditor.Views.Updates
 
         public int Interval { get; }
 
-        public UpdateInfo? Update
+        public IRelease? Update
         {
-            get => this._updateInfo;
+            get => this._update;
             private set
             {
-                if (this._updateInfo == value)
+                if (this._update == value)
                 {
                     return;
                 }
-                this._updateInfo = value;
+                this._update = value;
                 this.UpdateChanged?.Invoke(this, EventArgs.Empty);
             }
         }
@@ -60,9 +61,9 @@ namespace KoAR.SaveEditor.Views.Updates
             {
                 Release info = await UpdateService.GetLatestReleaseAsync(cancellationToken).ConfigureAwait(false);
                 ReleaseAsset? asset;
-                if (this.CurrentVersion != info.Version && (asset = info.GetZipFileAsset()) != null)
+                if (this.CurrentVersion != info.Version && (asset = info.GetZipFileAsset()) != null && asset.Equals(info.Assets[0]))
                 {
-                    this.Update = new UpdateInfo(info.Version, info.PublishedAt.ToLocalTime(), info.Body, asset.BrowserDownloadUrl, asset.Size);
+                    this.Update = info;
                 }
             }
             catch
@@ -72,22 +73,22 @@ namespace KoAR.SaveEditor.Views.Updates
 
         public async Task DownloadUpdateAsync(string targetFileName, CancellationToken cancellationToken = default)
         {
-            if (!this.Update.HasValue)
+            if (this.Update == null)
             {
                 return;
             }
-            UpdateInfo update = this.Update.Value;
             int bytesTransferred = 0, bytesPerInterval = 0;
             using Timer timer = new Timer(OnTick, null, 0, this.Interval);
             try
             {
-                HttpWebRequest request = WebRequest.CreateHttp(update.ZipFileUrl);
+                IReleaseAsset asset = this.Update.Assets[0];
+                HttpWebRequest request = WebRequest.CreateHttp(asset.BrowserDownloadUrl);
                 using WebResponse response = await request.GetResponseAsync().ConfigureAwait(false);
                 cancellationToken.ThrowIfCancellationRequested();
                 using Stream stream = response.GetResponseStream();
                 using FileStream fileStream = File.Create(targetFileName);
                 byte[] buffer = new byte[8192];
-                while (bytesTransferred < update.FileSize)
+                while (bytesTransferred < asset.Size)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
                     int count = await stream.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false);
@@ -187,13 +188,13 @@ namespace KoAR.SaveEditor.Views.Updates
             }
         }
 
-        private sealed class Release
+        private sealed class Release : IRelease
         {
             public ReleaseAsset[] Assets { get; set; } = Array.Empty<ReleaseAsset>();
 
-            public string Body { get; set; } = string.Empty;
+            IReadOnlyList<IReleaseAsset> IRelease.Assets => this.Assets;
 
-            public string Name { get; set; } = string.Empty;
+            public string Body { get; set; } = string.Empty;
 
             public DateTime PublishedAt { get; set; }
 
@@ -204,7 +205,7 @@ namespace KoAR.SaveEditor.Views.Updates
             public ReleaseAsset? GetZipFileAsset() => this.Assets.FirstOrDefault(asset => asset.IsZipFile);
         }
 
-        private sealed class ReleaseAsset
+        private sealed class ReleaseAsset : IReleaseAsset
         {
             public string BrowserDownloadUrl { get; set; } = string.Empty;
 
