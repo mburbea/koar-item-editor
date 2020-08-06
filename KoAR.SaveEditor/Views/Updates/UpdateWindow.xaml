@@ -48,19 +48,19 @@
         <TextBlock Grid.Row="0" Text="Current Version:" TextAlignment="Right" FontWeight="SemiBold" Margin="2" />
         <TextBlock Grid.Row="0" Grid.Column="1" Margin="2" Text="{Binding UpdateService.CurrentVersion, StringFormat='v{0}'}"/>
         <TextBlock Grid.Row="1" Text="Update Version:" TextAlignment="Right" FontWeight="SemiBold" Margin="2" />
-        <TextBlock Grid.Row="1" Grid.Column="1" Margin="2" Text="{Binding Update.Version, StringFormat='v{0}'}" />
+        <TextBlock Grid.Row="1" Grid.Column="1" Margin="2" Text="{Binding UpdateService.Update.Version, StringFormat='v{0}'}" />
         <TextBlock Grid.Row="2" Text="Update Released:" TextAlignment="Right" FontWeight="SemiBold" Margin="2" />
         <TextBlock Grid.Row="2" Grid.Column="1" Margin="2">
             <TextBlock.Text>
                 <MultiBinding Converter="{StaticResource TimeSpanConverter}" StringFormat="{}{0} ago" Mode="OneTime">
-                    <Binding Source="{x:Static s:DateTime.Now}" />
-                    <Binding Path="Update.PublishedAt" />
+                    <Binding Source="{x:Static s:DateTime.UtcNow}" />
+                    <Binding Path="UpdateService.Update.PublishedAt" />
                 </MultiBinding>
             </TextBlock.Text>
         </TextBlock>
         <TextBlock Grid.Row="3" Text="Release Notes:" TextAlignment="Right" FontWeight="SemiBold" Margin="2" VerticalAlignment="Top" />
         <RichTextBox Grid.Row="3" Grid.Column="1" FocusVisualStyle="{x:Null}" IsReadOnly="True" Margin="2" Height="150"
-            local:UpdateWindow.Document="{Binding Update.Body, Converter={StaticResource TextToFlowDocumentConverter}}" />
+            local:UpdateWindow.Document="{Binding UpdateService.Update.Body, Converter={StaticResource TextToFlowDocumentConverter}}" />
         <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Margin="2">
             <StackPanel.Style>
                 <Style TargetType="{x:Type StackPanel}">
@@ -71,7 +71,7 @@
                     </Style.Triggers>
                 </Style>
             </StackPanel.Style>
-            <constructs:StatefulProgressBar Minimum="0" Maximum="{Binding Update.Assets/Size}" Height="24" Value="{Binding BytesTransferred, Mode=OneWay, TargetNullValue=0}">
+            <constructs:StatefulProgressBar Minimum="0" Maximum="{Binding UpdateService.Update.Assets/Size}" Height="24" Value="{Binding BytesTransferred, Mode=OneWay, TargetNullValue=0}">
                 <constructs:StatefulProgressBar.Style>
                     <Style TargetType="{x:Type constructs:StatefulProgressBar}">
                         <Style.Triggers>
@@ -98,7 +98,7 @@
                                 <DataTrigger.Binding>
                                     <MultiBinding Converter="{StaticResource EqualityConverter}">
                                         <Binding Path="BytesTransferred" />
-                                        <Binding Path="Update.Assets/Size" />
+                                        <Binding Path="UpdateService.Update.Assets/Size" />
                                     </MultiBinding>
                                 </DataTrigger.Binding>
                                 <Setter Property="Text" Value="Preparing to update..." />
@@ -108,7 +108,7 @@
                             <Setter.Value>
                                 <MultiBinding StringFormat="Transferred: {0} out of {1}; Current Speed: {2}/s">
                                     <Binding Path="BytesTransferred" Converter="{StaticResource ByteGroupsConverter}" />
-                                    <Binding Path="Update.Assets/Size" Converter="{StaticResource ByteGroupsConverter}" />
+                                    <Binding Path="UpdateService.Update.Assets/Size" Converter="{StaticResource ByteGroupsConverter}" />
                                     <Binding Path="Speed" Converter="{StaticResource ByteGroupsConverter}" />
                                 </MultiBinding>
                             </Setter.Value>
