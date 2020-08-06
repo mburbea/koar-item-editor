@@ -3,7 +3,7 @@ using System.Collections.Specialized;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
 
-namespace KoAR.SaveEditor.Views
+namespace KoAR.SaveEditor.Views.Inventory
 {
     public sealed class ItemModel : ItemModelBase<Item>
     {

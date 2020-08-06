@@ -31,7 +31,7 @@
     <PackageReference Include="System.Text.Json" Version="4.7.2" />
   </ItemGroup>
   <Target Name="ZipData" BeforeTargets="BeforeBuild">
-    <ZipDirectory SourceDirectory="$(MSBuildProjectDirectory)\Data" DestinationFile="$(MSBuildProjectDirectory)\Data.zip" Overwrite="true" />
+    <ZipDirectory SourceDirectory="$(MSBuildProjectDirectory)\Data" DestinationFile="$(MSBuildProjectDirectory)\Data.zip" Overwrite="True" />
   </Target>
   <Target Name="CleanUp" AfterTargets="Build">
     <WriteLinesToFile File="$(MSBuildProjectDirectory)\Data.zip" Lines="" Overwrite="True" />

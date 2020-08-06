@@ -6,12 +6,12 @@ using KoAR.SaveEditor.Views.ChangeOrAddItem;
 using KoAR.SaveEditor.Views.Main;
 using KoAR.SaveEditor.Views.QuestItems;
 
-namespace KoAR.SaveEditor.Views.InventoryManager
+namespace KoAR.SaveEditor.Views.Inventory
 {
     public sealed class InventoryManagerViewModel : ManagerViewModelBase<ItemModel>
     {
         public InventoryManagerViewModel(MainWindowViewModel mainWindowViewModel)
-            : base(mainWindowViewModel, ManagementMode.Inventory, gameSave => gameSave.Items.Select(item => new ItemModel(item)))
+            : base(mainWindowViewModel, gameSave => gameSave.Items.Select(item => new ItemModel(item)))
         {
             this.AddItemBuffCommand = new DelegateCommand<uint>(this.AddItemBuff, this.CanAddItemBuff);
             this.AddPlayerBuffCommand = new DelegateCommand<uint>(this.AddPlayerBuff, this.CanAddPlayerBuff);
