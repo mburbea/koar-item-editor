@@ -18,7 +18,7 @@
         <constructs:EqualityConverter x:Key="EqualityConverter" />
         <constructs:NegatedBooleanConverter x:Key="NegatedBooleanConverter" />
     </Window.Resources>
-    <Grid>
+    <Grid FocusManager.FocusedElement="{Binding ElementName=PART_TextBox}">
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition Height="Auto" />
@@ -34,7 +34,7 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
             <TextBlock Text="Filter:" Margin="4,2,2,2" VerticalAlignment="Center" />
-            <TextBox Grid.Column="1" Text="{Binding NameFilter, UpdateSourceTrigger=PropertyChanged}" Margin="2" VerticalAlignment="Center">
+            <TextBox x:Name="PART_TextBox" Grid.Column="1" Text="{Binding NameFilter, UpdateSourceTrigger=PropertyChanged}" Margin="2" VerticalAlignment="Center">
                 <constructs:Watermarking.ContentTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding}" FontStyle="Italic" />
