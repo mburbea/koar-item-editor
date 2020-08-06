@@ -48,14 +48,8 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="Stash Count:" Margin="2" VerticalAlignment="Center" TextAlignment="Right"/>
-                    <TextBox Grid.Column="1" MinWidth="100" Margin="2" IsReadOnly="True" Background="{x:Static SystemColors.ControlBrush}">
-                        <TextBox.Style>
-                            <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-                                <Setter Property="Text" Value="{Binding Items.Count, Mode=OneWay}" />
-                                <Setter Property="TextAlignment" Value="Right" />
-                            </Style>
-                        </TextBox.Style>
-                    </TextBox>
+                    <TextBox Grid.Column="1" MinWidth="100" Margin="2" IsReadOnly="True" Background="{x:Static SystemColors.ControlBrush}"
+                        Text="{Binding Items.Count, Mode=OneWay}" TextAlignment="Right" />
                     <Button Grid.Column="2" Margin="2" Command="{Binding AddItemCommand}" Content="_Add Item" FocusVisualStyle="{x:Null}" />
                 </Grid>
             </GroupBox>
