@@ -8,8 +8,8 @@ using System.Windows.Threading;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
 using KoAR.SaveEditor.Properties;
-using KoAR.SaveEditor.Views.InventoryManager;
-using KoAR.SaveEditor.Views.StashManager;
+using KoAR.SaveEditor.Views.Inventory;
+using KoAR.SaveEditor.Views.Stash;
 using KoAR.SaveEditor.Views.Updates;
 using Microsoft.Win32;
 using TaskDialogInterop;
@@ -22,7 +22,7 @@ namespace KoAR.SaveEditor.Views.Main
         private bool _hasUnsavedChanges;
         private InventoryManagerViewModel? _inventoryManager;
         private bool _isCheckingForUpdate;
-        private ManagementMode _mode;
+        private Mode _mode;
         private StashManagerViewModel? _stashManager;
 
         public MainWindowViewModel()
@@ -66,7 +66,7 @@ namespace KoAR.SaveEditor.Views.Main
             private set => this.SetValue(ref this._isCheckingForUpdate, value);
         }
 
-        public ManagementMode Mode
+        public Mode Mode
         {
             get => this._mode;
             set => this.SetValue(ref this._mode, value);
@@ -112,7 +112,7 @@ namespace KoAR.SaveEditor.Views.Main
             this.StashManager = this.GameSave.Stash != null ? new StashManagerViewModel(this) : default;
             this.OnPropertyChanged(nameof(this.GameSave)); // Notifying the change is explicitly done after the view models are set.
             this.HasUnsavedChanges = false;
-            this.Mode = ManagementMode.Inventory;
+            this.Mode = Mode.Inventory;
         }
 
         public void RegisterUnsavedChange() => this.HasUnsavedChanges = true;

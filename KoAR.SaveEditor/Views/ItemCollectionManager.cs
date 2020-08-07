@@ -49,16 +49,16 @@ namespace KoAR.SaveEditor.Views
         private static readonly DependencyPropertyKey _collectionViewPropertyKey = DependencyProperty.RegisterReadOnly(nameof(ItemCollectionManager.CollectionView), typeof(CollectionView), typeof(ItemCollectionManager),
             new PropertyMetadata(ItemCollectionManager.CollectionView_ValueChanged));
 
-        private static readonly DependencyPropertyKey _modePropertyKey = DependencyProperty.RegisterReadOnly(nameof(ItemCollectionManager.Mode), typeof(ManagementMode), typeof(ItemCollectionManager),
+        private static readonly DependencyPropertyKey _modePropertyKey = DependencyProperty.RegisterReadOnly(nameof(ItemCollectionManager.Mode), typeof(Mode), typeof(ItemCollectionManager),
             new PropertyMetadata());
 
         private ListView? _listView;
 
         static ItemCollectionManager()
         {
-            FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(ItemCollectionManager), new FrameworkPropertyMetadata(typeof(ItemCollectionManager)));
             ItemCollectionManager.CollectionViewProperty = ItemCollectionManager._collectionViewPropertyKey.DependencyProperty;
             ItemCollectionManager.ModeProperty = ItemCollectionManager._modePropertyKey.DependencyProperty;
+            FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(ItemCollectionManager), new FrameworkPropertyMetadata(typeof(ItemCollectionManager)));
         }
 
         public bool? AllItemsStolen
@@ -97,9 +97,9 @@ namespace KoAR.SaveEditor.Views
             set => this.SetValue(ItemCollectionManager.ItemsProperty, value);
         }
 
-        public ManagementMode Mode
+        public Mode Mode
         {
-            get => (ManagementMode)this.GetValue(ItemCollectionManager.ModeProperty);
+            get => (Mode)this.GetValue(ItemCollectionManager.ModeProperty);
             private set => this.SetValue(ItemCollectionManager._modePropertyKey, value);
         }
 
@@ -196,7 +196,7 @@ namespace KoAR.SaveEditor.Views
         private static void ItemsProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             ItemCollectionManager itemsView = (ItemCollectionManager)d;
-            itemsView.Mode = e.NewValue is IEnumerable<ItemModelBase<StashItem>> ? ManagementMode.Stash : default;
+            itemsView.Mode = e.NewValue is IEnumerable<ItemModelBase<StashItem>> ? Mode.Stash : default;
             itemsView.CollectionView = e.NewValue == null ? null : new ListCollectionView((IList)e.NewValue)
             {
                 SortDescriptions =

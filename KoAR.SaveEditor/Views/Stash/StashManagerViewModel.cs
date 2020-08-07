@@ -5,12 +5,12 @@ using KoAR.SaveEditor.Constructs;
 using KoAR.SaveEditor.Views.ChangeOrAddItem;
 using KoAR.SaveEditor.Views.Main;
 
-namespace KoAR.SaveEditor.Views.StashManager
+namespace KoAR.SaveEditor.Views.Stash
 {
     public sealed class StashManagerViewModel : ManagerViewModelBase<StashItemModel>
     {
         public StashManagerViewModel(MainWindowViewModel mainWindowViewModel)
-            : base(mainWindowViewModel, ManagementMode.Stash, gameSave => gameSave.Stash!.Items.Select(item => new StashItemModel(item)))
+            : base(mainWindowViewModel, gameSave => gameSave.Stash!.Items.Select(item => new StashItemModel(item)))
         {
             this.AddItemCommand = new DelegateCommand(this.AddItem);
             this.DeleteItemCommand = new DelegateCommand<StashItemModel>(this.DeleteItem);
@@ -19,8 +19,6 @@ namespace KoAR.SaveEditor.Views.StashManager
         public DelegateCommand AddItemCommand { get; }
 
         public DelegateCommand<StashItemModel> DeleteItemCommand { get; }
-
-        public Stash Stash => this.GameSave.Stash!;
 
         private void AddItem()
         {
@@ -34,7 +32,7 @@ namespace KoAR.SaveEditor.Views.StashManager
             {
                 return;
             }
-            StashItem stashItem = this.Stash.AddItem(viewModel.Definition);
+            StashItem stashItem = this.GameSave.Stash!.AddItem(viewModel.Definition);
             this.AddItem(new StashItemModel(stashItem));
             this.MainWindowViewModel.RegisterUnsavedChange();
         }
@@ -42,7 +40,7 @@ namespace KoAR.SaveEditor.Views.StashManager
         private void DeleteItem(StashItemModel item)
         {
             this.RemoveItem(item);
-            this.Stash.DeleteItem(item.Item);
+            this.GameSave.Stash!.DeleteItem(item.Item);
             this.MainWindowViewModel.RegisterUnsavedChange();
         }
     }

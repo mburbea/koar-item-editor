@@ -3,6 +3,7 @@
     xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs"
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views"
+    xmlns:inventory="clr-namespace:KoAR.SaveEditor.Views.Inventory"
     xmlns:core="clr-namespace:KoAR.Core;assembly=KoAR.Core">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/PresentationFramework.Aero;component/Themes/Aero.NormalColor.xaml" />
@@ -410,7 +411,7 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
                                 <GridViewColumn Width="Auto" views:ItemCollectionManager.PropertyName="IsUnsellable" 
-                                    constructs:ColumnVisibility.IsHidden="{Binding Value, Source={StaticResource Mode}, Converter={StaticResource EqualityConverter}, ConverterParameter={x:Static views:ManagementMode.Stash}}">
+                                    constructs:ColumnVisibility.IsHidden="{Binding Value, Source={StaticResource Mode}, Converter={StaticResource EqualityConverter}, ConverterParameter={x:Static views:Mode.Stash}}">
                                     <GridViewColumn.Header>
                                         <StackPanel Orientation="Horizontal">
                                             <CheckBox Margin="2" FocusVisualStyle="{x:Null}" VerticalAlignment="Center">
@@ -428,7 +429,7 @@
                                         </StackPanel>
                                     </GridViewColumn.Header>
                                     <GridViewColumn.CellTemplate>
-                                        <DataTemplate DataType="{x:Type views:ItemModel}">
+                                        <DataTemplate DataType="{x:Type inventory:ItemModel}">
                                             <CheckBox FocusVisualStyle="{x:Null}" HorizontalAlignment="Center">
                                                 <CheckBox.Style>
                                                     <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
@@ -444,7 +445,7 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
                                 <GridViewColumn Width="Auto" views:ItemCollectionManager.PropertyName="IsUnstashable" 
-                                    constructs:ColumnVisibility.IsHidden="{Binding Value, Source={StaticResource Mode}, Converter={StaticResource EqualityConverter}, ConverterParameter={x:Static views:ManagementMode.Stash}}">
+                                    constructs:ColumnVisibility.IsHidden="{Binding Value, Source={StaticResource Mode}, Converter={StaticResource EqualityConverter}, ConverterParameter={x:Static views:Mode.Stash}}">
                                     <GridViewColumn.Header>
                                         <StackPanel Orientation="Horizontal">
                                             <CheckBox Margin="2" FocusVisualStyle="{x:Null}" VerticalAlignment="Center">
@@ -462,7 +463,7 @@
                                         </StackPanel>
                                     </GridViewColumn.Header>
                                     <GridViewColumn.CellTemplate>
-                                        <DataTemplate DataType="{x:Type views:ItemModel}">
+                                        <DataTemplate DataType="{x:Type inventory:ItemModel}">
                                             <CheckBox FocusVisualStyle="{x:Null}" HorizontalAlignment="Center">
                                                 <CheckBox.Style>
                                                     <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">

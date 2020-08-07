@@ -6,8 +6,8 @@
     xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views"
     xmlns:local="clr-namespace:KoAR.SaveEditor.Views.Main"
-    xmlns:im="clr-namespace:KoAR.SaveEditor.Views.InventoryManager"
-    xmlns:sm="clr-namespace:KoAR.SaveEditor.Views.StashManager"
+    xmlns:inventory="clr-namespace:KoAR.SaveEditor.Views.Inventory"
+    xmlns:stash="clr-namespace:KoAR.SaveEditor.Views.Stash"
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs" 
     xmlns:s="clr-namespace:System;assembly=mscorlib" 
     xmlns:aero="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
@@ -23,11 +23,11 @@
             <ObjectDataProvider x:Key="ViewModel" ObjectType="{x:Type local:MainWindowViewModel}" />
             <ObjectDataProvider x:Key="Modes" ObjectType="{x:Type s:Enum}" MethodName="GetValues">
                 <ObjectDataProvider.MethodParameters>
-                    <x:Type TypeName="views:ManagementMode" />
+                    <x:Type TypeName="views:Mode" />
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
             <constructs:IsNullConverter x:Key="IsNullConverter" />
-            <local:ManagementViewModelConverter x:Key="ManagementViewModelConverter" />
+            <local:ManagerViewModelConverter x:Key="ManagerViewModelConverter" />
             <BitmapImage UriSource="/KoAR.SaveEditor;component/Resources/Open.png" x:Key="Open" po:Freeze="True" />
             <BitmapImage UriSource="/KoAR.SaveEditor;component/Resources/Save.png" x:Key="Save" po:Freeze="True" />
             <BitmapImage UriSource="/KoAR.SaveEditor;component/Resources/Help.png" x:Key="Help" po:Freeze="True" />
@@ -228,13 +228,13 @@
                 </Style>
             </TabControl.Style>
             <TabControl.ItemTemplate>
-                <DataTemplate DataType="{x:Type views:ManagementMode}">
+                <DataTemplate DataType="{x:Type views:Mode}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock VerticalAlignment="Center" Margin="2">                            
                             <Run Text="{Binding Mode=OneTime}" />
                             <Run>
                                 <Run.Tag>
-                                    <MultiBinding Converter="{StaticResource ManagementViewModelConverter}">
+                                    <MultiBinding Converter="{StaticResource ManagerViewModelConverter}">
                                         <Binding Source="{StaticResource ViewModel}" />
                                         <Binding />
                                         <!-- Used to retrigger converter -->
@@ -265,7 +265,7 @@
                     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                     <Setter Property="Tag">
                         <Setter.Value>
-                            <MultiBinding Converter="{StaticResource ManagementViewModelConverter}">
+                            <MultiBinding Converter="{StaticResource ManagerViewModelConverter}">
                                 <Binding Source="{StaticResource ViewModel}" />
                                 <Binding Path="Header" RelativeSource="{RelativeSource Self}" />
                                 <!-- Used to retrigger converter -->
@@ -277,11 +277,11 @@
             </TabControl.ItemContainerStyle>
             <constructs:TabContent.TemplateSelector>
                 <constructs:KeyedDataTemplateSelector>
-                    <DataTemplate x:Key="{x:Static views:ManagementMode.Inventory}">
-                        <im:InventoryManagerControl DataContext="{Binding InventoryManager, Source={StaticResource ViewModel}}" />
+                    <DataTemplate x:Key="{x:Static views:Mode.Inventory}">
+                        <inventory:InventoryManager DataContext="{Binding InventoryManager, Source={StaticResource ViewModel}}" />
                     </DataTemplate>
-                    <DataTemplate x:Key="{x:Static views:ManagementMode.Stash}">
-                        <sm:StashManagerControl DataContext="{Binding StashManager, Source={StaticResource ViewModel}}" />
+                    <DataTemplate x:Key="{x:Static views:Mode.Stash}">
+                        <stash:StashManager DataContext="{Binding StashManager, Source={StaticResource ViewModel}}" />
                     </DataTemplate>
                 </constructs:KeyedDataTemplateSelector>
             </constructs:TabContent.TemplateSelector>

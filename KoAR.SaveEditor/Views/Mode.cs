@@ -1,6 +1,6 @@
 ﻿namespace KoAR.SaveEditor.Views
 {
-    public enum ManagementMode
+    public enum Mode
     {
         Inventory = 0,
         Stash = 1

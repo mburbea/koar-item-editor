@@ -15,10 +15,9 @@ namespace KoAR.SaveEditor.Views
         private IReadOnlyList<TItem> _filteredItems;
         private TItem? _selectedItem;
 
-        protected ManagerViewModelBase(MainWindowViewModel mainWindowViewModel, ManagementMode managementMode, Func<GameSave, IEnumerable<TItem>> itemsProjection)
+        protected ManagerViewModelBase(MainWindowViewModel mainWindowViewModel, Func<GameSave, IEnumerable<TItem>> itemsProjection)
         {
             this.MainWindowViewModel = mainWindowViewModel;
-            this.ManagementMode = managementMode;
             this._itemsProjection = itemsProjection;
             this._filteredItems = this._items = new NotifyingCollection<TItem>();
             (this.ItemFilters = new ItemFilters()).FilterChange += this.ItemFilters_FilterChange;
@@ -38,8 +37,6 @@ namespace KoAR.SaveEditor.Views
         public ItemFilters ItemFilters { get; }
 
         public IReadOnlyList<TItem> Items => this._items;
-
-        public ManagementMode ManagementMode { get; }
 
         public TItem? SelectedItem
         {

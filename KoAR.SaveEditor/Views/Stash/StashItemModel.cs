@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using KoAR.Core;
 
-namespace KoAR.SaveEditor.Views
+namespace KoAR.SaveEditor.Views.Stash
 {
     public sealed class StashItemModel : ItemModelBase<StashItem>
     {
