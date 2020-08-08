@@ -37,7 +37,8 @@ namespace KoAR.SaveEditor.Constructs
                 WatermarkAdorner? adorner = Watermarking.GetAdorner(textBox);
                 if (adorner != null)
                 {
-                    AdornerLayer.GetAdornerLayer(textBox).Remove(adorner);
+                    var adornerLayer = AdornerLayer.GetAdornerLayer(textBox)?? adorner.FindVisualTreeAncestor<AdornerLayer>()!;
+                    adornerLayer.Remove(adorner);
                     adorner.ClearVisibilityBinding();
                 }
                 else
@@ -98,7 +99,7 @@ namespace KoAR.SaveEditor.Constructs
                     Content = content,
                     ContentTemplate = contentTemplate,
                     Opacity = 0.5,
-                    VerticalAlignment= VerticalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center,
                     Margin = new Thickness(
                         this.AdornedElement.Margin.Left + this.AdornedElement.Padding.Left,
                         this.AdornedElement.Margin.Top + this.AdornedElement.Padding.Top,
