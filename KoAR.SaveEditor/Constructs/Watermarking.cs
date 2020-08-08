@@ -100,8 +100,8 @@ namespace KoAR.SaveEditor.Constructs
                     Opacity = 0.5,
                     VerticalAlignment = VerticalAlignment.Center,
                     Margin = new Thickness(
-                        this.AdornedElement.Margin.Left + this.AdornedElement.Padding.Left,
-                        this.AdornedElement.Margin.Top + this.AdornedElement.Padding.Top,
+                        adornedElement.Margin.Left + adornedElement.Padding.Left,
+                        adornedElement.Margin.Top + adornedElement.Padding.Top,
                         0,
                         0
                     )
@@ -112,8 +112,6 @@ namespace KoAR.SaveEditor.Constructs
                     Converter = WatermarkAdorner._booleanToVisibilityConverter
                 });
             }
-
-            private new Control AdornedElement => (Control)base.AdornedElement;
 
             public DataTemplate? ContentTemplate
             {
