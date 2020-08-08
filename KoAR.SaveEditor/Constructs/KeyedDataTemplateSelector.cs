@@ -19,31 +19,33 @@ namespace KoAR.SaveEditor.Constructs
 
         bool ICollection.IsSynchronized => false;
 
-        ICollection IDictionary.Keys => ((IDictionary)this._dictionary).Keys;
-
         public IReadOnlyCollection<object> Keys => this._dictionary.Keys;
 
-        object ICollection.SyncRoot => ((ICollection)this._dictionary).SyncRoot;
+        ICollection IDictionary.Keys => this._dictionary.Keys;
 
-        ICollection IDictionary.Values => ((IDictionary)this._dictionary).Values;
+        object ICollection.SyncRoot => this._dictionary;
 
         public IReadOnlyCollection<DataTemplate> Values => this._dictionary.Values;
+
+        ICollection IDictionary.Values => this._dictionary.Values;
 
         [MaybeNull]
         public DataTemplate this[object key]
         {
-            get => this.GetDataTemplate(key);
+            get => this.GetTemplate(key);
             set => this._dictionary[key] = value;
         }
 
         [MaybeNull]
         object IDictionary.this[object key]
         {
-            get => this.GetDataTemplate(key);
-            set => ((IDictionary)this._dictionary)[key] = value;
+            get => this.GetTemplate(key);
+            set => this._dictionary[key] = (DataTemplate)value;
         }
 
-        void IDictionary.Add(object key, object value) => ((IDictionary)this._dictionary).Add(key, value);
+        public void Add(object key, DataTemplate value) => this._dictionary.Add(key, value);
+
+        void IDictionary.Add(object key, object value) => this._dictionary.Add(key, (DataTemplate)value);
 
         public void Clear() => this._dictionary.Clear();
 
@@ -51,20 +53,15 @@ namespace KoAR.SaveEditor.Constructs
 
         void ICollection.CopyTo(Array array, int index) => ((ICollection)this._dictionary).CopyTo(array, index);
 
-        IDictionaryEnumerator IDictionary.GetEnumerator() => ((IDictionary)this._dictionary).GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => this._dictionary.GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)this._dictionary).GetEnumerator();
+        IDictionaryEnumerator IDictionary.GetEnumerator() => this._dictionary.GetEnumerator();
 
         public void Remove(object key) => this._dictionary.Remove(key);
 
         [return: MaybeNull]
-        public override DataTemplate SelectTemplate(object item, DependencyObject container) => this.GetDataTemplate(item);
+        public override DataTemplate SelectTemplate(object item, DependencyObject container) => this.GetTemplate(item);
 
-        private DataTemplate? GetDataTemplate(object item)
-        {
-            return item != null && this._dictionary.TryGetValue(item, out DataTemplate? dataTemplate)
-                ? dataTemplate
-                : null;
-        }
+        private DataTemplate? GetTemplate(object key) => key != null && this._dictionary.TryGetValue(key, out DataTemplate? value) ? value : null;
     }
 }
