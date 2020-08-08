@@ -77,8 +77,8 @@ namespace KoAR.SaveEditor.Constructs
         private static void TextBox_Loaded(object sender, RoutedEventArgs e)
         {
             TextBoxBase textBox = (TextBoxBase)sender;
-            object? content = Watermarking.GetContent(textBox);
-            if (content != null)
+            textBox.Loaded -= Watermarking.TextBox_Loaded;
+            if (Watermarking.GetContent(textBox) is object content)
             {
                 Watermarking.SetAdorner(textBox, new WatermarkAdorner(textBox, content, Watermarking.GetContentTemplate(textBox)));
             }
