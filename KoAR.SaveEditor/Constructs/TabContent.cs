@@ -76,25 +76,20 @@ namespace KoAR.SaveEditor.Constructs
             return (ContentManager?)tabControl.GetValue(TabContent._contentManagerProperty);
         }
 
-        private static ContentManager GetContentManager(TabControl tabControl, Decorator container)
+        private static ContentManager GetContentManager(TabControl tabControl, Border border)
         {
             ContentManager? manager = TabContent.GetContentManager(tabControl);
             if (manager == null)
             {
                 TabContent.SetContentManager(tabControl, manager = new ContentManager(tabControl));
             }
-            manager.Container = container;
+            manager.Container = border;
             return manager;
         }
 
         private static UIElement? GetPersistedContent(TabItem tabItem)
         {
             return (UIElement?)tabItem.GetValue(TabContent._persistedContentProperty);
-        }
-
-        private static TabControl? GetTabControl(Decorator decorator)
-        {
-            return (TabControl?)decorator.GetValue(TabContent._tabControlProperty);
         }
 
         private static void PersistProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -135,11 +130,6 @@ namespace KoAR.SaveEditor.Constructs
             tabItem?.SetValue(TabContent._persistedContentProperty, value);
         }
 
-        private static void SetTabControl(Decorator decorator, TabControl? value)
-        {
-            decorator?.SetValue(TabContent._tabControlProperty, value);
-        }
-
         private static void TabControl_ContentTemplatePropertiesChanged(object sender, EventArgs e)
         {
             throw new InvalidOperationException($"Can not assign to {nameof(TabControl.ContentTemplate)} or {nameof(TabControl.ContentTemplateSelector)} when Persist is true.");
@@ -147,25 +137,23 @@ namespace KoAR.SaveEditor.Constructs
 
         private static void TabControlProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (!(d is Decorator container) || e.NewValue == null)
+            if (e.NewValue != null)
             {
-                return;
+                TabContent.GetContentManager((TabControl)e.NewValue, (Border)d).UpdateSelectedTab();
             }
-            TabControl tabControl = (TabControl)e.NewValue;
-            TabContent.GetContentManager(tabControl, container).UpdateSelectedTab();
         }
 
         private sealed class ContentManager : IDisposable
         {
             private readonly TabControl _tabControl;
-            private Decorator? _container;
+            private Border? _container;
 
             public ContentManager(TabControl tabControl)
             {
                 (this._tabControl = tabControl).SelectionChanged += this.TabControl_SelectionChanged;
             }
 
-            public Decorator? Container
+            public Border? Container
             {
                 get => this._container;
                 set
