@@ -48,7 +48,7 @@ namespace KoAR.SaveEditor.Constructs
             {
                 return Array.Empty<Segment>();
             }
-            if (searchText == null || searchText.Length == 0)
+            if (searchText == null || searchText.Length == 0 || searchText.Length > text.Length)
             {
                 return new[] { (Segment)text };
             }
