@@ -25,8 +25,6 @@ namespace KoAR.SaveEditor.Constructs
 
         object ICollection.SyncRoot => this._dictionary;
 
-        public IReadOnlyCollection<DataTemplate> Values => this._dictionary.Values;
-
         ICollection IDictionary.Values => this._dictionary.Values;
 
         [MaybeNull]
