@@ -17,8 +17,8 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/KoAR.SaveEditor;component/Views/Templates/DownloadIndicatorTemplate.xaml" />
-                <ResourceDictionary Source="/KoAR.SaveEditor;component/Views/Templates/TextBoxErrorTemplate.xaml" />
+                <ResourceDictionary Source="/KoAR.SaveEditor;component/Templates/DownloadIndicatorTemplate.xaml" />
+                <ResourceDictionary Source="/KoAR.SaveEditor;component/Templates/TextBoxErrorTemplate.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <ObjectDataProvider x:Key="ViewModel" ObjectType="{x:Type local:MainWindowViewModel}" />
             <ObjectDataProvider x:Key="Modes" ObjectType="{x:Type s:Enum}" MethodName="GetValues">
@@ -32,6 +32,11 @@
             <BitmapImage UriSource="/KoAR.SaveEditor;component/Resources/Save.png" x:Key="Save" po:Freeze="True" />
             <BitmapImage UriSource="/KoAR.SaveEditor;component/Resources/Help.png" x:Key="Help" po:Freeze="True" />
             <BitmapImage UriSource="/KoAR.SaveEditor;component/Resources/Zoom.png" x:Key="Zoom" po:Freeze="True" />
+            <constructs:CompositeConverter x:Key="NotNullToVisibilityConverter">
+                <constructs:IsNullConverter />
+                <constructs:NegatedBooleanConverter />
+                <BooleanToVisibilityConverter />
+            </constructs:CompositeConverter>
         </ResourceDictionary>
     </Window.Resources>
     <Window.DataContext>
@@ -55,11 +60,14 @@
         </Style>
     </Window.Style>
     <Window.TaskbarItemInfo>
-        <TaskbarItemInfo constructs:TaskbarItemInfoOverlay.ContentTemplate="{StaticResource DownloadIndicatorTemplate}"
+        <TaskbarItemInfo x:Name="TaskbarItemInfo" constructs:TaskbarItemInfoOverlay.ContentTemplate="{StaticResource DownloadIndicatorTemplate}"
             constructs:TaskbarItemInfoOverlay.Content="{Binding UpdateService.Update, Source={StaticResource ViewModel}}">
             <TaskbarItemInfo.ThumbButtonInfos>
                 <ThumbButtonInfo Command="Open" ImageSource="{StaticResource Open}" Description="Open File..." DismissWhenClicked="True"
                     CommandTarget="{Binding MainWindow, Source={x:Static Application.Current}}" />
+                <ThumbButtonInfo ImageSource="{Binding Overlay, ElementName=TaskbarItemInfo}" Description="Update Available" DismissWhenClicked="True"
+                    Command="{Binding OpenUpdateWindowCommand, Source={StaticResource ViewModel}}"
+                    Visibility="{Binding UpdateService.Update, Source={StaticResource ViewModel}, Converter={StaticResource NotNullToVisibilityConverter}}"/>
                 <ThumbButtonInfo Command="Help" ImageSource="{StaticResource Help}" Description="Help" DismissWhenClicked="True"
                     CommandTarget="{Binding MainWindow, Source={x:Static Application.Current}}" />
             </TaskbarItemInfo.ThumbButtonInfos>

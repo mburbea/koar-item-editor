@@ -4,7 +4,7 @@
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views" 
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/KoAR.SaveEditor;component/Views/Templates/BuffToolTipTemplate.xaml" />
+        <ResourceDictionary Source="/KoAR.SaveEditor;component/Templates/BuffToolTipTemplate.xaml" />
     </ResourceDictionary.MergedDictionaries>
     <views:BitmapConverter x:Key="BitmapConverter" />
     <constructs:IsNullConverter x:Key="IsNullConverter" />
