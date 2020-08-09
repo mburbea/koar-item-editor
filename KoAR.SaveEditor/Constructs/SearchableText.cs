@@ -15,7 +15,7 @@ namespace KoAR.SaveEditor.Constructs
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register(nameof(SearchableText.Text), typeof(string), typeof(SearchableText),
             new PropertyMetadata(SearchableText.TextProperty_ValueChanged));
 
-        private static readonly DependencyPropertyKey _segmentsPropertyKey = DependencyProperty.RegisterReadOnly(nameof(SearchableText.Segments), typeof(IReadOnlyCollection<Segment>), typeof(SearchableText),
+        private static readonly DependencyPropertyKey _segmentsPropertyKey = DependencyProperty.RegisterReadOnly(nameof(SearchableText.Segments), typeof(IReadOnlyList<Segment>), typeof(SearchableText),
             new PropertyMetadata(Array.Empty<Segment>()));
 
         static SearchableText()
@@ -30,9 +30,9 @@ namespace KoAR.SaveEditor.Constructs
             set => this.SetValue(SearchableText.SearchTextProperty, value);
         }
 
-        public IReadOnlyCollection<Segment> Segments
+        public IReadOnlyList<Segment> Segments
         {
-            get => (IReadOnlyCollection<Segment>)this.GetValue(SearchableText.SegmentsProperty);
+            get => (IReadOnlyList<Segment>)this.GetValue(SearchableText.SegmentsProperty);
             private set => this.SetValue(SearchableText._segmentsPropertyKey, value);
         }
 
