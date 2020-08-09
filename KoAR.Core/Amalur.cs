@@ -21,7 +21,6 @@ namespace KoAR.Core
             var jsonOptions = new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonSnakeCaseNamingPolicy.Instance,
-                DictionaryKeyPolicy = JsonSnakeCaseNamingPolicy.Instance,
                 Converters = { new JsonStringEnumConverter() }
             };
             using var zipStream = Assembly.GetExecutingAssembly().GetManifestResourceStream($"{typeof(Amalur).Namespace}.Data.zip");

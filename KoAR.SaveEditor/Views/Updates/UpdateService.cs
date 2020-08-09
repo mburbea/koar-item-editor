@@ -14,8 +14,7 @@ namespace KoAR.SaveEditor.Views.Updates
     {
         private static readonly JsonSerializerOptions _options = new JsonSerializerOptions
         {
-            PropertyNamingPolicy = JsonSnakeCaseNamingPolicy.Instance,
-            DictionaryKeyPolicy = JsonSnakeCaseNamingPolicy.Instance
+            PropertyNamingPolicy = JsonSnakeCaseNamingPolicy.Instance
         };
 
         private Release? _update;
