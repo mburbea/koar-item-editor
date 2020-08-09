@@ -60,12 +60,12 @@
         </Style>
     </Window.Style>
     <Window.TaskbarItemInfo>
-        <TaskbarItemInfo x:Name="TaskbarItemInfo" constructs:TaskbarItemInfoOverlay.ContentTemplate="{StaticResource DownloadIndicatorTemplate}"
+        <TaskbarItemInfo x:Name="PART_TaskbarItemInfo" constructs:TaskbarItemInfoOverlay.ContentTemplate="{StaticResource DownloadIndicatorTemplate}"
             constructs:TaskbarItemInfoOverlay.Content="{Binding UpdateService.Update, Source={StaticResource ViewModel}}">
             <TaskbarItemInfo.ThumbButtonInfos>
                 <ThumbButtonInfo Command="Open" ImageSource="{StaticResource Open}" Description="Open File..." DismissWhenClicked="True"
                     CommandTarget="{Binding MainWindow, Source={x:Static Application.Current}}" />
-                <ThumbButtonInfo ImageSource="{Binding Overlay, ElementName=TaskbarItemInfo}" Description="Update Available" DismissWhenClicked="True"
+                <ThumbButtonInfo ImageSource="{Binding Overlay, ElementName=PART_TaskbarItemInfo}" Description="Update Available" DismissWhenClicked="True"
                     Command="{Binding OpenUpdateWindowCommand, Source={StaticResource ViewModel}}"
                     Visibility="{Binding UpdateService.Update, Source={StaticResource ViewModel}, Converter={StaticResource NotNullToVisibilityConverter}}"/>
                 <ThumbButtonInfo Command="Help" ImageSource="{StaticResource Help}" Description="Help" DismissWhenClicked="True"
