@@ -9,6 +9,8 @@ namespace KoAR.Core
     {
         public static readonly JsonNamingPolicy Instance = new JsonSnakeCaseNamingPolicy();
 
+        private JsonSnakeCaseNamingPolicy() { }
+
         public override string ConvertName(string name)
         {
             if (string.IsNullOrEmpty(name))
