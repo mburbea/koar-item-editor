@@ -95,7 +95,7 @@
                             <RowDefinition />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <Expander Header="Filters:" IsExpanded="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" views:FocusVisualStyleKiller.Kill="True">
+                        <Expander Header="Filters:" views:FocusVisualStyleKiller.Kill="True" IsExpanded="{Binding ItemFilters.IsExpanded, RelativeSource={RelativeSource TemplatedParent}}">
                             <Grid>
                                 <Grid.Resources>
                                     <Style TargetType="{x:Type TextBlock}">

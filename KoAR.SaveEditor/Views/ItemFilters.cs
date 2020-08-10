@@ -10,15 +10,13 @@ namespace KoAR.SaveEditor.Views
     public sealed class ItemFilters : NotifierBase
     {
         private int _armorType;
-        private int _category;
+        private EquipmentCategory _category;
         private int _element;
+        private bool _isExpanded = true;
         private string _itemName = string.Empty;
         private int _rarity;
 
-        public ItemFilters()
-        {
-            this.ResetFiltersCommand = new DelegateCommand(() => this.ResetFilters(resetCategory: false));
-        }
+        public ItemFilters() => this.ResetFiltersCommand = new DelegateCommand(this.ResetFilters);
 
         public event EventHandler? FilterChange;
 
@@ -36,10 +34,10 @@ namespace KoAR.SaveEditor.Views
 
         public EquipmentCategory Category
         {
-            get => (EquipmentCategory)this._category;
+            get => this._category;
             set
             {
-                if (this.SetValue(ref this._category, (int)value))
+                if (this.SetValue(ref this._category, value))
                 {
                     this.OnFilterChange();
                 }
@@ -56,6 +54,12 @@ namespace KoAR.SaveEditor.Views
                     this.OnFilterChange();
                 }
             }
+        }
+
+        public bool IsExpanded
+        {
+            get => this._isExpanded;
+            set => this.SetValue(ref this._isExpanded, value);
         }
 
         public string ItemName
@@ -82,9 +86,6 @@ namespace KoAR.SaveEditor.Views
             }
         }
 
-        /// <summary>
-        /// Command to reset all filters.  An optional parameter indicates whether or not to also reset the filter on <see cref="Category"/>.
-        /// </summary>
         public DelegateCommand ResetFiltersCommand { get; }
 
         public IReadOnlyList<TItem> GetFilteredItems<TItem>(IReadOnlyList<TItem> items)
@@ -114,7 +115,9 @@ namespace KoAR.SaveEditor.Views
             return object.Equals(collection, items) ? items : collection.ToList();
         }
 
-        public void ResetFilters(bool resetCategory)
+        private void OnFilterChange() => this.FilterChange?.Invoke(this, EventArgs.Empty);
+
+        private void ResetFilters()
         {
             if (Interlocked.Exchange(ref this._itemName, string.Empty).Length != 0)
             {
@@ -132,13 +135,7 @@ namespace KoAR.SaveEditor.Views
             {
                 this.OnPropertyChanged(nameof(this.ArmorType));
             }
-            if (resetCategory && Interlocked.Exchange(ref this._category, default) != default)
-            {
-                this.OnPropertyChanged(nameof(this.Category));
-            }
             this.OnFilterChange();
         }
-
-        private void OnFilterChange() => this.FilterChange?.Invoke(this, EventArgs.Empty);
     }
 }
