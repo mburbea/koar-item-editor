@@ -210,7 +210,7 @@
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate DataType="{x:Type views:ItemModelBase}">
                                             <Grid>
-                                                <views:ItemDefinitionControl Item="{Binding}">
+                                                <views:ItemDefinitionControl Item="{Binding}" SearchText="{Binding SearchText, RelativeSource={RelativeSource AncestorType={x:Type views:ItemCollectionManager}}}">
                                                     <views:ItemDefinitionControl.Style>
                                                         <Style TargetType="{x:Type views:ItemDefinitionControl}">
                                                             <Style.Triggers>

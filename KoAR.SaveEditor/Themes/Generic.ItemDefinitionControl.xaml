@@ -69,9 +69,9 @@
                                 </Style>
                             </views:RarityIcon.Style>
                         </views:RarityIcon>
-                        <TextBlock VerticalAlignment="Center" Margin="2,0">
-                            <TextBlock.Style>
-                                <Style TargetType="{x:Type TextBlock}">
+                        <constructs:SearchableText VerticalAlignment="Center" Margin="2,0" SearchText="{TemplateBinding SearchText}">
+                            <constructs:SearchableText.Style>
+                                <Style TargetType="{x:Type constructs:SearchableText}">
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding Item, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource EqualityConverter}}" Value="False">
                                             <Setter Property="Text" Value="{Binding Item.DisplayName, RelativeSource={RelativeSource TemplatedParent}}" />
@@ -79,8 +79,8 @@
                                     </Style.Triggers>
                                     <Setter Property="Text" Value="{Binding Definition.Name, RelativeSource={RelativeSource TemplatedParent}}" />
                                 </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
+                            </constructs:SearchableText.Style>
+                        </constructs:SearchableText>
                         <TextBlock VerticalAlignment="Center">
                             <TextBlock.Style>
                                 <Style TargetType="{x:Type TextBlock}">

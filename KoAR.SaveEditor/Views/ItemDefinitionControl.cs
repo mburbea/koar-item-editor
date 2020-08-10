@@ -12,12 +12,15 @@ namespace KoAR.SaveEditor.Views
         public static readonly DependencyProperty DefinitionProperty = DependencyProperty.Register(nameof(ItemDefinitionControl.Definition), typeof(ItemDefinition), typeof(ItemDefinitionControl),
             new PropertyMetadata(ItemDefinitionControl.Definition_ValueChanged));
 
-        public static readonly DependencyProperty SocketsProperty;
-
         public static readonly DependencyProperty ItemProperty = DependencyProperty.Register(nameof(ItemDefinitionControl.Item), typeof(ItemModelBase), typeof(ItemDefinitionControl),
             new PropertyMetadata(ItemDefinitionControl.ItemProperty_ValueChanged));
 
-        private static readonly DependencyPropertyKey _socketsPropertyKey = DependencyProperty.RegisterReadOnly(nameof(Sockets), typeof(IEnumerable<Socket>), typeof(ItemDefinitionControl), 
+        public static readonly DependencyProperty SearchTextProperty = DependencyProperty.Register(nameof(ItemDefinitionControl.SearchText), typeof(string), typeof(ItemDefinitionControl),
+            new PropertyMetadata());
+
+        public static readonly DependencyProperty SocketsProperty;
+
+        private static readonly DependencyPropertyKey _socketsPropertyKey = DependencyProperty.RegisterReadOnly(nameof(Sockets), typeof(IEnumerable<Socket>), typeof(ItemDefinitionControl),
             new PropertyMetadata());
 
         static ItemDefinitionControl()
@@ -32,16 +35,22 @@ namespace KoAR.SaveEditor.Views
             set => this.SetValue(ItemDefinitionControl.DefinitionProperty, value);
         }
 
-        public IEnumerable<Socket>? Sockets
-        {
-            get => (IEnumerable<Socket>?)this.GetValue(ItemDefinitionControl.SocketsProperty);
-            private set => this.SetValue(ItemDefinitionControl._socketsPropertyKey, value);
-        }
-
         public ItemModelBase? Item
         {
             get => (ItemModelBase?)this.GetValue(ItemDefinitionControl.ItemProperty);
             set => this.SetValue(ItemDefinitionControl.ItemProperty, value);
+        }
+
+        public string? SearchText
+        {
+            get => (string?)this.GetValue(ItemDefinitionControl.SearchTextProperty);
+            set => this.SetValue(ItemDefinitionControl.SearchTextProperty, value);
+        }
+
+        public IEnumerable<Socket>? Sockets
+        {
+            get => (IEnumerable<Socket>?)this.GetValue(ItemDefinitionControl.SocketsProperty);
+            private set => this.SetValue(ItemDefinitionControl._socketsPropertyKey, value);
         }
 
         private static void Definition_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -79,6 +88,6 @@ namespace KoAR.SaveEditor.Views
             ItemModelBase item = (ItemModelBase)sender;
             this.Definition = item.Definition;
             this.Sockets = item.Item.GetSockets();
-        }        
+        }
     }
 }

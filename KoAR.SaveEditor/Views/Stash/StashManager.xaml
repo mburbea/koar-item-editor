@@ -25,15 +25,11 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <Grid Margin="4">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition />
-            </Grid.RowDefinitions>
-            <views:ItemFiltersEditor Items="{Binding Items}" ItemFilters="{Binding ItemFilters}" />
-            <views:ItemCollectionManager Grid.Row="1" Items="{Binding FilteredItems}" SelectedItem="{Binding SelectedItem}" AllItemsStolen="{Binding AllItemsStolen, Mode=OneWay}" 
-                DeleteItemCommand="{Binding DeleteItemCommand}" />
-        </Grid>
+        <DockPanel Margin="4">
+            <views:ItemFiltersEditor DockPanel.Dock="Top" Items="{Binding Items}" ItemFilters="{Binding ItemFilters}" />
+            <views:ItemCollectionManager Items="{Binding FilteredItems}" SelectedItem="{Binding SelectedItem}" AllItemsStolen="{Binding AllItemsStolen, Mode=OneWay}" 
+                DeleteItemCommand="{Binding DeleteItemCommand}" SearchText="{Binding ItemFilters.ItemName}" />
+        </DockPanel>
         <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Stretch" Background="{x:Static SystemColors.ControlBrush}" FocusVisualStyle="{x:Null}" />
         <Grid Grid.Column="2">
             <Grid.RowDefinitions>
