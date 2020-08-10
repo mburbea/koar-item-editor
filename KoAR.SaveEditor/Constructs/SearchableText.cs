@@ -70,7 +70,7 @@ namespace KoAR.SaveEditor.Constructs
             }
             if (start < text.Length)
             {
-                list.Add(text.Substring(start));
+                list.Add(text[start..]);
             }
             return list;
         }
