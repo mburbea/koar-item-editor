@@ -5,8 +5,8 @@
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/PresentationFramework.Aero;component/Themes/Aero.NormalColor.xaml" />
-        <ResourceDictionary Source="/KoAR.SaveEditor;component/Views/Templates/BuffTemplate.xaml" />
-        <ResourceDictionary Source="/KoAR.SaveEditor;component/Views/Templates/BuffToolTipTemplate.xaml" />
+        <ResourceDictionary Source="/KoAR.SaveEditor;component/Templates/BuffTemplate.xaml" />
+        <ResourceDictionary Source="/KoAR.SaveEditor;component/Templates/BuffToolTipTemplate.xaml" />
     </ResourceDictionary.MergedDictionaries>
     <BitmapImage x:Key="Copy" UriSource="/KoAR.SaveEditor;component/Resources/Copy.png" po:Freeze="True" />
     <BitmapImage x:Key="Delete" UriSource="/KoAR.SaveEditor;component/Resources/Delete.png" po:Freeze="True" />
@@ -183,7 +183,7 @@
                                                                 <StackPanel Orientation="Horizontal">
                                                                     <Button Style="{StaticResource CommandButtonStyle}" Tag="{StaticResource Copy}" Command="Copy" ToolTip="Copy"
                                                                         CommandTarget="{Binding RelativeSource={RelativeSource AncestorType={x:Type TreeViewItem}}}" />
-                                                                    <Button Style="{StaticResource CommandButtonStyle}" Tag="{StaticResource Delete}" CommandParameter="{TemplateBinding Header}"
+                                                                    <Button Style="{StaticResource CommandButtonStyle}" Tag="{StaticResource Delete}" CommandParameter="{TemplateBinding Header}" ToolTip="Delete"
                                                                         IsEnabled="{Binding UnsupportedFormat, RelativeSource={RelativeSource AncestorType={x:Type views:BuffCollectionManager}}, Converter={StaticResource NegatedBooleanConverter}}"
                                                                         Command="{Binding DeleteBuffCommand, RelativeSource={RelativeSource AncestorType={x:Type views:BuffCollectionManager}}}" />
                                                                 </StackPanel>

@@ -11,9 +11,7 @@ namespace KoAR.Core
         public string Name { get; set; } = string.Empty;
         public string? Flavor { get; set; }
         public Rarity Rarity { get; set; }
-        [JsonPropertyName("buff_type")]
         public BuffTypes BuffType { get; set; }
-        [JsonPropertyName("apply_type")]
         public ApplyType ApplyType { get; set; }
         [JsonPropertyName("desc")]
         public BuffDescription[] Descriptions { get; set; } = Array.Empty<BuffDescription>();
@@ -30,8 +28,6 @@ namespace KoAR.Core
         [JsonPropertyName("param_icon")]
         public string? Icon { get; set; }
         public string? Text { get; set; }
-        [JsonPropertyName("buff_id")]
-        public string? BuffId { get; set; }
     }
 
     [Flags]

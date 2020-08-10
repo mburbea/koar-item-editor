@@ -13,7 +13,7 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/KoAR.SaveEditor;component/Views/Templates/DownloadIndicatorTemplate.xaml" />
+                <ResourceDictionary Source="/KoAR.SaveEditor;component/Templates/DownloadIndicatorTemplate.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <ObjectDataProvider x:Key="ViewModel" ObjectType="{x:Type local:UpdateViewModel}" />
         </ResourceDictionary>

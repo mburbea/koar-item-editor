@@ -40,6 +40,9 @@ namespace KoAR.SaveEditor.Views
         public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register(nameof(ItemCollectionManager.SelectedItem), typeof(object), typeof(ItemCollectionManager),
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
+        public static readonly DependencyProperty SearchTextProperty = DependencyProperty.RegisterAttached(nameof(ItemCollectionManager.SearchText), typeof(string), typeof(ItemCollectionManager),
+            new PropertyMetadata());
+
         public static readonly DependencyProperty SortDirectionProperty = DependencyProperty.RegisterAttached(nameof(ItemCollectionManager.SortDirection), typeof(ListSortDirection), typeof(ItemCollectionManager),
             new PropertyMetadata());
 
@@ -107,6 +110,12 @@ namespace KoAR.SaveEditor.Views
         {
             get => (ICommand?)this.GetValue(ItemCollectionManager.RowDoubleClickCommandProperty);
             set => this.SetValue(ItemCollectionManager.RowDoubleClickCommandProperty, value);
+        }
+
+        public string? SearchText
+        {
+            get => (string?)this.GetValue(ItemCollectionManager.SearchTextProperty);
+            set => this.SetValue(ItemCollectionManager.SearchTextProperty, value);
         }
 
         public object? SelectedItem

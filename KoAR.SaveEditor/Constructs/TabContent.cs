@@ -8,20 +8,8 @@ namespace KoAR.SaveEditor.Constructs
 {
     public static class TabContent
     {
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public static readonly DependencyProperty ContentManagerProperty = DependencyProperty.RegisterAttached(nameof(ContentManager), typeof(ContentManager), typeof(TabContent),
-            new PropertyMetadata());
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public static readonly DependencyProperty PersistedContentProperty = DependencyProperty.RegisterAttached("PersistedContent", typeof(UIElement), typeof(TabContent),
-            new PropertyMetadata(null));
-
         public static readonly DependencyProperty PersistProperty = DependencyProperty.RegisterAttached("Persist", typeof(bool), typeof(TabContent),
             new PropertyMetadata(TabContent.PersistProperty_ValueChanged));
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public static readonly DependencyProperty TabControlProperty = DependencyProperty.RegisterAttached(nameof(TabControl), typeof(TabControl), typeof(TabContent),
-            new PropertyMetadata(TabControlProperty_ValueChanged));
 
         public static readonly DependencyProperty TemplateProperty = DependencyProperty.RegisterAttached("Template", typeof(DataTemplate), typeof(TabContent),
             new PropertyMetadata());
@@ -29,31 +17,23 @@ namespace KoAR.SaveEditor.Constructs
         public static readonly DependencyProperty TemplateSelectorProperty = DependencyProperty.RegisterAttached("TemplateSelector", typeof(DataTemplateSelector), typeof(TabContent),
             new PropertyMetadata());
 
-        private static readonly DataTemplate _contentTemplate = TabContent.CreateContentTemplate();
+        private static readonly DependencyProperty _contentManagerProperty = DependencyProperty.RegisterAttached(nameof(ContentManager), typeof(ContentManager), typeof(TabContent),
+            new PropertyMetadata());
+
         private static readonly DependencyPropertyDescriptor _contentTemplateDescriptor = DependencyPropertyDescriptor.FromProperty(TabControl.ContentTemplateProperty, typeof(TabControl));
+
         private static readonly DependencyPropertyDescriptor _contentTemplateSelectorDescriptor = DependencyPropertyDescriptor.FromProperty(TabControl.ContentTemplateSelectorProperty, typeof(TabControl));
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public static ContentManager? GetContentManager(TabControl tabControl)
-        {
-            return (ContentManager?)tabControl.GetValue(TabContent.ContentManagerProperty);
-        }
+        private static readonly DependencyProperty _persistedContentProperty = DependencyProperty.RegisterAttached("PersistedContent", typeof(UIElement), typeof(TabContent));
+
+        private static readonly DependencyProperty _tabControlProperty = DependencyProperty.RegisterAttached(nameof(TabControl), typeof(TabControl), typeof(TabContent),
+            new PropertyMetadata(TabContent.TabControlProperty_ValueChanged));
+
+        private static readonly DataTemplate _template = TabContent.CreateContentTemplate();
 
         public static bool GetPersist(TabControl tabControl)
         {
             return tabControl != null && (bool)tabControl.GetValue(TabContent.PersistProperty);
-        }
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public static UIElement? GetPersistedContent(TabItem tabItem)
-        {
-            return (UIElement?)tabItem.GetValue(TabContent.PersistedContentProperty);
-        }
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public static TabControl? GetTabControl(Decorator decorator)
-        {
-            return (TabControl?)decorator.GetValue(TabContent.TabControlProperty);
         }
 
         public static DataTemplate? GetTemplate(TabControl tabControl)
@@ -66,27 +46,9 @@ namespace KoAR.SaveEditor.Constructs
             return (DataTemplateSelector?)tabControl.GetValue(TabContent.TemplateSelectorProperty);
         }
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public static void SetContentManager(TabControl tabControl, ContentManager? value)
-        {
-            tabControl.SetValue(TabContent.ContentManagerProperty, value);
-        }
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
         public static void SetPersist(TabControl tabControl, bool value)
         {
             tabControl?.SetValue(TabContent.PersistProperty, BooleanBoxes.GetBox(value));
-        }
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public static void SetPersistedContent(TabItem tabItem, UIElement? value)
-        {
-            tabItem?.SetValue(TabContent.PersistedContentProperty, value);
-        }
-
-        public static void SetTabControl(Decorator decorator, TabControl? value)
-        {
-            decorator?.SetValue(TabContent.TabControlProperty, value);
         }
 
         public static void SetTemplate(TabControl tabControl, DataTemplate? value)
@@ -102,22 +64,32 @@ namespace KoAR.SaveEditor.Constructs
         private static DataTemplate CreateContentTemplate()
         {
             FrameworkElementFactory factory = new FrameworkElementFactory(typeof(Border));
-            factory.SetBinding(TabContent.TabControlProperty, new Binding
+            factory.SetBinding(TabContent._tabControlProperty, new Binding
             {
                 RelativeSource = new RelativeSource { AncestorType = typeof(TabControl) }
             });
             return new DataTemplate { VisualTree = factory };
         }
 
-        private static ContentManager GetContentManager(TabControl tabControl, Decorator container)
+        private static ContentManager? GetContentManager(TabControl tabControl)
+        {
+            return (ContentManager?)tabControl.GetValue(TabContent._contentManagerProperty);
+        }
+
+        private static ContentManager GetContentManager(TabControl tabControl, Border border)
         {
             ContentManager? manager = TabContent.GetContentManager(tabControl);
             if (manager == null)
             {
                 TabContent.SetContentManager(tabControl, manager = new ContentManager(tabControl));
             }
-            manager.Container = container;
+            manager.Container = border;
             return manager;
+        }
+
+        private static UIElement? GetPersistedContent(TabItem tabItem)
+        {
+            return (UIElement?)tabItem.GetValue(TabContent._persistedContentProperty);
         }
 
         private static void PersistProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -132,7 +104,7 @@ namespace KoAR.SaveEditor.Constructs
                 {
                     throw new InvalidOperationException($"{nameof(TabControl.ContentTemplate)} and {nameof(TabControl.ContentTemplateSelector)} must be null when Persist is true.");
                 }
-                tabControl.ContentTemplate = TabContent._contentTemplate;
+                tabControl.ContentTemplate = TabContent._template;
                 TabContent._contentTemplateDescriptor.AddValueChanged(tabControl, TabContent.TabControl_ContentTemplatePropertiesChanged);
                 TabContent._contentTemplateSelectorDescriptor.AddValueChanged(tabControl, TabContent.TabControl_ContentTemplatePropertiesChanged);
             }
@@ -148,6 +120,16 @@ namespace KoAR.SaveEditor.Constructs
             }
         }
 
+        private static void SetContentManager(TabControl tabControl, ContentManager? value)
+        {
+            tabControl.SetValue(TabContent._contentManagerProperty, value);
+        }
+
+        private static void SetPersistedContent(TabItem tabItem, UIElement? value)
+        {
+            tabItem?.SetValue(TabContent._persistedContentProperty, value);
+        }
+
         private static void TabControl_ContentTemplatePropertiesChanged(object sender, EventArgs e)
         {
             throw new InvalidOperationException($"Can not assign to {nameof(TabControl.ContentTemplate)} or {nameof(TabControl.ContentTemplateSelector)} when Persist is true.");
@@ -155,26 +137,23 @@ namespace KoAR.SaveEditor.Constructs
 
         private static void TabControlProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (!(d is Decorator container) || e.NewValue == null)
+            if (e.NewValue != null)
             {
-                return;
+                TabContent.GetContentManager((TabControl)e.NewValue, (Border)d).UpdateSelectedTab();
             }
-            TabControl tabControl = (TabControl)e.NewValue;
-            TabContent.GetContentManager(tabControl, container).UpdateSelectedTab();
         }
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public sealed class ContentManager : IDisposable
+        private sealed class ContentManager : IDisposable
         {
             private readonly TabControl _tabControl;
-            private Decorator? _container;
+            private Border? _container;
 
             public ContentManager(TabControl tabControl)
             {
                 (this._tabControl = tabControl).SelectionChanged += this.TabControl_SelectionChanged;
             }
 
-            public Decorator? Container
+            public Border? Container
             {
                 get => this._container;
                 set
@@ -199,9 +178,7 @@ namespace KoAR.SaveEditor.Constructs
 
             private UIElement? GetPersistedContent()
             {
-                TabItem? tabItem;
-                object? item = this._tabControl.SelectedItem;
-                if (item == null || (tabItem = (TabItem?)this._tabControl.ItemContainerGenerator.ContainerFromItem(item)) == null)
+                if (!(this._tabControl.SelectedItem is object item && this._tabControl.ItemContainerGenerator.ContainerFromItem(item) is TabItem tabItem))
                 {
                     return null;
                 }

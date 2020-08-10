@@ -20,7 +20,7 @@ namespace KoAR.Core
                 CultureInfo.DefaultThreadCurrentCulture = CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
             var jsonOptions = new JsonSerializerOptions
             {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                PropertyNamingPolicy = JsonSnakeCaseNamingPolicy.Instance,
                 Converters = { new JsonStringEnumConverter() }
             };
             using var zipStream = Assembly.GetExecutingAssembly().GetManifestResourceStream($"{typeof(Amalur).Namespace}.Data.zip");

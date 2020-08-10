@@ -7,7 +7,7 @@
     xmlns:scm="clr-namespace:System.ComponentModel;assembly=PresentationFramework">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/PresentationFramework.Aero;component/Themes/Aero.NormalColor.xaml" />
-        <ResourceDictionary Source="/KoAR.SaveEditor;component/Views/Templates/BuffToolTipTemplate.xaml" />
+        <ResourceDictionary Source="/KoAR.SaveEditor;component/Templates/BuffToolTipTemplate.xaml" />
     </ResourceDictionary.MergedDictionaries>
     <constructs:EqualityConverter x:Key="EqualityConverter" />
     <constructs:ComboPanelMaxWidthConverter x:Key="MaxWidthConverter" />

@@ -6,7 +6,7 @@
     xmlns:s="clr-namespace:System;assembly=mscorlib">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/PresentationFramework.Aero;component/Themes/Aero.NormalColor.xaml" />
-        <ResourceDictionary Source="/KoAR.SaveEditor;component/Views/Templates/TextBoxErrorTemplate.xaml" />
+        <ResourceDictionary Source="/KoAR.SaveEditor;component/Templates/TextBoxErrorTemplate.xaml" />
     </ResourceDictionary.MergedDictionaries>
     <constructs:ArrayConverter x:Key="ArrayConverter" />
     <constructs:EqualityConverter x:Key="EqualityConverter" />
@@ -95,7 +95,7 @@
                             <RowDefinition />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <Expander Header="Filters:" IsExpanded="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" views:FocusVisualStyleKiller.Kill="True">
+                        <Expander Header="Filters:" views:FocusVisualStyleKiller.Kill="True" IsExpanded="{Binding ItemFilters.IsExpanded, RelativeSource={RelativeSource TemplatedParent}}">
                             <Grid>
                                 <Grid.Resources>
                                     <Style TargetType="{x:Type TextBlock}">
@@ -106,12 +106,10 @@
                                     <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
                                         <Setter Property="Margin" Value="2" />
                                         <Setter Property="VerticalAlignment" Value="Center" />
-                                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                                     </Style>
                                     <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
                                         <Setter Property="Margin" Value="2" />
                                         <Setter Property="VerticalAlignment" Value="Center" />
-                                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                                         <Setter Property="Validation.ErrorTemplate" Value="{StaticResource TextBoxErrorTemplate}" />
                                     </Style>                                    
                                 </Grid.Resources>

@@ -17,6 +17,7 @@
         <!-- Constructs -->
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.LoadingIndicator.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.ScrollingTabControl.xaml" />
+        <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.SearchableText.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.StatefulProgressBar.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
