@@ -178,9 +178,7 @@ namespace KoAR.SaveEditor.Constructs
 
             private UIElement? GetPersistedContent()
             {
-                TabItem? tabItem;
-                object? item = this._tabControl.SelectedItem;
-                if (item == null || (tabItem = (TabItem?)this._tabControl.ItemContainerGenerator.ContainerFromItem(item)) == null)
+                if (!(this._tabControl.SelectedItem is object item && this._tabControl.ItemContainerGenerator.ContainerFromItem(item) is TabItem tabItem))
                 {
                     return null;
                 }
