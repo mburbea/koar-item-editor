@@ -96,8 +96,7 @@ namespace KoAR.SaveEditor.Views
                 : items.Where(item => ItemFilters.Match(item, this.Category, this.Rarity, this.Element, this.ArmorType, this.ItemName)).ToList();
         }
 
-        internal static bool Match<TItem>(TItem item, EquipmentCategory category, Rarity rarity, Element element, ArmorType armorType, string itemName)
-            where TItem : ItemModelBase
+        internal static bool Match(ItemModelBase item, EquipmentCategory category, Rarity rarity, Element element, ArmorType armorType, string itemName)
         {
             return (category == default || category == item.Category) &&
                 (rarity == default || rarity == item.Rarity) &&
