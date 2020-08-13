@@ -46,10 +46,7 @@ namespace KoAR.SaveEditor.Views
                     : DependencyProperty.UnsetValue;
             }
 
-            object[] IMultiValueConverter.ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
-            {
-                throw new NotImplementedException();
-            }
+            object[] IMultiValueConverter.ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture) => throw new NotImplementedException();
         }
     }
 }
