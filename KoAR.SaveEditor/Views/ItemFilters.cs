@@ -131,7 +131,7 @@ namespace KoAR.SaveEditor.Views
         }
     }
 
-    internal static class ItemFiltersMethods
+    public static class ItemFiltersMethods
     {
         public static int GetFilteredItemCount(this IReadOnlyCollection<ItemModelBase> items, IItemFilters filters)
         {
@@ -144,7 +144,7 @@ namespace KoAR.SaveEditor.Views
             return filters.IsEmpty() ? items : items.Where(filters.Match).ToList();
         }
 
-        public static bool IsEmpty(this IItemFilters filters)
+        private static bool IsEmpty(this IItemFilters filters)
         {
             return filters.Category == default && filters.Rarity == default && filters.Element == default && filters.ArmorType == default && filters.ItemName.Length == 0;
         }
