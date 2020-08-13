@@ -78,12 +78,9 @@ namespace KoAR.SaveEditor.Views.QuestItems
 
         private void OnFilterChanged()
         {
-            IEnumerable<QuestItemModel> items = this.Items;
-            if (this._nameFilter.Length != 0)
-            {
-                items = items.Where(item => item.Name.IndexOf(this._nameFilter, StringComparison.InvariantCultureIgnoreCase) != -1);
-            }
-            this.FilteredItems = object.Equals(this.Items, items) ? this.Items : items.ToList();
+            this.FilteredItems = this._nameFilter.Length != 0 
+                ? this.Items.Where(item => item.Name.IndexOf(this._nameFilter, StringComparison.InvariantCultureIgnoreCase) != -1).ToList() 
+                : this.Items;
             this.OnPropertyChanged(nameof(this.AllItemsUnsellable));
         }
 
