@@ -5,23 +5,14 @@ using System.Windows.Data;
 
 namespace KoAR.SaveEditor.Views.Updates
 {
-    public sealed class TimeSpanConverter : IMultiValueConverter, IValueConverter
+    public sealed class TimeSpanConverter : IMultiValueConverter
     {
-        object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return value is TimeSpan timeSpan
-                ? TimeSpanConverter.GetDescriptiveText(timeSpan)
-                : DependencyProperty.UnsetValue;
-        }
-
         object IMultiValueConverter.Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             return values.Length >= 2 && values[0] is DateTime left && values[1] is DateTime right
                 ? TimeSpanConverter.GetDescriptiveText(left - right)
                 : DependencyProperty.UnsetValue;
         }
-
-        object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
 
         object[] IMultiValueConverter.ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture) => throw new NotImplementedException();
 

@@ -91,28 +91,18 @@ namespace KoAR.SaveEditor.Views
         public IReadOnlyList<TItem> GetFilteredItems<TItem>(IReadOnlyList<TItem> items)
             where TItem : ItemModelBase
         {
-            IEnumerable<TItem> collection = items;
-            if (this.Rarity != default)
-            {
-                collection = collection.Where(model => model.Rarity == this.Rarity);
-            }
-            if (this.Element != default)
-            {
-                collection = collection.Where(model => model.Definition.Element == this.Element);
-            }
-            if (this.ArmorType != default)
-            {
-                collection = collection.Where(model => model.Definition.ArmorType == this.ArmorType);
-            }
-            if (this.Category != default)
-            {
-                collection = collection.Where(model => model.Category == this.Category);
-            }
-            if (this.ItemName.Length != 0)
-            {
-                collection = collection.Where(model => model.DisplayName.IndexOf(this.ItemName, StringComparison.InvariantCultureIgnoreCase) != -1);
-            }
-            return object.Equals(collection, items) ? items : collection.ToList();
+            return this.Category == default && this.Rarity == default && this.Element == default && this.ArmorType == default && this.ItemName.Length == 0
+                ? items
+                : items.Where(item => ItemFilters.Match(item, this.Category, this.Rarity, this.Element, this.ArmorType, this.ItemName)).ToList();
+        }
+
+        internal static bool Match(ItemModelBase item, EquipmentCategory category, Rarity rarity, Element element, ArmorType armorType, string itemName)
+        {
+            return (category == default || category == item.Category) &&
+                (rarity == default || rarity == item.Rarity) &&
+                (element == default || element == item.Definition.Element) &&
+                (armorType == default || armorType == item.Definition.ArmorType) &&
+                (itemName.Length == 0 || item.DisplayName.IndexOf(itemName, StringComparison.InvariantCultureIgnoreCase) != -1);
         }
 
         private void OnFilterChange() => this.FilterChange?.Invoke(this, EventArgs.Empty);
