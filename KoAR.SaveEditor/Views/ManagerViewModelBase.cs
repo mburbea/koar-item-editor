@@ -68,7 +68,7 @@ namespace KoAR.SaveEditor.Views
 
         protected virtual void OnFilterChange()
         {
-            this.FilteredItems = this.ItemFilters.GetFilteredItems(this.Items);
+            this.FilteredItems = this.Items.GetFilteredItems(this.ItemFilters);
             this.SelectedItem = null;
             this.OnPropertyChanged(nameof(this.AllItemsStolen));
         }

@@ -39,17 +39,20 @@
     <DataTemplate x:Key="EmptyTemplate" />
     <DataTemplate x:Key="CategoryTemplate" DataType="{x:Type core:EquipmentCategory}">
         <StackPanel Orientation="Horizontal">
+            <StackPanel.Style>
+                <Style TargetType="{x:Type StackPanel}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type TabItem}}}" Value="True">
+                            <Setter Property="TextBlock.FontWeight" Value="SemiBold" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </StackPanel.Style>
             <views:EquipmentCategoryIcon Category="{Binding}" VerticalAlignment="Center" />
             <TextBlock VerticalAlignment="Center" Margin="2,0">
                 <TextBlock.Style>
                     <Style TargetType="{x:Type TextBlock}">
-                        <Style.Resources>
-                            <views:TitleCaseWordsConverter x:Key="TitleCaseWordsConverter" />
-                        </Style.Resources>
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type TabItem}}}" Value="True">
-                                <Setter Property="FontWeight" Value="SemiBold" />
-                            </DataTrigger>
                             <DataTrigger Binding="{Binding}" Value="{StaticResource AllCategory}">
                                 <Setter Property="Text" Value="All" />
                             </DataTrigger>
@@ -59,15 +62,6 @@
                 </TextBlock.Style>
             </TextBlock>
             <TextBlock VerticalAlignment="Center">
-                <TextBlock.Style>
-                    <Style TargetType="{x:Type TextBlock}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type TabItem}}}" Value="True">
-                                <Setter Property="FontWeight" Value="SemiBold" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBlock.Style>
                 <TextBlock.Text>
                     <MultiBinding Converter="{x:Static views:ItemFiltersEditor.ItemCountConverter}" StringFormat="({0})">
                         <Binding Path="Items" RelativeSource="{RelativeSource AncestorType={x:Type views:ItemFiltersEditor}}" />
@@ -191,8 +185,8 @@
                                         </DataTemplate>
                                     </ComboBox.ItemTemplate>
                                 </ComboBox>
-                                <Button Grid.Column="8" Content="Reset" FocusVisualStyle="{x:Null}" Command="{Binding ItemFilters.ResetFiltersCommand, RelativeSource={RelativeSource TemplatedParent}}" Margin="2" 
-                                    Height="{Binding ActualHeight, ElementName=PART_Rarities}" VerticalAlignment="Center" />
+                                <Button Grid.Column="8" Content="Reset" FocusVisualStyle="{x:Null}" Margin="2" Height="{Binding ActualHeight, ElementName=PART_Rarities}" VerticalAlignment="Center" 
+                                    Command="{x:Static views:ItemFilters.ResetCommand}" CommandParameter="{TemplateBinding ItemFilters}" />
                             </Grid>
                         </Expander>
                         <constructs:ScrollingTabControl Grid.Row="1" Margin="0,4,0,0" IsSynchronizedWithCurrentItem="False"
