@@ -11,7 +11,6 @@
     <constructs:ArrayConverter x:Key="ArrayConverter" />
     <constructs:EqualityConverter x:Key="EqualityConverter" />
     <views:TitleCaseWordsConverter x:Key="TitleCaseWordsConverter" />
-    <views:CategoryCountConverter x:Key="CategoryCountConverter" />
     <ObjectDataProvider x:Key="Rarities" ObjectType="{x:Type s:Enum}" MethodName="GetValues">
         <ObjectDataProvider.MethodParameters>
             <x:Type TypeName="core:Rarity" />
@@ -66,16 +65,17 @@
                             <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type TabItem}}}" Value="True">
                                 <Setter Property="FontWeight" Value="SemiBold" />
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding}" Value="{StaticResource AllCategory}">
-                                <Setter Property="Text" Value="{Binding Items.Count, RelativeSource={RelativeSource AncestorType={x:Type views:ItemFiltersEditor}}, StringFormat='({0})'}" />
-                            </DataTrigger>
                         </Style.Triggers>
                         <Setter Property="Text">
                             <Setter.Value>
-                                <MultiBinding Converter="{StaticResource CategoryCountConverter}" StringFormat="({0})">
-                                    <Binding />
+                                <MultiBinding Converter="{x:Static views:ItemFiltersEditor.ItemCountConverter}" StringFormat="({0})">
                                     <Binding Path="Items" RelativeSource="{RelativeSource AncestorType={x:Type views:ItemFiltersEditor}}" />
-                                    <!-- Used to retrigger binding if count changes after loading file -->
+                                    <Binding />
+                                    <Binding Path="ItemFilters.Rarity"  RelativeSource="{RelativeSource AncestorType={x:Type views:ItemFiltersEditor}}" />
+                                    <Binding Path="ItemFilters.Element"  RelativeSource="{RelativeSource AncestorType={x:Type views:ItemFiltersEditor}}" />
+                                    <Binding Path="ItemFilters.ArmorType"  RelativeSource="{RelativeSource AncestorType={x:Type views:ItemFiltersEditor}}" />
+                                    <Binding Path="ItemFilters.ItemName"  RelativeSource="{RelativeSource AncestorType={x:Type views:ItemFiltersEditor}}" />
+                                    <!-- Used to retrigger binding if count changes (i.e. stash item add) -->
                                     <Binding Path="Items.Count" RelativeSource="{RelativeSource AncestorType={x:Type views:ItemFiltersEditor}}" />
                                 </MultiBinding>
                             </Setter.Value>
