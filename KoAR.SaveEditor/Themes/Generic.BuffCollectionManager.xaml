@@ -22,7 +22,7 @@
                         <ControlTemplate TargetType="{x:Type Button}">
                             <Image x:Name="Icon" Width="16" Source="{TemplateBinding Tag}" Cursor="Hand">
                                 <Image.OpacityMask>
-                                    <ImageBrush ImageSource="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" />
+                                    <ImageBrush ImageSource="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" po:Freeze="True" />
                                 </Image.OpacityMask>
                             </Image>
                             <ControlTemplate.Triggers>
