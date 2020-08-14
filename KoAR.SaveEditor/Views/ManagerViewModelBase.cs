@@ -20,7 +20,7 @@ namespace KoAR.SaveEditor.Views
             this.MainWindowViewModel = mainWindowViewModel;
             this._itemsProjection = itemsProjection;
             this._filteredItems = this._items = new NotifyingCollection<TItem>();
-            (this.ItemFilters = new ItemFilters()).FilterChange += this.ItemFilters_FilterChange;
+            this.ItemFilters.FilterChange += this.ItemFilters_FilterChange;
             this.RepopulateItems();
         }
 
@@ -34,7 +34,7 @@ namespace KoAR.SaveEditor.Views
 
         protected GameSave GameSave => this.MainWindowViewModel.GameSave!;
 
-        public ItemFilters ItemFilters { get; }
+        public ItemFilters ItemFilters { get; } = new ItemFilters();
 
         public IReadOnlyList<TItem> Items => this._items;
 
@@ -68,7 +68,7 @@ namespace KoAR.SaveEditor.Views
 
         protected virtual void OnFilterChange()
         {
-            this.FilteredItems = this.ItemFilters.GetFilteredItems(this.Items);
+            this.FilteredItems = this.Items.GetFilteredItems(this.ItemFilters);
             this.SelectedItem = null;
             this.OnPropertyChanged(nameof(this.AllItemsStolen));
         }

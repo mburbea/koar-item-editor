@@ -18,7 +18,7 @@ namespace KoAR.SaveEditor.Views.ChangeOrAddItem
         private int _armorTypeFilter;
         private EquipmentCategory _category;
         private ItemDefinition? _definition;
-        private IEnumerable<ItemDefinition>? _definitions;
+        private IReadOnlyList<ItemDefinition>? _definitions;
         private int _elementFilter;
         private int _rarityFilter;
 
@@ -26,7 +26,7 @@ namespace KoAR.SaveEditor.Views.ChangeOrAddItem
         {
             this._definition = (this.Item = item)?.Definition ?? Amalur.ItemDefinitions.Values.First();
             this._category = item?.Category ?? ChangeOrAddItemViewModel._defaultCategory;
-            this.ProcessCommand = new DelegateCommand(this.Process, this.CanProcess);
+            this.ProcessCommand = new DelegateCommand(this.Process, () => this._definition != null);
             this.OnFilterChanged();
         }
 
@@ -47,22 +47,23 @@ namespace KoAR.SaveEditor.Views.ChangeOrAddItem
             get => this._category;
             set
             {
-                if (this.SetValue(ref this._category, value))
+                if (!this.SetValue(ref this._category, value))
                 {
-                    if (Interlocked.Exchange(ref this._rarityFilter, default) != default)
-                    {
-                        this.OnPropertyChanged(nameof(this.RarityFilter));
-                    }
-                    if (Interlocked.Exchange(ref this._elementFilter, default) != default)
-                    {
-                        this.OnPropertyChanged(nameof(this.ElementFilter));
-                    }
-                    if (Interlocked.Exchange(ref this._armorTypeFilter, default) != default)
-                    {
-                        this.OnPropertyChanged(nameof(this.ArmorTypeFilter));
-                    }
-                    this.OnFilterChanged();
+                    return;
                 }
+                if (Interlocked.Exchange(ref this._rarityFilter, default) != default)
+                {
+                    this.OnPropertyChanged(nameof(this.RarityFilter));
+                }
+                if (Interlocked.Exchange(ref this._elementFilter, default) != default)
+                {
+                    this.OnPropertyChanged(nameof(this.ElementFilter));
+                }
+                if (Interlocked.Exchange(ref this._armorTypeFilter, default) != default)
+                {
+                    this.OnPropertyChanged(nameof(this.ArmorTypeFilter));
+                }
+                this.OnFilterChanged();
             }
         }
 
@@ -72,7 +73,7 @@ namespace KoAR.SaveEditor.Views.ChangeOrAddItem
             set => this.SetValue(ref this._definition, value);
         }
 
-        public IEnumerable<ItemDefinition>? Definitions
+        public IReadOnlyList<ItemDefinition>? Definitions
         {
             get => this._definitions;
             private set => this.SetValue(ref this._definitions, value);
@@ -106,25 +107,19 @@ namespace KoAR.SaveEditor.Views.ChangeOrAddItem
             }
         }
 
-        private bool CanProcess() => this._definition != null;
+        private bool IsMatch(ItemDefinition item)
+        {
+            return this.Category == item.Category &&
+                (this.ElementFilter == default || this.ElementFilter == item.Element) &&
+                (this.ArmorTypeFilter == default || this.ArmorTypeFilter == item.ArmorType) &&
+                (this.RarityFilter == default || this.RarityFilter == item.Rarity);
+        }
 
         private void OnFilterChanged()
         {
-            IEnumerable<ItemDefinition> definitions = Amalur.ItemDefinitions.Values.Where(item => item.Category == this._category);
-            if (this._elementFilter != default)
-            {
-                definitions = definitions.Where(item => item.Element == this.ElementFilter);
-            }
-            if (this._armorTypeFilter != default)
-            {
-                definitions = definitions.Where(item => item.ArmorType == this.ArmorTypeFilter);
-            }
-            if (this._rarityFilter != default)
-            {
-                definitions = definitions.Where(item => item.Rarity == this.RarityFilter);
-            }
-            this.Definitions = definitions.ToArray();
-            if (this._definition == null || !this.Definitions.Contains(this._definition))
+            ItemDefinition? selectedItem = this._definition;
+            this.Definitions = Amalur.ItemDefinitions.Values.Where(this.IsMatch).ToArray();
+            if (selectedItem == null || !this.Definitions.Contains(selectedItem))
             {
                 this.Definition = this.Definitions.FirstOrDefault();
             }

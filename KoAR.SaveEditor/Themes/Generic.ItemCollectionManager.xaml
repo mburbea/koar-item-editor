@@ -38,10 +38,9 @@
                             <Setter Property="constructs:TextBoxUpdateSource.UpdateOnEnter" Value="{Binding IsVisible, RelativeSource={RelativeSource Self}}" />
                         </Style>
                     </ControlTemplate.Resources>
-                    <ListView x:Name="PART_ListView" ItemsSource="{TemplateBinding CollectionView}" 
+                    <ListView x:Name="PART_ListView" ItemsSource="{TemplateBinding CollectionView}" TextSearch.TextPath="ItemId" AlternationCount="2"
                         SelectedItem="{Binding SelectedItem, RelativeSource={RelativeSource TemplatedParent}}" VirtualizingPanel.IsVirtualizing="True"
-                        BorderBrush="LightGray" SelectionMode="Single" FocusVisualStyle="{x:Null}" VirtualizingPanel.ScrollUnit="Pixel"
-                        TextSearch.TextPath="ItemId" AlternationCount="2">
+                        BorderBrush="LightGray" SelectionMode="Single" FocusVisualStyle="{x:Null}" VirtualizingPanel.ScrollUnit="Pixel">
                         <ListView.Resources>
                             <constructs:TransportObject x:Key="Mode" Value="{Binding Mode, RelativeSource={RelativeSource AncestorType={x:Type views:ItemCollectionManager}}}" />
                             <constructs:TransportObject x:Key="DeleteItemCommand" Value="{Binding DeleteItemCommand, RelativeSource={RelativeSource AncestorType={x:Type views:ItemCollectionManager}}}" />

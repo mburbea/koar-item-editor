@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace KoAR.SaveEditor.Views
 {
-    public static class SelectAllCheckBoxValue
+    public static class SelectAllCheckBox
     {
         public static bool? GetSelectAllCheckBoxValue<T>(this IReadOnlyList<T> items, Func<T, bool> projection)
         {

@@ -15,9 +15,8 @@
                         <views:TitleCaseWordsConverter x:Key="TitleCaseWordsConverter" />
                         <views:BitmapConverter x:Key="BitmapConverter" />
                     </ControlTemplate.Resources>
-                    <Image Margin="1,0" x:Name="PART_Image" Height="24" SnapsToDevicePixels="True" 
-                        Source="{Binding Category, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BitmapConverter}}"
-                        ToolTip="{Binding Category, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource TitleCaseWordsConverter}}" />
+                    <Image Margin="1,0" x:Name="PART_Image" Height="24" SnapsToDevicePixels="True" DataContext="{TemplateBinding Category}"
+                        Source="{Binding Converter={StaticResource BitmapConverter}}" ToolTip="{Binding Converter={StaticResource TitleCaseWordsConverter}}" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
