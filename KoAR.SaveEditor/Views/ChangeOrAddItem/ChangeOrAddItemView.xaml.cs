@@ -11,11 +11,12 @@ namespace KoAR.SaveEditor.Views.ChangeOrAddItem
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            if (e.Key == Key.Escape)
+            if (e.Key != Key.Escape)
             {
-                this.Dispatcher.InvokeAsync(this.Close);
+                base.OnKeyDown(e);
+                return;
             }
-            base.OnKeyDown(e);
+            this.Close();
         }
     }
 }

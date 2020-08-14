@@ -48,18 +48,10 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <!--Category-->
-            <RowDefinition Height="Auto" />
-            <!--3 Pickers -->
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto "/>
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
-        <TextBlock Grid.ColumnSpan="2" Text="WARNING: Changing the type is irreversible!" TextAlignment="Center" 
-            FontWeight="SemiBold" Foreground="Red" Margin="4">
+        <TextBlock Text="WARNING: Changing the type is irreversible!" TextAlignment="Center" FontWeight="SemiBold" Foreground="Red">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">
                     <Style.Triggers>
@@ -70,121 +62,120 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
-        <TextBlock Grid.Row="1" Text="Category:" Margin="2" VerticalAlignment="Center" />
-        <ComboBox Grid.Row="1" Grid.Column="1" SelectedItem="{Binding Category}" x:Name="PART_CategorySelector">
-            <ComboBox.Style>
-                <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding Item}" Value="{x:Null}">
-                            <Setter Property="ItemsSource" Value="{Binding Source={StaticResource Categories}}" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                    <Setter Property="ItemsSource" Value="{Binding Category, Converter={StaticResource ArrayConverter}, Mode=OneTime}" />
-                </Style>
-            </ComboBox.Style>
-            <ComboBox.ItemTemplate>
-                <DataTemplate DataType="{x:Type core:EquipmentCategory}">
-                    <StackPanel Orientation="Horizontal">
-                        <views:EquipmentCategoryIcon VerticalAlignment="Center" Category="{Binding}" />
-                        <TextBlock VerticalAlignment="Center" Text="{Binding}" />
-                    </StackPanel>
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-        </ComboBox>
-        <Grid Grid.ColumnSpan="2" Grid.Row="2" Margin="2">
-            <Grid.Resources>
-                <Style TargetType="{x:Type ListBox}" BasedOn="{StaticResource {x:Type ListBox}}">
-                    <Setter Property="Grid.Row" Value="1" />
-                    <Setter Property="BorderThickness" Value="0" />
-                    <Setter Property="Margin" Value="2" />
-                    <Setter Property="ItemContainerStyle">
-                        <Setter.Value>
-                            <Style TargetType="{x:Type ListBoxItem}">
-                                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                            <RadioButton x:Name="PART_Button" FocusVisualStyle="{x:Null}" Content="{TemplateBinding Content}" 
-                                                IsChecked="{Binding IsSelected, RelativeSource={RelativeSource TemplatedParent}}">
-                                                <RadioButton.Style>
-                                                    <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource {x:Type RadioButton}}">
-                                                        <Setter Property="ContentTemplate" Value="{Binding Tag, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" />
-                                                    </Style>
-                                                </RadioButton.Style>
-                                            </RadioButton>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-                <ObjectDataProvider x:Key="ArmorTypes" ObjectType="{x:Type s:Enum}" MethodName="GetValues">
-                    <ObjectDataProvider.MethodParameters>
-                        <x:Type TypeName="core:ArmorType" />
-                    </ObjectDataProvider.MethodParameters>
-                </ObjectDataProvider>
-                <ObjectDataProvider x:Key="Elements" ObjectType="{x:Type s:Enum}" MethodName="GetValues">
-                    <ObjectDataProvider.MethodParameters>
-                        <x:Type TypeName="core:Element" />
-                    </ObjectDataProvider.MethodParameters>
-                </ObjectDataProvider>
-                <ObjectDataProvider x:Key="Rarities" ObjectType="{x:Type s:Enum}" MethodName="GetValues">
-                    <ObjectDataProvider.MethodParameters>
-                        <x:Type TypeName="core:Rarity" />
-                    </ObjectDataProvider.MethodParameters>
-                </ObjectDataProvider>
-                <Style TargetType="{x:Type TextBlock}" x:Key="Prompt">
-                    <Setter Property="TextAlignment" Value="Center" />
-                    <Setter Property="FontWeight" Value="SemiBold" />
-                </Style>
-            </Grid.Resources>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition />
-            </Grid.RowDefinitions>
-            <TextBlock Style="{StaticResource Prompt}" Text="Rarity" Margin="2" VerticalAlignment="Center" />
-            <ListBox ItemsSource="{Binding Source={StaticResource Rarities}}" SelectedItem="{Binding RarityFilter}">
-                <ListBox.Tag>
-                    <DataTemplate DataType="{x:Type core:Rarity}">
-                        <StackPanel Orientation="Horizontal" Margin="0,2">
-                            <views:RarityIcon Rarity="{Binding}" Width="18" Height="18" VerticalAlignment="Center" Margin="0,0,2,0" />
-                            <TextBlock Text="{Binding}" VerticalAlignment="Center" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.Tag>
-            </ListBox>
-            <TextBlock Grid.Column="1" Style="{StaticResource Prompt}" Text="Element" Margin="2" VerticalAlignment="Center" />
-            <ListBox Grid.Column="1" ItemsSource="{Binding Source={StaticResource Elements}}" SelectedItem="{Binding ElementFilter}">
-                <ListBox.Tag>
-                    <DataTemplate DataType="{x:Type core:Element}">
-                        <StackPanel Orientation="Horizontal" Margin="0,2">
-                            <views:ElementIcon Element="{Binding}" Width="18" Height="18" VerticalAlignment="Center" Margin="0,0,2,0" />
-                            <TextBlock Text="{Binding}" VerticalAlignment="Center" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.Tag>
-            </ListBox>
-            <TextBlock Grid.Column="2" Style="{StaticResource Prompt}" Text="ArmorType" Margin="2" VerticalAlignment="Center" />
-            <ListBox Grid.Column="2" ItemsSource="{Binding Source={StaticResource ArmorTypes}}" SelectedItem="{Binding ArmorTypeFilter}">
-                <ListBox.Tag>
-                    <DataTemplate DataType="{x:Type core:ArmorType}">
-                        <StackPanel Orientation="Horizontal" Margin="0,1">
-                            <views:ArmorTypeIcon ArmorType="{Binding}" Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,2,0" />
-                            <TextBlock Text="{Binding}" VerticalAlignment="Center" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.Tag>
-            </ListBox>
-            <Border Grid.Column="1" Grid.RowSpan="2" BorderThickness="0.5,0" BorderBrush="Black" SnapsToDevicePixels="True" />
-            <Border Grid.ColumnSpan="3" BorderThickness="0,0.5" BorderBrush="Black" SnapsToDevicePixels="True" />
-        </Grid>
-        <ComboBox Grid.Row="3" Grid.ColumnSpan="2" ItemsSource="{Binding Source={StaticResource Definitions}}" SelectedItem="{Binding Definition}" TextSearch.TextPath="Name"
+        <GroupBox Grid.Row="1" Header="Filters" Margin="2,0,2,2">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Category:" Margin="2" VerticalAlignment="Center" />
+                <ComboBox Grid.Column="1" SelectedItem="{Binding Category}" x:Name="PART_CategorySelector">
+                    <ComboBox.Style>
+                        <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Item}" Value="{x:Null}">
+                                    <Setter Property="ItemsSource" Value="{Binding Source={StaticResource Categories}}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                            <Setter Property="ItemsSource" Value="{Binding Category, Converter={StaticResource ArrayConverter}, Mode=OneTime}" />
+                        </Style>
+                    </ComboBox.Style>
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate DataType="{x:Type core:EquipmentCategory}">
+                            <StackPanel Orientation="Horizontal">
+                                <views:EquipmentCategoryIcon VerticalAlignment="Center" Category="{Binding}" />
+                                <TextBlock VerticalAlignment="Center" Text="{Binding}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <UniformGrid Grid.Row="1" Grid.ColumnSpan="2" Columns="3">
+                    <UniformGrid.Resources>
+                        <Style TargetType="{x:Type ListBox}" BasedOn="{StaticResource {x:Type ListBox}}">
+                            <Setter Property="BorderThickness" Value="0" />
+                            <Setter Property="Margin" Value="2" />
+                            <Setter Property="ItemContainerStyle">
+                                <Setter.Value>
+                                    <Style TargetType="{x:Type ListBoxItem}">
+                                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                                    <RadioButton x:Name="PART_Button" FocusVisualStyle="{x:Null}" Content="{TemplateBinding Content}" 
+                                                    IsChecked="{Binding IsSelected, RelativeSource={RelativeSource TemplatedParent}}">
+                                                        <RadioButton.Style>
+                                                            <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource {x:Type RadioButton}}">
+                                                                <Setter Property="ContentTemplate" Value="{Binding Tag, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" />
+                                                            </Style>
+                                                        </RadioButton.Style>
+                                                    </RadioButton>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                        <ObjectDataProvider x:Key="ArmorTypes" ObjectType="{x:Type s:Enum}" MethodName="GetValues">
+                            <ObjectDataProvider.MethodParameters>
+                                <x:Type TypeName="core:ArmorType" />
+                            </ObjectDataProvider.MethodParameters>
+                        </ObjectDataProvider>
+                        <ObjectDataProvider x:Key="Elements" ObjectType="{x:Type s:Enum}" MethodName="GetValues">
+                            <ObjectDataProvider.MethodParameters>
+                                <x:Type TypeName="core:Element" />
+                            </ObjectDataProvider.MethodParameters>
+                        </ObjectDataProvider>
+                        <ObjectDataProvider x:Key="Rarities" ObjectType="{x:Type s:Enum}" MethodName="GetValues">
+                            <ObjectDataProvider.MethodParameters>
+                                <x:Type TypeName="core:Rarity" />
+                            </ObjectDataProvider.MethodParameters>
+                        </ObjectDataProvider>
+                    </UniformGrid.Resources>
+                    <GroupBox Header="Rarity" Margin="2">
+                        <ListBox ItemsSource="{Binding Source={StaticResource Rarities}}" SelectedItem="{Binding RarityFilter}">
+                            <ListBox.Tag>
+                                <DataTemplate DataType="{x:Type core:Rarity}">
+                                    <StackPanel Orientation="Horizontal" Margin="0,2">
+                                        <views:RarityIcon Rarity="{Binding}" Width="18" Height="18" VerticalAlignment="Center" Margin="0,0,2,0" />
+                                        <TextBlock Text="{Binding}" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.Tag>
+                        </ListBox>
+                    </GroupBox>
+                    <GroupBox Header="Element" Margin="2">
+                        <ListBox ItemsSource="{Binding Source={StaticResource Elements}}" SelectedItem="{Binding ElementFilter}">
+                            <ListBox.Tag>
+                                <DataTemplate DataType="{x:Type core:Element}">
+                                    <StackPanel Orientation="Horizontal" Margin="0,2">
+                                        <views:ElementIcon Element="{Binding}" Width="18" Height="18" VerticalAlignment="Center" Margin="0,0,2,0" />
+                                        <TextBlock Text="{Binding}" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.Tag>
+                        </ListBox>
+                    </GroupBox>
+                    <GroupBox Header="ArmorType" Margin="2">
+                        <ListBox ItemsSource="{Binding Source={StaticResource ArmorTypes}}" SelectedItem="{Binding ArmorTypeFilter}">
+                            <ListBox.Tag>
+                                <DataTemplate DataType="{x:Type core:ArmorType}">
+                                    <StackPanel Orientation="Horizontal" Margin="0,1">
+                                        <views:ArmorTypeIcon ArmorType="{Binding}" Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,2,0" />
+                                        <TextBlock Text="{Binding}" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.Tag>
+                        </ListBox>
+                    </GroupBox>
+                </UniformGrid>
+            </Grid>
+        </GroupBox>
+        <ComboBox Grid.Row="2" ItemsSource="{Binding Source={StaticResource Definitions}}" SelectedItem="{Binding Definition}" TextSearch.TextPath="Name"
             MinHeight="{Binding ActualHeight, ElementName=PART_CategorySelector}">
             <ComboBox.Style>
                 <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
@@ -206,7 +197,7 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="4" Grid.ColumnSpan="2">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="3">
             <Button Content="Cancel" Command="Close" Margin="4" FocusVisualStyle="{x:Null}" />
             <Button Content="Save" Command="{Binding ProcessCommand}" Margin="4" IsDefault="True" FocusVisualStyle="{x:Null}" />
         </StackPanel>
