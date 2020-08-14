@@ -11,6 +11,7 @@
     <BitmapImage x:Key="Copy" UriSource="/KoAR.SaveEditor;component/Resources/Copy.png" po:Freeze="True" />
     <BitmapImage x:Key="Delete" UriSource="/KoAR.SaveEditor;component/Resources/Delete.png" po:Freeze="True" />
     <constructs:HexConverter x:Key="HexConverter" />
+    <constructs:IsNullConverter x:Key="IsNullConverter" />
     <constructs:NegatedBooleanConverter x:Key="NegatedBooleanConverter" />
     <constructs:GrayscaleConverter x:Key="GrayscaleConverter" />
     <Style TargetType="{x:Type views:BuffCollectionManager}">
@@ -19,19 +20,18 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type Button}">
-                            <Image x:Name="Icon" Width="16" Source="{TemplateBinding Tag}" Cursor="Hand" />
+                            <Image x:Name="Icon" Width="16" Source="{TemplateBinding Tag}" Cursor="Hand">
+                                <Image.OpacityMask>
+                                    <ImageBrush ImageSource="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" />
+                                </Image.OpacityMask>
+                            </Image>
                             <ControlTemplate.Triggers>
                                 <MultiTrigger>
                                     <MultiTrigger.Conditions>
                                         <Condition Property="IsPressed" Value="False" />
                                         <Condition Property="IsMouseOver" Value="False" />
                                     </MultiTrigger.Conditions>
-                                    <Setter Property="Source" TargetName="Icon" Value="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource GrayscaleConverter}}" />
-                                    <Setter TargetName="Icon" Property="OpacityMask">
-                                        <Setter.Value>
-                                            <ImageBrush ImageSource="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" po:Freeze="True"/>
-                                        </Setter.Value>
-                                    </Setter>
+                                    <Setter TargetName="Icon" Property="Source" Value="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource GrayscaleConverter}}" />
                                 </MultiTrigger>
                                 <Trigger Property="Command" Value="{x:Null}">
                                     <Setter Property="Visibility" Value="Collapsed" />

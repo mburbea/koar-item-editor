@@ -8,6 +8,46 @@
     </ResourceDictionary.MergedDictionaries>
     <views:BitmapConverter x:Key="BitmapConverter" />
     <constructs:IsNullConverter x:Key="IsNullConverter" />
+    <DataTemplate DataType="{x:Type core:Socket}" x:Key="SocketContentTemplate">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <TextBlock Margin="0,1">
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Gem, Converter={StaticResource IsNullConverter}}" Value="False">
+                                <Setter Property="Text">
+                                    <Setter.Value>
+                                        <MultiBinding StringFormat="{}{0} Socket - {1}">
+                                            <Binding Path="SocketType" Converter="{x:Static views:SocketIcon.PrefixConverter}" />
+                                            <Binding Path="Gem.Definition.Name" />
+                                        </MultiBinding>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                        <Setter Property="Text" Value="{Binding SocketType, Converter={x:Static views:SocketIcon.PrefixConverter}, StringFormat='{}{0} Socket'}" />
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+            <ContentControl Grid.Row="1" Content="{Binding Gem.Definition.Buff}">
+                <ContentControl.Style>
+                    <Style TargetType="{x:Type ContentControl}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Content, RelativeSource={RelativeSource Self}, Converter={StaticResource IsNullConverter}}" Value="False">
+                                <Setter Property="Visibility" Value="Visible" />
+                                <Setter Property="ContentTemplate" Value="{StaticResource BuffToolTipTemplate}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                        <Setter Property="Visibility" Value="Collapsed" />
+                    </Style>
+                </ContentControl.Style>
+            </ContentControl>
+        </Grid>
+    </DataTemplate>
     <Style TargetType="{x:Type views:SocketIcon}">
         <Setter Property="Focusable" Value="False" />
         <Setter Property="Width" Value="18" />
@@ -19,50 +59,7 @@
                     <Image Height="{TemplateBinding Height}" Width="{TemplateBinding Width}"
                         Source="{Binding IconName, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BitmapConverter}}">
                         <Image.ToolTip>
-                            <ToolTip Content="{TemplateBinding Socket}">
-                                <ToolTip.ContentTemplate>
-                                    <DataTemplate DataType="{x:Type core:Socket}">
-                                        <Grid>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition />
-                                                <RowDefinition Height="Auto" />
-                                            </Grid.RowDefinitions>
-                                            <TextBlock Margin="0,1">
-                                                <TextBlock.Style>
-                                                    <Style TargetType="{x:Type TextBlock}">
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding Gem, Converter={StaticResource IsNullConverter}}" Value="False">
-                                                                <Setter Property="Text">
-                                                                    <Setter.Value>
-                                                                        <MultiBinding StringFormat="{}{0} Socket - {1}">
-                                                                            <Binding Path="SocketType" Converter="{x:Static views:SocketIcon.PrefixConverter}" />
-                                                                            <Binding Path="Gem.Definition.Name" />
-                                                                        </MultiBinding>
-                                                                    </Setter.Value>
-                                                                </Setter>
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                        <Setter Property="Text" Value="{Binding SocketType, Converter={x:Static views:SocketIcon.PrefixConverter}, StringFormat='{}{0} Socket'}" />
-                                                    </Style>
-                                                </TextBlock.Style>
-                                            </TextBlock>
-                                            <ContentControl Grid.Row="1" Content="{Binding Gem.Definition.Buff}">
-                                                <ContentControl.Style>
-                                                    <Style TargetType="{x:Type ContentControl}">
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding Content, RelativeSource={RelativeSource Self}, Converter={StaticResource IsNullConverter}}" Value="False">
-                                                                <Setter Property="Visibility" Value="Visible" />
-                                                                <Setter Property="ContentTemplate" Value="{StaticResource BuffToolTipTemplate}" />
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                        <Setter Property="Visibility" Value="Collapsed" />
-                                                    </Style>
-                                                </ContentControl.Style>
-                                            </ContentControl>
-                                        </Grid>
-                                    </DataTemplate>
-                                </ToolTip.ContentTemplate>
-                            </ToolTip>
+                            <ToolTip Content="{TemplateBinding Socket}" ContentTemplate="{StaticResource SocketContentTemplate}" />
                         </Image.ToolTip>
                     </Image>
                 </ControlTemplate>
