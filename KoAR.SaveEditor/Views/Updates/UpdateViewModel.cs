@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
+using System.Windows.Media;
 using System.Windows.Threading;
 using KoAR.SaveEditor.Constructs;
 
 namespace KoAR.SaveEditor.Views.Updates
 {
+    using MarkdownEngine = Markdown.Xaml.Markdown;
+
     public sealed class UpdateViewModel : NotifierBase, IDisposable
     {
         private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
@@ -24,6 +29,9 @@ namespace KoAR.SaveEditor.Views.Updates
         {
             this.CancelCommand = new DelegateCommand(this.Cancel);
             this.DownloadCommand = new DelegateCommand(this.Download, () => !this.BytesTransferred.HasValue);
+            this.FlowDocument = this.UpdateService?.Update != null 
+                ? UpdateViewModel.CreateDocument(this.UpdateService.Update) 
+                : new FlowDocument();
         }
 
         public int? BytesTransferred
@@ -48,6 +56,8 @@ namespace KoAR.SaveEditor.Views.Updates
             set => this.SetValue(ref this._error, value);
         }
 
+        public FlowDocument FlowDocument { get; }
+
         public double Speed
         {
             get => this._speed;
@@ -70,6 +80,59 @@ namespace KoAR.SaveEditor.Views.Updates
             }
             this.Cancel();
             this._downloadTask.ContinueWith(delegate { this.DeleteFile(); }, TaskContinuationOptions.None);
+        }
+
+        private static FlowDocument CreateDocument(UpdateInfo update)
+        {
+            MarkdownEngine engine = new MarkdownEngine();
+            SolidColorBrush alternateBrush = new SolidColorBrush(Color.FromArgb(8, 0, 0, 0));
+            alternateBrush.Freeze();
+            FlowDocument document = new FlowDocument();
+            foreach (IReleaseInfo release in update.Releases)
+            {
+                Section section = new Section { Background = document.Blocks.Count % 2 == 0 ? Brushes.White : alternateBrush };
+                section.Blocks.Add(new Paragraph
+                {
+                    Inlines =
+                    {
+                        new Run($"{release.Name}{Environment.NewLine}Released:") { FontWeight = FontWeights.SemiBold },
+                        new Run($" {GetDescriptiveText(DateTime.UtcNow - release.PublishedAt)} ago."),
+                    }
+                });
+                section.Blocks.AddRange(engine.Transform(release.Body).Blocks.ToList());
+                document.Blocks.Add(section);
+            }
+            return document;
+
+            static string GetDescriptiveText(TimeSpan timeSpan)
+            {
+                if (timeSpan.TotalDays >= 365d)
+                {
+                    int years = (int)Math.Floor(timeSpan.TotalDays / 365d);
+                    return years > 1 ? $"{years} years" : "A year";
+                }
+                if (timeSpan.TotalDays >= 30d)
+                {
+                    int months = (int)Math.Floor(timeSpan.TotalDays / 30d);
+                    return months > 1 ? $"{months} months" : "A month";
+                }
+                if (timeSpan.TotalDays >= 1d)
+                {
+                    int days = (int)Math.Floor(timeSpan.TotalDays);
+                    return days > 1 ? $"{days} days" : "A day";
+                }
+                if (timeSpan.TotalHours >= 1d)
+                {
+                    int hours = (int)Math.Floor(timeSpan.TotalHours);
+                    return hours > 1 ? $"{hours} hours" : "An hour";
+                }
+                if (timeSpan.TotalMinutes >= 1d)
+                {
+                    int minutes = (int)Math.Floor(timeSpan.TotalMinutes);
+                    return minutes > 1 ? $"{minutes} minutes" : "A minute";
+                }
+                return "Seconds";
+            }
         }
 
         private static async Task<string> ExtractPowershellScript()

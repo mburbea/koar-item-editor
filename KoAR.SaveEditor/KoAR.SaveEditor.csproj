@@ -124,6 +124,7 @@
     <None Remove="Resources\Daggers.png" />
     <None Remove="Resources\Daggers_Primal.png" />
     <None Remove="Resources\Delete.png" />
+    <None Remove="Resources\Ellipsis.png" />
     <None Remove="Resources\Epic_Socket.png" />
     <None Remove="Resources\Faeblades.png" />
     <None Remove="Resources\Faeblades_Primal.png" />
@@ -309,6 +310,7 @@
     <Resource Include="Resources\categories\Shield_Sorcery.png" />
     <Resource Include="Resources\categories\Shield_Sorcery_Fire.png" />
     <Resource Include="Resources\categories\Shield_Sorcery_Lightning.png" />
+    <Resource Include="Resources\Ellipsis.png" />
     <Resource Include="Resources\sockets\A.png" />
     <Resource Include="Resources\sockets\A_G.png" />
     <Resource Include="Resources\sockets\E.png" />

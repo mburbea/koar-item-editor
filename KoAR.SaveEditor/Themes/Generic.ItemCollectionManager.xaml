@@ -17,9 +17,45 @@
     <constructs:NegatedBooleanConverter x:Key="NegatedBooleanConverter" />
     <constructs:HexConverter x:Key="HexConverter" />
     <constructs:LittleEndianConverter x:Key="LittleEndianConverter" />
-    <constructs:IsNullConverter x:Key="IsNullConverter" />
     <constructs:GrayscaleConverter x:Key="GrayscaleConverter" />
     <BitmapImage x:Key="Delete" UriSource="/KoAR.SaveEditor;component/Resources/Delete.png" po:Freeze="True" />
+    <BitmapImage x:Key="Ellipsis" UriSource="/KoAR.SaveEditor;component/Resources/Ellipsis.png" po:Freeze="True" />
+    <Style TargetType="{x:Type Button}" x:Key="CommandButtonStyle">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Image x:Name="Icon" Width="16" Source="{TemplateBinding Tag}" Cursor="Hand">
+                        <Image.OpacityMask>
+                            <ImageBrush ImageSource="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" po:Freeze="True" />
+                        </Image.OpacityMask>
+                    </Image>
+                    <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsPressed" Value="False" />
+                                <Condition Property="IsMouseOver" Value="False" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Source" TargetName="Icon" Value="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource GrayscaleConverter}}" />
+                        </MultiTrigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.25" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="RenderTransform">
+                                <Setter.Value>
+                                    <ScaleTransform ScaleX="0.85" ScaleY="0.85" po:Freeze="True" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Margin" Value="2" />
+        <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
+    </Style>
     <Style TargetType="{x:Type views:ItemCollectionManager}">
         <Setter Property="Focusable" Value="False" />
         <Setter Property="Template">
@@ -43,6 +79,7 @@
                         BorderBrush="LightGray" SelectionMode="Single" FocusVisualStyle="{x:Null}" VirtualizingPanel.ScrollUnit="Pixel">
                         <ListView.Resources>
                             <constructs:TransportObject x:Key="Mode" Value="{Binding Mode, RelativeSource={RelativeSource AncestorType={x:Type views:ItemCollectionManager}}}" />
+                            <constructs:TransportObject x:Key="ChangeDefinitionCommand" Value="{Binding ChangeDefinitionCommand, RelativeSource={RelativeSource AncestorType={x:Type views:ItemCollectionManager}}}" />
                             <constructs:TransportObject x:Key="DeleteItemCommand" Value="{Binding DeleteItemCommand, RelativeSource={RelativeSource AncestorType={x:Type views:ItemCollectionManager}}}" />
                             <Style TargetType="{x:Type GridViewColumnHeader}" BasedOn="{StaticResource {x:Type GridViewColumnHeader}}">
                                 <Style.Triggers>
@@ -96,7 +133,7 @@
                                 </Style.Triggers>
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                                 <Setter Property="constructs:MouseDoubleClick.CommandParameter" Value="{Binding}" />
-                                <Setter Property="constructs:MouseDoubleClick.Command" Value="{Binding RowDoubleClickCommand, RelativeSource={RelativeSource AncestorType={x:Type views:ItemCollectionManager}}}" />
+                                <Setter Property="constructs:MouseDoubleClick.Command" Value="{Binding ChangeDefinitionCommand, RelativeSource={RelativeSource AncestorType={x:Type views:ItemCollectionManager}}}" />
                                 <Setter Property="constructs:ItemSelection.SelectItemOnClick" Value="{Binding IsVisible, RelativeSource={RelativeSource Self}}" />
                             </Style>
                         </ListView.ItemContainerStyle>
@@ -107,53 +144,11 @@
                         </ListView.ContextMenu>
                         <ListView.View>
                             <GridView AllowsColumnReorder="True">
-                                <GridViewColumn Header="Delete" Width="Auto" constructs:ColumnVisibility.IsHidden="{Binding Value, Source={StaticResource DeleteItemCommand}, Converter={StaticResource IsNullConverter}}">
+                                <GridViewColumn Header="Delete" Width="Auto" constructs:ColumnVisibility.IsHidden="{Binding Value, Source={StaticResource DeleteItemCommand}, Converter={StaticResource EqualityConverter}}">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate DataType="{x:Type views:ItemModelBase}">
-                                            <Button CommandParameter="{Binding}" Command="{Binding Value, Source={StaticResource DeleteItemCommand}}">
-                                                <Button.Style>
-                                                    <Style TargetType="{x:Type Button}">
-                                                        <Setter Property="Template">
-                                                            <Setter.Value>
-                                                                <ControlTemplate TargetType="{x:Type Button}">
-                                                                    <ControlTemplate.Resources>
-                                                                        <constructs:GrayscaleConverter x:Key="GrayscaleConverter" />
-                                                                    </ControlTemplate.Resources>
-                                                                    <Image x:Name="Icon" Width="16" Source="{StaticResource Delete}" Cursor="Hand" />
-                                                                    <ControlTemplate.Triggers>
-                                                                        <MultiTrigger>
-                                                                            <MultiTrigger.Conditions>
-                                                                                <Condition Property="IsPressed" Value="False" />
-                                                                                <Condition Property="IsMouseOver" Value="False" />
-                                                                            </MultiTrigger.Conditions>
-                                                                            <Setter Property="Source" TargetName="Icon" Value="{Binding Source={StaticResource Delete}, Converter={StaticResource GrayscaleConverter}}" />
-                                                                            <Setter TargetName="Icon" Property="OpacityMask">
-                                                                                <Setter.Value>
-                                                                                    <ImageBrush ImageSource="{StaticResource Delete}" po:Freeze="True"/>
-                                                                                </Setter.Value>
-                                                                            </Setter>
-                                                                        </MultiTrigger>
-                                                                        <Trigger Property="IsEnabled" Value="False">
-                                                                            <Setter Property="Opacity" Value="0.25" />
-                                                                        </Trigger>
-                                                                        <Trigger Property="IsPressed" Value="True">
-                                                                            <Setter Property="RenderTransform">
-                                                                                <Setter.Value>
-                                                                                    <ScaleTransform ScaleX="0.85" ScaleY="0.85" po:Freeze="True" />
-                                                                                </Setter.Value>
-                                                                            </Setter>
-                                                                        </Trigger>
-                                                                    </ControlTemplate.Triggers>
-                                                                </ControlTemplate>
-                                                            </Setter.Value>
-                                                        </Setter>
-                                                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                                                        <Setter Property="VerticalAlignment" Value="Center" />
-                                                        <Setter Property="Margin" Value="2" />
-                                                        <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
-                                                    </Style>
-                                                </Button.Style>
-                                            </Button>
+                                            <Button Style="{StaticResource CommandButtonStyle}" Tag="{StaticResource Delete}" ToolTip="Delete"
+                                                CommandParameter="{Binding}" Command="{Binding Value, Source={StaticResource DeleteItemCommand}}" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
@@ -543,6 +538,14 @@
                                                     </DataTemplate>
                                                 </ItemsControl.ItemTemplate>
                                             </ItemsControl>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Change" Width="Auto" constructs:ColumnVisibility.IsHidden="{Binding Value, Source={StaticResource ChangeDefinitionCommand}, Converter={StaticResource EqualityConverter}}">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate DataType="{x:Type views:ItemModelBase}">
+                                            <Button Style="{StaticResource CommandButtonStyle}" Tag="{StaticResource Ellipsis}" ToolTip="Change Definition"
+                                                CommandParameter="{Binding}" Command="{Binding Value, Source={StaticResource ChangeDefinitionCommand}}" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>

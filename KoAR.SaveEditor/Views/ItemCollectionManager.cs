@@ -23,6 +23,8 @@ namespace KoAR.SaveEditor.Views
         public static readonly DependencyProperty AllItemsUnstashableProperty = DependencyProperty.Register(nameof(ItemCollectionManager.AllItemsUnstashable), typeof(bool?), typeof(ItemCollectionManager),
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
+        public static readonly DependencyProperty ChangeDefinitionCommandProperty = DependencyProperty.Register(nameof(ItemCollectionManager.ChangeDefinitionCommand), typeof(ICommand), typeof(ItemCollectionManager));
+
         public static readonly DependencyProperty CollectionViewProperty;
 
         public static readonly DependencyProperty DeleteItemCommandProperty = DependencyProperty.Register(nameof(ItemCollectionManager.DeleteItemCommand), typeof(ICommand), typeof(ItemCollectionManager));
@@ -34,8 +36,6 @@ namespace KoAR.SaveEditor.Views
 
         public static readonly DependencyProperty PropertyNameProperty = DependencyProperty.RegisterAttached("PropertyName", typeof(string), typeof(ItemCollectionManager),
             new PropertyMetadata());
-
-        public static readonly DependencyProperty RowDoubleClickCommandProperty = DependencyProperty.Register(nameof(ItemCollectionManager.RowDoubleClickCommand), typeof(ICommand), typeof(ItemCollectionManager));
 
         public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register(nameof(ItemCollectionManager.SelectedItem), typeof(object), typeof(ItemCollectionManager),
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
@@ -82,6 +82,12 @@ namespace KoAR.SaveEditor.Views
             set => this.SetValue(ItemCollectionManager.AllItemsUnstashableProperty, value.HasValue ? BooleanBoxes.GetBox(value.Value) : null);
         }
 
+        public ICommand? ChangeDefinitionCommand
+        {
+            get => (ICommand?)this.GetValue(ItemCollectionManager.ChangeDefinitionCommandProperty);
+            set => this.SetValue(ItemCollectionManager.ChangeDefinitionCommandProperty, value);
+        }
+
         public ICollectionView? CollectionView
         {
             get => (ICollectionView?)this.GetValue(ItemCollectionManager.CollectionViewProperty);
@@ -104,12 +110,6 @@ namespace KoAR.SaveEditor.Views
         {
             get => (Mode)this.GetValue(ItemCollectionManager.ModeProperty);
             private set => this.SetValue(ItemCollectionManager._modePropertyKey, value);
-        }
-
-        public ICommand? RowDoubleClickCommand
-        {
-            get => (ICommand?)this.GetValue(ItemCollectionManager.RowDoubleClickCommandProperty);
-            set => this.SetValue(ItemCollectionManager.RowDoubleClickCommandProperty, value);
         }
 
         public string? SearchText
