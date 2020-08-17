@@ -29,8 +29,8 @@ namespace KoAR.Core
             _itemBuffsContainer = new Container(this, data.IndexOf(new byte[5] { 0xBB, 0xD5, 0x43, 0x00, 0x00 }), 0x00_28_60_84_00_00_00_0Bul);
             _itemSocketsContainer = new Container(this, data.IndexOf(new byte[5] { 0x93, 0xCC, 0x80, 0x00, 0x00 }), 0x00_59_36_38_00_00_00_0Bul);
             var itemLocs = _itemContainer.ToDictionary(x => x.id, x => (x.offset, x.dataLength));
-            var itemBuffsLoc = _itemBuffsContainer.ToDictionary(x => x.id, x => (x.offset, x.dataLength));
-            var itemSocketsLoc = _itemSocketsContainer.ToDictionary(x => x.id, x => (x.offset, x.dataLength));
+            var itemBuffsLocs = _itemBuffsContainer.ToDictionary(x => x.id, x => (x.offset, x.dataLength));
+            var itemSocketsLocs = _itemSocketsContainer.ToDictionary(x => x.id, x => (x.offset, x.dataLength));
             int dataLength, playerActor = 0;
             var candidates = new List<(int id, int typeIdOffset, QuestItemDefinition? questItemDef)>();
 
@@ -68,8 +68,8 @@ namespace KoAR.Core
                     }
                     else
                     {
-                        var (itemBuffsOffset, itemBuffsLength) = itemBuffsLoc[id];
-                        var (itemGemsOffset, itemGemsLength) = itemSocketsLoc[id];
+                        var (itemBuffsOffset, itemBuffsLength) = itemBuffsLocs[id];
+                        var (itemGemsOffset, itemGemsLength) = itemSocketsLocs[id];
                         Items.Add(new Item(this, typeIdOffset, itemOffset, itemLength, itemBuffsOffset, itemBuffsLength, itemGemsOffset, itemGemsLength));
                     }
                 }
