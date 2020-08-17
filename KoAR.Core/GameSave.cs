@@ -11,7 +11,7 @@ namespace KoAR.Core
         private readonly int[] _dataLengthOffsets;
         private Container _itemBuffsContainer;
         private Container _itemContainer;
-        private Container _itemGemsContainer;
+        private Container _itemSocketsContainer;
 
         public GameSave(string fileName)
         {
@@ -27,10 +27,10 @@ namespace KoAR.Core
             };
             _itemContainer = new Container(this, data.IndexOf(new byte[5] { 0xD3, 0x34, 0x43, 0x00, 0x00 }), 0x00_24_D5_68_00_00_00_0Bul);
             _itemBuffsContainer = new Container(this, data.IndexOf(new byte[5] { 0xBB, 0xD5, 0x43, 0x00, 0x00 }), 0x00_28_60_84_00_00_00_0Bul);
-            _itemGemsContainer = new Container(this, data.IndexOf(new byte[5] { 0x93, 0xCC, 0x80, 0x00, 0x00 }), 0x00_59_36_38_00_00_00_0Bul);
+            _itemSocketsContainer = new Container(this, data.IndexOf(new byte[5] { 0x93, 0xCC, 0x80, 0x00, 0x00 }), 0x00_59_36_38_00_00_00_0Bul);
             var itemLocs = _itemContainer.ToDictionary(x => x.id, x => (x.offset, x.dataLength));
-            var itemBuffLocs = _itemBuffsContainer.ToDictionary(x => x.id, x => (x.offset, x.dataLength));
-            var itemGemLocs = _itemGemsContainer.ToDictionary(x => x.id, x => (x.offset, x.dataLength));
+            var itemBuffsLoc = _itemBuffsContainer.ToDictionary(x => x.id, x => (x.offset, x.dataLength));
+            var itemSocketsLoc = _itemSocketsContainer.ToDictionary(x => x.id, x => (x.offset, x.dataLength));
             int dataLength, playerActor = 0;
             var candidates = new List<(int id, int typeIdOffset, QuestItemDefinition? questItemDef)>();
 
@@ -68,8 +68,8 @@ namespace KoAR.Core
                     }
                     else
                     {
-                        var (itemBuffsOffset, itemBuffsLength) = itemBuffLocs[id];
-                        var (itemGemsOffset, itemGemsLength) = itemGemLocs[id];
+                        var (itemBuffsOffset, itemBuffsLength) = itemBuffsLoc[id];
+                        var (itemGemsOffset, itemGemsLength) = itemSocketsLoc[id];
                         Items.Add(new Item(this, typeIdOffset, itemOffset, itemLength, itemBuffsOffset, itemBuffsLength, itemGemsOffset, itemGemsLength));
                     }
                 }
@@ -130,7 +130,7 @@ namespace KoAR.Core
 
         public void UpdateOffsets(int itemOffset, int delta)
         {
-            _itemGemsContainer.Offset += _itemGemsContainer.Offset > itemOffset ? delta : 0;
+            _itemSocketsContainer.Offset += _itemSocketsContainer.Offset > itemOffset ? delta : 0;
             _itemBuffsContainer.Offset += _itemBuffsContainer.Offset > itemOffset ? delta : 0;
             _itemContainer.Offset += _itemContainer.Offset > itemOffset ? delta : 0;
             for (int i = 0; i < _dataLengthOffsets.Length; i++)
@@ -146,9 +146,9 @@ namespace KoAR.Core
             }
             foreach (var item in Items)
             {
-                if (item.ItemGems.ItemOffset > itemOffset)
+                if (item.ItemSockets.ItemOffset > itemOffset)
                 {
-                    item.ItemGems.ItemOffset += delta;
+                    item.ItemSockets.ItemOffset += delta;
                 }
                 if (item.ItemBuffs.ItemOffset > itemOffset)
                 {

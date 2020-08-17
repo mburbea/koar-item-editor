@@ -24,7 +24,7 @@ namespace KoAR.Core
                 _levelShiftOffset = 8;
             }
             ItemBytes = _gameSave.Bytes.AsSpan(offset, dataLength).ToArray();
-            ItemGems = new ItemSockets(gameSave, itemGemsOffset, itemGemsLength);
+            ItemSockets = new ItemSockets(gameSave, itemGemsOffset, itemGemsLength);
             ItemBuffs = new ItemBuffMemory(gameSave, itemBuffsOffset, itemBuffsLength);
             PlayerBuffs = new List<Buff>(BuffCount);
             for (int i = 0; i < PlayerBuffs.Capacity; i++)
@@ -118,7 +118,7 @@ namespace KoAR.Core
 
         public uint ItemId => MemoryUtilities.Read<uint>(ItemBytes);
 
-        public ItemSockets ItemGems { get; }
+        public ItemSockets ItemSockets { get; }
 
         public int ItemOffset { get; internal set; }
         internal int TypeIdOffset { get; set; }
@@ -133,7 +133,7 @@ namespace KoAR.Core
             ? Rarity.Set
             : PlayerBuffs.Select(x => x.Rarity)
                 .Concat(ItemBuffs.List.Select(x => x.Rarity))
-                .Concat(ItemGems.Gems.Select(x => x.Definition.Buff.Rarity))
+                .Concat(ItemSockets.Gems.Select(x => x.Definition.Buff.Rarity))
                 .Concat(new[] { ItemBuffs.Prefix?.Rarity ?? default, ItemBuffs.Suffix?.Rarity ?? default, Definition.SocketTypes.Any() ? Rarity.Infrequent : Rarity.Common })
                 .Max();
 
@@ -217,11 +217,11 @@ namespace KoAR.Core
 
         public IEnumerable<Socket> GetSockets()
         {
-            return ItemGems.Gems.Length switch
+            return ItemSockets.Gems.Length switch
             {
                 0 => Definition.GetSockets(),
-                1 when Definition.SocketTypes.Length == 1 => new[] { new Socket(Definition.SocketTypes[0], ItemGems.Gems[0]) }, // trivial case.
-                _ => Inner(Definition.SocketTypes, ItemGems.Gems.AsSpan().ToArray())
+                1 when Definition.SocketTypes.Length == 1 => new[] { new Socket(Definition.SocketTypes[0], ItemSockets.Gems[0]) }, // trivial case.
+                _ => Inner(Definition.SocketTypes, ItemSockets.Gems.AsSpan().ToArray())
             };
 
             static IEnumerable<Socket> Inner(string sockets, Gem[] gems)
