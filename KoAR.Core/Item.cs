@@ -24,7 +24,7 @@ namespace KoAR.Core
                 _levelShiftOffset = 8;
             }
             ItemBytes = _gameSave.Bytes.AsSpan(offset, dataLength).ToArray();
-            ItemGems = new ItemGems(gameSave, itemGemsOffset, itemGemsLength);
+            ItemGems = new ItemSockets(gameSave, itemGemsOffset, itemGemsLength);
             ItemBuffs = new ItemBuffMemory(gameSave, itemBuffsOffset, itemBuffsLength);
             PlayerBuffs = new List<Buff>(BuffCount);
             for (int i = 0; i < PlayerBuffs.Capacity; i++)
@@ -118,7 +118,7 @@ namespace KoAR.Core
 
         public uint ItemId => MemoryUtilities.Read<uint>(ItemBytes);
 
-        public ItemGems ItemGems { get; }
+        public ItemSockets ItemGems { get; }
 
         public int ItemOffset { get; internal set; }
         internal int TypeIdOffset { get; set; }

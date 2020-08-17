@@ -39,7 +39,7 @@ namespace KoAR.SaveEditor.Views.Main
 
 2. When modifying item names, do NOT use special characters.
 
-3. Editing unique items or adding properties beyond the maximum detected will cause your file to not load."
+3. Editing equipped items may cause your file to not load."
         });
 
         private void Open_Executed(object sender, ExecutedRoutedEventArgs e) => this.ViewModel.OpenFile();

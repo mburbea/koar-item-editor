@@ -6,6 +6,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
@@ -39,6 +40,12 @@ namespace KoAR.Core
         public static IReadOnlyDictionary<uint, GemDefinition> GemDefinitions { get; }
         public static IReadOnlyDictionary<uint, ItemDefinition> ItemDefinitions { get; }
         public static IReadOnlyDictionary<uint, QuestItemDefinition> QuestItemDefinitions { get; }
+        public static ReadOnlySpan<uint> PlayerTypeIds => MemoryMarshal.Cast<byte,uint>(new byte[16]{
+            0x6D, 0x38, 0x0A, 0x00, // playerHumanMale
+            0x6E, 0x38, 0x0A, 0x00, // playerHumanFemale
+            0x6F, 0x38, 0x0A, 0x00, // playerElfMale
+            0x70, 0x38, 0x0A, 0x00,  // playerElfFemale
+        });
 
         internal static char[] Separator { get; } = { ',' };
 

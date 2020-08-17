@@ -7,9 +7,8 @@ namespace KoAR.Core
 {
     public sealed class GameSave
     {
-        private int? _bagOffset;
-        private int[] _dataLengthOffsets = Array.Empty<int>();
-
+        private readonly int _bagOffset;
+        private readonly int[] _dataLengthOffsets;
         private Container _itemBuffsContainer;
         private Container _itemContainer;
         private Container _itemGemsContainer;
@@ -17,7 +16,80 @@ namespace KoAR.Core
         public GameSave(string fileName)
         {
             Bytes = File.ReadAllBytes(FileName = fileName);
-            GetAllEquipment();
+            ReadOnlySpan<byte> data = Bytes;
+            Stash = Stash.TryCreateStash(this);
+            _bagOffset = GetBagOffset(data);
+            _dataLengthOffsets = new[]{
+                data.IndexOf(new byte[8] { 0, 0, 0, 0, 0xA, 0, 0, 0 }) - 4, // file length
+                data.IndexOf(new byte[5] { 0x0C, 0xAE, 0x32, 0x00, 0x00 }) + 5, // unknown length 1
+                data.IndexOf(new byte[5] { 0xF7, 0x5D, 0x3C, 0x00, 0x0A }) + 5, // unknown length 2
+                data.IndexOf(new byte[5] { 0x23, 0xCC, 0x58, 0x00, 0x03 }) + 5, // type section length
+            };
+            _itemContainer = new Container(this, data.IndexOf(new byte[5] { 0xD3, 0x34, 0x43, 0x00, 0x00 }), 0x00_24_D5_68_00_00_00_0Bul);
+            _itemBuffsContainer = new Container(this, data.IndexOf(new byte[5] { 0xBB, 0xD5, 0x43, 0x00, 0x00 }), 0x00_28_60_84_00_00_00_0Bul);
+            _itemGemsContainer = new Container(this, data.IndexOf(new byte[5] { 0x93, 0xCC, 0x80, 0x00, 0x00 }), 0x00_59_36_38_00_00_00_0Bul);
+            var itemLocs = _itemContainer.ToDictionary(x => x.id, x => (x.offset, x.dataLength));
+            var itemBuffLocs = _itemBuffsContainer.ToDictionary(x => x.id, x => (x.offset, x.dataLength));
+            var itemGemLocs = _itemGemsContainer.ToDictionary(x => x.id, x => (x.offset, x.dataLength));
+            int dataLength, playerActor = 0;
+            var candidates = new List<(int id, int typeIdOffset, QuestItemDefinition? questItemDef)>();
+
+            for (int ixOfActor = _dataLengthOffsets[^1] + 4; BitConverter.ToInt32(Bytes, ixOfActor) == 0x00_75_2D_06; ixOfActor += dataLength)
+            {
+                dataLength = 9 + BitConverter.ToInt32(Bytes, ixOfActor + 5);
+                var id = BitConverter.ToInt32(Bytes, ixOfActor + 9);
+                var typeIdOffset = ixOfActor + 13;
+                var typeId = BitConverter.ToUInt32(Bytes, typeIdOffset);
+                if (Amalur.ItemDefinitions.ContainsKey(typeId))
+                {
+                    candidates.Add((id, typeIdOffset, null));
+                }
+                else if (Amalur.QuestItemDefinitions.TryGetValue(typeId, out var questItemDefinition))
+                {
+                    candidates.Add((id, typeIdOffset, questItemDefinition));
+                }
+                else if (Amalur.GemDefinitions.ContainsKey(typeId))
+                {
+                    Gems.Add(id, new Gem(this, typeIdOffset));
+                }
+                else if (Amalur.PlayerTypeIds.IndexOf(typeId) != -1)
+                {
+                    playerActor = id;
+                }
+            }
+            foreach (var (id, typeIdOffset, questItemDef) in candidates)
+            {
+                var (itemOffset, itemLength) = itemLocs[id];
+                if (BitConverter.ToInt32(Bytes, itemOffset + 17) == playerActor)
+                {
+                    if (questItemDef != null)
+                    {
+                        QuestItems.Add(new QuestItem(this, questItemDef, itemOffset + itemLength - 3));
+                    }
+                    else
+                    {
+                        var (itemBuffsOffset, itemBuffsLength) = itemBuffLocs[id];
+                        var (itemGemsOffset, itemGemsLength) = itemGemLocs[id];
+                        Items.Add(new Item(this, typeIdOffset, itemOffset, itemLength, itemBuffsOffset, itemBuffsLength, itemGemsOffset, itemGemsLength));
+                    }
+                }
+            }
+
+            static int GetBagOffset(ReadOnlySpan<byte> data)
+            {
+                ReadOnlySpan<byte> inventoryLimit = new[] { (byte)'i', (byte)'n', (byte)'v', (byte)'e', (byte)'n', (byte)'t', (byte)'o', (byte)'r', (byte)'y', (byte)'_', (byte)'l', (byte)'i', (byte)'m', (byte)'i', (byte)'t' };
+                ReadOnlySpan<byte> increaseAmount = new[] { (byte)'i', (byte)'n', (byte)'c', (byte)'r', (byte)'e', (byte)'a', (byte)'s', (byte)'e', (byte)'_', (byte)'a', (byte)'m', (byte)'o', (byte)'u', (byte)'n', (byte)'t' };
+                ReadOnlySpan<byte> currentInventoryCount = new[] { (byte)'c', (byte)'u', (byte)'r', (byte)'r', (byte)'e', (byte)'n', (byte)'t', (byte)'_', (byte)'i', (byte)'n', (byte)'v', (byte)'e', (byte)'n', (byte)'t', (byte)'o', (byte)'r', (byte)'y', (byte)'_', (byte)'c', (byte)'o', (byte)'u', (byte)'n', (byte)'t' };
+                var curInvCountOffset = data.IndexOf(currentInventoryCount) + currentInventoryCount.Length;
+                var inventoryLimitOffset = data.IndexOf(inventoryLimit) + inventoryLimit.Length;
+                var increaseAmountOffset = data.IndexOf(increaseAmount) + increaseAmount.Length;
+                var finalOffset = Math.Max(Math.Max(curInvCountOffset, inventoryLimitOffset), increaseAmountOffset);
+                var inventoryLimitOrder = inventoryLimitOffset == finalOffset
+                    ? 3
+                    : inventoryLimitOffset < Math.Min(curInvCountOffset, increaseAmountOffset) ? 1 : 2;
+
+                return finalOffset + (inventoryLimitOrder * 12);
+            }
         }
 
         public byte[] Bytes { get; internal set; }
@@ -26,8 +98,8 @@ namespace KoAR.Core
 
         public int InventorySize
         {
-            get => MemoryUtilities.Read<int>(Bytes, _bagOffset ??= GetBagOffset());
-            set => MemoryUtilities.Write(Bytes, _bagOffset ??= GetBagOffset(), value);
+            get => MemoryUtilities.Read<int>(Bytes, _bagOffset);
+            set => MemoryUtilities.Write(Bytes, _bagOffset, value);
         }
 
         public List<Item> Items { get; } = new List<Item>();
@@ -50,92 +122,6 @@ namespace KoAR.Core
             }
         }
 
-        private void GetAllEquipment()
-        {
-            ReadOnlySpan<byte> unknownLengthSeq = new byte[] { 0x0C, 0xAE, 0x32, 0x00, 0x00 };
-            ReadOnlySpan<byte> unknownLengthSeq2 = new byte[] { 0xF7, 0x5D, 0x3C, 0x00, 0x0A };
-            ReadOnlySpan<byte> typeIdSeq = new byte[] { 0x23, 0xCC, 0x58, 0x00, 0x03 };
-            ReadOnlySpan<byte> fileLengthSeq = new byte[8] { 0, 0, 0, 0, 0xA, 0, 0, 0 };
-            ReadOnlySpan<byte> itemsMarker = new byte[5] { 0xD3, 0x34, 0x43, 0x00, 0x00 };
-            ReadOnlySpan<byte> itemBuffsMarker = new byte[5] { 0xBB, 0xD5, 0x43, 0x00, 0x00 };
-            ReadOnlySpan<byte> itemGemsMarker = new byte[5] { 0x93, 0xCC, 0x80, 0x00, 0x00 };
-            const int playerHumanMale = 0x0A386D;
-            const int playerHumanFemale = 0x0A386E;
-            const int playerElfMale = 0x0A386F;
-            const int playerElfFemale = 0x0A3870;
-
-            ReadOnlySpan<byte> data = Bytes;
-            _dataLengthOffsets = new[]{
-                data.IndexOf(fileLengthSeq) - 4,
-                data.IndexOf(unknownLengthSeq) + 5,
-                data.IndexOf(unknownLengthSeq2) + 5,
-                data.IndexOf(typeIdSeq) + 5,
-            };
-
-            _itemContainer = new Container(this, data.IndexOf(itemsMarker), 0x00_24_D5_68_00_00_00_0Bul);
-            _itemBuffsContainer = new Container(this, data.IndexOf(itemBuffsMarker), 0x00_28_60_84_00_00_00_0Bul);
-            _itemGemsContainer = new Container(this, data.IndexOf(itemGemsMarker), 0x00_59_36_38_00_00_00_0Bul);
-            var itemMemoryLocs = _itemContainer.ToDictionary(x => x.id, x => (x.offset, x.dataLength));
-            var itemBuffLocs = _itemBuffsContainer.ToDictionary(x => x.id, x => (x.offset, x.dataLength));
-            var itemGemLocs = _itemGemsContainer.ToDictionary(x => x.id, x => (x.offset, x.dataLength));
-            QuestItems.Clear();
-            Items.Clear();
-            Gems.Clear();
-            Stash = Stash.TryCreateStash(this);
-            int ixOfActor = _dataLengthOffsets[^1] + 4;
-            int playerActor = 0;
-            var candidates = new List<(int id, int typeIdOffset)>();
-            var questItemCandidates = new List<(int id, QuestItemDefinition questItemDefinition)>();
-
-            if (BitConverter.ToInt32(Bytes, ixOfActor) == 0)
-            {
-                ixOfActor += 4;
-            }
-            while (BitConverter.ToInt32(Bytes, ixOfActor) == 0x00_75_2D_06)
-            {
-                var dataLength = 9 + BitConverter.ToInt32(Bytes, ixOfActor + 5);
-                var id = BitConverter.ToInt32(Bytes, ixOfActor + 9);
-                var typeIdOffset = ixOfActor + 13;
-                var typeId = BitConverter.ToUInt32(Bytes, typeIdOffset);
-                if (Amalur.ItemDefinitions.ContainsKey(typeId))
-                {
-                    candidates.Add((id, typeIdOffset));
-                }
-                else if (Amalur.GemDefinitions.ContainsKey(typeId))
-                {
-                    Gems.Add(id, new Gem(this, typeIdOffset));
-                }
-                else if (typeId == playerHumanMale || typeId == playerHumanFemale || typeId == playerElfMale || typeId == playerElfFemale)
-                {
-                    playerActor = id;
-                }
-                else if (Amalur.QuestItemDefinitions.TryGetValue(typeId, out var questItemDefinition))
-                {
-                    questItemCandidates.Add((id, questItemDefinition));
-                }
-                ixOfActor += dataLength;
-            }
-            foreach (var (id, typeIdOffset) in candidates)
-            {
-                var (itemOffset, itemLength) = itemMemoryLocs[id];
-                var (itemBuffsOffset, itemBuffsLength) = itemBuffLocs[id];
-                var (itemGemsOffset, itemGemsLength) = itemGemLocs[id];
-                if (BitConverter.ToInt32(Bytes, itemOffset + 17) == playerActor)
-                {
-                    Items.Add(new Item(this, typeIdOffset, itemOffset, itemLength, itemBuffsOffset, itemBuffsLength, itemGemsOffset, itemGemsLength));
-                }
-            }
-            foreach (var (id, questItemDef) in questItemCandidates)
-            {
-                var (itemOffset, itemLength) = itemMemoryLocs[id];
-                var inventoryState = (InventoryState)Bytes[itemOffset + itemLength - 3];
-                if (BitConverter.ToInt32(Bytes, itemOffset + 17) == playerActor)
-                {
-                    QuestItems.Add(new QuestItem(this, questItemDef, itemOffset + itemLength - 3));
-                }
-            }
-        }
-
         public void SaveFile()
         {
             File.Copy(FileName, $"{FileName}.bak", true);
@@ -144,91 +130,71 @@ namespace KoAR.Core
 
         public void UpdateOffsets(int itemOffset, int delta)
         {
-            if (delta != 0)
+            _itemGemsContainer.Offset += _itemGemsContainer.Offset > itemOffset ? delta : 0;
+            _itemBuffsContainer.Offset += _itemBuffsContainer.Offset > itemOffset ? delta : 0;
+            _itemContainer.Offset += _itemContainer.Offset > itemOffset ? delta : 0;
+            for (int i = 0; i < _dataLengthOffsets.Length; i++)
             {
-                _itemGemsContainer = _itemGemsContainer.UpdateOffset(itemOffset, delta);
-                _itemBuffsContainer = _itemBuffsContainer.UpdateOffset(itemOffset, delta);
-                _itemContainer = _itemContainer.UpdateOffset(itemOffset, delta);
-                for (int i = 0; i < _dataLengthOffsets.Length; i++)
+                _dataLengthOffsets[i] += _dataLengthOffsets[i] > itemOffset ? delta : 0;
+            }
+            foreach (var item in Stash?.Items ?? Enumerable.Empty<StashItem>())
+            {
+                if (item.ItemOffset > itemOffset)
                 {
-                    _dataLengthOffsets[i] += _dataLengthOffsets[i] > itemOffset ? delta : 0;
+                    item.ItemOffset += delta;
                 }
-                foreach (var item in Stash?.Items ?? Enumerable.Empty<StashItem>())
+            }
+            foreach (var item in Items)
+            {
+                if (item.ItemGems.ItemOffset > itemOffset)
                 {
-                    if (item.ItemOffset > itemOffset)
-                    {
-                        item.ItemOffset += delta;
-                    }
+                    item.ItemGems.ItemOffset += delta;
                 }
-                foreach (var item in Items)
+                if (item.ItemBuffs.ItemOffset > itemOffset)
                 {
-                    if (item.ItemGems.ItemOffset > itemOffset)
-                    {
-                        item.ItemGems.ItemOffset += delta;
-                    }
-                    if (item.ItemBuffs.ItemOffset > itemOffset)
-                    {
-                        item.ItemBuffs.ItemOffset += delta;
-                    }
-                    if (item.ItemOffset > itemOffset)
-                    {
-                        item.ItemOffset += delta;
-                    }
-                    if (item.TypeIdOffset > itemOffset)
-                    {
-                        item.TypeIdOffset += delta;
-                    }
+                    item.ItemBuffs.ItemOffset += delta;
                 }
-                foreach (var questItem in QuestItems)
+                if (item.ItemOffset > itemOffset)
                 {
-                    if (questItem.Offset > itemOffset)
-                    {
-                        questItem.Offset += delta;
-                    }
+                    item.ItemOffset += delta;
+                }
+                if (item.TypeIdOffset > itemOffset)
+                {
+                    item.TypeIdOffset += delta;
+                }
+            }
+            foreach (var questItem in QuestItems)
+            {
+                if (questItem.Offset > itemOffset)
+                {
+                    questItem.Offset += delta;
                 }
             }
         }
 
         public void WriteEquipmentBytes(Item item, bool forced = false)
         {
-            int WriteItem(int itemOffset, int dataLength, byte[] bytes)
+            int WriteSection(int itemOffset, int dataLength, ReadOnlySpan<byte> newBytes)
             {
                 var prevLength = Bytes.Length;
-                Bytes = MemoryUtilities.ReplaceBytes(Bytes, itemOffset, dataLength, bytes);
-                int delta = Bytes.Length - prevLength;
-                UpdateOffsets(itemOffset, delta);
-                return delta;
+                Bytes = MemoryUtilities.ReplaceBytes(Bytes, itemOffset, dataLength, newBytes);
+                return Bytes.Length - prevLength;
             }
 
-            var delta = WriteItem(item.ItemBuffs.ItemOffset, item.ItemBuffs.DataLength, item.ItemBuffs.Serialize(forced));
+            var delta = WriteSection(item.ItemBuffs.ItemOffset, item.ItemBuffs.DataLength, item.ItemBuffs.Serialize(forced));
             if (delta != 0)
             {
+                UpdateOffsets(item.ItemBuffs.ItemOffset, delta);
                 _itemBuffsContainer.UpdateDataLength(delta);
             }
-            var delta2 = WriteItem(item.ItemOffset, item.DataLength, item.Serialize(forced));
+            var delta2 = WriteSection(item.ItemOffset, item.DataLength, item.Serialize(forced));
             if (delta2 != 0)
             {
+                UpdateOffsets(item.ItemOffset, delta2);
                 _itemContainer.UpdateDataLength(delta2);
             }
 
             UpdateDataLengths(item.ItemOffset, delta + delta2);
-        }
-
-        private int GetBagOffset()
-        {
-            ReadOnlySpan<byte> inventoryLimit = new[] { (byte)'i', (byte)'n', (byte)'v', (byte)'e', (byte)'n', (byte)'t', (byte)'o', (byte)'r', (byte)'y', (byte)'_', (byte)'l', (byte)'i', (byte)'m', (byte)'i', (byte)'t' };
-            ReadOnlySpan<byte> increaseAmount = new[] { (byte)'i', (byte)'n', (byte)'c', (byte)'r', (byte)'e', (byte)'a', (byte)'s', (byte)'e', (byte)'_', (byte)'a', (byte)'m', (byte)'o', (byte)'u', (byte)'n', (byte)'t' };
-            ReadOnlySpan<byte> currentInventoryCount = new[] { (byte)'c', (byte)'u', (byte)'r', (byte)'r', (byte)'e', (byte)'n', (byte)'t', (byte)'_', (byte)'i', (byte)'n', (byte)'v', (byte)'e', (byte)'n', (byte)'t', (byte)'o', (byte)'r', (byte)'y', (byte)'_', (byte)'c', (byte)'o', (byte)'u', (byte)'n', (byte)'t' };
-            ReadOnlySpan<byte> span = Bytes;
-            var curInvCountOffset = span.IndexOf(currentInventoryCount) + currentInventoryCount.Length;
-            var inventoryLimitOffset = span.IndexOf(inventoryLimit) + inventoryLimit.Length;
-            var increaseAmountOffset = span.IndexOf(increaseAmount) + increaseAmount.Length;
-            var finalOffset = Math.Max(Math.Max(curInvCountOffset, inventoryLimitOffset), increaseAmountOffset);
-            var inventoryLimitOrder = inventoryLimitOffset == finalOffset
-                ? 3
-                : inventoryLimitOffset < Math.Min(curInvCountOffset, increaseAmountOffset) ? 1 : 2;
-
-            return finalOffset + (inventoryLimitOrder * 12);
         }
     }
 }
