@@ -2,7 +2,7 @@
 
 namespace KoAR.Core
 {
-    public class ItemGems
+    public class ItemSockets
     {
         private static class Offsets
         {
@@ -14,7 +14,7 @@ namespace KoAR.Core
         private readonly GameSave _gameSave;
         internal int ItemOffset { get; set; }
 
-        public ItemGems(GameSave gameSave, int itemOffset, int dataLength)
+        public ItemSockets(GameSave gameSave, int itemOffset, int dataLength)
         {
             (_gameSave, ItemOffset) = (gameSave, itemOffset);
             Gems = GemCount > 0 ? new Gem[GemCount] : Array.Empty<Gem>();

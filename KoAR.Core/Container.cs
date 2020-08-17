@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace KoAR.Core
 {
-    public readonly struct Container : IEnumerable<(int id, int offset, int dataLength)>
+    internal class Container : IEnumerable<(int id, int offset, int dataLength)>
     {
         private static class Offsets
         {
@@ -13,8 +13,9 @@ namespace KoAR.Core
             public const int FirstItem = 26;
             public const int Count = 18;
         }
+
         private readonly GameSave _gameSave;
-        public int Offset { get; }
+        public int Offset { get; set; }
         private readonly ulong _pattern;
 
         public Container(GameSave gameSave, int offset, ulong pattern) => (_gameSave, Offset, _pattern) = (gameSave, offset, pattern);
@@ -63,8 +64,6 @@ namespace KoAR.Core
             }
         }
 
-        public Container UpdateOffset(int offset, int delta) => Offset > offset ? new Container(_gameSave, Offset + delta, _pattern) : this;
-
-        IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }
