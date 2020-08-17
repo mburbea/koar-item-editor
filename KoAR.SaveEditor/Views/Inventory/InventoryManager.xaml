@@ -28,7 +28,7 @@
         </Grid.ColumnDefinitions>
         <DockPanel Margin="4">
             <views:ItemFiltersEditor DockPanel.Dock="Top" Items="{Binding Items}" ItemFilters="{Binding ItemFilters}" />
-            <views:ItemCollectionManager Items="{Binding FilteredItems}" SelectedItem="{Binding SelectedItem}" RowDoubleClickCommand="{Binding ChangeDefinitionCommand}"
+            <views:ItemCollectionManager Items="{Binding FilteredItems}" SelectedItem="{Binding SelectedItem}" ChangeDefinitionCommand="{Binding ChangeDefinitionCommand}"
                 AllItemsUnstashable="{Binding AllItemsUnstashable}" AllItemsUnsellable="{Binding AllItemsUnsellable}" AllItemsStolen="{Binding AllItemsStolen}" 
                 SearchText="{Binding ItemFilters.ItemName}" />
         </DockPanel>

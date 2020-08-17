@@ -33,7 +33,7 @@
             <BitmapImage UriSource="/KoAR.SaveEditor;component/Resources/Help.png" x:Key="Help" po:Freeze="True" />
             <BitmapImage UriSource="/KoAR.SaveEditor;component/Resources/Zoom.png" x:Key="Zoom" po:Freeze="True" />
             <constructs:CompositeConverter x:Key="NotNullToVisibilityConverter">
-                <constructs:IsNullConverter />
+                <StaticResource ResourceKey="IsNullConverter" />
                 <constructs:NegatedBooleanConverter />
                 <BooleanToVisibilityConverter />
             </constructs:CompositeConverter>
@@ -148,7 +148,7 @@
                 <Button>
                     <Button.Resources>
                         <DataTemplate x:Key="LoadingTemplate" DataType="{x:Type s:Boolean}">
-                            <constructs:LoadingIndicator  Width="18" Height="18" IsLoading="{Binding}" />
+                            <constructs:LoadingIndicator Width="18" Height="18" IsLoading="{Binding}" />
                         </DataTemplate>
                     </Button.Resources>
                     <Button.Style>
