@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Force.Crc32;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 
 namespace KoAR.Core
 {
@@ -9,15 +11,18 @@ namespace KoAR.Core
     {
         private readonly int _bagOffset;
         private readonly int[] _dataLengthOffsets;
-        private Container _itemBuffsContainer;
-        private Container _itemContainer;
-        private Container _itemSocketsContainer;
+        private readonly Container _itemBuffsContainer;
+        private readonly Container _itemContainer;
+        private readonly Container _itemSocketsContainer;
+        public bool IsRemaster { get; }
 
         public GameSave(string fileName)
         {
             Bytes = File.ReadAllBytes(FileName = fileName);
             ReadOnlySpan<byte> data = Bytes;
             Stash = Stash.TryCreateStash(this);
+            IsRemaster = BitConverter.ToInt32(Bytes, 8) == 0;
+
             _bagOffset = GetBagOffset(data);
             _dataLengthOffsets = new[]{
                 data.IndexOf(new byte[8] { 0, 0, 0, 0, 0xA, 0, 0, 0 }) - 4, // file length
@@ -125,6 +130,13 @@ namespace KoAR.Core
         public void SaveFile()
         {
             File.Copy(FileName, $"{FileName}.bak", true);
+            if (IsRemaster)
+            {
+                var fileCrc32 = Crc32Algorithm.Append(0, Bytes, 8, Bytes.Length - 8);
+                var headerCrc32 = Crc32Algorithm.Append(0, Bytes, 8, 6 * 1024 - 8);
+                MemoryUtilities.Write(Bytes, 0, fileCrc32);
+                MemoryUtilities.Write(Bytes, 4, headerCrc32);
+            }
             File.WriteAllBytes(FileName, Bytes);
         }
 
