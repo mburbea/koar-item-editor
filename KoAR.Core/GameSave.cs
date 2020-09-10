@@ -9,23 +9,30 @@ namespace KoAR.Core
 {
     public sealed class GameSave
     {
+        private const int HeaderSize = 6 * 1024 - 8;
+        private const int BodySize = 4 * 1024 * 1024;
+
         private readonly int _bagOffset;
         private readonly int[] _dataLengthOffsets;
         private readonly Container _itemBuffsContainer;
         private readonly Container _itemContainer;
         private readonly Container _itemSocketsContainer;
-        public bool IsRemaster { get; }
+        private readonly GameSaveHeader _header;
+        private readonly int _bodyStart;
+        private int _originalBodyLength;
 
         public GameSave(string fileName)
         {
             Bytes = File.ReadAllBytes(FileName = fileName);
-            ReadOnlySpan<byte> data = Bytes;
-            Stash = Stash.TryCreateStash(this);
             IsRemaster = BitConverter.ToInt32(Bytes, 8) == 0;
-
+            _header = new GameSaveHeader(this);
+            Body = Bytes.AsSpan(_bodyStart = (_header.Bytes.Length + 8), BitConverter.ToInt32(Bytes, _header.Bytes.Length + 8) + 4).ToArray();
+            _originalBodyLength = Body.Length;
+            Stash = Stash.TryCreateStash(this);
+            ReadOnlySpan<byte> data = Body;
             _bagOffset = GetBagOffset(data);
             _dataLengthOffsets = new[]{
-                data.IndexOf(new byte[8] { 0, 0, 0, 0, 0xA, 0, 0, 0 }) - 4, // file length
+                0,
                 data.IndexOf(new byte[5] { 0x0C, 0xAE, 0x32, 0x00, 0x00 }) + 5, // unknown length 1
                 data.IndexOf(new byte[5] { 0xF7, 0x5D, 0x3C, 0x00, 0x0A }) + 5, // unknown length 2
                 data.IndexOf(new byte[5] { 0x23, 0xCC, 0x58, 0x00, 0x03 }) + 5, // type section length
@@ -39,12 +46,12 @@ namespace KoAR.Core
             int dataLength, playerActor = 0;
             var candidates = new List<(int id, int typeIdOffset, QuestItemDefinition? questItemDef)>();
 
-            for (int ixOfActor = _dataLengthOffsets[^1] + 4; BitConverter.ToInt32(Bytes, ixOfActor) == 0x00_75_2D_06; ixOfActor += dataLength)
+            for (int ixOfActor = _dataLengthOffsets[^1] + 4; BitConverter.ToInt32(Body, ixOfActor) == 0x00_75_2D_06; ixOfActor += dataLength)
             {
-                dataLength = 9 + BitConverter.ToInt32(Bytes, ixOfActor + 5);
-                var id = BitConverter.ToInt32(Bytes, ixOfActor + 9);
+                dataLength = 9 + BitConverter.ToInt32(Body, ixOfActor + 5);
+                var id = BitConverter.ToInt32(Body, ixOfActor + 9);
                 var typeIdOffset = ixOfActor + 13;
-                var typeId = BitConverter.ToUInt32(Bytes, typeIdOffset);
+                var typeId = BitConverter.ToUInt32(Body, typeIdOffset);
                 if (Amalur.ItemDefinitions.ContainsKey(typeId))
                 {
                     candidates.Add((id, typeIdOffset, null));
@@ -65,7 +72,7 @@ namespace KoAR.Core
             foreach (var (id, typeIdOffset, questItemDef) in candidates)
             {
                 var (itemOffset, itemLength) = itemLocs[id];
-                if (BitConverter.ToInt32(Bytes, itemOffset + 17) == playerActor)
+                if (BitConverter.ToInt32(Body, itemOffset + 17) == playerActor)
                 {
                     if (questItemDef != null)
                     {
@@ -97,14 +104,16 @@ namespace KoAR.Core
             }
         }
 
-        public byte[] Bytes { get; internal set; }
+        public bool IsRemaster { get; }
 
+        public byte[] Bytes { get; internal set; }
+        public byte[] Body { get; internal set; }
         public string FileName { get; }
 
         public int InventorySize
         {
-            get => MemoryUtilities.Read<int>(Bytes, _bagOffset);
-            set => MemoryUtilities.Write(Bytes, _bagOffset, value);
+            get => MemoryUtilities.Read<int>(Body, _bagOffset);
+            set => MemoryUtilities.Write(Body, _bagOffset, value);
         }
 
         public List<Item> Items { get; } = new List<Item>();
@@ -117,12 +126,13 @@ namespace KoAR.Core
 
         internal void UpdateDataLengths(int itemOffset, int delta)
         {
+            _header.DataLength += delta;
             foreach (var offset in _dataLengthOffsets)
             {
                 if (offset < itemOffset)
                 {
-                    var oldVal = MemoryUtilities.Read<int>(Bytes, offset);
-                    MemoryUtilities.Write(Bytes, offset, delta + oldVal);
+                    var oldVal = MemoryUtilities.Read<int>(Body, offset);
+                    MemoryUtilities.Write(Body, offset, delta + oldVal);
                 }
             }
         }
@@ -130,12 +140,20 @@ namespace KoAR.Core
         public void SaveFile()
         {
             File.Copy(FileName, $"{FileName}.bak", true);
-            if (IsRemaster)
+            _header.Bytes.CopyTo(Bytes, 8);
+            if (IsRemaster) 
             {
+                Body.CopyTo(Bytes, _bodyStart);
+                _originalBodyLength = Body.Length;
                 var fileCrc32 = Crc32Algorithm.Append(0, Bytes, 8, Bytes.Length - 8);
-                var headerCrc32 = Crc32Algorithm.Append(0, Bytes, 8, 6 * 1024 - 8);
+                var headerCrc32 = Crc32Algorithm.Append(0, _header.Bytes);
                 MemoryUtilities.Write(Bytes, 0, fileCrc32);
                 MemoryUtilities.Write(Bytes, 4, headerCrc32);
+            }
+            else
+            {
+                Bytes = MemoryUtilities.ReplaceBytes(Bytes, _bodyStart, _originalBodyLength, Body);
+                _originalBodyLength = Body.Length;
             }
             File.WriteAllBytes(FileName, Bytes);
         }
@@ -188,9 +206,9 @@ namespace KoAR.Core
         {
             int WriteSection(int itemOffset, int dataLength, ReadOnlySpan<byte> newBytes)
             {
-                var prevLength = Bytes.Length;
-                Bytes = MemoryUtilities.ReplaceBytes(Bytes, itemOffset, dataLength, newBytes);
-                return Bytes.Length - prevLength;
+                var prevLength = Body.Length;
+                Body = MemoryUtilities.ReplaceBytes(Body, itemOffset, dataLength, newBytes);
+                return Body.Length - prevLength;
             }
 
             var delta = WriteSection(item.ItemBuffs.ItemOffset, item.ItemBuffs.DataLength, item.ItemBuffs.Serialize(forced));

@@ -30,8 +30,8 @@ namespace KoAR.Core
 
         private int this[int index]
         {
-            get => MemoryUtilities.Read<int>(_gameSave.Bytes, ItemOffset + index);
-            set => MemoryUtilities.Write(_gameSave.Bytes, ItemOffset + index, value);
+            get => MemoryUtilities.Read<int>(_gameSave.Body, ItemOffset + index);
+            set => MemoryUtilities.Write(_gameSave.Body, ItemOffset + index, value);
         }
 
         private int DataLength => this[Offsets.DataLength] + 17;

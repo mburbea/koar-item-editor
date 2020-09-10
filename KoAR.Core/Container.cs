@@ -22,19 +22,19 @@ namespace KoAR.Core
 
         private int DataLength
         {
-            get => MemoryUtilities.Read<int>(_gameSave.Bytes, Offset + Offsets.DataLength);
-            set => MemoryUtilities.Write(_gameSave.Bytes, Offset + Offsets.DataLength, value);
+            get => MemoryUtilities.Read<int>(_gameSave.Body, Offset + Offsets.DataLength);
+            set => MemoryUtilities.Write(_gameSave.Body, Offset + Offsets.DataLength, value);
         }
 
         private int DataLength2
         {
-            get => MemoryUtilities.Read<int>(_gameSave.Bytes, Offset + Offsets.DataLength2);
-            set => MemoryUtilities.Write(_gameSave.Bytes, Offset + Offsets.DataLength2, value);
+            get => MemoryUtilities.Read<int>(_gameSave.Body, Offset + Offsets.DataLength2);
+            set => MemoryUtilities.Write(_gameSave.Body, Offset + Offsets.DataLength2, value);
         }
 
         private int Count
         {
-            get => MemoryUtilities.Read<int>(_gameSave.Bytes, Offset + Offsets.Count);
+            get => MemoryUtilities.Read<int>(_gameSave.Body, Offset + Offsets.Count);
         }
 
         public void UpdateDataLength(int delta)
@@ -50,15 +50,15 @@ namespace KoAR.Core
             int dataLength;
             while (true)
             {
-                while ((id = BitConverter.ToInt32(_gameSave.Bytes, offset)) == 0)
+                while ((id = BitConverter.ToInt32(_gameSave.Body, offset)) == 0)
                 {
                     offset += 4;
                 }
-                if (BitConverter.ToUInt64(_gameSave.Bytes, offset + 4) != _pattern)
+                if (BitConverter.ToUInt64(_gameSave.Body, offset + 4) != _pattern)
                 {
                     break;
                 }
-                dataLength = 17 + BitConverter.ToInt32(_gameSave.Bytes, offset + 13);
+                dataLength = 17 + BitConverter.ToInt32(_gameSave.Body, offset + 13);
                 yield return (id, offset, dataLength);
                 offset += dataLength;
             }

@@ -9,8 +9,8 @@
 
         public GemDefinition Definition
         {
-            get => Amalur.GemDefinitions[MemoryUtilities.Read<uint>(_gameSave.Bytes, ItemOffset)];
-            set => MemoryUtilities.Write(_gameSave.Bytes, ItemOffset, value.TypeId);
+            get => Amalur.GemDefinitions[MemoryUtilities.Read<uint>(_gameSave.Body, ItemOffset)];
+            set => MemoryUtilities.Write(_gameSave.Body, ItemOffset, value.TypeId);
         }
     }
 }
