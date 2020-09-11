@@ -26,12 +26,11 @@ namespace KoAR.SaveEditor.Views
             set => throw new NotSupportedException();
         }
 
-        public string DisplayName => this.HasCustomName switch
-        {
-            true => this.ItemName,
-            false when this.Definition.AffixableName && (this.Prefix ?? this.Suffix) != null => $"{this.Prefix?.Modifier} {this.Definition.CategoryDisplayName} {this.Suffix?.Modifier}".Trim(),
-            false => this.Definition.Name,
-        };
+        public string DefinitionDisplayName => this.Definition.AffixableName && (this.Prefix ?? this.Suffix) != null
+            ? $"{this.Prefix?.Modifier} {this.Definition.CategoryDisplayName} {this.Suffix?.Modifier}".Trim()
+            : this.Definition.Name;
+
+        public string DisplayName => this.HasCustomName ? this.ItemName : this.DefinitionDisplayName;
 
         public bool HasCustomName => this.Item.HasCustomName;
 

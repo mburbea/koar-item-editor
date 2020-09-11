@@ -241,7 +241,7 @@
                                                                         <Condition Property="IsVisible" Value="True" />
                                                                         <Condition Property="Text" Value="" />
                                                                     </MultiTrigger.Conditions>
-                                                                    <Setter Property="constructs:Watermarking.Content" Value="{Binding Definition.Name}" />
+                                                                    <Setter Property="constructs:Watermarking.Content" Value="{Binding DefinitionDisplayName}" />
                                                                 </MultiTrigger>
                                                             </Style.Triggers>
                                                             <Setter Property="Visibility" Value="Collapsed" />
