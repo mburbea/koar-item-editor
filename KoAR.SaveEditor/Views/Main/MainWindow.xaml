@@ -85,8 +85,8 @@
     </Window.InputBindings>
     <DockPanel>
         <Border Background="Transparent" DockPanel.Dock="Top">
-            <StackPanel Margin="4,1" Orientation="Horizontal">
-                <StackPanel.Resources>
+            <DockPanel Margin="4,1">
+                <DockPanel.Resources>
                     <ScaleTransform x:Key="ScaleTransform" ScaleX="0.85" ScaleY="0.85" po:Freeze="True" />
                     <Style TargetType="{x:Type Button}" x:Key="ToolButtonStyle">
                         <Setter Property="Template">
@@ -114,7 +114,7 @@
                         <Setter Property="Margin" Value="2" />
                         <Setter Property="VerticalAlignment" Value="Center" />
                     </Style>
-                </StackPanel.Resources>
+                </DockPanel.Resources>
                 <Button ToolTip="Open File..." Command="Open" Style="{StaticResource ToolButtonStyle}" Tag="{StaticResource Open}" />
                 <Button ToolTip="Save" Command="Save" Style="{StaticResource ToolButtonStyle}" Tag="{StaticResource Save}" />
                 <ToggleButton x:Name="OpenZoomPopup" FocusVisualStyle="{x:Null}" ToolTip="Zoom" Margin="2" VerticalAlignment="Center">
@@ -220,7 +220,8 @@
                         </Border>
                     </aero:SystemDropShadowChrome>
                 </Popup>
-            </StackPanel>
+                <TextBlock Text="{Binding Source={x:Static views:ApplicationVersion.Current}, StringFormat='v{0}'}" TextAlignment="Right" />
+            </DockPanel>
         </Border>
         <TabControl x:Name="PART_TabControl" ItemsSource="{Binding Source={StaticResource Modes}}" SelectedItem="{Binding Mode}" FocusVisualStyle="{x:Null}" 
             Margin="-1,0,-1,4" TabStripPlacement="Bottom" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="1"

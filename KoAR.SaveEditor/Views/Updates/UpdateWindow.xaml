@@ -3,6 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:views="clr-namespace:KoAR.SaveEditor.Views"
     xmlns:local="clr-namespace:KoAR.SaveEditor.Views.Updates"
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs"
     mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type local:UpdateViewModel}}"
@@ -16,7 +17,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    <Grid Margin="6">        
+    <Grid Margin="6">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -28,7 +29,7 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <TextBlock Grid.Row="0" Text="Current Version:" TextAlignment="Right" FontWeight="SemiBold" Margin="2" />
-        <TextBlock Grid.Row="0" Grid.Column="1" Margin="2" Text="{Binding Source={x:Static local:UpdateService.CurrentVersion}, StringFormat='v{0}'}"/>
+        <TextBlock Grid.Row="0" Grid.Column="1" Margin="2" Text="{Binding Source={x:Static views:ApplicationVersion.Current}, StringFormat='v{0}'}"/>
         <TextBlock Grid.Row="1" Text="Update Version:" TextAlignment="Right" FontWeight="SemiBold" Margin="2" />
         <TextBlock Grid.Row="1" Grid.Column="1" Margin="2" Text="{Binding UpdateService.Update.Version, StringFormat='v{0}'}" />
         <TextBlock Grid.Row="2" Text="Release Notes:" TextAlignment="Right" FontWeight="SemiBold" Margin="2" VerticalAlignment="Top" />

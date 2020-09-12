@@ -31,7 +31,7 @@ namespace KoAR.SaveEditor.Views.Main
         private void Help_Executed(object sender, ExecutedRoutedEventArgs e) => TaskDialog.Show(new TaskDialogOptions
         {
             Owner = this,
-            Title = $"KoAR Save Editor v{UpdateService.CurrentVersion}",
+            Title = $"KoAR Save Editor v{ApplicationVersion.Current}",
             MainInstruction = "Help",
             MainIcon = VistaTaskDialogIcon.Information,
             CommonButtons = TaskDialogCommonButtons.Close,

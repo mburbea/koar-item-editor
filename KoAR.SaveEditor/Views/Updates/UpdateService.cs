@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using KoAR.Core;
@@ -13,8 +14,6 @@ namespace KoAR.SaveEditor.Views.Updates
 {
     public sealed class UpdateService
     {
-        public static readonly string CurrentVersion = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
-
         private static readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions { PropertyNamingPolicy = JsonSnakeCaseNamingPolicy.Instance };
 
         private UpdateInfo? _update;
@@ -90,38 +89,65 @@ namespace KoAR.SaveEditor.Views.Updates
             }
         }
 
-        private static async Task<Release[]> GetReleasesAsync(CancellationToken cancellationToken)
-        {
-            const string endpoint = "https://api.github.com/repos/mburbea/koar-item-editor/releases";
-            const int maxReleases = 15;
-            HttpWebRequest request = WebRequest.CreateHttp($"{endpoint}?per_page={maxReleases}");
-            request.UserAgent = request.Accept = "application/vnd.github.v3+json";
-            using WebResponse response = await request.GetResponseAsync().ConfigureAwait(false);
-            cancellationToken.ThrowIfCancellationRequested();
-            using Stream stream = response.GetResponseStream();
-            cancellationToken.ThrowIfCancellationRequested();
-            return await JsonSerializer.DeserializeAsync<Release[]>(stream, UpdateService._jsonOptions).ConfigureAwait(false);
-        }
-
-        private async static Task<UpdateInfo?> GetUpdateInfoAsync(CancellationToken cancellationToken)
+        private static async Task<T?> FetchAsync<T>(string suffix, CancellationToken cancellationToken)
+            where T : class
         {
             try
             {
-                Release[] releases = await UpdateService.GetReleasesAsync(cancellationToken).ConfigureAwait(false);
+                HttpWebRequest request = WebRequest.CreateHttp($"https://api.github.com/repos/mburbea/koar-item-editor/{suffix}");
+                request.UserAgent = request.Accept = "application/vnd.github.v3+json";
+                using WebResponse response = await request.GetResponseAsync().ConfigureAwait(false);
+                cancellationToken.ThrowIfCancellationRequested();
+                using Stream stream = response.GetResponseStream();
+                cancellationToken.ThrowIfCancellationRequested();
+                return await JsonSerializer.DeserializeAsync<T>(stream, UpdateService._jsonOptions).ConfigureAwait(false);
+            }
+            catch (WebException e)
+            {
+                if (((HttpWebResponse)e.Response).StatusCode == HttpStatusCode.NotFound)
+                {
+                    return default;
+                }
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Gets a release by tag asynchronously. It's possible for this task to resolve to
+        /// <see langword="null"/> as a release may have been deleted.
+        /// </summary>
+        private static Task<Release?> GetRelease(string tag, CancellationToken cancellationToken) => UpdateService.FetchAsync<Release>($"releases/tags/{tag}", cancellationToken);
+
+        private static async Task<Tag[]> GetTagsAsync(CancellationToken cancellationToken) => (await UpdateService.FetchAsync<Tag[]>("tags", cancellationToken).ConfigureAwait(false))!;
+
+        private async static Task<UpdateInfo?> GetUpdateInfoAsync(CancellationToken cancellationToken)
+        {
+            const int maxReleases = 15;
+            try
+            {
+                List<string> tagNames = (await UpdateService.GetTagsAsync(cancellationToken).ConfigureAwait(false))
+                    .Where(tag => tag.Version.Value.Major == ApplicationVersion.Current.Major)
+                    .TakeWhile(tag => tag.Version.Value > ApplicationVersion.Current)
+                    .Take(maxReleases)
+                    .Select(tag => tag.Name)
+                    .ToList();
+                if (tagNames.Count == 0)
+                {
+                    return null;
+                }
+                List<Release> releases = (await Task.WhenAll(tagNames.Select(tag => UpdateService.GetRelease(tag, cancellationToken))).ConfigureAwait(false))
+                    .OfType<Release>()
+                    .ToList();
                 Release? latest = releases.FirstOrDefault();
                 ReleaseAsset? asset;
-                if (latest != null && UpdateService.CurrentVersion != latest.Version && (asset = latest.GetZipFileAsset()) != null)
+                if (latest != null && (asset = latest.GetZipFileAsset()) != null)
                 {
-                    return new UpdateInfo(
-                        latest.Version,
-                        asset.BrowserDownloadUrl,
-                        asset.Size,
-                        releases.TakeWhile(release => release.Version != UpdateService.CurrentVersion).ToArray()
-                    );
+                    return new UpdateInfo(latest.Version, asset.BrowserDownloadUrl, asset.Size, releases);
                 }
             }
-            catch
+            catch (Exception e)
             {
+                e.ToString();
             }
             return null;
         }
@@ -154,6 +180,17 @@ namespace KoAR.SaveEditor.Views.Updates
             public bool IsZipFile => this.ContentType == "application/zip";
 
             public int Size { get; set; }
+        }
+
+        private sealed class Tag
+        {
+            private static readonly Regex _regex = new Regex(@"^v(?<version>\d+\.\d+\.\d+)$", RegexOptions.ExplicitCapture);
+
+            public string Name { get; set; } = string.Empty;
+
+            public Lazy<Version> Version => new Lazy<Version>(
+                () => new Version(Tag._regex.Match(this.Name) is { Success: true } match ? match.Groups["version"].Value : "0.0.0")
+            );
         }
     }
 }
