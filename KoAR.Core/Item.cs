@@ -19,10 +19,7 @@ namespace KoAR.Core
         public Item(GameSave gameSave, int typeIdOffset, int offset, int dataLength, int itemBuffsOffset, int itemBuffsLength, int itemGemsOffset, int itemGemsLength)
         {
             (_gameSave, TypeIdOffset, ItemOffset) = (gameSave, typeIdOffset, offset);
-            if (gameSave.Body[TypeIdOffset + 10] == 1)
-            {
-                _levelShiftOffset = 8;
-            }
+            _levelShiftOffset = (byte)(8 * (gameSave.Body[TypeIdOffset + 10]));
             ItemBytes = _gameSave.Body.AsSpan(offset, dataLength).ToArray();
             ItemSockets = new ItemSockets(gameSave, itemGemsOffset, itemGemsLength);
             ItemBuffs = new ItemBuffMemory(gameSave, itemBuffsOffset, itemBuffsLength);
@@ -201,7 +198,9 @@ namespace KoAR.Core
 
         internal void LoadFromDefinition(ItemDefinition definition)
         {
-            CurrentDurability = definition.MaxDurability;
+            CurrentDurability = definition.Category == EquipmentCategory.Necklace || definition.Category == EquipmentCategory.Ring 
+                ? 100 
+                : definition.MaxDurability; 
             MaxDurability = definition.MaxDurability;
             ItemBuffs.List.Clear();
             foreach (var buff in definition.ItemBuffs.List)
