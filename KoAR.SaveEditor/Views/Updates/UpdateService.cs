@@ -145,9 +145,8 @@ namespace KoAR.SaveEditor.Views.Updates
                     return new UpdateInfo(latest.Version, asset.BrowserDownloadUrl, asset.Size, releases);
                 }
             }
-            catch (Exception e)
+            catch
             {
-                e.ToString();
             }
             return null;
         }
