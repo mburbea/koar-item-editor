@@ -194,6 +194,7 @@
     <None Remove="Resources\Utility_Socket.png" />
     <None Remove="Resources\Weapon_Socket.jpg" />
     <None Remove="Resources\Zoom.png" />
+    <None Remove="Views\Updates\github.credentials" />
     <None Remove="Views\Updates\update.ps1" />
   </ItemGroup>
   <ItemGroup>
@@ -343,6 +344,7 @@
     <Resource Include="Resources\categories\Torso_Finesse.png" />
     <Resource Include="Resources\Unknown.png" />
     <Resource Include="Resources\Zoom.png" />
+    <Resource Include="Views\Updates\github.credentials" />
     <Resource Include="Views\Updates\update.ps1" />
   </ItemGroup>
   <ItemGroup>
@@ -377,4 +379,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <Target Name="EnsureCredentialsFileExists" BeforeTargets="BeforeBuild">
+    <WriteLinesToFile File="$(MSBuildProjectDirectory)\Views\Updates\github.credentials" Lines="" Overwrite="False" />
+  </Target>
 </Project>

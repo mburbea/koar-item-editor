@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
 
@@ -14,22 +17,15 @@ namespace KoAR.SaveEditor.Views.Updates
 {
     public sealed class UpdateService
     {
+
+        private static readonly Lazy<string?> _credentials = new Lazy<string?>(UpdateService.LoadCredentials);
         private static readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions { PropertyNamingPolicy = JsonSnakeCaseNamingPolicy.Instance };
 
         private UpdateInfo? _update;
 
-        public UpdateService()
-            : this(interval: 250)
-        {
-        }
-
-        public UpdateService(int interval) => this.Interval = interval;
-
         public event EventHandler<EventArgs<DownloadProgress>>? DownloadProgress;
 
         public event EventHandler? UpdateChanged;
-
-        public int Interval { get; }
 
         public UpdateInfo? Update
         {
@@ -52,8 +48,9 @@ namespace KoAR.SaveEditor.Views.Updates
             {
                 return;
             }
+            const int interval = 250;
             int bytesTransferred = 0, bytesPerInterval = 0;
-            using Timer timer = new Timer(OnTick, null, 0, this.Interval);
+            using Timer timer = new Timer(OnTick, null, 0, interval);
             try
             {
                 HttpWebRequest request = WebRequest.CreateHttp(this.Update.Uri);
@@ -83,10 +80,29 @@ namespace KoAR.SaveEditor.Views.Updates
 
             void OnTick(object _)
             {
-                DownloadProgress progress = new DownloadProgress(bytesTransferred, bytesPerInterval * 1000d / this.Interval);
+                DownloadProgress progress = new DownloadProgress(bytesTransferred, bytesPerInterval * 1000d / interval);
                 bytesPerInterval = 0;
                 this.OnDownloadProgress(progress);
             }
+        }
+
+        public void ExecuteUpdate(string scriptFileName, string zipFileName)
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                WorkingDirectory = Path.GetTempPath(),
+                UseShellExecute = false,
+                FileName = "powershell.exe",
+                Arguments = $"-ExecutionPolicy Bypass -File \"{Path.GetFileName(scriptFileName)}\" {Process.GetCurrentProcess().Id} \"{Path.GetFileName(zipFileName)}\"",
+            }).WaitForExit();
+        }
+
+        public async Task<string> ExtractPowershellScript()
+        {
+            string fileName = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.ps1");
+            using FileStream fileStream = File.Create(fileName);
+            await UpdateService.GetResourceFileStream("update.ps1").CopyToAsync(fileStream).ConfigureAwait(false);
+            return fileName;
         }
 
         private static async Task<T?> FetchAsync<T>(string suffix, CancellationToken cancellationToken)
@@ -96,6 +112,10 @@ namespace KoAR.SaveEditor.Views.Updates
             {
                 HttpWebRequest request = WebRequest.CreateHttp($"https://api.github.com/repos/mburbea/koar-item-editor/{suffix}");
                 request.UserAgent = request.Accept = "application/vnd.github.v3+json";
+                if (UpdateService._credentials.Value != null)
+                {
+                    request.Headers.Add(HttpRequestHeader.Authorization, UpdateService._credentials.Value);
+                }
                 using WebResponse response = await request.GetResponseAsync().ConfigureAwait(false);
                 cancellationToken.ThrowIfCancellationRequested();
                 using Stream stream = response.GetResponseStream();
@@ -118,13 +138,15 @@ namespace KoAR.SaveEditor.Views.Updates
         /// </summary>
         private static Task<Release?> GetRelease(string tag, CancellationToken cancellationToken) => UpdateService.FetchAsync<Release>($"releases/tags/{tag}", cancellationToken);
 
+        private static Stream GetResourceFileStream(string name) => Application.GetResourceStream(new Uri($"/Views/Updates/{name}", UriKind.Relative)).Stream;
+
         private static async Task<Tag[]> GetTagsAsync(CancellationToken cancellationToken) => (await UpdateService.FetchAsync<Tag[]>("tags", cancellationToken).ConfigureAwait(false))!;
 
         private async static Task<UpdateInfo?> GetUpdateInfoAsync(CancellationToken cancellationToken)
         {
-            const int maxReleases = 15;
             try
             {
+                const int maxReleases = 10;
                 List<string> tagNames = (await UpdateService.GetTagsAsync(cancellationToken).ConfigureAwait(false))
                     .Where(tag => tag.Version.Value.Major == ApplicationVersion.Current.Major)
                     .TakeWhile(tag => tag.Version.Value > ApplicationVersion.Current)
@@ -145,11 +167,16 @@ namespace KoAR.SaveEditor.Views.Updates
                     return new UpdateInfo(latest.Version, asset.BrowserDownloadUrl, asset.Size, releases);
                 }
             }
-            catch (Exception e)
+            catch
             {
-                e.ToString();
             }
             return null;
+        }
+
+        private static string? LoadCredentials()
+        {
+            using StreamReader reader = new StreamReader(UpdateService.GetResourceFileStream("github.credentials"));
+            return reader.EndOfStream ? default : $"Basic {Convert.ToBase64String(Encoding.ASCII.GetBytes(reader.ReadToEnd()))}";
         }
 
         private void OnDownloadProgress(DownloadProgress data) => this.DownloadProgress?.Invoke(this, new EventArgs<DownloadProgress>(data));

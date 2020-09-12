@@ -220,7 +220,8 @@
                         </Border>
                     </aero:SystemDropShadowChrome>
                 </Popup>
-                <TextBlock Text="{Binding Source={x:Static views:ApplicationVersion.Current}, StringFormat='v{0}'}" TextAlignment="Right" />
+                <TextBlock Text="{Binding Source={x:Static views:ApplicationVersion.Current}, StringFormat='v{0}'}" FontSize="10"
+                    TextAlignment="Right" VerticalAlignment="Center" FontWeight="Light" Opacity="0.66" Margin="0,0,8,0" />
             </DockPanel>
         </Border>
         <TabControl x:Name="PART_TabControl" ItemsSource="{Binding Source={StaticResource Modes}}" SelectedItem="{Binding Mode}" FocusVisualStyle="{x:Null}" 
