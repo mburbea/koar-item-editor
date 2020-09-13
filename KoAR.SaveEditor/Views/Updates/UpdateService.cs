@@ -133,8 +133,8 @@ namespace KoAR.SaveEditor.Views.Updates
         }
 
         /// <summary>
-        /// Gets a release by tag asynchronously. It's possible for this task to resolve to
-        /// <see langword="null"/> as a release may have been deleted.
+        /// Gets a release by tag asynchronously. 
+        /// It's possible for this task to resolve to <see langword="null"/> as a release may have been deleted.
         /// </summary>
         private static Task<Release?> GetRelease(string tag, CancellationToken cancellationToken) => UpdateService.FetchAsync<Release>($"releases/tags/{tag}", cancellationToken);
 
