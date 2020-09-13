@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 
 namespace KoAR.Core
 {
@@ -119,6 +118,8 @@ namespace KoAR.Core
 
         public void DeleteItem(StashItem item)
         {
+            // To do: Add support for deleting an item with a gem (how?).
+            // maybe block it?
             var itemLength = item.DataLength;
             Items.Remove(item);
             _gameSave.Body = MemoryUtilities.ReplaceBytes(_gameSave.Body, item.ItemOffset, itemLength, Array.Empty<byte>());
