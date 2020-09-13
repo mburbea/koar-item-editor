@@ -17,7 +17,6 @@ namespace KoAR.SaveEditor.Views.Updates
 {
     public sealed class UpdateService
     {
-
         private static readonly Lazy<string?> _credentials = new Lazy<string?>(UpdateService.LoadCredentials);
         private static readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions { PropertyNamingPolicy = JsonSnakeCaseNamingPolicy.Instance };
 
@@ -35,6 +34,25 @@ namespace KoAR.SaveEditor.Views.Updates
                 this._update = value;
                 this.UpdateChanged?.Invoke(this, EventArgs.Empty);
             }
+        }
+
+        public static void ExecuteUpdate(string scriptFileName, string zipFileName)
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                WorkingDirectory = Path.GetTempPath(),
+                UseShellExecute = false,
+                FileName = "powershell.exe",
+                Arguments = $"-ExecutionPolicy Bypass -File \"{Path.GetFileName(scriptFileName)}\" {Process.GetCurrentProcess().Id} \"{Path.GetFileName(zipFileName)}\"",
+            }).WaitForExit();
+        }
+
+        public static async Task<string> ExtractPowershellScript()
+        {
+            string fileName = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.ps1");
+            using FileStream fileStream = File.Create(fileName);
+            await UpdateService.GetResourceFileStream("update.ps1").CopyToAsync(fileStream).ConfigureAwait(false);
+            return fileName;
         }
 
         public async Task CheckForUpdatesAsync(CancellationToken cancellationToken = default)
@@ -86,25 +104,6 @@ namespace KoAR.SaveEditor.Views.Updates
             }
         }
 
-        public void ExecuteUpdate(string scriptFileName, string zipFileName)
-        {
-            Process.Start(new ProcessStartInfo
-            {
-                WorkingDirectory = Path.GetTempPath(),
-                UseShellExecute = false,
-                FileName = "powershell.exe",
-                Arguments = $"-ExecutionPolicy Bypass -File \"{Path.GetFileName(scriptFileName)}\" {Process.GetCurrentProcess().Id} \"{Path.GetFileName(zipFileName)}\"",
-            }).WaitForExit();
-        }
-
-        public async Task<string> ExtractPowershellScript()
-        {
-            string fileName = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.ps1");
-            using FileStream fileStream = File.Create(fileName);
-            await UpdateService.GetResourceFileStream("update.ps1").CopyToAsync(fileStream).ConfigureAwait(false);
-            return fileName;
-        }
-
         private static async Task<T?> FetchAsync<T>(string suffix, CancellationToken cancellationToken)
             where T : class
         {
@@ -133,7 +132,7 @@ namespace KoAR.SaveEditor.Views.Updates
         }
 
         /// <summary>
-        /// Gets a release by tag asynchronously. 
+        /// Gets a release by tag asynchronously.
         /// It's possible for this task to resolve to <see langword="null"/> as a release may have been deleted.
         /// </summary>
         private static Task<Release?> GetRelease(string tag, CancellationToken cancellationToken) => UpdateService.FetchAsync<Release>($"releases/tags/{tag}", cancellationToken);
