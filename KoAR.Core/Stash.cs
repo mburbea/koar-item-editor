@@ -49,15 +49,12 @@ namespace KoAR.Core
                     {
                         var item = Factory(gameSave, _offset + indices[i], indices[i + 1] - indices[i]);
                         Items.Add(item);
-                        if(item.GemCount > 0u)
+                        for(uint j = 0; j < item.GemCount; j++)
                         {
-                            for(var j = 0; j < item.GemCount; j++)
+                            i++;
+                            if (Amalur.GemDefinitions.ContainsKey(MemoryUtilities.Read<uint>(_gameSave.Body, _offset + indices[i])))
                             {
-                                i++;
-                                if (Amalur.GemDefinitions.ContainsKey(MemoryUtilities.Read<uint>(_gameSave.Body, _offset + indices[i])))
-                                {
-                                    item.Gems.Add(new Gem(_gameSave, _offset + indices[i]));
-                                }
+                                item.Gems.Add(new Gem(_gameSave, _offset + indices[i]));
                             }
                         }
                     }
