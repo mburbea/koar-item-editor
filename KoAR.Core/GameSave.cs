@@ -178,12 +178,27 @@ namespace KoAR.Core
                 {
                     item.ItemOffset += delta;
                 }
+                foreach (var gem in item.Gems)
+                {
+                    if (gem.ItemOffset > itemOffset)
+                    {
+                        gem.ItemOffset += delta;
+                    }
+                }
+
             }
             foreach (var item in Items)
             {
                 if (item.ItemSockets.ItemOffset > itemOffset)
                 {
                     item.ItemSockets.ItemOffset += delta;
+                    foreach(var gem in item.ItemSockets.Gems)
+                    {
+                        if(gem.ItemOffset > itemOffset)
+                        {
+                            gem.ItemOffset += delta;
+                        }
+                    }
                 }
                 if (item.ItemBuffs.ItemOffset > itemOffset)
                 {

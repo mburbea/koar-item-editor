@@ -5,7 +5,7 @@
         private readonly GameSave _gameSave;
         public Gem(GameSave gameSave, int itemOffset) => (_gameSave, ItemOffset) = (gameSave, itemOffset);
 
-        public int ItemOffset { get; }
+        public int ItemOffset { get; set; }
 
         public GemDefinition Definition
         {

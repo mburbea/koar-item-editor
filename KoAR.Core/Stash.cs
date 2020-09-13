@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 
 namespace KoAR.Core
 {
@@ -38,6 +39,7 @@ namespace KoAR.Core
             (_gameSave, _offset) = (gameSave, offset);
             Items.Capacity = Count;
             Span<byte> data = _gameSave.Body.AsSpan(_offset, DataLength);
+
             if (Items.Capacity > 0)
             {
                 var indices = GetAllIndices(data, gameSave.IsRemaster);
@@ -45,14 +47,31 @@ namespace KoAR.Core
                 {
                     if (Amalur.ItemDefinitions.ContainsKey(MemoryUtilities.Read<uint>(_gameSave.Body, _offset + indices[i])))
                     {
-                        Items.Add(new StashItem(gameSave, _offset + indices[i], indices[i + 1] - indices[i]));
+                        var item = Factory(gameSave, _offset + indices[i], indices[i + 1] - indices[i]);
+                        Items.Add(item);
+                        if(item.GemCount > 0u)
+                        {
+                            for(var j = 1; j <= item.GemCount; j++)
+                            {
+                                if (Amalur.GemDefinitions.ContainsKey(MemoryUtilities.Read<uint>(_gameSave.Body, _offset + indices[i + j])))
+                                {
+                                    item.Gems.Add(new Gem(_gameSave, _offset + indices[i + j]));
+                                }
+                            }
+                        }
                     }
+                    
                 }
+                // ok we might read this twice, who cares.
                 if (Amalur.ItemDefinitions.ContainsKey(MemoryUtilities.Read<uint>(_gameSave.Body, _offset + indices[^1])))
                 {
-                    Items.Add(new StashItem(gameSave, _offset + indices[^1], DataLength - indices[^1]));
+                    Items.Add(Factory(gameSave, _offset + indices[^1], DataLength - indices[^1]));
                 }
             }
+
+            static StashItem Factory(GameSave gameSave, int offset, int datalength) => gameSave.IsRemaster
+                ? new RemasterStashItem(gameSave, offset, datalength)
+                : new StashItem(gameSave, offset, datalength);
         }
 
         public int DataLength
@@ -80,7 +99,8 @@ namespace KoAR.Core
             // 2. We blow away everything when we do this operation anyway.
             // 3. We rely on the fact that the game will regenerate the ItemBuff section when the stash spawns the item. (Primarily to avoid thinking about instanceIds...)
             Span<byte> temp = stackalloc byte[25 + type.PlayerBuffs.Length * 8];
-            MemoryUtilities.Write(temp, 0, type.TypeId | ((ulong)0x03_0A) << 32);
+            var sectionHeader = _gameSave.IsRemaster ? 0x04_0Aul : 0x03_0Aul; 
+            MemoryUtilities.Write(temp, 0, type.TypeId | sectionHeader << 32);
             MemoryUtilities.Write(temp, 10, type.MaxDurability);
             temp[14] = 1;
             MemoryUtilities.Write(temp, 18, type.PlayerBuffs.Length);
@@ -114,7 +134,7 @@ namespace KoAR.Core
         {
             ReadOnlySpan<byte> stashIndicator = new byte[] { 0x00, 0xF5, 0x43, 0xEB, 0x00, 0x02 };
             var offset = gameSave.Body.AsSpan().IndexOf(stashIndicator);
-            return offset != -1 && !gameSave.IsRemaster ? new Stash(gameSave, offset - 3) : null;
+            return offset != -1 ? new Stash(gameSave, offset - 3) : null;
         }
     }
 }

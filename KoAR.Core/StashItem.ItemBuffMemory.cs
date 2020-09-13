@@ -7,12 +7,14 @@ namespace KoAR.Core
         private sealed class ItemBuffMemory : IItemBuffMemory
         {
             private readonly StashItem _stashItem;
+            private readonly int _endOfSection;
+
             private byte[] Bytes => _stashItem.Bytes;
             private Offset Offsets => _stashItem.Offsets;
 
-            public ItemBuffMemory(StashItem stashItem)
+            public ItemBuffMemory(StashItem stashItem, int endOfSection)
             {
-                _stashItem = stashItem;
+                (_stashItem, _endOfSection) = (stashItem, endOfSection);
                 int count = Count;
                 var firstBuff = Offsets.FirstItemBuff;
                 for(int i = 0; i < count; i++)
@@ -26,9 +28,9 @@ namespace KoAR.Core
 
             public IList<Buff> List { get; } = new List<Buff>();
 
-            public Buff? Prefix => Amalur.Buffs.GetOrDefault(MemoryUtilities.Read<uint>(Bytes, Bytes.Length - 9));
+            public Buff? Prefix => Amalur.Buffs.GetOrDefault(MemoryUtilities.Read<uint>(Bytes, _endOfSection - 8));
 
-            public Buff? Suffix => Amalur.Buffs.GetOrDefault(MemoryUtilities.Read<uint>(Bytes, Bytes.Length - 5));
+            public Buff? Suffix => Amalur.Buffs.GetOrDefault(MemoryUtilities.Read<uint>(Bytes, _endOfSection - 4));
         }
     }
 }

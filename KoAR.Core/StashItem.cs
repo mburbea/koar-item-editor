@@ -7,8 +7,11 @@ namespace KoAR.Core
 {
     public partial class StashItem : IItem
     {
-        private byte[] Bytes { get; }
+        protected byte[] Bytes { get; }
         public List<Buff> PlayerBuffs { get; } = new List<Buff>();
+
+        public uint GemCount { get; }
+        public List<Gem> Gems { get; } = new List<Gem>();
 
         public StashItem(GameSave gameSave, int offset, int datalength)
         {
@@ -24,14 +27,27 @@ namespace KoAR.Core
             {
                 ItemName = Encoding.Default.GetString(Bytes, Offsets.Name, NameLength);
             }
-            ItemBuffs = Bytes[Offsets.HasItemBuffs] == 0x14 ? new ItemBuffMemory(this) : Definition.ItemBuffs;
+            int socketsStart = Bytes.Length - 1;
+            if(Bytes[^1] != 0xFF)
+            {
+                int i = Bytes.Length - 4;
+                uint handle;
+                while((handle = MemoryUtilities.Read<uint>(Bytes, i)) > 4)
+                {
+                    i -= 4;
+                }
+                GemCount = handle;
+                socketsStart = i - 2;
+            }
+
+            ItemBuffs = Bytes[Offsets.HasItemBuffs] == 0x14 ? new ItemBuffMemory(this, socketsStart) : Definition.ItemBuffs;
         }
 
         internal int DataLength => Bytes.Length;
 
         internal int ItemOffset { get; set; }
 
-        private Offset Offsets => new Offset(this);
+        protected Offset Offsets => new Offset(this);
 
         public ItemDefinition Definition => Amalur.ItemDefinitions[MemoryUtilities.Read<uint>(Bytes)];
 
@@ -39,9 +55,9 @@ namespace KoAR.Core
 
         private int BuffCount => MemoryUtilities.Read<int>(Bytes, Offsets.BuffCount);
 
-        public bool IsStolen => Bytes[Offsets.IsStolen] == 1;
+        public virtual bool IsStolen => Bytes[Offsets.IsStolen] == 1;
 
-        public bool HasCustomName => Bytes[Offsets.HasCustomName] == 1;
+        public virtual bool HasCustomName => Bytes[Offsets.HasCustomName] == 1;
 
         private int NameLength => MemoryUtilities.Read<int>(Bytes, Offsets.NameLength);
 
@@ -60,6 +76,34 @@ namespace KoAR.Core
                 .Concat(new[] { ItemBuffs.Prefix?.Rarity ?? default, ItemBuffs.Suffix?.Rarity ?? default, Definition.SocketTypes.Any() ? Rarity.Infrequent : Rarity.Common })
                 .Max();
 
-        public IEnumerable<Socket> GetSockets() => Definition.GetSockets();
+        public IEnumerable<Socket> GetSockets()
+        {
+            return GemCount switch
+            {
+                0 => Definition.GetSockets(),
+                1 when Definition.SocketTypes.Length == 1 => new[] { new Socket(Definition.SocketTypes[0], Gems[0]) }, // trivial case.
+                _ => Inner(Definition.SocketTypes, Gems.ToArray())
+            };
+
+            static IEnumerable<Socket> Inner(string sockets, Gem[] gems)
+            {
+                int start = 0;
+                foreach (var socket in sockets)
+                {
+                    Gem? gem = null;
+                    for (int i = start; i < gems.Length; i++)
+                    {
+                        if (gems[i].Definition.SocketType == socket)
+                        {
+                            gem = gems[i];
+                            (gems[start], gems[i]) = (gems[i], gems[start]);
+                            start++;
+                            break;
+                        }
+                    }
+                    yield return new Socket(socket, gem);
+                }
+            }
+        }
     }
 }
