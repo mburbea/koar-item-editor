@@ -4,7 +4,7 @@ using KoAR.Core;
 
 namespace KoAR.SaveEditor.Views
 {
-    public class ElementIcon : Control
+    public sealed class ElementIcon : Control
     {
         public static readonly DependencyProperty ElementProperty = DependencyProperty.Register(nameof(ElementIcon.Element), typeof(Element), typeof(ElementIcon),
             new PropertyMetadata(Element.None));
