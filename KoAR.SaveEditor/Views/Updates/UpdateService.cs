@@ -112,9 +112,9 @@ namespace KoAR.SaveEditor.Views.Updates
             {
                 HttpWebRequest request = WebRequest.CreateHttp($"https://api.github.com/repos/mburbea/koar-item-editor/{suffix}");
                 request.UserAgent = request.Accept = "application/vnd.github.v3+json";
-                if (UpdateService._credentials.Value != null)
+                if (UpdateService._credentials.Value is string credentials)
                 {
-                    request.Headers.Add(HttpRequestHeader.Authorization, UpdateService._credentials.Value);
+                    request.Headers.Add(HttpRequestHeader.Authorization, credentials);
                 }
                 using WebResponse response = await request.GetResponseAsync().ConfigureAwait(false);
                 cancellationToken.ThrowIfCancellationRequested();
@@ -159,12 +159,11 @@ namespace KoAR.SaveEditor.Views.Updates
                 }
                 List<Release> releases = (await Task.WhenAll(tagNames.Select(tag => UpdateService.GetRelease(tag, cancellationToken))).ConfigureAwait(false))
                     .OfType<Release>()
+                    .Where(release => release.GetZipFileAsset() != null)
                     .ToList();
-                Release? latest = releases.FirstOrDefault();
-                ReleaseAsset? asset;
-                if (latest != null && (asset = latest.GetZipFileAsset()) != null)
+                if (releases.Count != 0)
                 {
-                    return new UpdateInfo(latest.Version, asset.BrowserDownloadUrl, asset.Size, releases);
+                    return new UpdateInfo(releases);
                 }
             }
             catch
@@ -183,6 +182,8 @@ namespace KoAR.SaveEditor.Views.Updates
 
         private sealed class Release : IReleaseInfo
         {
+            private ReleaseAsset? _zipFileAsset;
+
             public ReleaseAsset[] Assets { get; set; } = Array.Empty<ReleaseAsset>();
 
             public string Body { get; set; } = string.Empty;
@@ -195,7 +196,11 @@ namespace KoAR.SaveEditor.Views.Updates
 
             public string Version => this.TagName.Length == 0 ? string.Empty : this.TagName.Substring(1);
 
-            public ReleaseAsset? GetZipFileAsset() => this.Assets.FirstOrDefault(asset => asset.IsZipFile);
+            public int ZipFileSize => this.GetZipFileAsset()?.Size ?? 0;
+
+            public string ZipFileUri => this.GetZipFileAsset()?.BrowserDownloadUrl ?? string.Empty;
+
+            public ReleaseAsset? GetZipFileAsset() => this._zipFileAsset ??= this.Assets.FirstOrDefault(asset => asset.IsZipFile);
         }
 
         private sealed class ReleaseAsset
