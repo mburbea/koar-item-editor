@@ -7,9 +7,6 @@ using System.Text;
 
 namespace KoAR.Core
 {
-    /// <summary>
-    /// Equipment Memory Information
-    /// </summary>
     public partial class Item : IItem
     {
         public const float DurabilityLowerBound = 0f;
@@ -19,7 +16,7 @@ namespace KoAR.Core
         public Item(GameSave gameSave, int typeIdOffset, int offset, int dataLength, int itemBuffsOffset, int itemBuffsLength, int itemGemsOffset, int itemGemsLength)
         {
             (_gameSave, TypeIdOffset, ItemOffset) = (gameSave, typeIdOffset, offset);
-            _levelShiftOffset = (byte)(8 * (gameSave.Body[TypeIdOffset + 10]));
+            _levelShiftOffset = (byte)(8 * gameSave.Body[TypeIdOffset + 10]);
             ItemBytes = _gameSave.Body.AsSpan(offset, dataLength).ToArray();
             ItemSockets = new ItemSockets(gameSave, itemGemsOffset, itemGemsLength);
             ItemBuffs = new ItemBuffMemory(gameSave, itemBuffsOffset, itemBuffsLength);
