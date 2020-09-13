@@ -51,11 +51,12 @@ namespace KoAR.Core
                         Items.Add(item);
                         if(item.GemCount > 0u)
                         {
-                            for(var j = 1; j <= item.GemCount; j++)
+                            for(var j = 0; j < item.GemCount; j++)
                             {
-                                if (Amalur.GemDefinitions.ContainsKey(MemoryUtilities.Read<uint>(_gameSave.Body, _offset + indices[i + j])))
+                                i++;
+                                if (Amalur.GemDefinitions.ContainsKey(MemoryUtilities.Read<uint>(_gameSave.Body, _offset + indices[i])))
                                 {
-                                    item.Gems.Add(new Gem(_gameSave, _offset + indices[i + j]));
+                                    item.Gems.Add(new Gem(_gameSave, _offset + indices[i]));
                                 }
                             }
                         }
