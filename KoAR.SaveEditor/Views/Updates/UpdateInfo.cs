@@ -4,9 +4,10 @@ namespace KoAR.SaveEditor.Views.Updates
 {
     public sealed class UpdateInfo
     {
-        public UpdateInfo(string version, string uri, int size, IReadOnlyList<IReleaseInfo> releases)
+        public UpdateInfo(IReadOnlyList<IReleaseInfo> releases)
         {
-            (this.Version, this.Uri, this.Size, this.Releases) = (version, uri, size, releases);
+            IReleaseInfo latest = releases[0];
+            (this.Version, this.Uri, this.Size, this.Releases) = (latest.Version, latest.ZipFileUri, latest.ZipFileSize, releases);
         }
 
         public IReadOnlyList<IReleaseInfo> Releases { get; }

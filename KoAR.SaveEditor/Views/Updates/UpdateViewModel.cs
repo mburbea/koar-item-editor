@@ -135,14 +135,6 @@ namespace KoAR.SaveEditor.Views.Updates
             }
         }
 
-        private static async Task<string> ExtractPowershellScript()
-        {
-            string fileName = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.ps1");
-            using FileStream fileStream = File.Create(fileName);
-            await Application.GetResourceStream(new Uri("/Views/Updates/update.ps1", UriKind.Relative)).Stream.CopyToAsync(fileStream).ConfigureAwait(false);
-            return fileName;
-        }
-
         private void Cancel()
         {
             this._cancellationTokenSource.Cancel();
@@ -176,14 +168,8 @@ namespace KoAR.SaveEditor.Views.Updates
         private async Task DownloadAndUpdateAsync()
         {
             await this.UpdateService.DownloadUpdateAsync(this._tempFileName, this._cancellationTokenSource.Token).ConfigureAwait(false);
-            string scriptFileName = await UpdateViewModel.ExtractPowershellScript().ConfigureAwait(false);
-            Process.Start(new ProcessStartInfo
-            {
-                WorkingDirectory = Path.GetTempPath(),
-                UseShellExecute = false,
-                FileName = "powershell.exe",
-                Arguments = $"-ExecutionPolicy Bypass -File \"{Path.GetFileName(scriptFileName)}\" {Process.GetCurrentProcess().Id} \"{Path.GetFileName(this._tempFileName)}\"",
-            }).WaitForExit();
+            string scriptFileName = await UpdateService.ExtractPowershellScript().ConfigureAwait(false);
+            UpdateService.ExecuteUpdate(scriptFileName, this._tempFileName);
         }
 
         private void UpdateService_DownloadProgress(object sender, EventArgs<DownloadProgress> e)

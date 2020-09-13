@@ -11,5 +11,9 @@ namespace KoAR.SaveEditor.Views.Updates
         DateTime PublishedAt { get; }
         
         string Version { get; }
+
+        int ZipFileSize { get; }
+
+        string ZipFileUri { get; }
     }
 }

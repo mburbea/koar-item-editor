@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Reflection;
+using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
 
@@ -13,24 +17,14 @@ namespace KoAR.SaveEditor.Views.Updates
 {
     public sealed class UpdateService
     {
-        public static readonly string CurrentVersion = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
-
+        private static readonly Lazy<string?> _credentials = new Lazy<string?>(UpdateService.LoadCredentials);
         private static readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions { PropertyNamingPolicy = JsonSnakeCaseNamingPolicy.Instance };
 
         private UpdateInfo? _update;
 
-        public UpdateService()
-            : this(interval: 250)
-        {
-        }
-
-        public UpdateService(int interval) => this.Interval = interval;
-
         public event EventHandler<EventArgs<DownloadProgress>>? DownloadProgress;
 
         public event EventHandler? UpdateChanged;
-
-        public int Interval { get; }
 
         public UpdateInfo? Update
         {
@@ -40,6 +34,25 @@ namespace KoAR.SaveEditor.Views.Updates
                 this._update = value;
                 this.UpdateChanged?.Invoke(this, EventArgs.Empty);
             }
+        }
+
+        public static void ExecuteUpdate(string scriptFileName, string zipFileName)
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                WorkingDirectory = Path.GetTempPath(),
+                UseShellExecute = false,
+                FileName = "powershell.exe",
+                Arguments = $"-ExecutionPolicy Bypass -File \"{Path.GetFileName(scriptFileName)}\" {Process.GetCurrentProcess().Id} \"{Path.GetFileName(zipFileName)}\"",
+            }).WaitForExit();
+        }
+
+        public static async Task<string> ExtractPowershellScript()
+        {
+            string fileName = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.ps1");
+            using FileStream fileStream = File.Create(fileName);
+            await UpdateService.GetResourceFileStream("update.ps1").CopyToAsync(fileStream).ConfigureAwait(false);
+            return fileName;
         }
 
         public async Task CheckForUpdatesAsync(CancellationToken cancellationToken = default)
@@ -53,8 +66,9 @@ namespace KoAR.SaveEditor.Views.Updates
             {
                 return;
             }
+            const int interval = 250;
             int bytesTransferred = 0, bytesPerInterval = 0;
-            using Timer timer = new Timer(OnTick, null, 0, this.Interval);
+            using Timer timer = new Timer(OnTick, null, 0, interval);
             try
             {
                 HttpWebRequest request = WebRequest.CreateHttp(this.Update.Uri);
@@ -84,40 +98,71 @@ namespace KoAR.SaveEditor.Views.Updates
 
             void OnTick(object _)
             {
-                DownloadProgress progress = new DownloadProgress(bytesTransferred, bytesPerInterval * 1000d / this.Interval);
+                DownloadProgress progress = new DownloadProgress(bytesTransferred, bytesPerInterval * 1000d / interval);
                 bytesPerInterval = 0;
                 this.OnDownloadProgress(progress);
             }
         }
 
-        private static async Task<Release[]> GetReleasesAsync(CancellationToken cancellationToken)
+        private static async Task<T?> FetchAsync<T>(string suffix, CancellationToken cancellationToken)
+            where T : class
         {
-            const string endpoint = "https://api.github.com/repos/mburbea/koar-item-editor/releases";
-            const int maxReleases = 15;
-            HttpWebRequest request = WebRequest.CreateHttp($"{endpoint}?per_page={maxReleases}");
-            request.UserAgent = request.Accept = "application/vnd.github.v3+json";
-            using WebResponse response = await request.GetResponseAsync().ConfigureAwait(false);
-            cancellationToken.ThrowIfCancellationRequested();
-            using Stream stream = response.GetResponseStream();
-            cancellationToken.ThrowIfCancellationRequested();
-            return await JsonSerializer.DeserializeAsync<Release[]>(stream, UpdateService._jsonOptions).ConfigureAwait(false);
+            try
+            {
+                HttpWebRequest request = WebRequest.CreateHttp($"https://api.github.com/repos/mburbea/koar-item-editor/{suffix}");
+                request.UserAgent = request.Accept = "application/vnd.github.v3+json";
+                if (UpdateService._credentials.Value is string credentials)
+                {
+                    request.Headers.Add(HttpRequestHeader.Authorization, credentials);
+                }
+                using WebResponse response = await request.GetResponseAsync().ConfigureAwait(false);
+                cancellationToken.ThrowIfCancellationRequested();
+                using Stream stream = response.GetResponseStream();
+                cancellationToken.ThrowIfCancellationRequested();
+                return await JsonSerializer.DeserializeAsync<T>(stream, UpdateService._jsonOptions).ConfigureAwait(false);
+            }
+            catch (WebException e)
+            {
+                if (((HttpWebResponse)e.Response).StatusCode == HttpStatusCode.NotFound)
+                {
+                    return default;
+                }
+                throw;
+            }
         }
+
+        /// <summary>
+        /// Gets a release by tag asynchronously.
+        /// It's possible for this task to resolve to <see langword="null"/> as a release may have been deleted.
+        /// </summary>
+        private static Task<Release?> GetRelease(string tag, CancellationToken cancellationToken) => UpdateService.FetchAsync<Release>($"releases/tags/{tag}", cancellationToken);
+
+        private static Stream GetResourceFileStream(string name) => Application.GetResourceStream(new Uri($"/Views/Updates/{name}", UriKind.Relative)).Stream;
+
+        private static async Task<Tag[]> GetTagsAsync(CancellationToken cancellationToken) => (await UpdateService.FetchAsync<Tag[]>("tags", cancellationToken).ConfigureAwait(false))!;
 
         private async static Task<UpdateInfo?> GetUpdateInfoAsync(CancellationToken cancellationToken)
         {
             try
             {
-                Release[] releases = await UpdateService.GetReleasesAsync(cancellationToken).ConfigureAwait(false);
-                Release? latest = releases.FirstOrDefault();
-                ReleaseAsset? asset;
-                if (latest != null && UpdateService.CurrentVersion != latest.Version && (asset = latest.GetZipFileAsset()) != null)
+                const int maxReleases = 10;
+                List<string> tagNames = (await UpdateService.GetTagsAsync(cancellationToken).ConfigureAwait(false))
+                    .Where(tag => tag.Version.Value.Major == ApplicationVersion.Current.Major)
+                    .TakeWhile(tag => tag.Version.Value > ApplicationVersion.Current)
+                    .Take(maxReleases)
+                    .Select(tag => tag.Name)
+                    .ToList();
+                if (tagNames.Count == 0)
                 {
-                    return new UpdateInfo(
-                        latest.Version,
-                        asset.BrowserDownloadUrl,
-                        asset.Size,
-                        releases.TakeWhile(release => release.Version != UpdateService.CurrentVersion).ToArray()
-                    );
+                    return null;
+                }
+                List<Release> releases = (await Task.WhenAll(tagNames.Select(tag => UpdateService.GetRelease(tag, cancellationToken))).ConfigureAwait(false))
+                    .OfType<Release>()
+                    .Where(release => release.GetZipFileAsset() != null)
+                    .ToList();
+                if (releases.Count != 0)
+                {
+                    return new UpdateInfo(releases);
                 }
             }
             catch
@@ -126,10 +171,18 @@ namespace KoAR.SaveEditor.Views.Updates
             return null;
         }
 
+        private static string? LoadCredentials()
+        {
+            using StreamReader reader = new StreamReader(UpdateService.GetResourceFileStream("github.credentials"));
+            return reader.EndOfStream ? default : $"Basic {Convert.ToBase64String(Encoding.ASCII.GetBytes(reader.ReadToEnd()))}";
+        }
+
         private void OnDownloadProgress(DownloadProgress data) => this.DownloadProgress?.Invoke(this, new EventArgs<DownloadProgress>(data));
 
         private sealed class Release : IReleaseInfo
         {
+            private ReleaseAsset? _zipFileAsset;
+
             public ReleaseAsset[] Assets { get; set; } = Array.Empty<ReleaseAsset>();
 
             public string Body { get; set; } = string.Empty;
@@ -142,7 +195,11 @@ namespace KoAR.SaveEditor.Views.Updates
 
             public string Version => this.TagName.Length == 0 ? string.Empty : this.TagName.Substring(1);
 
-            public ReleaseAsset? GetZipFileAsset() => this.Assets.FirstOrDefault(asset => asset.IsZipFile);
+            public int ZipFileSize => this.GetZipFileAsset()?.Size ?? 0;
+
+            public string ZipFileUri => this.GetZipFileAsset()?.BrowserDownloadUrl ?? string.Empty;
+
+            public ReleaseAsset? GetZipFileAsset() => this._zipFileAsset ??= this.Assets.FirstOrDefault(asset => asset.IsZipFile);
         }
 
         private sealed class ReleaseAsset
@@ -154,6 +211,17 @@ namespace KoAR.SaveEditor.Views.Updates
             public bool IsZipFile => this.ContentType == "application/zip";
 
             public int Size { get; set; }
+        }
+
+        private sealed class Tag
+        {
+            private static readonly Regex _regex = new Regex(@"^v(?<version>\d+\.\d+\.\d+)$", RegexOptions.ExplicitCapture);
+
+            public string Name { get; set; } = string.Empty;
+
+            public Lazy<Version> Version => new Lazy<Version>(
+                () => new Version(Tag._regex.Match(this.Name) is { Success: true } match ? match.Groups["version"].Value : "0.0.0")
+            );
         }
     }
 }
