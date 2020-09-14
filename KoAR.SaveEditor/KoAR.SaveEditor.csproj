@@ -23,7 +23,7 @@
     <RepositoryUrl>https://github.com/mburbea/koar-item-editor</RepositoryUrl>
     <NeutralLanguage>en-US</NeutralLanguage>
     <UserSecretsId>08a013c8-a2ef-43c0-9e42-9500e36a74d4</UserSecretsId>
-    <Version>2.0.0</Version>
+    <Version>3.0.0</Version>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -378,6 +378,9 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Updates\" />
   </ItemGroup>
   <Target Name="EnsureCredentialsFileExists" BeforeTargets="BeforeBuild">
     <WriteLinesToFile File="$(MSBuildProjectDirectory)\Views\Updates\github.credentials" Lines="" Overwrite="False" />

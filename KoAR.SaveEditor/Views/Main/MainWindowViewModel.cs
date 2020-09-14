@@ -106,7 +106,23 @@ namespace KoAR.SaveEditor.Views.Main
             {
                 return;
             }
-            this.GameSave = new GameSave(dialog.FileName);
+            GameSave gameSave;
+            try
+            {
+                gameSave = new GameSave(dialog.FileName);
+            }
+            catch (NotSupportedException e)
+            {
+                TaskDialog.Show(new TaskDialogOptions
+                {
+                    Title = "KoAR Save Editor",
+                    MainInstruction = "File Not Supported",
+                    Content = e.Message,
+                    MainIcon = VistaTaskDialogIcon.Error,
+                });
+                return;
+            }
+            this.GameSave = gameSave;
             Settings.Default.LastDirectory = Path.GetDirectoryName(dialog.FileName);
             this.InventoryManager = new InventoryManagerViewModel(this);
             this.StashManager = this.GameSave.Stash != null ? new StashManagerViewModel(this) : default;

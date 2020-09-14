@@ -25,7 +25,7 @@ namespace KoAR.Core
             IsRemaster = BitConverter.ToInt32(Bytes, 8) == 0;
             if(IsRemaster && !Path.GetFileNameWithoutExtension(fileName).StartsWith("svd_fmt_5_"))
             {
-                throw new NotSupportedException("Save file is not a user save and changing them can lead to the game infinite looping. The editor only supports saves that start with svd_fmt_5_");
+                throw new NotSupportedException("Save file is not a user save and changing them can lead to the game infinite looping. The editor only supports saves that start with svd_fmt_5.");
             }
             _header = new GameSaveHeader(this);
             Body = Bytes.AsSpan(BodyStart, BodyDataLength).ToArray();
