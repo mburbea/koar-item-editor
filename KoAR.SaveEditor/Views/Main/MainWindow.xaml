@@ -4,6 +4,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+    xmlns:editor="clr-namespace:KoAR.SaveEditor"
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views"
     xmlns:local="clr-namespace:KoAR.SaveEditor.Views.Main"
     xmlns:inventory="clr-namespace:KoAR.SaveEditor.Views.Inventory"
@@ -220,7 +221,7 @@
                         </Border>
                     </aero:SystemDropShadowChrome>
                 </Popup>
-                <TextBlock Text="{Binding Source={x:Static views:ApplicationVersion.Current}, StringFormat='v{0}'}" FontSize="10"
+                <TextBlock Text="{Binding Source={x:Static editor:App.Version}, StringFormat='v{0}'}" FontSize="10"
                     TextAlignment="Right" VerticalAlignment="Center" FontWeight="Light" Opacity="0.66" Margin="0,0,8,0" />
             </DockPanel>
         </Border>

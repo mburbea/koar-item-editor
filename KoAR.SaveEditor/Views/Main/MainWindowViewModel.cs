@@ -8,6 +8,7 @@ using System.Windows.Threading;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
 using KoAR.SaveEditor.Properties;
+using KoAR.SaveEditor.Updates;
 using KoAR.SaveEditor.Views.Inventory;
 using KoAR.SaveEditor.Views.Stash;
 using KoAR.SaveEditor.Views.Updates;

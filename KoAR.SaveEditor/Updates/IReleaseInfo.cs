@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KoAR.SaveEditor.Views.Updates
+namespace KoAR.SaveEditor.Updates
 {
     public interface IReleaseInfo
     {

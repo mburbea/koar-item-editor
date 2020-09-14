@@ -13,7 +13,7 @@ using System.Windows;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
 
-namespace KoAR.SaveEditor.Views.Updates
+namespace KoAR.SaveEditor.Updates
 {
     public sealed class UpdateService
     {
@@ -137,7 +137,7 @@ namespace KoAR.SaveEditor.Views.Updates
         /// </summary>
         private static Task<Release?> GetRelease(string tag, CancellationToken cancellationToken) => UpdateService.FetchAsync<Release>($"releases/tags/{tag}", cancellationToken);
 
-        private static Stream GetResourceFileStream(string name) => Application.GetResourceStream(new Uri($"/Views/Updates/{name}", UriKind.Relative)).Stream;
+        private static Stream GetResourceFileStream(string name) => Application.GetResourceStream(new Uri($"/Updates/{name}", UriKind.Relative)).Stream;
 
         private static async Task<Tag[]> GetTagsAsync(CancellationToken cancellationToken) => (await UpdateService.FetchAsync<Tag[]>("tags", cancellationToken).ConfigureAwait(false))!;
 
@@ -147,8 +147,8 @@ namespace KoAR.SaveEditor.Views.Updates
             {
                 const int maxReleases = 10;
                 List<string> tagNames = (await UpdateService.GetTagsAsync(cancellationToken).ConfigureAwait(false))
-                    .Where(tag => tag.Version.Value.Major == ApplicationVersion.Current.Major)
-                    .TakeWhile(tag => tag.Version.Value > ApplicationVersion.Current)
+                    .Where(tag => tag.Version.Value.Major == App.Version.Major)
+                    .TakeWhile(tag => tag.Version.Value > App.Version)
                     .Take(maxReleases)
                     .Select(tag => tag.Name)
                     .ToList();

@@ -9,6 +9,7 @@ using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Threading;
 using KoAR.SaveEditor.Constructs;
+using KoAR.SaveEditor.Updates;
 
 namespace KoAR.SaveEditor.Views.Updates
 {

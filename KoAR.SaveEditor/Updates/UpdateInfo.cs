@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace KoAR.SaveEditor.Views.Updates
+namespace KoAR.SaveEditor.Updates
 {
     public sealed class UpdateInfo
     {

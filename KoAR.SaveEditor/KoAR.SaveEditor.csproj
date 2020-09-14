@@ -344,8 +344,8 @@
     <Resource Include="Resources\categories\Torso_Finesse.png" />
     <Resource Include="Resources\Unknown.png" />
     <Resource Include="Resources\Zoom.png" />
-    <Resource Include="Views\Updates\github.credentials" />
-    <Resource Include="Views\Updates\update.ps1" />
+    <Resource Include="Updates\github.credentials" />
+    <Resource Include="Updates\update.ps1" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -378,9 +378,6 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Updates\" />
   </ItemGroup>
   <Target Name="EnsureCredentialsFileExists" BeforeTargets="BeforeBuild">
     <WriteLinesToFile File="$(MSBuildProjectDirectory)\Views\Updates\github.credentials" Lines="" Overwrite="False" />
