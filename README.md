@@ -7,7 +7,7 @@ This is heavily updated editor, rewritten in WPF and modern C#8 paradigms. A pro
   - The current final release is the following: https://github.com/mburbea/koar-item-editor/releases/tag/v2.1.189
 * The auto-updater will now only look for updates of the same major version. (e.g. 2.x will find new 2.x releases, and 3.x will find new 3.x releases).
 * There is no plan for removing support for the original in 3.x branches, but I'm no longer testing my changes against the original.
-* Data definitions are based off the **original** game. Not the remaster. This means that descriptions and localizations maybe wrong. Item definitions can also be incorrectly defined. One such example is the longbow The Hunter which now applies both it's buffs as Item buff and not Player buffs. 
+* Data definitions are based off the **original** game. Not the remaster. This means that descriptions and localizations may be wrong. Item definitions can also be incorrectly defined. One such example is the longbow The Hunter which now applies both it's buffs as Item buff and not Player buffs. 
 
 ### Currently Not Supported / Issues
 * Modifying buffs on an equipped item can lead to corruption. Do not modify any of them. (There's no indicator yet as to which items are equipped).
@@ -16,7 +16,7 @@ This is heavily updated editor, rewritten in WPF and modern C#8 paradigms. A pro
 * Modifying the auto-save, tutorial save, quick save or the end of game save are NOT supported (and may never be). These 4 saves are slightly different formats and if any of these files are corrupted the game can get stuck in an infinite loop. Even deleting the files will still cause an infinite loop.
 
 ### Features
-* The inventory view display and allows modifying items currently in your inventory. It is broken up into equipment categories, and allows user sorting by different columns.
+* The inventory view displays and allows modifying items currently in your inventory. It is broken up into equipment categories, and allows user sorting by different columns.
   - Level, which is a hidden stat that controls level and stat requirements for an item and the damage amount for weapons
   - Gems socketed in the item. (Immutable)
   - The name
