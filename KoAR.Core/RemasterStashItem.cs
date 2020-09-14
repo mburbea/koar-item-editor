@@ -8,7 +8,6 @@ namespace KoAR.Core
         {
         }
 
-
         private ref InventoryState State => ref Unsafe.As<byte, InventoryState>(ref Bytes[Offsets.IsStolen]);
 
         public override bool HasCustomName => (Bytes[Offsets.HasCustomName] & 16) != 0;
