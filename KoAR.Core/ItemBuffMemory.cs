@@ -19,7 +19,7 @@ namespace KoAR.Core
         internal ItemBuffMemory(GameSave gameSave, int itemOffset, int dataLength)
         {
             ItemOffset = itemOffset;
-            Bytes = gameSave.Bytes.AsSpan(itemOffset, dataLength).ToArray();
+            Bytes = gameSave.Body.AsSpan(itemOffset, dataLength).ToArray();
             var itemId = MemoryUtilities.Read<uint>(Bytes);
             var count = Count;
             var firstBuff = Offsets.FirstBuff;

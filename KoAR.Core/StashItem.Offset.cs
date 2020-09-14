@@ -2,7 +2,7 @@
 {
     public partial class StashItem
     {
-        private readonly struct Offset
+        protected readonly struct Offset
         {
             private readonly StashItem _item;
             public Offset(StashItem item) => _item = item;

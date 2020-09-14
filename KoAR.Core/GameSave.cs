@@ -1,26 +1,44 @@
-﻿using System;
+﻿using Force.Crc32;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace KoAR.Core
 {
     public sealed class GameSave
     {
+        private const int MaxRemasterBodySize = 4 * 1024 * 1024;
+
         private readonly int _bagOffset;
         private readonly int[] _dataLengthOffsets;
-        private Container _itemBuffsContainer;
-        private Container _itemContainer;
-        private Container _itemSocketsContainer;
+        private readonly Container _itemBuffsContainer;
+        private readonly Container _itemContainer;
+        private readonly Container _itemSocketsContainer;
+        private readonly GameSaveHeader _header;
+        private int _originalBodyLength;
 
         public GameSave(string fileName)
         {
             Bytes = File.ReadAllBytes(FileName = fileName);
-            ReadOnlySpan<byte> data = Bytes;
+            IsRemaster = BitConverter.ToInt32(Bytes, 8) == 0;
+            if(IsRemaster && !Path.GetFileNameWithoutExtension(fileName).StartsWith("svd_fmt_5_"))
+            {
+                throw new NotSupportedException("Save file is not a user save and changing them can lead to the game infinite looping. The editor only supports saves that start with svd_fmt_5_");
+            }
+            _header = new GameSaveHeader(this);
+            Body = Bytes.AsSpan(BodyStart, BodyDataLength).ToArray();
+            IsCompressed = Encoding.Default.GetString(Body, 0, 4) == "zlib";
+            if(IsCompressed)
+            {
+                throw new NotSupportedException("Save file uses compression.");
+            }
+            _originalBodyLength = Body.Length;
             Stash = Stash.TryCreateStash(this);
+            ReadOnlySpan<byte> data = Body;
             _bagOffset = GetBagOffset(data);
             _dataLengthOffsets = new[]{
-                data.IndexOf(new byte[8] { 0, 0, 0, 0, 0xA, 0, 0, 0 }) - 4, // file length
                 data.IndexOf(new byte[5] { 0x0C, 0xAE, 0x32, 0x00, 0x00 }) + 5, // unknown length 1
                 data.IndexOf(new byte[5] { 0xF7, 0x5D, 0x3C, 0x00, 0x0A }) + 5, // unknown length 2
                 data.IndexOf(new byte[5] { 0x23, 0xCC, 0x58, 0x00, 0x03 }) + 5, // type section length
@@ -34,12 +52,12 @@ namespace KoAR.Core
             int dataLength, playerActor = 0;
             var candidates = new List<(int id, int typeIdOffset, QuestItemDefinition? questItemDef)>();
 
-            for (int ixOfActor = _dataLengthOffsets[^1] + 4; BitConverter.ToInt32(Bytes, ixOfActor) == 0x00_75_2D_06; ixOfActor += dataLength)
+            for (int ixOfActor = _dataLengthOffsets[^1] + 4; BitConverter.ToInt32(Body, ixOfActor) == 0x00_75_2D_06; ixOfActor += dataLength)
             {
-                dataLength = 9 + BitConverter.ToInt32(Bytes, ixOfActor + 5);
-                var id = BitConverter.ToInt32(Bytes, ixOfActor + 9);
+                dataLength = 9 + BitConverter.ToInt32(Body, ixOfActor + 5);
+                var id = BitConverter.ToInt32(Body, ixOfActor + 9);
                 var typeIdOffset = ixOfActor + 13;
-                var typeId = BitConverter.ToUInt32(Bytes, typeIdOffset);
+                var typeId = BitConverter.ToUInt32(Body, typeIdOffset);
                 if (Amalur.ItemDefinitions.ContainsKey(typeId))
                 {
                     candidates.Add((id, typeIdOffset, null));
@@ -60,7 +78,7 @@ namespace KoAR.Core
             foreach (var (id, typeIdOffset, questItemDef) in candidates)
             {
                 var (itemOffset, itemLength) = itemLocs[id];
-                if (BitConverter.ToInt32(Bytes, itemOffset + 17) == playerActor)
+                if (BitConverter.ToInt32(Body, itemOffset + 17) == playerActor)
                 {
                     if (questItemDef != null)
                     {
@@ -92,14 +110,23 @@ namespace KoAR.Core
             }
         }
 
+        public bool IsRemaster { get; }
+        public bool IsCompressed { get; private set; }
+        private int BodyStart => 8 + _header.Bytes.Length + 4;
         public byte[] Bytes { get; internal set; }
-
+        public byte[] Body { get; internal set; }
         public string FileName { get; }
 
         public int InventorySize
         {
-            get => MemoryUtilities.Read<int>(Bytes, _bagOffset);
-            set => MemoryUtilities.Write(Bytes, _bagOffset, value);
+            get => MemoryUtilities.Read<int>(Body, _bagOffset);
+            set => MemoryUtilities.Write(Body, _bagOffset, value);
+        }
+
+        private int BodyDataLength
+        {
+            get => MemoryUtilities.Read<int>(Bytes, 8 + _header.Bytes.Length);
+            set => MemoryUtilities.Write(Bytes, 8 + _header.Bytes.Length, value);
         }
 
         public List<Item> Items { get; } = new List<Item>();
@@ -112,12 +139,14 @@ namespace KoAR.Core
 
         internal void UpdateDataLengths(int itemOffset, int delta)
         {
+            _header.DataLength += delta;
+            BodyDataLength += delta;
             foreach (var offset in _dataLengthOffsets)
             {
                 if (offset < itemOffset)
                 {
-                    var oldVal = MemoryUtilities.Read<int>(Bytes, offset);
-                    MemoryUtilities.Write(Bytes, offset, delta + oldVal);
+                    var oldVal = MemoryUtilities.Read<int>(Body, offset);
+                    MemoryUtilities.Write(Body, offset, delta + oldVal);
                 }
             }
         }
@@ -125,6 +154,22 @@ namespace KoAR.Core
         public void SaveFile()
         {
             File.Copy(FileName, $"{FileName}.bak", true);
+            _header.Bytes.CopyTo(Bytes, 8);
+            if (IsRemaster) 
+            {
+                Bytes.AsSpan(BodyStart, MaxRemasterBodySize).Clear();
+                Body.CopyTo(Bytes, BodyStart);
+                _originalBodyLength = Body.Length;
+                var fileCrc32 = Crc32Algorithm.Append(0, Bytes, 8, Bytes.Length - 8);
+                var headerCrc32 = Crc32Algorithm.Append(0, _header.Bytes);
+                MemoryUtilities.Write(Bytes, 0, fileCrc32);
+                MemoryUtilities.Write(Bytes, 4, headerCrc32);
+            }
+            else
+            {
+                Bytes = MemoryUtilities.ReplaceBytes(Bytes, BodyStart, _originalBodyLength, Body);
+                _originalBodyLength = Body.Length;
+            }
             File.WriteAllBytes(FileName, Bytes);
         }
 
@@ -143,12 +188,27 @@ namespace KoAR.Core
                 {
                     item.ItemOffset += delta;
                 }
+                foreach (var gem in item.Gems)
+                {
+                    if (gem.ItemOffset > itemOffset)
+                    {
+                        gem.ItemOffset += delta;
+                    }
+                }
+
             }
             foreach (var item in Items)
             {
                 if (item.ItemSockets.ItemOffset > itemOffset)
                 {
                     item.ItemSockets.ItemOffset += delta;
+                    foreach(var gem in item.ItemSockets.Gems)
+                    {
+                        if(gem.ItemOffset > itemOffset)
+                        {
+                            gem.ItemOffset += delta;
+                        }
+                    }
                 }
                 if (item.ItemBuffs.ItemOffset > itemOffset)
                 {
@@ -176,9 +236,9 @@ namespace KoAR.Core
         {
             int WriteSection(int itemOffset, int dataLength, ReadOnlySpan<byte> newBytes)
             {
-                var prevLength = Bytes.Length;
-                Bytes = MemoryUtilities.ReplaceBytes(Bytes, itemOffset, dataLength, newBytes);
-                return Bytes.Length - prevLength;
+                var prevLength = Body.Length;
+                Body = MemoryUtilities.ReplaceBytes(Body, itemOffset, dataLength, newBytes);
+                return Body.Length - prevLength;
             }
 
             var delta = WriteSection(item.ItemBuffs.ItemOffset, item.ItemBuffs.DataLength, item.ItemBuffs.Serialize(forced));

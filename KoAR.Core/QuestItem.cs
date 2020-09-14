@@ -12,7 +12,7 @@ namespace KoAR.Core
 
         internal int Offset { get; set; }
 
-        private ref InventoryState State => ref Unsafe.As<byte, InventoryState>(ref _gameSave.Bytes[Offset]);
+        private ref InventoryState State => ref Unsafe.As<byte, InventoryState>(ref _gameSave.Body[Offset]);
 
         public string Name => _definition.Name;
 
