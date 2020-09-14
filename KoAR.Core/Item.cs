@@ -195,9 +195,9 @@ namespace KoAR.Core
 
         internal void LoadFromDefinition(ItemDefinition definition)
         {
-            CurrentDurability = definition.Category == EquipmentCategory.Necklace || definition.Category == EquipmentCategory.Ring 
-                ? 100 
-                : definition.MaxDurability; 
+            CurrentDurability = definition.Category == EquipmentCategory.Necklace || definition.Category == EquipmentCategory.Ring
+                ? 100
+                : definition.MaxDurability;
             MaxDurability = definition.MaxDurability;
             ItemBuffs.List.Clear();
             foreach (var buff in definition.ItemBuffs.List)

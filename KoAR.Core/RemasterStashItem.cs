@@ -4,7 +4,7 @@ namespace KoAR.Core
 {
     public class RemasterStashItem : StashItem
     {
-        public RemasterStashItem(GameSave gameSave, int offset, int datalength) : base(gameSave, offset, datalength)
+        public RemasterStashItem(GameSave gameSave, int offset, int dataLength) : base(gameSave, offset, dataLength)
         {
         }
 

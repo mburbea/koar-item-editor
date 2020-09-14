@@ -46,7 +46,7 @@ namespace KoAR.Core
                 {
                     if (Amalur.ItemDefinitions.ContainsKey(MemoryUtilities.Read<uint>(_gameSave.Body, _offset + indices[i])))
                     {
-                        var item = Factory(gameSave, _offset + indices[i], indices[i + 1] - indices[i]);
+                        var item = CreateStashItem(gameSave, _offset + indices[i], indices[i + 1] - indices[i]);
                         Items.Add(item);
                         for(uint j = 0; j < item.GemCount; j++)
                         {
@@ -62,14 +62,14 @@ namespace KoAR.Core
                 // ok we might read this twice, who cares.
                 if (Amalur.ItemDefinitions.ContainsKey(MemoryUtilities.Read<uint>(_gameSave.Body, _offset + indices[^1])))
                 {
-                    Items.Add(Factory(gameSave, _offset + indices[^1], DataLength - indices[^1]));
+                    Items.Add(CreateStashItem(gameSave, _offset + indices[^1], DataLength - indices[^1]));
                 }
             }
-
-            static StashItem Factory(GameSave gameSave, int offset, int datalength) => gameSave.IsRemaster
-                ? new RemasterStashItem(gameSave, offset, datalength)
-                : new StashItem(gameSave, offset, datalength);
         }
+
+        static StashItem CreateStashItem(GameSave gameSave, int offset, int datalength) => gameSave.IsRemaster
+    ? new RemasterStashItem(gameSave, offset, datalength)
+    : new StashItem(gameSave, offset, datalength);
 
         public int DataLength
         {
@@ -105,12 +105,19 @@ namespace KoAR.Core
             {
                 MemoryUtilities.Write(temp, i * 8 + 22, type.PlayerBuffs[i].Id | ((ulong)uint.MaxValue) << 32);
             }
+            temp[^3] = (byte)(_gameSave.IsRemaster ? 5 : 0); // can be sold for gold and is equipment
+            temp[^2] = _gameSave.IsRemaster switch
+            {
+                true when type.Category == EquipmentCategory.Shield => 0x04,
+                true when type.Category > EquipmentCategory.Shield && type.Category < EquipmentCategory.Necklace => 0x01,
+                _ => 0
+            };
             temp[^1] = 0xFF;
             var offset = _offset + Offsets.FirstItem;
             _gameSave.Body = MemoryUtilities.ReplaceBytes(_gameSave.Body, offset, 0, temp);
             DataLength += temp.Length;
             Count++;
-            Items.Add(new StashItem(_gameSave, offset, temp.Length));
+            Items.Add(CreateStashItem(_gameSave, offset, temp.Length));
             _gameSave.UpdateOffsets(offset, temp.Length);
             _gameSave.UpdateDataLengths(offset, temp.Length);
             return Items[^1];

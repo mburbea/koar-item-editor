@@ -13,10 +13,10 @@ namespace KoAR.Core
         public uint GemCount { get; }
         public List<Gem> Gems { get; } = new List<Gem>();
 
-        public StashItem(GameSave gameSave, int offset, int datalength)
+        public StashItem(GameSave gameSave, int offset, int dataLength)
         {
             ItemOffset = offset;
-            Bytes = gameSave.Body.AsSpan(offset, datalength).ToArray();
+            Bytes = gameSave.Body.AsSpan(offset, dataLength).ToArray();
             PlayerBuffs.Capacity = BuffCount;
             var firstBuff = Offsets.FirstBuff;
             for (int i = 0; i < PlayerBuffs.Capacity; i++)
@@ -28,11 +28,11 @@ namespace KoAR.Core
                 ItemName = Encoding.Default.GetString(Bytes, Offsets.Name, NameLength);
             }
             int socketsStart = Bytes.Length - 1;
-            if(Bytes[^1] != 0xFF)
+            if (Bytes[^1] != 0xFF)
             {
                 int i = Bytes.Length - 4;
                 uint handle;
-                while((handle = MemoryUtilities.Read<uint>(Bytes, i)) > 4)
+                while ((handle = MemoryUtilities.Read<uint>(Bytes, i)) > 4)
                 {
                     i -= 4;
                 }
