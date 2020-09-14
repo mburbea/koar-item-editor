@@ -125,8 +125,14 @@ namespace KoAR.Core
 
         private int BodyDataLength
         {
-            get => MemoryUtilities.Read<int>(Bytes, 8 + _header.Bytes.Length);
-            set => MemoryUtilities.Write(Bytes, 8 + _header.Bytes.Length, value);
+            get => IsRemaster ? MemoryUtilities.Read<int>(Bytes, 8 + _header.Bytes.Length) : Bytes.Length - BodyStart;
+            set
+            {
+                if (IsRemaster)
+                {
+                    MemoryUtilities.Write(Bytes, 8 + _header.Bytes.Length, value);
+                }
+            }
         }
 
         public List<Item> Items { get; } = new List<Item>();
