@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
+using System.Text;
 
 namespace KoAR.Core
 {
@@ -23,8 +23,17 @@ namespace KoAR.Core
         {
             Bytes = File.ReadAllBytes(FileName = fileName);
             IsRemaster = BitConverter.ToInt32(Bytes, 8) == 0;
+            if(IsRemaster && !Path.GetFileNameWithoutExtension(fileName).StartsWith("svd_fmt_5_"))
+            {
+                throw new NotSupportedException("Save file is not a user save and changing them can lead to the game infinite looping. The editor only supports saves that start with svd_fmt_5_");
+            }
             _header = new GameSaveHeader(this);
             Body = Bytes.AsSpan(BodyStart, BodyDataLength).ToArray();
+            IsCompressed = Encoding.Default.GetString(Body, 0, 4) == "zlib";
+            if(IsCompressed)
+            {
+                throw new NotSupportedException("Save file uses compression.");
+            }
             _originalBodyLength = Body.Length;
             Stash = Stash.TryCreateStash(this);
             ReadOnlySpan<byte> data = Body;
@@ -102,6 +111,7 @@ namespace KoAR.Core
         }
 
         public bool IsRemaster { get; }
+        public bool IsCompressed { get; private set; }
         private int BodyStart => 8 + _header.Bytes.Length + 4;
         public byte[] Bytes { get; internal set; }
         public byte[] Body { get; internal set; }
