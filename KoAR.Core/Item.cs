@@ -217,7 +217,7 @@ namespace KoAR.Core
             {
                 0 => Definition.GetSockets(),
                 1 when Definition.SocketTypes.Length == 1 => new[] { new Socket(Definition.SocketTypes[0], ItemSockets.Gems[0]) }, // trivial case.
-                _ => Inner(Definition.SocketTypes, ItemSockets.Gems.AsSpan().ToArray())
+                _ => Inner(Definition.SocketTypes, ItemSockets.Gems.ToArray())
             };
 
             static IEnumerable<Socket> Inner(string sockets, Gem[] gems)

@@ -46,30 +46,43 @@ namespace KoAR.Core
                 {
                     if (Amalur.ItemDefinitions.ContainsKey(MemoryUtilities.Read<uint>(_gameSave.Body, _offset + indices[i])))
                     {
-                        var item = CreateStashItem(gameSave, _offset + indices[i], indices[i + 1] - indices[i]);
-                        Items.Add(item);
-                        for(uint j = 0; j < item.GemCount; j++)
+                        var itemStart = indices[i];
+                        var gems = Array.Empty<Gem>();
+                        if (_gameSave.Body[_offset + indices[i + 1] - 1] != 0xFF)
                         {
-                            i++;
-                            if (Amalur.GemDefinitions.ContainsKey(MemoryUtilities.Read<uint>(_gameSave.Body, _offset + indices[i])))
+                            var gemList = new List<Gem>();
+                            var ix = _offset + indices[i + 1] - 4;
+                            uint handle;
+                            while ((handle = MemoryUtilities.Read<uint>(_gameSave.Body, ix)) > 4u)
                             {
-                                item.Gems.Add(new Gem(_gameSave, _offset + indices[i]));
+                                ix -= 4;
                             }
+                            for (uint j = 0; j < handle; j++)
+                            {
+                                i++;
+                                if (Amalur.GemDefinitions.ContainsKey(MemoryUtilities.Read<uint>(_gameSave.Body, _offset + indices[i])))
+                                {
+                                    gemList.Add(new Gem(_gameSave, _offset + indices[i]));
+                                }
+                            }
+                            gems = gemList.ToArray();
                         }
+                        var item = CreateStashItem(gameSave, _offset + itemStart, (i + 1 == indices.Count ? DataLength : indices[i + 1]) - itemStart, gems);
+                        Items.Add(item);
                     }
-                    
+
                 }
                 // ok we might read this twice, who cares.
                 if (Amalur.ItemDefinitions.ContainsKey(MemoryUtilities.Read<uint>(_gameSave.Body, _offset + indices[^1])))
                 {
-                    Items.Add(CreateStashItem(gameSave, _offset + indices[^1], DataLength - indices[^1]));
+                    Items.Add(CreateStashItem(gameSave, _offset + indices[^1], DataLength - indices[^1], Array.Empty<Gem>()));
                 }
             }
         }
 
-        static StashItem CreateStashItem(GameSave gameSave, int offset, int datalength) => gameSave.IsRemaster
-    ? new RemasterStashItem(gameSave, offset, datalength)
-    : new StashItem(gameSave, offset, datalength);
+        static StashItem CreateStashItem(GameSave gameSave, int offset, int datalength, Gem[] gems) => gameSave.IsRemaster
+    ? new RemasterStashItem(gameSave, offset, datalength, gems)
+    : new StashItem(gameSave, offset, datalength, gems);
 
         public int DataLength
         {
@@ -96,7 +109,7 @@ namespace KoAR.Core
             // 2. We blow away everything when we do this operation anyway.
             // 3. We rely on the fact that the game will regenerate the ItemBuff section when the stash spawns the item. (Primarily to avoid thinking about instanceIds...)
             Span<byte> temp = stackalloc byte[25 + type.PlayerBuffs.Length * 8];
-            var sectionHeader = _gameSave.IsRemaster ? 0x04_0Aul : 0x03_0Aul; 
+            var sectionHeader = _gameSave.IsRemaster ? 0x04_0Aul : 0x03_0Aul;
             MemoryUtilities.Write(temp, 0, type.TypeId | sectionHeader << 32);
             MemoryUtilities.Write(temp, 10, type.MaxDurability);
             temp[14] = 1;
@@ -117,7 +130,7 @@ namespace KoAR.Core
             _gameSave.Body = MemoryUtilities.ReplaceBytes(_gameSave.Body, offset, 0, temp);
             DataLength += temp.Length;
             Count++;
-            Items.Add(CreateStashItem(_gameSave, offset, temp.Length));
+            Items.Add(CreateStashItem(_gameSave, offset, temp.Length, Array.Empty<Gem>()));
             _gameSave.UpdateOffsets(offset, temp.Length);
             _gameSave.UpdateDataLengths(offset, temp.Length);
             return Items[^1];
