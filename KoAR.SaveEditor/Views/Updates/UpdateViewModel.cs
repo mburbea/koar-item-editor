@@ -169,8 +169,7 @@ namespace KoAR.SaveEditor.Views.Updates
         private async Task DownloadAndUpdateAsync()
         {
             await this.UpdateService.DownloadUpdateAsync(this._tempFileName, this._cancellationTokenSource.Token).ConfigureAwait(false);
-            string scriptFileName = await UpdateService.ExtractPowershellScript().ConfigureAwait(false);
-            UpdateService.ExecuteUpdate(scriptFileName, this._tempFileName);
+            await UpdateMethods.ExecuteUpdate( this._tempFileName).ConfigureAwait(false);
         }
 
         private void UpdateService_DownloadProgress(object sender, EventArgs<DownloadProgress> e)
