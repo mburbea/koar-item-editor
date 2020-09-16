@@ -153,9 +153,21 @@ namespace KoAR.SaveEditor.Views.Main
             application.MainWindow.Closing += this.MainWindow_Closing;
             try
             {
-                using CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-                cancellationTokenSource.CancelAfter(2500);
-                await this.UpdateNotifier.CheckForUpdatesAsync(cancellationTokenSource.Token).ConfigureAwait(false);
+                using CancellationTokenSource source = new CancellationTokenSource();
+                source.CancelAfter(2500);
+                if (Settings.Default.Acknowledged3x)
+                {
+                    await this.UpdateNotifier.CheckForUpdatesAsync(source.Token).ConfigureAwait(false);
+                }
+                else
+                {
+                    IReleaseInfo? release = await UpdateMethods.FetchLatest2xReleaseAsync(source.Token).ConfigureAwait(false);
+                    if (release != null)
+                    {
+                        application.Dispatcher.Invoke(new Action<IReleaseInfo>(this.OpenOriginalUpdateWindow), release);
+                        return;
+                    }
+                }
             }
             catch (OperationCanceledException)
             {
@@ -205,9 +217,9 @@ namespace KoAR.SaveEditor.Views.Main
             try
             {
                 this.IsCheckingForUpdate = true;
-                using CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-                cancellationTokenSource.CancelAfter(15000); // 15s
-                await this.UpdateNotifier.CheckForUpdatesAsync(cancellationTokenSource.Token).ConfigureAwait(false);
+                using CancellationTokenSource source = new CancellationTokenSource();
+                source.CancelAfter(15000); // 15s
+                await this.UpdateNotifier.CheckForUpdatesAsync(source.Token).ConfigureAwait(false);
             }
             catch
             {
@@ -230,6 +242,15 @@ namespace KoAR.SaveEditor.Views.Main
                 "Save before closing.\nFile will be saved and then the application will close.",
                 "Application will not close."
             );
+        }
+
+        private void OpenOriginalUpdateWindow(IReleaseInfo release)
+        {
+            Settings.Default.Acknowledged3x = true;
+            Settings.Default.Save();
+            using OriginalUpdateViewModel viewModel = new OriginalUpdateViewModel(release);
+            UpdateWindow window = new UpdateWindow { DataContext = viewModel, Owner = Application.Current.MainWindow };
+            window.ShowDialog();
         }
 
         private bool OpenUpdateWindow()

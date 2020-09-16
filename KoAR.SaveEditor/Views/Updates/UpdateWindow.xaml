@@ -6,9 +6,10 @@
     xmlns:local="clr-namespace:KoAR.SaveEditor.Views.Updates"
     mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type local:UpdateViewModelBase}}"
     Icon="/app.ico" Title="{Binding Title, StringFormat='{}{0} - KoAR Save Editor'}"
-    Width="640" Height="500" WindowStartupLocation="CenterOwner" ResizeMode="CanResizeWithGrip">
+    Width="640" Height="480" WindowStartupLocation="CenterOwner" ResizeMode="CanResizeWithGrip">
     <DockPanel>
-        <TextBlock Text="{Binding Preamble}" DockPanel.Dock="Top" FontWeight="SemiBold" TextAlignment="Center">
+        <TextBlock Text="{Binding Preamble}" DockPanel.Dock="Top" Margin="6" Foreground="Red"
+            FontWeight="SemiBold" TextWrapping="Wrap">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">
                     <Style.Triggers>

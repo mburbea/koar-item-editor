@@ -36,18 +36,17 @@ namespace KoAR.SaveEditor.Updates
         }
 
         /// <summary>
-        /// Fetches the latest release for a specific major version.
+        /// Fetches the latest 2.x release.
         /// </summary>
-        /// <param name="major">The major version of the application for which to fetch the latest release.</param>
         /// <param name="cancellationToken">Optionally used to propagate cancellation requests.</param>
         /// <returns>Information related to a release. Returns <see langword="null"/> if not found or an error occurs.</returns>
-        public static async Task<IReleaseInfo?> FetchLatestReleaseAsync(int major, CancellationToken cancellationToken = default)
+        public static async Task<IReleaseInfo?> FetchLatest2xReleaseAsync(CancellationToken cancellationToken = default)
         {
             try
             {
                 foreach (Tag tag in await UpdateMethods.FetchTagsAsync(cancellationToken).ConfigureAwait(false))
                 {
-                    if (tag.Version.Major != major)
+                    if (tag.Version.Major != 2)
                     {
                         continue;
                     }
