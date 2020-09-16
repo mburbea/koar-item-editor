@@ -148,6 +148,7 @@ namespace KoAR.SaveEditor.Updates
 
         private sealed class Release : IReleaseInfo
         {
+            private Version? _version;
             private ReleaseAsset? _zipFileAsset;
 
             public ReleaseAsset[] Assets { get; set; } = Array.Empty<ReleaseAsset>();
@@ -162,7 +163,7 @@ namespace KoAR.SaveEditor.Updates
 
             public string TagName { get; set; } = string.Empty;
 
-            public string Version => this.TagName.Length == 0 ? string.Empty : this.TagName[1..];
+            public Version Version => this._version ??= new Version(this.TagName.Length != 0 ? this.TagName[1..] : "0.0.0");
 
             public ReleaseAsset? ZipFileAsset => this._zipFileAsset ??= this.Assets.FirstOrDefault(asset => asset.IsZipFile);
 
@@ -184,9 +185,8 @@ namespace KoAR.SaveEditor.Updates
 
         private sealed class Tag
         {
-            private Version? _version;
-
             private static readonly Regex _regex = new Regex(@"^v(?<version>\d+\.\d+\.\d+)$", RegexOptions.ExplicitCapture);
+            private Version? _version;
 
             public string Name { get; set; } = string.Empty;
 

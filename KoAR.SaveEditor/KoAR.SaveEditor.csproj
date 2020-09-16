@@ -9,7 +9,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <AssemblyTitle>KoAR.SaveEditor</AssemblyTitle>
     <Product>Kingdoms of Amalur: Reckoning Save Editor</Product>
-    <Copyright>Copyright © Michael Burbea 2020</Copyright>
+    <Copyright>Copyright © Michael Burbea &amp; Amir Burbea 2020</Copyright>
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>app.ico</ApplicationIcon>
@@ -17,13 +17,14 @@
     <Authors>Michael Burbea; Amir Burbea</Authors>
     <Company>-</Company>
     <Description>Save editor for Kingdoms of Amalur: Reckoning</Description>
-    <PackageLicenseExpression>ISC</PackageLicenseExpression>
+    <PackageLicenseExpression></PackageLicenseExpression>
     <RepositoryType>Git</RepositoryType>
     <PackageProjectUrl>https://github.com/mburbea/koar-item-editor</PackageProjectUrl>
     <RepositoryUrl>https://github.com/mburbea/koar-item-editor</RepositoryUrl>
     <NeutralLanguage>en-US</NeutralLanguage>
     <UserSecretsId>08a013c8-a2ef-43c0-9e42-9500e36a74d4</UserSecretsId>
     <Version>3.0.0</Version>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -196,6 +197,10 @@
     <None Remove="Resources\Zoom.png" />
     <None Remove="Views\Updates\github.credentials" />
     <None Remove="Views\Updates\update.ps1" />
+    <None Include="..\LICENSE.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Markdown.Xaml" Version="1.0.0" />

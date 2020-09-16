@@ -10,7 +10,7 @@ namespace KoAR.SaveEditor.Updates
 
         DateTime PublishedAt { get; }
         
-        string Version { get; }
+        Version Version { get; }
 
         int ZipFileSize { get; }
 

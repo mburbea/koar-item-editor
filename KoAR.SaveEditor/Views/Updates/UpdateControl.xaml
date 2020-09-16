@@ -6,12 +6,16 @@
     xmlns:editor="clr-namespace:KoAR.SaveEditor"
     xmlns:local="clr-namespace:KoAR.SaveEditor.Views.Updates"
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs"
+    xmlns:s="clr-namespace:System;assembly=mscorlib"
     mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type local:UpdateViewModelBase}}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/KoAR.SaveEditor;component/Templates/DownloadIndicatorTemplate.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <s:Int32 x:Key="2">2</s:Int32>
+            <s:Int32 x:Key="3">3</s:Int32>
+            <constructs:EqualityConverter x:Key="EqualityConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid Margin="6">
@@ -34,7 +38,6 @@
         <StackPanel Grid.Row="3" Grid.ColumnSpan="2">
             <StackPanel.Resources>
                 <local:ByteGroupsConverter x:Key="ByteGroupsConverter" />
-                <constructs:EqualityConverter x:Key="EqualityConverter" />
                 <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
                     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                     <Setter Property="MinWidth" Value="175" />
@@ -98,7 +101,7 @@
                 </TextBlock>
             </StackPanel>
             <StackPanel Margin="2" HorizontalAlignment="Center" Orientation="Horizontal">
-                <Button Command="{Binding DownloadCommand}" IsDefault="True">
+                <Button Command="{Binding DownloadCommand}" IsDefault="{Binding Target.Version.Major, Converter={StaticResource EqualityConverter}, ConverterParameter={StaticResource 3}}">
                     <StackPanel Orientation="Horizontal">
                         <ContentPresenter Content="-" ContentTemplate="{StaticResource DownloadIndicatorTemplate}" VerticalAlignment="Center">
                             <ContentPresenter.Style>
@@ -114,7 +117,7 @@
                         <TextBlock Text="Download" VerticalAlignment="Center" Margin="2,0" />
                     </StackPanel>
                 </Button>
-                <Button Content="Close" Command="{Binding CancelCommand}" />
+                <Button Content="Close" Command="{Binding CancelCommand}" IsDefault="{Binding Target.Version.Major, Converter={StaticResource EqualityConverter}, ConverterParameter={StaticResource 2}}" />
             </StackPanel>
         </StackPanel>
     </Grid>
