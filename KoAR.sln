@@ -11,10 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItemTesting", "ItemTesting\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D963AD8C-8F3A-4D38-9323-FDD9A5AE90FA}"
 	ProjectSection(SolutionItems) = preProject
-		9190114save84.sav = 9190114save84.sav
-		9190114save87.sav = 9190114save87.sav
-		9190114save90.sav = 9190114save90.sav
-		symbol_tables.zip = symbol_tables.zip
+		README.md = README.md
 	EndProjectSection
 EndProject
 Global

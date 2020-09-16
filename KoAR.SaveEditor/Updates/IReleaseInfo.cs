@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KoAR.SaveEditor.Views.Updates
+namespace KoAR.SaveEditor.Updates
 {
     public interface IReleaseInfo
     {
@@ -10,7 +10,7 @@ namespace KoAR.SaveEditor.Views.Updates
 
         DateTime PublishedAt { get; }
         
-        string Version { get; }
+        Version Version { get; }
 
         int ZipFileSize { get; }
 

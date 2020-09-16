@@ -1,18 +1,18 @@
-## Kingdoms of Amalur: Reckoning Save Editor
-This is heavily updated editor, rewritten in WPF and modern C#8 paradigms. A product of covid-19 quarantine and my frustrations with this game. 
+## Kingdoms of Amalur: Reckoning (and Re-Reckoning) Save Editor
+This is heavily updated editor, rewritten in WPF and modern C# 8 paradigms. A product of Covid-19 quarantine and my frustrations with this game. 
 
 ### Versioning Strategy
-* Version 3.x will be for the Remaster. 
+* Version 3.x will be for the Remaster.
 * Version 2.x will be for the Original. 
-  - The current final release is the following: https://github.com/mburbea/koar-item-editor/releases/tag/v2.1.189
-* The auto-updater will now only look for updates of the same major version. (e.g. 2.x will find new 2.x releases, and 3.x will find new 3.x releases).
-* There is no plan for removing support for the original in 3.x branches, but I'm no longer testing my changes against the original.
-* Data definitions are based off the **original** game. Not the remaster. This means that descriptions and localizations may be wrong. Item definitions can also be incorrectly defined. One such example is the longbow The Hunter which now applies both it's buffs as Item buff and not Player buffs. 
+  - The current final 2.x release is the following: https://github.com/mburbea/koar-item-editor/releases/tag/v2.1.189
+* The auto-updater will only look for updates of the same major version. (e.g. 2.x will find new 2.x releases, and 3.x will find new 3.x releases).
+* There is no plan for removing support for the original in 3.x branches, but I'm no longer testing my changes against the original.  
+  - You **must** use a 3.x release for the remaster; 3.x releases **might** work for the original. 
+* Data definitions are based off the **original** game - not the remaster. This means that descriptions and localizations may be wrong. Item definitions can also be incorrectly defined. One such example is the longbow The Hunter which now applies both its buffs as Item buffs and not Player buffs. 
 
 ### Currently Not Supported / Issues
 * Modifying buffs on an equipped item can lead to corruption. Do not modify any of them. (There's no indicator yet as to which items are equipped).
-* The remaster now will switch to a compressed format when the save game data exceeds 4 megabytes. This feature is NOT supported. 
-* Removing stashed items that have gems can corrupt your stash, don't do it!
+* The remaster now will switch to a compressed format when the save game data exceeds 4 megabytes. This feature is as of yet NOT supported. 
 * Modifying the auto-save, tutorial save, quick save or the end of game save are NOT supported (and may never be). These 4 saves are slightly different formats and if any of these files are corrupted the game can get stuck in an infinite loop. Even deleting the files will still cause an infinite loop.
 
 ### Features

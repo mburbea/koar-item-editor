@@ -8,6 +8,7 @@ using System.Windows.Threading;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
 using KoAR.SaveEditor.Properties;
+using KoAR.SaveEditor.Updates;
 using KoAR.SaveEditor.Views.Inventory;
 using KoAR.SaveEditor.Views.Stash;
 using KoAR.SaveEditor.Views.Updates;
@@ -28,6 +29,7 @@ namespace KoAR.SaveEditor.Views.Main
         public MainWindowViewModel()
         {
             this.CheckForUpdateCommand = new DelegateCommand(this.CheckForUpdate, () => !this._isCheckingForUpdate);
+            this.OpenUpdateWindowCommand = new DelegateCommand(() => this.OpenUpdateWindow());
             if (!(bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(Window)).DefaultValue)
             {
                 Application.Current.Activated += this.Application_Activated;
@@ -72,7 +74,7 @@ namespace KoAR.SaveEditor.Views.Main
             set => this.SetValue(ref this._mode, value);
         }
 
-        public DelegateCommand OpenUpdateWindowCommand { get; } = new DelegateCommand(() => MainWindowViewModel.OpenUpdateWindow());
+        public DelegateCommand OpenUpdateWindowCommand { get; }
 
         public StashManagerViewModel? StashManager
         {
@@ -86,7 +88,7 @@ namespace KoAR.SaveEditor.Views.Main
             }
         }
 
-        public UpdateService UpdateService { get; } = (UpdateService)Application.Current.TryFindResource(typeof(UpdateService));
+        public UpdateNotifier UpdateNotifier { get; } = new UpdateNotifier();
 
         public void OpenFile()
         {
@@ -106,7 +108,23 @@ namespace KoAR.SaveEditor.Views.Main
             {
                 return;
             }
-            this.GameSave = new GameSave(dialog.FileName);
+            GameSave gameSave;
+            try
+            {
+                gameSave = new GameSave(dialog.FileName);
+            }
+            catch (NotSupportedException e)
+            {
+                TaskDialog.Show(new TaskDialogOptions
+                {
+                    Title = "KoAR Save Editor",
+                    MainInstruction = "File Not Supported",
+                    Content = e.Message,
+                    MainIcon = VistaTaskDialogIcon.Error,
+                });
+                return;
+            }
+            this.GameSave = gameSave;
             Settings.Default.LastDirectory = Path.GetDirectoryName(dialog.FileName);
             this.InventoryManager = new InventoryManagerViewModel(this);
             this.StashManager = this.GameSave.Stash != null ? new StashManagerViewModel(this) : default;
@@ -128,12 +146,6 @@ namespace KoAR.SaveEditor.Views.Main
             MessageBox.Show(Application.Current.MainWindow, $"Save successful! Original save backed up as {this.GameSave.FileName}.bak.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private static bool OpenUpdateWindow()
-        {
-            UpdateWindow window = new UpdateWindow { Owner = Application.Current.MainWindow };
-            return window.ShowDialog().GetValueOrDefault();
-        }
-
         private async void Application_Activated(object sender, EventArgs e)
         {
             Application application = (Application)sender;
@@ -141,14 +153,26 @@ namespace KoAR.SaveEditor.Views.Main
             application.MainWindow.Closing += this.MainWindow_Closing;
             try
             {
-                using CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-                cancellationTokenSource.CancelAfter(2500);
-                await this.UpdateService.CheckForUpdatesAsync(cancellationTokenSource.Token).ConfigureAwait(false);
+                using CancellationTokenSource source = new CancellationTokenSource();
+                source.CancelAfter(2500);
+                if (Settings.Default.Acknowledged3x)
+                {
+                    await this.UpdateNotifier.CheckForUpdatesAsync(source.Token).ConfigureAwait(false);
+                }
+                else
+                {
+                    IReleaseInfo? release = await UpdateMethods.FetchLatest2xReleaseAsync(source.Token).ConfigureAwait(false);
+                    if (release != null)
+                    {
+                        application.Dispatcher.Invoke(new Action<IReleaseInfo>(this.OpenOriginalUpdateWindow), release);
+                        return;
+                    }
+                }
             }
             catch (OperationCanceledException)
             {
             }
-            if (Debugger.IsAttached || this.UpdateService.Update == null || !application.Dispatcher.Invoke(MainWindowViewModel.OpenUpdateWindow))
+            if (Debugger.IsAttached || this.UpdateNotifier.Update == null || !application.Dispatcher.Invoke(this.OpenUpdateWindow))
             {
                 await application.Dispatcher.InvokeAsync(this.OpenFile);
             }
@@ -193,9 +217,9 @@ namespace KoAR.SaveEditor.Views.Main
             try
             {
                 this.IsCheckingForUpdate = true;
-                using CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-                cancellationTokenSource.CancelAfter(15000); // 15s
-                await this.UpdateService.CheckForUpdatesAsync(cancellationTokenSource.Token).ConfigureAwait(false);
+                using CancellationTokenSource source = new CancellationTokenSource();
+                source.CancelAfter(15000); // 15s
+                await this.UpdateNotifier.CheckForUpdatesAsync(source.Token).ConfigureAwait(false);
             }
             catch
             {
@@ -204,9 +228,9 @@ namespace KoAR.SaveEditor.Views.Main
             finally
             {
                 this.IsCheckingForUpdate = false;
-                if (this.UpdateService.Update != null)
+                if (this.UpdateNotifier.Update != null)
                 {
-                    this._dispatcher.Invoke(MainWindowViewModel.OpenUpdateWindow);
+                    this._dispatcher.Invoke(this.OpenUpdateWindow);
                 }
             }
         }
@@ -218,6 +242,26 @@ namespace KoAR.SaveEditor.Views.Main
                 "Save before closing.\nFile will be saved and then the application will close.",
                 "Application will not close."
             );
+        }
+
+        private void OpenOriginalUpdateWindow(IReleaseInfo release)
+        {
+            Settings.Default.Acknowledged3x = true;
+            Settings.Default.Save();
+            using OriginalUpdateViewModel viewModel = new OriginalUpdateViewModel(release);
+            UpdateWindow window = new UpdateWindow { DataContext = viewModel, Owner = Application.Current.MainWindow };
+            window.ShowDialog();
+        }
+
+        private bool OpenUpdateWindow()
+        {
+            if (this.UpdateNotifier.Update == null)
+            {
+                return false;
+            }
+            using UpdateViewModel viewModel = new UpdateViewModel(this.UpdateNotifier.Update);
+            UpdateWindow window = new UpdateWindow { DataContext = viewModel, Owner = Application.Current.MainWindow };
+            return window.ShowDialog().GetValueOrDefault();
         }
     }
 }
