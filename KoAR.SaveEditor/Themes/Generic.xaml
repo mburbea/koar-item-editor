@@ -12,7 +12,6 @@
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.ItemDefinitionControl.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.ItemFiltersEditor.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.RarityIcon.xaml" />
-        <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.ReleaseDownloader.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.SocketIcon.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Themes/Generic.ZoomScaler.xaml" />
         <!-- Constructs -->
