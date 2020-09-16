@@ -62,13 +62,13 @@
     </Window.Style>
     <Window.TaskbarItemInfo>
         <TaskbarItemInfo x:Name="PART_TaskbarItemInfo" constructs:TaskbarItemInfoOverlay.ContentTemplate="{StaticResource DownloadIndicatorTemplate}"
-            constructs:TaskbarItemInfoOverlay.Content="{Binding UpdateService.Update, Source={StaticResource ViewModel}}">
+            constructs:TaskbarItemInfoOverlay.Content="{Binding UpdateNotifier.Update, Source={StaticResource ViewModel}}">
             <TaskbarItemInfo.ThumbButtonInfos>
                 <ThumbButtonInfo Command="Open" ImageSource="{StaticResource Open}" Description="Open File..." DismissWhenClicked="True"
                     CommandTarget="{Binding MainWindow, Source={x:Static Application.Current}}" />
                 <ThumbButtonInfo ImageSource="{Binding Overlay, ElementName=PART_TaskbarItemInfo}" Description="Update Available" DismissWhenClicked="True"
                     Command="{Binding OpenUpdateWindowCommand, Source={StaticResource ViewModel}}"
-                    Visibility="{Binding UpdateService.Update, Source={StaticResource ViewModel}, Converter={StaticResource NotNullToVisibilityConverter}}"/>
+                    Visibility="{Binding UpdateNotifier.Update, Source={StaticResource ViewModel}, Converter={StaticResource NotNullToVisibilityConverter}}"/>
                 <ThumbButtonInfo Command="Help" ImageSource="{StaticResource Help}" Description="Help" DismissWhenClicked="True"
                     CommandTarget="{Binding MainWindow, Source={x:Static Application.Current}}" />
             </TaskbarItemInfo.ThumbButtonInfos>
@@ -155,7 +155,7 @@
                     <Button.Style>
                         <Style TargetType="{x:Type Button}">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding UpdateService.Update}" Value="{x:Null}">
+                                <DataTrigger Binding="{Binding UpdateNotifier.Update}" Value="{x:Null}">
                                     <Setter Property="Content" Value="{Binding IsCheckingForUpdate}" />
                                     <Setter Property="ContentTemplate" Value="{StaticResource LoadingTemplate}" />
                                     <Setter Property="Command" Value="{Binding CheckForUpdateCommand}" />
@@ -163,7 +163,7 @@
                                 </DataTrigger>
                                 <MultiDataTrigger>
                                     <MultiDataTrigger.Conditions>
-                                        <Condition Binding="{Binding UpdateService.Update}" Value="{x:Null}" />
+                                        <Condition Binding="{Binding UpdateNotifier.Update}" Value="{x:Null}" />
                                         <Condition Binding="{Binding IsCheckingForUpdate}" Value="True" />
                                     </MultiDataTrigger.Conditions>
                                     <Setter Property="ToolTip" Value="Checking For Update..." />

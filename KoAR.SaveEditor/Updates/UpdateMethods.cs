@@ -23,7 +23,7 @@ namespace KoAR.SaveEditor.Updates
         /// Given the path to a zip file containing an update, executes the update process.
         /// </summary>
         /// <param name="zipFilePath">Zip file path.</param>
-        public static async Task ExecuteUpdate(string zipFilePath)
+        public static async void ExecuteUpdate(string zipFilePath)
         {
             string scriptFileName = await UpdateMethods.ExtractPowershellScript().ConfigureAwait(false);
             Process.Start(new ProcessStartInfo
@@ -47,12 +47,12 @@ namespace KoAR.SaveEditor.Updates
             {
                 foreach (Tag tag in await UpdateMethods.FetchTagsAsync(cancellationToken).ConfigureAwait(false))
                 {
-                    if (tag.Version.Value.Major != major)
+                    if (tag.Version.Major != major)
                     {
                         continue;
                     }
                     Release? release = await UpdateMethods.FetchReleaseAsync(tag.Name, cancellationToken).ConfigureAwait(false);
-                    if (release != null && release.GetZipFileAsset() != null)
+                    if (release != null && release.HasUpdateAsset)
                     {
                         return release;
                     }
@@ -65,7 +65,7 @@ namespace KoAR.SaveEditor.Updates
         }
 
         /// <summary>
-        /// Fetches an array of the interim releases for the current major version of the application to the latest.
+        /// Fetches an array of the interim update releases for the current major version of the application to the latest.
         /// Only checks up to <paramref name="maxReleases"/> number of tags/releases.
         /// </summary>
         /// <param name="cancellationToken">Optionally used to propagate cancellation requests.</param>
@@ -75,14 +75,13 @@ namespace KoAR.SaveEditor.Updates
             try
             {
                 List<string> tagNames = (await UpdateMethods.FetchTagsAsync(cancellationToken).ConfigureAwait(false))
-                    .Where(tag => tag.Version.Value.Major == App.Version.Major)
-                    .TakeWhile(tag => tag.Version.Value > App.Version)
+                    .Where(tag => tag.Version.Major == App.Version.Major && tag.Version > App.Version)
                     .Take(maxReleases)
                     .Select(tag => tag.Name)
                     .ToList();
                 Release[] array = (await Task.WhenAll(tagNames.Select(tag => UpdateMethods.FetchReleaseAsync(tag, cancellationToken))).ConfigureAwait(false))
                     .OfType<Release>()
-                    .Where(release => release.GetZipFileAsset() != null)
+                    .Where(release => release.HasUpdateAsset)
                     .ToArray();
                 if (array.Length != 0)
                 {
@@ -156,19 +155,21 @@ namespace KoAR.SaveEditor.Updates
 
             public string Body { get; set; } = string.Empty;
 
-            public bool IsValid => this.GetZipFileAsset() != null;
+            public bool HasUpdateAsset => this.ZipFileAsset != null;
+
             public string Name { get; set; } = string.Empty;
+
             public DateTime PublishedAt { get; set; }
 
             public string TagName { get; set; } = string.Empty;
 
-            public string Version => this.TagName.Length == 0 ? string.Empty : this.TagName.Substring(1);
+            public string Version => this.TagName.Length == 0 ? string.Empty : this.TagName[1..];
 
-            public int ZipFileSize => this.GetZipFileAsset()?.Size ?? 0;
+            public ReleaseAsset? ZipFileAsset => this._zipFileAsset ??= this.Assets.FirstOrDefault(asset => asset.IsZipFile);
 
-            public string ZipFileUri => this.GetZipFileAsset()?.BrowserDownloadUrl ?? string.Empty;
+            public int ZipFileSize => this.ZipFileAsset?.Size ?? 0;
 
-            public ReleaseAsset? GetZipFileAsset() => this._zipFileAsset ??= this.Assets.FirstOrDefault(asset => asset.IsZipFile);
+            public string ZipFileUri => this.ZipFileAsset?.BrowserDownloadUrl ?? string.Empty;
         }
 
         private sealed class ReleaseAsset
@@ -184,11 +185,13 @@ namespace KoAR.SaveEditor.Updates
 
         private sealed class Tag
         {
+            private Version? _version;
+
             private static readonly Regex _regex = new Regex(@"^v(?<version>\d+\.\d+\.\d+)$", RegexOptions.ExplicitCapture);
 
             public string Name { get; set; } = string.Empty;
 
-            public Lazy<Version> Version => new Lazy<Version>(() => new Version(Tag._regex.IsMatch(this.Name) ? this.Name[1..] : "0.0.0"));
+            public Version Version => this._version ??= new Version(Tag._regex.IsMatch(this.Name) ? this.Name[1..] : "0.0.0");
         }
     }
 }
