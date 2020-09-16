@@ -102,7 +102,7 @@ namespace KoAR.SaveEditor.Updates
         }
 
         private static async Task<T?> FetchDataAsync<T>(string suffix, CancellationToken cancellationToken)
-                    where T : class
+            where T : class
         {
             try
             {
