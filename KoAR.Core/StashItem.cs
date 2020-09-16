@@ -10,10 +10,9 @@ namespace KoAR.Core
         protected byte[] Bytes { get; }
         public List<Buff> PlayerBuffs { get; } = new List<Buff>();
 
-        public uint GemCount { get; }
-        public List<Gem> Gems { get; } = new List<Gem>();
+        public Gem[] Gems { get; }
 
-        public StashItem(GameSave gameSave, int offset, int dataLength)
+        public StashItem(GameSave gameSave, int offset, int dataLength, Gem[] gems)
         {
             ItemOffset = offset;
             Bytes = gameSave.Body.AsSpan(offset, dataLength).ToArray();
@@ -27,18 +26,12 @@ namespace KoAR.Core
             {
                 ItemName = Encoding.Default.GetString(Bytes, Offsets.Name, NameLength);
             }
-            int socketsStart = Bytes.Length - 1;
-            if (Bytes[^1] != 0xFF)
-            {
-                int i = Bytes.Length - 4;
-                uint handle;
-                while ((handle = MemoryUtilities.Read<uint>(Bytes, i)) > 4)
-                {
-                    i -= 4;
-                }
-                GemCount = handle;
-                socketsStart = i - 2;
-            }
+            Gems = gems;
+            // socket section is either FF
+            // or 20 02, followed by int32 count, and int32 handle per gem.
+            int socketsStart = gems.Length == 0 
+                ? Bytes.Length - 1 
+                : gems[0].ItemOffset - offset - (4 * (1 + gems.Length)) - 2; 
 
             ItemBuffs = Bytes[Offsets.HasItemBuffs] == 0x14 ? new ItemBuffMemory(this, socketsStart) : Definition.ItemBuffs;
         }
@@ -78,7 +71,7 @@ namespace KoAR.Core
 
         public IEnumerable<Socket> GetSockets()
         {
-            return GemCount switch
+            return Gems.Length switch
             {
                 0 => Definition.GetSockets(),
                 1 when Definition.SocketTypes.Length == 1 => new[] { new Socket(Definition.SocketTypes[0], Gems[0]) }, // trivial case.

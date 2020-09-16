@@ -17,7 +17,7 @@ namespace KoAR.Core
                 (_stashItem, _endOfSection) = (stashItem, endOfSection);
                 int count = Count;
                 var firstBuff = Offsets.FirstItemBuff;
-                for(int i = 0; i < count; i++)
+                for (int i = 0; i < count; i++)
                 {
                     var buffId = MemoryUtilities.Read<uint>(Bytes, firstBuff + (i * 16) + 4);
                     List.Add(Amalur.GetBuff(buffId));
