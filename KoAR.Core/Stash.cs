@@ -122,7 +122,7 @@ namespace KoAR.Core
             temp[^2] = _gameSave.IsRemaster switch
             {
                 true when type.Category == EquipmentCategory.Shield => 0x04,
-                true when type.Category > EquipmentCategory.Shield && type.Category < EquipmentCategory.Necklace => 0x01,
+                true when type.Category.IsWeapon() => 0x01,
                 _ => 0
             };
             temp[^1] = 0xFF;

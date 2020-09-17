@@ -195,7 +195,7 @@ namespace KoAR.Core
 
         internal void LoadFromDefinition(ItemDefinition definition)
         {
-            if (_gameSave.IsRemaster && definition.Category >= EquipmentCategory.Necklace)
+            if (_gameSave.IsRemaster && definition.Category.IsJewelry())
             {
                 CurrentDurability = 100;
                 MaxDurability = -1;
