@@ -272,6 +272,14 @@
                         <Trigger Property="Tag" Value="{x:Null}">
                             <Setter Property="IsEnabled" Value="False" />
                         </Trigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="{x:Null}" />
+                                <Condition Binding="{Binding GameSave, Source={StaticResource ViewModel}, Converter={StaticResource IsNullConverter}}" Value="False" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="ToolTip" 
+                                Value="Stash cannot be located in save. This can be because the stash has not been discovered or your character is in the same area as the stash." />
+                        </MultiDataTrigger>
                     </Style.Triggers>
                     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                     <Setter Property="Tag">
@@ -284,6 +292,7 @@
                             </MultiBinding>
                         </Setter.Value>
                     </Setter>
+                    <Setter Property="ToolTipService.ShowOnDisabled" Value="True" />
                 </Style>
             </TabControl.ItemContainerStyle>
             <constructs:TabContent.TemplateSelector>
