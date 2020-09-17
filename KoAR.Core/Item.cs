@@ -195,10 +195,15 @@ namespace KoAR.Core
 
         internal void LoadFromDefinition(ItemDefinition definition)
         {
-            CurrentDurability = definition.Category == EquipmentCategory.Necklace || definition.Category == EquipmentCategory.Ring
-                ? 100
-                : definition.MaxDurability;
-            MaxDurability = definition.MaxDurability;
+            if (_gameSave.IsRemaster && definition.Category >= EquipmentCategory.Necklace)
+            {
+                CurrentDurability = 100;
+                MaxDurability = -1;
+            }
+            else
+            {
+                CurrentDurability = MaxDurability = definition.MaxDurability;
+            }
             ItemBuffs.List.Clear();
             foreach (var buff in definition.ItemBuffs.List)
             {
