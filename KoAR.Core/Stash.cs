@@ -111,7 +111,7 @@ namespace KoAR.Core
             Span<byte> temp = stackalloc byte[25 + type.PlayerBuffs.Length * 8];
             var sectionHeader = _gameSave.IsRemaster ? 0x04_0Aul : 0x03_0Aul;
             MemoryUtilities.Write(temp, 0, type.TypeId | sectionHeader << 32);
-            MemoryUtilities.Write(temp, 10, type.MaxDurability);
+            MemoryUtilities.Write(temp, 10, _gameSave.IsRemaster ? 100f : type.MaxDurability);
             temp[14] = 1;
             MemoryUtilities.Write(temp, 18, type.PlayerBuffs.Length);
             for (int i = 0; i < type.PlayerBuffs.Length; i++)
