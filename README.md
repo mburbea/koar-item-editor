@@ -31,7 +31,7 @@ This is heavily updated editor, rewritten in WPF and modern C# 8 paradigms. A pr
   - This window will list all the quest items in your inventory and let you mark them as sellable. Note that selling currently active quest items can cause quests to break.
 * The stash view
   - The stash view becomes available for save files that have discovered the stash, and are not in the same room as the stash.
-  - The stash lists all known properties of stashed items, simmilar to the inventory view, but does not support modifying the item.
+  - The stash lists all known properties of stashed items, similar to the inventory view, but does not support modifying the item.
   - Equipment items can be removed and added directly to the stash.
   - The stash size CANNOT be modified, however you can add items past the in game limits. (155 in original, 300 in remaster). 
 
