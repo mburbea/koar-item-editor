@@ -155,8 +155,8 @@ Chakrams,1D176B,2,Iron Chakrams,chakrams_merchant_common01d,20,Infrequent,U,Fire
 Chakrams,1D176A,2,Iron Chakrams,chakrams_merchant_common01c,20,Common,,Lightning,None,0,0,,,False
 Chakrams,1D1769,2,Iron Chakrams,chakrams_merchant_common01b,20,Common,,Ice,None,0,0,,,False
 Chakrams,1D1768,2,Iron Chakrams,chakrams_merchant_common01a,20,Common,,Fire,None,0,0,,,False
-Chakrams,1D7EE8,3,Twinned Souls,chakrams_entitlement02,20,Unique,,Fire,None,0,0,1D2A251D2A24,,True
-Chakrams,1D2A0B,3,Fate's Eyes,chakrams_entitlement01,20,Unique,,Lightning,None,0,0,,1FAEA8,True
+Chakrams,1D7EE8,3,Twinned Souls,chakrams_entitlement02,20,Unique,,Fire,None,0,0,1D2A251D2A24,,False
+Chakrams,1D2A0B,3,Fate's Eyes,chakrams_entitlement01,20,Unique,,Lightning,None,0,0,,1FAEA8,False
 Chakrams,13AEA8,36,Fine Prismere Chakrams,chakrams_common05c_lightning,28,Common,,Lightning,None,0,0,,,False
 Chakrams,13AE89,36,Fine Prismere Chakrams,chakrams_common05c_ice,28,Common,,Ice,None,0,0,,,False
 Chakrams,135A32,36,Fine Prismere Chakrams,chakrams_common05c_fire,28,Common,,Fire,None,0,0,,,False
@@ -430,8 +430,8 @@ Daggers,1D16E3,12,Rimy Daggers,daggers_merchant_common02a,24,Infrequent,,None,No
 Daggers,1D16DC,2,Iron Daggers,daggers_merchant_common01c,20,Infrequent,W,None,None,0,0,,,False
 Daggers,1D16DB,2,Daggers of Skill,daggers_merchant_common01b,20,Rare,,None,None,0,07AA70,,,False
 Daggers,1D16DA,2,Erosive Daggers,daggers_merchant_common01a,20,Infrequent,,None,None,1C3D82,0,1C3D82,,False
-Daggers,1D2A2D,3,Omniblades,daggers_entitlement02,20,Unique,,None,None,0,0,1D2A2E,,True
-Daggers,1D2A08,3,Fate's Needles,daggers_entitlement01,20,Unique,,None,None,0,0,,1FAEA8,True
+Daggers,1D2A2D,3,Omniblades,daggers_entitlement02,20,Unique,,None,None,0,0,1D2A2E,,False
+Daggers,1D2A08,3,Fate's Needles,daggers_entitlement01,20,Unique,,None,None,0,0,,1FAEA8,False
 Daggers,09AFFE,2,[DEV] Poison Daggers,Daggers_DEV_poison,20,Unique,,None,None,0,0,0342F6,,False
 Daggers,09AFFD,2,[DEV] Lightning Daggers,Daggers_DEV_lightning,20,Unique,,Lightning,None,0,0,065FB20342F4,,False
 Daggers,09AFFC,2,[DEV] Ice Daggers,Daggers_DEV_ice,20,Unique,,Ice,None,0,0,06476A064761,,False
@@ -647,7 +647,7 @@ Faeblades,1D1737,12,Searing Faeblades,mirrorblades_merchant_common02a,24,Infrequ
 Faeblades,1D1730,2,Iron Faeblades,mirrorblades_merchant_common01c,20,Infrequent,W,None,None,0,0,,,False
 Faeblades,1D172F,2,Faeblades of Puncturing,mirrorblades_merchant_common01b,20,Infrequent,,None,None,0,07A8C5,,,False
 Faeblades,1D172E,2,Iron Faeblades,mirrorblades_merchant_common01a,20,Common,,None,None,0,0,,,False
-Faeblades,1D2A07,3,Fate's Scours,mirrorblades_entitlement01,20,Unique,,None,None,0,0,,1FAEA8,True
+Faeblades,1D2A07,3,Fate's Scours,mirrorblades_entitlement01,20,Unique,,None,None,0,0,,1FAEA8,False
 Faeblades,05989E,36,Fine Prismere Faeblades,mirrorblades_common05c,28,Common,,None,None,0,0,,,False
 Faeblades,084A75,33,Prismere Faeblades,mirrorblades_common05b_sockets_03,28,Infrequent,WUU,None,None,0,0,,,False
 Faeblades,084A74,33,Prismere Faeblades,mirrorblades_common05b_sockets_02,28,Infrequent,WU,None,None,0,0,,,False
@@ -1119,8 +1119,8 @@ Feet,086841,14,Greaves of the Legion,warrior_set04_feet,46,Set,,None,Might,0,0,,
 Feet,086840,11,Thrydon's Greaves of War,warrior_set03_feet,44,Set,,None,Might,0,0,,1D1E841CD69A,False
 Feet,08683F,8,Belen's Greaves,warrior_set02_feet,44,Set,,None,Might,0,0,,1D1E841CD699,False
 Feet,08683E,5,Ceremonial Greaves,warrior_set01_feet,42,Set,,None,Might,0,0,,1D1E841CD698,False
-Feet,1D2AA3,3,Shepard's Greaves,warrior_entitlement02_feet,20,Set,,None,Might,0,0,,1D1E841D2B05,True
-Feet,1D2AA4,3,Vigilant Greaves,warrior_entitlement01_feet,20,Set,,None,Might,0,0,,1D1E841D2AF5,True
+Feet,1D2AA3,3,Shepard's Greaves,warrior_entitlement02_feet,20,Set,,None,Might,0,0,,1D1E841D2B05,False
+Feet,1D2AA4,3,Vigilant Greaves,warrior_entitlement01_feet,20,Set,,None,Might,0,0,,1D1E841D2AF5,False
 Feet,03FF89,37,Fine Prismere Greaves,warrior_common06c_feet,30,Common,,None,Might,0,0,,1D1E84,False
 Feet,0859BB,34,Prismere Greaves,warrior_common06b_feet_sockets_03,30,Infrequent,AUU,None,Might,0,0,,1D1E84,False
 Feet,0859BA,34,Prismere Greaves,warrior_common06b_feet_sockets_02,30,Infrequent,AU,None,Might,0,0,,1D1E84,False
@@ -1190,7 +1190,7 @@ Feet,086892,17,Vekreth's Boots,rogue_set04_feet,41,Set,,None,Finesse,0,0,,081EDE
 Feet,086891,13,Captain's Boots,rogue_set03_feet,41,Set,,None,Finesse,0,0,,081EDE1CD6BF,False
 Feet,086890,9,Mercenary's Boots,rogue_set02_feet,39,Set,,None,Finesse,0,0,,081EDE1CD6BE,False
 Feet,08688F,6,Perfidious Boots,rogue_set01_feet,39,Set,,None,Finesse,0,0,,081EDE1CD6BD,False
-Feet,1D2A9A,3,Imminent Boots,rogue_entitlement01_feet,17,Set,,None,Finesse,0,0,,081EDE1D2AFB,True
+Feet,1D2A9A,3,Imminent Boots,rogue_entitlement01_feet,17,Set,,None,Finesse,0,0,,081EDE1D2AFB,False
 Feet,0818C9,36,Fine Dreadscale Boots,rogue_common05c_feet,26,Common,,None,Finesse,0,0,,081EDE,False
 Feet,085966,33,Dreadscale Boots,rogue_common05b_feet_sockets_03,26,Infrequent,AUU,None,Finesse,0,0,,081EDE,False
 Feet,085965,33,Dreadscale Boots,rogue_common05b_feet_sockets_02,26,Infrequent,AU,None,Finesse,0,0,,081EDE,False
@@ -1283,7 +1283,7 @@ Feet,0868E7,22,Harbinger's Shoes,mage_set04_feet,41,Set,,None,Sorcery,0,0,,05E7D
 Feet,0868E6,15,Vraekor's Shoes,mage_set03_feet,38,Set,,None,Sorcery,0,0,,05E7D81CD6D4,False
 Feet,0868E5,11,Lyria's Shoes,mage_set02_feet,38,Set,,None,Sorcery,0,0,,05E7D81CD6D3,False
 Feet,0868E4,7,Frostweave Shoes,mage_set01_feet,37,Set,,None,Sorcery,0,0,,05E7D81CD6D2,False
-Feet,1D2A9E,3,Pensive Shoes,mage_entitlement01_feet,15,Set,,None,Sorcery,0,0,,05E7D81D2B00,True
+Feet,1D2A9E,3,Pensive Shoes,mage_entitlement01_feet,15,Set,,None,Sorcery,0,0,,05E7D81D2B00,False
 Feet,081524,36,Fine Spiritweave Shoes,mage_common05c_feet,23,Common,,None,Sorcery,0,0,,05E7D8,False
 Feet,0858DB,33,Spiritweave Shoes,mage_common05b_feet_sockets_03,23,Infrequent,AUU,None,Sorcery,0,0,,05E7D8,False
 Feet,0858DA,33,Spiritweave Shoes,mage_common05b_feet_sockets_02,23,Infrequent,AU,None,Sorcery,0,0,,05E7D8,False
@@ -1566,7 +1566,7 @@ Greatsword,1D1689,12,Surging Greatsword,sword2h_merchant_common02a,24,Infrequent
 Greatsword,1D1682,2,Iron Greatsword,sword2h_merchant_common01c,20,Infrequent,W,None,None,0,0,,,False
 Greatsword,1D1681,2,Numbing Greatsword,sword2h_merchant_common01b,20,Infrequent,,None,None,079F86,0,079F86,,False
 Greatsword,1D1680,2,Iron Greatsword,sword2h_merchant_common01a,20,Common,,None,None,0,0,,,False
-Greatsword,1D2A04,3,Fate's Brand,sword2h_entitlement01,20,Unique,,None,None,0,0,,1FAEA8,True
+Greatsword,1D2A04,3,Fate's Brand,sword2h_entitlement01,20,Unique,,None,None,0,0,,1FAEA8,False
 Greatsword,088964,36,Fine Prismere Greatsword,sword2h_common05c,28,Common,,None,None,0,0,,,False
 Greatsword,088965,33,Prismere Greatsword,sword2h_common05b_sockets_03,28,Infrequent,WUU,None,None,0,0,,,False
 Greatsword,088966,33,Prismere Greatsword,sword2h_common05b_sockets_02,28,Infrequent,WU,None,None,0,0,,,False
@@ -1799,7 +1799,7 @@ Hammer,1D16B3,12,Dazing Hammer,greathammer_merchant_common02a,24,Rare,,None,None
 Hammer,1D16AC,2,Iron Hammer,greathammer_merchant_common01c,20,Infrequent,W,None,None,0,0,,,False
 Hammer,1D16AB,2,Smoldering Hammer,greathammer_merchant_common01b,20,Infrequent,,None,None,079F8B,0,079F8B,,False
 Hammer,1D16AA,2,Iron Hammer,greathammer_merchant_common01a,20,Common,,None,None,0,0,,,False
-Hammer,1D2A05,3,Fate's Mallet,greathammer_entitlement01,20,Unique,,None,None,0,0,,1FAEA8,True
+Hammer,1D2A05,3,Fate's Mallet,greathammer_entitlement01,20,Unique,,None,None,0,0,,1FAEA8,False
 Hammer,040B97,36,Fine Prismere Hammer,greathammer_common05c,28,Common,,None,None,0,0,,,False
 Hammer,084A5D,33,Prismere Hammer,greathammer_common05b_sockets_03,28,Infrequent,WUU,None,None,0,0,,,False
 Hammer,084A5C,33,Prismere Hammer,greathammer_common05b_sockets_02,28,Infrequent,WU,None,None,0,0,,,False
@@ -2270,8 +2270,8 @@ Hands,086850,14,Gauntlets of the Legion,warrior_set04_hands,46,Set,,None,Might,0
 Hands,08684F,11,Thyrdon's Gauntlets of War,warrior_set03_hands,44,Set,,None,Might,0,0,,1D1E831CD2C8,False
 Hands,08684E,8,Belen's Gauntlets,warrior_set02_hands,44,Set,,None,Might,0,0,,1D1E831CD2C7,False
 Hands,08684D,5,Ceremonial Gauntlets,warrior_set01_hands,42,Set,,None,Might,0,0,,1D1E831CD2C6,False
-Hands,1D2AA1,3,Shepard's Gauntlets,warrior_entitlement02_hands,20,Set,,None,Might,0,0,,1D1E831D2B03,True
-Hands,1D2A94,3,Vigilant Gauntlets,warrior_entitlement01_hands,20,Set,,None,Might,0,0,,1D1E831D2AF3,True
+Hands,1D2AA1,3,Shepard's Gauntlets,warrior_entitlement02_hands,20,Set,,None,Might,0,0,,1D1E831D2B03,False
+Hands,1D2A94,3,Vigilant Gauntlets,warrior_entitlement01_hands,20,Set,,None,Might,0,0,,1D1E831D2AF3,False
 Hands,03FBD2,37,Fine Prismere Gauntlets,warrior_common06c_hands,30,Common,,None,Might,0,0,,1D1E83,False
 Hands,0859BF,34,Prismere Gauntlets,warrior_common06b_hands_sockets_03,30,Infrequent,AUU,None,Might,0,0,,1D1E83,False
 Hands,0859BE,34,Prismere Gauntlets,warrior_common06b_hands_sockets_02,30,Infrequent,AU,None,Might,0,0,,1D1E83,False
@@ -2340,7 +2340,7 @@ Hands,0868A2,17,Vekreth's Gloves,rogue_set04_hands,41,Set,,None,Finesse,0,0,,081
 Hands,0868A1,13,Captain's Gloves,rogue_set03_hands,41,Set,,None,Finesse,0,0,,081EDD1CD432,False
 Hands,0868A0,9,Mercenary's Gloves,rogue_set02_hands,39,Set,,None,Finesse,0,0,,081EDD1CD431,False
 Hands,08689F,6,Perfidious Gloves,rogue_set01_hands,39,Set,,None,Finesse,0,0,,081EDD1CD42F,False
-Hands,1D2A98,3,Imminent Gloves,rogue_entitlement01_hands,17,Set,,None,Finesse,0,0,,081EDD1D2AF8,True
+Hands,1D2A98,3,Imminent Gloves,rogue_entitlement01_hands,17,Set,,None,Finesse,0,0,,081EDD1D2AF8,False
 Hands,0818C8,36,Fine Dreadscale Gloves,rogue_common05c_hands,26,Common,,None,Finesse,0,0,,081EDD,False
 Hands,08596A,33,Dreadscale Gloves,rogue_common05b_hands_sockets_03,26,Infrequent,AUU,None,Finesse,0,0,,081EDD,False
 Hands,085969,33,Dreadscale Gloves,rogue_common05b_hands_sockets_02,26,Infrequent,AU,None,Finesse,0,0,,081EDD,False
@@ -2429,7 +2429,7 @@ Hands,0868F7,19,Harbinger's Handwraps,mage_set04_hands,38,Set,,None,Sorcery,0,0,
 Hands,0868F6,15,Vraekor's Handwraps,mage_set03_hands,38,Set,,None,Sorcery,0,0,,05E7D61CD44A,False
 Hands,0868F5,11,Lyria's Handwraps,mage_set02_hands,38,Set,,None,Sorcery,0,0,,05E7D61CD449,False
 Hands,0868F4,7,Frostweave Handwraps,mage_set01_hands,37,Set,,None,Sorcery,0,0,,05E7D61CD448,False
-Hands,1D2A9D,3,Pensive Handwraps,mage_entitlement01_hands,15,Set,,None,Sorcery,0,0,,05E7D61D2AFF,True
+Hands,1D2A9D,3,Pensive Handwraps,mage_entitlement01_hands,15,Set,,None,Sorcery,0,0,,05E7D61D2AFF,False
 Hands,081523,36,Fine Spiritweave Handwraps,mage_common05c_hands,23,Common,,None,Sorcery,0,0,,05E7D6,False
 Hands,0858DF,33,Spiritweave Handwraps,mage_common05b_hands_sockets_03,23,Infrequent,AUU,None,Sorcery,0,0,,05E7D6,False
 Hands,0858DE,33,Spiritweave Handwraps,mage_common05b_hands_sockets_02,23,Infrequent,AU,None,Sorcery,0,0,,05E7D6,False
@@ -2932,9 +2932,9 @@ Hat,08685F,14,Helm of the Legion,warrior_set04_head,46,Set,,None,Might,0,0,,1D1E
 Hat,08685E,11,Thyrdon's Helm of War,warrior_set03_head,44,Set,,None,Might,0,0,,1D1E821CCA9F,False
 Hat,08685D,8,Belen's Helm,warrior_set02_head,44,Set,,None,Might,0,0,,1D1E821CCA9E,False
 Hat,08685C,5,Ceremonial Helm,warrior_set01_head,42,Set,,None,Might,0,0,,1D1E821CCA9D,False
-Hat,1D7EDD,4,Infernal Helm,warrior_entitlement03_head,22,Unique,,None,Might,0,0,,1D1E821D2A35,True
-Hat,1D2A9F,3,Shepard's Helm,warrior_entitlement02_head,20,Set,,None,Might,0,0,,1D1E821D2B01,True
-Hat,1D2A92,3,Vigilant Helm,warrior_entitlement01_head,20,Set,,None,Might,0,0,,1D1E821D2AF1,True
+Hat,1D7EDD,4,Infernal Helm,warrior_entitlement03_head,22,Unique,,None,Might,0,0,,1D1E821D2A35,False
+Hat,1D2A9F,3,Shepard's Helm,warrior_entitlement02_head,20,Set,,None,Might,0,0,,1D1E821D2B01,False
+Hat,1D2A92,3,Vigilant Helm,warrior_entitlement01_head,20,Set,,None,Might,0,0,,1D1E821D2AF1,False
 Hat,03E98D,37,Fine Prismere Helm,warrior_common06c_head,30,Common,,None,Might,0,0,,1D1E82,False
 Hat,0859C3,34,Prismere Helm,warrior_common06b_head_sockets_03,30,Infrequent,AUU,None,Might,0,0,,1D1E82,False
 Hat,0859C2,34,Prismere Helm,warrior_common06b_head_sockets_02,30,Infrequent,AU,None,Might,0,0,,1D1E82,False
@@ -3017,7 +3017,7 @@ Hat,0868B2,17,Vekreth's Cap,rogue_set04_head,41,Set,,None,Finesse,0,0,,081EDC1CC
 Hat,0868B1,13,Captain's Fine Cap,rogue_set03_head,41,Set,,None,Finesse,0,0,,081EDC1CCB4D,False
 Hat,0868B0,9,Mercenary's Cap,rogue_set02_head,39,Set,,None,Finesse,0,0,,081EDC1CCB4C,False
 Hat,0868AF,6,Perfidious Cap,rogue_set01_head,39,Set,,None,Finesse,0,0,,081EDC1CCB4B,False
-Hat,1D2A96,3,Imminent Cap,rogue_entitlement01_head,17,Set,,None,Finesse,0,0,,081EDC1D2AF6,True
+Hat,1D2A96,3,Imminent Cap,rogue_entitlement01_head,17,Set,,None,Finesse,0,0,,081EDC1D2AF6,False
 Hat,0818C7,36,Fine Dreadscale Hood,rogue_common05c_head,26,Common,,None,Finesse,0,0,,081EDC,False
 Hat,08596E,33,Dreadscale Hood,rogue_common05b_head_sockets_03,26,Infrequent,AUU,None,Finesse,0,0,,081EDC,False
 Hat,08596D,33,Dreadscale Hood,rogue_common05b_head_sockets_02,26,Infrequent,AU,None,Finesse,0,0,,081EDC,False
@@ -3117,7 +3117,7 @@ Hat,086906,14,Vraekor's Cowl,mage_set03_head,38,Set,,None,Sorcery,0,0,,05E7D51CC
 Hat,086905,10,Lyria's Cowl,mage_set02_head,38,Set,,None,Sorcery,0,0,,05E7D51CCB9B,False
 Hat,086904,6,Frostweave Cowl,mage_set01_head,37,Set,,None,Sorcery,0,0,,05E7D51CCB9A,False
 Hat,0856F4,40,Fine Crown of Sorrow,mage_HP01_Helmet,20,Common,,None,Sorcery,0,0,,05E7D5,False
-Hat,1D2A9B,3,Pensive Cowl,mage_entitlement01_head,15,Set,,None,Sorcery,0,0,,05E7D51D2AFD,True
+Hat,1D2A9B,3,Pensive Cowl,mage_entitlement01_head,15,Set,,None,Sorcery,0,0,,05E7D51D2AFD,False
 Hat,081522,36,Fine Spiritweave Cowl,mage_common05c_head,23,Common,,None,Sorcery,0,0,,05E7D5,False
 Hat,0858E3,33,Spiritweave Cowl,mage_common05b_head_sockets_03,23,Infrequent,AUU,None,Sorcery,0,0,,05E7D5,False
 Hat,0858E2,33,Spiritweave Cowl,mage_common05b_head_sockets_02,23,Infrequent,AU,None,Sorcery,0,0,,05E7D5,False
@@ -3520,8 +3520,8 @@ Legs,08686F,14,Chausses of the Legion,warrior_set04_legs,46,Set,,None,Might,0,0,
 Legs,08686E,11,Thyrdon's Chausses of War,warrior_set03_legs,44,Set,,None,Might,0,0,,1D1E811CD63A,False
 Legs,08686C,8,Belen's Chausses,warrior_set02_legs,44,Set,,None,Might,0,0,,1D1E811CD639,False
 Legs,08686B,5,Ceremonial Chausses,warrior_set01_legs,42,Set,,None,Might,0,0,,1D1E811CD638,False
-Legs,1D2AA2,3,Shepard's Chausses,warrior_entitlement02_legs,20,Set,,None,Might,0,0,,1D1E811D2B04,True
-Legs,1D2A95,3,Vigilant Chausses,warrior_entitlement01_legs,20,Set,,None,Might,0,0,,1D1E811D2AF4,True
+Legs,1D2AA2,3,Shepard's Chausses,warrior_entitlement02_legs,20,Set,,None,Might,0,0,,1D1E811D2B04,False
+Legs,1D2A95,3,Vigilant Chausses,warrior_entitlement01_legs,20,Set,,None,Might,0,0,,1D1E811D2AF4,False
 Legs,03FE7B,37,Fine Prismere Chausses,warrior_common06c_legs,30,Common,,None,Might,0,0,,1D1E81,False
 Legs,0859C7,34,Prismere Chausses,warrior_common06b_legs_sockets_03,30,Infrequent,AUU,None,Might,0,0,,1D1E81,False
 Legs,0859C6,34,Prismere Chausses,warrior_common06b_legs_sockets_02,30,Infrequent,AU,None,Might,0,0,,1D1E81,False
@@ -3595,7 +3595,7 @@ Legs,0868C2,17,Vekreth's Leggings,rogue_set04_legs,41,Set,,None,Finesse,0,0,,081
 Legs,0868C1,13,Captain's Leggings,rogue_set03_legs,41,Set,,None,Finesse,0,0,,081EDB1CD661,False
 Legs,0868C0,9,Mercenary's Leggings,rogue_set02_legs,39,Set,,None,Finesse,0,0,,081EDB1CD660,False
 Legs,0868BF,6,Perfidious Leggings,rogue_set01_legs,39,Set,,None,Finesse,0,0,,081EDB1CD65F,False
-Legs,1D2A99,3,Imminent Leggings,rogue_entitlement01_legs,17,Set,,None,Finesse,0,0,,081EDB1D2AFA,True
+Legs,1D2A99,3,Imminent Leggings,rogue_entitlement01_legs,17,Set,,None,Finesse,0,0,,081EDB1D2AFA,False
 Legs,0818C6,36,Fine Dreadscale Leggings,rogue_common05c_legs,26,Common,,None,Finesse,0,0,,081EDB,False
 Legs,085972,33,Dreadscale Leggings,rogue_common05b_legs_sockets_03,26,Infrequent,AUU,None,Finesse,0,0,,081EDB,False
 Legs,085971,33,Dreadscale Leggings,rogue_common05b_legs_sockets_02,26,Infrequent,AU,None,Finesse,0,0,,081EDB,False
@@ -3834,7 +3834,7 @@ Longbow,1D170F,12,Searing Longbow,longbow_merchant_common02a,24,Infrequent,,None
 Longbow,1D1708,2,Birch Longbow,longbow_merchant_common01c,20,Infrequent,W,None,None,0,0,,,False
 Longbow,1D1707,2,Erosive Longbow,longbow_merchant_common01b,20,Infrequent,,None,None,1C3D82,0,1C3D82,,False
 Longbow,1D1706,2,Birch Longbow,longbow_merchant_common01a,20,Common,,None,None,0,0,,,False
-Longbow,1D2A06,3,Fate's Curve,longbow_entitlement01,20,Unique,,None,None,0,0,,1FAEA8,True
+Longbow,1D2A06,3,Fate's Curve,longbow_entitlement01,20,Unique,,None,None,0,0,,1FAEA8,False
 Longbow,040B05,36,Fine Ebony Longbow,longbow_common05c,28,Common,,None,None,0,0,,,False
 Longbow,084A69,33,Ebony Longbow,longbow_common05b_sockets_03,28,Infrequent,WUU,None,None,0,0,,,False
 Longbow,084A68,33,Ebony Longbow,longbow_common05b_sockets_02,28,Infrequent,WU,None,None,0,0,,,False
@@ -4054,7 +4054,7 @@ Longsword,1D10F9,12,Ruthless Longsword,sword1h_merchant_common02a,24,Infrequent,
 Longsword,1D10EC,2,Iron Longsword,sword1h_merchant_common01c,20,Infrequent,W,None,None,0,0,,,False
 Longsword,1D10E0,2,Numbing Longsword,sword1h_merchant_common01b,20,Infrequent,,None,None,079F86,0,079F86,,False
 Longsword,1D10DF,2,Iron Longsword,sword1h_merchant_common01a,20,Common,,None,None,0,0,,,False
-Longsword,1D2A03,3,Fate's Edge,sword1h_entitlement01,20,Unique,,None,None,0,0,,1FAEA8,True
+Longsword,1D2A03,3,Fate's Edge,sword1h_entitlement01,20,Unique,,None,None,0,0,,1FAEA8,False
 Longsword,04074A,36,Fine Prismere Longsword,sword1h_common05c,28,Common,,None,None,0,0,,,False
 Longsword,084A45,33,Prismere Longsword,sword1h_common05b_sockets_03,28,Infrequent,WUU,None,None,0,0,,,False
 Longsword,084A44,33,Prismere Longsword,sword1h_common05b_sockets_02,28,Infrequent,WU,None,None,0,0,,,False
@@ -4941,7 +4941,7 @@ Robes,086927,17,Harbinger's Vestments,mage_set04_torso,38,Set,,None,Sorcery,0,0,
 Robes,086926,14,Vraekor's Robes,mage_set03_torso,38,Set,,None,Sorcery,0,0,,05E0F31AC3071CD19B,False
 Robes,086925,10,Lyria's Robes,mage_set02_torso,38,Set,,None,Sorcery,0,0,,05E0F31AC3071CD19A,False
 Robes,086924,6,Frostweave Robes,mage_set01_torso,37,Set,,None,Sorcery,0,0,,05E0F31AC3071CD199,False
-Robes,1D2A9C,3,Pensive Robes,mage_entitlement01_torso,15,Set,,None,Sorcery,0,0,,05E0F31AC3071D2AFE,True
+Robes,1D2A9C,3,Pensive Robes,mage_entitlement01_torso,15,Set,,None,Sorcery,0,0,,05E0F31AC3071D2AFE,False
 Robes,081520,36,Fine Spiritweave Robes,mage_common05c_torso,23,Common,,None,Sorcery,0,0,,05E0F31AC307,False
 Robes,0858EC,33,Spiritweave Robes,mage_common05b_torso_sockets_04,23,Infrequent,AUUE,None,Sorcery,0,0,,05E0F31AC307,False
 Robes,0858EB,33,Spiritweave Robes,mage_common05b_torso_sockets_03,23,Infrequent,AUU,None,Sorcery,0,0,,05E0F31AC307,False
@@ -5141,7 +5141,7 @@ Sceptre,1D17A9,2,Birch Sceptre,sceptre_merchant_common01d,20,Infrequent,U,Fire,N
 Sceptre,1D17A8,2,Birch Sceptre,sceptre_merchant_common01c,20,Common,,Lightning,None,0,0,,,False
 Sceptre,1D17A7,2,Birch Sceptre,sceptre_merchant_common01b,20,Common,,Ice,None,0,0,,,False
 Sceptre,1D17A6,2,Birch Sceptre,sceptre_merchant_common01a,20,Common,,Fire,None,0,0,,,False
-Sceptre,1D2A0A,3,Fate's Stem,sceptre_entitlement01,20,Unique,,Ice,None,0,0,,1FAEA8,True
+Sceptre,1D2A0A,3,Fate's Stem,sceptre_entitlement01,20,Unique,,Ice,None,0,0,,1FAEA8,False
 Sceptre,09722B,36,Fine Ebony Sceptre,sceptre_common_05c_lightning,28,Common,,Lightning,None,0,0,,,False
 Sceptre,0971E1,36,Fine Ebony Sceptre,sceptre_common_05c_ice,28,Common,,Ice,None,0,0,,,False
 Sceptre,097242,36,Fine Ebony Sceptre,sceptre_common_05c_fire,28,Common,,Fire,None,0,0,,,False
@@ -5830,7 +5830,7 @@ Shield,09160B,20,Reprisal,rogue_unique04_shield,44,Unique,,None,Finesse,0,0,,083
 Shield,09160A,15,Storm-Serpent,rogue_unique03_shield,41,Unique,,None,Finesse,0,0,,0832F51CD2F5091635,False
 Shield,091609,10,Boggart-Mask Buckler,rogue_unique02_shield,41,Unique,,None,Finesse,0,0,,0832F51CD2EB091634,False
 Shield,091608,5,Fae Summer Shield,rogue_unique01_shield,39,Unique,,None,Finesse,0,0,,0832F5091633,False
-Shield,1D7EFF,3,Spinning Tom's Anvil,rogue_entitlement01_shield,17,Unique,,None,Finesse,0,0,,0832F51D2B42,True
+Shield,1D7EFF,3,Spinning Tom's Anvil,rogue_entitlement01_shield,17,Unique,,None,Finesse,0,0,,0832F51D2B42,False
 Shield,08EA7D,15,Protector,QuestItem_SQ35_HreidsShield,25,Common,,None,Might,0,0,,0832F6,False
 Shield,14EE29,15,Silver Faitir Scaith's Talisman,QuestItem_SQ26_Shield,18,Common,,Fire,Sorcery,0,0,,0B5691,False
 Shield,082D7C,0,[DEV] Shield - Kite Shield,PARENT_Shield_Warrior,30,Common,,None,Might,0,0,,0832F6,False
@@ -6071,7 +6071,7 @@ Staff,1D1801,2,Birch Staff,staff_merchant_common01d,20,Infrequent,U,Fire,None,0,
 Staff,1D1800,2,Birch Staff,staff_merchant_common01c,20,Common,,Lightning,None,0,0,,,False
 Staff,1D17FF,2,Birch Staff,staff_merchant_common01b,20,Common,,Ice,None,0,0,,,False
 Staff,1D17FE,2,Birch Staff,staff_merchant_common01a,20,Common,,Fire,None,0,0,,,False
-Staff,1D2A09,3,Fate's Arbor,staff_entitlement01,20,Unique,,Lightning,None,0,0,,1FAEA8,True
+Staff,1D2A09,3,Fate's Arbor,staff_entitlement01,20,Unique,,Lightning,None,0,0,,1FAEA8,False
 Staff,07371F,36,Fine Ebony Staff,staff_common05c_lightning,28,Common,,Lightning,None,0,0,,,False
 Staff,073644,36,Fine Ebony Staff,staff_common05c_ice,28,Common,,Ice,None,0,0,,,False
 Staff,07370C,36,Fine Ebony Staff,staff_common05c_fire,28,Common,,Fire,None,0,0,,,False
@@ -6503,8 +6503,8 @@ Torso,086880,14,Cuirass of the Legion,warrior_set04_torso,46,Set,,None,Might,0,0
 Torso,08687F,11,Thyrdon's Cuirass of War,warrior_set03_torso,44,Set,,None,Might,0,0,,1D1E801AC3071CD078,False
 Torso,08687E,8,Belen's Cuirass,warrior_set02_torso,44,Set,,None,Might,0,0,,1D1E801AC3071CD077,False
 Torso,08687D,5,Ceremonial Cuirass,warrior_set01_torso,42,Set,,None,Might,0,0,,1D1E801AC3071CD076,False
-Torso,1D2AA0,3,Shepard's Cuirass,warrior_entitlement02_torso,20,Set,,None,Might,0,0,,1D1E801AC3071D2B02,True
-Torso,1D2A93,3,Vigilant Cuirass,warrior_entitlement01_torso,20,Set,,None,Might,0,0,,1D1E801AC3071D2AF2,True
+Torso,1D2AA0,3,Shepard's Cuirass,warrior_entitlement02_torso,20,Set,,None,Might,0,0,,1D1E801AC3071D2B02,False
+Torso,1D2A93,3,Vigilant Cuirass,warrior_entitlement01_torso,20,Set,,None,Might,0,0,,1D1E801AC3071D2AF2,False
 Torso,03E5E3,37,Fine Prismere Cuirass,warrior_common06c_torso,30,Common,,None,Might,0,0,,1D1E801AC307,False
 Torso,0859CC,34,Prismere Cuirass,warrior_common06b_torso_sockets_04,30,Infrequent,AUUE,None,Might,0,0,,1D1E801AC307,False
 Torso,0859CB,34,Prismere Cuirass,warrior_common06b_torso_sockets_03,30,Infrequent,AUU,None,Might,0,0,,1D1E801AC307,False
@@ -6601,7 +6601,7 @@ Torso,0868D2,17,Vekreth's Armor,rogue_set04_torso,41,Set,,None,Finesse,0,0,,081E
 Torso,0868D1,13,Captain's Armor,rogue_set03_torso,41,Set,,None,Finesse,0,0,,081EDA1AC3071CD109,False
 Torso,0868D0,9,Mercenary's Armor,rogue_set02_torso,39,Set,,None,Finesse,0,0,,081EDA1AC3071CD108,False
 Torso,0868CF,6,Perfidious Armor,rogue_set01_torso,39,Set,,None,Finesse,0,0,,081EDA1AC3071CD107,False
-Torso,1D2A97,3,Imminent Vest,rogue_entitlement01_torso,17,Set,,None,Finesse,0,0,,081EDA1AC3071D2AF7,True
+Torso,1D2A97,3,Imminent Vest,rogue_entitlement01_torso,17,Set,,None,Finesse,0,0,,081EDA1AC3071D2AF7,False
 Torso,0818C5,36,Fine Dreadscale Armor,rogue_common05c_torso,26,Common,,None,Finesse,0,0,,081EDA1AC307,False
 Torso,085977,33,Dreadscale Armor,rogue_common05b_torso_sockets_04,26,Infrequent,AUUE,None,Finesse,0,0,,081EDA1AC307,False
 Torso,085976,33,Dreadscale Armor,rogue_common05b_torso_sockets_03,26,Infrequent,AUU,None,Finesse,0,0,,081EDA1AC307,False
