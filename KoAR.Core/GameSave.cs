@@ -118,7 +118,7 @@ namespace KoAR.Core
             ReadOnlySpan<byte> signature = new byte[9] { 0x0B, 0x00, 0x00, 0x00, 0x41, 0xF5, 0x7E, 0x00, 0x04 };
             Span<byte> temp = stackalloc byte[13];
             MemoryUtilities.Write(temp, 0, playerActor);
-            signature.CopyTo(temp.Slice(4));
+            signature.CopyTo(temp[4..]);
             int offset = data.IndexOf(MemoryMarshal.AsBytes(temp));
             int dataLength = MemoryUtilities.Read<int>(data, offset + 13);
             // 17 is the loot table
@@ -128,9 +128,9 @@ namespace KoAR.Core
             var equippedItemsCount = partInventory[inventoryCount + 2];
             var equippedData = partInventory.Slice(inventoryCount + 3, equippedItemsCount);
 
-            foreach (var actorId in equippedData)
+            foreach (var itemId in equippedData)
             {
-                if (actorId != 0 && Items.FirstOrDefault(x => x.ItemId == actorId) is Item item)
+                if (itemId != 0 && Items.FirstOrDefault(x => x.ItemId == itemId) is Item item)
                 {
                     EquippedItems.Add(item);
                 }
