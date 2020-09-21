@@ -34,6 +34,8 @@ namespace KoAR.SaveEditor.Views
 
         public bool HasCustomName => this.Item.HasCustomName;
 
+        public bool IsEquipped => this.Item.IsEquipped;
+
         public virtual bool IsStolen
         {
             get => this.Item.IsStolen;

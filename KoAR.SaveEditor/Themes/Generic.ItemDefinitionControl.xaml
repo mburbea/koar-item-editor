@@ -9,7 +9,7 @@
             <views:BitmapConverter x:Key="BitmapConverter" />
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <constructs:EqualityConverter x:Key="EqualityConverter" />
-            <s:String x:Key="Merchant">Merchant</s:String>  
+            <s:String x:Key="Merchant">Merchant</s:String>
         </Style.Resources>
         <Style.Triggers>
             <Trigger Property="Definition" Value="{x:Null}">
@@ -21,42 +21,65 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type views:ItemDefinitionControl}">
                     <StackPanel Orientation="Horizontal">
-                        <Image Height="24" SnapsToDevicePixels="True" VerticalAlignment="Center" Margin="2,0" DataContext="{TemplateBinding Definition}">
-                            <Image.ToolTip>
-                                <ToolTip Content="{Binding}">
-                                    <ToolTip.ContentTemplate>
-                                        <DataTemplate DataType="{x:Type core:ItemDefinition}">
-                                            <TextBlock>
-                                                <TextBlock.Style>
-                                                    <Style TargetType="{x:Type TextBlock}">
-                                                        <Style.Triggers>
-                                                            <DataTrigger Value="False" Binding="{Binding Element, ConverterParameter={x:Static core:Element.None}, Converter={StaticResource EqualityConverter}}">
-                                                                <Setter Property="Text">
-                                                                    <Setter.Value>
-                                                                        <MultiBinding StringFormat="{}{0} {1}">
-                                                                            <Binding Path="Element" />
-                                                                            <Binding Path="CategoryDisplayName" />
-                                                                        </MultiBinding>
-                                                                    </Setter.Value>
-                                                                </Setter>
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                        <Setter Property="Text" Value="{Binding CategoryDisplayName}" />
-                                                    </Style>
-                                                </TextBlock.Style>
-                                            </TextBlock>
-                                        </DataTemplate>
-                                    </ToolTip.ContentTemplate>
-                                </ToolTip>
-                            </Image.ToolTip>
-                            <Image.Source>
-                                <MultiBinding Converter="{StaticResource BitmapConverter}">
-                                    <Binding Path="Category" />
-                                    <Binding Path="ArmorType" />
-                                    <Binding Path="Element" />
-                                </MultiBinding>
-                            </Image.Source>
-                        </Image>
+                        <Grid SnapsToDevicePixels="True" VerticalAlignment="Center" Margin="2,0">
+                            <Image Height="24" DataContext="{TemplateBinding Definition}">
+                                <Image.ToolTip>
+                                    <ToolTip Content="{Binding}">
+                                        <ToolTip.ContentTemplate>
+                                            <DataTemplate DataType="{x:Type core:ItemDefinition}">
+                                                <TextBlock>
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="{x:Type TextBlock}">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Value="False" Binding="{Binding Element, ConverterParameter={x:Static core:Element.None}, Converter={StaticResource EqualityConverter}}">
+                                                                    <Setter Property="Text">
+                                                                        <Setter.Value>
+                                                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                                                <Binding Path="Element" />
+                                                                                <Binding Path="CategoryDisplayName" />
+                                                                            </MultiBinding>
+                                                                        </Setter.Value>
+                                                                    </Setter>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                            <Setter Property="Text" Value="{Binding CategoryDisplayName}" />
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                            </DataTemplate>
+                                        </ToolTip.ContentTemplate>
+                                    </ToolTip>
+                                </Image.ToolTip>
+                                <Image.Source>
+                                    <MultiBinding Converter="{StaticResource BitmapConverter}">
+                                        <Binding Path="Category" />
+                                        <Binding Path="ArmorType" />
+                                        <Binding Path="Element" />
+                                    </MultiBinding>
+                                </Image.Source>
+                            </Image>
+                            <Grid Width="12" Height="12" VerticalAlignment="Bottom" HorizontalAlignment="Left" ToolTip="Equipped">
+                                <Grid.Style>
+                                    <Style TargetType="{x:Type Grid}">
+                                        <Style.Triggers>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding Item, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource EqualityConverter}}" Value="False" />
+                                                    <Condition Binding="{Binding Item.IsEquipped, RelativeSource={RelativeSource TemplatedParent}}" Value="True" />
+                                                </MultiDataTrigger.Conditions>
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </MultiDataTrigger>
+                                        </Style.Triggers>
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </Style>
+                                </Grid.Style>
+                                <Ellipse Fill="White" Stroke="White" StrokeThickness="1" />
+                                <Ellipse Fill="LimeGreen" Stroke="White" StrokeThickness=".5" />
+                                <Viewbox Height="10" Width="10" StretchDirection="Both" Stretch="Uniform" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,0.5,0,0">
+                                    <TextBlock Text="E" TextAlignment="Center" Foreground="White" VerticalAlignment="Center" />
+                                </Viewbox>
+                            </Grid>
+                        </Grid>
                         <views:RarityIcon>
                             <views:RarityIcon.Style>
                                 <Style TargetType="{x:Type views:RarityIcon}">

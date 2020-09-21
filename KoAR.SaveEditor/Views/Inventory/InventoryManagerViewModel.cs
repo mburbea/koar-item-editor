@@ -15,7 +15,7 @@ namespace KoAR.SaveEditor.Views.Inventory
         {
             this.AddItemBuffCommand = new DelegateCommand<uint>(this.AddItemBuff, this.CanAddItemBuff);
             this.AddPlayerBuffCommand = new DelegateCommand<uint>(this.AddPlayerBuff, this.CanAddPlayerBuff);
-            this.ChangeDefinitionCommand = new DelegateCommand<ItemModel>(this.ChangeDefinition);
+            this.ChangeDefinitionCommand = new DelegateCommand<ItemModel>(this.ChangeDefinition, this.CanChangeDefinition);
             this.DeleteItemBuffCommand = new DelegateCommand<Buff>(this.DeleteItemBuff, this.CanDeleteItemBuff);
             this.DeletePlayerBuffCommand = new DelegateCommand<Buff>(this.DeletePlayerBuff, this.CanDeletePlayerBuff);
             this.OpenQuestItemsWindowCommand = new DelegateCommand(this.OpenQuestItemsWindow);
@@ -115,6 +115,8 @@ namespace KoAR.SaveEditor.Views.Inventory
         private bool CanAddItemBuff(uint buffId) => this.SelectedItem != null && buffId != 0u;
 
         private bool CanAddPlayerBuff(uint buffId) => this.SelectedItem != null && buffId != 0u;
+
+        private bool CanChangeDefinition(ItemModel item) => !item.IsEquipped;
 
         private bool CanDeleteItemBuff(Buff buff) => this.SelectedItem != null && buff != null;
 

@@ -135,7 +135,7 @@
                         </views:BuffCollectionManager.HeaderTemplate>
                     </views:BuffCollectionManager>
                     <views:BuffCollectionManager Margin="4,4,4,0" Header="{Binding SelectedItem}" BuffsFilter="Player" Collection="{Binding SelectedItem.PlayerBuffs}" 
-                        AddBuffCommand="{Binding AddPlayerBuffCommand}" DeleteBuffCommand="{Binding DeletePlayerBuffCommand}">
+                        AddBuffCommand="{Binding AddPlayerBuffCommand}" DeleteBuffCommand="{Binding DeletePlayerBuffCommand}" UnsupportedFormat="{Binding SelectedItem.IsEquipped}">
                         <views:BuffCollectionManager.HeaderTemplate>
                             <DataTemplate DataType="{x:Type views:ItemModelBase}">
                                 <TextBlock>
