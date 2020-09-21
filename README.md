@@ -11,7 +11,6 @@ This is heavily updated editor, rewritten in WPF and modern C# 8 paradigms. A pr
 * Data definitions are based off the **original** game - not the remaster. This means that descriptions and localizations may be wrong. Item definitions can also be incorrectly defined. One such example is the longbow The Hunter which now applies both its buffs as Item buffs and not Player buffs. 
 
 ### Currently Not Supported / Issues
-* Modifying buffs on an equipped item can lead to corruption. Do not modify any of them. (There's no indicator yet as to which items are equipped).
 * The remaster now will switch to a compressed format when the save game data exceeds 4 megabytes. This feature is as of yet NOT supported. 
 * Modifying the auto-save, tutorial save, quick save or the end of game save are NOT supported (and may never be). These 4 saves are slightly different formats and if any of these files are corrupted the game can get stuck in an infinite loop. Even deleting the files will still cause an infinite loop.
 

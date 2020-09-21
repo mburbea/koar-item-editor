@@ -31,6 +31,8 @@ namespace KoAR.Core
             }
         }
 
+        public bool IsEquipped => _gameSave.EquippedItems.Contains(this);
+
         public ItemBuffMemory ItemBuffs { get; }
 
         public float CurrentDurability

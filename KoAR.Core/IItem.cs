@@ -7,6 +7,7 @@ namespace KoAR.Core
         float CurrentDurability { get; }
         bool HasCustomName { get; }
         bool IsStolen { get; }
+        bool IsEquipped { get; }
         IItemBuffMemory ItemBuffs { get; }
         string ItemName { get; }
         byte Level { get; }

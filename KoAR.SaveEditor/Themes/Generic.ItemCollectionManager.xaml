@@ -74,7 +74,7 @@
                             <Setter Property="constructs:TextBoxUpdateSource.UpdateOnEnter" Value="{Binding IsVisible, RelativeSource={RelativeSource Self}}" />
                         </Style>
                     </ControlTemplate.Resources>
-                    <ListView x:Name="PART_ListView" ItemsSource="{TemplateBinding CollectionView}" TextSearch.TextPath="ItemId" AlternationCount="2"
+                    <ListView x:Name="PART_ListView" ItemsSource="{TemplateBinding CollectionView}" TextSearch.TextPath="DisplayName" AlternationCount="2"
                         SelectedItem="{Binding SelectedItem, RelativeSource={RelativeSource TemplatedParent}}" VirtualizingPanel.IsVirtualizing="True"
                         BorderBrush="LightGray" SelectionMode="Single" FocusVisualStyle="{x:Null}" VirtualizingPanel.ScrollUnit="Pixel">
                         <ListView.Resources>
