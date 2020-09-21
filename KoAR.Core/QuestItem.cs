@@ -12,14 +12,14 @@ namespace KoAR.Core
 
         internal int Offset { get; set; }
 
-        private ref InventoryState State => ref Unsafe.As<byte, InventoryState>(ref _gameSave.Body[Offset]);
+        private ref InventoryFlags Flags => ref Unsafe.As<byte, InventoryFlags>(ref _gameSave.Body[Offset]);
 
         public string Name => _definition.Name;
 
         public bool IsUnsellable
         {
-            get => (State & InventoryState.Unsellable) == InventoryState.Unsellable;
-            set => State = value ? State | InventoryState.Unsellable : State & ~InventoryState.Unsellable;
+            get => (Flags & InventoryFlags.Unsellable) == InventoryFlags.Unsellable;
+            set => Flags = value ? Flags | InventoryFlags.Unsellable : Flags & ~InventoryFlags.Unsellable;
         }
     }
 }

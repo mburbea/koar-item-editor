@@ -27,7 +27,7 @@ namespace KoAR.Core
             {
                 results.Add(start + ix - 4);
                 start += ix + itemMarker.Length;
-                var segment = data.Slice(start);
+                var segment = data[start..];
                 ix = segment.IndexOf(itemMarker);
             }
             return results;
@@ -81,8 +81,8 @@ namespace KoAR.Core
         }
 
         static StashItem CreateStashItem(GameSave gameSave, int offset, int datalength, Gem[] gems) => gameSave.IsRemaster
-    ? new RemasterStashItem(gameSave, offset, datalength, gems)
-    : new StashItem(gameSave, offset, datalength, gems);
+            ? new RemasterStashItem(gameSave, offset, datalength, gems)
+            : new StashItem(gameSave, offset, datalength, gems);
 
         public int DataLength
         {
@@ -104,27 +104,24 @@ namespace KoAR.Core
 
         public StashItem AddItem(ItemDefinition type)
         {
-            // Why don't we use the StashItem class? 
-            // 1. Because we don't support mutating them yet
-            // 2. We blow away everything when we do this operation anyway.
-            // 3. We rely on the fact that the game will regenerate the ItemBuff section when the stash spawns the item. (Primarily to avoid thinking about instanceIds...)
+            // I don't write the item buff section as the game will regenerate it from the simtype blueprint when it spawns the item. (Primarily to avoid thinking about instanceIds...)
             Span<byte> temp = stackalloc byte[25 + type.PlayerBuffs.Length * 8];
-            var sectionHeader = _gameSave.IsRemaster ? 0x04_0Aul : 0x03_0Aul;
+            ulong sectionHeader = _gameSave.IsRemaster ? 0x04_0Aul : 0x03_0Aul;
             MemoryUtilities.Write(temp, 0, type.TypeId | sectionHeader << 32);
-            MemoryUtilities.Write(temp, 10, _gameSave.IsRemaster ? 100f : type.MaxDurability);
-            temp[14] = 1;
+            MemoryUtilities.Write(temp, 10, _gameSave.IsRemaster && type.Category.IsJewelry() ? 100f : type.MaxDurability);
+            temp[14] = 1; // quantity
             MemoryUtilities.Write(temp, 18, type.PlayerBuffs.Length);
             for (int i = 0; i < type.PlayerBuffs.Length; i++)
             {
                 MemoryUtilities.Write(temp, i * 8 + 22, type.PlayerBuffs[i].Id | ((ulong)uint.MaxValue) << 32);
             }
-            temp[^3] = (byte)(_gameSave.IsRemaster ? 5 : 0); // can be sold for gold and is equipment
-            temp[^2] = _gameSave.IsRemaster switch
+            temp[^3] = (byte)(_gameSave.IsRemaster ? InventoryFlags.CanBeConvertedToGold | InventoryFlags.IsEquipment : default);
+            temp[^2] = (byte)(_gameSave.IsRemaster switch
             {
-                true when type.Category == EquipmentCategory.Shield => 0x04,
-                true when type.Category.IsWeapon() => 0x01,
-                _ => 0
-            };
+                true when type.Category == EquipmentCategory.Shield => ExtendedInventoryFlags.IsShield,
+                true when type.Category.IsWeapon() => ExtendedInventoryFlags.IsWeapon,
+                _ => default
+            });
             temp[^1] = 0xFF;
             var offset = _offset + Offsets.FirstItem;
             _gameSave.Body = MemoryUtilities.ReplaceBytes(_gameSave.Body, offset, 0, temp);
@@ -138,8 +135,6 @@ namespace KoAR.Core
 
         public void DeleteItem(StashItem item)
         {
-            // To do: Add support for deleting an item with a gem (how?).
-            // maybe block it?
             var itemLength = item.DataLength;
             Items.Remove(item);
             _gameSave.Body = MemoryUtilities.ReplaceBytes(_gameSave.Body, item.ItemOffset, itemLength, Array.Empty<byte>());

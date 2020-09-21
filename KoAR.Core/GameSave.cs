@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace KoAR.Core
@@ -23,14 +24,14 @@ namespace KoAR.Core
         {
             Bytes = File.ReadAllBytes(FileName = fileName);
             IsRemaster = BitConverter.ToInt32(Bytes, 8) == 0;
-            if(IsRemaster && !Path.GetFileNameWithoutExtension(fileName).StartsWith("svd_fmt_5_"))
+            if (IsRemaster && !Path.GetFileNameWithoutExtension(fileName).StartsWith("svd_fmt_5_"))
             {
                 throw new NotSupportedException("Save file is not a user save and changing them can lead to the game infinite looping. The editor only supports saves that start with svd_fmt_5.");
             }
             _header = new GameSaveHeader(this);
             Body = Bytes.AsSpan(BodyStart, BodyDataLength).ToArray();
             IsCompressed = Encoding.Default.GetString(Body, 0, 4) == "zlib";
-            if(IsCompressed)
+            if (IsCompressed)
             {
                 throw new NotSupportedException("Save file uses compression.");
             }
@@ -92,6 +93,7 @@ namespace KoAR.Core
                     }
                 }
             }
+            FindEquippedItems(playerActor);
 
             static int GetBagOffset(ReadOnlySpan<byte> data)
             {
@@ -107,6 +109,31 @@ namespace KoAR.Core
                     : inventoryLimitOffset < Math.Min(curInvCountOffset, increaseAmountOffset) ? 1 : 2;
 
                 return finalOffset + (inventoryLimitOrder * 12);
+            }
+        }
+
+        private void FindEquippedItems(int playerActor)
+        {
+            var data = Body.AsSpan();
+            ReadOnlySpan<byte> signature = new byte[9] { 0x0B, 0x00, 0x00, 0x00, 0x41, 0xF5, 0x7E, 0x00, 0x04 };
+            Span<byte> temp = stackalloc byte[13];
+            MemoryUtilities.Write(temp, 0, playerActor);
+            signature.CopyTo(temp[4..]);
+            int offset = data.IndexOf(MemoryMarshal.AsBytes(temp));
+            int dataLength = MemoryUtilities.Read<int>(data, offset + 13);
+            // 17 is the loot table
+            // 21 is the count of items in the inventory.
+            var partInventory = MemoryMarshal.Cast<byte, int>(data.Slice(offset + 17, dataLength));
+            var inventoryCount = partInventory[1];
+            var equippedItemsCount = partInventory[inventoryCount + 2];
+            var equippedData = partInventory.Slice(inventoryCount + 3, equippedItemsCount);
+
+            foreach (var itemId in equippedData)
+            {
+                if (itemId != 0 && Items.FirstOrDefault(x => x.ItemId == itemId) is Item item)
+                {
+                    EquippedItems.Add(item);
+                }
             }
         }
 
@@ -137,6 +164,8 @@ namespace KoAR.Core
 
         public List<Item> Items { get; } = new List<Item>();
 
+        public HashSet<Item> EquippedItems { get; } = new HashSet<Item>();
+
         public Dictionary<int, Gem> Gems { get; } = new Dictionary<int, Gem>();
 
         public Stash? Stash { get; private set; }
@@ -161,7 +190,7 @@ namespace KoAR.Core
         {
             File.Copy(FileName, $"{FileName}.bak", true);
             _header.Bytes.CopyTo(Bytes, 8);
-            if (IsRemaster) 
+            if (IsRemaster)
             {
                 Bytes.AsSpan(BodyStart, MaxRemasterBodySize).Clear();
                 Body.CopyTo(Bytes, BodyStart);
@@ -201,16 +230,15 @@ namespace KoAR.Core
                         gem.ItemOffset += delta;
                     }
                 }
-
             }
             foreach (var item in Items)
             {
                 if (item.ItemSockets.ItemOffset > itemOffset)
                 {
                     item.ItemSockets.ItemOffset += delta;
-                    foreach(var gem in item.ItemSockets.Gems)
+                    foreach (var gem in item.ItemSockets.Gems)
                     {
-                        if(gem.ItemOffset > itemOffset)
+                        if (gem.ItemOffset > itemOffset)
                         {
                             gem.ItemOffset += delta;
                         }

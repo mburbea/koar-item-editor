@@ -57,7 +57,7 @@ namespace KoAR.SaveEditor.Views.Inventory
 
         public override IReadOnlyList<Buff> ItemBuffs => this._itemBuffs;
 
-        public uint ItemId => this.Item.ItemId;
+        public int ItemId => this.Item.ItemId;
 
         public int ItemIndex => this.Item.ItemOffset;
 

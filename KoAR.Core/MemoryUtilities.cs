@@ -22,10 +22,10 @@ namespace KoAR.Core
 
         public static T Read<T>(ReadOnlySpan<byte> span, int offset = 0)
             where T : struct
-            => MemoryMarshal.Read<T>(span.Slice(offset));
+            => MemoryMarshal.Read<T>(span[offset..]);
 
         public static void Write<T>(Span<byte> span, int offset, T value)
             where T : struct
-            => MemoryMarshal.Write(span.Slice(offset), ref value);
+            => MemoryMarshal.Write(span[offset..], ref value);
     }
 }

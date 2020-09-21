@@ -48,9 +48,9 @@ namespace KoAR.Core
 
         private int BuffCount => MemoryUtilities.Read<int>(Bytes, Offsets.BuffCount);
 
-        public virtual bool IsStolen => Bytes[Offsets.IsStolen] == 1;
+        public virtual bool IsStolen => Bytes[Offsets.InventoryFlags] == 1;
 
-        public virtual bool HasCustomName => Bytes[Offsets.HasCustomName] == 1;
+        public virtual bool HasCustomName => Bytes[Offsets.ExtendedInventoryFlags] == 1;
 
         private int NameLength => MemoryUtilities.Read<int>(Bytes, Offsets.NameLength);
 
