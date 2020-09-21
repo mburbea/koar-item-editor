@@ -30,7 +30,7 @@ namespace KoAR.Core
             }
             _header = new GameSaveHeader(this);
             Body = Bytes.AsSpan(BodyStart, BodyDataLength).ToArray();
-            IsCompressed = Encoding.Default.GetString(Body, 0, 4) == "zlib";
+            IsCompressed = Encoding.GetString(Body, 0, 4) == "zlib";
             if (IsCompressed)
             {
                 throw new NotSupportedException("Save file uses compression.");
@@ -137,6 +137,7 @@ namespace KoAR.Core
             }
         }
 
+        public Encoding Encoding => IsRemaster ? Encoding.UTF8 : Encoding.Default;
         public bool IsRemaster { get; }
         public bool IsCompressed { get; private set; }
         private int BodyStart => 8 + _header.Bytes.Length + 4;
