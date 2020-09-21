@@ -8,10 +8,11 @@ namespace KoAR.Core
         {
         }
 
-        private ref InventoryState State => ref Unsafe.As<byte, InventoryState>(ref Bytes[Offsets.IsStolen]);
+        private ref InventoryFlags Flags => ref Unsafe.As<byte, InventoryFlags>(ref Bytes[Offsets.InventoryFlags]);
+        private ref ExtendedInventoryFlags ExtendedFlags => ref Unsafe.As<byte, ExtendedInventoryFlags>(ref Bytes[Offsets.ExtendedInventoryFlags]);
 
-        public override bool HasCustomName => (Bytes[Offsets.HasCustomName] & 16) == 16; 
+        public override bool HasCustomName => (ExtendedFlags & ExtendedInventoryFlags.HasCustomName) == ExtendedInventoryFlags.HasCustomName;
 
-        public override bool IsStolen => (State & InventoryState.Stolen) == InventoryState.Stolen;
+        public override bool IsStolen => (Flags & InventoryFlags.IsFromStolenSource) == InventoryFlags.IsFromStolenSource;
     }
 }

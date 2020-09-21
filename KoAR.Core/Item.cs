@@ -53,26 +53,26 @@ namespace KoAR.Core
             private set => ItemBytes[Offsets.HasCustomName] = (byte)(value ? 1 : 0);
         }
 
-        private ref InventoryState State => ref Unsafe.As<byte, InventoryState>(ref ItemBytes[Offsets.InventoryState]);
+        private ref InventoryFlags Flags => ref Unsafe.As<byte, InventoryFlags>(ref ItemBytes[Offsets.InventoryFlags]);
 
         public int Owner => MemoryUtilities.Read<int>(ItemBytes, Offsets.Owner);
 
         public bool IsStolen
         {
-            get => (State & InventoryState.Stolen) == InventoryState.Stolen;
-            set => State = value ? State | InventoryState.Stolen : State & ~InventoryState.Stolen;
+            get => (Flags & InventoryFlags.IsFromStolenSource) == InventoryFlags.IsFromStolenSource;
+            set => Flags = value ? Flags | InventoryFlags.IsFromStolenSource : Flags & ~InventoryFlags.IsFromStolenSource;
         }
 
         public bool IsUnsellable
         {
-            get => (State & InventoryState.Unsellable) == InventoryState.Unsellable;
-            set => State = value ? State | InventoryState.Unsellable : State & ~InventoryState.Unsellable;
+            get => (Flags & InventoryFlags.Unsellable) == InventoryFlags.Unsellable;
+            set => Flags = value ? Flags | InventoryFlags.Unsellable : Flags & ~InventoryFlags.Unsellable;
         }
 
         public bool IsUnstashable
         {
-            get => (State & InventoryState.Unstashable) == InventoryState.Unstashable;
-            set => State = value ? State | InventoryState.Unstashable : State & ~InventoryState.Unstashable;
+            get => (Flags & InventoryFlags.Unstashable) == InventoryFlags.Unstashable;
+            set => Flags = value ? Flags | InventoryFlags.Unstashable : Flags & ~InventoryFlags.Unstashable;
         }
 
         public ItemDefinition Definition
@@ -110,7 +110,7 @@ namespace KoAR.Core
 
         internal byte[] ItemBytes { get; private set; }
 
-        public uint ItemId => MemoryUtilities.Read<uint>(ItemBytes);
+        public int ItemId => MemoryUtilities.Read<int>(ItemBytes);
 
         public ItemSockets ItemSockets { get; }
 
