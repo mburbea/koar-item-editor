@@ -24,7 +24,7 @@ namespace KoAR.Core
             }
             if (HasCustomName)
             {
-                ItemName = Encoding.Default.GetString(Bytes, Offsets.Name, NameLength);
+                ItemName = gameSave.Encoding.GetString(Bytes, Offsets.Name, NameLength);
             }
             Gems = gems;
             // socket section is either FF

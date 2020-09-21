@@ -27,7 +27,7 @@ namespace KoAR.Core
             }
             if (HasCustomName)
             {
-                ItemName = Encoding.Default.GetString(ItemBytes, Offsets.Name, NameLength);
+                ItemName = _gameSave.Encoding.GetString(ItemBytes, Offsets.Name, NameLength);
             }
         }
 
@@ -156,11 +156,11 @@ namespace KoAR.Core
         internal byte[] Serialize(bool forced = false)
         {
             if (HasCustomName != (ItemName.Length != 0)
-                || HasCustomName && ItemName != Encoding.Default.GetString(ItemBytes, Offsets.Name, NameLength))
+                || HasCustomName && ItemName != _gameSave.Encoding.GetString(ItemBytes, Offsets.Name, NameLength))
             {
                 if (ItemName.Length > 0)
                 {
-                    var newBytes = Encoding.Default.GetBytes(ItemName);
+                    var newBytes = _gameSave.Encoding.GetBytes(ItemName);
                     if (Offsets.Name + newBytes.Length != ItemBytes.Length)
                     {
                         var buffer = new byte[Offsets.Name + newBytes.Length];
