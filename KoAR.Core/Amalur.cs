@@ -60,7 +60,7 @@ namespace KoAR.Core
             try
             {
                 // GOG
-                var directory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData, Environment.SpecialFolderOption.DoNotVerify), @"..\LocalLow\THQNOnline\Kingdoms of Amalur Re-Reckoning\autocloud\save");
+                var directory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile, Environment.SpecialFolderOption.DoNotVerify), @"appdata\LocalLow\THQNOnline\Kingdoms of Amalur Re-Reckoning\autocloud\save");
                 if (Directory.Exists(directory))
                 {
                     return directory;
