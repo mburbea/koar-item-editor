@@ -60,13 +60,13 @@ namespace KoAR.Core
             try
             {
                 // GOG
-                var directory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"..\LocalLow\THQNOnline\Kingdoms of Amalur Re-Reckoning\autocloud\save");
+                var directory = Path.Combine(Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData, Environment.SpecialFolderOption.DoNotVerify)), @"..\LocalLow\THQNOnline\Kingdoms of Amalur Re-Reckoning\autocloud\save");
                 if (Directory.Exists(directory))
                 {
                     return directory;
                 }
                 // Steam
-                directory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Steam", "userdata");
+                directory = Path.Combine(Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolderOption.DoNotVerify)), "Steam", "userdata");
                 if (Directory.Exists(directory) && Directory.GetDirectories(directory) is string[] { Length: 1 } userDirs
                         && (Directory.Exists(directory = Path.Combine(userDirs[0], @"1041720\remote\autocloud\save")) || Directory.Exists(directory = Path.Combine(userDirs[0], @"102500\remote"))))
                 {
