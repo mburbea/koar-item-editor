@@ -55,20 +55,28 @@ namespace KoAR.Core
         internal static TValue GetOrDefault<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key, TValue? defaultValue = default)
             where TValue : class => dictionary.TryGetValue(key, out TValue res) ? res : defaultValue;
 
-        public static string? FindSaveGameDirectory()
+        public static string FindSaveGameDirectory()
         {
-            // GOG
-            var directory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"..\LocalLow\THQNOnline\Kingdoms of Amalur Re-Reckoning\autocloud\save");
-            if (Directory.Exists(directory))
+            try
             {
-                return directory;
+                // GOG
+                var directory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"..\LocalLow\THQNOnline\Kingdoms of Amalur Re-Reckoning\autocloud\save");
+                if (Directory.Exists(directory))
+                {
+                    return directory;
+                }
+                // Steam
+                directory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Steam", "userdata");
+                if (Directory.Exists(directory) && Directory.GetDirectories(directory) is string[] { Length: 1 } userDirs
+                        && (Directory.Exists(directory = Path.Combine(userDirs[0], @"1041720\remote\autocloud\save")) || Directory.Exists(directory = Path.Combine(userDirs[0], @"102500\remote"))))
+                {
+                    return directory;
+                }
             }
-            // Steam
-            directory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Steam", "userdata");
-            return Directory.Exists(directory) && Directory.GetDirectories(directory) is string[] { Length: 1 } userDirs 
-                    && (Directory.Exists(directory = Path.Combine(userDirs[0], @"1041720\remote\autocloud\save")) || Directory.Exists(directory = Path.Combine(userDirs[0], @"102500\remote")))
-                ? directory
-                : null;
+            catch
+            {
+            }
+            return Environment.CurrentDirectory;
         }
     }
 }

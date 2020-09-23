@@ -102,7 +102,16 @@ namespace KoAR.SaveEditor.Views.Main
                     ? Amalur.FindSaveGameDirectory()
                     : Settings.Default.LastDirectory
             };
-            if (dialog.ShowDialog(Application.Current.MainWindow) != true || this.CancelDueToUnsavedChanges(
+            bool? result = default;
+            try
+            {
+                result = dialog.ShowDialog(Application.Current.MainWindow);
+            }
+            catch (Exception e) when (e is IOException || e is UnauthorizedAccessException || e is ArgumentException)
+            {
+                dialog.InitialDirectory = Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.Personal));
+            }
+            if (result != true || this.CancelDueToUnsavedChanges(
                 $"Ignore.\nLoad \"{dialog.FileName}\" without saving the current file.",
                 $"Save before loading.\nCurrent file will be saved and then \"{dialog.FileName}\" will be loaded.",
                 "Proceed with the current file."
@@ -127,7 +136,7 @@ namespace KoAR.SaveEditor.Views.Main
                 return;
             }
             this.GameSave = gameSave;
-            Settings.Default.LastDirectory = Path.GetDirectoryName(dialog.FileName);
+            Settings.Default.LastDirectory = Path.GetFullPath(Path.GetDirectoryName(dialog.FileName));
             this.InventoryManager = new InventoryManagerViewModel(this);
             this.StashManager = this.GameSave.Stash != null ? new StashManagerViewModel(this) : default;
             this.OnPropertyChanged(nameof(this.GameSave)); // Notifying the change is explicitly done after the view models are set.
