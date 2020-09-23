@@ -107,7 +107,7 @@ namespace KoAR.SaveEditor.Views.Main
             {
                 result = dialog.ShowDialog(Application.Current.MainWindow);
             }
-            catch (Exception e) when (e is IOException || e is UnauthorizedAccessException || e is ArgumentException)
+            catch
             {
                 dialog.InitialDirectory = Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.Personal));
                 result = dialog.ShowDialog(Application.Current.MainWindow);
