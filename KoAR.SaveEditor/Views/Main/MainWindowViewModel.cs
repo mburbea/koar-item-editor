@@ -102,7 +102,7 @@ namespace KoAR.SaveEditor.Views.Main
                     ? Amalur.FindSaveGameDirectory()
                     : Settings.Default.LastDirectory)
             };
-            bool? result = default;
+            bool? result;
             try
             {
                 result = dialog.ShowDialog(Application.Current.MainWindow);
@@ -110,6 +110,7 @@ namespace KoAR.SaveEditor.Views.Main
             catch (Exception e) when (e is IOException || e is UnauthorizedAccessException || e is ArgumentException)
             {
                 dialog.InitialDirectory = Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.Personal));
+                result = dialog.ShowDialog(Application.Current.MainWindow);
             }
             if (result != true || this.CancelDueToUnsavedChanges(
                 $"Ignore.\nLoad \"{dialog.FileName}\" without saving the current file.",
