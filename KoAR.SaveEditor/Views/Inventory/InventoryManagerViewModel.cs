@@ -136,7 +136,7 @@ namespace KoAR.SaveEditor.Views.Inventory
             };
             if (view.ShowDialog() == true && viewModel.Definition != null)
             {
-                item.Definition = viewModel.Definition;
+                item.ChangeDefinition(viewModel.Definition, viewModel.RetainStats);
                 this.GameSave.WriteEquipmentBytes(item.Item, true);
             }
         }

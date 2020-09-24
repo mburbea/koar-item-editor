@@ -191,9 +191,20 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
+        <CheckBox Margin="4" Content="Retain current buffs and stats" IsChecked="{Binding RetainStats}" FocusVisualStyle="{x:Null}" HorizontalAlignment="Stretch">
+            <CheckBox.Style>
+                <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Item}" Value="{x:Null}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </CheckBox.Style>
+        </CheckBox>        
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="Cancel" Command="Close" Margin="4" FocusVisualStyle="{x:Null}" />
-            <Button Content="Save" Command="{Binding ProcessCommand}" Margin="4" IsDefault="True" FocusVisualStyle="{x:Null}" />
+            <Button Content="OK" Command="{Binding ProcessCommand}" Margin="4" IsDefault="True" FocusVisualStyle="{x:Null}" MinWidth="100" />
+            <Button Content="Cancel" Command="Close" Margin="4" FocusVisualStyle="{x:Null}" MinWidth="100" />
         </StackPanel>
     </StackPanel>
 </Window>
