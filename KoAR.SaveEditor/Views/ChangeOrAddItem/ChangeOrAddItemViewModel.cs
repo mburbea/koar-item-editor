@@ -21,6 +21,7 @@ namespace KoAR.SaveEditor.Views.ChangeOrAddItem
         private IReadOnlyList<ItemDefinition>? _definitions;
         private int _elementFilter;
         private int _rarityFilter;
+        private bool _retainStats;
 
         public ChangeOrAddItemViewModel(ItemModelBase? item = null)
         {
@@ -105,6 +106,12 @@ namespace KoAR.SaveEditor.Views.ChangeOrAddItem
                     this.OnFilterChanged();
                 }
             }
+        }
+
+        public bool RetainStats
+        {
+            get => this._retainStats;
+            set => this.SetValue(ref this._retainStats, value);
         }
 
         private bool IsMatch(ItemDefinition item)

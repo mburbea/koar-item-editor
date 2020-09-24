@@ -25,18 +25,6 @@ namespace KoAR.SaveEditor.Views.Inventory
             set => this.SetItemValue(value);
         }
 
-        public override ItemDefinition Definition
-        {
-            get => base.Definition;
-            set
-            {
-                this.Item.Definition = value;
-                this.OnPropertyChanged(string.Empty);
-                this._playerBuffs.OnReset();
-                this._itemBuffs.OnReset();
-            }
-        }
-
         public override bool IsStolen
         {
             get => base.IsStolen;
@@ -129,6 +117,14 @@ namespace KoAR.SaveEditor.Views.Inventory
         public void AddItemBuff(Buff buff) => this._itemBuffs.Add(buff);
 
         public void AddPlayerBuff(Buff buff) => this._playerBuffs.Add(buff);
+
+        public void ChangeDefinition(ItemDefinition definition, bool retainStats)
+        {
+            this.Item.ChangeDefinition(definition, retainStats);
+            this.OnPropertyChanged(string.Empty);
+            this._playerBuffs.OnReset();
+            this._itemBuffs.OnReset();
+        }
 
         public void RemoveItemBuff(Buff buff) => this._itemBuffs.Remove(buff);
 

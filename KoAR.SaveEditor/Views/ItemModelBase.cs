@@ -80,11 +80,7 @@ namespace KoAR.SaveEditor.Views
             set => throw new NotSupportedException();
         }
 
-        public virtual ItemDefinition Definition
-        {
-            get => this.Item.Definition;
-            set => throw new NotSupportedException();
-        }
+        public ItemDefinition Definition => this.Item.Definition;
 
         public abstract bool UnsupportedFormat { get; }
 

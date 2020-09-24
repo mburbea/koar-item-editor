@@ -80,7 +80,7 @@ namespace KoAR.Core
         public ItemDefinition Definition
         {
             get => Amalur.ItemDefinitions[MemoryUtilities.Read<uint>(_gameSave.Body, TypeIdOffset)];
-            set
+            private set
             {
                 var oldType = Amalur.ItemDefinitions[MemoryUtilities.Read<uint>(_gameSave.Body, TypeIdOffset)];
                 MemoryUtilities.Write(_gameSave.Body, TypeIdOffset, value.TypeId);
@@ -95,7 +95,6 @@ namespace KoAR.Core
                         _ => _gameSave.Body[TypeIdOffset + 14],
                     };
                 }
-                LoadFromDefinition(value);
             }
         }
 
@@ -195,8 +194,13 @@ namespace KoAR.Core
             return ItemBytes;
         }
 
-        internal void LoadFromDefinition(ItemDefinition definition)
+        public void ChangeDefinition(ItemDefinition definition, bool retainStats)
         {
+            Definition = definition;
+            if (retainStats)
+            {
+                return;
+            }
             if (_gameSave.IsRemaster && definition.Category.IsJewelry())
             {
                 CurrentDurability = 100;
