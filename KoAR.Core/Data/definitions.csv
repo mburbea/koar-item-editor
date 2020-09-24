@@ -425,7 +425,7 @@ Daggers,1D16EF,24,Sylvanite Daggers,daggers_merchant_common03c,26,Infrequent,WU,
 Daggers,1D16EE,24,Stalker's Daggers,daggers_merchant_common03b,26,Infrequent,,None,None,140C28,0,,,False
 Daggers,1D16ED,24,Daggers of Breadth,daggers_merchant_common03a,26,Rare,,None,None,0,080B0A,,,False
 Daggers,1D16E6,12,Searing Daggers,daggers_merchant_common02c,24,Infrequent,,None,None,079F8F,0,,,False
-Daggers,1D16E4,12,Daggers of Carnage,daggers_merchant_common02b,24,Infrequent,,None,None,0,07AA21,7AA21,,False
+Daggers,1D16E4,12,Daggers of Carnage,daggers_merchant_common02b,24,Infrequent,,None,None,0,07AA21,,,False
 Daggers,1D16E3,12,Rimy Daggers,daggers_merchant_common02a,24,Infrequent,,None,None,079F8A,0,,,False
 Daggers,1D16DC,2,Iron Daggers,daggers_merchant_common01c,20,Infrequent,W,None,None,0,0,,,False
 Daggers,1D16DB,2,Daggers of Skill,daggers_merchant_common01b,20,Rare,,None,None,0,07AA70,,,False
@@ -627,10 +627,10 @@ Faeblades,1D1752,36,Faeblades of Impaling,mirrorblades_merchant_infrequent04c,28
 Faeblades,1D1751,36,Arctic Faeblades,mirrorblades_merchant_infrequent04b,28,Infrequent,,None,None,1C3D7F,0,,,False
 Faeblades,1D174F,33,Prismere Faeblades,mirrorblades_merchant_infrequent04a,28,Infrequent,WUU,None,None,0,0,,,False
 Faeblades,1D1745,27,Shocking Faeblades,mirrorblades_merchant_infrequent03c,26,Infrequent,,None,None,140D50,0,,,False
-Faeblades,1D1744,27,Faeblades of Ravening,mirrorblades_merchant_infrequent03b,26,Rare,,None,None,0,13AE20,13AE2,,False
+Faeblades,1D1744,27,Faeblades of Ravening,mirrorblades_merchant_infrequent03b,26,Rare,,None,None,0,13AE20,,,False
 Faeblades,1D1743,24,Sylvanite Faeblades,mirrorblades_merchant_infrequent03a,26,Infrequent,WUU,None,None,0,0,,,False
 Faeblades,1D173C,15,Azurite Faeblades,mirrorblades_merchant_infrequent02c,24,Infrequent,WU,None,None,0,0,,,False
-Faeblades,1D173B,15,Faeblades of Hemorrhaging,mirrorblades_merchant_infrequent02b,24,Infrequent,,None,None,0,07AA20,7AA2,,False
+Faeblades,1D173B,15,Faeblades of Hemorrhaging,mirrorblades_merchant_infrequent02b,24,Infrequent,,None,None,0,07AA20,,,False
 Faeblades,1D173A,15,Rimy Faeblades,mirrorblades_merchant_infrequent02a,24,Infrequent,,None,None,079F8A,0,,,False
 Faeblades,1D1733,7,Steel Faeblades,mirrorblades_merchant_infrequent01c,22,Infrequent,WU,None,None,0,0,,,False
 Faeblades,1D1732,5,Faeblades of Luck,mirrorblades_merchant_infrequent01b,22,Infrequent,,None,None,0,080B00,,,False
@@ -3820,7 +3820,7 @@ Longbow,1D1714,15,Oak Longbow,longbow_merchant_infrequent02c,24,Infrequent,WU,No
 Longbow,1D1713,15,Longbow of Sundering,longbow_merchant_infrequent02b,24,Infrequent,,None,None,0,07A92D,,,False
 Longbow,1D1712,15,Noxious Longbow,longbow_merchant_infrequent02a,24,Rare,,None,None,07A7F3,0,,,False
 Longbow,1D170B,7,Elm Longbow,longbow_merchant_infrequent01c,22,Infrequent,WU,None,None,0,0,,,False
-Longbow,1D170A,5,Longbow of Bloodletting,longbow_merchant_infrequent01b,22,Infrequent,,None,None,0,07AA22,7AA22,,False
+Longbow,1D170A,5,Longbow of Bloodletting,longbow_merchant_infrequent01b,22,Infrequent,,None,None,0,07AA22,,,False
 Longbow,1D1709,5,Vile Longbow,longbow_merchant_infrequent01a,22,Rare,,None,None,07A7EF,0,,,False
 Longbow,1D1723,33,Ebony Longbow,longbow_merchant_common04c,28,Infrequent,WU,None,None,0,0,,,False
 Longbow,1D1722,33,Longbow of Annihilating,longbow_merchant_common04b,28,Infrequent,,None,None,0,1421EE,,,False
@@ -3829,7 +3829,7 @@ Longbow,1D171A,24,Ash Longbow,longbow_merchant_common03c,26,Infrequent,WU,None,N
 Longbow,1D1719,24,Raider's Longbow,longbow_merchant_common03b,26,Infrequent,,None,None,1C4227,0,,,False
 Longbow,1D1718,24,Longbow of Bloodshed,longbow_merchant_common03a,26,Infrequent,,None,None,0,142276,,,False
 Longbow,1D1711,12,Rimy Longbow,longbow_merchant_common02c,24,Infrequent,,None,None,079F8A,0,,,False
-Longbow,1D1710,12,Longbow of Carnage,longbow_merchant_common02b,24,Infrequent,,None,None,0,07AA21,7AA21,,False
+Longbow,1D1710,12,Longbow of Carnage,longbow_merchant_common02b,24,Infrequent,,None,None,0,07AA21,,,False
 Longbow,1D170F,12,Searing Longbow,longbow_merchant_common02a,24,Infrequent,,None,None,079F8F,0,,,False
 Longbow,1D1708,2,Birch Longbow,longbow_merchant_common01c,20,Infrequent,W,None,None,0,0,,,False
 Longbow,1D1707,2,Erosive Longbow,longbow_merchant_common01b,20,Infrequent,,None,None,1C3D82,0,,,False
@@ -4030,7 +4030,7 @@ Longsword,1D113D,24,Jolting Longsword of Bloodshed,sword1h_merchant_rare02a,26,I
 Longsword,1D10F7,7,Emboldening Longsword of Craft,sword1h_merchant_rare01c,22,Rare,,None,None,079F5A,07AA72,,,False
 Longsword,1D10F6,7,Venomous Longsword of Bloodletting,sword1h_merchant_rare01b,22,Infrequent,,None,None,1C3D85,07AA22,,,False
 Longsword,1D10F5,7,Charged Longsword of Puncturing,sword1h_merchant_rare01a,22,Infrequent,,None,None,07A01E,07A8C5,,,False
-Longsword,1D115C,36,Longsword of Bloodletting,sword1h_merchant_infrequent04c,28,Rare,,None,None,0,1C3D90,1C3D9,,False
+Longsword,1D115C,36,Longsword of Bloodletting,sword1h_merchant_infrequent04c,28,Rare,,None,None,0,1C3D90,,,False
 Longsword,1D115B,36,Blazing Longsword,sword1h_merchant_infrequent04b,28,Infrequent,,None,None,1C3D7E,0,,,False
 Longsword,1D115A,33,Prismere Longsword,sword1h_merchant_infrequent04a,28,Infrequent,WUU,None,None,0,0,,,False
 Longsword,1D1150,27,Jolting Longsword of Gloom,sword1h_merchant_infrequent03c,26,Rare,,None,None,140D4F,142297,,,False
