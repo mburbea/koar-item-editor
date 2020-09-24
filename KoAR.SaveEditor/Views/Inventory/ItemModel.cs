@@ -93,9 +93,15 @@ namespace KoAR.SaveEditor.Views.Inventory
             get => base.Prefix;
             set
             {
-                if (this.SetItemValue(value, $"{nameof(IItem.ItemBuffs)}.{nameof(this.Prefix)}"))
+                if (!this.SetItemValue(value, $"{nameof(IItem.ItemBuffs)}.{nameof(this.Prefix)}"))
                 {
-                    this.OnPropertyChanged(nameof(this.AffixCount));
+                    return;
+                }
+                this.OnPropertyChanged(nameof(this.AffixCount));
+                if (this.Item.Definition.AffixableName)
+                {
+                    this.OnPropertyChanged(nameof(DisplayName));
+                    this.OnPropertyChanged(nameof(DefinitionDisplayName));
                 }
             }
         }
@@ -105,9 +111,15 @@ namespace KoAR.SaveEditor.Views.Inventory
             get => base.Suffix;
             set
             {
-                if (this.SetItemValue(value, $"{nameof(IItem.ItemBuffs)}.{nameof(this.Suffix)}"))
+                if (!this.SetItemValue(value, $"{nameof(IItem.ItemBuffs)}.{nameof(this.Suffix)}"))
                 {
-                    this.OnPropertyChanged(nameof(this.AffixCount));
+                    return;
+                }
+                this.OnPropertyChanged(nameof(this.AffixCount));
+                if (this.Item.Definition.AffixableName)
+                {
+                    this.OnPropertyChanged(nameof(DisplayName));
+                    this.OnPropertyChanged(nameof(DefinitionDisplayName));
                 }
             }
         }
