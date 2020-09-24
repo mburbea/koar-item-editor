@@ -96,6 +96,11 @@ namespace KoAR.SaveEditor.Views.Inventory
                 if (this.SetItemValue(value, $"{nameof(IItem.ItemBuffs)}.{nameof(this.Prefix)}"))
                 {
                     this.OnPropertyChanged(nameof(this.AffixCount));
+                    if (this.Item.Definition.AffixableName)
+                    {
+                        this.OnPropertyChanged(nameof(DisplayName));
+                        this.OnPropertyChanged(nameof(DefinitionDisplayName));
+                    }
                 }
             }
         }
@@ -108,6 +113,11 @@ namespace KoAR.SaveEditor.Views.Inventory
                 if (this.SetItemValue(value, $"{nameof(IItem.ItemBuffs)}.{nameof(this.Suffix)}"))
                 {
                     this.OnPropertyChanged(nameof(this.AffixCount));
+                    if (this.Item.Definition.AffixableName)
+                    {
+                        this.OnPropertyChanged(nameof(DisplayName));
+                        this.OnPropertyChanged(nameof(DefinitionDisplayName));
+                    }
                 }
             }
         }

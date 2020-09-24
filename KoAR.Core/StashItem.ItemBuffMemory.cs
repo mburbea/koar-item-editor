@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace KoAR.Core
 {
@@ -16,10 +18,12 @@ namespace KoAR.Core
             {
                 (_stashItem, _endOfSection) = (stashItem, endOfSection);
                 int count = Count;
-                var firstBuff = Offsets.FirstItemBuff;
-                for (int i = 0; i < count; i++)
+                var selfBuffCount = MemoryUtilities.Read<int>(Bytes, Offsets.FirstItemBuff + 4 + (count * 16));
+                var selfBuffs = MemoryMarshal.Cast<byte, uint>(Bytes.AsSpan(Offsets.FirstItemBuff + 8 + (count * 16), selfBuffCount * 8));
+                // since we don't support mutation we just need to read in what item buffs are applied.
+                for (int i = 0; i < selfBuffs.Length; i += 2)
                 {
-                    var buffId = MemoryUtilities.Read<uint>(Bytes, firstBuff + (i * 16) + 4);
+                    var buffId = selfBuffs[0];
                     List.Add(Amalur.GetBuff(buffId));
                 }
             }

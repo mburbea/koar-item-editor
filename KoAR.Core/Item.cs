@@ -19,7 +19,7 @@ namespace KoAR.Core
             _levelShiftOffset = (byte)(8 * gameSave.Body[TypeIdOffset + 10]);
             ItemBytes = _gameSave.Body.AsSpan(offset, dataLength).ToArray();
             ItemSockets = new ItemSockets(gameSave, itemGemsOffset, itemGemsLength);
-            ItemBuffs = new ItemBuffMemory(gameSave, itemBuffsOffset, itemBuffsLength);
+            ItemBuffs = new ItemBuffMemory(gameSave, this, itemBuffsOffset, itemBuffsLength);
             PlayerBuffs = new List<Buff>(BuffCount);
             for (int i = 0; i < PlayerBuffs.Capacity; i++)
             {
@@ -211,6 +211,7 @@ namespace KoAR.Core
             {
                 ItemBuffs.List.Add(buff);
             }
+            ItemBuffs.UnsupportedFormat = false; // If there was crap here it's gone now.
             ItemBuffs.Prefix = definition.ItemBuffs.Prefix;
             ItemBuffs.Suffix = definition.ItemBuffs.Suffix;
             PlayerBuffs.Clear();
