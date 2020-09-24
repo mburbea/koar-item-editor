@@ -325,42 +325,42 @@ Daggers,201DE7,12,Primal Daggers,daggers_dlc2_primal04,25,Infrequent,,Primal,Non
 Daggers,201DE6,9,Primal Daggers,daggers_dlc2_primal03,25,Infrequent,,Primal,None,0,0,20700A,,True
 Daggers,201DE5,6,Primal Daggers,daggers_dlc2_primal02,25,Infrequent,,Primal,None,0,0,20700A,,True
 Daggers,201DE4,3,Primal Daggers,daggers_dlc2_primal01,25,Infrequent,,Primal,None,0,0,20700A,,True
-Daggers,NULL,44,Dvergan Swords,daggers_dlc1_unique02_r,25,Unique,,None,None,0,0,1E689B,1E68AF,True
-Daggers,NULL,42,Dvergan Swords,daggers_dlc1_unique02_q,25,Unique,,None,None,0,0,1E689A,1E68AE,True
-Daggers,NULL,40,Dvergan Swords,daggers_dlc1_unique02_p,25,Unique,,None,None,0,0,NULL,1E68AD,True
-Daggers,NULL,38,Dvergan Swords,daggers_dlc1_unique02_o,25,Unique,,None,None,0,0,NULL,1E68AC,True
-Daggers,NULL,36,Dvergan Swords,daggers_dlc1_unique02_n,25,Unique,,None,None,0,0,NULL,1E68AB,True
-Daggers,NULL,34,Dvergan Swords,daggers_dlc1_unique02_m,25,Unique,,None,None,0,0,NULL,1E68AA,True
-Daggers,NULL,32,Dvergan Swords,daggers_dlc1_unique02_l,25,Unique,,None,None,0,0,NULL,1E68A9,True
-Daggers,NULL,30,Dvergan Swords,daggers_dlc1_unique02_k,25,Unique,,None,None,0,0,NULL,1E68A8,True
-Daggers,1E682F,28,Dvergan Swords,daggers_dlc1_unique02_j,25,Unique,,None,None,0,0,NULL,1E68A7,True
-Daggers,1E682E,26,Dvergan Swords,daggers_dlc1_unique02_i,25,Unique,,None,None,0,0,NULL,1E68A6,True
-Daggers,1E682D,24,Dvergan Swords,daggers_dlc1_unique02_h,25,Unique,,None,None,0,0,NULL,1E68A4,True
-Daggers,1E682C,22,Dvergan Swords,daggers_dlc1_unique02_g,25,Unique,,None,None,0,0,NULL,1E68A3,True
+Daggers,1E6837,44,Dvergan Swords,daggers_dlc1_unique02_r,25,Unique,,None,None,0,0,1E689B,1E68AF,True
+Daggers,1E6836,42,Dvergan Swords,daggers_dlc1_unique02_q,25,Unique,,None,None,0,0,1E689A,1E68AE,True
+Daggers,1E6835,40,Dvergan Swords,daggers_dlc1_unique02_p,25,Unique,,None,None,0,0,1E6899,1E68AD,True
+Daggers,1E6834,38,Dvergan Swords,daggers_dlc1_unique02_o,25,Unique,,None,None,0,0,1E6898,1E68AC,True
+Daggers,1E6833,36,Dvergan Swords,daggers_dlc1_unique02_n,25,Unique,,None,None,0,0,1E6897,1E68AB,True
+Daggers,1E6832,34,Dvergan Swords,daggers_dlc1_unique02_m,25,Unique,,None,None,0,0,1E6896,1E68AA,True
+Daggers,1E6831,32,Dvergan Swords,daggers_dlc1_unique02_l,25,Unique,,None,None,0,0,1E6895,1E68A9,True
+Daggers,1E6830,30,Dvergan Swords,daggers_dlc1_unique02_k,25,Unique,,None,None,0,0,1E6894,1E68A8,True
+Daggers,1E682F,28,Dvergan Swords,daggers_dlc1_unique02_j,25,Unique,,None,None,0,0,1E6893,1E68A7,True
+Daggers,1E682E,26,Dvergan Swords,daggers_dlc1_unique02_i,25,Unique,,None,None,0,0,1E6892,1E68A6,True
+Daggers,1E682D,24,Dvergan Swords,daggers_dlc1_unique02_h,25,Unique,,None,None,0,0,1E6891,1E68A4,True
+Daggers,1E682C,22,Dvergan Swords,daggers_dlc1_unique02_g,25,Unique,,None,None,0,0,1E6890,1E68A3,True
 Daggers,1E682B,20,Dvergan Swords,daggers_dlc1_unique02_f,25,Unique,,None,None,0,0,1E688F,1E68A1,True
 Daggers,1E682A,18,Dvergan Swords,daggers_dlc1_unique02_e,25,Unique,,None,None,0,0,1E688E,1E68A0,True
-Daggers,NULL,16,Dvergan Swords,daggers_dlc1_unique02_d,25,Unique,,None,None,0,0,1E688D,1E689F,True
-Daggers,NULL,14,Dvergan Swords,daggers_dlc1_unique02_c,25,Unique,,None,None,0,0,1E688C,1E689E,True
-Daggers,NULL,12,Dvergan Swords,daggers_dlc1_unique02_b,25,Unique,,None,None,0,0,1E688B,1E689D,True
-Daggers,NULL,10,Dvergan Swords,daggers_dlc1_unique02_a,25,Unique,,None,None,0,0,1E688A,1E689C,True
-Daggers,NULL,44,Boning Knives,daggers_dlc1_unique01_r,25,Unique,,None,None,0,0,1E68201E681F1E7310,,True
-Daggers,NULL,42,Boning Knives,daggers_dlc1_unique01_q,25,Unique,,None,None,0,0,1E68201E681F1E730F,,True
-Daggers,NULL,40,Boning Knives,daggers_dlc1_unique01_p,25,Unique,,None,None,0,0,1E68201E681F1E730E,,True
-Daggers,NULL,38,Boning Knives,daggers_dlc1_unique01_o,25,Unique,,None,None,0,0,1E68201E681F1E730D,,True
-Daggers,NULL,36,Boning Knives,daggers_dlc1_unique01_n,25,Unique,,None,None,0,0,1E68201E681F1E730C,,True
-Daggers,NULL,34,Boning Knives,daggers_dlc1_unique01_m,25,Unique,,None,None,0,0,1E68201E681F1E730A,,True
-Daggers,NULL,32,Boning Knives,daggers_dlc1_unique01_l,25,Unique,,None,None,0,0,1E68201E681F1E7308,,True
-Daggers,NULL,30,Boning Knives,daggers_dlc1_unique01_k,25,Unique,,None,None,0,0,1E68201E681F1E7307,,True
-Daggers,NULL,28,Boning Knives,daggers_dlc1_unique01_j,25,Unique,,None,None,0,0,1E68201E681F1E7305,,True
-Daggers,NULL,26,Boning Knives,daggers_dlc1_unique01_i,25,Unique,,None,None,0,0,1E68201E681F1E7304,,True
+Daggers,1E6829,16,Dvergan Swords,daggers_dlc1_unique02_d,25,Unique,,None,None,0,0,1E688D,1E689F,True
+Daggers,1E6828,14,Dvergan Swords,daggers_dlc1_unique02_c,25,Unique,,None,None,0,0,1E688C,1E689E,True
+Daggers,1E6827,12,Dvergan Swords,daggers_dlc1_unique02_b,25,Unique,,None,None,0,0,1E688B,1E689D,True
+Daggers,1E6826,10,Dvergan Swords,daggers_dlc1_unique02_a,25,Unique,,None,None,0,0,1E688A,1E689C,True
+Daggers,1E6819,44,Boning Knives,daggers_dlc1_unique01_r,25,Unique,,None,None,0,0,1E68201E681F1E7310,,True
+Daggers,1E6818,42,Boning Knives,daggers_dlc1_unique01_q,25,Unique,,None,None,0,0,1E68201E681F1E730F,,True
+Daggers,1E6817,40,Boning Knives,daggers_dlc1_unique01_p,25,Unique,,None,None,0,0,1E68201E681F1E730E,,True
+Daggers,1E6816,38,Boning Knives,daggers_dlc1_unique01_o,25,Unique,,None,None,0,0,1E68201E681F1E730D,,True
+Daggers,1E6815,36,Boning Knives,daggers_dlc1_unique01_n,25,Unique,,None,None,0,0,1E68201E681F1E730C,,True
+Daggers,1E6814,34,Boning Knives,daggers_dlc1_unique01_m,25,Unique,,None,None,0,0,1E68201E681F1E730A,,True
+Daggers,1E6813,32,Boning Knives,daggers_dlc1_unique01_l,25,Unique,,None,None,0,0,1E68201E681F1E7308,,True
+Daggers,1E6812,30,Boning Knives,daggers_dlc1_unique01_k,25,Unique,,None,None,0,0,1E68201E681F1E7307,,True
+Daggers,1E6811,28,Boning Knives,daggers_dlc1_unique01_j,25,Unique,,None,None,0,0,1E68201E681F1E7305,,True
+Daggers,1E6810,26,Boning Knives,daggers_dlc1_unique01_i,25,Unique,,None,None,0,0,1E68201E681F1E7304,,True
 Daggers,1E680F,24,Boning Knives,daggers_dlc1_unique01_h,25,Unique,,None,None,0,0,1E68201E681F1E7303,,True
 Daggers,1E680E,22,Boning Knives,daggers_dlc1_unique01_g,25,Unique,,None,None,0,0,1E68201E681F1E7301,,True
 Daggers,1E680D,20,Boning Knives,daggers_dlc1_unique01_f,25,Unique,,None,None,0,0,1E68201E681F1E7300,,True
 Daggers,1E680C,18,Boning Knives,daggers_dlc1_unique01_e,25,Unique,,None,None,0,0,1E68201E681F1E72FE,,True
 Daggers,1E680B,16,Boning Knives,daggers_dlc1_unique01_d,25,Unique,,None,None,0,0,1E68201E681F1E72FD,,True
 Daggers,1E680A,14,Boning Knives,daggers_dlc1_unique01_c,25,Unique,,None,None,0,0,1E68201E681F1E72FB,,True
-Daggers,NULL,12,Boning Knives,daggers_dlc1_unique01_b,25,Unique,,None,None,0,0,1E68201E681F1E72FA,,True
-Daggers,NULL,10,Boning Knives,daggers_dlc1_unique01_a,25,Unique,,None,None,0,0,1E68201E681F1E6821,,True
+Daggers,1E6809,12,Boning Knives,daggers_dlc1_unique01_b,25,Unique,,None,None,0,0,1E68201E681F1E72FA,,True
+Daggers,1E6808,10,Boning Knives,daggers_dlc1_unique01_a,25,Unique,,None,None,0,0,1E68201E681F1E6821,,True
 Daggers,18BCCF,5,Draug's Toothpicks,QuestItem_TRSQ01_DraugsToothpicks,22,Common,,None,None,0,0,,,True
 Daggers,084A20,1,Ratofer's Daggers,QuestItem_SQ24_RatoferDagger,20,Infrequent,WU,None,None,0,0,,,True
 Daggers,16ABDF,1,Engraved Varani Daggers,QuestItem_SQ126_Daggers,20,Common,,None,None,0,0,,,True
@@ -526,16 +526,16 @@ Faeblades,1F7C0C,6,Zelus & Bia,mirrorblades_DLC2_unique01_b,25,Unique,,None,None
 Faeblades,1EE199,3,Zelus & Bia,mirrorblades_DLC2_unique01_a,25,Unique,,None,None,0,0,1F7C44,1F7C45,True
 Faeblades,201E1B,42,Primal Faeblades,mirrorblades_dlc2_primal14,25,Infrequent,,Primal,None,0,0,20700A,,True
 Faeblades,201E1A,39,Primal Faeblades,mirrorblades_dlc2_primal13,25,Infrequent,,Primal,None,0,0,20700A,,True
-Faeblades,2.01e+21,36,Primal Faeblades,mirrorblades_dlc2_primal12,25,Infrequent,,Primal,None,0,0,20700A,,True
-Faeblades,201000000000000000000,33,Primal Faeblades,mirrorblades_dlc2_primal11,25,Infrequent,,Primal,None,0,0,20700A,,True
-Faeblades,20100000000000000000,30,Primal Faeblades,mirrorblades_dlc2_primal10,25,Infrequent,,Primal,None,0,0,20700A,,True
-Faeblades,2010000000000000000,27,Primal Faeblades,mirrorblades_dlc2_primal09,25,Infrequent,,Primal,None,0,0,20700A,,True
-Faeblades,201000000000000000,24,Primal Faeblades,mirrorblades_dlc2_primal08,25,Infrequent,,Primal,None,0,0,20700A,,True
-Faeblades,20100000000000000,21,Primal Faeblades,mirrorblades_dlc2_primal07,25,Infrequent,,Primal,None,0,0,20700A,,True
-Faeblades,2010000000000000,18,Primal Faeblades,mirrorblades_dlc2_primal06,25,Infrequent,,Primal,None,0,0,20700A,,True
-Faeblades,201000000000000,15,Primal Faeblades,mirrorblades_dlc2_primal05,25,Infrequent,,Primal,None,0,0,20700A,,True
-Faeblades,20100000000000,12,Primal Faeblades,mirrorblades_dlc2_primal04,25,Infrequent,,Primal,None,0,0,20700A,,True
-Faeblades,2010000000000,9,Primal Faeblades,mirrorblades_dlc2_primal03,25,Infrequent,,Primal,None,0,0,20700A,,True
+Faeblades,201E19,36,Primal Faeblades,mirrorblades_dlc2_primal12,25,Infrequent,,Primal,None,0,0,20700A,,True
+Faeblades,201E18,33,Primal Faeblades,mirrorblades_dlc2_primal11,25,Infrequent,,Primal,None,0,0,20700A,,True
+Faeblades,201E17,30,Primal Faeblades,mirrorblades_dlc2_primal10,25,Infrequent,,Primal,None,0,0,20700A,,True
+Faeblades,201E16,27,Primal Faeblades,mirrorblades_dlc2_primal09,25,Infrequent,,Primal,None,0,0,20700A,,True
+Faeblades,201E15,24,Primal Faeblades,mirrorblades_dlc2_primal08,25,Infrequent,,Primal,None,0,0,20700A,,True
+Faeblades,201E14,21,Primal Faeblades,mirrorblades_dlc2_primal07,25,Infrequent,,Primal,None,0,0,20700A,,True
+Faeblades,201E13,18,Primal Faeblades,mirrorblades_dlc2_primal06,25,Infrequent,,Primal,None,0,0,20700A,,True
+Faeblades,201E12,15,Primal Faeblades,mirrorblades_dlc2_primal05,25,Infrequent,,Primal,None,0,0,20700A,,True
+Faeblades,201E11,12,Primal Faeblades,mirrorblades_dlc2_primal04,25,Infrequent,,Primal,None,0,0,20700A,,True
+Faeblades,201E10,9,Primal Faeblades,mirrorblades_dlc2_primal03,25,Infrequent,,Primal,None,0,0,20700A,,True
 Faeblades,201E0F,6,Primal Faeblades,mirrorblades_dlc2_primal02,25,Infrequent,,Primal,None,0,0,20700A,,True
 Faeblades,201E0E,3,Primal Faeblades,mirrorblades_dlc2_primal01,25,Infrequent,,Primal,None,0,0,20700A,,True
 Faeblades,1F7DB7,5,DLC2 DEV Faeblades Primal,DEV_DLC2_mirrorblades_primal01,25,Common,,Primal,None,0,0,,,False
@@ -548,33 +548,33 @@ Faeblades,1E679D,34,Beak and Talon,mirrorblades_dlc1_unique02_m,25,Unique,,None,
 Faeblades,1E679C,32,Beak and Talon,mirrorblades_dlc1_unique02_l,25,Unique,,None,None,0,0,1E67E21E67CB1E67D9,,True
 Faeblades,1E679B,30,Beak and Talon,mirrorblades_dlc1_unique02_k,25,Unique,,None,None,0,0,1E67E21E67CB1E67D8,,True
 Faeblades,1E679A,28,Beak and Talon,mirrorblades_dlc1_unique02_j,25,Unique,,None,None,0,0,1E67E21E67CB1E67D6,,True
-Faeblades,NULL,26,Beak and Talon,mirrorblades_dlc1_unique02_i,25,Unique,,None,None,0,0,1E67E21E67CB1E67D5,,True
-Faeblades,NULL,24,Beak and Talon,mirrorblades_dlc1_unique02_h,25,Unique,,None,None,0,0,1E67E21E67CB1E67D4,,True
-Faeblades,NULL,22,Beak and Talon,mirrorblades_dlc1_unique02_g,25,Unique,,None,None,0,0,1E67E21E67CB1E67D3,,True
-Faeblades,NULL,20,Beak and Talon,mirrorblades_dlc1_unique02_f,25,Unique,,None,None,0,0,1E67E21E67CB1E67D2,,True
-Faeblades,NULL,18,Beak and Talon,mirrorblades_dlc1_unique02_e,25,Unique,,None,None,0,0,1E67E21E67CB1E67D1,,True
-Faeblades,NULL,16,Beak and Talon,mirrorblades_dlc1_unique02_d,25,Unique,,None,None,0,0,1E67E21E67CB1E67CF,,True
-Faeblades,NULL,14,Beak and Talon,mirrorblades_dlc1_unique02_c,25,Unique,,None,None,0,0,1E67E21E67CB1E67CE,,True
-Faeblades,NULL,12,Beak and Talon,mirrorblades_dlc1_unique02_b,25,Unique,,None,None,0,0,1E67E21E67CB1E67CD,,True
-Faeblades,NULL,10,Beak and Talon,mirrorblades_dlc1_unique02_a,25,Unique,,None,None,0,0,1E67E21E67CC1E67CB,,True
-Faeblades,NULL,44,Obsidian Blades,mirrorblades_dlc1_unique01_r,25,Unique,,None,None,0,0,NULL,,True
-Faeblades,NULL,42,Obsidian Blades,mirrorblades_dlc1_unique01_q,25,Unique,,None,None,0,0,NULL,,True
-Faeblades,NULL,40,Obsidian Blades,mirrorblades_dlc1_unique01_p,25,Unique,,None,None,0,0,NULL,,True
-Faeblades,NULL,38,Obsidian Blades,mirrorblades_dlc1_unique01_o,25,Unique,,None,None,0,0,NULL,,True
-Faeblades,NULL,36,Obsidian Blades,mirrorblades_dlc1_unique01_n,25,Unique,,None,None,0,0,NULL,,True
-Faeblades,1E676F,34,Obsidian Blades,mirrorblades_dlc1_unique01_m,25,Unique,,None,None,0,0,NULL,,True
-Faeblades,1E676E,32,Obsidian Blades,mirrorblades_dlc1_unique01_l,25,Unique,,None,None,0,0,NULL,,True
+Faeblades,1E6799,26,Beak and Talon,mirrorblades_dlc1_unique02_i,25,Unique,,None,None,0,0,1E67E21E67CB1E67D5,,True
+Faeblades,1E6798,24,Beak and Talon,mirrorblades_dlc1_unique02_h,25,Unique,,None,None,0,0,1E67E21E67CB1E67D4,,True
+Faeblades,1E6797,22,Beak and Talon,mirrorblades_dlc1_unique02_g,25,Unique,,None,None,0,0,1E67E21E67CB1E67D3,,True
+Faeblades,1E6796,20,Beak and Talon,mirrorblades_dlc1_unique02_f,25,Unique,,None,None,0,0,1E67E21E67CB1E67D2,,True
+Faeblades,1E6795,18,Beak and Talon,mirrorblades_dlc1_unique02_e,25,Unique,,None,None,0,0,1E67E21E67CB1E67D1,,True
+Faeblades,1E6794,16,Beak and Talon,mirrorblades_dlc1_unique02_d,25,Unique,,None,None,0,0,1E67E21E67CB1E67CF,,True
+Faeblades,1E6793,14,Beak and Talon,mirrorblades_dlc1_unique02_c,25,Unique,,None,None,0,0,1E67E21E67CB1E67CE,,True
+Faeblades,1E6792,12,Beak and Talon,mirrorblades_dlc1_unique02_b,25,Unique,,None,None,0,0,1E67E21E67CB1E67CD,,True
+Faeblades,1E6791,10,Beak and Talon,mirrorblades_dlc1_unique02_a,25,Unique,,None,None,0,0,1E67E21E67CC1E67CB,,True
+Faeblades,1E6774,44,Obsidian Blades,mirrorblades_dlc1_unique01_r,25,Unique,,None,None,0,0,1E6786,,True
+Faeblades,1E6773,42,Obsidian Blades,mirrorblades_dlc1_unique01_q,25,Unique,,None,None,0,0,1E6785,,True
+Faeblades,1E6772,40,Obsidian Blades,mirrorblades_dlc1_unique01_p,25,Unique,,None,None,0,0,1E6784,,True
+Faeblades,1E6771,38,Obsidian Blades,mirrorblades_dlc1_unique01_o,25,Unique,,None,None,0,0,1E6783,,True
+Faeblades,1E6770,36,Obsidian Blades,mirrorblades_dlc1_unique01_n,25,Unique,,None,None,0,0,1E6782,,True
+Faeblades,1E676F,34,Obsidian Blades,mirrorblades_dlc1_unique01_m,25,Unique,,None,None,0,0,1E6781,,True
+Faeblades,1E676E,32,Obsidian Blades,mirrorblades_dlc1_unique01_l,25,Unique,,None,None,0,0,1E6780,,True
 Faeblades,1E676D,30,Obsidian Blades,mirrorblades_dlc1_unique01_k,25,Unique,,None,None,0,0,1E677F,,True
 Faeblades,1E676C,28,Obsidian Blades,mirrorblades_dlc1_unique01_j,25,Unique,,None,None,0,0,1E677E,,True
 Faeblades,1E676B,26,Obsidian Blades,mirrorblades_dlc1_unique01_i,25,Unique,,None,None,0,0,1E677D,,True
 Faeblades,1E676A,24,Obsidian Blades,mirrorblades_dlc1_unique01_h,25,Unique,,None,None,0,0,1E677C,,True
-Faeblades,NULL,22,Obsidian Blades,mirrorblades_dlc1_unique01_g,25,Unique,,None,None,0,0,1E677B,,True
-Faeblades,NULL,20,Obsidian Blades,mirrorblades_dlc1_unique01_f,25,Unique,,None,None,0,0,1E677A,,True
-Faeblades,NULL,18,Obsidian Blades,mirrorblades_dlc1_unique01_e,25,Unique,,None,None,0,0,NULL,,True
-Faeblades,NULL,16,Obsidian Blades,mirrorblades_dlc1_unique01_d,25,Unique,,None,None,0,0,NULL,,True
-Faeblades,NULL,14,Obsidian Blades,mirrorblades_dlc1_unique01_c,25,Unique,,None,None,0,0,NULL,,True
-Faeblades,NULL,12,Obsidian Blades,mirrorblades_dlc1_unique01_b,25,Unique,,None,None,0,0,NULL,,True
-Faeblades,NULL,10,Obsidian Blades,mirrorblades_dlc1_unique01_a,25,Unique,,None,None,0,0,NULL,,True
+Faeblades,1E6769,22,Obsidian Blades,mirrorblades_dlc1_unique01_g,25,Unique,,None,None,0,0,1E677B,,True
+Faeblades,1E6768,20,Obsidian Blades,mirrorblades_dlc1_unique01_f,25,Unique,,None,None,0,0,1E677A,,True
+Faeblades,1E6767,18,Obsidian Blades,mirrorblades_dlc1_unique01_e,25,Unique,,None,None,0,0,1E6779,,True
+Faeblades,1E6766,16,Obsidian Blades,mirrorblades_dlc1_unique01_d,25,Unique,,None,None,0,0,1E6778,,True
+Faeblades,1E6765,14,Obsidian Blades,mirrorblades_dlc1_unique01_c,25,Unique,,None,None,0,0,1E6777,,True
+Faeblades,1E6764,12,Obsidian Blades,mirrorblades_dlc1_unique01_b,25,Unique,,None,None,0,0,1E6776,,True
+Faeblades,1E6763,10,Obsidian Blades,mirrorblades_dlc1_unique01_a,25,Unique,,None,None,0,0,1E6775,,True
 Faeblades,072410,15,Azurite Blades of Song,Wpn_Sword_HM03_HouseofBallads,24,Infrequent,W,None,None,0,0,,,True
 Faeblades,0AD642,5,Crude Steel Blades of Yolvan,QuestItem_SQ17_Faeblades,22,Common,,None,None,0,0,,,False
 Faeblades,16C641,4,Crude Iron Ysa Honor Brand,QuestItem_FFQ60_HonorBrand,20,Common,,None,None,0,0,,,True
@@ -955,23 +955,23 @@ Feet,1E3DB9,16,Ocean's Gift,rogue_dlc1_unique01_feet_d,25,Unique,,None,Finesse,0
 Feet,1E3DB8,14,Ocean's Gift,rogue_dlc1_unique01_feet_c,25,Unique,,None,Finesse,0,0,,081EDE1E3DCC1E3DCB1E3DD0,True
 Feet,1E3DB7,12,Ocean's Gift,rogue_dlc1_unique01_feet_b,25,Unique,,None,Finesse,0,0,,081EDE1E3DCC1E3DCB1E3DCF,True
 Feet,1E3DB6,10,Ocean's Gift,rogue_dlc1_unique01_feet_a,25,Unique,,None,Finesse,0,0,,081EDE1E3DCE1E3DCC1E3DCB,True
-Feet,NULL,44,Survivor's Boots,rogue_dlc1_set02_feet_r,25,Set,,None,Finesse,0,0,,081EDE1E8A2A,True
+Feet,1E5462,44,Survivor's Boots,rogue_dlc1_set02_feet_r,25,Set,,None,Finesse,0,0,,081EDE1E8A2A,True
 Feet,1E545F,42,Survivor's Boots,rogue_dlc1_set02_feet_q,25,Set,,None,Finesse,0,0,,081EDE1E8A29,True
 Feet,1E545C,40,Survivor's Boots,rogue_dlc1_set02_feet_p,25,Set,,None,Finesse,0,0,,081EDE1E8A28,True
 Feet,1E545A,38,Survivor's Boots,rogue_dlc1_set02_feet_o,25,Set,,None,Finesse,0,0,,081EDE1E8A27,True
-Feet,NULL,36,Survivor's Boots,rogue_dlc1_set02_feet_n,25,Set,,None,Finesse,0,0,,081EDE1E8A25,True
-Feet,NULL,34,Survivor's Boots,rogue_dlc1_set02_feet_m,25,Set,,None,Finesse,0,0,,081EDE1E8A24,True
-Feet,NULL,32,Survivor's Boots,rogue_dlc1_set02_feet_l,25,Set,,None,Finesse,0,0,,081EDE1E8A22,True
-Feet,NULL,30,Survivor's Boots,rogue_dlc1_set02_feet_k,25,Set,,None,Finesse,0,0,,081EDE1E8A21,True
+Feet,1E5457,36,Survivor's Boots,rogue_dlc1_set02_feet_n,25,Set,,None,Finesse,0,0,,081EDE1E8A25,True
+Feet,1E5454,34,Survivor's Boots,rogue_dlc1_set02_feet_m,25,Set,,None,Finesse,0,0,,081EDE1E8A24,True
+Feet,1E5452,32,Survivor's Boots,rogue_dlc1_set02_feet_l,25,Set,,None,Finesse,0,0,,081EDE1E8A22,True
+Feet,1E5450,30,Survivor's Boots,rogue_dlc1_set02_feet_k,25,Set,,None,Finesse,0,0,,081EDE1E8A21,True
 Feet,1E544F,28,Survivor's Boots,rogue_dlc1_set02_feet_j,25,Set,,None,Finesse,0,0,,081EDE1E8A20,True
 Feet,1E544D,26,Survivor's Boots,rogue_dlc1_set02_feet_i,25,Set,,None,Finesse,0,0,,081EDE1E8A1F,True
 Feet,1E544C,24,Survivor's Boots,rogue_dlc1_set02_feet_h,25,Set,,None,Finesse,0,0,,081EDE1E8A1E,True
 Feet,1E544A,22,Survivor's Boots,rogue_dlc1_set02_feet_g,25,Set,,None,Finesse,0,0,,081EDE1E8A1D,True
-Feet,NULL,20,Survivor's Boots,rogue_dlc1_set02_feet_f,25,Set,,None,Finesse,0,0,,081EDE1E8A1C,True
-Feet,NULL,18,Survivor's Boots,rogue_dlc1_set02_feet_e,25,Set,,None,Finesse,0,0,,081EDE1E8A1B,True
-Feet,NULL,16,Survivor's Boots,rogue_dlc1_set02_feet_d,25,Set,,None,Finesse,0,0,,081EDE1E8A1A,True
-Feet,NULL,14,Survivor's Boots,rogue_dlc1_set02_feet_c,25,Set,,None,Finesse,0,0,,081EDE1E8A19,True
-Feet,NULL,12,Survivor's Boots,rogue_dlc1_set02_feet_b,25,Set,,None,Finesse,0,0,,081EDE1E8A18,True
+Feet,1E5448,20,Survivor's Boots,rogue_dlc1_set02_feet_f,25,Set,,None,Finesse,0,0,,081EDE1E8A1C,True
+Feet,1E5446,18,Survivor's Boots,rogue_dlc1_set02_feet_e,25,Set,,None,Finesse,0,0,,081EDE1E8A1B,True
+Feet,1E5445,16,Survivor's Boots,rogue_dlc1_set02_feet_d,25,Set,,None,Finesse,0,0,,081EDE1E8A1A,True
+Feet,1E5443,14,Survivor's Boots,rogue_dlc1_set02_feet_c,25,Set,,None,Finesse,0,0,,081EDE1E8A19,True
+Feet,1E5441,12,Survivor's Boots,rogue_dlc1_set02_feet_b,25,Set,,None,Finesse,0,0,,081EDE1E8A18,True
 Feet,1E543E,10,Survivor's Boots,rogue_dlc1_set02_feet_a,25,Set,,None,Finesse,0,0,,081EDE1E53DA,True
 Feet,1E53C9,44,Privateer's Boots,rogue_dlc1_set01_feet_r,25,Set,,None,Finesse,0,0,,081EDE1E889E,True
 Feet,1E53C8,42,Privateer's Boots,rogue_dlc1_set01_feet_q,25,Set,,None,Finesse,0,0,,081EDE1E889D,True
@@ -1027,14 +1027,14 @@ Feet,1E55D8,16,Crypsis Boots,mage_dlc1_set02_feet_d,20,Set,,None,Sorcery,0,0,,05
 Feet,1E55D7,14,Crypsis Boots,mage_dlc1_set02_feet_c,20,Set,,None,Sorcery,0,0,,05E7D81E8BD1,True
 Feet,1E55D6,12,Crypsis Boots,mage_dlc1_set02_feet_b,20,Set,,None,Sorcery,0,0,,05E7D81E8BD0,True
 Feet,1E55D4,10,Crypsis Boots,mage_dlc1_set02_feet_a,20,Set,,None,Sorcery,0,0,,05E7D81E5493,True
-Feet,NULL,44,Children of Erathell Boots,mage_dlc1_set01_feet_r,20,Set,,None,Sorcery,0,0,,05E7D81E8B16,True
-Feet,NULL,42,Children of Erathell Boots,mage_dlc1_set01_feet_q,20,Set,,None,Sorcery,0,0,,05E7D81E8B15,True
-Feet,NULL,40,Children of Erathell Boots,mage_dlc1_set01_feet_p,20,Set,,None,Sorcery,0,0,,05E7D81E8B14,True
-Feet,NULL,38,Children of Erathell Boots,mage_dlc1_set01_feet_o,20,Set,,None,Sorcery,0,0,,05E7D81E8B13,True
-Feet,NULL,36,Children of Erathell Boots,mage_dlc1_set01_feet_n,20,Set,,None,Sorcery,0,0,,05E7D81E8B12,True
-Feet,NULL,34,Children of Erathell Boots,mage_dlc1_set01_feet_m,20,Set,,None,Sorcery,0,0,,05E7D81E8B10,True
-Feet,NULL,32,Children of Erathell Boots,mage_dlc1_set01_feet_l,20,Set,,None,Sorcery,0,0,,05E7D81E8B0F,True
-Feet,NULL,30,Children of Erathell Boots,mage_dlc1_set01_feet_k,20,Set,,None,Sorcery,0,0,,05E7D81E8B0E,True
+Feet,1E5507,44,Children of Erathell Boots,mage_dlc1_set01_feet_r,20,Set,,None,Sorcery,0,0,,05E7D81E8B16,True
+Feet,1E5506,42,Children of Erathell Boots,mage_dlc1_set01_feet_q,20,Set,,None,Sorcery,0,0,,05E7D81E8B15,True
+Feet,1E5505,40,Children of Erathell Boots,mage_dlc1_set01_feet_p,20,Set,,None,Sorcery,0,0,,05E7D81E8B14,True
+Feet,1E5504,38,Children of Erathell Boots,mage_dlc1_set01_feet_o,20,Set,,None,Sorcery,0,0,,05E7D81E8B13,True
+Feet,1E5503,36,Children of Erathell Boots,mage_dlc1_set01_feet_n,20,Set,,None,Sorcery,0,0,,05E7D81E8B12,True
+Feet,1E5502,34,Children of Erathell Boots,mage_dlc1_set01_feet_m,20,Set,,None,Sorcery,0,0,,05E7D81E8B10,True
+Feet,1E5501,32,Children of Erathell Boots,mage_dlc1_set01_feet_l,20,Set,,None,Sorcery,0,0,,05E7D81E8B0F,True
+Feet,1E5500,30,Children of Erathell Boots,mage_dlc1_set01_feet_k,20,Set,,None,Sorcery,0,0,,05E7D81E8B0E,True
 Feet,1E54FF,28,Children of Erathell Boots,mage_dlc1_set01_feet_j,20,Set,,None,Sorcery,0,0,,05E7D81E8B0D,True
 Feet,1E54FE,26,Children of Erathell Boots,mage_dlc1_set01_feet_i,20,Set,,None,Sorcery,0,0,,05E7D81E8B0C,True
 Feet,1E54FD,24,Children of Erathell Boots,mage_dlc1_set01_feet_h,20,Set,,None,Sorcery,0,0,,05E7D81E8B0B,True
@@ -1426,20 +1426,20 @@ Greatsword,1F6E33,12,The Titan Spear,sword2h_DLC2_unique01_d,25,Unique,,None,Non
 Greatsword,1F6E32,9,The Titan Spear,sword2h_DLC2_unique01_c,25,Unique,,None,None,0,0,1F6E45,1F6E42,True
 Greatsword,1F6E31,6,The Titan Spear,sword2h_DLC2_unique01_b,25,Unique,,None,None,0,0,1F6E44,1F6E42,True
 Greatsword,1EE191,3,The Titan Spear,sword2h_DLC2_unique01_a,25,Unique,,None,None,0,0,1F6E43,1F6E42,True
-Greatsword,2.01e+57,42,Primal Greatsword,sword2h_dlc2_primal14,25,Infrequent,,Primal,None,0,0,20700A,,True
-Greatsword,2.01e+56,39,Primal Greatsword,sword2h_dlc2_primal13,25,Infrequent,,Primal,None,0,0,20700A,,True
-Greatsword,2.01e+55,36,Primal Greatsword,sword2h_dlc2_primal12,25,Infrequent,,Primal,None,0,0,20700A,,True
-Greatsword,2.01e+54,33,Primal Greatsword,sword2h_dlc2_primal11,25,Infrequent,,Primal,None,0,0,20700A,,True
-Greatsword,2.01e+53,30,Primal Greatsword,sword2h_dlc2_primal10,25,Infrequent,,Primal,None,0,0,20700A,,True
-Greatsword,2.01e+52,27,Primal Greatsword,sword2h_dlc2_primal09,25,Infrequent,,Primal,None,0,0,20700A,,True
+Greatsword,201E55,42,Primal Greatsword,sword2h_dlc2_primal14,25,Infrequent,,Primal,None,0,0,20700A,,True
+Greatsword,201E54,39,Primal Greatsword,sword2h_dlc2_primal13,25,Infrequent,,Primal,None,0,0,20700A,,True
+Greatsword,201E53,36,Primal Greatsword,sword2h_dlc2_primal12,25,Infrequent,,Primal,None,0,0,20700A,,True
+Greatsword,201E52,33,Primal Greatsword,sword2h_dlc2_primal11,25,Infrequent,,Primal,None,0,0,20700A,,True
+Greatsword,201E51,30,Primal Greatsword,sword2h_dlc2_primal10,25,Infrequent,,Primal,None,0,0,20700A,,True
+Greatsword,201E50,27,Primal Greatsword,sword2h_dlc2_primal09,25,Infrequent,,Primal,None,0,0,20700A,,True
 Greatsword,201E4F,24,Primal Greatsword,sword2h_dlc2_primal08,25,Infrequent,,Primal,None,0,0,20700A,,True
 Greatsword,201E4E,21,Primal Greatsword,sword2h_dlc2_primal07,25,Infrequent,,Primal,None,0,0,20700A,,True
 Greatsword,201E4D,18,Primal Greatsword,sword2h_dlc2_primal06,25,Infrequent,,Primal,None,0,0,20700A,,True
 Greatsword,201E4C,15,Primal Greatsword,sword2h_dlc2_primal05,25,Infrequent,,Primal,None,0,0,20700A,,True
 Greatsword,201E4B,12,Primal Greatsword,sword2h_dlc2_primal04,25,Infrequent,,Primal,None,0,0,20700A,,True
 Greatsword,201E4A,9,Primal Greatsword,sword2h_dlc2_primal03,25,Infrequent,,Primal,None,0,0,20700A,,True
-Greatsword,2.01e+51,6,Primal Greatsword,sword2h_dlc2_primal02,25,Infrequent,,Primal,None,0,0,20700A,,True
-Greatsword,2.01e+50,3,Primal Greatsword,sword2h_dlc2_primal01,25,Infrequent,,Primal,None,0,0,20700A,,True
+Greatsword,201E49,6,Primal Greatsword,sword2h_dlc2_primal02,25,Infrequent,,Primal,None,0,0,20700A,,True
+Greatsword,201E48,3,Primal Greatsword,sword2h_dlc2_primal01,25,Infrequent,,Primal,None,0,0,20700A,,True
 Greatsword,1F7DB4,5,DLC2 DEV Greatsword Primal,DEV_DLC2_sword2h_primal01,25,Common,,Primal,None,0,0,,,False
 Greatsword,1E5F13,44,Trencher,sword2h_dlc1_unique02_r,25,Unique,,None,None,0,0,1E5F301E5F2F,,True
 Greatsword,1E5F12,42,Trencher,sword2h_dlc1_unique02_q,25,Unique,,None,None,0,0,1E5F301E5F2E,,True
@@ -1684,16 +1684,16 @@ Hammer,1E60F7,40,The Spine,greathammer_dlc1_unique02_p,25,Unique,,None,None,0,0,
 Hammer,1E60F6,38,The Spine,greathammer_dlc1_unique02_o,25,Unique,,None,None,0,0,1E610C,,True
 Hammer,1E60F5,36,The Spine,greathammer_dlc1_unique02_n,25,Unique,,None,None,0,0,1E610B,,True
 Hammer,1E60F4,34,The Spine,greathammer_dlc1_unique02_m,25,Unique,,None,None,0,0,1E610A,,True
-Hammer,1E60F3,32,The Spine,greathammer_dlc1_unique02_l,25,Unique,,None,None,0,0,NULL,,True
-Hammer,1E60F2,30,The Spine,greathammer_dlc1_unique02_k,25,Unique,,None,None,0,0,NULL,,True
-Hammer,1E60F1,28,The Spine,greathammer_dlc1_unique02_j,25,Unique,,None,None,0,0,NULL,,True
-Hammer,1E60F0,26,The Spine,greathammer_dlc1_unique02_i,25,Unique,,None,None,0,0,NULL,,True
-Hammer,1E60EF,24,The Spine,greathammer_dlc1_unique02_h,25,Unique,,None,None,0,0,NULL,,True
-Hammer,1E60EE,22,The Spine,greathammer_dlc1_unique02_g,25,Unique,,None,None,0,0,NULL,,True
-Hammer,1E60ED,20,The Spine,greathammer_dlc1_unique02_f,25,Unique,,None,None,0,0,NULL,,True
-Hammer,1E60EC,18,The Spine,greathammer_dlc1_unique02_e,25,Unique,,None,None,0,0,NULL,,True
-Hammer,1E60EB,16,The Spine,greathammer_dlc1_unique02_d,25,Unique,,None,None,0,0,NULL,,True
-Hammer,1E60EA,14,The Spine,greathammer_dlc1_unique02_c,25,Unique,,None,None,0,0,NULL,,True
+Hammer,1E60F3,32,The Spine,greathammer_dlc1_unique02_l,25,Unique,,None,None,0,0,1E6109,,True
+Hammer,1E60F2,30,The Spine,greathammer_dlc1_unique02_k,25,Unique,,None,None,0,0,1E6108,,True
+Hammer,1E60F1,28,The Spine,greathammer_dlc1_unique02_j,25,Unique,,None,None,0,0,1E6107,,True
+Hammer,1E60F0,26,The Spine,greathammer_dlc1_unique02_i,25,Unique,,None,None,0,0,1E6106,,True
+Hammer,1E60EF,24,The Spine,greathammer_dlc1_unique02_h,25,Unique,,None,None,0,0,1E6105,,True
+Hammer,1E60EE,22,The Spine,greathammer_dlc1_unique02_g,25,Unique,,None,None,0,0,1E6104,,True
+Hammer,1E60ED,20,The Spine,greathammer_dlc1_unique02_f,25,Unique,,None,None,0,0,1E6103,,True
+Hammer,1E60EC,18,The Spine,greathammer_dlc1_unique02_e,25,Unique,,None,None,0,0,1E6102,,True
+Hammer,1E60EB,16,The Spine,greathammer_dlc1_unique02_d,25,Unique,,None,None,0,0,1E6101,,True
+Hammer,1E60EA,14,The Spine,greathammer_dlc1_unique02_c,25,Unique,,None,None,0,0,1E6100,,True
 Hammer,1E60E9,12,The Spine,greathammer_dlc1_unique02_b,25,Unique,,None,None,0,0,1E60FF,,True
 Hammer,1E60E8,10,The Spine,greathammer_dlc1_unique02_a,25,Unique,,None,None,0,0,1E60FD,,True
 Hammer,1E5FC5,44,Shipbuilder's Mate,greathammer_dlc1_unique01_r,25,Unique,,None,None,0,0,1E5FEE,1E60D3,True
@@ -2108,34 +2108,34 @@ Hands,1E3CF4,12,Shredskin Gloves,rogue_dlc1_unique01_hands_b,25,Unique,,None,Fin
 Hands,1E3CF3,10,Shredskin Gloves,rogue_dlc1_unique01_hands_a,25,Unique,,None,Finesse,0,0,,081EDD1E3D0E1E3D0D1E3D0B,True
 Hands,1E541C,44,Survivor's Gloves,rogue_dlc1_set02_hands_r,25,Set,,None,Finesse,0,0,,081EDD1E88D7,True
 Hands,1E541A,42,Survivor's Gloves,rogue_dlc1_set02_hands_q,25,Set,,None,Finesse,0,0,,081EDD1E88D6,True
-Hands,NULL,40,Survivor's Gloves,rogue_dlc1_set02_hands_p,25,Set,,None,Finesse,0,0,,081EDD1E88D5,True
-Hands,NULL,38,Survivor's Gloves,rogue_dlc1_set02_hands_o,25,Set,,None,Finesse,0,0,,081EDD1E88D4,True
-Hands,NULL,36,Survivor's Gloves,rogue_dlc1_set02_hands_n,25,Set,,None,Finesse,0,0,,081EDD1E88D3,True
-Hands,NULL,34,Survivor's Gloves,rogue_dlc1_set02_hands_m,25,Set,,None,Finesse,0,0,,081EDD1E88D2,True
+Hands,1E5418,40,Survivor's Gloves,rogue_dlc1_set02_hands_p,25,Set,,None,Finesse,0,0,,081EDD1E88D5,True
+Hands,1E5416,38,Survivor's Gloves,rogue_dlc1_set02_hands_o,25,Set,,None,Finesse,0,0,,081EDD1E88D4,True
+Hands,1E5413,36,Survivor's Gloves,rogue_dlc1_set02_hands_n,25,Set,,None,Finesse,0,0,,081EDD1E88D3,True
+Hands,1E5411,34,Survivor's Gloves,rogue_dlc1_set02_hands_m,25,Set,,None,Finesse,0,0,,081EDD1E88D2,True
 Hands,1E540F,32,Survivor's Gloves,rogue_dlc1_set02_hands_l,25,Set,,None,Finesse,0,0,,081EDD1E88D1,True
 Hands,1E540C,30,Survivor's Gloves,rogue_dlc1_set02_hands_k,25,Set,,None,Finesse,0,0,,081EDD1E88D0,True
 Hands,1E540B,28,Survivor's Gloves,rogue_dlc1_set02_hands_j,25,Set,,None,Finesse,0,0,,081EDD1E88CF,True
-Hands,NULL,26,Survivor's Gloves,rogue_dlc1_set02_hands_i,25,Set,,None,Finesse,0,0,,081EDD1E88CE,True
-Hands,NULL,24,Survivor's Gloves,rogue_dlc1_set02_hands_h,25,Set,,None,Finesse,0,0,,081EDD1E88CD,True
-Hands,NULL,22,Survivor's Gloves,rogue_dlc1_set02_hands_g,25,Set,,None,Finesse,0,0,,081EDD1E88CC,True
-Hands,NULL,20,Survivor's Gloves,rogue_dlc1_set02_hands_f,25,Set,,None,Finesse,0,0,,081EDD1E88CB,True
-Hands,NULL,18,Survivor's Gloves,rogue_dlc1_set02_hands_e,25,Set,,None,Finesse,0,0,,081EDD1E88CA,True
-Hands,NULL,16,Survivor's Gloves,rogue_dlc1_set02_hands_d,25,Set,,None,Finesse,0,0,,081EDD1E88C9,True
-Hands,NULL,14,Survivor's Gloves,rogue_dlc1_set02_hands_c,25,Set,,None,Finesse,0,0,,081EDD1E88C8,True
-Hands,NULL,12,Survivor's Gloves,rogue_dlc1_set02_hands_b,25,Set,,None,Finesse,0,0,,081EDD1E88C7,True
-Hands,NULL,10,Survivor's Gloves,rogue_dlc1_set02_hands_a,25,Set,,None,Finesse,0,0,,081EDD1E53D8,True
+Hands,1E5408,26,Survivor's Gloves,rogue_dlc1_set02_hands_i,25,Set,,None,Finesse,0,0,,081EDD1E88CE,True
+Hands,1E5407,24,Survivor's Gloves,rogue_dlc1_set02_hands_h,25,Set,,None,Finesse,0,0,,081EDD1E88CD,True
+Hands,1E5406,22,Survivor's Gloves,rogue_dlc1_set02_hands_g,25,Set,,None,Finesse,0,0,,081EDD1E88CC,True
+Hands,1E5405,20,Survivor's Gloves,rogue_dlc1_set02_hands_f,25,Set,,None,Finesse,0,0,,081EDD1E88CB,True
+Hands,1E5404,18,Survivor's Gloves,rogue_dlc1_set02_hands_e,25,Set,,None,Finesse,0,0,,081EDD1E88CA,True
+Hands,1E5403,16,Survivor's Gloves,rogue_dlc1_set02_hands_d,25,Set,,None,Finesse,0,0,,081EDD1E88C9,True
+Hands,1E5402,14,Survivor's Gloves,rogue_dlc1_set02_hands_c,25,Set,,None,Finesse,0,0,,081EDD1E88C8,True
+Hands,1E5401,12,Survivor's Gloves,rogue_dlc1_set02_hands_b,25,Set,,None,Finesse,0,0,,081EDD1E88C7,True
+Hands,1E5400,10,Survivor's Gloves,rogue_dlc1_set02_hands_a,25,Set,,None,Finesse,0,0,,081EDD1E53D8,True
 Hands,1E539F,44,Privateer's Gloves,rogue_dlc1_set01_hands_r,25,Set,,None,Finesse,0,0,,081EDD1E881A,True
 Hands,1E539E,42,Privateer's Gloves,rogue_dlc1_set01_hands_q,25,Set,,None,Finesse,0,0,,081EDD1E8819,True
 Hands,1E539C,40,Privateer's Gloves,rogue_dlc1_set01_hands_p,25,Set,,None,Finesse,0,0,,081EDD1E8818,True
 Hands,1E539B,38,Privateer's Gloves,rogue_dlc1_set01_hands_o,25,Set,,None,Finesse,0,0,,081EDD1E8817,True
-Hands,NULL,36,Privateer's Gloves,rogue_dlc1_set01_hands_n,25,Set,,None,Finesse,0,0,,081EDD1E8816,True
-Hands,NULL,34,Privateer's Gloves,rogue_dlc1_set01_hands_m,25,Set,,None,Finesse,0,0,,081EDD1E8815,True
-Hands,NULL,32,Privateer's Gloves,rogue_dlc1_set01_hands_l,25,Set,,None,Finesse,0,0,,081EDD1E8814,True
-Hands,NULL,30,Privateer's Gloves,rogue_dlc1_set01_hands_k,25,Set,,None,Finesse,0,0,,081EDD1E8813,True
-Hands,NULL,28,Privateer's Gloves,rogue_dlc1_set01_hands_j,25,Set,,None,Finesse,0,0,,081EDD1E8811,True
-Hands,NULL,26,Privateer's Gloves,rogue_dlc1_set01_hands_i,25,Set,,None,Finesse,0,0,,081EDD1E8810,True
-Hands,NULL,24,Privateer's Gloves,rogue_dlc1_set01_hands_h,25,Set,,None,Finesse,0,0,,081EDD1E880F,True
-Hands,NULL,22,Privateer's Gloves,rogue_dlc1_set01_hands_g,25,Set,,None,Finesse,0,0,,081EDD1E880E,True
+Hands,1E5399,36,Privateer's Gloves,rogue_dlc1_set01_hands_n,25,Set,,None,Finesse,0,0,,081EDD1E8816,True
+Hands,1E5398,34,Privateer's Gloves,rogue_dlc1_set01_hands_m,25,Set,,None,Finesse,0,0,,081EDD1E8815,True
+Hands,1E5396,32,Privateer's Gloves,rogue_dlc1_set01_hands_l,25,Set,,None,Finesse,0,0,,081EDD1E8814,True
+Hands,1E5394,30,Privateer's Gloves,rogue_dlc1_set01_hands_k,25,Set,,None,Finesse,0,0,,081EDD1E8813,True
+Hands,1E5393,28,Privateer's Gloves,rogue_dlc1_set01_hands_j,25,Set,,None,Finesse,0,0,,081EDD1E8811,True
+Hands,1E5392,26,Privateer's Gloves,rogue_dlc1_set01_hands_i,25,Set,,None,Finesse,0,0,,081EDD1E8810,True
+Hands,1E5391,24,Privateer's Gloves,rogue_dlc1_set01_hands_h,25,Set,,None,Finesse,0,0,,081EDD1E880F,True
+Hands,1E5390,22,Privateer's Gloves,rogue_dlc1_set01_hands_g,25,Set,,None,Finesse,0,0,,081EDD1E880E,True
 Hands,1E538F,20,Privateer's Gloves,rogue_dlc1_set01_hands_f,25,Set,,None,Finesse,0,0,,081EDD1E880D,True
 Hands,1E538E,18,Privateer's Gloves,rogue_dlc1_set01_hands_e,25,Set,,None,Finesse,0,0,,081EDD1E880C,True
 Hands,1E538D,16,Privateer's Gloves,rogue_dlc1_set01_hands_d,25,Set,,None,Finesse,0,0,,081EDD1E880B,True
@@ -2972,7 +2972,7 @@ Hat,08BDE6,3,Fine Iron Helm,warrior_common01c_head,20,Common,,None,Might,0,0,,1D
 Hat,08BDE7,2,Iron Helm,warrior_common01b_head_sockets_01,20,Infrequent,A,None,Might,0,0,,1D1E82,False
 Hat,08BDF3,2,Iron Helm,warrior_common01b_head,20,Common,,None,Might,0,0,,1D1E82,False
 Hat,08BDE8,1,Crude Iron Helm,warrior_common01a_head,20,Common,,None,Might,0,0,,1D1E82,False
-Hat,NULL,0,test_full_head[DEV],test_full_head,30,Common,,None,None,0,0,,,False
+Hat,13E679,0,test_full_head[DEV],test_full_head,30,Common,,None,None,0,0,,,False
 Hat,1B93A5,1,Shoddy Helm,starter_armor_head_warrior,30,Common,,None,Might,0,0,,1D1E82,False
 Hat,154657,1,Tattered Hood,starter_armor_head_rogue,17,Common,,None,Finesse,0,0,,081EDC,False
 Hat,1B93AA,1,Tattered Cowl,starter_armor_head_mage,20,Common,,None,Sorcery,0,0,,05E7D5,False
@@ -3411,21 +3411,21 @@ Legs,1E3D19,14,Leggings of the High Seas,rogue_dlc1_unique01_legs_c,25,Unique,,N
 Legs,1E3D18,12,Leggings of the High Seas,rogue_dlc1_unique01_legs_b,25,Unique,,None,Finesse,0,0,,081EDB1E3D3E1E3D2A1E3D2C,True
 Legs,1E3D17,10,Leggings of the High Seas,rogue_dlc1_unique01_legs_a,25,Unique,,None,Finesse,0,0,,081EDB1E3D3E1E3D2B1E3D2A,True
 Legs,1E543B,44,Survivor's Leggings,rogue_dlc1_set02_legs_r,25,Set,,None,Finesse,0,0,,081EDB1E8A00,True
-Legs,NULL,42,Survivor's Leggings,rogue_dlc1_set02_legs_q,25,Set,,None,Finesse,0,0,,081EDB1E89FF,True
-Legs,NULL,40,Survivor's Leggings,rogue_dlc1_set02_legs_p,25,Set,,None,Finesse,0,0,,081EDB1E89FE,True
-Legs,NULL,38,Survivor's Leggings,rogue_dlc1_set02_legs_o,25,Set,,None,Finesse,0,0,,081EDB1E89FD,True
-Legs,NULL,36,Survivor's Leggings,rogue_dlc1_set02_legs_n,25,Set,,None,Finesse,0,0,,081EDB1E89FC,True
-Legs,NULL,34,Survivor's Leggings,rogue_dlc1_set02_legs_m,25,Set,,None,Finesse,0,0,,081EDB1E89FB,True
-Legs,NULL,32,Survivor's Leggings,rogue_dlc1_set02_legs_l,25,Set,,None,Finesse,0,0,,081EDB1E89FA,True
+Legs,1E5439,42,Survivor's Leggings,rogue_dlc1_set02_legs_q,25,Set,,None,Finesse,0,0,,081EDB1E89FF,True
+Legs,1E5438,40,Survivor's Leggings,rogue_dlc1_set02_legs_p,25,Set,,None,Finesse,0,0,,081EDB1E89FE,True
+Legs,1E5436,38,Survivor's Leggings,rogue_dlc1_set02_legs_o,25,Set,,None,Finesse,0,0,,081EDB1E89FD,True
+Legs,1E5434,36,Survivor's Leggings,rogue_dlc1_set02_legs_n,25,Set,,None,Finesse,0,0,,081EDB1E89FC,True
+Legs,1E5432,34,Survivor's Leggings,rogue_dlc1_set02_legs_m,25,Set,,None,Finesse,0,0,,081EDB1E89FB,True
+Legs,1E5430,32,Survivor's Leggings,rogue_dlc1_set02_legs_l,25,Set,,None,Finesse,0,0,,081EDB1E89FA,True
 Legs,1E542F,30,Survivor's Leggings,rogue_dlc1_set02_legs_k,25,Set,,None,Finesse,0,0,,081EDB1E89F9,True
 Legs,1E542D,28,Survivor's Leggings,rogue_dlc1_set02_legs_j,25,Set,,None,Finesse,0,0,,081EDB1E89F8,True
 Legs,1E542B,26,Survivor's Leggings,rogue_dlc1_set02_legs_i,25,Set,,None,Finesse,0,0,,081EDB1E89F7,True
-Legs,NULL,24,Survivor's Leggings,rogue_dlc1_set02_legs_h,25,Set,,None,Finesse,0,0,,081EDB1E89F6,True
-Legs,NULL,22,Survivor's Leggings,rogue_dlc1_set02_legs_g,25,Set,,None,Finesse,0,0,,081EDB1E89F5,True
-Legs,NULL,20,Survivor's Leggings,rogue_dlc1_set02_legs_f,25,Set,,None,Finesse,0,0,,081EDB1E89F4,True
-Legs,NULL,18,Survivor's Leggings,rogue_dlc1_set02_legs_e,25,Set,,None,Finesse,0,0,,081EDB1E89F3,True
-Legs,NULL,16,Survivor's Leggings,rogue_dlc1_set02_legs_d,25,Set,,None,Finesse,0,0,,081EDB1E89F2,True
-Legs,NULL,14,Survivor's Leggings,rogue_dlc1_set02_legs_c,25,Set,,None,Finesse,0,0,,081EDB1E89F1,True
+Legs,1E5429,24,Survivor's Leggings,rogue_dlc1_set02_legs_h,25,Set,,None,Finesse,0,0,,081EDB1E89F6,True
+Legs,1E5427,22,Survivor's Leggings,rogue_dlc1_set02_legs_g,25,Set,,None,Finesse,0,0,,081EDB1E89F5,True
+Legs,1E5426,20,Survivor's Leggings,rogue_dlc1_set02_legs_f,25,Set,,None,Finesse,0,0,,081EDB1E89F4,True
+Legs,1E5424,18,Survivor's Leggings,rogue_dlc1_set02_legs_e,25,Set,,None,Finesse,0,0,,081EDB1E89F3,True
+Legs,1E5422,16,Survivor's Leggings,rogue_dlc1_set02_legs_d,25,Set,,None,Finesse,0,0,,081EDB1E89F2,True
+Legs,1E5420,14,Survivor's Leggings,rogue_dlc1_set02_legs_c,25,Set,,None,Finesse,0,0,,081EDB1E89F1,True
 Legs,1E541F,12,Survivor's Leggings,rogue_dlc1_set02_legs_b,25,Set,,None,Finesse,0,0,,081EDB1E89F0,True
 Legs,1E541D,10,Survivor's Leggings,rogue_dlc1_set02_legs_a,25,Set,,None,Finesse,0,0,,081EDB1E53D9,True
 Legs,1E53B7,44,Privateer's Leggings,rogue_dlc1_set01_legs_r,25,Set,,None,Finesse,0,0,,081EDB1E8886,True
@@ -3726,51 +3726,51 @@ Longbow,201E0D,42,Primal Bow,longbow_dlc2_primal14,25,Infrequent,,Primal,None,0,
 Longbow,201E0C,39,Primal Bow,longbow_dlc2_primal13,25,Infrequent,,Primal,None,0,0,20700A,,True
 Longbow,201E0B,36,Primal Bow,longbow_dlc2_primal12,25,Infrequent,,Primal,None,0,0,20700A,,True
 Longbow,201E0A,33,Primal Bow,longbow_dlc2_primal11,25,Infrequent,,Primal,None,0,0,20700A,,True
-Longbow,201000000000,30,Primal Bow,longbow_dlc2_primal10,25,Infrequent,,Primal,None,0,0,20700A,,True
-Longbow,20100000000,27,Primal Bow,longbow_dlc2_primal09,25,Infrequent,,Primal,None,0,0,20700A,,True
-Longbow,2010000000,24,Primal Bow,longbow_dlc2_primal08,25,Infrequent,,Primal,None,0,0,20700A,,True
-Longbow,201000000,21,Primal Bow,longbow_dlc2_primal07,25,Infrequent,,Primal,None,0,0,20700A,,True
-Longbow,20100000,18,Primal Bow,longbow_dlc2_primal06,25,Infrequent,,Primal,None,0,0,20700A,,True
-Longbow,2010000,15,Primal Bow,longbow_dlc2_primal05,25,Infrequent,,Primal,None,0,0,20700A,,True
-Longbow,201000,12,Primal Bow,longbow_dlc2_primal04,25,Infrequent,,Primal,None,0,0,20700A,,True
-Longbow,20100,9,Primal Bow,longbow_dlc2_primal03,25,Infrequent,,Primal,None,0,0,20700A,,True
-Longbow,2010,6,Primal Bow,longbow_dlc2_primal02,25,Infrequent,,Primal,None,0,0,20700A,,True
-Longbow,201,3,Primal Bow,longbow_dlc2_primal01,25,Infrequent,,Primal,None,0,0,20700A,,True
+Longbow,201E09,30,Primal Bow,longbow_dlc2_primal10,25,Infrequent,,Primal,None,0,0,20700A,,True
+Longbow,201E08,27,Primal Bow,longbow_dlc2_primal09,25,Infrequent,,Primal,None,0,0,20700A,,True
+Longbow,201E07,24,Primal Bow,longbow_dlc2_primal08,25,Infrequent,,Primal,None,0,0,20700A,,True
+Longbow,201E06,21,Primal Bow,longbow_dlc2_primal07,25,Infrequent,,Primal,None,0,0,20700A,,True
+Longbow,201E05,18,Primal Bow,longbow_dlc2_primal06,25,Infrequent,,Primal,None,0,0,20700A,,True
+Longbow,201E04,15,Primal Bow,longbow_dlc2_primal05,25,Infrequent,,Primal,None,0,0,20700A,,True
+Longbow,201E03,12,Primal Bow,longbow_dlc2_primal04,25,Infrequent,,Primal,None,0,0,20700A,,True
+Longbow,201E02,9,Primal Bow,longbow_dlc2_primal03,25,Infrequent,,Primal,None,0,0,20700A,,True
+Longbow,201E01,6,Primal Bow,longbow_dlc2_primal02,25,Infrequent,,Primal,None,0,0,20700A,,True
+Longbow,201E00,3,Primal Bow,longbow_dlc2_primal01,25,Infrequent,,Primal,None,0,0,20700A,,True
 Longbow,1F7DB8,5,DLC2 DEV Bow Primal,DEV_DLC2_longbow_primal01,25,Common,,Primal,None,0,0,,,False
 Longbow,1E667A,44,Eye,longbow_dlc1_unique02_r,25,Unique,,None,None,0,0,1E66811E734A,,True
-Longbow,NULL,42,Eye,longbow_dlc1_unique02_q,25,Unique,,None,None,0,0,1E66811E7349,,True
-Longbow,NULL,40,Eye,longbow_dlc1_unique02_p,25,Unique,,None,None,0,0,1E66811E7348,,True
-Longbow,NULL,38,Eye,longbow_dlc1_unique02_o,25,Unique,,None,None,0,0,1E66811E7347,,True
-Longbow,NULL,36,Eye,longbow_dlc1_unique02_n,25,Unique,,None,None,0,0,1E66811E7346,,True
-Longbow,NULL,34,Eye,longbow_dlc1_unique02_m,25,Unique,,None,None,0,0,1E66811E7345,,True
-Longbow,NULL,32,Eye,longbow_dlc1_unique02_l,25,Unique,,None,None,0,0,1E66811E7344,,True
-Longbow,NULL,30,Eye,longbow_dlc1_unique02_k,25,Unique,,None,None,0,0,1E66811E7343,,True
-Longbow,NULL,28,Eye,longbow_dlc1_unique02_j,25,Unique,,None,None,0,0,1E66811E7342,,True
-Longbow,NULL,26,Eye,longbow_dlc1_unique02_i,25,Unique,,None,None,0,0,1E66811E7341,,True
-Longbow,NULL,24,Eye,longbow_dlc1_unique02_h,25,Unique,,None,None,0,0,1E66811E7340,,True
+Longbow,1E6679,42,Eye,longbow_dlc1_unique02_q,25,Unique,,None,None,0,0,1E66811E7349,,True
+Longbow,1E6678,40,Eye,longbow_dlc1_unique02_p,25,Unique,,None,None,0,0,1E66811E7348,,True
+Longbow,1E6677,38,Eye,longbow_dlc1_unique02_o,25,Unique,,None,None,0,0,1E66811E7347,,True
+Longbow,1E6676,36,Eye,longbow_dlc1_unique02_n,25,Unique,,None,None,0,0,1E66811E7346,,True
+Longbow,1E6675,34,Eye,longbow_dlc1_unique02_m,25,Unique,,None,None,0,0,1E66811E7345,,True
+Longbow,1E6674,32,Eye,longbow_dlc1_unique02_l,25,Unique,,None,None,0,0,1E66811E7344,,True
+Longbow,1E6673,30,Eye,longbow_dlc1_unique02_k,25,Unique,,None,None,0,0,1E66811E7343,,True
+Longbow,1E6672,28,Eye,longbow_dlc1_unique02_j,25,Unique,,None,None,0,0,1E66811E7342,,True
+Longbow,1E6671,26,Eye,longbow_dlc1_unique02_i,25,Unique,,None,None,0,0,1E66811E7341,,True
+Longbow,1E6670,24,Eye,longbow_dlc1_unique02_h,25,Unique,,None,None,0,0,1E66811E7340,,True
 Longbow,1E666F,22,Eye,longbow_dlc1_unique02_g,25,Unique,,None,None,0,0,1E66811E733F,,True
 Longbow,1E666E,20,Eye,longbow_dlc1_unique02_f,25,Unique,,None,None,0,0,1E66811E733E,,True
 Longbow,1E666D,18,Eye,longbow_dlc1_unique02_e,25,Unique,,None,None,0,0,1E66811E733D,,True
 Longbow,1E666C,16,Eye,longbow_dlc1_unique02_d,25,Unique,,None,None,0,0,1E66811E733C,,True
 Longbow,1E666A,14,Eye,longbow_dlc1_unique02_c,25,Unique,,None,None,0,0,1E66811E733B,,True
-Longbow,NULL,12,Eye,longbow_dlc1_unique02_b,25,Unique,,None,None,0,0,1E66811E733A,,True
-Longbow,NULL,10,Eye,longbow_dlc1_unique02_a,25,Unique,,None,None,0,0,1E66811E6680,,True
-Longbow,NULL,44,Silver Stag,longbow_dlc1_unique01_r,25,Unique,,None,None,0,0,1E65631E6562,1E659A,True
+Longbow,1E6669,12,Eye,longbow_dlc1_unique02_b,25,Unique,,None,None,0,0,1E66811E733A,,True
+Longbow,1E6668,10,Eye,longbow_dlc1_unique02_a,25,Unique,,None,None,0,0,1E66811E6680,,True
+Longbow,1E6550,44,Silver Stag,longbow_dlc1_unique01_r,25,Unique,,None,None,0,0,1E65631E6562,1E659A,True
 Longbow,1E654F,42,Silver Stag,longbow_dlc1_unique01_q,25,Unique,,None,None,0,0,1E65631E6561,1E659A,True
 Longbow,1E654E,40,Silver Stag,longbow_dlc1_unique01_p,25,Unique,,None,None,0,0,1E65631E6560,1E659A,True
 Longbow,1E654D,38,Silver Stag,longbow_dlc1_unique01_o,25,Unique,,None,None,0,0,1E65631E655F,1E659A,True
 Longbow,1E654C,36,Silver Stag,longbow_dlc1_unique01_n,25,Unique,,None,None,0,0,1E65631E655E,1E659A,True
 Longbow,1E654B,34,Silver Stag,longbow_dlc1_unique01_m,25,Unique,,None,None,0,0,1E65631E655D,1E659A,True
 Longbow,1E654A,32,Silver Stag,longbow_dlc1_unique01_l,25,Unique,,None,None,0,0,1E65631E655C,1E659A,True
-Longbow,NULL,30,Silver Stag,longbow_dlc1_unique01_k,25,Unique,,None,None,0,0,1E65631E655B,1E659A,True
-Longbow,NULL,28,Silver Stag,longbow_dlc1_unique01_j,25,Unique,,None,None,0,0,1E65631E655A,1E659A,True
-Longbow,NULL,26,Silver Stag,longbow_dlc1_unique01_i,25,Unique,,None,None,0,0,1E65631E6559,1E659A,True
-Longbow,NULL,24,Silver Stag,longbow_dlc1_unique01_h,25,Unique,,None,None,0,0,1E65631E6558,1E659A,True
-Longbow,NULL,22,Silver Stag,longbow_dlc1_unique01_g,25,Unique,,None,None,0,0,1E65631E6557,1E659A,True
-Longbow,NULL,20,Silver Stag,longbow_dlc1_unique01_f,25,Unique,,None,None,0,0,1E65631E6556,1E659A,True
-Longbow,NULL,18,Silver Stag,longbow_dlc1_unique01_e,25,Unique,,None,None,0,0,1E65631E6555,1E659A,True
-Longbow,NULL,16,Silver Stag,longbow_dlc1_unique01_d,25,Unique,,None,None,0,0,1E65631E6554,1E659A,True
-Longbow,NULL,14,Silver Stag,longbow_dlc1_unique01_c,25,Unique,,None,None,0,0,1E65631E6553,1E659A,True
+Longbow,1E6549,30,Silver Stag,longbow_dlc1_unique01_k,25,Unique,,None,None,0,0,1E65631E655B,1E659A,True
+Longbow,1E6548,28,Silver Stag,longbow_dlc1_unique01_j,25,Unique,,None,None,0,0,1E65631E655A,1E659A,True
+Longbow,1E6547,26,Silver Stag,longbow_dlc1_unique01_i,25,Unique,,None,None,0,0,1E65631E6559,1E659A,True
+Longbow,1E6546,24,Silver Stag,longbow_dlc1_unique01_h,25,Unique,,None,None,0,0,1E65631E6558,1E659A,True
+Longbow,1E6545,22,Silver Stag,longbow_dlc1_unique01_g,25,Unique,,None,None,0,0,1E65631E6557,1E659A,True
+Longbow,1E6543,20,Silver Stag,longbow_dlc1_unique01_f,25,Unique,,None,None,0,0,1E65631E6556,1E659A,True
+Longbow,1E6542,18,Silver Stag,longbow_dlc1_unique01_e,25,Unique,,None,None,0,0,1E65631E6555,1E659A,True
+Longbow,1E6541,16,Silver Stag,longbow_dlc1_unique01_d,25,Unique,,None,None,0,0,1E65631E6554,1E659A,True
+Longbow,1E6540,14,Silver Stag,longbow_dlc1_unique01_c,25,Unique,,None,None,0,0,1E65631E6553,1E659A,True
 Longbow,1E653F,12,Silver Stag,longbow_dlc1_unique01_b,25,Unique,,None,None,0,0,1E65631E6552,1E659A,True
 Longbow,1E653E,10,Silver Stag,longbow_dlc1_unique01_a,25,Unique,,None,None,0,0,1E65631E6551,1E659A,True
 Longbow,089DB7,24,Ash Guide's Bow,Weapon_HP_Guide_Bow,26,Infrequent,WU,None,None,0,0,,,True
@@ -3930,14 +3930,14 @@ Longsword,1F6D1F,12,Windcarver,sword1h_DLC2_unique01_d,25,Unique,,None,None,0,0,
 Longsword,1F6D1E,9,Windcarver,sword1h_DLC2_unique01_c,25,Unique,,None,None,0,0,1F6D631F6D621F6D66,,True
 Longsword,1F6D1D,6,Windcarver,sword1h_DLC2_unique01_b,25,Unique,,None,None,0,0,1F6D631F6D621F6D65,,True
 Longsword,1EE18F,3,Windcarver,sword1h_DLC2_unique01_a,25,Unique,,None,None,0,0,1F6D641F6D631F6D62,,True
-Longsword,2.01e+49,42,Primal Longsword,sword1h_dlc2_primal14,25,Infrequent,,Primal,None,0,0,20700A,,True
-Longsword,2.01e+48,39,Primal Longsword,sword1h_dlc2_primal13,25,Infrequent,,Primal,None,0,0,20700A,,True
-Longsword,2.01e+47,36,Primal Longsword,sword1h_dlc2_primal12,25,Infrequent,,Primal,None,0,0,20700A,,True
-Longsword,2.01e+46,33,Primal Longsword,sword1h_dlc2_primal11,25,Infrequent,,Primal,None,0,0,20700A,,True
-Longsword,2.01e+45,30,Primal Longsword,sword1h_dlc2_primal10,25,Infrequent,,Primal,None,0,0,20700A,,True
-Longsword,2.01e+44,27,Primal Longsword,sword1h_dlc2_primal09,25,Infrequent,,Primal,None,0,0,20700A,,True
-Longsword,2.01e+43,24,Primal Longsword,sword1h_dlc2_primal08,25,Infrequent,,Primal,None,0,0,20700A,,True
-Longsword,2.01e+42,21,Primal Longsword,sword1h_dlc2_primal07,25,Infrequent,,Primal,None,0,0,20700A,,True
+Longsword,201E47,42,Primal Longsword,sword1h_dlc2_primal14,25,Infrequent,,Primal,None,0,0,20700A,,True
+Longsword,201E46,39,Primal Longsword,sword1h_dlc2_primal13,25,Infrequent,,Primal,None,0,0,20700A,,True
+Longsword,201E45,36,Primal Longsword,sword1h_dlc2_primal12,25,Infrequent,,Primal,None,0,0,20700A,,True
+Longsword,201E44,33,Primal Longsword,sword1h_dlc2_primal11,25,Infrequent,,Primal,None,0,0,20700A,,True
+Longsword,201E43,30,Primal Longsword,sword1h_dlc2_primal10,25,Infrequent,,Primal,None,0,0,20700A,,True
+Longsword,201E42,27,Primal Longsword,sword1h_dlc2_primal09,25,Infrequent,,Primal,None,0,0,20700A,,True
+Longsword,201E41,24,Primal Longsword,sword1h_dlc2_primal08,25,Infrequent,,Primal,None,0,0,20700A,,True
+Longsword,201E40,21,Primal Longsword,sword1h_dlc2_primal07,25,Infrequent,,Primal,None,0,0,20700A,,True
 Longsword,201E3F,18,Primal Longsword,sword1h_dlc2_primal06,25,Infrequent,,Primal,None,0,0,20700A,,True
 Longsword,201E3E,15,Primal Longsword,sword1h_dlc2_primal05,25,Infrequent,,Primal,None,0,0,20700A,,True
 Longsword,201E3D,12,Primal Longsword,sword1h_dlc2_primal04,25,Infrequent,,Primal,None,0,0,20700A,,True
@@ -4301,26 +4301,26 @@ Necklace,1E99A4,16,Bound Tempest,amulet_dlc1_unique03_d,100,Unique,,None,None,0,
 Necklace,1E99A3,14,Bound Tempest,amulet_dlc1_unique03_c,100,Unique,,None,None,0,0,,1E99C01E99BF1E99C3,True
 Necklace,1E99A2,12,Bound Tempest,amulet_dlc1_unique03_b,100,Unique,,None,None,0,0,,1E99C01E99BF1E99C2,True
 Necklace,1E99A1,10,Bound Tempest,amulet_dlc1_unique03_a,100,Unique,,None,None,0,0,,1E99C11E99C01E99BF,True
-Necklace,NULL,44,Starry-Eye Pearl Necklace,amulet_dlc1_unique02_r,100,Unique,,None,None,0,0,,1E995A1E9959,True
-Necklace,NULL,42,Starry-Eye Pearl Necklace,amulet_dlc1_unique02_q,100,Unique,,None,None,0,0,,1E995A1E9958,True
-Necklace,NULL,40,Starry-Eye Pearl Necklace,amulet_dlc1_unique02_p,100,Unique,,None,None,0,0,,1E995A1E9957,True
+Necklace,1E9944,44,Starry-Eye Pearl Necklace,amulet_dlc1_unique02_r,100,Unique,,None,None,0,0,,1E995A1E9959,True
+Necklace,1E9942,42,Starry-Eye Pearl Necklace,amulet_dlc1_unique02_q,100,Unique,,None,None,0,0,,1E995A1E9958,True
+Necklace,1E9940,40,Starry-Eye Pearl Necklace,amulet_dlc1_unique02_p,100,Unique,,None,None,0,0,,1E995A1E9957,True
 Necklace,1E993F,38,Starry-Eye Pearl Necklace,amulet_dlc1_unique02_o,100,Unique,,None,None,0,0,,1E995A1E9956,True
 Necklace,1E993D,36,Starry-Eye Pearl Necklace,amulet_dlc1_unique02_n,100,Unique,,None,None,0,0,,1E995A1E9955,True
 Necklace,1E993A,34,Starry-Eye Pearl Necklace,amulet_dlc1_unique02_m,100,Unique,,None,None,0,0,,1E995A1E9954,True
-Necklace,NULL,32,Starry-Eye Pearl Necklace,amulet_dlc1_unique02_l,100,Unique,,None,None,0,0,,1E995A1E9953,True
-Necklace,NULL,30,Starry-Eye Pearl Necklace,amulet_dlc1_unique02_k,100,Unique,,None,None,0,0,,1E995A1E9952,True
-Necklace,NULL,28,Starry-Eye Pearl Necklace,amulet_dlc1_unique02_j,100,Unique,,None,None,0,0,,1E995A1E9951,True
-Necklace,NULL,26,Starry-Eye Pearl Necklace,amulet_dlc1_unique02_i,100,Unique,,None,None,0,0,,1E995A1E9950,True
-Necklace,NULL,24,Starry-Eye Pearl Necklace,amulet_dlc1_unique02_h,100,Unique,,None,None,0,0,,1E995A1E994F,True
-Necklace,NULL,22,Starry-Eye Pearl Necklace,amulet_dlc1_unique02_g,100,Unique,,None,None,0,0,,1E995A1E994E,True
-Necklace,NULL,20,Starry-Eye Pearl Necklace,amulet_dlc1_unique02_f,100,Unique,,None,None,0,0,,1E995A1E994D,True
-Necklace,NULL,18,Starry-Eye Pearl Necklace,amulet_dlc1_unique02_e,100,Unique,,None,None,0,0,,1E995A1E994C,True
-Necklace,NULL,16,Starry-Eye Pearl Necklace,amulet_dlc1_unique02_d,100,Unique,,None,None,0,0,,1E995A1E994B,True
-Necklace,NULL,14,Starry-Eye Pearl Necklace,amulet_dlc1_unique02_c,100,Unique,,None,None,0,0,,1E995A1E994A,True
+Necklace,1E9939,32,Starry-Eye Pearl Necklace,amulet_dlc1_unique02_l,100,Unique,,None,None,0,0,,1E995A1E9953,True
+Necklace,1E9938,30,Starry-Eye Pearl Necklace,amulet_dlc1_unique02_k,100,Unique,,None,None,0,0,,1E995A1E9952,True
+Necklace,1E9937,28,Starry-Eye Pearl Necklace,amulet_dlc1_unique02_j,100,Unique,,None,None,0,0,,1E995A1E9951,True
+Necklace,1E9936,26,Starry-Eye Pearl Necklace,amulet_dlc1_unique02_i,100,Unique,,None,None,0,0,,1E995A1E9950,True
+Necklace,1E9935,24,Starry-Eye Pearl Necklace,amulet_dlc1_unique02_h,100,Unique,,None,None,0,0,,1E995A1E994F,True
+Necklace,1E9934,22,Starry-Eye Pearl Necklace,amulet_dlc1_unique02_g,100,Unique,,None,None,0,0,,1E995A1E994E,True
+Necklace,1E9933,20,Starry-Eye Pearl Necklace,amulet_dlc1_unique02_f,100,Unique,,None,None,0,0,,1E995A1E994D,True
+Necklace,1E9932,18,Starry-Eye Pearl Necklace,amulet_dlc1_unique02_e,100,Unique,,None,None,0,0,,1E995A1E994C,True
+Necklace,1E9931,16,Starry-Eye Pearl Necklace,amulet_dlc1_unique02_d,100,Unique,,None,None,0,0,,1E995A1E994B,True
+Necklace,1E9930,14,Starry-Eye Pearl Necklace,amulet_dlc1_unique02_c,100,Unique,,None,None,0,0,,1E995A1E994A,True
 Necklace,1E992F,12,Starry-Eye Pearl Necklace,amulet_dlc1_unique02_b,100,Unique,,None,None,0,0,,1E995A1E9949,True
 Necklace,1E992E,10,Starry-Eye Pearl Necklace,amulet_dlc1_unique02_a,100,Unique,,None,None,0,0,,1E995A1E9948,True
-Necklace,NULL,44,Whale Tooth Pendant,amulet_dlc1_unique01_r,100,Unique,,None,None,0,0,,1E99201E991F1E991E,True
-Necklace,NULL,42,Whale Tooth Pendant,amulet_dlc1_unique01_q,100,Unique,,None,None,0,0,,1E99201E991F1E991D,True
+Necklace,1E9901,44,Whale Tooth Pendant,amulet_dlc1_unique01_r,100,Unique,,None,None,0,0,,1E99201E991F1E991E,True
+Necklace,1E9900,42,Whale Tooth Pendant,amulet_dlc1_unique01_q,100,Unique,,None,None,0,0,,1E99201E991F1E991D,True
 Necklace,1E98FF,40,Whale Tooth Pendant,amulet_dlc1_unique01_p,100,Unique,,None,None,0,0,,1E99201E991F1E991C,True
 Necklace,1E98FE,38,Whale Tooth Pendant,amulet_dlc1_unique01_o,100,Unique,,None,None,0,0,,1E99201E991F1E991B,True
 Necklace,1E98FD,36,Whale Tooth Pendant,amulet_dlc1_unique01_n,100,Unique,,None,None,0,0,,1E99201E991F1E991A,True
@@ -4340,7 +4340,7 @@ Necklace,1E98F0,10,Whale Tooth Pendant,amulet_dlc1_unique01_a,100,Unique,,None,N
 Necklace,0A0C16,0,Rithen Amulet,QuestItem_TR06_Amulet,100,Common,,None,None,0,0,,,False
 Necklace,09EABC,1,Rithen Amulet,QuestItem_TR05_Amulet,100,Common,,None,None,0,0,,,False
 Necklace,152F6C,27,Royal Seal of Ansilla,QuestItem_SQ116_HouseSeal,100,Common,,None,None,0,0,,,True
-Necklace,1A69DF,0,Murghan Charm,QuestItem_SQ103_MurghanCharm,100,Common,,None,None,0,0,,,False
+Necklace,1A69DF,0,Murghan Charm,QuestItem_SQ103_MurghanCharm,100,Common,,None,None,0,0,,,False,Missing ItemGems section
 Necklace,073577,14,Pendant of Warmth,QuestItem_SA04_PendantOfWarmth,100,Common,,None,None,0,0,,0AB204,False
 Necklace,13F3EE,14,Heartstone,QuestItem_FP01_Heartstone_Empty,100,Common,,None,None,0,0,,,False
 Necklace,0934D1,14,Heartstone,QuestItem_FP01_Heartstone,100,Unique,,None,None,0,0,,06619F089759089785,False
@@ -4748,7 +4748,7 @@ Ring,0B355F,0,Ratofer's Ring,QuestItem_FFQ18_Ring,100,Common,,None,None,0,0,,,Fa
 Ring,1455A6,0,A Maiden' s Ring,QuestItem_FFQ04_MaidensRing,100,Common,,None,None,0,0,,,False
 Ring,082F65,1,Ring,PARENT_ring,100,Common,,None,None,0,0,,,False
 Ring,1CEA13,5,Student's Ring of Achievement,MQ01_ring,100,Rare,,None,None,07A715,080B4D,,,True
-Ring,NULL,2,Squire's Ring,MQ01_RewardRing,100,Infrequent,,None,None,07A732,0,,,True
+Ring,1E2055,2,Squire's Ring,MQ01_RewardRing,100,Infrequent,,None,None,07A732,0,,,True
 Ring,09DADD,8,Wedding Ring,Item_Gorhart_CamdensRing,100,Common,,None,None,0,0,,,True
 Ring,1B2271,21,Savage Ring of Craft,EA3_ring,100,Rare,,None,None,07A764,07AA72,,,True
 Ring,1F1AF1,5,Warrior's Ring,DEV_MattGrayRing01,100,Infrequent,,None,None,07A737,0,,,False
@@ -4818,24 +4818,24 @@ Robes,1FB3E7,12,Primal Robes,mage_DLC2_set01_torso_d,20,Set,,None,Sorcery,0,0,,0
 Robes,1FB3E6,9,Primal Robes,mage_DLC2_set01_torso_c,20,Set,,None,Sorcery,0,0,,05E0F31AC3071FB411,True
 Robes,1FB3E5,6,Primal Robes,mage_DLC2_set01_torso_b,20,Set,,None,Sorcery,0,0,,05E0F31AC3071FB410,True
 Robes,1EE7E6,3,Primal Robes,mage_DLC2_set01_torso_a,20,Set,,None,Sorcery,0,0,,05E0F31AC3071FB40F,True
-Robes,NULL,44,The Magister's Boatcloak,mage_dlc1_unique01_torso_r,20,Unique,,None,Sorcery,0,0,,05E0F31AC3071E498B1E498A1E499D,True
-Robes,NULL,42,The Magister's Boatcloak,mage_dlc1_unique01_torso_q,20,Unique,,None,Sorcery,0,0,,05E0F31AC3071E498B1E498A1E499C,True
-Robes,NULL,40,The Magister's Boatcloak,mage_dlc1_unique01_torso_p,20,Unique,,None,Sorcery,0,0,,05E0F31AC3071E498B1E498A1E499B,True
-Robes,NULL,38,The Magister's Boatcloak,mage_dlc1_unique01_torso_o,20,Unique,,None,Sorcery,0,0,,05E0F31AC3071E498B1E498A1E499A,True
-Robes,NULL,36,The Magister's Boatcloak,mage_dlc1_unique01_torso_n,20,Unique,,None,Sorcery,0,0,,05E0F31AC3071E498B1E498A1E4999,True
+Robes,1E4984,44,The Magister's Boatcloak,mage_dlc1_unique01_torso_r,20,Unique,,None,Sorcery,0,0,,05E0F31AC3071E498B1E498A1E499D,True
+Robes,1E4983,42,The Magister's Boatcloak,mage_dlc1_unique01_torso_q,20,Unique,,None,Sorcery,0,0,,05E0F31AC3071E498B1E498A1E499C,True
+Robes,1E4982,40,The Magister's Boatcloak,mage_dlc1_unique01_torso_p,20,Unique,,None,Sorcery,0,0,,05E0F31AC3071E498B1E498A1E499B,True
+Robes,1E4981,38,The Magister's Boatcloak,mage_dlc1_unique01_torso_o,20,Unique,,None,Sorcery,0,0,,05E0F31AC3071E498B1E498A1E499A,True
+Robes,1E4980,36,The Magister's Boatcloak,mage_dlc1_unique01_torso_n,20,Unique,,None,Sorcery,0,0,,05E0F31AC3071E498B1E498A1E4999,True
 Robes,1E497F,34,The Magister's Boatcloak,mage_dlc1_unique01_torso_m,20,Unique,,None,Sorcery,0,0,,05E0F31AC3071E498B1E498A1E4998,True
 Robes,1E497E,32,The Magister's Boatcloak,mage_dlc1_unique01_torso_l,20,Unique,,None,Sorcery,0,0,,05E0F31AC3071E498B1E498A1E4997,True
 Robes,1E497D,30,The Magister's Boatcloak,mage_dlc1_unique01_torso_k,20,Unique,,None,Sorcery,0,0,,05E0F31AC3071E498B1E498A1E4996,True
 Robes,1E497C,28,The Magister's Boatcloak,mage_dlc1_unique01_torso_j,20,Unique,,None,Sorcery,0,0,,05E0F31AC3071E498B1E498A1E4995,True
 Robes,1E497B,26,The Magister's Boatcloak,mage_dlc1_unique01_torso_i,20,Unique,,None,Sorcery,0,0,,05E0F31AC3071E498B1E498A1E4994,True
 Robes,1E497A,24,The Magister's Boatcloak,mage_dlc1_unique01_torso_h,20,Unique,,None,Sorcery,0,0,,05E0F31AC3071E498B1E498A1E4993,True
-Robes,NULL,22,The Magister's Boatcloak,mage_dlc1_unique01_torso_g,20,Unique,,None,Sorcery,0,0,,05E0F31AC3071E498B1E498A1E4992,True
-Robes,NULL,20,The Magister's Boatcloak,mage_dlc1_unique01_torso_f,20,Unique,,None,Sorcery,0,0,,05E0F31AC3071E498B1E498A1E4991,True
-Robes,NULL,18,The Magister's Boatcloak,mage_dlc1_unique01_torso_e,20,Unique,,None,Sorcery,0,0,,05E0F31AC3071E498B1E498A1E4990,True
-Robes,NULL,16,The Magister's Boatcloak,mage_dlc1_unique01_torso_d,20,Unique,,None,Sorcery,0,0,,05E0F31AC3071E498B1E498A1E498F,True
-Robes,NULL,14,The Magister's Boatcloak,mage_dlc1_unique01_torso_c,20,Unique,,None,Sorcery,0,0,,05E0F31AC3071E498B1E498A1E498E,True
-Robes,NULL,12,The Magister's Boatcloak,mage_dlc1_unique01_torso_b,20,Unique,,None,Sorcery,0,0,,05E0F31AC3071E498B1E498A1E498D,True
-Robes,NULL,10,The Magister's Boatcloak,mage_dlc1_unique01_torso_a,20,Unique,,None,Sorcery,0,0,,05E0F31AC3071E498C1E498B1E498A,True
+Robes,1E4979,22,The Magister's Boatcloak,mage_dlc1_unique01_torso_g,20,Unique,,None,Sorcery,0,0,,05E0F31AC3071E498B1E498A1E4992,True
+Robes,1E4978,20,The Magister's Boatcloak,mage_dlc1_unique01_torso_f,20,Unique,,None,Sorcery,0,0,,05E0F31AC3071E498B1E498A1E4991,True
+Robes,1E4977,18,The Magister's Boatcloak,mage_dlc1_unique01_torso_e,20,Unique,,None,Sorcery,0,0,,05E0F31AC3071E498B1E498A1E4990,True
+Robes,1E4976,16,The Magister's Boatcloak,mage_dlc1_unique01_torso_d,20,Unique,,None,Sorcery,0,0,,05E0F31AC3071E498B1E498A1E498F,True
+Robes,1E4975,14,The Magister's Boatcloak,mage_dlc1_unique01_torso_c,20,Unique,,None,Sorcery,0,0,,05E0F31AC3071E498B1E498A1E498E,True
+Robes,1E4974,12,The Magister's Boatcloak,mage_dlc1_unique01_torso_b,20,Unique,,None,Sorcery,0,0,,05E0F31AC3071E498B1E498A1E498D,True
+Robes,1E4973,10,The Magister's Boatcloak,mage_dlc1_unique01_torso_a,20,Unique,,None,Sorcery,0,0,,05E0F31AC3071E498C1E498B1E498A,True
 Robes,1E55C1,44,Pestilent Pall,mage_dlc1_set02_torso_r,20,Set,,None,Sorcery,0,0,,05E0F31AC3071E8BC8,True
 Robes,1E55C0,42,Pestilent Pall,mage_dlc1_set02_torso_q,20,Set,,None,Sorcery,0,0,,05E0F31AC3071E8BC7,True
 Robes,1E55BF,40,Pestilent Pall,mage_dlc1_set02_torso_p,20,Set,,None,Sorcery,0,0,,05E0F31AC3071E8BC6,True
@@ -4878,8 +4878,8 @@ Robes,1D1D58,24,Augur's Robes of the Sage,torso_merchant_rare02c,21,Infrequent,,
 Robes,1D1D4D,7,Linen Robes,torso_merchant_rare01d,17,Infrequent,AU,None,Sorcery,0,0,,05E0F31AC307,False
 Robes,1D1D4C,7,Apprentice's Robes of the Soothsayer,torso_merchant_rare01c,17,Infrequent,,None,Sorcery,07A71B,07A961,,05E0F31AC307,False
 Robes,1D1D6C,36,Robes of the Mystic,torso_merchant_infrequent04c,23,Infrequent,,None,Sorcery,0,1C421D,,05E0F31AC307,False
-Robes,1D1D60,27,Robes of Storm's Bite,torso_merchant_infrequent03c,21,Rare,,None,Sorcery,0,142800,,05E0F31AC307,False
-Robes,1D1D54,15,Robes of Storm's Cry,torso_merchant_infrequent02c,18,Rare,,None,Sorcery,0,14280,,05E0F31AC307,False
+Robes,1D1D60,27,Robes of Storm's Bite,torso_merchant_infrequent03c,21,Rare,,None,Sorcery,0,1428E2,,05E0F31AC307,False
+Robes,1D1D54,15,Robes of Storm's Cry,torso_merchant_infrequent02c,18,Rare,,None,Sorcery,0,1428E1,,05E0F31AC307,False
 Robes,1D1D48,5,Robes of Fire Shield,torso_merchant_infrequent01c,17,Infrequent,,None,Sorcery,0,07AA36,,05E0F31AC307,False
 Robes,1D1D69,33,Spiritweave Robes,torso_merchant_common04d,23,Infrequent,AU,None,Sorcery,0,0,,05E0F31AC307,False
 Robes,1D1D68,33,Mage's Robes,torso_merchant_common04c,23,Infrequent,,None,Sorcery,1C4293,0,,05E0F31AC307,False
@@ -4957,7 +4957,7 @@ Robes,0858D7,24,Hexweave Robes,mage_common04b_torso_sockets_03,21,Infrequent,AUU
 Robes,0858D6,24,Hexweave Robes,mage_common04b_torso_sockets_02,21,Infrequent,AU,None,Sorcery,0,0,,05E0F31AC307,False
 Robes,0858D5,24,Hexweave Robes,mage_common04b_torso_sockets_01,21,Infrequent,A,None,Sorcery,0,0,,05E0F31AC307,False
 Robes,03E8C1,24,Hexweave Robes,mage_common04b_torso,21,Common,,None,Sorcery,0,0,,05E0F31AC307,False
-Robes,1C21A3,21,Timeless Robes of Storm's Rage,mage_common04a_torso_merchant_02,21,Rare,,None,Sorcery,07A2B6,1428000,,05E0F31AC307,False
+Robes,1C21A3,21,Timeless Robes of Storm's Rage,mage_common04a_torso_merchant_02,21,Rare,,None,Sorcery,07A2B6,1428E3,,05E0F31AC307,False
 Robes,1C2197,21,Cavalier's Robes of Lightning Hindrance,mage_common04a_torso_merchant_01,21,Infrequent,,None,Sorcery,07A73A,07AA55,,05E0F31AC307,False
 Robes,03E8C0,21,Crude Hexweave Robes,mage_common04a_torso,21,Common,,None,Sorcery,0,0,,05E0F31AC307,False
 Robes,03E8BF,18,Fine Silk Robes,mage_common03c_torso,18,Common,,None,Sorcery,0,0,,05E0F31AC307,False
@@ -5031,15 +5031,15 @@ Sceptre,1F9215,9,The Heavens' Gift,sceptre_DLC2_unique01_c,25,Unique,,Primal,Non
 Sceptre,1F9213,6,The Heavens' Gift,sceptre_DLC2_unique01_b,25,Unique,,Primal,None,0,0,20700A1F92A8,1F92A4,True
 Sceptre,1EE19D,3,The Heavens' Gift,sceptre_DLC2_unique01_a,25,Unique,,Primal,None,0,0,20700A1F92A6,1F92A4,True
 Sceptre,201E2A,42,Primal Sceptre,sceptre_dlc2_primal14,25,Infrequent,,Primal,None,0,0,20700A,,True
-Sceptre,2.01e+31,39,Primal Sceptre,sceptre_dlc2_primal13,25,Infrequent,,Primal,None,0,0,20700A,,True
-Sceptre,2.01e+30,36,Primal Sceptre,sceptre_dlc2_primal12,25,Infrequent,,Primal,None,0,0,20700A,,True
-Sceptre,2.01e+29,33,Primal Sceptre,sceptre_dlc2_primal11,25,Infrequent,,Primal,None,0,0,20700A,,True
-Sceptre,2.01e+28,30,Primal Sceptre,sceptre_dlc2_primal10,25,Infrequent,,Primal,None,0,0,20700A,,True
-Sceptre,2.01e+27,27,Primal Sceptre,sceptre_dlc2_primal09,25,Infrequent,,Primal,None,0,0,20700A,,True
-Sceptre,2.01e+26,24,Primal Sceptre,sceptre_dlc2_primal08,25,Infrequent,,Primal,None,0,0,20700A,,True
-Sceptre,2.01e+25,21,Primal Sceptre,sceptre_dlc2_primal07,25,Infrequent,,Primal,None,0,0,20700A,,True
-Sceptre,2.01e+24,18,Primal Sceptre,sceptre_dlc2_primal06,25,Infrequent,,Primal,None,0,0,20700A,,True
-Sceptre,2.01e+22,15,Primal Sceptre,sceptre_dlc2_primal05,25,Infrequent,,Primal,None,0,0,20700A,,True
+Sceptre,201E29,39,Primal Sceptre,sceptre_dlc2_primal13,25,Infrequent,,Primal,None,0,0,20700A,,True
+Sceptre,201E28,36,Primal Sceptre,sceptre_dlc2_primal12,25,Infrequent,,Primal,None,0,0,20700A,,True
+Sceptre,201E27,33,Primal Sceptre,sceptre_dlc2_primal11,25,Infrequent,,Primal,None,0,0,20700A,,True
+Sceptre,201E26,30,Primal Sceptre,sceptre_dlc2_primal10,25,Infrequent,,Primal,None,0,0,20700A,,True
+Sceptre,201E25,27,Primal Sceptre,sceptre_dlc2_primal09,25,Infrequent,,Primal,None,0,0,20700A,,True
+Sceptre,201E24,24,Primal Sceptre,sceptre_dlc2_primal08,25,Infrequent,,Primal,None,0,0,20700A,,True
+Sceptre,201E23,21,Primal Sceptre,sceptre_dlc2_primal07,25,Infrequent,,Primal,None,0,0,20700A,,True
+Sceptre,201E22,18,Primal Sceptre,sceptre_dlc2_primal06,25,Infrequent,,Primal,None,0,0,20700A,,True
+Sceptre,201E20,15,Primal Sceptre,sceptre_dlc2_primal05,25,Infrequent,,Primal,None,0,0,20700A,,True
 Sceptre,201E1F,12,Primal Sceptre,sceptre_dlc2_primal04,25,Infrequent,,Primal,None,0,0,20700A,,True
 Sceptre,201E1E,9,Primal Sceptre,sceptre_dlc2_primal03,25,Infrequent,,Primal,None,0,0,20700A,,True
 Sceptre,201E1D,6,Primal Sceptre,sceptre_dlc2_primal02,25,Infrequent,,Primal,None,0,0,20700A,,True
@@ -5460,42 +5460,42 @@ Shield,1E6DCA,16,Porthole Buckler,shield_rogue_dlc1_unique01_d,25,Unique,,None,F
 Shield,1E6DC9,14,Porthole Buckler,shield_rogue_dlc1_unique01_c,25,Unique,,None,Finesse,0,0,,0832F51E6DDA1E7E70,True
 Shield,1E6DC8,12,Porthole Buckler,shield_rogue_dlc1_unique01_b,25,Unique,,None,Finesse,0,0,,0832F51E6DDA1E7E6F,True
 Shield,1E6DC7,10,Porthole Buckler,shield_rogue_dlc1_unique01_a,25,Unique,,None,Finesse,0,0,,0832F51E6DDB1E6DDA,True
-Shield,NULL,44,Fury,shield_mage_dlc1_unique02_r,20,Unique,,Fire,Sorcery,0,0,,0B56911E71821E71801E7FF3,True
+Shield,1E7170,44,Fury,shield_mage_dlc1_unique02_r,20,Unique,,Fire,Sorcery,0,0,,0B56911E71821E71801E7FF3,True
 Shield,1E716F,42,Fury,shield_mage_dlc1_unique02_q,20,Unique,,Fire,Sorcery,0,0,,0B56911E71821E71801E7FF2,True
 Shield,1E716E,40,Fury,shield_mage_dlc1_unique02_p,20,Unique,,Fire,Sorcery,0,0,,0B56911E71821E71801E7FF1,True
 Shield,1E716D,38,Fury,shield_mage_dlc1_unique02_o,20,Unique,,Fire,Sorcery,0,0,,0B56911E71821E71801E7FF0,True
 Shield,1E716C,36,Fury,shield_mage_dlc1_unique02_n,20,Unique,,Fire,Sorcery,0,0,,0B56911E71821E71801E7FEF,True
 Shield,1E716B,34,Fury,shield_mage_dlc1_unique02_m,20,Unique,,Fire,Sorcery,0,0,,0B56911E71821E71801E7FEE,True
 Shield,1E716A,32,Fury,shield_mage_dlc1_unique02_l,20,Unique,,Fire,Sorcery,0,0,,0B56911E71821E71801E7FED,True
-Shield,NULL,30,Fury,shield_mage_dlc1_unique02_k,20,Unique,,Fire,Sorcery,0,0,,0B56911E71821E71801E7FEC,True
-Shield,NULL,28,Fury,shield_mage_dlc1_unique02_j,20,Unique,,Fire,Sorcery,0,0,,0B56911E71821E71801E7FEB,True
-Shield,NULL,26,Fury,shield_mage_dlc1_unique02_i,20,Unique,,Fire,Sorcery,0,0,,0B56911E71821E71801E7FEA,True
-Shield,NULL,24,Fury,shield_mage_dlc1_unique02_h,20,Unique,,Fire,Sorcery,0,0,,0B56911E71821E71801E7FE8,True
-Shield,NULL,22,Fury,shield_mage_dlc1_unique02_g,20,Unique,,Fire,Sorcery,0,0,,0B56911E71821E71801E7FE7,True
-Shield,NULL,20,Fury,shield_mage_dlc1_unique02_f,20,Unique,,Fire,Sorcery,0,0,,0B56911E71821E71801E7FE5,True
-Shield,NULL,18,Fury,shield_mage_dlc1_unique02_e,20,Unique,,Fire,Sorcery,0,0,,0B56911E71821E71801E7FE4,True
-Shield,NULL,16,Fury,shield_mage_dlc1_unique02_d,20,Unique,,Fire,Sorcery,0,0,,0B56911E71821E71801E7FE3,True
-Shield,NULL,14,Fury,shield_mage_dlc1_unique02_c,20,Unique,,Fire,Sorcery,0,0,,0B56911E71821E71801E7FE1,True
-Shield,NULL,12,Fury,shield_mage_dlc1_unique02_b,20,Unique,,Fire,Sorcery,0,0,,0B56911E71821E71801E7FE0,True
+Shield,1E7169,30,Fury,shield_mage_dlc1_unique02_k,20,Unique,,Fire,Sorcery,0,0,,0B56911E71821E71801E7FEC,True
+Shield,1E7168,28,Fury,shield_mage_dlc1_unique02_j,20,Unique,,Fire,Sorcery,0,0,,0B56911E71821E71801E7FEB,True
+Shield,1E7167,26,Fury,shield_mage_dlc1_unique02_i,20,Unique,,Fire,Sorcery,0,0,,0B56911E71821E71801E7FEA,True
+Shield,1E7166,24,Fury,shield_mage_dlc1_unique02_h,20,Unique,,Fire,Sorcery,0,0,,0B56911E71821E71801E7FE8,True
+Shield,1E7165,22,Fury,shield_mage_dlc1_unique02_g,20,Unique,,Fire,Sorcery,0,0,,0B56911E71821E71801E7FE7,True
+Shield,1E7164,20,Fury,shield_mage_dlc1_unique02_f,20,Unique,,Fire,Sorcery,0,0,,0B56911E71821E71801E7FE5,True
+Shield,1E7163,18,Fury,shield_mage_dlc1_unique02_e,20,Unique,,Fire,Sorcery,0,0,,0B56911E71821E71801E7FE4,True
+Shield,1E7162,16,Fury,shield_mage_dlc1_unique02_d,20,Unique,,Fire,Sorcery,0,0,,0B56911E71821E71801E7FE3,True
+Shield,1E7161,14,Fury,shield_mage_dlc1_unique02_c,20,Unique,,Fire,Sorcery,0,0,,0B56911E71821E71801E7FE1,True
+Shield,1E7160,12,Fury,shield_mage_dlc1_unique02_b,20,Unique,,Fire,Sorcery,0,0,,0B56911E71821E71801E7FE0,True
 Shield,1E715F,10,Fury,shield_mage_dlc1_unique02_a,20,Unique,,Fire,Sorcery,0,0,,0B56911E71821E71811E7180,True
-Shield,NULL,44,Akara's Visage,shield_mage_dlc1_unique01_r,20,Unique,,Lightning,Sorcery,0,0,,0B56911E715B1E7F1E,True
-Shield,NULL,42,Akara's Visage,shield_mage_dlc1_unique01_q,20,Unique,,Lightning,Sorcery,0,0,,0B56911E715B1E7F1D,True
-Shield,NULL,40,Akara's Visage,shield_mage_dlc1_unique01_p,20,Unique,,Lightning,Sorcery,0,0,,0B56911E715B1E7F1C,True
-Shield,NULL,38,Akara's Visage,shield_mage_dlc1_unique01_o,20,Unique,,Lightning,Sorcery,0,0,,0B56911E715B1E7F1B,True
-Shield,NULL,36,Akara's Visage,shield_mage_dlc1_unique01_n,20,Unique,,Lightning,Sorcery,0,0,,0B56911E715B1E7F1A,True
-Shield,NULL,34,Akara's Visage,shield_mage_dlc1_unique01_m,20,Unique,,Lightning,Sorcery,0,0,,0B56911E715B1E7F19,True
-Shield,NULL,32,Akara's Visage,shield_mage_dlc1_unique01_l,20,Unique,,Lightning,Sorcery,0,0,,0B56911E715B1E7F18,True
-Shield,NULL,30,Akara's Visage,shield_mage_dlc1_unique01_k,20,Unique,,Lightning,Sorcery,0,0,,0B56911E715B1E7F17,True
-Shield,NULL,28,Akara's Visage,shield_mage_dlc1_unique01_j,20,Unique,,Lightning,Sorcery,0,0,,0B56911E715B1E7F16,True
+Shield,1E7148,44,Akara's Visage,shield_mage_dlc1_unique01_r,20,Unique,,Lightning,Sorcery,0,0,,0B56911E715B1E7F1E,True
+Shield,1E7147,42,Akara's Visage,shield_mage_dlc1_unique01_q,20,Unique,,Lightning,Sorcery,0,0,,0B56911E715B1E7F1D,True
+Shield,1E7146,40,Akara's Visage,shield_mage_dlc1_unique01_p,20,Unique,,Lightning,Sorcery,0,0,,0B56911E715B1E7F1C,True
+Shield,1E7145,38,Akara's Visage,shield_mage_dlc1_unique01_o,20,Unique,,Lightning,Sorcery,0,0,,0B56911E715B1E7F1B,True
+Shield,1E7144,36,Akara's Visage,shield_mage_dlc1_unique01_n,20,Unique,,Lightning,Sorcery,0,0,,0B56911E715B1E7F1A,True
+Shield,1E7143,34,Akara's Visage,shield_mage_dlc1_unique01_m,20,Unique,,Lightning,Sorcery,0,0,,0B56911E715B1E7F19,True
+Shield,1E7142,32,Akara's Visage,shield_mage_dlc1_unique01_l,20,Unique,,Lightning,Sorcery,0,0,,0B56911E715B1E7F18,True
+Shield,1E7141,30,Akara's Visage,shield_mage_dlc1_unique01_k,20,Unique,,Lightning,Sorcery,0,0,,0B56911E715B1E7F17,True
+Shield,1E7140,28,Akara's Visage,shield_mage_dlc1_unique01_j,20,Unique,,Lightning,Sorcery,0,0,,0B56911E715B1E7F16,True
 Shield,1E713F,26,Akara's Visage,shield_mage_dlc1_unique01_i,20,Unique,,Lightning,Sorcery,0,0,,0B56911E715B1E7F15,True
 Shield,1E713E,24,Akara's Visage,shield_mage_dlc1_unique01_h,20,Unique,,Lightning,Sorcery,0,0,,0B56911E715B1E7F14,True
 Shield,1E713D,22,Akara's Visage,shield_mage_dlc1_unique01_g,20,Unique,,Lightning,Sorcery,0,0,,0B56911E715B1E7F13,True
 Shield,1E713C,20,Akara's Visage,shield_mage_dlc1_unique01_f,20,Unique,,Lightning,Sorcery,0,0,,0B56911E715B1E7F12,True
 Shield,1E713B,18,Akara's Visage,shield_mage_dlc1_unique01_e,20,Unique,,Lightning,Sorcery,0,0,,0B56911E715B1E7F10,True
 Shield,1E713A,16,Akara's Visage,shield_mage_dlc1_unique01_d,20,Unique,,Lightning,Sorcery,0,0,,0B56911E715B1E7F0F,True
-Shield,NULL,14,Akara's Visage,shield_mage_dlc1_unique01_c,20,Unique,,Lightning,Sorcery,0,0,,0B56911E715B1E7F0E,True
-Shield,NULL,12,Akara's Visage,shield_mage_dlc1_unique01_b,20,Unique,,Lightning,Sorcery,0,0,,0B56911E715B1E7F0D,True
-Shield,NULL,10,Akara's Visage,shield_mage_dlc1_unique01_a,20,Unique,,Lightning,Sorcery,0,0,,0B56911E715B1E715A,True
+Shield,1E7139,14,Akara's Visage,shield_mage_dlc1_unique01_c,20,Unique,,Lightning,Sorcery,0,0,,0B56911E715B1E7F0E,True
+Shield,1E7138,12,Akara's Visage,shield_mage_dlc1_unique01_b,20,Unique,,Lightning,Sorcery,0,0,,0B56911E715B1E7F0D,True
+Shield,1E7137,10,Akara's Visage,shield_mage_dlc1_unique01_a,20,Unique,,Lightning,Sorcery,0,0,,0B56911E715B1E715A,True
 Shield,1AD2D7,40,Winter's Respite,warrior_unique10_shield_j,54,Unique,,None,Might,0,0,,0832F61CD2E1,True
 Shield,1AD2D6,39,Winter's Respite,warrior_unique10_shield_i,52,Unique,,None,Might,0,0,,0832F61CD2E0,True
 Shield,1AD2D5,37,Winter's Respite,warrior_unique10_shield_h,52,Unique,,None,Might,0,0,,0832F61CD2DF,True
@@ -5522,7 +5522,7 @@ Shield,0915FF,10,Last Light,warrior_unique02_shield,46,Unique,,None,Might,0,0,,0
 Shield,0915FE,5,Aegis of Ahn'Vas,warrior_unique01_shield,43,Unique,,None,Might,0,0,,0832F6091629,False
 Shield,1D1E4D,35,Vigorous Kite Shield of Sanctuary,shield_warrior_merchant_rare04c,32,Rare,,None,Might,1C4287,1C3E28,,0832F6,False
 Shield,1D1E4C,35,Ingenious Kite Shield of the Elixir,shield_warrior_merchant_rare04b,32,Infrequent,,None,Might,07A781,1C3E26,,0832F6,False
-Shield,1D1E4B,35,Savant's Kite Shield of Storm's Rage,shield_warrior_merchant_rare04a,32,Rare,,None,Might,1C4291,1428000,,0832F6,False
+Shield,1D1E4B,35,Savant's Kite Shield of Storm's Rage,shield_warrior_merchant_rare04a,32,Rare,,None,Might,1C4291,1428E3,,0832F6,False
 Shield,1D1E44,35,Prismere Kite Shield,shield_warrior_merchant_rare03c,32,Infrequent,AU,None,Might,0,0,,0832F6,False
 Shield,1D1E43,31,Impenetrable Kite Shield of Tempering,shield_warrior_merchant_rare03b,32,Rare,,None,Might,07A5D5,1C3E22,,0832F6,False
 Shield,1D1E42,31,Crowning Kite Shield of the Indomitable,shield_warrior_merchant_rare03a,32,Rare,,None,Might,1C3E08,07B62B,,0832F6,False
@@ -5604,7 +5604,7 @@ Shield,1D1E0C,7,Superior Buckler of the Hale,shield_rogue_merchant_rare01a,19,Ra
 Shield,1D1E26,35,Ingenious Buckler,shield_rogue_merchant_infrequent04c,26,Infrequent,,None,Finesse,07A781,0,,0832F5,False
 Shield,1D1E25,35,Buckler of Inceneration,shield_rogue_merchant_infrequent04b,26,Rare,,None,Finesse,0,142769,,0832F5,False
 Shield,1D1E24,35,Ebony Buckler,shield_rogue_merchant_infrequent04a,26,Infrequent,AU,None,Finesse,0,0,,0832F5,False
-Shield,1D1E1D,27,Buckler of Storm's Bite,shield_rogue_merchant_infrequent03c,24,Rare,,None,Finesse,0,142800,,0832F5,False
+Shield,1D1E1D,27,Buckler of Storm's Bite,shield_rogue_merchant_infrequent03c,24,Rare,,None,Finesse,0,1428E2,,0832F5,False
 Shield,1D1E1C,27,Master's Buckler,shield_rogue_merchant_infrequent03b,24,Infrequent,,None,Finesse,1C4290,0,,0832F5,False
 Shield,1D1E1B,24,Ash Buckler,shield_rogue_merchant_infrequent03a,24,Infrequent,AU,None,Finesse,0,0,,0832F5,False
 Shield,1D1E14,15,Oak Buckler,shield_rogue_merchant_infrequent02c,21,Infrequent,AU,None,Finesse,0,0,,0832F5,False
@@ -5658,7 +5658,7 @@ Shield,089885,3,Fine Birch Buckler,Shield_Rogue_Common_01c,17,Common,,None,Fines
 Shield,19CEC4,2,Birch Buckler,Shield_Rogue_Common_01b_sockets_01,17,Infrequent,A,None,Finesse,0,0,,0832F5,False
 Shield,089884,2,Birch Buckler,Shield_Rogue_Common_01b,17,Common,,None,Finesse,0,0,,0832F5,False
 Shield,089883,1,Crude Birch Buckler,Shield_Rogue_Common_01a,17,Common,,None,Finesse,0,0,,0832F5,False
-Shield,1D1E04,35,Sage's Talisman of Storm's Rage,shield_mage_merchant_rare04c,23,Rare,,Ice,Sorcery,1C4292,1428000,,0B5691,False
+Shield,1D1E04,35,Sage's Talisman of Storm's Rage,shield_mage_merchant_rare04c,23,Rare,,Ice,Sorcery,1C4292,1428E3,,0B5691,False
 Shield,1D1E03,35,Impregnable Talisman of Winter,shield_mage_merchant_rare04b,23,Rare,,Ice,Sorcery,1C3E07,142670,,0B5691,False
 Shield,1D1E02,35,Emperor's Talisman of Inceneration,shield_mage_merchant_rare04a,23,Rare,,Fire,Sorcery,1C4275,142769,,0B5691,False
 Shield,1D1DF9,35,Platinum Talisman,shield_mage_merchant_rare03d,23,Infrequent,AU,Lightning,Sorcery,0,0,,0B5691,False
@@ -5809,7 +5809,7 @@ Shield,1ACCD5,22,Shield of Ambient,rogue_unique11_shield_e,44,Unique,,None,Fines
 Shield,1ACCD4,20,Shield of Ambient,rogue_unique11_shield_d,44,Unique,,None,Finesse,0,0,,0832F51CD428,True
 Shield,1ACCD3,18,Shield of Ambient,rogue_unique11_shield_c,41,Unique,,None,Finesse,0,0,,0832F51CD427,True
 Shield,1ACCD2,16,Shield of Ambient,rogue_unique11_shield_b,41,Unique,,None,Finesse,0,0,,0832F51CD426,True
-Shield,1.91e+70,14,Shield of Ambient,rogue_unique11_shield_a,41,Unique,,None,Finesse,0,0,,0832F51B3B11,True
+Shield,191E68,14,Shield of Ambient,rogue_unique11_shield_a,41,Unique,,None,Finesse,0,0,,0832F51B3B11,True
 Shield,1ACCD1,24,Orieator's Shield,rogue_unique10_shield_f,44,Unique,,None,Finesse,0,0,,0832F51CD425,True
 Shield,1ACCD0,22,Orieator's Shield,rogue_unique10_shield_e,44,Unique,,None,Finesse,0,0,,0832F51CD424,True
 Shield,1ACCCF,20,Orieator's Shield,rogue_unique10_shield_d,44,Unique,,None,Finesse,0,0,,0832F51CD423,True
@@ -5932,15 +5932,15 @@ Staff,1F80CC,12,Primal Mirror,staff_DLC2_unique01_d,25,Unique,,Primal,None,0,0,2
 Staff,1F80CB,9,Primal Mirror,staff_DLC2_unique01_c,25,Unique,,Primal,None,0,0,20700A1F80E51F80E8,,True
 Staff,1F80CA,6,Primal Mirror,staff_DLC2_unique01_b,25,Unique,,Primal,None,0,0,20700A1F80E51F80E7,,True
 Staff,1EE19B,3,Primal Mirror,staff_DLC2_unique01_a,25,Unique,,Primal,None,0,0,20700A1F80E61F80E5,,True
-Staff,2.01e+41,42,Primal Staff,staff_dlc2_primal14,25,Infrequent,,Primal,None,0,0,20700A,,True
-Staff,2.01e+40,39,Primal Staff,staff_dlc2_primal13,25,Infrequent,,Primal,None,0,0,20700A,,True
-Staff,2.01e+39,36,Primal Staff,staff_dlc2_primal12,25,Infrequent,,Primal,None,0,0,20700A,,True
-Staff,2.01e+38,33,Primal Staff,staff_dlc2_primal11,25,Infrequent,,Primal,None,0,0,20700A,,True
-Staff,2.01e+37,30,Primal Staff,staff_dlc2_primal10,25,Infrequent,,Primal,None,0,0,20700A,,True
-Staff,2.01e+36,27,Primal Staff,staff_dlc2_primal09,25,Infrequent,,Primal,None,0,0,20700A,,True
-Staff,2.01e+35,24,Primal Staff,staff_dlc2_primal08,25,Infrequent,,Primal,None,0,0,20700A,,True
-Staff,2.01e+34,21,Primal Staff,staff_dlc2_primal07,25,Infrequent,,Primal,None,0,0,20700A,,True
-Staff,2.01e+32,18,Primal Staff,staff_dlc2_primal06,25,Infrequent,,Primal,None,0,0,20700A,,True
+Staff,201E39,42,Primal Staff,staff_dlc2_primal14,25,Infrequent,,Primal,None,0,0,20700A,,True
+Staff,201E38,39,Primal Staff,staff_dlc2_primal13,25,Infrequent,,Primal,None,0,0,20700A,,True
+Staff,201E37,36,Primal Staff,staff_dlc2_primal12,25,Infrequent,,Primal,None,0,0,20700A,,True
+Staff,201E36,33,Primal Staff,staff_dlc2_primal11,25,Infrequent,,Primal,None,0,0,20700A,,True
+Staff,201E35,30,Primal Staff,staff_dlc2_primal10,25,Infrequent,,Primal,None,0,0,20700A,,True
+Staff,201E34,27,Primal Staff,staff_dlc2_primal09,25,Infrequent,,Primal,None,0,0,20700A,,True
+Staff,201E33,24,Primal Staff,staff_dlc2_primal08,25,Infrequent,,Primal,None,0,0,20700A,,True
+Staff,201E32,21,Primal Staff,staff_dlc2_primal07,25,Infrequent,,Primal,None,0,0,20700A,,True
+Staff,201E30,18,Primal Staff,staff_dlc2_primal06,25,Infrequent,,Primal,None,0,0,20700A,,True
 Staff,201E2F,15,Primal Staff,staff_dlc2_primal05,25,Infrequent,,Primal,None,0,0,20700A,,True
 Staff,201E2E,12,Primal Staff,staff_dlc2_primal04,25,Infrequent,,Primal,None,0,0,20700A,,True
 Staff,201E2D,9,Primal Staff,staff_dlc2_primal03,25,Infrequent,,Primal,None,0,0,20700A,,True
@@ -5948,42 +5948,42 @@ Staff,201E2C,6,Primal Staff,staff_dlc2_primal02,25,Infrequent,,Primal,None,0,0,2
 Staff,201E2B,3,Primal Staff,staff_dlc2_primal01,25,Infrequent,,Primal,None,0,0,20700A,,True
 Staff,1F8DCD,1,Staff,PARENT_staff_primal,25,Infrequent,,Primal,None,0,0,20700A,,False
 Staff,1F7DB9,5,DLC2 DEV Staff Primal,DEV_DLC2_staff_primal01,25,Common,,Primal,None,0,0,,,False
-Staff,NULL,44,The Crafted Sun,staff_dlc1_unique02_r,25,Unique,,Ice,None,0,0,1E698D,1E7E6C,True
-Staff,NULL,42,The Crafted Sun,staff_dlc1_unique02_q,25,Unique,,Ice,None,0,0,1E698D,1E7E6B,True
-Staff,NULL,40,The Crafted Sun,staff_dlc1_unique02_p,25,Unique,,Ice,None,0,0,1E698D,1E7E6A,True
-Staff,NULL,38,The Crafted Sun,staff_dlc1_unique02_o,25,Unique,,Ice,None,0,0,1E698D,1E7E69,True
-Staff,NULL,36,The Crafted Sun,staff_dlc1_unique02_n,25,Unique,,Ice,None,0,0,1E698D,1E7E68,True
-Staff,NULL,34,The Crafted Sun,staff_dlc1_unique02_m,25,Unique,,Ice,None,0,0,1E698D,1E7E67,True
+Staff,1E6985,44,The Crafted Sun,staff_dlc1_unique02_r,25,Unique,,Ice,None,0,0,1E698D,1E7E6C,True
+Staff,1E6984,42,The Crafted Sun,staff_dlc1_unique02_q,25,Unique,,Ice,None,0,0,1E698D,1E7E6B,True
+Staff,1E6983,40,The Crafted Sun,staff_dlc1_unique02_p,25,Unique,,Ice,None,0,0,1E698D,1E7E6A,True
+Staff,1E6982,38,The Crafted Sun,staff_dlc1_unique02_o,25,Unique,,Ice,None,0,0,1E698D,1E7E69,True
+Staff,1E6981,36,The Crafted Sun,staff_dlc1_unique02_n,25,Unique,,Ice,None,0,0,1E698D,1E7E68,True
+Staff,1E6980,34,The Crafted Sun,staff_dlc1_unique02_m,25,Unique,,Ice,None,0,0,1E698D,1E7E67,True
 Staff,1E697F,32,The Crafted Sun,staff_dlc1_unique02_l,25,Unique,,Ice,None,0,0,1E698D,1E7E66,True
 Staff,1E697E,30,The Crafted Sun,staff_dlc1_unique02_k,25,Unique,,Ice,None,0,0,1E698D,1E7E65,True
 Staff,1E697D,28,The Crafted Sun,staff_dlc1_unique02_j,25,Unique,,Ice,None,0,0,1E698D,1E7E64,True
 Staff,1E697C,26,The Crafted Sun,staff_dlc1_unique02_i,25,Unique,,Ice,None,0,0,1E698D,1E7E63,True
 Staff,1E697B,24,The Crafted Sun,staff_dlc1_unique02_h,25,Unique,,Ice,None,0,0,1E698D,1E7E62,True
 Staff,1E697A,22,The Crafted Sun,staff_dlc1_unique02_g,25,Unique,,Ice,None,0,0,1E698D,1E7E61,True
-Staff,NULL,20,The Crafted Sun,staff_dlc1_unique02_f,25,Unique,,Ice,None,0,0,1E698D,1E7E60,True
-Staff,NULL,18,The Crafted Sun,staff_dlc1_unique02_e,25,Unique,,Ice,None,0,0,1E698D,1E7E5F,True
-Staff,NULL,16,The Crafted Sun,staff_dlc1_unique02_d,25,Unique,,Ice,None,0,0,1E698D,1E7E5E,True
-Staff,NULL,14,The Crafted Sun,staff_dlc1_unique02_c,25,Unique,,Ice,None,0,0,1E698D,1E7E5D,True
-Staff,NULL,12,The Crafted Sun,staff_dlc1_unique02_b,25,Unique,,Ice,None,0,0,1E698D,1E7E5C,True
-Staff,NULL,10,The Crafted Sun,staff_dlc1_unique02_a,25,Unique,,Ice,None,0,0,1E698D,1E698C,True
-Staff,NULL,44,Seaglass,staff_dlc1_unique01_r,25,Unique,,Lightning,None,0,0,,1E696E1E7E5A,True
-Staff,NULL,42,Seaglass,staff_dlc1_unique01_q,25,Unique,,Lightning,None,0,0,,1E696E1E7E59,True
-Staff,NULL,40,Seaglass,staff_dlc1_unique01_p,25,Unique,,Lightning,None,0,0,,1E696E1E7E58,True
-Staff,NULL,38,Seaglass,staff_dlc1_unique01_o,25,Unique,,Lightning,None,0,0,,1E696E1E7E57,True
-Staff,NULL,36,Seaglass,staff_dlc1_unique01_n,25,Unique,,Lightning,None,0,0,,1E696E1E7E56,True
-Staff,NULL,34,Seaglass,staff_dlc1_unique01_m,25,Unique,,Lightning,None,0,0,,1E696E1E7E55,True
-Staff,NULL,32,Seaglass,staff_dlc1_unique01_l,25,Unique,,Lightning,None,0,0,,1E696E1E7E54,True
-Staff,NULL,30,Seaglass,staff_dlc1_unique01_k,25,Unique,,Lightning,None,0,0,,1E696E1E7E53,True
-Staff,NULL,28,Seaglass,staff_dlc1_unique01_j,25,Unique,,Lightning,None,0,0,,1E696E1E7E52,True
+Staff,1E6979,20,The Crafted Sun,staff_dlc1_unique02_f,25,Unique,,Ice,None,0,0,1E698D,1E7E60,True
+Staff,1E6978,18,The Crafted Sun,staff_dlc1_unique02_e,25,Unique,,Ice,None,0,0,1E698D,1E7E5F,True
+Staff,1E6977,16,The Crafted Sun,staff_dlc1_unique02_d,25,Unique,,Ice,None,0,0,1E698D,1E7E5E,True
+Staff,1E6976,14,The Crafted Sun,staff_dlc1_unique02_c,25,Unique,,Ice,None,0,0,1E698D,1E7E5D,True
+Staff,1E6975,12,The Crafted Sun,staff_dlc1_unique02_b,25,Unique,,Ice,None,0,0,1E698D,1E7E5C,True
+Staff,1E6974,10,The Crafted Sun,staff_dlc1_unique02_a,25,Unique,,Ice,None,0,0,1E698D,1E698C,True
+Staff,1E6959,44,Seaglass,staff_dlc1_unique01_r,25,Unique,,Lightning,None,0,0,,1E696E1E7E5A,True
+Staff,1E6958,42,Seaglass,staff_dlc1_unique01_q,25,Unique,,Lightning,None,0,0,,1E696E1E7E59,True
+Staff,1E6957,40,Seaglass,staff_dlc1_unique01_p,25,Unique,,Lightning,None,0,0,,1E696E1E7E58,True
+Staff,1E6956,38,Seaglass,staff_dlc1_unique01_o,25,Unique,,Lightning,None,0,0,,1E696E1E7E57,True
+Staff,1E6955,36,Seaglass,staff_dlc1_unique01_n,25,Unique,,Lightning,None,0,0,,1E696E1E7E56,True
+Staff,1E6954,34,Seaglass,staff_dlc1_unique01_m,25,Unique,,Lightning,None,0,0,,1E696E1E7E55,True
+Staff,1E6953,32,Seaglass,staff_dlc1_unique01_l,25,Unique,,Lightning,None,0,0,,1E696E1E7E54,True
+Staff,1E6952,30,Seaglass,staff_dlc1_unique01_k,25,Unique,,Lightning,None,0,0,,1E696E1E7E53,True
+Staff,1E6951,28,Seaglass,staff_dlc1_unique01_j,25,Unique,,Lightning,None,0,0,,1E696E1E7E52,True
 Staff,1E694F,26,Seaglass,staff_dlc1_unique01_i,25,Unique,,Lightning,None,0,0,,1E696E1E7E51,True
 Staff,1E694E,24,Seaglass,staff_dlc1_unique01_h,25,Unique,,Lightning,None,0,0,,1E696E1E7E50,True
 Staff,1E694D,22,Seaglass,staff_dlc1_unique01_g,25,Unique,,Lightning,None,0,0,,1E696E1E7E4F,True
 Staff,1E694B,20,Seaglass,staff_dlc1_unique01_f,25,Unique,,Lightning,None,0,0,,1E696E1E7E4E,True
 Staff,1E694A,18,Seaglass,staff_dlc1_unique01_e,25,Unique,,Lightning,None,0,0,,1E696E1E7E4D,True
-Staff,NULL,16,Seaglass,staff_dlc1_unique01_d,25,Unique,,Lightning,None,0,0,,1E696E1E7E4C,True
-Staff,NULL,14,Seaglass,staff_dlc1_unique01_c,25,Unique,,Lightning,None,0,0,,1E696E1E7E4B,True
-Staff,NULL,12,Seaglass,staff_dlc1_unique01_b,25,Unique,,Lightning,None,0,0,,1E696E1E7E4A,True
-Staff,NULL,10,Seaglass,staff_dlc1_unique01_a,25,Unique,,Lightning,None,0,0,,1E696E1E696F,True
+Staff,1E6949,16,Seaglass,staff_dlc1_unique01_d,25,Unique,,Lightning,None,0,0,,1E696E1E7E4C,True
+Staff,1E6948,14,Seaglass,staff_dlc1_unique01_c,25,Unique,,Lightning,None,0,0,,1E696E1E7E4B,True
+Staff,1E6947,12,Seaglass,staff_dlc1_unique01_b,25,Unique,,Lightning,None,0,0,,1E696E1E7E4A,True
+Staff,1E6946,10,Seaglass,staff_dlc1_unique01_a,25,Unique,,Lightning,None,0,0,,1E696E1E696F,True
 Staff,06C458,0,Staff of Ruin,Wpn_Staff_OfRuin,25,Common,,Bleeding,None,0,0,,,False
 Staff,06C469,0,Medusa's Grudge,Wpn_Staff_MedusasGrudge,25,Common,,None,None,0,0,,,False
 Staff,06C542,0,Hypnotic Shock,Wpn_Staff_HypnoticShock,25,Common,,None,None,0,0,,,False
@@ -6398,24 +6398,24 @@ Torso,1E53F1,16,Survivor's Jacket,rogue_dlc1_set02_torso_d,25,Set,,None,Finesse,
 Torso,1E53F0,14,Survivor's Jacket,rogue_dlc1_set02_torso_c,25,Set,,None,Finesse,0,0,,081EDA1AC3071E8957,True
 Torso,1E53EF,12,Survivor's Jacket,rogue_dlc1_set02_torso_b,25,Set,,None,Finesse,0,0,,081EDA1AC3071E8956,True
 Torso,1E53EE,10,Survivor's Jacket,rogue_dlc1_set02_torso_a,25,Set,,None,Finesse,0,0,,081EDA1AC3071E53D7,True
-Torso,NULL,44,Privateer's Vest,rogue_dlc1_set01_torso_r,25,Set,,None,Finesse,0,0,,081EDA1AC3071E8838,True
-Torso,NULL,42,Privateer's Vest,rogue_dlc1_set01_torso_q,25,Set,,None,Finesse,0,0,,081EDA1AC3071E8836,True
-Torso,NULL,40,Privateer's Vest,rogue_dlc1_set01_torso_p,25,Set,,None,Finesse,0,0,,081EDA1AC3071E8835,True
-Torso,NULL,38,Privateer's Vest,rogue_dlc1_set01_torso_o,25,Set,,None,Finesse,0,0,,081EDA1AC3071E8833,True
-Torso,NULL,36,Privateer's Vest,rogue_dlc1_set01_torso_n,25,Set,,None,Finesse,0,0,,081EDA1AC3071E8832,True
-Torso,NULL,34,Privateer's Vest,rogue_dlc1_set01_torso_m,25,Set,,None,Finesse,0,0,,081EDA1AC3071E8831,True
-Torso,NULL,32,Privateer's Vest,rogue_dlc1_set01_torso_l,25,Set,,None,Finesse,0,0,,081EDA1AC3071E8830,True
-Torso,NULL,30,Privateer's Vest,rogue_dlc1_set01_torso_k,25,Set,,None,Finesse,0,0,,081EDA1AC3071E882F,True
-Torso,NULL,28,Privateer's Vest,rogue_dlc1_set01_torso_j,25,Set,,None,Finesse,0,0,,081EDA1AC3071E882E,True
-Torso,NULL,26,Privateer's Vest,rogue_dlc1_set01_torso_i,25,Set,,None,Finesse,0,0,,081EDA1AC3071E882D,True
+Torso,1E5389,44,Privateer's Vest,rogue_dlc1_set01_torso_r,25,Set,,None,Finesse,0,0,,081EDA1AC3071E8838,True
+Torso,1E5388,42,Privateer's Vest,rogue_dlc1_set01_torso_q,25,Set,,None,Finesse,0,0,,081EDA1AC3071E8836,True
+Torso,1E5387,40,Privateer's Vest,rogue_dlc1_set01_torso_p,25,Set,,None,Finesse,0,0,,081EDA1AC3071E8835,True
+Torso,1E5386,38,Privateer's Vest,rogue_dlc1_set01_torso_o,25,Set,,None,Finesse,0,0,,081EDA1AC3071E8833,True
+Torso,1E5385,36,Privateer's Vest,rogue_dlc1_set01_torso_n,25,Set,,None,Finesse,0,0,,081EDA1AC3071E8832,True
+Torso,1E5384,34,Privateer's Vest,rogue_dlc1_set01_torso_m,25,Set,,None,Finesse,0,0,,081EDA1AC3071E8831,True
+Torso,1E5383,32,Privateer's Vest,rogue_dlc1_set01_torso_l,25,Set,,None,Finesse,0,0,,081EDA1AC3071E8830,True
+Torso,1E5382,30,Privateer's Vest,rogue_dlc1_set01_torso_k,25,Set,,None,Finesse,0,0,,081EDA1AC3071E882F,True
+Torso,1E5381,28,Privateer's Vest,rogue_dlc1_set01_torso_j,25,Set,,None,Finesse,0,0,,081EDA1AC3071E882E,True
+Torso,1E5380,26,Privateer's Vest,rogue_dlc1_set01_torso_i,25,Set,,None,Finesse,0,0,,081EDA1AC3071E882D,True
 Torso,1E537F,24,Privateer's Vest,rogue_dlc1_set01_torso_h,25,Set,,None,Finesse,0,0,,081EDA1AC3071E882C,True
 Torso,1E537E,22,Privateer's Vest,rogue_dlc1_set01_torso_g,25,Set,,None,Finesse,0,0,,081EDA1AC3071E882B,True
 Torso,1E537D,20,Privateer's Vest,rogue_dlc1_set01_torso_f,25,Set,,None,Finesse,0,0,,081EDA1AC3071E882A,True
 Torso,1E537C,18,Privateer's Vest,rogue_dlc1_set01_torso_e,25,Set,,None,Finesse,0,0,,081EDA1AC3071E8829,True
 Torso,1E537B,16,Privateer's Vest,rogue_dlc1_set01_torso_d,25,Set,,None,Finesse,0,0,,081EDA1AC3071E8828,True
 Torso,1E537A,14,Privateer's Vest,rogue_dlc1_set01_torso_c,25,Set,,None,Finesse,0,0,,081EDA1AC3071E8827,True
-Torso,NULL,12,Privateer's Vest,rogue_dlc1_set01_torso_b,25,Set,,None,Finesse,0,0,,081EDA1AC3071E8826,True
-Torso,NULL,10,Privateer's Vest,rogue_dlc1_set01_torso_a,25,Set,,None,Finesse,0,0,,081EDA1AC3071E53CD,True
+Torso,1E5379,12,Privateer's Vest,rogue_dlc1_set01_torso_b,25,Set,,None,Finesse,0,0,,081EDA1AC3071E8826,True
+Torso,1E5378,10,Privateer's Vest,rogue_dlc1_set01_torso_a,25,Set,,None,Finesse,0,0,,081EDA1AC3071E53CD,True
 Torso,1CCBFC,45,Armor of the Fallen,warrior_unique10_torso_s,52,Unique,,None,Might,0,0,,1D1E801AC3071CCCBF1CCC80,True
 Torso,1CCBFB,44,Armor of the Fallen,warrior_unique10_torso_r,52,Unique,,None,Might,0,0,,1D1E801AC3071CCCBE1CCC7F,True
 Torso,1CCBFA,42,Armor of the Fallen,warrior_unique10_torso_q,52,Unique,,None,Might,0,0,,1D1E801AC3071CCCBD1CCC7E,True
@@ -6556,7 +6556,7 @@ Torso,1D1D56,24,Renewing Cuirass of Eradicating,torso_merchant_rare02a,28,Infreq
 Torso,1D1D4B,7,Rousing Armor of Lightning Aversion,torso_merchant_rare01b,19,Infrequent,,None,Finesse,079F59,07AA53,,081EDA1AC307,False
 Torso,1D1D4A,8,Warrior's Cuirass of Dismantling,torso_merchant_rare01a,24,Infrequent,,None,Might,07A737,07A8D6,,1D1E801AC307,False
 Torso,1D1D6D,36,Innervating Armor,torso_merchant_infrequent04d,26,Rare,,None,Finesse,1C428D,0,,081EDA1AC307,False
-Torso,1D1D6B,36,Armor of Storm's Rage,torso_merchant_infrequent04b,26,Rare,,None,Finesse,0,1428000,,081EDA1AC307,False
+Torso,1D1D6B,36,Armor of Storm's Rage,torso_merchant_infrequent04b,26,Rare,,None,Finesse,0,1428E3,,081EDA1AC307,False
 Torso,1D1D6A,34,Prismere Cuirass,torso_merchant_infrequent04a,30,Infrequent,AUUE,None,Might,0,0,,1D1E801AC307,False
 Torso,1D1D61,28,Rallying Cuirass,torso_merchant_infrequent03d,28,Infrequent,,None,Might,140BC7,0,,1D1E801AC307,False
 Torso,1D1D5F,27,Noxious Armor,torso_merchant_infrequent03b,24,Rare,,None,Finesse,07A7F3,0,,081EDA1AC307,False

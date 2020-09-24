@@ -32,7 +32,7 @@ namespace KoAR.Core
         private static bool TryLoadFromRow(string[] entries, [NotNullWhen(true)] out ItemDefinition? definition)
         {
             definition = null;
-            if (entries.Length != 16
+            if (entries.Length != 15
                 || !Enum.TryParse(entries[0], true, out EquipmentCategory category)
                 || !uint.TryParse(entries[1], NumberStyles.HexNumber, null, out uint typeId)
                 || !byte.TryParse(entries[2], out byte level)
@@ -44,8 +44,7 @@ namespace KoAR.Core
                 || !uint.TryParse(entries[11], NumberStyles.HexNumber, null, out uint suffix)
                 || !TryParseBuffList(entries[12], out var itemBuffs)
                 || !TryParseBuffList(entries[13], out var playerBuffs)
-                || !bool.TryParse(entries[14], out bool hasVariants)
-                || entries[15].Length > 0)
+                || !bool.TryParse(entries[14], out bool hasVariants))
             {
                 return false;
             }
