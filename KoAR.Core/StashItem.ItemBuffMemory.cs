@@ -23,8 +23,7 @@ namespace KoAR.Core
                 // since we don't support mutation we just need to read in what item buffs are applied.
                 for (int i = 0; i < selfBuffs.Length; i += 2)
                 {
-                    var buffId = selfBuffs[0];
-                    List.Add(Amalur.GetBuff(buffId));
+                    List.Add(Amalur.GetBuff(selfBuffs[i]));
                 }
             }
 

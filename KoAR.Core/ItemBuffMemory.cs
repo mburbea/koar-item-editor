@@ -17,7 +17,7 @@ namespace KoAR.Core
 
         internal static uint GetSelfBuffInstanceId(int index) => (uint)Hasher.GetHash($"selfbuff_{index}");
         internal static uint GetAffixInstanceId(Buff? buff) => buff is null ? 0 : (uint)Hasher.GetHash($"selfbuff{buff.BuffType}_{buff.Id}");
-        internal static uint GetSocketInstanceId(int socket) => (uint)Hasher.GetHash($"socketable_self_{socket}_0");
+        internal static uint GetSocketInstanceId(int slot) => (uint)Hasher.GetHash($"socketable_self_{slot}_0");
 
         private readonly Item _item;
 
@@ -34,9 +34,9 @@ namespace KoAR.Core
             }
             var activeBuffs = MemoryMarshal.Cast<byte, uint>(Bytes.AsSpan(Offsets.FirstActiveBuff, count * 16));
             var socketInstances = _item.ItemSockets.Gems
-                .Select((g, i) => (g, i))
-                .Where(t => t.g.Definition.Buff.ApplyType == ApplyType.OnObject)
-                .Select(t => GetSocketInstanceId(t.i))
+                .Select((gem, slot) => (gem, slot))
+                .Where(t => t.gem.Definition.Buff.ApplyType == ApplyType.OnObject)
+                .Select(t => GetSocketInstanceId(t.slot))
                 .ToArray();
 
             for (int i = 0; i < activeBuffs.Length; i += 4)
@@ -111,8 +111,7 @@ namespace KoAR.Core
             buffData = buffData[1..];
             for (int i = 0; i < List.Count; i++)
             {
-                ulong buffId = List[i].Id;
-                buffData[i] = buffId | ((ulong)uint.MaxValue) << 32;
+                buffData[i] = List[i].Id | ((ulong)uint.MaxValue) << 32;
             }
             Bytes = MemoryUtilities.ReplaceBytes(Bytes, Offsets.FirstActiveBuff, currentLength, MemoryMarshal.AsBytes(buffer));
             Count = ActiveBuffCount;
