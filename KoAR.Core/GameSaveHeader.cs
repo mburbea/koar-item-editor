@@ -4,23 +4,22 @@ namespace KoAR.Core
 {
     public class GameSaveHeader
     {
-        private const int RemasterHeaderSize = 6 * 1024 - 8;
-        public byte[] Bytes { get; }
-        private int _dataLengthOffset { get; }
+        private const int RemasterHeaderLength = 6 * 1024 - 8;
+        private readonly int _dataLengthOffset;
+        private readonly GameSave _gameSave;
 
-        public int DataLength
+        public GameSaveHeader(GameSave gameSave)
         {
-            get => MemoryUtilities.Read<int>(Bytes, _dataLengthOffset);
-            set => MemoryUtilities.Write(Bytes, _dataLengthOffset, value);
+            _gameSave = gameSave;
+            _dataLengthOffset = gameSave.Bytes.AsSpan().IndexOf(new byte[8] { 0, 0, 0, 0, 0xA, 0, 0, 0 }) - 4;
         }
 
-        public GameSaveHeader(GameSave save)
+        public int BodyDataLength
         {
-            var data = save.Bytes.AsSpan(8);
-            _dataLengthOffset = data.IndexOf(new byte[8] { 0, 0, 0, 0, 0xA, 0, 0, 0 }) - 4;
-            Bytes = save.IsRemaster ?
-                data.Slice(0, RemasterHeaderSize).ToArray()
-                : data.Slice(0, _dataLengthOffset + 12).ToArray();
+            get => MemoryUtilities.Read<int>(_gameSave.Bytes, _dataLengthOffset);
+            set => MemoryUtilities.Write(_gameSave.Bytes, _dataLengthOffset, value);
         }
+
+        public int Length => _gameSave.IsRemaster ? RemasterHeaderLength : _dataLengthOffset + 12;
     }
 }

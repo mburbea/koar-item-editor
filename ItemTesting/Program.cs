@@ -103,15 +103,12 @@ namespace ItemTesting
         //}
         static void Main()
         {
-            GameSave gameSave = new GameSave(@"..\..\..\..\9190114save84.sav");
-            Console.WriteLine($"Stash item count at load:{gameSave.Stash.Items.Count}");
-            gameSave.Stash.AddItem(Amalur.ItemDefinitions.Values.First());
-            //gameSave.GetAllEquipment(); // Reload stash
-            Console.WriteLine($"Stash item count after add:{gameSave.Stash.Items.Count}");
-            gameSave.Stash.DeleteItem(gameSave.Stash.Items.First());
-            //gameSave.GetAllEquipment(); // Resload stash
-            Console.WriteLine($"Stash item count after delete:{gameSave.Stash.Items.Count}");
-            Console.ReadLine();
+            GameSave gameSave = new GameSave(@"C:\Program Files (x86)\Steam\userdata\107335713\1041720\remote\autocloud\save\svd_fmt_5_7.sav");
+            foreach(var (key,item) in Amalur.ItemDefinitions.Take(2000))
+            {
+                gameSave.Stash.AddItem(item);
+            }
+            gameSave.SaveFile();
         }
     }
 }

@@ -11,7 +11,6 @@ namespace KoAR.Core
     {
         public const float DurabilityLowerBound = 0f;
         public const float DurabilityUpperBound = 100f;
-        public const int MinEquipmentLength = 44;
 
         public Item(GameSave gameSave, int typeIdOffset, int offset, int dataLength, int itemBuffsOffset, int itemBuffsLength, int itemGemsOffset, int itemGemsLength)
         {
