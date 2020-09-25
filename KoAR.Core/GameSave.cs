@@ -1,6 +1,8 @@
 ﻿using Force.Crc32;
+using Ionic.Zlib;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -11,8 +13,10 @@ namespace KoAR.Core
     public sealed class GameSave
     {
         private const int MaxRemasterBodySize = 4 * 1024 * 1024;
+        private const int CompressedFlag = 0x62_69_6C_7A; // zlib
 
         private readonly int _bagOffset;
+        private readonly int _gameStateStartOffset;
         private readonly int[] _dataLengthOffsets;
         private readonly Container _itemBuffsContainer;
         private readonly Container _itemContainer;
@@ -29,19 +33,31 @@ namespace KoAR.Core
                 throw new NotSupportedException("Save file is not a user save and changing them can lead to the game infinite looping. The editor only supports saves that start with svd_fmt_5.");
             }
             _header = new GameSaveHeader(this);
-            Body = Bytes.AsSpan(BodyStart, BodyDataLength).ToArray();
-            IsCompressed = Encoding.GetString(Body, 0, 4) == "zlib";
-            if (IsCompressed)
+            if (BitConverter.ToInt32(Bytes, BodyStart) == CompressedFlag)
             {
-                throw new NotSupportedException("Save file uses compression.");
+                using var buffer = new MemoryStream();
+                var bundleInfoStart = BodyStart + 12;
+                var bundleInfoSize = BitConverter.ToInt32(Bytes, bundleInfoStart - 4);
+                using var bundleInfoData = new ZlibStream(new MemoryStream(Bytes, bundleInfoStart, bundleInfoSize), CompressionMode.Decompress);
+                bundleInfoData.CopyTo(buffer);
+                var gameStateStart = bundleInfoStart + bundleInfoSize + 4;
+                var gameStateSize = BitConverter.ToInt32(Bytes, gameStateStart - 4);
+                using var gameStateData = new ZlibStream(new MemoryStream(Bytes, gameStateStart, gameStateSize), CompressionMode.Decompress);
+                gameStateData.CopyTo(buffer);
+                Body = buffer.ToArray();
+            }
+            else
+            {
+                Body = Bytes.AsSpan(BodyStart, BodyDataLength).ToArray();
             }
             _originalBodyLength = Body.Length;
             Stash = Stash.TryCreateStash(this);
             ReadOnlySpan<byte> data = Body;
             _bagOffset = GetBagOffset(data);
+            _gameStateStartOffset = data.IndexOf(new byte[5] { 0xF7, 0x5D, 0x3C, 0x00, 0x0A });
             _dataLengthOffsets = new[]{
+                _gameStateStartOffset + 5, // gameStateSize
                 data.IndexOf(new byte[5] { 0x0C, 0xAE, 0x32, 0x00, 0x00 }) + 5, // unknown length 1
-                data.IndexOf(new byte[5] { 0xF7, 0x5D, 0x3C, 0x00, 0x0A }) + 5, // unknown length 2
                 data.IndexOf(new byte[5] { 0x23, 0xCC, 0x58, 0x00, 0x03 }) + 5, // type section length
             };
             _itemContainer = new Container(this, data.IndexOf(new byte[5] { 0xD3, 0x34, 0x43, 0x00, 0x00 }), 0x00_24_D5_68_00_00_00_0Bul);
@@ -139,7 +155,6 @@ namespace KoAR.Core
 
         public Encoding Encoding => IsRemaster ? Encoding.UTF8 : Encoding.Default;
         public bool IsRemaster { get; }
-        public bool IsCompressed { get; private set; }
         private int BodyStart => 8 + _header.Bytes.Length + 4;
         public byte[] Bytes { get; internal set; }
         public byte[] Body { get; internal set; }
@@ -176,7 +191,7 @@ namespace KoAR.Core
         internal void UpdateDataLengths(int itemOffset, int delta)
         {
             _header.DataLength += delta;
-            BodyDataLength += delta;
+            //BodyDataLength += delta;
             foreach (var offset in _dataLengthOffsets)
             {
                 if (offset < itemOffset)
@@ -193,9 +208,35 @@ namespace KoAR.Core
             _header.Bytes.CopyTo(Bytes, 8);
             if (IsRemaster)
             {
+                // possibly unneccessary but it can't hurt.
                 Bytes.AsSpan(BodyStart, MaxRemasterBodySize).Clear();
-                Body.CopyTo(Bytes, BodyStart);
-                _originalBodyLength = Body.Length;
+                if (Body.Length > MaxRemasterBodySize)
+                {
+                    using var bundleBuffer = new MemoryStream();
+                    using (var zip = new ZlibStream(bundleBuffer, CompressionMode.Compress, leaveOpen: true))
+                    {
+                        zip.Write(Body, 0, _gameStateStartOffset);
+                    }
+                    var bundleBytes = bundleBuffer.ToArray();
+                    using var gameStateBuffer = new MemoryStream();
+                    using (var zip = new ZlibStream(gameStateBuffer, CompressionMode.Compress, leaveOpen: true))
+                    {
+                        zip.Write(Body, _gameStateStartOffset, Body.Length - _gameStateStartOffset);
+                    }
+                    var gameStateBytes = gameStateBuffer.ToArray();
+                    BodyDataLength = bundleBytes.Length + gameStateBytes.Length + 16; //The bundles + 4 int32s (flag, uncompressed length, bundleInfoLength, gameStateLength).
+                    MemoryUtilities.Write(Bytes, BodyStart, CompressedFlag); // zlib
+                    MemoryUtilities.Write(Bytes, BodyStart + 4, _header.DataLength);
+                    MemoryUtilities.Write(Bytes, BodyStart + 8, bundleBytes.Length);
+                    bundleBytes.CopyTo(Bytes, BodyStart + 12);
+                    MemoryUtilities.Write(Bytes, BodyStart + 12 + bundleBytes.Length, gameStateBytes.Length);
+                    gameStateBytes.CopyTo(Bytes, BodyStart + 16 + bundleBytes.Length);
+                }
+                else
+                {
+                    BodyDataLength = Body.Length;
+                    Body.CopyTo(Bytes, BodyStart);
+                }
                 var fileCrc32 = Crc32Algorithm.Append(0, Bytes, 8, Bytes.Length - 8);
                 var headerCrc32 = Crc32Algorithm.Append(0, _header.Bytes);
                 MemoryUtilities.Write(Bytes, 0, fileCrc32);
@@ -203,6 +244,7 @@ namespace KoAR.Core
             }
             else
             {
+                BodyDataLength = Body.Length;
                 Bytes = MemoryUtilities.ReplaceBytes(Bytes, BodyStart, _originalBodyLength, Body);
                 _originalBodyLength = Body.Length;
             }
