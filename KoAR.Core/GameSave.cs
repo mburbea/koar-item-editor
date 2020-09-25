@@ -2,7 +2,6 @@
 using Ionic.Zlib;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -191,7 +190,6 @@ namespace KoAR.Core
         internal void UpdateDataLengths(int itemOffset, int delta)
         {
             _header.DataLength += delta;
-            //BodyDataLength += delta;
             foreach (var offset in _dataLengthOffsets)
             {
                 if (offset < itemOffset)
