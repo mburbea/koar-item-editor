@@ -154,7 +154,7 @@ namespace KoAR.Core
 
         public Encoding Encoding => IsRemaster ? Encoding.UTF8 : Encoding.Default;
         public bool IsRemaster { get; }
-        private int BodyStart => 8 + _header.Bytes.Length + 4;
+        private int BodyStart => 8 + _header.Length + 4;
         public byte[] Bytes { get; internal set; }
         public byte[] Body { get; internal set; }
         public string FileName { get; }
@@ -167,12 +167,12 @@ namespace KoAR.Core
 
         private int BodyDataLength
         {
-            get => IsRemaster ? MemoryUtilities.Read<int>(Bytes, 8 + _header.Bytes.Length) : Bytes.Length - BodyStart;
+            get => IsRemaster ? MemoryUtilities.Read<int>(Bytes, 8 + _header.Length) : Bytes.Length - BodyStart;
             set
             {
                 if (IsRemaster)
                 {
-                    MemoryUtilities.Write(Bytes, 8 + _header.Bytes.Length, value);
+                    MemoryUtilities.Write(Bytes, 8 + _header.Length, value);
                 }
             }
         }
@@ -189,7 +189,7 @@ namespace KoAR.Core
 
         internal void UpdateDataLengths(int itemOffset, int delta)
         {
-            _header.DataLength += delta;
+            _header.BodyDataLength += delta;
             foreach (var offset in _dataLengthOffsets)
             {
                 if (offset < itemOffset)
@@ -203,42 +203,29 @@ namespace KoAR.Core
         public void SaveFile()
         {
             File.Copy(FileName, $"{FileName}.bak", true);
-            _header.Bytes.CopyTo(Bytes, 8);
             if (IsRemaster)
             {
                 // possibly unneccessary but it can't hurt.
                 Bytes.AsSpan(BodyStart, MaxRemasterBodySize).Clear();
                 if (Body.Length > MaxRemasterBodySize)
                 {
-                    using var bundleBuffer = new MemoryStream();
-                    using (var zip = new ZlibStream(bundleBuffer, CompressionMode.Compress, leaveOpen: true))
-                    {
-                        zip.Write(Body, 0, _gameStateStartOffset);
-                    }
-                    var bundleBytes = bundleBuffer.ToArray();
-                    using var gameStateBuffer = new MemoryStream();
-                    using (var zip = new ZlibStream(gameStateBuffer, CompressionMode.Compress, leaveOpen: true))
-                    {
-                        zip.Write(Body, _gameStateStartOffset, Body.Length - _gameStateStartOffset);
-                    }
-                    var gameStateBytes = gameStateBuffer.ToArray();
-                    BodyDataLength = bundleBytes.Length + gameStateBytes.Length + 16; //The bundles + 4 int32s (flag, uncompressed length, bundleInfoLength, gameStateLength).
+                    var (bundleStream, bundleLength) = CompressStream(Body, 0, _gameStateStartOffset);
+                    var (gameStateStream, gameStateLength) = CompressStream(Body, _gameStateStartOffset, Body.Length - _gameStateStartOffset);
+                    BodyDataLength = bundleLength + gameStateLength + 16; //The bundles + 4 int32s (flag, uncompressed length, bundleInfoLength, gameStateLength).
                     MemoryUtilities.Write(Bytes, BodyStart, CompressedFlag); // zlib
-                    MemoryUtilities.Write(Bytes, BodyStart + 4, _header.DataLength);
-                    MemoryUtilities.Write(Bytes, BodyStart + 8, bundleBytes.Length);
-                    bundleBytes.CopyTo(Bytes, BodyStart + 12);
-                    MemoryUtilities.Write(Bytes, BodyStart + 12 + bundleBytes.Length, gameStateBytes.Length);
-                    gameStateBytes.CopyTo(Bytes, BodyStart + 16 + bundleBytes.Length);
+                    MemoryUtilities.Write(Bytes, BodyStart + 4, _header.BodyDataLength);
+                    MemoryUtilities.Write(Bytes, BodyStart + 8, bundleLength);
+                    bundleStream.Read(Bytes, BodyStart + 12, bundleLength);
+                    MemoryUtilities.Write(Bytes, BodyStart + 12 + bundleLength, gameStateLength);
+                    gameStateStream.Read(Bytes, BodyStart + 16 + bundleLength, gameStateLength);
                 }
                 else
                 {
                     BodyDataLength = Body.Length;
                     Body.CopyTo(Bytes, BodyStart);
                 }
-                var fileCrc32 = Crc32Algorithm.Append(0, Bytes, 8, Bytes.Length - 8);
-                var headerCrc32 = Crc32Algorithm.Append(0, _header.Bytes);
-                MemoryUtilities.Write(Bytes, 0, fileCrc32);
-                MemoryUtilities.Write(Bytes, 4, headerCrc32);
+                MemoryUtilities.Write(Bytes, 0, Crc32Algorithm.Compute(Bytes, 8, Bytes.Length - 8)); // fileCrc
+                MemoryUtilities.Write(Bytes, 4, Crc32Algorithm.Compute(Bytes, 8, _header.Length)); // headerCrc
             }
             else
             {
@@ -247,6 +234,17 @@ namespace KoAR.Core
                 _originalBodyLength = Body.Length;
             }
             File.WriteAllBytes(FileName, Bytes);
+
+            static (Stream, int) CompressStream(byte[] body, int start, int count)
+            {
+                var stream = new MemoryStream();
+                using (var zip = new ZlibStream(stream, CompressionMode.Compress, leaveOpen: true))
+                {
+                    zip.Write(body, start, count);
+                }
+                stream.Seek(0L, SeekOrigin.Begin);
+                return (stream, (int)stream.Length);
+            }
         }
 
         public void UpdateOffsets(int itemOffset, int delta)
