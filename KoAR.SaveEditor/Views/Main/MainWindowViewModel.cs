@@ -136,6 +136,11 @@ namespace KoAR.SaveEditor.Views.Main
                 });
                 return;
             }
+            catch (Exception e)
+            {
+                App.ShowExceptionDialog("Error Loading File", e);
+                return;
+            }
             this.GameSave = gameSave;
             Settings.Default.LastDirectory = Path.GetFullPath(Path.GetDirectoryName(dialog.FileName));
             this.InventoryManager = new InventoryManagerViewModel(this);

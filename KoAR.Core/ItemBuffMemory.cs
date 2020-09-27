@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace KoAR.Core
@@ -25,14 +26,20 @@ namespace KoAR.Core
         {
             (_item, ItemOffset) = (item, itemOffset);
             Bytes = gameSave.Body.AsSpan(itemOffset, dataLength).ToArray();
-            var count = Count;
-            var selfBuffCount = MemoryUtilities.Read<int>(Bytes, Offsets.FirstActiveBuff + 4 + (count * 16));
-            var selfBuffs = MemoryMarshal.Cast<byte, uint>(Bytes.AsSpan(Offsets.FirstActiveBuff + 8 + (count * 16), selfBuffCount * 8));
+            var buffData = Bytes.AsSpan(Offsets.BuffCount, dataLength - 8 - Offsets.BuffCount); // everything else except for the affixes.
+            int activeBuffCount = MemoryUtilities.Read<int>(buffData);
+            buffData = buffData[4..];
+            var activeBuffs = MemoryMarshal.Cast<byte, BuffInstance>(buffData[..(Unsafe.SizeOf<BuffInstance>() * activeBuffCount)]);
+            buffData =  buffData[activeBuffs
+            var inactiveBuffCount = (int)buffData[0];
+            var inactiveBuffs = buffData.Slice(1, inactiveBuffCount * 4);
+            buffData = buffData[(1 + inactiveBuffCount * 4)..];
+            var selfBuffCount = buffData[0];
+            var selfBuffs = buffData[1..];
             for (int i = 0; i < selfBuffs.Length; i += 2)
             {
                 List.Add(Amalur.GetBuff(selfBuffs[i]));
             }
-            var activeBuffs = MemoryMarshal.Cast<byte, uint>(Bytes.AsSpan(Offsets.FirstActiveBuff, count * 16));
             var socketInstances = _item.ItemSockets.Gems
                 .Select((gem, slot) => (gem, slot))
                 .Where(t => t.gem.Definition.Buff.ApplyType == ApplyType.OnObject)
