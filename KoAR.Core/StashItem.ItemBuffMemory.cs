@@ -21,7 +21,7 @@ namespace KoAR.Core
                 BuffInstance.ReadList(ref data); // activeBuffs
                 BuffInstance.ReadList(ref data); // inactiveBuffs
                 var selfBuffs = BuffDuration.ReadList(ref data);
-                foreach(var (buffId, _) in selfBuffs)
+                foreach (var (buffId, _) in selfBuffs)
                 {
                     List.Add(Amalur.GetBuff(buffId));
                 }

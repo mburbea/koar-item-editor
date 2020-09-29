@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -24,7 +23,7 @@ namespace KoAR.Core
     {
         public readonly uint BuffId;
         public readonly uint Duration;
-        
+
         public BuffDuration(uint buffId) => (BuffId, Duration) = (buffId, uint.MaxValue);
 
         public void Deconstruct(out uint buffId, out uint duration) => (buffId, duration) = (BuffId, Duration);

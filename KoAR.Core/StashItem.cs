@@ -16,7 +16,7 @@ namespace KoAR.Core
             ItemOffset = offset;
             Bytes = gameSave.Body.AsSpan(offset, dataLength).ToArray();
             var span = Bytes.AsSpan(Offsets.BuffCount);
-            foreach(var (buffId, _) in BuffDuration.ReadList(ref span))
+            foreach (var (buffId, _) in BuffDuration.ReadList(ref span))
             {
                 PlayerBuffs.Add(Amalur.GetBuff(buffId));
             }
@@ -27,9 +27,9 @@ namespace KoAR.Core
             Gems = gems;
             // socket section is either FF
             // or 20 02, followed by int32 count, and int32 handle per gem.
-            int socketsStart = gems.Length == 0 
-                ? Bytes.Length - 1 
-                : gems[0].ItemOffset - offset - (4 * (1 + gems.Length)) - 2; 
+            int socketsStart = gems.Length == 0
+                ? Bytes.Length - 1
+                : gems[0].ItemOffset - offset - (4 * (1 + gems.Length)) - 2;
 
             ItemBuffs = Bytes[Offsets.HasItemBuffs] == 0x14 ? new ItemBuffMemory(this, socketsStart) : Definition.ItemBuffs;
         }
