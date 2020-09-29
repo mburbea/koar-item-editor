@@ -172,7 +172,7 @@ namespace KoAR.SaveEditor.Views.Main
             {
                 using CancellationTokenSource source = new CancellationTokenSource();
                 source.CancelAfter(2500);
-                if (Settings.Default.Acknowledged3x)
+                if (false && Settings.Default.Acknowledged3x)
                 {
                     await this.UpdateNotifier.CheckForUpdatesAsync(source.Token).ConfigureAwait(false);
                 }
@@ -181,8 +181,20 @@ namespace KoAR.SaveEditor.Views.Main
                     IReleaseInfo? release = await UpdateMethods.FetchLatest2xReleaseAsync(source.Token).ConfigureAwait(false);
                     if (release != null)
                     {
-                        application.Dispatcher.Invoke(new Action<IReleaseInfo>(this.OpenOriginalUpdateWindow), release);
-                        return;
+                        TaskDialogResult downgradePromptResult = TaskDialog.Show(new TaskDialogOptions
+                        {
+                            Title = "KoAR Save Editor",
+                            MainInstruction = $"Downgrade to {release.Version}?",
+                            Content = $"You are currently running v{App.Version}. 3.0 releases are only tested against Re-Reckoning. If you are playing Reckoning you should consider downgrading.",
+                            MainIcon = VistaTaskDialogIcon.Information,
+                            VerificationText = $"Check here to downgrade to {release.Version}",
+                        }) ;
+
+                        if (downgradePromptResult.VerificationChecked == true)
+                        {
+                            application.Dispatcher.Invoke(new Action<IReleaseInfo>(this.OpenOriginalUpdateWindow), release);
+                            return;
+                        }
                     }
                 }
             }
