@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -15,14 +16,7 @@ namespace KoAR.Core
 
         public void Deconstruct(out uint instanceId, out uint buffId, out ulong duration) => (instanceId, buffId, duration) = (InstanceId, BuffId, Duration);
 
-        public static Span<BuffInstance> ReadList(ref Span<byte> data)
-        {
-            var count = MemoryMarshal.Read<int>(data);
-            var byteCount = count * Unsafe.SizeOf<BuffInstance>();
-            var list = MemoryMarshal.Cast<byte, BuffInstance>(data.Slice(4, byteCount));
-            data = data[(4 + byteCount)..];
-            return list;
-        }
+        public static Span<BuffInstance> ReadList(ref Span<byte> data) => BuffMethods.ReadList<BuffInstance>(ref data);
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -35,11 +29,17 @@ namespace KoAR.Core
 
         public void Deconstruct(out uint buffId, out uint duration) => (buffId, duration) = (BuffId, Duration);
 
-        public static Span<BuffDuration> ReadList(ref Span<byte> data)
+        public static Span<BuffDuration> ReadList(ref Span<byte> data) => BuffMethods.ReadList<BuffDuration>(ref data);
+    }
+
+    internal static class BuffMethods
+    {
+        public static Span<T> ReadList<T>(ref Span<byte> data)
+            where T : struct
         {
             var count = MemoryMarshal.Read<int>(data);
-            var byteCount = count * Unsafe.SizeOf<BuffDuration>();
-            var list = MemoryMarshal.Cast<byte, BuffDuration>(data.Slice(4, byteCount));
+            var byteCount = count * Unsafe.SizeOf<T>();
+            var list = MemoryMarshal.Cast<byte, T>(data.Slice(4, byteCount));
             data = data[(4 + byteCount)..];
             return list;
         }

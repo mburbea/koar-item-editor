@@ -158,9 +158,9 @@ namespace KoAR.SaveEditor.Views.Main
             {
                 return;
             }
-            this.GameSave.SaveFile();
+            string backupPath = this.GameSave.SaveFile();
             this.HasUnsavedChanges = false;
-            MessageBox.Show(Application.Current.MainWindow, $"Save successful! Original save backed up as {this.GameSave.FileName}.bak.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(Application.Current.MainWindow, $"Save successful! Original save backed up as {backupPath}.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private async void Application_Activated(object sender, EventArgs e)

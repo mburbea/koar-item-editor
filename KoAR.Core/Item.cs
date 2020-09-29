@@ -20,8 +20,7 @@ namespace KoAR.Core
             ItemSockets = new ItemSockets(gameSave, itemGemsOffset, itemGemsLength);
             ItemBuffs = new ItemBuffMemory(gameSave, this, itemBuffsOffset, itemBuffsLength);
             var span = Bytes.AsSpan(Offsets.BuffCount);
-            var playerBuffs = BuffDuration.ReadList(ref span);
-            foreach(var (buffId, _) in playerBuffs)
+            foreach (var (buffId, _) in BuffDuration.ReadList(ref span))
             {
                 PlayerBuffs.Add(Amalur.GetBuff(buffId));
             }
@@ -184,11 +183,7 @@ namespace KoAR.Core
             }
             var currentLength = Offsets.PostBuffs - Offsets.FirstBuff;
             MemoryUtilities.Write(Bytes, Offsets.BuffCount, PlayerBuffs.Count);
-            Span<ulong> buffData = stackalloc ulong[PlayerBuffs.Count];
-            for (int i = 0; i < buffData.Length; i++)
-            {
-                buffData[i] = PlayerBuffs[i].Id | (ulong)uint.MaxValue << 32;
-            }
+            Span<BuffDuration> buffData = PlayerBuffs.Select(buff => new BuffDuration(buff.Id)).ToArray();
             Bytes = MemoryUtilities.ReplaceBytes(Bytes, Offsets.FirstBuff, currentLength, MemoryMarshal.AsBytes(buffData));
             DataLength = Bytes.Length;
             return Bytes;

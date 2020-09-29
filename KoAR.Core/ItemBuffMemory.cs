@@ -39,7 +39,6 @@ namespace KoAR.Core
                 .Where(t => t.gem.Definition.Buff.ApplyType == ApplyType.OnObject)
                 .Select(t => GetSocketInstanceId(t.slot))
                 .ToArray();
-
             foreach (var (instanceId, buffId, _) in activeBuffs)
             {
                 var buff = Amalur.GetBuff(buffId);
@@ -96,43 +95,24 @@ namespace KoAR.Core
                 return Bytes;
             }
             var currentLength = Bytes.Length - 8 - Offsets.FirstActiveBuff;
-            Span<ulong> buffer = stackalloc ulong[1 + 2 * ActiveBuffCount + List.Count];
-            var buffData = WriteAffixBuffInstance(buffer, Prefix);
-            buffData = WriteAffixBuffInstance(buffData, Suffix);
-            for (int i = 0; i < List.Count; i++)
-            {
-                buffData = WriteSelfBuffInstance(buffData, List[i], i);
-            }
-            for (int i = 0; i < _item.ItemSockets.Gems.Length; i++)
-            {
-                buffData = WriteSocketBuffInstance(buffData, _item.ItemSockets.Gems[i].Definition.Buff, i);
-            }
-            buffData[0] = ((ulong)List.Count) << 32;
-            buffData = buffData[1..];
-            for (int i = 0; i < List.Count; i++)
-            {
-                buffData[i] = List[i].Id | ((ulong)uint.MaxValue) << 32;
-            }
+            Span<byte> buffer = stackalloc byte[8 + (Unsafe.SizeOf<BuffInstance>() * ActiveBuffCount) + (Unsafe.SizeOf<BuffDuration>() * List.Count)];
+            Span<BuffInstance> activeBuffs = Prefix is null ? Array.Empty<BuffInstance>() : new[] { new BuffInstance(GetAffixInstanceId(Prefix), Prefix.Id) }
+                .Concat(Suffix is null ? Array.Empty<BuffInstance>() : new[] { new BuffInstance(GetAffixInstanceId(Suffix), Suffix.Id) })
+                .Concat(List.Select((buff, i) => new BuffInstance(GetSelfBuffInstanceId(i), buff.Id)))
+                .Concat(_item.ItemSockets.Gems
+                        .Select((gem, slot) => (gem.Definition.Buff, slot))
+                        .Where(x => x.Buff.ApplyType == ApplyType.OnObject)
+                        .Select(x => new BuffInstance(GetSocketInstanceId(x.slot), x.Buff.Id)))
+                .ToArray();
+            MemoryMarshal.AsBytes(activeBuffs).CopyTo(buffer);
+            var buffData = buffer[(Unsafe.SizeOf<BuffInstance>() * ActiveBuffCount)..];
+            MemoryUtilities.Write(buffData, 4, List.Count);
+            buffData = buffData[8..];
+            MemoryMarshal.AsBytes(List.Select(buff => new BuffDuration(buff.Id)).ToArray().AsSpan()).CopyTo(buffData);
             Bytes = MemoryUtilities.ReplaceBytes(Bytes, Offsets.FirstActiveBuff, currentLength, MemoryMarshal.AsBytes(buffer));
-            Count = ActiveBuffCount;
+            Count = activeBuffs.Length;
             DataLength = Bytes.Length;
             return Bytes;
-
-            static Span<ulong> WriteBuffInstance(Span<ulong> buffData, Buff buff, uint instanceId)
-            {
-                ulong buffId = buff.Id;
-                buffData[0] = instanceId | buffId << 32;
-                buffData[1] = ulong.MaxValue;
-                return buffData[2..];
-            }
-
-            static Span<ulong> WriteSelfBuffInstance(Span<ulong> buffData, Buff buff, int index) => WriteBuffInstance(buffData, buff, GetSelfBuffInstanceId(index));
-
-            static Span<ulong> WriteAffixBuffInstance(Span<ulong> buffData, Buff? buff) => buff?.ApplyType == ApplyType.OnObject ?
-                WriteBuffInstance(buffData, buff, GetAffixInstanceId(buff)) : buffData;
-
-            static Span<ulong> WriteSocketBuffInstance(Span<ulong> buffData, Buff? buff, int socket) => buff?.ApplyType == ApplyType.OnObject ?
-                WriteBuffInstance(buffData, buff, GetSocketInstanceId(socket)) : buffData;
         }
     }
 }

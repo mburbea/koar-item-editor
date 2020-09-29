@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace KoAR.Core
 {
@@ -16,11 +15,10 @@ namespace KoAR.Core
         {
             ItemOffset = offset;
             Bytes = gameSave.Body.AsSpan(offset, dataLength).ToArray();
-            PlayerBuffs.Capacity = BuffCount;
-            var firstBuff = Offsets.FirstBuff;
-            for (int i = 0; i < PlayerBuffs.Capacity; i++)
+            var span = Bytes.AsSpan(Offsets.BuffCount);
+            foreach(var (buffId, _) in BuffDuration.ReadList(ref span))
             {
-                PlayerBuffs.Add(Amalur.GetBuff(MemoryUtilities.Read<uint>(Bytes, firstBuff + (i * 8))));
+                PlayerBuffs.Add(Amalur.GetBuff(buffId));
             }
             if (HasCustomName)
             {
