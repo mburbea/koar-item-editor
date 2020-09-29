@@ -95,7 +95,6 @@ namespace KoAR.Core
                 return Bytes;
             }
             var currentLength = Bytes.Length - 8 - Offsets.FirstActiveBuff;
-            Span<byte> buffer = stackalloc byte[8 + (Unsafe.SizeOf<BuffInstance>() * ActiveBuffCount) + (Unsafe.SizeOf<BuffDuration>() * List.Count)];
             var activeBuffBytes = MemoryMarshal.AsBytes(Prefix is null ? Array.Empty<BuffInstance>() : new[] { new BuffInstance(GetAffixInstanceId(Prefix), Prefix.Id) }
                 .Concat(Suffix is null ? Array.Empty<BuffInstance>() : new[] { new BuffInstance(GetAffixInstanceId(Suffix), Suffix.Id) })
                 .Concat(List.Select((buff, i) => new BuffInstance(GetSelfBuffInstanceId(i), buff.Id)))
@@ -105,11 +104,11 @@ namespace KoAR.Core
                         .Select(x => new BuffInstance(GetSocketInstanceId(x.slot), x.Buff.Id)))
                 .ToArray()
                 .AsSpan());
+            var selfBuffBytes = MemoryMarshal.AsBytes(List.Select(buff => new BuffDuration(buff.Id)).ToArray().AsSpan());
+            Span<byte> buffer = stackalloc byte[8 + activeBuffBytes.Length + selfBuffBytes.Length];
             activeBuffBytes.CopyTo(buffer);
-            var buffData = buffer[activeBuffBytes.Length..];
-            MemoryUtilities.Write(buffData, 4, List.Count);
-            buffData = buffData[8..];
-            MemoryMarshal.AsBytes(List.Select(buff => new BuffDuration(buff.Id)).ToArray().AsSpan()).CopyTo(buffData);
+            MemoryUtilities.Write(buffer, activeBuffBytes.Length + 4, List.Count);
+            selfBuffBytes.CopyTo(buffer[(activeBuffBytes.Length + 8)..]);
             Bytes = MemoryUtilities.ReplaceBytes(Bytes, Offsets.FirstActiveBuff, currentLength, MemoryMarshal.AsBytes(buffer));
             Count = ActiveBuffCount;
             DataLength = Bytes.Length;
