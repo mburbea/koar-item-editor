@@ -34,16 +34,15 @@ namespace KoAR.Core
             _header = new GameSaveHeader(this);
             if (BitConverter.ToInt32(Bytes, BodyStart) == CompressedFlag)
             {
-                using var buffer = new MemoryStream();
+                Body = new byte[_header.BodyDataLength];
                 var bundleInfoStart = BodyStart + 12;
                 var bundleInfoSize = BitConverter.ToInt32(Bytes, bundleInfoStart - 4);
                 using var bundleInfoData = new ZlibStream(new MemoryStream(Bytes, bundleInfoStart, bundleInfoSize), CompressionMode.Decompress);
-                bundleInfoData.CopyTo(buffer);
+                var endOfBundle = bundleInfoData.Read(Body, 0, Body.Length);
                 var gameStateStart = bundleInfoStart + bundleInfoSize + 4;
                 var gameStateSize = BitConverter.ToInt32(Bytes, gameStateStart - 4);
                 using var gameStateData = new ZlibStream(new MemoryStream(Bytes, gameStateStart, gameStateSize), CompressionMode.Decompress);
-                gameStateData.CopyTo(buffer);
-                Body = buffer.ToArray();
+                gameStateData.Read(Body, endOfBundle, Body.Length - endOfBundle);
             }
             else
             {

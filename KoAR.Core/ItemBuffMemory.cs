@@ -8,7 +8,7 @@ namespace KoAR.Core
 {
     public class ItemBuffMemory : IItemBuffMemory
     {
-        internal static List<(Item item, int offset, uint instanceId)> SetOfInstances = new List<(Item, int, uint)>();
+        internal static List<(Item item, uint instanceId)> SetOfInstances = new List<(Item, uint)>();
         private static class Offsets
         {
             public const int DataLength = 13;
@@ -26,19 +26,13 @@ namespace KoAR.Core
         {
             (_item, ItemOffset) = (item, itemOffset);
             Bytes = gameSave.Body.AsSpan(itemOffset, dataLength).ToArray();
-            var buffData = Bytes.AsSpan(Offsets.BuffCount, dataLength - 8 - Offsets.BuffCount); // everything else except for the affixes.
-            int activeBuffCount = MemoryUtilities.Read<int>(buffData);
-            buffData = buffData[4..];
-            var activeBuffs = MemoryMarshal.Cast<byte, BuffInstance>(buffData[..(Unsafe.SizeOf<BuffInstance>() * activeBuffCount)]);
-            buffData =  buffData[activeBuffs
-            var inactiveBuffCount = (int)buffData[0];
-            var inactiveBuffs = buffData.Slice(1, inactiveBuffCount * 4);
-            buffData = buffData[(1 + inactiveBuffCount * 4)..];
-            var selfBuffCount = buffData[0];
-            var selfBuffs = buffData[1..];
-            for (int i = 0; i < selfBuffs.Length; i += 2)
+            var buffData = Bytes.AsSpan(Offsets.BuffCount); // everything else except for the affixes.
+            var activeBuffs = BuffInstance.ReadList(ref buffData);
+            var inactiveBuffs = BuffInstance.ReadList(ref buffData);
+            var selfBuffs = BuffDuration.ReadList(ref buffData);
+            foreach (var (buffId, _) in selfBuffs)
             {
-                List.Add(Amalur.GetBuff(selfBuffs[i]));
+                List.Add(Amalur.GetBuff(buffId));
             }
             var socketInstances = _item.ItemSockets.Gems
                 .Select((gem, slot) => (gem, slot))
@@ -46,16 +40,15 @@ namespace KoAR.Core
                 .Select(t => GetSocketInstanceId(t.slot))
                 .ToArray();
 
-            for (int i = 0; i < activeBuffs.Length; i += 4)
+            foreach (var (instanceId, buffId, _) in activeBuffs)
             {
-                var instanceId = activeBuffs[i];
-                var buff = Amalur.GetBuff(activeBuffs[i + 1]);
+                var buff = Amalur.GetBuff(buffId);
                 if (GetSelfBuffInstanceId(List.IndexOf(buff)) != instanceId
                     && instanceId != GetAffixInstanceId(Prefix)
                     && instanceId != GetAffixInstanceId(Suffix)
                     && !socketInstances.Contains(instanceId))
                 {
-                    SetOfInstances.Add((item, i / 4, instanceId));
+                    SetOfInstances.Add((item, instanceId));
                     UnsupportedFormat = true;
                     continue;
                 }

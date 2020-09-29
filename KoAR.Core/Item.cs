@@ -16,17 +16,18 @@ namespace KoAR.Core
         {
             (_gameSave, TypeIdOffset, ItemOffset) = (gameSave, typeIdOffset, offset);
             _levelShiftOffset = (byte)(8 * gameSave.Body[TypeIdOffset + 10]);
-            ItemBytes = _gameSave.Body.AsSpan(offset, dataLength).ToArray();
+            Bytes = _gameSave.Body.AsSpan(offset, dataLength).ToArray();
             ItemSockets = new ItemSockets(gameSave, itemGemsOffset, itemGemsLength);
             ItemBuffs = new ItemBuffMemory(gameSave, this, itemBuffsOffset, itemBuffsLength);
-            PlayerBuffs = new List<Buff>(BuffCount);
-            for (int i = 0; i < PlayerBuffs.Capacity; i++)
+            var span = Bytes.AsSpan(Offsets.BuffCount);
+            var playerBuffs = BuffDuration.ReadList(ref span);
+            foreach(var (buffId, _) in playerBuffs)
             {
-                PlayerBuffs.Add(Amalur.GetBuff(MemoryUtilities.Read<uint>(ItemBytes, Offsets.FirstBuff + i * 8)));
+                PlayerBuffs.Add(Amalur.GetBuff(buffId));
             }
             if (HasCustomName)
             {
-                ItemName = _gameSave.Encoding.GetString(ItemBytes, Offsets.Name, NameLength);
+                ItemName = _gameSave.Encoding.GetString(Bytes, Offsets.Name, NameLength);
             }
         }
 
@@ -36,27 +37,27 @@ namespace KoAR.Core
 
         public float CurrentDurability
         {
-            get => MemoryUtilities.Read<float>(ItemBytes, Offsets.CurrentDurability);
-            set => MemoryUtilities.Write(ItemBytes, Offsets.CurrentDurability, value);
+            get => MemoryUtilities.Read<float>(Bytes, Offsets.CurrentDurability);
+            set => MemoryUtilities.Write(Bytes, Offsets.CurrentDurability, value);
         }
 
         internal int DataLength
         {
-            get => MemoryUtilities.Read<int>(ItemBytes, Offsets.DataLength) + 17;
-            set => MemoryUtilities.Write(ItemBytes, Offsets.DataLength, value - 17);
+            get => MemoryUtilities.Read<int>(Bytes, Offsets.DataLength) + 17;
+            set => MemoryUtilities.Write(Bytes, Offsets.DataLength, value - 17);
         }
 
         public List<Buff> PlayerBuffs { get; } = new List<Buff>();
 
         public bool HasCustomName
         {
-            get => ItemBytes[Offsets.HasCustomName] == 1;
-            private set => ItemBytes[Offsets.HasCustomName] = (byte)(value ? 1 : 0);
+            get => Bytes[Offsets.HasCustomName] == 1;
+            private set => Bytes[Offsets.HasCustomName] = (byte)(value ? 1 : 0);
         }
 
-        private ref InventoryFlags Flags => ref Unsafe.As<byte, InventoryFlags>(ref ItemBytes[Offsets.InventoryFlags]);
+        private ref InventoryFlags Flags => ref Unsafe.As<byte, InventoryFlags>(ref Bytes[Offsets.InventoryFlags]);
 
-        public int Owner => MemoryUtilities.Read<int>(ItemBytes, Offsets.Owner);
+        public int Owner => MemoryUtilities.Read<int>(Bytes, Offsets.Owner);
 
         public bool IsStolen
         {
@@ -108,9 +109,9 @@ namespace KoAR.Core
             set => _gameSave.Body[LevelOffset] = value;
         }
 
-        internal byte[] ItemBytes { get; private set; }
+        internal byte[] Bytes { get; private set; }
 
-        public int ItemId => MemoryUtilities.Read<int>(ItemBytes);
+        public int ItemId => MemoryUtilities.Read<int>(Bytes);
 
         public ItemSockets ItemSockets { get; }
 
@@ -119,8 +120,8 @@ namespace KoAR.Core
 
         private int NameLength
         {
-            get => MemoryUtilities.Read<int>(ItemBytes, Offsets.NameLength);
-            set => MemoryUtilities.Write(ItemBytes, Offsets.NameLength, value);
+            get => MemoryUtilities.Read<int>(Bytes, Offsets.NameLength);
+            set => MemoryUtilities.Write(Bytes, Offsets.NameLength, value);
         }
 
         public Rarity Rarity => Definition.Rarity == Rarity.Set
@@ -135,14 +136,14 @@ namespace KoAR.Core
 
         public float MaxDurability
         {
-            get => MemoryUtilities.Read<float>(ItemBytes, Offsets.MaxDurability);
-            set => MemoryUtilities.Write(ItemBytes, Offsets.MaxDurability, value);
+            get => MemoryUtilities.Read<float>(Bytes, Offsets.MaxDurability);
+            set => MemoryUtilities.Write(Bytes, Offsets.MaxDurability, value);
         }
 
         private int BuffCount
         {
-            get => MemoryUtilities.Read<int>(ItemBytes, Offsets.BuffCount);
-            set => MemoryUtilities.Write(ItemBytes, Offsets.BuffCount, value);
+            get => MemoryUtilities.Read<int>(Bytes, Offsets.BuffCount);
+            set => MemoryUtilities.Write(Bytes, Offsets.BuffCount, value);
         }
 
         private Offset Offsets => new Offset(this);
@@ -154,43 +155,43 @@ namespace KoAR.Core
         internal byte[] Serialize(bool forced = false)
         {
             if (HasCustomName != (ItemName.Length != 0)
-                || HasCustomName && ItemName != _gameSave.Encoding.GetString(ItemBytes, Offsets.Name, NameLength))
+                || HasCustomName && ItemName != _gameSave.Encoding.GetString(Bytes, Offsets.Name, NameLength))
             {
                 if (ItemName.Length > 0)
                 {
                     var newBytes = _gameSave.Encoding.GetBytes(ItemName);
-                    if (Offsets.Name + newBytes.Length != ItemBytes.Length)
+                    if (Offsets.Name + newBytes.Length != Bytes.Length)
                     {
                         var buffer = new byte[Offsets.Name + newBytes.Length];
-                        ItemBytes.AsSpan(0, Offsets.NameLength).CopyTo(buffer);
-                        ItemBytes = buffer;
+                        Bytes.AsSpan(0, Offsets.NameLength).CopyTo(buffer);
+                        Bytes = buffer;
                     }
                     HasCustomName = true;
                     NameLength = newBytes.Length;
-                    newBytes.CopyTo(ItemBytes, Offsets.Name);
+                    newBytes.CopyTo(Bytes, Offsets.Name);
                 }
                 else if (HasCustomName)
                 {
-                    ItemBytes = ItemBytes.AsSpan(0, Offsets.NameLength).ToArray();
+                    Bytes = Bytes.AsSpan(0, Offsets.NameLength).ToArray();
                     HasCustomName = false;
                 }
-                DataLength = ItemBytes.Length;
+                DataLength = Bytes.Length;
             }
 
             if (!forced && PlayerBuffs.Count == BuffCount)
             {
-                return ItemBytes;
+                return Bytes;
             }
             var currentLength = Offsets.PostBuffs - Offsets.FirstBuff;
-            MemoryUtilities.Write(ItemBytes, Offsets.BuffCount, PlayerBuffs.Count);
+            MemoryUtilities.Write(Bytes, Offsets.BuffCount, PlayerBuffs.Count);
             Span<ulong> buffData = stackalloc ulong[PlayerBuffs.Count];
             for (int i = 0; i < buffData.Length; i++)
             {
                 buffData[i] = PlayerBuffs[i].Id | (ulong)uint.MaxValue << 32;
             }
-            ItemBytes = MemoryUtilities.ReplaceBytes(ItemBytes, Offsets.FirstBuff, currentLength, MemoryMarshal.AsBytes(buffData));
-            DataLength = ItemBytes.Length;
-            return ItemBytes;
+            Bytes = MemoryUtilities.ReplaceBytes(Bytes, Offsets.FirstBuff, currentLength, MemoryMarshal.AsBytes(buffData));
+            DataLength = Bytes.Length;
+            return Bytes;
         }
 
         public void ChangeDefinition(ItemDefinition definition, bool retainStats)
