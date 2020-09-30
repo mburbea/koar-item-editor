@@ -192,7 +192,7 @@ namespace KoAR.SaveEditor.Views.Main
                                 $"Downgrade to v{release.Version}\n I am running Reckoning",
                             },
                             AllowDialogCancellation = true,
-                            FooterText = " "
+                            FooterText = " " // Dialog looks a bit weird without a footer.
                         });
                         Settings.Default.Acknowledged3x = true;
                         if (dialogResult.CommandButtonResult == 1)
