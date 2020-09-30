@@ -181,7 +181,7 @@ namespace KoAR.SaveEditor.Views.Main
                     IReleaseInfo? release = await UpdateMethods.FetchLatest2xReleaseAsync(source.Token).ConfigureAwait(false);
                     if (release != null)
                     {
-                        TaskDialogResult downgradePromptResult = TaskDialog.Show(new TaskDialogOptions
+                        TaskDialogResult dialogResult = TaskDialog.Show(new TaskDialogOptions
                         {
                             Title = "KoAR Save Editor",
                             MainInstruction = $"Downgrade to v{release.Version}?",
@@ -189,7 +189,8 @@ namespace KoAR.SaveEditor.Views.Main
                             MainIcon = VistaTaskDialogIcon.Warning,
                             VerificationText = $"Check here to downgrade to v{release.Version}",
                         });
-                        if (downgradePromptResult.VerificationChecked == true)
+                        Settings.Default.Acknowledged3x = true;
+                        if (dialogResult.VerificationChecked == true)
                         {
                             application.Dispatcher.Invoke(new Action<IReleaseInfo>(this.OpenOriginalUpdateWindow), release);
                             return;
@@ -274,7 +275,6 @@ namespace KoAR.SaveEditor.Views.Main
 
         private void OpenOriginalUpdateWindow(IReleaseInfo release)
         {
-            Settings.Default.Acknowledged3x = true;
             Settings.Default.Save();
             using OriginalUpdateViewModel viewModel = new OriginalUpdateViewModel(release);
             UpdateWindow window = new UpdateWindow { DataContext = viewModel, Owner = Application.Current.MainWindow };

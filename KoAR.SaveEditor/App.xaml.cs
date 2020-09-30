@@ -1,11 +1,11 @@
-﻿using KoAR.SaveEditor.Properties;
-using Microsoft.Windows.Themes;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Net;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Threading;
+using KoAR.SaveEditor.Properties;
+using Microsoft.Windows.Themes;
 using TaskDialogInterop;
 
 namespace KoAR.SaveEditor
