@@ -195,13 +195,10 @@ namespace KoAR.SaveEditor.Views.Main
                             FooterText = " "
                         });
                         Settings.Default.Acknowledged3x = true;
-                        switch (dialogResult.CommandButtonResult)
+                        if (dialogResult.CommandButtonResult == 1)
                         {
-                            case 1:
-                                application.Dispatcher.Invoke(new Action<IReleaseInfo>(this.OpenOriginalUpdateWindow), release);
-                                return;
-                            default:
-                                break;
+                            application.Dispatcher.Invoke(new Action<IReleaseInfo>(this.OpenOriginalUpdateWindow), release);
+                            return;
                         }
                     }
                 }
