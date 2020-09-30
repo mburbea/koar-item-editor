@@ -172,7 +172,7 @@ namespace KoAR.SaveEditor.Views.Main
             {
                 using CancellationTokenSource source = new CancellationTokenSource();
                 source.CancelAfter(2500);
-                if (false && Settings.Default.Acknowledged3x)
+                if (Settings.Default.Acknowledged3x)
                 {
                     await this.UpdateNotifier.CheckForUpdatesAsync(source.Token).ConfigureAwait(false);
                 }
