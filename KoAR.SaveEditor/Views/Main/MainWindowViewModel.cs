@@ -172,7 +172,7 @@ namespace KoAR.SaveEditor.Views.Main
             {
                 using CancellationTokenSource source = new CancellationTokenSource();
                 source.CancelAfter(2500);
-                if (Settings.Default.Acknowledged3x)
+                if (false && Settings.Default.Acknowledged3x)
                 {
                     await this.UpdateNotifier.CheckForUpdatesAsync(source.Token).ConfigureAwait(false);
                 }
@@ -185,15 +185,23 @@ namespace KoAR.SaveEditor.Views.Main
                         {
                             Title = "KoAR Save Editor",
                             MainInstruction = $"Downgrade to v{release.Version}?",
-                            Content = $"You are currently running v{App.Version}. 3.0 releases are only tested against Re-Reckoning. If you are playing Reckoning you should consider downgrading.",
+                            Content = $"You are currently running v{App.Version}. 3.x releases are only tested against Re-Reckoning. If you are playing Reckoning you should consider downgrading.",
                             MainIcon = VistaTaskDialogIcon.Warning,
-                            VerificationText = $"Check here to downgrade to v{release.Version}",
+                            CommandButtons = new[] {
+                                $"Continue with current version\nI am running Re-Reckoning or willing to experiment",
+                                $"Downgrade to v{release.Version}\n I am running Reckoning",
+                            },
+                            AllowDialogCancellation = true,
+                            FooterText = " "
                         });
                         Settings.Default.Acknowledged3x = true;
-                        if (dialogResult.VerificationChecked == true)
+                        switch (dialogResult.CommandButtonResult)
                         {
-                            application.Dispatcher.Invoke(new Action<IReleaseInfo>(this.OpenOriginalUpdateWindow), release);
-                            return;
+                            case 1:
+                                application.Dispatcher.Invoke(new Action<IReleaseInfo>(this.OpenOriginalUpdateWindow), release);
+                                return;
+                            default:
+                                break;
                         }
                     }
                 }
