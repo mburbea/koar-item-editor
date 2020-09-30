@@ -15399,7 +15399,7 @@
     "modifier": "of the Gladiator",
     "name": "Suffix_Char_Crit_Chance_Plus_Damage_02",
     "id": 502415,
-    "apply_type": "OnObject"
+    "apply_type": "OnOwner"
   },
   {
     "buff_type": "Normal",
@@ -50370,7 +50370,7 @@
     "modifier": "of the Duelist",
     "name": "Suffix_Char_Crit_Chance_Plus_Damage_01",
     "id": 502388,
-    "apply_type": "OnObject"
+    "apply_type": "OnOwner"
   },
   {
     "buff_type": "Normal",
@@ -61007,7 +61007,7 @@
     "modifier": "of the Warlord",
     "name": "Suffix_Char_Crit_Chance_Plus_Damage_03",
     "id": 502416,
-    "apply_type": "OnObject"
+    "apply_type": "OnOwner"
   },
   {
     "buff_type": "Normal",

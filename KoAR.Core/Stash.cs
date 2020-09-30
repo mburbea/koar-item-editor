@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace KoAR.Core
 {
@@ -111,10 +112,7 @@ namespace KoAR.Core
             MemoryUtilities.Write(temp, 10, _gameSave.IsRemaster && type.Category.IsJewelry() ? 100f : type.MaxDurability);
             temp[14] = 1; // quantity
             MemoryUtilities.Write(temp, 18, type.PlayerBuffs.Length);
-            for (int i = 0; i < type.PlayerBuffs.Length; i++)
-            {
-                MemoryUtilities.Write(temp, i * 8 + 22, type.PlayerBuffs[i].Id | ((ulong)uint.MaxValue) << 32);
-            }
+            MemoryMarshal.AsBytes(Array.ConvertAll(type.PlayerBuffs, buff => new BuffDuration(buff.Id)).AsSpan()).CopyTo(temp[22..]);
             temp[^3] = (byte)(_gameSave.IsRemaster ? InventoryFlags.CanBeConvertedToGold | InventoryFlags.IsEquipment : default);
             temp[^2] = (byte)(_gameSave.IsRemaster switch
             {

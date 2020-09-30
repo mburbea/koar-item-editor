@@ -207,6 +207,9 @@
     <PackageReference Include="WPFTaskDialog" Version="1.7.1" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\KoAR.Core\KoAR.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
     <Resource Include="app.ico" />
     <Resource Include="Resources\buffs\absorb_health_damage_amount.png" />
     <Resource Include="Resources\buffs\absorb_power_damage_amount.png" />
@@ -361,9 +364,6 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\KoAR.Core\KoAR.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Settings.Designer.cs">

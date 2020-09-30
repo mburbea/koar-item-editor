@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace KoAR.Core
 {
     public class ItemBuffMemory : IItemBuffMemory
     {
-        internal static List<(Item item, int offset, uint instanceId)> SetOfInstances = new List<(Item, int, uint)>();
+        internal static List<(Item item, uint instanceId)> SetOfInstances = new List<(Item, uint)>();
         private static class Offsets
         {
             public const int DataLength = 13;
@@ -25,30 +26,28 @@ namespace KoAR.Core
         {
             (_item, ItemOffset) = (item, itemOffset);
             Bytes = gameSave.Body.AsSpan(itemOffset, dataLength).ToArray();
-            var count = Count;
-            var selfBuffCount = MemoryUtilities.Read<int>(Bytes, Offsets.FirstActiveBuff + 4 + (count * 16));
-            var selfBuffs = MemoryMarshal.Cast<byte, uint>(Bytes.AsSpan(Offsets.FirstActiveBuff + 8 + (count * 16), selfBuffCount * 8));
-            for (int i = 0; i < selfBuffs.Length; i += 2)
+            var buffData = Bytes.AsSpan(Offsets.BuffCount); // everything else except for the affixes.
+            var activeBuffs = BuffInstance.ReadList(ref buffData);
+            var inactiveBuffs = BuffInstance.ReadList(ref buffData);
+            var selfBuffs = BuffDuration.ReadList(ref buffData);
+            foreach (var (buffId, _) in selfBuffs)
             {
-                List.Add(Amalur.GetBuff(selfBuffs[i]));
+                List.Add(Amalur.GetBuff(buffId));
             }
-            var activeBuffs = MemoryMarshal.Cast<byte, uint>(Bytes.AsSpan(Offsets.FirstActiveBuff, count * 16));
             var socketInstances = _item.ItemSockets.Gems
                 .Select((gem, slot) => (gem, slot))
                 .Where(t => t.gem.Definition.Buff.ApplyType == ApplyType.OnObject)
                 .Select(t => GetSocketInstanceId(t.slot))
                 .ToArray();
-
-            for (int i = 0; i < activeBuffs.Length; i += 4)
+            foreach (var (instanceId, buffId, _) in activeBuffs)
             {
-                var instanceId = activeBuffs[i];
-                var buff = Amalur.GetBuff(activeBuffs[i + 1]);
+                var buff = Amalur.GetBuff(buffId);
                 if (GetSelfBuffInstanceId(List.IndexOf(buff)) != instanceId
                     && instanceId != GetAffixInstanceId(Prefix)
                     && instanceId != GetAffixInstanceId(Suffix)
                     && !socketInstances.Contains(instanceId))
                 {
-                    SetOfInstances.Add((item, i / 4, instanceId));
+                    SetOfInstances.Add((item, instanceId));
                     UnsupportedFormat = true;
                     continue;
                 }
@@ -96,43 +95,24 @@ namespace KoAR.Core
                 return Bytes;
             }
             var currentLength = Bytes.Length - 8 - Offsets.FirstActiveBuff;
-            Span<ulong> buffer = stackalloc ulong[1 + 2 * ActiveBuffCount + List.Count];
-            var buffData = WriteAffixBuffInstance(buffer, Prefix);
-            buffData = WriteAffixBuffInstance(buffData, Suffix);
-            for (int i = 0; i < List.Count; i++)
-            {
-                buffData = WriteSelfBuffInstance(buffData, List[i], i);
-            }
-            for (int i = 0; i < _item.ItemSockets.Gems.Length; i++)
-            {
-                buffData = WriteSocketBuffInstance(buffData, _item.ItemSockets.Gems[i].Definition.Buff, i);
-            }
-            buffData[0] = ((ulong)List.Count) << 32;
-            buffData = buffData[1..];
-            for (int i = 0; i < List.Count; i++)
-            {
-                buffData[i] = List[i].Id | ((ulong)uint.MaxValue) << 32;
-            }
+            var activeBuffBytes = MemoryMarshal.AsBytes(Prefix is null ? Array.Empty<BuffInstance>() : new[] { new BuffInstance(GetAffixInstanceId(Prefix), Prefix.Id) }
+                .Concat(Suffix is null ? Array.Empty<BuffInstance>() : new[] { new BuffInstance(GetAffixInstanceId(Suffix), Suffix.Id) })
+                .Concat(List.Select((buff, i) => new BuffInstance(GetSelfBuffInstanceId(i), buff.Id)))
+                .Concat(_item.ItemSockets.Gems
+                        .Select((gem, slot) => (gem.Definition.Buff, slot))
+                        .Where(x => x.Buff.ApplyType == ApplyType.OnObject)
+                        .Select(x => new BuffInstance(GetSocketInstanceId(x.slot), x.Buff.Id)))
+                .ToArray()
+                .AsSpan());
+            var selfBuffBytes = MemoryMarshal.AsBytes(List.Select(buff => new BuffDuration(buff.Id)).ToArray().AsSpan());
+            Span<byte> buffer = stackalloc byte[8 + activeBuffBytes.Length + selfBuffBytes.Length];
+            activeBuffBytes.CopyTo(buffer);
+            MemoryUtilities.Write(buffer, activeBuffBytes.Length + 4, List.Count);
+            selfBuffBytes.CopyTo(buffer[(activeBuffBytes.Length + 8)..]);
             Bytes = MemoryUtilities.ReplaceBytes(Bytes, Offsets.FirstActiveBuff, currentLength, MemoryMarshal.AsBytes(buffer));
             Count = ActiveBuffCount;
             DataLength = Bytes.Length;
             return Bytes;
-
-            static Span<ulong> WriteBuffInstance(Span<ulong> buffData, Buff buff, uint instanceId)
-            {
-                ulong buffId = buff.Id;
-                buffData[0] = instanceId | buffId << 32;
-                buffData[1] = ulong.MaxValue;
-                return buffData[2..];
-            }
-
-            static Span<ulong> WriteSelfBuffInstance(Span<ulong> buffData, Buff buff, int index) => WriteBuffInstance(buffData, buff, GetSelfBuffInstanceId(index));
-
-            static Span<ulong> WriteAffixBuffInstance(Span<ulong> buffData, Buff? buff) => buff?.ApplyType == ApplyType.OnObject ?
-                WriteBuffInstance(buffData, buff, GetAffixInstanceId(buff)) : buffData;
-
-            static Span<ulong> WriteSocketBuffInstance(Span<ulong> buffData, Buff? buff, int socket) => buff?.ApplyType == ApplyType.OnObject ?
-                WriteBuffInstance(buffData, buff, GetSocketInstanceId(socket)) : buffData;
         }
     }
 }

@@ -34,16 +34,15 @@ namespace KoAR.Core
             _header = new GameSaveHeader(this);
             if (BitConverter.ToInt32(Bytes, BodyStart) == CompressedFlag)
             {
-                using var buffer = new MemoryStream();
+                Body = new byte[_header.BodyDataLength];
                 var bundleInfoStart = BodyStart + 12;
                 var bundleInfoSize = BitConverter.ToInt32(Bytes, bundleInfoStart - 4);
                 using var bundleInfoData = new ZlibStream(new MemoryStream(Bytes, bundleInfoStart, bundleInfoSize), CompressionMode.Decompress);
-                bundleInfoData.CopyTo(buffer);
+                var endOfBundle = bundleInfoData.Read(Body, 0, Body.Length);
                 var gameStateStart = bundleInfoStart + bundleInfoSize + 4;
                 var gameStateSize = BitConverter.ToInt32(Bytes, gameStateStart - 4);
                 using var gameStateData = new ZlibStream(new MemoryStream(Bytes, gameStateStart, gameStateSize), CompressionMode.Decompress);
-                gameStateData.CopyTo(buffer);
-                Body = buffer.ToArray();
+                gameStateData.Read(Body, endOfBundle, Body.Length - endOfBundle);
             }
             else
             {
@@ -54,10 +53,11 @@ namespace KoAR.Core
             ReadOnlySpan<byte> data = Body;
             _bagOffset = GetBagOffset(data);
             _gameStateStartOffset = data.IndexOf(new byte[5] { 0xF7, 0x5D, 0x3C, 0x00, 0x0A });
+            var typeSectionOffset = data.IndexOf(new byte[5] { 0x23, 0xCC, 0x58, 0x00, 0x04 }) is int ix && ix == -1 ? data.IndexOf(new byte[5] { 0x23, 0xCC, 0x58, 0x00, 0x03 }) : ix;
             _dataLengthOffsets = new[]{
                 _gameStateStartOffset + 5, // gameStateSize
                 data.IndexOf(new byte[5] { 0x0C, 0xAE, 0x32, 0x00, 0x00 }) + 5, // unknown length 1
-                data.IndexOf(new byte[5] { 0x23, 0xCC, 0x58, 0x00, 0x03 }) + 5, // type section length
+                typeSectionOffset + 5, // type section length
             };
             _itemContainer = new Container(this, data.IndexOf(new byte[5] { 0xD3, 0x34, 0x43, 0x00, 0x00 }), 0x00_24_D5_68_00_00_00_0Bul);
             _itemBuffsContainer = new Container(this, data.IndexOf(new byte[5] { 0xBB, 0xD5, 0x43, 0x00, 0x00 }), 0x00_28_60_84_00_00_00_0Bul);
@@ -200,9 +200,14 @@ namespace KoAR.Core
             }
         }
 
-        public void SaveFile()
+        public string SaveFile()
         {
-            File.Copy(FileName, $"{FileName}.bak", true);
+            var backupPath = Path.Combine(Path.GetDirectoryName(FileName), "backup");
+            if (!Directory.Exists(backupPath))
+            {
+                Directory.CreateDirectory(backupPath);
+            }
+            File.Copy(FileName, backupPath = Path.Combine(backupPath, Path.GetFileName(FileName)), true);
             if (IsRemaster)
             {
                 // possibly unneccessary but it can't hurt.
@@ -234,6 +239,7 @@ namespace KoAR.Core
                 _originalBodyLength = Body.Length;
             }
             File.WriteAllBytes(FileName, Bytes);
+            return backupPath;
 
             static (Stream, int) CompressStream(byte[] body, int start, int count)
             {

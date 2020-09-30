@@ -17,13 +17,13 @@ namespace KoAR.Core
             public ItemBuffMemory(StashItem stashItem, int endOfSection)
             {
                 (_stashItem, _endOfSection) = (stashItem, endOfSection);
-                int count = Count;
-                var selfBuffCount = MemoryUtilities.Read<int>(Bytes, Offsets.FirstItemBuff + 4 + (count * 16));
-                var selfBuffs = MemoryMarshal.Cast<byte, uint>(Bytes.AsSpan(Offsets.FirstItemBuff + 8 + (count * 16), selfBuffCount * 8));
-                // since we don't support mutation we just need to read in what item buffs are applied.
-                for (int i = 0; i < selfBuffs.Length; i += 2)
+                var data = Bytes.AsSpan(Offsets.ItemBuffCount);
+                BuffInstance.ReadList(ref data); // activeBuffs
+                BuffInstance.ReadList(ref data); // inactiveBuffs
+                var selfBuffs = BuffDuration.ReadList(ref data);
+                foreach (var (buffId, _) in selfBuffs)
                 {
-                    List.Add(Amalur.GetBuff(selfBuffs[i]));
+                    List.Add(Amalur.GetBuff(buffId));
                 }
             }
 

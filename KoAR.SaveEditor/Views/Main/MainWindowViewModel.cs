@@ -136,6 +136,11 @@ namespace KoAR.SaveEditor.Views.Main
                 });
                 return;
             }
+            catch (Exception e)
+            {
+                App.ShowExceptionDialog("Error Loading File", e);
+                return;
+            }
             this.GameSave = gameSave;
             Settings.Default.LastDirectory = Path.GetFullPath(Path.GetDirectoryName(dialog.FileName));
             this.InventoryManager = new InventoryManagerViewModel(this);
@@ -153,9 +158,9 @@ namespace KoAR.SaveEditor.Views.Main
             {
                 return;
             }
-            this.GameSave.SaveFile();
+            string backupPath = this.GameSave.SaveFile();
             this.HasUnsavedChanges = false;
-            MessageBox.Show(Application.Current.MainWindow, $"Save successful! Original save backed up as {this.GameSave.FileName}.bak.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(Application.Current.MainWindow, $"Save successful! Original save backed up as {backupPath}.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private async void Application_Activated(object sender, EventArgs e)
@@ -176,8 +181,25 @@ namespace KoAR.SaveEditor.Views.Main
                     IReleaseInfo? release = await UpdateMethods.FetchLatest2xReleaseAsync(source.Token).ConfigureAwait(false);
                     if (release != null)
                     {
-                        application.Dispatcher.Invoke(new Action<IReleaseInfo>(this.OpenOriginalUpdateWindow), release);
-                        return;
+                        TaskDialogResult dialogResult = TaskDialog.Show(new TaskDialogOptions
+                        {
+                            Title = "KoAR Save Editor",
+                            MainInstruction = $"Downgrade to v{release.Version}?",
+                            Content = $"You are currently running v{App.Version}. 3.x releases are only tested against Re-Reckoning. If you are playing Reckoning you should consider downgrading.",
+                            MainIcon = VistaTaskDialogIcon.Warning,
+                            CommandButtons = new[] {
+                                $"Continue with current version\nI am running Re-Reckoning or willing to experiment",
+                                $"Downgrade to v{release.Version}\n I am running Reckoning",
+                            },
+                            AllowDialogCancellation = true,
+                            FooterText = " " // Dialog looks a bit weird without a footer.
+                        });
+                        Settings.Default.Acknowledged3x = true;
+                        if (dialogResult.CommandButtonResult == 1)
+                        {
+                            application.Dispatcher.Invoke(new Action<IReleaseInfo>(this.OpenOriginalUpdateWindow), release);
+                            return;
+                        }
                     }
                 }
             }
@@ -258,7 +280,6 @@ namespace KoAR.SaveEditor.Views.Main
 
         private void OpenOriginalUpdateWindow(IReleaseInfo release)
         {
-            Settings.Default.Acknowledged3x = true;
             Settings.Default.Save();
             using OriginalUpdateViewModel viewModel = new OriginalUpdateViewModel(release);
             UpdateWindow window = new UpdateWindow { DataContext = viewModel, Owner = Application.Current.MainWindow };
