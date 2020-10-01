@@ -96,8 +96,8 @@ namespace KoAR.Core
             }
             var currentLength = Bytes.Length - 8 - Offsets.FirstActiveBuff;
             var activeBuffBytes = MemoryMarshal.AsBytes(
-                (Prefix is null ? Array.Empty<BuffInstance>() : new[] { new BuffInstance(GetAffixInstanceId(Prefix), Prefix.Id) })
-                .Concat(Suffix is null ? Array.Empty<BuffInstance>() : new[] { new BuffInstance(GetAffixInstanceId(Suffix), Suffix.Id) })
+                (Prefix?.ApplyType == ApplyType.OnObject ? new[] { new BuffInstance(GetAffixInstanceId(Prefix), Prefix.Id) } : Array.Empty<BuffInstance>())
+                .Concat(Suffix?.ApplyType == ApplyType.OnObject ? new[] { new BuffInstance(GetAffixInstanceId(Suffix), Suffix.Id) } : Array.Empty<BuffInstance>())
                 .Concat(List.Select((buff, i) => new BuffInstance(GetSelfBuffInstanceId(i), buff.Id)))
                 .Concat(_item.ItemSockets.Gems
                         .Select((gem, slot) => (gem.Definition.Buff, slot))
