@@ -9,16 +9,16 @@ namespace KoAR.SaveEditor.Constructs
     public static class TabContent
     {
         public static readonly DependencyProperty PersistProperty = DependencyProperty.RegisterAttached("Persist", typeof(bool), typeof(TabContent),
-            new PropertyMetadata(TabContent.PersistProperty_ValueChanged));
+            new(TabContent.PersistProperty_ValueChanged));
 
         public static readonly DependencyProperty TemplateProperty = DependencyProperty.RegisterAttached("Template", typeof(DataTemplate), typeof(TabContent),
-            new PropertyMetadata());
+            new());
 
         public static readonly DependencyProperty TemplateSelectorProperty = DependencyProperty.RegisterAttached("TemplateSelector", typeof(DataTemplateSelector), typeof(TabContent),
-            new PropertyMetadata());
+            new());
 
         private static readonly DependencyProperty _contentManagerProperty = DependencyProperty.RegisterAttached(nameof(ContentManager), typeof(ContentManager), typeof(TabContent),
-            new PropertyMetadata());
+            new());
 
         private static readonly DependencyPropertyDescriptor _contentTemplateDescriptor = DependencyPropertyDescriptor.FromProperty(TabControl.ContentTemplateProperty, typeof(TabControl));
 
@@ -94,7 +94,7 @@ namespace KoAR.SaveEditor.Constructs
 
         private static void PersistProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (!(d is TabControl tabControl))
+            if (d is not TabControl tabControl)
             {
                 return;
             }
@@ -186,7 +186,7 @@ namespace KoAR.SaveEditor.Constructs
                 {
                     return element;
                 }
-                ContentPresenter contentPresenter = new ContentPresenter
+                ContentPresenter contentPresenter = new()
                 {
                     DataContext = item,
                     ContentTemplate = TabContent.GetTemplate(this._tabControl),

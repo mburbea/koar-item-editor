@@ -28,11 +28,11 @@ namespace KoAR.SaveEditor.Constructs
         {
             object IMultiValueConverter.Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
             {
-                if (values == null || values.Length != 2 || !(parameter is string text))
+                if (values == null || values.Length != 2 || parameter is not string text)
                 {
                     return DependencyProperty.UnsetValue;
                 }
-                Func<double, double> function = text == "Top" ? Math.Cos : (Func<double, double>)Math.Sin;
+                Func<double, double> function = text == "Top" ? Math.Cos : Math.Sin;
                 return (1d + function(Math.PI + Convert.ToInt32(values[1], culture) * (Math.PI / 5d))) * Convert.ToDouble(values[0], culture) * 2.5;
             }
 

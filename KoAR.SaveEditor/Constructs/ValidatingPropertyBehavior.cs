@@ -17,7 +17,7 @@ namespace KoAR.SaveEditor.Constructs
         /// Defines the ValidatingProperty dependency property.
         /// </summary>
         public static readonly DependencyProperty ValidatingPropertyProperty = DependencyProperty.RegisterAttached("ValidatingProperty", typeof(DependencyProperty), typeof(ValidatingPropertyBehavior),
-            new PropertyMetadata(ValidatingPropertyBehavior.ValidatingPropertyProperty_PropertyChanged));
+            new(ValidatingPropertyBehavior.ValidatingPropertyProperty_PropertyChanged));
 
         /// <summary>
         /// Gets the validating dependency property for a dependency object.
@@ -69,7 +69,7 @@ namespace KoAR.SaveEditor.Constructs
                     ValidationResult result = rule.Validate(value, CultureInfo.InvariantCulture);
                     if (!result.IsValid)
                     {
-                        Validation.MarkInvalid(bindingExpression, new ValidationError(rule, bindingExpression.ParentBindingBase, result.ErrorContent, null));
+                        Validation.MarkInvalid(bindingExpression, new(rule, bindingExpression.ParentBindingBase, result.ErrorContent, null));
                         return;
                     }
                 }

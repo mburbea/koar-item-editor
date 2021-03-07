@@ -30,7 +30,7 @@ namespace KoAR.SaveEditor.Constructs
 
         private static void SelectItemOnClickProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (!(d is ListBoxItem item))
+            if (d is not ListBoxItem item)
             {
                 return;
             }

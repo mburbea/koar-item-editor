@@ -9,13 +9,13 @@ namespace KoAR.SaveEditor.Constructs
     public static class TaskbarItemInfoOverlay
     {
         public static readonly DependencyProperty ContentProperty = DependencyProperty.RegisterAttached("Content", typeof(object), typeof(TaskbarItemInfoOverlay),
-            new PropertyMetadata(TaskbarItemInfoOverlay.OnPropertyChanged));
+            new(TaskbarItemInfoOverlay.OnPropertyChanged));
 
         public static readonly DependencyProperty ContentTemplateProperty = DependencyProperty.RegisterAttached("ContentTemplate", typeof(DataTemplate), typeof(TaskbarItemInfoOverlay),
-            new PropertyMetadata(TaskbarItemInfoOverlay.OnPropertyChanged));
+            new(TaskbarItemInfoOverlay.OnPropertyChanged));
 
         public static readonly DependencyProperty ContentTemplateSelectorProperty = DependencyProperty.RegisterAttached("ContentTemplateSelector", typeof(DataTemplateSelector), typeof(TaskbarItemInfoOverlay),
-            new PropertyMetadata(TaskbarItemInfoOverlay.OnPropertyChanged));
+            new(TaskbarItemInfoOverlay.OnPropertyChanged));
 
         public static object? GetContent(TaskbarItemInfo info)
         {
@@ -49,7 +49,7 @@ namespace KoAR.SaveEditor.Constructs
 
         private static void OnPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (!(d is TaskbarItemInfo info))
+            if (d is not TaskbarItemInfo info)
             {
                 return;
             }
@@ -65,8 +65,8 @@ namespace KoAR.SaveEditor.Constructs
                 ContentTemplate = TaskbarItemInfoOverlay.GetContentTemplate(info),
                 ContentTemplateSelector = TaskbarItemInfoOverlay.GetContentTemplateSelector(info)
             };
-            element.Arrange(new Rect(0, 0, 16, 16));
-            RenderTargetBitmap bitmap = new RenderTargetBitmap(16, 16, 96, 96, PixelFormats.Pbgra32);
+            element.Arrange(new(0, 0, 16, 16));
+            RenderTargetBitmap bitmap = new(16, 16, 96, 96, PixelFormats.Pbgra32);
             bitmap.Render(element);
             bitmap.Freeze();
             info.Overlay = bitmap;

@@ -20,7 +20,7 @@ namespace KoAR.SaveEditor.Views
         public static DependencyProperty FilteredItemsProperty;
 
         private static readonly DependencyPropertyKey _filteredItemsPropertyKey = DependencyProperty.RegisterReadOnly(nameof(BuffSelector.FilteredItems), typeof(IReadOnlyList<Buff>), typeof(BuffSelector),
-            new PropertyMetadata());
+            new());
 
         static BuffSelector()
         {

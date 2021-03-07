@@ -13,9 +13,9 @@ namespace KoAR.SaveEditor.Views.Inventory
         public ItemModel(Item item)
             : base(item)
         {
-            this._itemBuffs = new NotifyingCollection<Buff>(item.ItemBuffs.List);
+            this._itemBuffs = new(item.ItemBuffs.List);
             this._itemBuffs.CollectionChanged += this.Buffs_CollectionChanged;
-            this._playerBuffs = new NotifyingCollection<Buff>(item.PlayerBuffs);
+            this._playerBuffs = new(item.PlayerBuffs);
             this._playerBuffs.CollectionChanged += this.Buffs_CollectionChanged;
         }
 

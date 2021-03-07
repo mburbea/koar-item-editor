@@ -22,7 +22,7 @@ namespace KoAR.SaveEditor.Views
 
     public sealed class ItemFilters : NotifierBase, IItemFilters
     {
-        public static readonly DelegateCommand<ItemFilters> ResetCommand = new DelegateCommand<ItemFilters>(filters => filters.Reset());
+        public static readonly DelegateCommand<ItemFilters> ResetCommand = new(filters => filters.Reset());
 
         private int _armorType;
         private EquipmentCategory _category;

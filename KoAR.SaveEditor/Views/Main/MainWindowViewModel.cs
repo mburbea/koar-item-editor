@@ -28,8 +28,8 @@ namespace KoAR.SaveEditor.Views.Main
 
         public MainWindowViewModel()
         {
-            this.CheckForUpdateCommand = new DelegateCommand(this.CheckForUpdate, () => !this._isCheckingForUpdate);
-            this.OpenUpdateWindowCommand = new DelegateCommand(() => this.OpenUpdateWindow());
+            this.CheckForUpdateCommand = new(this.CheckForUpdate, () => !this._isCheckingForUpdate);
+            this.OpenUpdateWindowCommand = new(() => this.OpenUpdateWindow());
             if (!(bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(Window)).DefaultValue)
             {
                 Application.Current.Activated += this.Application_Activated;
@@ -88,11 +88,11 @@ namespace KoAR.SaveEditor.Views.Main
             }
         }
 
-        public UpdateNotifier UpdateNotifier { get; } = new UpdateNotifier();
+        public UpdateNotifier UpdateNotifier { get; } = new();
 
         public void OpenFile()
         {
-            OpenFileDialog dialog = new OpenFileDialog
+            OpenFileDialog dialog = new()
             {
                 Title = "Open Save File...",
                 DefaultExt = ".sav",
@@ -123,11 +123,11 @@ namespace KoAR.SaveEditor.Views.Main
             GameSave gameSave;
             try
             {
-                gameSave = new GameSave(dialog.FileName);
+                gameSave = new(dialog.FileName);
             }
             catch (NotSupportedException e)
             {
-                TaskDialog.Show(new TaskDialogOptions
+                TaskDialog.Show(new()
                 {
                     Title = "KoAR Save Editor",
                     MainInstruction = "File Not Supported",
@@ -143,8 +143,8 @@ namespace KoAR.SaveEditor.Views.Main
             }
             this.GameSave = gameSave;
             Settings.Default.LastDirectory = Path.GetFullPath(Path.GetDirectoryName(dialog.FileName));
-            this.InventoryManager = new InventoryManagerViewModel(this);
-            this.StashManager = this.GameSave.Stash != null ? new StashManagerViewModel(this) : default;
+            this.InventoryManager = new(this);
+            this.StashManager = this.GameSave.Stash != null ? new(this) : default;
             this.OnPropertyChanged(nameof(this.GameSave)); // Notifying the change is explicitly done after the view models are set.
             this.HasUnsavedChanges = false;
             this.Mode = Mode.Inventory;
@@ -170,7 +170,7 @@ namespace KoAR.SaveEditor.Views.Main
             application.MainWindow.Closing += this.MainWindow_Closing;
             try
             {
-                using CancellationTokenSource source = new CancellationTokenSource();
+                using CancellationTokenSource source = new();
                 source.CancelAfter(2500);
                 if (Settings.Default.Acknowledged3x)
                 {
@@ -181,7 +181,7 @@ namespace KoAR.SaveEditor.Views.Main
                     IReleaseInfo? release = await UpdateMethods.FetchLatest2xReleaseAsync(source.Token).ConfigureAwait(false);
                     if (release != null)
                     {
-                        TaskDialogResult dialogResult = TaskDialog.Show(new TaskDialogOptions
+                        TaskDialogResult dialogResult = TaskDialog.Show(new()
                         {
                             Title = "KoAR Save Editor",
                             MainInstruction = $"Downgrade to v{release.Version}?",
@@ -218,7 +218,7 @@ namespace KoAR.SaveEditor.Views.Main
             {
                 return false;
             }
-            TaskDialogResult result = TaskDialog.Show(new TaskDialogOptions
+            TaskDialogResult result = TaskDialog.Show(new()
             {
                 MainInstruction = "Unsaved Changes Detected!",
                 Content = "Changed were made to the equipment that have not been saved.",
@@ -251,7 +251,7 @@ namespace KoAR.SaveEditor.Views.Main
             try
             {
                 this.IsCheckingForUpdate = true;
-                using CancellationTokenSource source = new CancellationTokenSource();
+                using CancellationTokenSource source = new();
                 source.CancelAfter(15000); // 15s
                 await this.UpdateNotifier.CheckForUpdatesAsync(source.Token).ConfigureAwait(false);
             }
@@ -281,8 +281,8 @@ namespace KoAR.SaveEditor.Views.Main
         private void OpenOriginalUpdateWindow(IReleaseInfo release)
         {
             Settings.Default.Save();
-            using OriginalUpdateViewModel viewModel = new OriginalUpdateViewModel(release);
-            UpdateWindow window = new UpdateWindow { DataContext = viewModel, Owner = Application.Current.MainWindow };
+            using OriginalUpdateViewModel viewModel = new(release);
+            UpdateWindow window = new() { DataContext = viewModel, Owner = Application.Current.MainWindow };
             window.ShowDialog();
         }
 
@@ -292,8 +292,8 @@ namespace KoAR.SaveEditor.Views.Main
             {
                 return false;
             }
-            using UpdateViewModel viewModel = new UpdateViewModel(this.UpdateNotifier.Update);
-            UpdateWindow window = new UpdateWindow { DataContext = viewModel, Owner = Application.Current.MainWindow };
+            using UpdateViewModel viewModel = new(this.UpdateNotifier.Update);
+            UpdateWindow window = new() { DataContext = viewModel, Owner = Application.Current.MainWindow };
             return window.ShowDialog().GetValueOrDefault();
         }
     }

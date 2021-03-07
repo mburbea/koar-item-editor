@@ -30,30 +30,30 @@ namespace KoAR.SaveEditor.Views
         public static readonly DependencyProperty DeleteItemCommandProperty = DependencyProperty.Register(nameof(ItemCollectionManager.DeleteItemCommand), typeof(ICommand), typeof(ItemCollectionManager));
 
         public static readonly DependencyProperty ItemsProperty = DependencyProperty.Register(nameof(ItemCollectionManager.Items), typeof(IReadOnlyList<ItemModelBase>), typeof(ItemCollectionManager),
-            new PropertyMetadata(ItemCollectionManager.ItemsProperty_ValueChanged));
+            new(ItemCollectionManager.ItemsProperty_ValueChanged));
 
         public static readonly DependencyProperty ModeProperty;
 
         public static readonly DependencyProperty PropertyNameProperty = DependencyProperty.RegisterAttached("PropertyName", typeof(string), typeof(ItemCollectionManager),
-            new PropertyMetadata());
+            new());
 
         public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register(nameof(ItemCollectionManager.SelectedItem), typeof(object), typeof(ItemCollectionManager),
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         public static readonly DependencyProperty SearchTextProperty = DependencyProperty.RegisterAttached(nameof(ItemCollectionManager.SearchText), typeof(string), typeof(ItemCollectionManager),
-            new PropertyMetadata());
+            new());
 
         public static readonly DependencyProperty SortDirectionProperty = DependencyProperty.RegisterAttached(nameof(ItemCollectionManager.SortDirection), typeof(ListSortDirection), typeof(ItemCollectionManager),
-            new PropertyMetadata());
+            new());
 
         public static readonly DependencyProperty SortPropertyProperty = DependencyProperty.RegisterAttached(nameof(ItemCollectionManager.SortProperty), typeof(string), typeof(ItemCollectionManager),
-            new PropertyMetadata(nameof(ItemModelBase.Level)));
+            new(nameof(ItemModelBase.Level)));
 
         private static readonly DependencyPropertyKey _collectionViewPropertyKey = DependencyProperty.RegisterReadOnly(nameof(ItemCollectionManager.CollectionView), typeof(CollectionView), typeof(ItemCollectionManager),
-            new PropertyMetadata(ItemCollectionManager.CollectionView_ValueChanged));
+            new(ItemCollectionManager.CollectionView_ValueChanged));
 
         private static readonly DependencyPropertyKey _modePropertyKey = DependencyProperty.RegisterReadOnly(nameof(ItemCollectionManager.Mode), typeof(Mode), typeof(ItemCollectionManager),
-            new PropertyMetadata());
+            new());
 
         private ListView? _listView;
 
@@ -156,7 +156,7 @@ namespace KoAR.SaveEditor.Views
         private void GridViewColumn_Click(object sender, RoutedEventArgs e)
         {
             ICollectionView? view;
-            if (!(e.OriginalSource is GridViewColumnHeader header) || (view = this.CollectionView) == null || view.SortDescriptions == null)
+            if (e.OriginalSource is not GridViewColumnHeader header || (view = this.CollectionView) == null || view.SortDescriptions == null)
             {
                 return;
             }
@@ -166,7 +166,7 @@ namespace KoAR.SaveEditor.Views
                 return;
             }
             SortDescription current = view.SortDescriptions[1];
-            view.SortDescriptions[1] = new SortDescription(
+            view.SortDescriptions[1] = new(
                 this.SortProperty = propertyName,
                 this.SortDirection = propertyName == current.PropertyName
                     ? (ListSortDirection)((int)current.Direction ^ 1)

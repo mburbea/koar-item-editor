@@ -10,18 +10,18 @@ namespace KoAR.SaveEditor.Views
     public sealed class ItemDefinitionControl : Control
     {
         public static readonly DependencyProperty DefinitionProperty = DependencyProperty.Register(nameof(ItemDefinitionControl.Definition), typeof(ItemDefinition), typeof(ItemDefinitionControl),
-            new PropertyMetadata(ItemDefinitionControl.Definition_ValueChanged));
+            new(ItemDefinitionControl.Definition_ValueChanged));
 
         public static readonly DependencyProperty ItemProperty = DependencyProperty.Register(nameof(ItemDefinitionControl.Item), typeof(ItemModelBase), typeof(ItemDefinitionControl),
-            new PropertyMetadata(ItemDefinitionControl.ItemProperty_ValueChanged));
+            new(ItemDefinitionControl.ItemProperty_ValueChanged));
 
         public static readonly DependencyProperty SearchTextProperty = DependencyProperty.Register(nameof(ItemDefinitionControl.SearchText), typeof(string), typeof(ItemDefinitionControl),
-            new PropertyMetadata());
+            new());
 
         public static readonly DependencyProperty SocketsProperty;
 
         private static readonly DependencyPropertyKey _socketsPropertyKey = DependencyProperty.RegisterReadOnly(nameof(Sockets), typeof(IEnumerable<Socket>), typeof(ItemDefinitionControl),
-            new PropertyMetadata());
+            new());
 
         static ItemDefinitionControl()
         {

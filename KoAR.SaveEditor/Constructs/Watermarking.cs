@@ -11,13 +11,13 @@ namespace KoAR.SaveEditor.Constructs
     public static class Watermarking
     {
         public static readonly DependencyProperty ContentProperty = DependencyProperty.RegisterAttached("Content", typeof(object), typeof(Watermarking),
-            new PropertyMetadata(Watermarking.ContentProperty_ValueChanged));
+            new(Watermarking.ContentProperty_ValueChanged));
 
         public static readonly DependencyProperty ContentTemplateProperty = DependencyProperty.RegisterAttached("ContentTemplate", typeof(DataTemplate), typeof(Watermarking),
-            new PropertyMetadata(Watermarking.ContentTemplateProperty_ValueChanged));
+            new(Watermarking.ContentTemplateProperty_ValueChanged));
 
         private static readonly DependencyProperty _adornerProperty = DependencyProperty.RegisterAttached("Adorner", typeof(WatermarkAdorner), typeof(Watermarking),
-            new PropertyMetadata(Watermarking.AdornerProperty_ValueChanged));
+            new(Watermarking.AdornerProperty_ValueChanged));
 
         public static object? GetContent(TextBoxBase control) => control?.GetValue(Watermarking.ContentProperty);
 
@@ -50,7 +50,7 @@ namespace KoAR.SaveEditor.Constructs
             }
             if (textBox.IsLoaded)
             {
-                Watermarking.SetAdorner(textBox, e.NewValue == null ? default : new WatermarkAdorner(textBox, e.NewValue, Watermarking.GetContentTemplate(textBox)));
+                Watermarking.SetAdorner(textBox, e.NewValue == null ? default : new(textBox, e.NewValue, Watermarking.GetContentTemplate(textBox)));
             }
             else if (e.NewValue != null && e.OldValue == null)
             {
@@ -80,26 +80,26 @@ namespace KoAR.SaveEditor.Constructs
             textBox.Loaded -= Watermarking.TextBox_Loaded;
             if (Watermarking.GetContent(textBox) is object content)
             {
-                Watermarking.SetAdorner(textBox, new WatermarkAdorner(textBox, content, Watermarking.GetContentTemplate(textBox)));
+                Watermarking.SetAdorner(textBox, new(textBox, content, Watermarking.GetContentTemplate(textBox)));
             }
         }
 
         private sealed class WatermarkAdorner : Adorner, IDisposable
         {
-            private static readonly BooleanToVisibilityConverter _booleanToVisibilityConverter = new BooleanToVisibilityConverter();
+            private static readonly BooleanToVisibilityConverter _booleanToVisibilityConverter = new();
             private readonly ContentPresenter _contentPresenter;
 
             public WatermarkAdorner(Control adornedElement, object content, DataTemplate? contentTemplate)
                 : base(adornedElement)
             {
                 this.IsHitTestVisible = false;
-                this._contentPresenter = new ContentPresenter
+                this._contentPresenter = new()
                 {
                     Content = content,
                     ContentTemplate = contentTemplate,
                     Opacity = 0.5,
                     VerticalAlignment = VerticalAlignment.Center,
-                    Margin = new Thickness(
+                    Margin = new(
                         adornedElement.Margin.Left + adornedElement.Padding.Left,
                         adornedElement.Margin.Top + adornedElement.Padding.Top,
                         0,
@@ -125,7 +125,7 @@ namespace KoAR.SaveEditor.Constructs
 
             protected override Size ArrangeOverride(Size finalSize)
             {
-                this._contentPresenter.Arrange(new Rect(finalSize));
+                this._contentPresenter.Arrange(new(finalSize));
                 return finalSize;
             }
 

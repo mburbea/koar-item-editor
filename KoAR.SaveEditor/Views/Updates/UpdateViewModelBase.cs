@@ -20,7 +20,7 @@ namespace KoAR.SaveEditor.Views.Updates
     {
         private static readonly Brush _alternateBrush = UpdateViewModelBase.CreateAlternateBrush();
 
-        private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        private readonly CancellationTokenSource _cancellationTokenSource = new();
         private readonly Dispatcher _dispatcher = Dispatcher.CurrentDispatcher;
         private readonly string _zipFilePath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.zip");
         private int? _bytesTransferred;
@@ -32,8 +32,8 @@ namespace KoAR.SaveEditor.Views.Updates
         protected UpdateViewModelBase(IReadOnlyCollection<IReleaseInfo> releases)
         {
             this.Document = UpdateViewModelBase.CreateDocument(this.Releases = releases);
-            this.CancelCommand = new DelegateCommand(this.Cancel);
-            this.DownloadCommand = new DelegateCommand(this.Download, () => !this.BytesTransferred.HasValue);
+            this.CancelCommand = new(this.Cancel);
+            this.DownloadCommand = new(this.Download, () => !this.BytesTransferred.HasValue);
         }
 
         public int? BytesTransferred
@@ -92,18 +92,18 @@ namespace KoAR.SaveEditor.Views.Updates
 
         private static Brush CreateAlternateBrush()
         {
-            SolidColorBrush brush = new SolidColorBrush(Color.FromArgb(8, 0, 0, 0));
+            SolidColorBrush brush = new(Color.FromArgb(8, 0, 0, 0));
             brush.Freeze();
             return brush;
         }
 
         private static FlowDocument CreateDocument(IEnumerable<IReleaseInfo> releases)
         {
-            FlowDocument document = new FlowDocument();
-            MarkdownEngine engine = new MarkdownEngine();
+            FlowDocument document = new();
+            MarkdownEngine engine = new();
             foreach (IReleaseInfo release in releases)
             {
-                Section section = new Section { Background = document.Blocks.Count % 2 == 0 ? Brushes.White : UpdateViewModelBase._alternateBrush };
+                Section section = new() { Background = document.Blocks.Count % 2 == 0 ? Brushes.White : UpdateViewModelBase._alternateBrush };
                 section.Blocks.Add(new Paragraph
                 {
                     Inlines =
@@ -187,7 +187,7 @@ namespace KoAR.SaveEditor.Views.Updates
             (this.BytesTransferred, this.Speed, this.Error) = (default, default, default);
             const int interval = 250;
             int bytesTransferred = 0, bytesPerInterval = 0;
-            DispatcherTimer timer = new DispatcherTimer(TimeSpan.FromMilliseconds(interval), DispatcherPriority.Normal, Timer_Tick, this._dispatcher);
+            DispatcherTimer timer = new(TimeSpan.FromMilliseconds(interval), DispatcherPriority.Normal, Timer_Tick, this._dispatcher);
             try
             {
                 CancellationToken cancellationToken = this._cancellationTokenSource.Token;

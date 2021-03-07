@@ -7,7 +7,7 @@ namespace KoAR.SaveEditor.Constructs
     {
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
-            return value == null || value.Equals(string.Empty) ? new ValidationResult(false, "Value is required.") : ValidationResult.ValidResult;
+            return value == null || value.Equals(string.Empty) ? new(false, "Value is required.") : ValidationResult.ValidResult;
         }
     }
 }

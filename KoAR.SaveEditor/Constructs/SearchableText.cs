@@ -8,15 +8,15 @@ namespace KoAR.SaveEditor.Constructs
     public sealed class SearchableText : Control
     {
         public static readonly DependencyProperty SearchTextProperty = DependencyProperty.Register(nameof(SearchableText.SearchText), typeof(string), typeof(SearchableText),
-            new PropertyMetadata(SearchableText.SearchTextProperty_ValueChanged));
+            new(SearchableText.SearchTextProperty_ValueChanged));
 
         public static readonly DependencyProperty SegmentsProperty;
 
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register(nameof(SearchableText.Text), typeof(string), typeof(SearchableText),
-            new PropertyMetadata(SearchableText.TextProperty_ValueChanged));
+            new(SearchableText.TextProperty_ValueChanged));
 
         private static readonly DependencyPropertyKey _segmentsPropertyKey = DependencyProperty.RegisterReadOnly(nameof(SearchableText.Segments), typeof(IReadOnlyList<Segment>), typeof(SearchableText),
-            new PropertyMetadata(Array.Empty<Segment>()));
+            new (Array.Empty<Segment>()));
 
         static SearchableText()
         {
@@ -65,7 +65,7 @@ namespace KoAR.SaveEditor.Constructs
                 {
                     list.Add(text[start..index]);
                 }
-                list.Add(new Segment(text.Substring(index, searchText.Length), true));
+                list.Add(new(text.Substring(index, searchText.Length), true));
                 start = index + searchText.Length;
             }
             if (start < text.Length)
@@ -98,7 +98,7 @@ namespace KoAR.SaveEditor.Constructs
 
             public string Text { get; }
 
-            public static implicit operator Segment(string text) => new Segment(text, false);
+            public static implicit operator Segment(string text) => new(text, false);
 
             public bool Equals(Segment other) => (this.Text, this.IsMatch) == (other.Text, other.IsMatch);
 

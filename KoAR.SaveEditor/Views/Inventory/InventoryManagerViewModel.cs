@@ -13,12 +13,12 @@ namespace KoAR.SaveEditor.Views.Inventory
         public InventoryManagerViewModel(MainWindowViewModel mainWindowViewModel)
             : base(mainWindowViewModel, gameSave => gameSave.Items.Select(item => new ItemModel(item)))
         {
-            this.AddItemBuffCommand = new DelegateCommand<uint>(this.AddItemBuff, this.CanAddItemBuff);
-            this.AddPlayerBuffCommand = new DelegateCommand<uint>(this.AddPlayerBuff, this.CanAddPlayerBuff);
-            this.ChangeDefinitionCommand = new DelegateCommand<ItemModel>(this.ChangeDefinition, this.CanChangeDefinition);
-            this.DeleteItemBuffCommand = new DelegateCommand<Buff>(this.DeleteItemBuff, this.CanDeleteItemBuff);
-            this.DeletePlayerBuffCommand = new DelegateCommand<Buff>(this.DeletePlayerBuff, this.CanDeletePlayerBuff);
-            this.OpenQuestItemsWindowCommand = new DelegateCommand(this.OpenQuestItemsWindow);
+            this.AddItemBuffCommand = new(this.AddItemBuff, this.CanAddItemBuff);
+            this.AddPlayerBuffCommand = new(this.AddPlayerBuff, this.CanAddPlayerBuff);
+            this.ChangeDefinitionCommand = new(this.ChangeDefinition, this.CanChangeDefinition);
+            this.DeleteItemBuffCommand = new(this.DeleteItemBuff, this.CanDeleteItemBuff);
+            this.DeletePlayerBuffCommand = new(this.DeletePlayerBuff, this.CanDeletePlayerBuff);
+            this.OpenQuestItemsWindowCommand = new(this.OpenQuestItemsWindow);
         }
 
         public DelegateCommand<uint> AddItemBuffCommand { get; }
@@ -128,8 +128,8 @@ namespace KoAR.SaveEditor.Views.Inventory
             {
                 return;
             }
-            ChangeOrAddItemViewModel viewModel = new ChangeOrAddItemViewModel(item);
-            ChangeOrAddItemView view = new ChangeOrAddItemView
+            ChangeOrAddItemViewModel viewModel = new(item);
+            ChangeOrAddItemView view = new()
             {
                 Owner = Application.Current.MainWindow,
                 DataContext = viewModel
@@ -147,8 +147,8 @@ namespace KoAR.SaveEditor.Views.Inventory
 
         private void OpenQuestItemsWindow()
         {
-            using QuestItemsWindowViewModel viewModel = new QuestItemsWindowViewModel(this.MainWindowViewModel);
-            QuestItemsWindow window = new QuestItemsWindow
+            using QuestItemsWindowViewModel viewModel = new(this.MainWindowViewModel);
+            QuestItemsWindow window = new()
             {
                 DataContext = viewModel,
                 Owner = Application.Current.MainWindow,

@@ -8,13 +8,13 @@ namespace KoAR.SaveEditor.Constructs
     public static class MouseDoubleClick
     {
         public static readonly DependencyProperty CommandParameterProperty = DependencyProperty.RegisterAttached("CommandParameter", typeof(object), typeof(MouseDoubleClick),
-            new PropertyMetadata());
+            new());
 
         public static readonly DependencyProperty CommandProperty = DependencyProperty.RegisterAttached("Command", typeof(ICommand), typeof(MouseDoubleClick),
-            new PropertyMetadata(MouseDoubleClick.OnCommandPropertyChanged));
+            new(MouseDoubleClick.OnCommandPropertyChanged));
 
         public static readonly DependencyProperty CommandTargetProperty = DependencyProperty.RegisterAttached("CommandTarget", typeof(IInputElement), typeof(MouseDoubleClick),
-            new PropertyMetadata());
+            new());
 
         public static ICommand? GetCommand(Control control)
         {
@@ -55,7 +55,7 @@ namespace KoAR.SaveEditor.Constructs
 
         private static void OnCommandPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (!(d is Control control) || (e.OldValue == null) == (e.NewValue == null))
+            if (d is not Control control || (e.OldValue == null) == (e.NewValue == null))
             {
                 return;
             }

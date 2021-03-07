@@ -6,7 +6,7 @@ namespace KoAR.SaveEditor.Constructs
     public sealed class RangeValidationRule : ValidationRule
     {
         public long Max { get; set; } = long.MaxValue;
-        
+
         public long Min { get; set; } = long.MinValue;
 
         public NumberStyles NumberStyle { get; set; } = NumberStyles.Any;
@@ -17,7 +17,7 @@ namespace KoAR.SaveEditor.Constructs
                 && long.TryParse(text, this.NumberStyle, cultureInfo, out long number)
                 && number >= this.Min && number <= this.Max
                 ? ValidationResult.ValidResult
-                : new ValidationResult(false, $"Value must be a number between {this.Min} and {this.Max}.");
+                : new(false, $"Value must be a number between {this.Min} and {this.Max}.");
         }
     }
 }

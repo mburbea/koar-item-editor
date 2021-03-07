@@ -7,7 +7,7 @@ namespace KoAR.SaveEditor.Constructs
 {
     public sealed class ActivatorExtension : MarkupExtension
     {
-        private static readonly Dictionary<Type, Func<object>> _functions = new Dictionary<Type, Func<object>>();
+        private static readonly Dictionary<Type, Func<object>> _functions = new();
 
         public ActivatorExtension(Type type) => this.Type = type;
 

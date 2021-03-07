@@ -9,7 +9,7 @@ namespace KoAR.SaveEditor.Constructs
 {
     public sealed class KeyedDataTemplateSelector : DataTemplateSelector, IDictionary
     {
-        private readonly Dictionary<object, DataTemplate> _dictionary = new Dictionary<object, DataTemplate>();
+        private readonly Dictionary<object, DataTemplate> _dictionary = new();
 
         public int Count => this._dictionary.Count;
 

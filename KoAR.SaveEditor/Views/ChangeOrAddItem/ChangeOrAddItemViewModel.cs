@@ -27,7 +27,7 @@ namespace KoAR.SaveEditor.Views.ChangeOrAddItem
         {
             this._definition = (this.Item = item)?.Definition ?? Amalur.ItemDefinitions.Values.First();
             this._category = item?.Category ?? ChangeOrAddItemViewModel._defaultCategory;
-            this.ProcessCommand = new DelegateCommand(this.Process, () => this._definition != null);
+            this.ProcessCommand = new(this.Process, () => this._definition != null);
             this.OnFilterChanged();
         }
 

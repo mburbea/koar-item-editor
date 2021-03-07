@@ -24,7 +24,7 @@ namespace KoAR.SaveEditor.Views.Updates
         public async Task CheckForUpdatesAsync(CancellationToken cancellationToken = default)
         {
             IReleaseInfo[]? releases = await UpdateMethods.FetchUpdateReleasesAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
-            this.Update = releases == null ? null : new UpdateInfo(releases);
+            this.Update = releases != null ? new(releases) : null;
         }
     }
 }

@@ -8,7 +8,7 @@ namespace KoAR.SaveEditor.Constructs
     public static class TextBoxUpdateSource
     {
         public static readonly DependencyProperty UpdateOnEnterProperty = DependencyProperty.RegisterAttached("UpdateOnEnter", typeof(bool), typeof(TextBoxUpdateSource),
-            new PropertyMetadata(BooleanBoxes.False, TextBoxUpdateSource.UpdateOnEnterProperty_ValueChanged));
+            new(BooleanBoxes.False, TextBoxUpdateSource.UpdateOnEnterProperty_ValueChanged));
 
         public static bool GetUpdateOnEnter(TextBox textBox) => textBox != null && (bool)textBox.GetValue(TextBoxUpdateSource.UpdateOnEnterProperty);
 
@@ -40,7 +40,7 @@ namespace KoAR.SaveEditor.Constructs
 
         private static void UpdateOnEnterProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (!(d is TextBox textBox))
+            if (d is not TextBox textBox)
             {
                 return;
             }

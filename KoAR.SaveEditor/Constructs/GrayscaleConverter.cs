@@ -11,8 +11,8 @@ namespace KoAR.SaveEditor.Constructs
     {
         object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value is BitmapSource source 
-                ? GrayscaleConverter.Convert(source) 
+            return value is BitmapSource source
+                ? GrayscaleConverter.Convert(source)
                 : DependencyProperty.UnsetValue;
         }
 
@@ -20,7 +20,7 @@ namespace KoAR.SaveEditor.Constructs
 
         private static BitmapSource Convert(BitmapSource source)
         {
-            FormatConvertedBitmap bitmap = new FormatConvertedBitmap();
+            FormatConvertedBitmap bitmap = new();
             bitmap.BeginInit();
             bitmap.Source = source;
             bitmap.DestinationFormat = PixelFormats.Gray8;
