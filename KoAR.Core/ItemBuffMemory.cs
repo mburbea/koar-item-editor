@@ -8,7 +8,7 @@ namespace KoAR.Core
 {
     public class ItemBuffMemory : IItemBuffMemory
     {
-        internal static List<(Item item, uint instanceId)> SetOfInstances = new List<(Item, uint)>();
+        internal static List<(Item item, uint instanceId)> SetOfInstances = new();
         private static class Offsets
         {
             public const int DataLength = 13;

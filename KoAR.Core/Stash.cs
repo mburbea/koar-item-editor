@@ -63,7 +63,7 @@ namespace KoAR.Core
                                 i++;
                                 if (Amalur.GemDefinitions.ContainsKey(MemoryUtilities.Read<uint>(_gameSave.Body, _offset + indices[i])))
                                 {
-                                    gemList.Add(new Gem(_gameSave, _offset + indices[i]));
+                                    gemList.Add(new(_gameSave, _offset + indices[i]));
                                 }
                             }
                             gems = gemList.ToArray();
@@ -83,7 +83,7 @@ namespace KoAR.Core
 
         static StashItem CreateStashItem(GameSave gameSave, int offset, int datalength, Gem[] gems) => gameSave.IsRemaster
             ? new RemasterStashItem(gameSave, offset, datalength, gems)
-            : new StashItem(gameSave, offset, datalength, gems);
+            : new(gameSave, offset, datalength, gems);
 
         public int DataLength
         {
@@ -101,7 +101,7 @@ namespace KoAR.Core
             set => MemoryUtilities.Write(_gameSave.Body, _offset + Offsets.Count, value);
         }
 
-        public List<StashItem> Items { get; } = new List<StashItem>();
+        public List<StashItem> Items { get; } = new();
 
         public StashItem AddItem(ItemDefinition type)
         {
@@ -146,7 +146,7 @@ namespace KoAR.Core
         {
             ReadOnlySpan<byte> stashIndicator = new byte[] { 0x00, 0xF5, 0x43, 0xEB, 0x00, 0x02 };
             var offset = gameSave.Body.AsSpan().IndexOf(stashIndicator);
-            return offset != -1 ? new Stash(gameSave, offset - 3) : null;
+            return offset != -1 ? new(gameSave, offset - 3) : null;
         }
     }
 }

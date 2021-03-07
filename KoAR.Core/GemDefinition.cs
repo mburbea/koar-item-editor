@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace KoAR.Core
 {
@@ -28,7 +27,7 @@ namespace KoAR.Core
             while (reader.ReadLine() is string line)
             {
                 var parts = line.Split(Amalur.Separator);
-                yield return new GemDefinition(
+                yield return new(
                     typeId: uint.Parse(parts[0]),
                     name: parts[1],
                     internalName: parts[2],

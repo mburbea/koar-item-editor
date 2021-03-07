@@ -16,8 +16,8 @@ namespace KoAR.Core
             (_gameSave, TypeIdOffset, ItemOffset) = (gameSave, typeIdOffset, offset);
             _levelShiftOffset = (byte)(8 * gameSave.Body[TypeIdOffset + 10]);
             Bytes = _gameSave.Body.AsSpan(offset, dataLength).ToArray();
-            ItemSockets = new ItemSockets(gameSave, itemGemsOffset, itemGemsLength);
-            ItemBuffs = new ItemBuffMemory(gameSave, this, itemBuffsOffset, itemBuffsLength);
+            ItemSockets = new(gameSave, itemGemsOffset, itemGemsLength);
+            ItemBuffs = new(gameSave, this, itemBuffsOffset, itemBuffsLength);
             var span = Bytes.AsSpan(Offsets.BuffCount);
             foreach (var (buffId, _) in BuffDuration.ReadList(ref span))
             {
@@ -45,7 +45,7 @@ namespace KoAR.Core
             set => MemoryUtilities.Write(Bytes, Offsets.DataLength, value - 17);
         }
 
-        public List<Buff> PlayerBuffs { get; } = new List<Buff>();
+        public List<Buff> PlayerBuffs { get; } = new();
 
         public bool HasCustomName
         {
@@ -144,7 +144,7 @@ namespace KoAR.Core
             set => MemoryUtilities.Write(Bytes, Offsets.BuffCount, value);
         }
 
-        private Offset Offsets => new Offset(this);
+        private Offset Offsets => new(this);
 
         IItemBuffMemory IItem.ItemBuffs => ItemBuffs;
 
@@ -242,7 +242,7 @@ namespace KoAR.Core
                             break;
                         }
                     }
-                    yield return new Socket(socket, gem);
+                    yield return new(socket, gem);
                 }
             }
         }
