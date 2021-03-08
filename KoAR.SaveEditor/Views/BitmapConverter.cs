@@ -64,7 +64,7 @@ namespace KoAR.SaveEditor.Views
         private static Dictionary<string, BitmapImage> DiscoverBitmaps()
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
-            ResourceManager manager = new ResourceManager($"{assembly.GetName().Name}.g", assembly);
+            ResourceManager manager = new($"{assembly.GetName().Name}.g", assembly);
             return manager.GetResourceSet(CultureInfo.InvariantCulture, true, true)
                 .Cast<DictionaryEntry>()
                 .Select(entry => (string)entry.Key)

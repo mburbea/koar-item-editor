@@ -90,7 +90,7 @@ namespace KoAR.SaveEditor.Views
             base.OnApplyTemplate();
             if (this.Template.FindName("PART_TreeView", this) is TreeView treeView)
             {
-                treeView.CommandBindings.Add(new CommandBinding(ApplicationCommands.Copy, BuffCollectionManager.CopyCommand_Executed));
+                treeView.CommandBindings.Add(new(ApplicationCommands.Copy, BuffCollectionManager.CopyCommand_Executed));
             }
         }
 

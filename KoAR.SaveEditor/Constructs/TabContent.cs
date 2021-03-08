@@ -27,7 +27,7 @@ namespace KoAR.SaveEditor.Constructs
         private static readonly DependencyProperty _persistedContentProperty = DependencyProperty.RegisterAttached("PersistedContent", typeof(UIElement), typeof(TabContent));
 
         private static readonly DependencyProperty _tabControlProperty = DependencyProperty.RegisterAttached(nameof(TabControl), typeof(TabControl), typeof(TabContent),
-            new PropertyMetadata(TabContent.TabControlProperty_ValueChanged));
+            new(TabContent.TabControlProperty_ValueChanged));
 
         private static readonly DataTemplate _template = TabContent.CreateContentTemplate();
 
@@ -63,12 +63,12 @@ namespace KoAR.SaveEditor.Constructs
 
         private static DataTemplate CreateContentTemplate()
         {
-            FrameworkElementFactory factory = new FrameworkElementFactory(typeof(Border));
+            FrameworkElementFactory factory = new(typeof(Border));
             factory.SetBinding(TabContent._tabControlProperty, new Binding
             {
                 RelativeSource = new RelativeSource { AncestorType = typeof(TabControl) }
             });
-            return new DataTemplate { VisualTree = factory };
+            return new() { VisualTree = factory };
         }
 
         private static ContentManager? GetContentManager(TabControl tabControl)
@@ -81,7 +81,7 @@ namespace KoAR.SaveEditor.Constructs
             ContentManager? manager = TabContent.GetContentManager(tabControl);
             if (manager == null)
             {
-                TabContent.SetContentManager(tabControl, manager = new ContentManager(tabControl));
+                TabContent.SetContentManager(tabControl, manager = new(tabControl));
             }
             manager.Container = border;
             return manager;
@@ -178,7 +178,7 @@ namespace KoAR.SaveEditor.Constructs
 
             private UIElement? GetPersistedContent()
             {
-                if (!(this._tabControl.SelectedItem is object item && this._tabControl.ItemContainerGenerator.ContainerFromItem(item) is TabItem tabItem))
+                if (this._tabControl.SelectedItem is not object item || this._tabControl.ItemContainerGenerator.ContainerFromItem(item) is not TabItem tabItem)
                 {
                     return null;
                 }
