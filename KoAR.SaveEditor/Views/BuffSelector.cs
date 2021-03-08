@@ -9,10 +9,10 @@ namespace KoAR.SaveEditor.Views
     public sealed class BuffSelector : Control
     {
         public static readonly DependencyProperty BuffsProperty = DependencyProperty.Register(nameof(BuffSelector.Buffs), typeof(IReadOnlyCollection<Buff>), typeof(BuffSelector),
-            new PropertyMetadata(BuffSelector.BuffsProperty_ValueChanged));
+            new(BuffSelector.BuffsProperty_ValueChanged));
 
         public static readonly DependencyProperty FilterProperty = DependencyProperty.Register(nameof(BuffSelector.Filter), typeof(BuffsFilter), typeof(BuffSelector),
-            new PropertyMetadata(BuffSelector.FilterProperty_ValueChanged));
+            new(BuffSelector.FilterProperty_ValueChanged));
 
         public static readonly DependencyProperty SelectedBuffProperty = DependencyProperty.Register(nameof(BuffSelector.SelectedBuff), typeof(Buff), typeof(BuffSelector),
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));

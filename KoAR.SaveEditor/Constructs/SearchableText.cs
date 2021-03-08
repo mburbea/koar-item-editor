@@ -52,7 +52,7 @@ namespace KoAR.SaveEditor.Constructs
             {
                 return new[] { (Segment)text };
             }
-            List<Segment> list = new List<Segment>();
+            List<Segment> list = new();
             int start = 0;
             while (start < text.Length)
             {

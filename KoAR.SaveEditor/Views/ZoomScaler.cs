@@ -105,10 +105,10 @@ namespace KoAR.SaveEditor.Views
             {
                 return;
             }
-            Settings.Default.ZoomScale = Math.Sign(e.Delta) switch
+            Settings.Default.ZoomScale = e.Delta switch
             {
-                1 => Math.Min(Settings.Default.MaxZoomScale, Settings.Default.ZoomScale + 0.05),
-                -1 => Math.Max(Settings.Default.MinZoomScale, Settings.Default.ZoomScale - 0.05),
+                > 0 => Math.Min(Settings.Default.MaxZoomScale, Settings.Default.ZoomScale + 0.05),
+                < 0 => Math.Max(Settings.Default.MinZoomScale, Settings.Default.ZoomScale - 0.05),
                 _ => Settings.Default.ZoomScale,
             };
         }

@@ -6,7 +6,7 @@ namespace KoAR.SaveEditor.Constructs
     public static class ItemSelection
     {
         public static readonly DependencyProperty SelectItemOnClickProperty = DependencyProperty.RegisterAttached("SelectItemOnClick", typeof(bool), typeof(ItemSelection),
-            new PropertyMetadata(BooleanBoxes.False, ItemSelection.SelectItemOnClickProperty_ValueChanged));
+            new(BooleanBoxes.False, ItemSelection.SelectItemOnClickProperty_ValueChanged));
 
         public static bool GetSelectItemOnClick(ListBoxItem item)
         {
