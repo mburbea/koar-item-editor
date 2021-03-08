@@ -28,7 +28,7 @@ namespace KoAR.SaveEditor.Constructs
         {
             object IMultiValueConverter.Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
             {
-                if (values == null || values.Length != 2 || parameter is not string text)
+                if (values is not { Length: 2 } || parameter is not string text)
                 {
                     return DependencyProperty.UnsetValue;
                 }

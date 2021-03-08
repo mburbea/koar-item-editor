@@ -9,7 +9,7 @@ namespace KoAR.SaveEditor.Constructs
     {
         object IMultiValueConverter.Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            return values == null || values.Length < 2 ? DependencyProperty.UnsetValue : BooleanBoxes.GetBox(Object.Equals(values[0], values[1]));
+            return values is not { Length: >= 2 } ? DependencyProperty.UnsetValue : BooleanBoxes.GetBox(Object.Equals(values[0], values[1]));
         }
 
         object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)

@@ -89,14 +89,15 @@ namespace KoAR.SaveEditor.Constructs
             {
                 return;
             }
-            switch (bindingExpression.ParentBindingBase)
+            ICollection<ValidationRule> rules = bindingExpression.ParentBindingBase switch
             {
-                case Binding binding:
-                    ValidatingPropertyBehavior.Validate(dependencyObject.GetValue(dependencyProperty), binding.ValidationRules, bindingExpression);
-                    break;
-                case MultiBinding multiBinding:
-                    ValidatingPropertyBehavior.Validate(dependencyObject.GetValue(dependencyProperty), multiBinding.ValidationRules, bindingExpression);
-                    break;
+                Binding binding => binding.ValidationRules,
+                MultiBinding multiBinding => multiBinding.ValidationRules,
+                _ => Array.Empty<ValidationRule>()
+            };
+            if (rules.Count > 0)
+            {
+                ValidatingPropertyBehavior.Validate(dependencyObject.GetValue(dependencyProperty), rules, bindingExpression);
             }
         }
 

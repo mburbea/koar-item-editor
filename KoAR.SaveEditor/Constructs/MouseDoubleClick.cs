@@ -55,7 +55,7 @@ namespace KoAR.SaveEditor.Constructs
 
         private static void OnCommandPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is not Control control || (e.OldValue == null) == (e.NewValue == null))
+            if (d is not Control control || e.OldValue is null == e.NewValue is null)
             {
                 return;
             }

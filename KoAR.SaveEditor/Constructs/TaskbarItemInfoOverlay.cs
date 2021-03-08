@@ -59,7 +59,7 @@ namespace KoAR.SaveEditor.Constructs
                 info.Overlay = null;
                 return;
             }
-            UIElement element = new ContentPresenter
+            ContentPresenter element = new()
             {
                 Content = content,
                 ContentTemplate = TaskbarItemInfoOverlay.GetContentTemplate(info),
