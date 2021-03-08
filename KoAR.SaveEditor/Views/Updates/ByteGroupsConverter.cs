@@ -11,7 +11,7 @@ namespace KoAR.SaveEditor.Views.Updates
 
         object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (!(value is IConvertible convertible))
+            if (value is not IConvertible convertible)
             {
                 // Converter receives both Int32 values and Double values.
                 return DependencyProperty.UnsetValue;

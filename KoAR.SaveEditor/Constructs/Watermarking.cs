@@ -44,7 +44,7 @@ namespace KoAR.SaveEditor.Constructs
 
         private static void ContentProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (!(d is TextBoxBase textBox))
+            if (d is not TextBoxBase textBox)
             {
                 return;
             }
