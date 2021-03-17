@@ -15,16 +15,16 @@ namespace KoAR.Core
         }
 
         public uint TypeId { get; }
-        public string Name { get; set; }
-        public string InternalName { get; set; }
-        public Buff Buff { get; set; }
-        public char SocketType { get; set; }
+        public string Name { get; }
+        public string InternalName { get; }
+        public Buff Buff { get; }
+        public char SocketType { get; }
 
         internal static IEnumerable<GemDefinition> ParseFile(Stream stream)
         {
             using var reader = new StreamReader(stream);
             reader.ReadLine();
-            while (reader.ReadLine() is string line)
+            while (reader.ReadLine() is { } line)
             {
                 var parts = line.Split(Amalur.Separator);
                 yield return new(
