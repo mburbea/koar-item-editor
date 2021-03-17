@@ -156,12 +156,8 @@ namespace KoAR.SaveEditor.Views
         private void GridViewColumn_Click(object sender, RoutedEventArgs e)
         {
             ICollectionView? view;
-            if (e.OriginalSource is not GridViewColumnHeader header || (view = this.CollectionView) == null || view.SortDescriptions == null)
-            {
-                return;
-            }
-            string? propertyName = ItemCollectionManager.GetPropertyName(header.Column);
-            if (propertyName == null)
+            if (e.OriginalSource is not GridViewColumnHeader header || (view = this.CollectionView) == null 
+                || view.SortDescriptions == null || ItemCollectionManager.GetPropertyName(header.Column) is not string propertyName)
             {
                 return;
             }
