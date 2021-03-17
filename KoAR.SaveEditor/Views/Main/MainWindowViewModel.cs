@@ -97,6 +97,7 @@ namespace KoAR.SaveEditor.Views.Main
                 Title = "Open Save File...",
                 DefaultExt = ".sav",
                 Filter = "Save Files (*.sav)|*.sav|Switch Save Files|*.*",
+                FilterIndex = Settings.Default.LastFilterUsed,
                 CheckFileExists = true,
                 InitialDirectory = Path.GetFullPath(string.IsNullOrEmpty(Settings.Default.LastDirectory)
                     ? Amalur.FindSaveGameDirectory()
@@ -143,6 +144,7 @@ namespace KoAR.SaveEditor.Views.Main
             }
             this.GameSave = gameSave;
             Settings.Default.LastDirectory = Path.GetFullPath(Path.GetDirectoryName(dialog.FileName));
+            Settings.Default.LastFilterUsed = dialog.FilterIndex;
             this.InventoryManager = new(this);
             this.StashManager = this.GameSave.Stash != null ? new(this) : default;
             this.OnPropertyChanged(nameof(this.GameSave)); // Notifying the change is explicitly done after the view models are set.
