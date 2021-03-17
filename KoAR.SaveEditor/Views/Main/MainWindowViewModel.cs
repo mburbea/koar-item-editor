@@ -96,7 +96,7 @@ namespace KoAR.SaveEditor.Views.Main
             {
                 Title = "Open Save File...",
                 DefaultExt = ".sav",
-                Filter = "Save Files (*.sav)|*.sav",
+                Filter =$"Save Files (*.sav)|*.sav|Switch Save Files|*.*",
                 CheckFileExists = true,
                 InitialDirectory = Path.GetFullPath(string.IsNullOrEmpty(Settings.Default.LastDirectory)
                     ? Amalur.FindSaveGameDirectory()

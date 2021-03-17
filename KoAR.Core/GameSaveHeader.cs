@@ -10,17 +10,10 @@ namespace KoAR.Core
 
         public GameSaveHeader(GameSave gameSave)
         {
-            ReadOnlySpan<byte> endOfStructMarker = new byte[8] { 0, 0, 0, 0, 0xA, 0, 0, 0 };
             _gameSave = gameSave;
-            var span = gameSave.Bytes.AsSpan();
-            var ix = span.IndexOf(endOfStructMarker);
-            
-            while(gameSave.IsRemaster && MemoryUtilities.Read<int>(_gameSave.Bytes, ix + 8) != 0)
-            {
-                span = gameSave.Bytes.AsSpan(ix + 8);
-                ix += 8 + span.IndexOf(new byte[8] { 0, 0, 0, 0, 0xA, 0, 0, 0 });
-            }
-            _dataLengthOffset = ix - 4;
+            _dataLengthOffset = gameSave.Bytes.AsSpan().IndexOf(gameSave.IsRemaster
+              ? new byte[16] { 0, 0, 0, 0, 0xA, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+              : new byte[8] { 0, 0, 0, 0, 0xA, 0, 0, 0 }) - 4;
         }
 
         public int BodyDataLength
