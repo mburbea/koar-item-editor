@@ -6,7 +6,7 @@ namespace KoAR.SaveEditor.Constructs
     public static class ColumnVisibility
     {
         public static readonly DependencyProperty IsHiddenProperty = DependencyProperty.RegisterAttached("IsHidden", typeof(bool), typeof(ColumnVisibility),
-            new PropertyMetadata(ColumnVisibility.IsHiddenProperty_ValueChanged));
+            new(ColumnVisibility.IsHiddenProperty_ValueChanged));
 
         public static bool GetIsHidden(GridViewColumn column)
         {

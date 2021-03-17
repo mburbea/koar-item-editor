@@ -7,7 +7,7 @@ namespace KoAR.Core
     public partial class StashItem : IItem
     {
         protected byte[] Bytes { get; }
-        public List<Buff> PlayerBuffs { get; } = new List<Buff>();
+        public List<Buff> PlayerBuffs { get; } = new();
 
         public Gem[] Gems { get; }
 
@@ -38,7 +38,7 @@ namespace KoAR.Core
 
         internal int ItemOffset { get; set; }
 
-        protected Offset Offsets => new Offset(this);
+        protected Offset Offsets => new(this);
 
         public ItemDefinition Definition => Amalur.ItemDefinitions[MemoryUtilities.Read<uint>(Bytes)];
 
@@ -94,7 +94,7 @@ namespace KoAR.Core
                             break;
                         }
                     }
-                    yield return new Socket(socket, gem);
+                    yield return new(socket, gem);
                 }
             }
         }

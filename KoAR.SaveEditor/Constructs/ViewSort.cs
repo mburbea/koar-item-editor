@@ -9,7 +9,7 @@ namespace KoAR.SaveEditor.Constructs
     public static class ViewSort
     {
         public static readonly DependencyProperty ComparerProperty = DependencyProperty.RegisterAttached("Comparer", typeof(IComparer), typeof(ViewSort),
-            new PropertyMetadata(ViewSort.ComparerProperty_PropertyChanged));
+            new(ViewSort.ComparerProperty_PropertyChanged));
 
         private static readonly DependencyPropertyDescriptor _viewDescriptor = DependencyPropertyDescriptor.FromProperty(CollectionViewSource.ViewProperty, typeof(CollectionViewSource));
 
@@ -19,7 +19,7 @@ namespace KoAR.SaveEditor.Constructs
 
         private static void ComparerProperty_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (!(d is CollectionViewSource source))
+            if (d is not CollectionViewSource source)
             {
                 return;
             }

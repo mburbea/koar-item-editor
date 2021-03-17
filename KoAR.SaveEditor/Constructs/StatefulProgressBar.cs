@@ -13,7 +13,7 @@ namespace KoAR.SaveEditor.Constructs
     public sealed class StatefulProgressBar : ProgressBar
     {
         public static readonly DependencyProperty StateProperty = DependencyProperty.Register("State", typeof(ProgressBarState), typeof(StatefulProgressBar),
-            new PropertyMetadata(ProgressBarState.Default));
+            new(ProgressBarState.Default));
 
         static StatefulProgressBar() => FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(StatefulProgressBar), new FrameworkPropertyMetadata(typeof(StatefulProgressBar)));
 

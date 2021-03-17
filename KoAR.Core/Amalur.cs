@@ -49,7 +49,7 @@ namespace KoAR.Core
 
         internal static char[] Separator { get; } = { ',' };
 
-        public static Buff GetBuff(uint buffId) => Buffs.GetOrDefault(buffId, new Buff { Id = buffId, Name = "Unknown" });
+        public static Buff GetBuff(uint buffId) => Buffs.GetOrDefault(buffId, new() { Id = buffId, Name = "Unknown" });
 
         [return: MaybeNull, NotNullIfNotNull("defaultValue")]
         internal static TValue GetOrDefault<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key, TValue? defaultValue = default)
@@ -67,7 +67,7 @@ namespace KoAR.Core
                 }
                 // Steam
                 directory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolderOption.DoNotVerify), "Steam", "userdata");
-                if (Directory.Exists(directory) && Directory.GetDirectories(directory) is string[] { Length: 1 } userDirs
+                if (Directory.Exists(directory) && Directory.GetDirectories(directory) is { Length: 1 } userDirs
                         && (Directory.Exists(directory = Path.Combine(userDirs[0], @"1041720\remote\autocloud\save")) || Directory.Exists(directory = Path.Combine(userDirs[0], @"102500\remote"))))
                 {
                     return directory;

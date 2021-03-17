@@ -16,8 +16,8 @@ namespace KoAR.SaveEditor.Updates
 {
     public static class UpdateMethods
     {
-        private static readonly Lazy<string?> _credentials = new Lazy<string?>(UpdateMethods.LoadCredentials);
-        private static readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions { PropertyNamingPolicy = JsonSnakeCaseNamingPolicy.Instance };
+        private static readonly Lazy<string?> _credentials = new(UpdateMethods.LoadCredentials);
+        private static readonly JsonSerializerOptions _jsonOptions = new() { PropertyNamingPolicy = JsonSnakeCaseNamingPolicy.Instance };
 
         /// <summary>
         /// Given the path to a zip file containing an update, executes the update process.
@@ -138,11 +138,11 @@ namespace KoAR.SaveEditor.Updates
 
         private static async Task<Tag[]> FetchTagsAsync(CancellationToken cancellationToken) => (await UpdateMethods.FetchDataAsync<Tag[]>("tags", cancellationToken).ConfigureAwait(false))!;
 
-        private static Stream GetResourceFileStream(string name) => Application.GetResourceStream(new Uri($"/Updates/{name}", UriKind.Relative)).Stream;
+        private static Stream GetResourceFileStream(string name) => Application.GetResourceStream(new($"/Updates/{name}", UriKind.Relative)).Stream;
 
         private static string? LoadCredentials()
         {
-            using StreamReader reader = new StreamReader(UpdateMethods.GetResourceFileStream("github.credentials"));
+            using StreamReader reader = new(UpdateMethods.GetResourceFileStream("github.credentials"));
             return reader.EndOfStream ? default : $"Basic {Convert.ToBase64String(Encoding.ASCII.GetBytes(reader.ReadToEnd()))}";
         }
 
@@ -163,7 +163,7 @@ namespace KoAR.SaveEditor.Updates
 
             public string TagName { get; set; } = string.Empty;
 
-            public Version Version => this._version ??= new Version(this.TagName.Length != 0 ? this.TagName[1..] : "0.0.0");
+            public Version Version => this._version ??= new(this.TagName.Length != 0 ? this.TagName[1..] : "0.0.0");
 
             public ReleaseAsset? ZipFileAsset => this._zipFileAsset ??= this.Assets.FirstOrDefault(asset => asset.IsZipFile);
 
@@ -185,12 +185,12 @@ namespace KoAR.SaveEditor.Updates
 
         private sealed class Tag
         {
-            private static readonly Regex _regex = new Regex(@"^v(?<version>\d+\.\d+\.\d+)$", RegexOptions.ExplicitCapture);
+            private static readonly Regex _regex = new(@"^v(?<version>\d+\.\d+\.\d+)$", RegexOptions.ExplicitCapture);
             private Version? _version;
 
             public string Name { get; set; } = string.Empty;
 
-            public Version Version => this._version ??= new Version(Tag._regex.IsMatch(this.Name) ? this.Name[1..] : "0.0.0");
+            public Version Version => this._version ??= new(Tag._regex.IsMatch(this.Name) ? this.Name[1..] : "0.0.0");
         }
     }
 }

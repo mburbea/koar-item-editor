@@ -31,7 +31,7 @@ namespace KoAR.Core
             {
                 throw new NotSupportedException("Save file is not a user save and changing them can lead to the game infinite looping. The editor only supports saves that start with svd_fmt_5.");
             }
-            _header = new GameSaveHeader(this);
+            _header = new(this);
             if (BitConverter.ToInt32(Bytes, BodyStart) == CompressedFlag)
             {
                 Body = new byte[_header.BodyDataLength];
@@ -59,9 +59,9 @@ namespace KoAR.Core
                 data.IndexOf(new byte[5] { 0x0C, 0xAE, 0x32, 0x00, 0x00 }) + 5, // unknown length 1
                 typeSectionOffset + 5, // type section length
             };
-            _itemContainer = new Container(this, data.IndexOf(new byte[5] { 0xD3, 0x34, 0x43, 0x00, 0x00 }), 0x00_24_D5_68_00_00_00_0Bul);
-            _itemBuffsContainer = new Container(this, data.IndexOf(new byte[5] { 0xBB, 0xD5, 0x43, 0x00, 0x00 }), 0x00_28_60_84_00_00_00_0Bul);
-            _itemSocketsContainer = new Container(this, data.IndexOf(new byte[5] { 0x93, 0xCC, 0x80, 0x00, 0x00 }), 0x00_59_36_38_00_00_00_0Bul);
+            _itemContainer = new(this, data.IndexOf(new byte[5] { 0xD3, 0x34, 0x43, 0x00, 0x00 }), 0x00_24_D5_68_00_00_00_0Bul);
+            _itemBuffsContainer = new(this, data.IndexOf(new byte[5] { 0xBB, 0xD5, 0x43, 0x00, 0x00 }), 0x00_28_60_84_00_00_00_0Bul);
+            _itemSocketsContainer = new(this, data.IndexOf(new byte[5] { 0x93, 0xCC, 0x80, 0x00, 0x00 }), 0x00_59_36_38_00_00_00_0Bul);
             var itemLocs = _itemContainer.ToDictionary(x => x.id, x => (x.offset, x.dataLength));
             var itemBuffsLocs = _itemBuffsContainer.ToDictionary(x => x.id, x => (x.offset, x.dataLength));
             var itemSocketsLocs = _itemSocketsContainer.ToDictionary(x => x.id, x => (x.offset, x.dataLength));
@@ -84,7 +84,7 @@ namespace KoAR.Core
                 }
                 else if (Amalur.GemDefinitions.ContainsKey(typeId))
                 {
-                    Gems.Add(id, new Gem(this, typeIdOffset));
+                    Gems.Add(id, new(this, typeIdOffset));
                 }
                 else if (Amalur.PlayerTypeIds.IndexOf(typeId) != -1)
                 {
@@ -98,13 +98,13 @@ namespace KoAR.Core
                 {
                     if (questItemDef != null)
                     {
-                        QuestItems.Add(new QuestItem(this, questItemDef, itemOffset + itemLength - 3));
+                        QuestItems.Add(new(this, questItemDef, itemOffset + itemLength - 3));
                     }
                     else
                     {
                         var (itemBuffsOffset, itemBuffsLength) = itemBuffsLocs[id];
                         var (itemGemsOffset, itemGemsLength) = itemSocketsLocs[id];
-                        Items.Add(new Item(this, typeIdOffset, itemOffset, itemLength, itemBuffsOffset, itemBuffsLength, itemGemsOffset, itemGemsLength));
+                        Items.Add(new(this, typeIdOffset, itemOffset, itemLength, itemBuffsOffset, itemBuffsLength, itemGemsOffset, itemGemsLength));
                     }
                 }
             }
@@ -177,15 +177,15 @@ namespace KoAR.Core
             }
         }
 
-        public List<Item> Items { get; } = new List<Item>();
+        public List<Item> Items { get; } = new();
 
-        public HashSet<Item> EquippedItems { get; } = new HashSet<Item>();
+        public HashSet<Item> EquippedItems { get; } = new();
 
-        public Dictionary<int, Gem> Gems { get; } = new Dictionary<int, Gem>();
+        public Dictionary<int, Gem> Gems { get; } = new();
 
         public Stash? Stash { get; private set; }
 
-        public List<QuestItem> QuestItems { get; } = new List<QuestItem>();
+        public List<QuestItem> QuestItems { get; } = new();
 
         internal void UpdateDataLengths(int itemOffset, int delta)
         {

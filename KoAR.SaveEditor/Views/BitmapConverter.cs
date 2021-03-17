@@ -14,7 +14,7 @@ namespace KoAR.SaveEditor.Views
     public sealed class BitmapConverter : IValueConverter, IMultiValueConverter
     {
         private static readonly Dictionary<string, BitmapImage> _bitmaps = BitmapConverter.DiscoverBitmaps();
-        private static readonly BitmapImage _fallback = BitmapConverter.CreateFrozenBitmap(() => new BitmapImage());
+        private static readonly BitmapImage _fallback = BitmapConverter.CreateFrozenBitmap(() => new());
 
         object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -27,7 +27,7 @@ namespace KoAR.SaveEditor.Views
         {
             if (values != null)
             {
-                List<string> list = new List<string>(values.Length);
+                List<string> list = new(values.Length);
                 foreach (object value in values)
                 {
                     if (value == null || value is Enum && value.GetHashCode() == 0)
@@ -64,14 +64,14 @@ namespace KoAR.SaveEditor.Views
         private static Dictionary<string, BitmapImage> DiscoverBitmaps()
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
-            ResourceManager manager = new ResourceManager($"{assembly.GetName().Name}.g", assembly);
+            ResourceManager manager = new($"{assembly.GetName().Name}.g", assembly);
             return manager.GetResourceSet(CultureInfo.InvariantCulture, true, true)
                 .Cast<DictionaryEntry>()
                 .Select(entry => (string)entry.Key)
                 .Where(path => path.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
                 .ToDictionary(
                     Path.GetFileNameWithoutExtension,
-                    name => BitmapConverter.CreateFrozenBitmap(() => new BitmapImage(new Uri($"pack://application:,,,/{assembly.GetName().Name};component/{name}"))),
+                    name => BitmapConverter.CreateFrozenBitmap(() => new(new($"pack://application:,,,/{assembly.GetName().Name};component/{name}"))),
                     StringComparer.OrdinalIgnoreCase
                 );
         }

@@ -23,7 +23,7 @@ namespace KoAR.Core
 
     public class BuffDescription
     {
-        public static readonly BuffDescription Empty = new BuffDescription { Icon = "Default", Text = "None" };
+        public static readonly BuffDescription Empty = new() { Icon = "Default", Text = "None" };
 
         [JsonPropertyName("param_icon")]
         public string? Icon { get; set; }

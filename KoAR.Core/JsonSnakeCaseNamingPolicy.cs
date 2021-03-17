@@ -7,7 +7,7 @@ namespace KoAR.Core
 {
     public sealed class JsonSnakeCaseNamingPolicy : JsonNamingPolicy
     {
-        public static readonly JsonNamingPolicy Instance = new JsonSnakeCaseNamingPolicy();
+        public static readonly JsonSnakeCaseNamingPolicy Instance = new();
 
         private JsonSnakeCaseNamingPolicy() { }
 
@@ -17,7 +17,7 @@ namespace KoAR.Core
             {
                 return name;
             }
-            StringBuilder builder = new StringBuilder(name.Length + Math.Max(2, name.Length / 5));
+            StringBuilder builder = new(name.Length + Math.Max(2, name.Length / 5));
             UnicodeCategory? previousCategory = null;
             for (int index = 0; index < name.Length; index++)
             {

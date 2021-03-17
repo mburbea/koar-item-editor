@@ -17,15 +17,15 @@ namespace KoAR.SaveEditor.Views
         {
             if (text.Length == 0)
             {
-                return new ValidationResult(false, "Value is required.");
+                return new(false, "Value is required.");
             }
             if (!float.TryParse(text, NumberStyles.Float, culture, out float durability))
             {
-                return new ValidationResult(false, "Durability must be a numeric value.");
+                return new(false, "Durability must be a numeric value.");
             }
             if (!Item.IsValidDurability(durability))
             {
-                return new ValidationResult(false, $"Durability must be between {Item.DurabilityLowerBound} and {Item.DurabilityUpperBound}.");
+                return new(false, $"Durability must be between {Item.DurabilityLowerBound} and {Item.DurabilityUpperBound}.");
             }
             return ValidationResult.ValidResult;
         }

@@ -12,8 +12,8 @@ namespace KoAR.SaveEditor.Views.Stash
         public StashManagerViewModel(MainWindowViewModel mainWindowViewModel)
             : base(mainWindowViewModel, gameSave => gameSave.Stash!.Items.Select(item => new StashItemModel(item)))
         {
-            this.AddItemCommand = new DelegateCommand(this.AddItem);
-            this.DeleteItemCommand = new DelegateCommand<StashItemModel>(this.DeleteItem);
+            this.AddItemCommand = new(this.AddItem);
+            this.DeleteItemCommand = new(this.DeleteItem);
         }
 
         public DelegateCommand AddItemCommand { get; }
@@ -22,8 +22,8 @@ namespace KoAR.SaveEditor.Views.Stash
 
         private void AddItem()
         {
-            ChangeOrAddItemViewModel viewModel = new ChangeOrAddItemViewModel();
-            ChangeOrAddItemView view = new ChangeOrAddItemView
+            ChangeOrAddItemViewModel viewModel = new();
+            ChangeOrAddItemView view = new()
             {
                 Owner = Application.Current.MainWindow,
                 DataContext = viewModel
@@ -33,7 +33,7 @@ namespace KoAR.SaveEditor.Views.Stash
                 return;
             }
             StashItem stashItem = this.GameSave.Stash!.AddItem(viewModel.Definition);
-            this.AddItem(new StashItemModel(stashItem));
+            this.AddItem(new(stashItem));
             this.MainWindowViewModel.RegisterUnsavedChange();
         }
 

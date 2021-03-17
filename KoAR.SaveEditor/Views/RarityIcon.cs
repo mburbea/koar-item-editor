@@ -7,7 +7,7 @@ namespace KoAR.SaveEditor.Views
     public sealed class RarityIcon : Control
     {
         public static readonly DependencyProperty RarityProperty = DependencyProperty.Register(nameof(RarityIcon.Rarity), typeof(Rarity), typeof(RarityIcon),
-            new PropertyMetadata(Rarity.None));
+            new(Rarity.None));
 
         static RarityIcon() => FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(RarityIcon), new FrameworkPropertyMetadata(typeof(RarityIcon)));
 

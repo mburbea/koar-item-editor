@@ -34,7 +34,7 @@ namespace KoAR.SaveEditor.Views
 
         protected GameSave GameSave => this.MainWindowViewModel.GameSave!;
 
-        public ItemFilters ItemFilters { get; } = new ItemFilters();
+        public ItemFilters ItemFilters { get; } = new();
 
         public IReadOnlyList<TItem> Items => this._items;
 

@@ -7,7 +7,7 @@ namespace KoAR.SaveEditor.Views
     public sealed class ArmorTypeIcon : Control
     {
         public static readonly DependencyProperty ArmorTypeProperty = DependencyProperty.Register(nameof(ArmorTypeIcon.ArmorType), typeof(ArmorType), typeof(ArmorTypeIcon),
-            new PropertyMetadata(ArmorType.None));
+            new(ArmorType.None));
 
         static ArmorTypeIcon() => FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(ArmorTypeIcon), new FrameworkPropertyMetadata(typeof(ArmorTypeIcon)));
 

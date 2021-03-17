@@ -10,10 +10,10 @@ namespace KoAR.SaveEditor.Views
 {
     public sealed class ZoomScaler : Control
     {
-        public static readonly RoutedCommand ResetZoomCommand = new RoutedCommand("Reset Zoom", typeof(ZoomScaler));
+        public static readonly RoutedCommand ResetZoomCommand = new("Reset Zoom", typeof(ZoomScaler));
 
         public static readonly DependencyProperty TargetProperty = DependencyProperty.Register(nameof(ZoomScaler.Target), typeof(FrameworkElement), typeof(ZoomScaler),
-            new PropertyMetadata(null, ZoomScaler.TargetProperty_ValueChanged));
+            new(null, ZoomScaler.TargetProperty_ValueChanged));
 
         static ZoomScaler() => FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(ZoomScaler), new FrameworkPropertyMetadata(typeof(ZoomScaler)));
 
@@ -26,7 +26,7 @@ namespace KoAR.SaveEditor.Views
         protected override void OnInitialized(EventArgs e)
         {
             base.OnInitialized(e);
-            this.CommandBindings.Add(new CommandBinding(ZoomScaler.ResetZoomCommand, ZoomScaler.ResetZoomCommand_Executed));
+            this.CommandBindings.Add(new(ZoomScaler.ResetZoomCommand, ZoomScaler.ResetZoomCommand_Executed));
         }
 
         private static void AttachToTarget(FrameworkElement target)
@@ -37,8 +37,8 @@ namespace KoAR.SaveEditor.Views
                 target.Loaded += ZoomScaler.Target_Loaded;
                 return;
             }
-            ScaleTransform transform = new ScaleTransform();
-            Binding binding = new Binding(nameof(Settings.ZoomScale)) { Source = Settings.Default };
+            ScaleTransform transform = new();
+            Binding binding = new(nameof(Settings.ZoomScale)) { Source = Settings.Default };
             BindingOperations.SetBinding(transform, ScaleTransform.ScaleXProperty, binding);
             BindingOperations.SetBinding(transform, ScaleTransform.ScaleYProperty, binding);
             target.LayoutTransform = transform;
@@ -105,10 +105,10 @@ namespace KoAR.SaveEditor.Views
             {
                 return;
             }
-            Settings.Default.ZoomScale = Math.Sign(e.Delta) switch
+            Settings.Default.ZoomScale = e.Delta switch
             {
-                1 => Math.Min(Settings.Default.MaxZoomScale, Settings.Default.ZoomScale + 0.05),
-                -1 => Math.Max(Settings.Default.MinZoomScale, Settings.Default.ZoomScale - 0.05),
+                > 0 => Math.Min(Settings.Default.MaxZoomScale, Settings.Default.ZoomScale + 0.05),
+                < 0 => Math.Max(Settings.Default.MinZoomScale, Settings.Default.ZoomScale - 0.05),
                 _ => Settings.Default.ZoomScale,
             };
         }

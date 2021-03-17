@@ -27,7 +27,7 @@ namespace KoAR.SaveEditor.Views.Main
             base.OnPreviewKeyDown(e);
         }
 
-        private void Help_Executed(object sender, ExecutedRoutedEventArgs e) => TaskDialog.Show(new TaskDialogOptions
+        private void Help_Executed(object sender, ExecutedRoutedEventArgs e) => TaskDialog.Show(new()
         {
             Owner = this,
             Title = $"KoAR Save Editor",

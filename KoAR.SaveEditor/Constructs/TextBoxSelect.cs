@@ -6,7 +6,7 @@ namespace KoAR.SaveEditor.Constructs
     public static class TextBoxSelect
     {
         public static readonly DependencyProperty SelectOnFocusProperty = DependencyProperty.RegisterAttached("SelectOnFocus", typeof(bool), typeof(TextBoxSelect),
-            new PropertyMetadata(BooleanBoxes.False, TextBoxSelect.SelectOnFocusProperty_ValueChanged));
+            new(BooleanBoxes.False, TextBoxSelect.SelectOnFocusProperty_ValueChanged));
 
         private static readonly RoutedEventHandler _gotKeyboardFocus = (sender, e) => ((TextBoxBase)sender).SelectAll();
 
@@ -18,7 +18,7 @@ namespace KoAR.SaveEditor.Constructs
 
         private static readonly RoutedEventHandler _previewMouseLeftButtonDown = (sender, e) =>
         {
-            if (!(e.OriginalSource is DependencyObject d))
+            if (e.OriginalSource is not DependencyObject d)
             {
                 return;
             }
@@ -36,7 +36,7 @@ namespace KoAR.SaveEditor.Constructs
 
         private static void SelectOnFocusProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (!(d is TextBoxBase textBox))
+            if (d is not TextBoxBase textBox)
             {
                 return;
             }

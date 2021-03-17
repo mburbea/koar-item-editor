@@ -24,10 +24,10 @@ namespace KoAR.SaveEditor.Views
         public static readonly DependencyProperty PendingBuffIdProperty = DependencyProperty.Register(nameof(BuffCollectionManager.PendingBuffId), typeof(uint?), typeof(BuffCollectionManager));
 
         public static readonly DependencyProperty PendingBuffProperty = DependencyProperty.Register(nameof(BuffCollectionManager.PendingBuff), typeof(Buff), typeof(BuffCollectionManager),
-            new PropertyMetadata(BuffCollectionManager.PendingBuffProperty_ValueChanged));
+            new(BuffCollectionManager.PendingBuffProperty_ValueChanged));
 
         public static readonly DependencyProperty UnsupportedFormatProperty = DependencyProperty.Register(nameof(BuffCollectionManager.UnsupportedFormat), typeof(bool), typeof(BuffCollectionManager),
-            new PropertyMetadata(BooleanBoxes.False));
+            new(BooleanBoxes.False));
 
         static BuffCollectionManager() => FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(BuffCollectionManager), new FrameworkPropertyMetadata(typeof(BuffCollectionManager)));
 
@@ -90,7 +90,7 @@ namespace KoAR.SaveEditor.Views
             base.OnApplyTemplate();
             if (this.Template.FindName("PART_TreeView", this) is TreeView treeView)
             {
-                treeView.CommandBindings.Add(new CommandBinding(ApplicationCommands.Copy, BuffCollectionManager.CopyCommand_Executed));
+                treeView.CommandBindings.Add(new(ApplicationCommands.Copy, BuffCollectionManager.CopyCommand_Executed));
             }
         }
 

@@ -15,9 +15,9 @@ namespace KoAR.SaveEditor.Constructs
     /// <typeparam name="T">Type of the items in the collection.</typeparam>
     public sealed class NotifyingCollection<T> : Collection<T>, INotifyCollectionChanged, INotifyPropertyChanged
     {
-        private static readonly PropertyChangedEventArgs _countArgs = new PropertyChangedEventArgs(nameof(IList<T>.Count));
-        private static readonly PropertyChangedEventArgs _indexerArgs = new PropertyChangedEventArgs(Binding.IndexerName);
-        private static readonly NotifyCollectionChangedEventArgs _resetArgs = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset);
+        private static readonly PropertyChangedEventArgs _countArgs = new(nameof(IList<T>.Count));
+        private static readonly PropertyChangedEventArgs _indexerArgs = new(Binding.IndexerName);
+        private static readonly NotifyCollectionChangedEventArgs _resetArgs = new(NotifyCollectionChangedAction.Reset);
 
         private int _pauseCount;
 
@@ -60,7 +60,7 @@ namespace KoAR.SaveEditor.Constructs
         protected override void InsertItem(int index, T item)
         {
             base.InsertItem(index, item);
-            this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, index));
+            this.OnCollectionChanged(new(NotifyCollectionChangedAction.Add, item, index));
             this.OnPropertyChanged(NotifyingCollection<T>._countArgs);
             this.OnPropertyChanged(NotifyingCollection<T>._indexerArgs);
         }
@@ -69,7 +69,7 @@ namespace KoAR.SaveEditor.Constructs
         {
             T oldItem = this.Items[index];
             base.RemoveItem(index);
-            this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, oldItem, index));
+            this.OnCollectionChanged(new(NotifyCollectionChangedAction.Remove, oldItem, index));
             this.OnPropertyChanged(NotifyingCollection<T>._countArgs);
             this.OnPropertyChanged(NotifyingCollection<T>._indexerArgs);
         }
@@ -82,7 +82,7 @@ namespace KoAR.SaveEditor.Constructs
                 return;
             }
             base.SetItem(index, item);
-            this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, item, oldItem, index));
+            this.OnCollectionChanged(new(NotifyCollectionChangedAction.Replace, item, oldItem, index));
             this.OnPropertyChanged(NotifyingCollection<T>._indexerArgs);
         }
 

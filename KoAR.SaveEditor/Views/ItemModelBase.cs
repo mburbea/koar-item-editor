@@ -117,7 +117,7 @@ namespace KoAR.SaveEditor.Views
         {
             private static readonly PropertyInfo _defaultProperty = typeof(EqualityComparer<TValue>).GetProperty(nameof(EqualityComparer<TValue>.Default), BindingFlags.Public | BindingFlags.Static);
             private static readonly MethodInfo _equalsMethod = typeof(EqualityComparer<TValue>).GetMethod(nameof(EqualityComparer<TValue>.Equals), new[] { typeof(TValue), typeof(TValue) });
-            private static readonly Dictionary<string, Func<ItemModelBase<TItem>, TValue, bool>> _setters = new Dictionary<string, Func<ItemModelBase<TItem>, TValue, bool>>();
+            private static readonly Dictionary<string, Func<ItemModelBase<TItem>, TValue, bool>> _setters = new();
             private static readonly ParameterExpression _valueParameter = Expression.Parameter(typeof(TValue), "value");
 
             public static bool SetValue(ItemModelBase<TItem> model, TValue value, string propertyPath, string propertyName)

@@ -5,7 +5,7 @@ namespace KoAR.Core
 {
     public class ItemDefinitionBuffMemory : IItemBuffMemory
     {
-        public static readonly ItemDefinitionBuffMemory Empty = new ItemDefinitionBuffMemory(Array.Empty<Buff>(), null, null);
+        public static readonly ItemDefinitionBuffMemory Empty = new(Array.Empty<Buff>(), null, null);
 
         internal ItemDefinitionBuffMemory(Buff[] list, Buff? prefix, Buff? suffix) => (List, Prefix, Suffix) = (list, prefix, suffix);
 

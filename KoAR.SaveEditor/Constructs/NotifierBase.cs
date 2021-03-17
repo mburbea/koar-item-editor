@@ -14,7 +14,7 @@ namespace KoAR.SaveEditor.Constructs
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
-            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            this.PropertyChanged?.Invoke(this, new(propertyName));
         }
 
         protected bool SetValue<T>(ref T field, T value, [CallerMemberName] string propertyName = "")

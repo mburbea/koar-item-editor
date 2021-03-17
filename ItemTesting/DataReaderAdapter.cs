@@ -11,7 +11,7 @@ namespace ItemTesting
     {
         public DbDataReaderAdapter(IEnumerable<object[]> data) => _data = data.GetEnumerator();
 
-        private StrongBox<bool> _firstRead = new StrongBox<bool>();
+        private StrongBox<bool> _firstRead = new();
         private readonly IEnumerator<object[]> _data;
 
         public override bool Read() => Interlocked.Exchange(ref _firstRead, null) is StrongBox<bool> box ? box.Value : _data.MoveNext();

@@ -39,7 +39,7 @@ namespace KoAR.SaveEditor.Constructs
         {
             object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
             {
-                static DataContainer GetContainer(object value) => value is DataContainer container ? container : new DataContainer(value);
+                static DataContainer GetContainer(object value) => value is DataContainer container ? container : new(value);
 
                 return value is IEnumerable collection ? collection.Cast<object>().Select(GetContainer).ToArray() : new[] { GetContainer(value) };
             }

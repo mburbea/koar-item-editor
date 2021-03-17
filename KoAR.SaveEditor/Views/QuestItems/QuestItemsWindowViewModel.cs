@@ -18,14 +18,14 @@ namespace KoAR.SaveEditor.Views.QuestItems
         {
             this._mainWindowViewModel = mainWindowViewModel;
             GameSave gameSave = this._mainWindowViewModel.GameSave!;
-            List<QuestItemModel> items = new List<QuestItemModel>(gameSave.QuestItems.Count);
+            List<QuestItemModel> items = new(gameSave.QuestItems.Count);
             foreach (QuestItemModel item in gameSave.QuestItems.Select(item => new QuestItemModel(item)))
             {
                 item.IsUnsellableChanged += this.Item_IsUnsellableChanged;
                 items.Add(item);
             }
             this.Items = this._filteredItems = items;
-            this.ResetFiltersCommand = new DelegateCommand(this.ResetFilters);
+            this.ResetFiltersCommand = new(this.ResetFilters);
         }
 
         public bool? AllItemsUnsellable

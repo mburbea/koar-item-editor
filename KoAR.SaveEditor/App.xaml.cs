@@ -14,12 +14,12 @@ namespace KoAR.SaveEditor
     {
         static App() => Type.GetTypeCode(typeof(PlatformCulture)); // Needed to enforce loading of PresentationFramework.Aero.dll before initializing App.
 
-        public static Version Version { get; } = new Version(Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion);
+        public static Version Version { get; } = new(Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion);
 
         public static void ShowExceptionDialog(string mainInstruction, Exception exception)
         {
             string content = $"{exception.GetType().FullName}: {exception.Message}";
-            TaskDialogResult dialogResult = TaskDialog.Show(new TaskDialogOptions
+            TaskDialogResult dialogResult = TaskDialog.Show(new()
             {
                 Title = "KoAR Save Editor",
                 MainInstruction = mainInstruction,

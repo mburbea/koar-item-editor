@@ -9,7 +9,7 @@ namespace KoAR.SaveEditor.Constructs
     [ContentProperty(nameof(CompositeConverter.Converters))]
     public sealed class CompositeConverter : IValueConverter
     {
-        public Collection<IValueConverter> Converters { get; } = new Collection<IValueConverter>();
+        public Collection<IValueConverter> Converters { get; } = new();
 
         object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

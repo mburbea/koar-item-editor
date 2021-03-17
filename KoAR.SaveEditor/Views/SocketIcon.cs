@@ -14,10 +14,10 @@ namespace KoAR.SaveEditor.Views
         public static readonly IValueConverter PrefixConverter = new SocketPrefixConverter();
 
         public static readonly DependencyProperty SocketProperty = DependencyProperty.Register(nameof(SocketIcon.Socket), typeof(Socket), typeof(SocketIcon),
-            new PropertyMetadata(SocketIcon.SocketProperty_ValueChanged));
+            new(SocketIcon.SocketProperty_ValueChanged));
 
         private static readonly DependencyPropertyKey _iconNamePropertyKey = DependencyProperty.RegisterReadOnly(nameof(SocketIcon.IconName), typeof(string), typeof(SocketIcon),
-            new PropertyMetadata());
+            new());
 
         static SocketIcon()
         {

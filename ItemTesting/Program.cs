@@ -103,8 +103,8 @@ namespace ItemTesting
         //}
         static void Main()
         {
-            GameSave gameSave = new GameSave(@"C:\Program Files (x86)\Steam\userdata\107335713\1041720\remote\autocloud\save\svd_fmt_5_7.sav");
-            foreach(var (key,item) in Amalur.ItemDefinitions.Take(2000))
+            GameSave gameSave = new(@"C:\Program Files (x86)\Steam\userdata\107335713\1041720\remote\autocloud\save\svd_fmt_5_7.sav");
+            foreach (var (key, item) in Amalur.ItemDefinitions.Take(2000))
             {
                 gameSave.Stash.AddItem(item);
             }

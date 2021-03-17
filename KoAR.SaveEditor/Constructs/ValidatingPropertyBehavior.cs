@@ -17,7 +17,7 @@ namespace KoAR.SaveEditor.Constructs
         /// Defines the ValidatingProperty dependency property.
         /// </summary>
         public static readonly DependencyProperty ValidatingPropertyProperty = DependencyProperty.RegisterAttached("ValidatingProperty", typeof(DependencyProperty), typeof(ValidatingPropertyBehavior),
-            new PropertyMetadata(ValidatingPropertyBehavior.ValidatingPropertyProperty_PropertyChanged));
+            new(ValidatingPropertyBehavior.ValidatingPropertyProperty_PropertyChanged));
 
         /// <summary>
         /// Gets the validating dependency property for a dependency object.
@@ -69,7 +69,7 @@ namespace KoAR.SaveEditor.Constructs
                     ValidationResult result = rule.Validate(value, CultureInfo.InvariantCulture);
                     if (!result.IsValid)
                     {
-                        Validation.MarkInvalid(bindingExpression, new ValidationError(rule, bindingExpression.ParentBindingBase, result.ErrorContent, null));
+                        Validation.MarkInvalid(bindingExpression, new(rule, bindingExpression.ParentBindingBase, result.ErrorContent, null));
                         return;
                     }
                 }
@@ -89,14 +89,15 @@ namespace KoAR.SaveEditor.Constructs
             {
                 return;
             }
-            switch (bindingExpression.ParentBindingBase)
+            ICollection<ValidationRule> rules = bindingExpression.ParentBindingBase switch
             {
-                case Binding binding:
-                    ValidatingPropertyBehavior.Validate(dependencyObject.GetValue(dependencyProperty), binding.ValidationRules, bindingExpression);
-                    break;
-                case MultiBinding multiBinding:
-                    ValidatingPropertyBehavior.Validate(dependencyObject.GetValue(dependencyProperty), multiBinding.ValidationRules, bindingExpression);
-                    break;
+                Binding binding => binding.ValidationRules,
+                MultiBinding multiBinding => multiBinding.ValidationRules,
+                _ => Array.Empty<ValidationRule>()
+            };
+            if (rules.Count > 0)
+            {
+                ValidatingPropertyBehavior.Validate(dependencyObject.GetValue(dependencyProperty), rules, bindingExpression);
             }
         }
 
