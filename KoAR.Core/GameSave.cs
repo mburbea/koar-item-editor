@@ -145,7 +145,7 @@ namespace KoAR.Core
 
             foreach (var itemId in equippedData)
             {
-                if (itemId != 0 && Items.FirstOrDefault(x => x.ItemId == itemId) is Item item)
+                if (itemId != 0 && Items.FirstOrDefault(x => x.ItemId == itemId) is { } item)
                 {
                     EquippedItems.Add(item);
                 }

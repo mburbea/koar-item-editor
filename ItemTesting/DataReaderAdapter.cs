@@ -14,7 +14,7 @@ namespace ItemTesting
         private StrongBox<bool> _firstRead = new();
         private readonly IEnumerator<object[]> _data;
 
-        public override bool Read() => Interlocked.Exchange(ref _firstRead, null) is StrongBox<bool> box ? box.Value : _data.MoveNext();
+        public override bool Read() => Interlocked.Exchange(ref _firstRead, null) is {Value: var value } ? value : _data.MoveNext();
 
         public override int FieldCount => (_firstRead.Value = _data.MoveNext()) ? _data.Current.Length : 0;
 
