@@ -155,19 +155,16 @@ namespace KoAR.SaveEditor.Views
 
         private void GridViewColumn_Click(object sender, RoutedEventArgs e)
         {
-            ICollectionView? view;
-            if (e.OriginalSource is not GridViewColumnHeader header || (view = this.CollectionView) == null 
-                || view.SortDescriptions == null || ItemCollectionManager.GetPropertyName(header.Column) is not string propertyName)
+            if (e.OriginalSource is GridViewColumnHeader header && ItemCollectionManager.GetPropertyName(header.Column) is string propertyName && this.CollectionView?.SortDescriptions is { } descriptions)
             {
-                return;
+                SortDescription current = descriptions[1];
+                descriptions[1] = new(
+                    this.SortProperty = propertyName,
+                    this.SortDirection = propertyName == current.PropertyName
+                        ? (ListSortDirection)((int)current.Direction ^ 1)
+                        : ListSortDirection.Ascending
+                );
             }
-            SortDescription current = view.SortDescriptions[1];
-            view.SortDescriptions[1] = new(
-                this.SortProperty = propertyName,
-                this.SortDirection = propertyName == current.PropertyName
-                    ? (ListSortDirection)((int)current.Direction ^ 1)
-                    : ListSortDirection.Ascending
-            );
         }
 
         private void OnViewChanged()
