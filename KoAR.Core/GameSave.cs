@@ -30,7 +30,7 @@ namespace KoAR.Core
             IsRemaster = BitConverter.ToInt32(Bytes, 8) == 0;
             SaveType = IsRemaster switch
             {
-                true when Path.GetExtension(fileName) == "" && Bytes.Length != 4_462_592 => SaveType.Switch,
+                true when Path.GetExtension(fileName) is "" && Bytes.Length != 4_462_592 => SaveType.Switch,
                 true => SaveType.Remaster,
                 false => SaveType.Original,
             };
