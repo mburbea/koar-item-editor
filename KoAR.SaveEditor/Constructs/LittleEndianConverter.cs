@@ -10,7 +10,7 @@ namespace KoAR.SaveEditor.Constructs
     {
         object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value is uint number ? BinaryPrimitives.ReverseEndianness(number).ToString(culture) : DependencyProperty.UnsetValue;
+            return value is uint number ? BinaryPrimitives.ReverseEndianness(number).ToString("X8", culture) : DependencyProperty.UnsetValue;
         }
 
         object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
