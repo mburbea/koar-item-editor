@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Data;
@@ -37,11 +38,11 @@ namespace KoAR.SaveEditor.Constructs
 
         private sealed class DataContainerCollectionConverter : IValueConverter
         {
+            [SuppressMessage("Style", "IDE0039:Use local function", Justification = "Prevent a delegate creation on each usage.")]
             object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
             {
-                static DataContainer GetContainer(object value) => value is DataContainer container ? container : new(value);
-
-                return value is IEnumerable collection ? collection.Cast<object>().Select(GetContainer).ToArray() : new[] { GetContainer(value) };
+                Func<object, DataContainer> getContainer = value => value is DataContainer container ? container : new(value);
+                return value is IEnumerable collection ? collection.Cast<object>().Select(getContainer).ToArray() : new[] { getContainer(value) };
             }
 
             object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();

@@ -17,7 +17,7 @@ namespace KoAR.Core
         }
 
         internal static uint GetSelfBuffInstanceId(int index) => (uint)Hasher.GetHash($"selfbuff_{index}");
-        internal static uint GetAffixInstanceId(Buff? buff) => buff is null ? 0 : (uint)Hasher.GetHash($"selfbuff{buff.BuffType}_{buff.Id}");
+        internal static uint GetAffixInstanceId(Buff? buff) => buff is { BuffType: var type, Id: var id } ? (uint)Hasher.GetHash($"selfbuff{type}_{id}") : 0;
         internal static uint GetSocketInstanceId(int slot) => (uint)Hasher.GetHash($"socketable_self_{slot}_0");
 
         private readonly Item _item;
