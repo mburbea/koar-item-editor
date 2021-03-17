@@ -12,6 +12,7 @@ namespace KoAR.Core
     public sealed class GameSave
     {
         private const int MaxRemasterBodySize = 4 * 1024 * 1024;
+        private const int MaxSwitchBodySize = 256 * 1024 * 10;
         private const int CompressedFlag = 0x62_69_6C_7A; // zlib
 
         private readonly int _bagOffset;
@@ -27,7 +28,13 @@ namespace KoAR.Core
         {
             Bytes = File.ReadAllBytes(FileName = fileName);
             IsRemaster = BitConverter.ToInt32(Bytes, 8) == 0;
-            if (IsRemaster && !Path.GetFileNameWithoutExtension(fileName).StartsWith("svd_fmt_5_"))
+            SaveType = IsRemaster switch
+            {
+                true when Path.GetExtension(fileName) == "" && Bytes.Length != 4_462_592 => SaveType.Switch,
+                true => SaveType.Remaster,
+                false => SaveType.Original,
+            };
+            if (SaveType == SaveType.Remaster && !Path.GetFileNameWithoutExtension(fileName).StartsWith("svd_fmt_5_"))
             {
                 throw new NotSupportedException("Save file is not a user save and changing them can lead to the game infinite looping. The editor only supports saves that start with svd_fmt_5.");
             }
@@ -130,7 +137,7 @@ namespace KoAR.Core
         private void FindEquippedItems(int playerActor)
         {
             var data = Body.AsSpan();
-            ReadOnlySpan<byte> signature = new byte[9] { 0x0B, 0x00, 0x00, 0x00, 0x41, 0xF5, 0x7E, 0x00, 0x04 };
+            ReadOnlySpan<byte> signature = new byte[9] { 0x0B, 0x00, 0x00, 0x00, 0x41, 0xF5, 0x7E, 0x00, (byte)(SaveType == SaveType.Switch ? 0x05 : 0x04) };
             Span<byte> temp = stackalloc byte[13];
             MemoryUtilities.Write(temp, 0, playerActor);
             signature.CopyTo(temp[4..]);
@@ -154,6 +161,7 @@ namespace KoAR.Core
 
         public Encoding Encoding => IsRemaster ? Encoding.UTF8 : Encoding.Default;
         public bool IsRemaster { get; }
+        public SaveType SaveType { get; }
         private int BodyStart => 8 + _header.Length + 4;
         public byte[] Bytes { get; internal set; }
         public byte[] Body { get; internal set; }
@@ -210,9 +218,10 @@ namespace KoAR.Core
             File.Copy(FileName, backupPath = Path.Combine(backupPath, Path.GetFileName(FileName)), true);
             if (IsRemaster)
             {
+                int maxBodySize = SaveType == SaveType.Switch ? MaxSwitchBodySize : MaxRemasterBodySize;
                 // possibly unneccessary but it can't hurt.
-                Bytes.AsSpan(BodyStart, MaxRemasterBodySize).Clear();
-                if (Body.Length > MaxRemasterBodySize)
+                Bytes.AsSpan(BodyStart, maxBodySize).Clear();
+                if (Body.Length > maxBodySize)
                 {
                     var (bundleStream, bundleLength) = CompressStream(Body, 0, _gameStateStartOffset);
                     var (gameStateStream, gameStateLength) = CompressStream(Body, _gameStateStartOffset, Body.Length - _gameStateStartOffset);
