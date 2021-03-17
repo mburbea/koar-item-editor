@@ -6,14 +6,17 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using StringLiteral;
 
 namespace KoAR.Core
 {
-    public sealed class GameSave
+    public sealed partial class GameSave
     {
         private const int MaxRemasterBodySize = 4 * 1024 * 1024;
         private const int MaxSwitchBodySize = 256 * 1024 * 10;
         private const int CompressedFlag = 0x62_69_6C_7A; // zlib
+        private const string RemasterFilePattern = "svd_fmt_5_";
+        private const string SwitchFilePattern = "svd_04_";
 
         private readonly int _bagOffset;
         private readonly int _gameStateStartOffset;
@@ -34,9 +37,10 @@ namespace KoAR.Core
                 true => SaveType.Remaster,
                 false => SaveType.Original,
             };
-            if (SaveType == SaveType.Remaster && !Path.GetFileNameWithoutExtension(fileName).StartsWith("svd_fmt_5_"))
+            var pattern = SaveType == SaveType.Switch ? SwitchFilePattern : RemasterFilePattern;
+            if (IsRemaster && !Path.GetFileNameWithoutExtension(fileName).StartsWith(pattern))
             {
-                throw new NotSupportedException("Save file is not a user save and changing them can lead to the game infinite looping. The editor only supports saves that start with svd_fmt_5.");
+                throw new NotSupportedException($"Save file is not a user save and changing them can lead to the game infinite looping. The editor only supports saves that start with {pattern}.");
             }
             _header = new(this);
             if (BitConverter.ToInt32(Bytes, BodyStart) == CompressedFlag)
@@ -117,11 +121,12 @@ namespace KoAR.Core
             }
             FindEquippedItems(playerActor);
 
+
             static int GetBagOffset(ReadOnlySpan<byte> data)
             {
-                ReadOnlySpan<byte> inventoryLimit = new[] { (byte)'i', (byte)'n', (byte)'v', (byte)'e', (byte)'n', (byte)'t', (byte)'o', (byte)'r', (byte)'y', (byte)'_', (byte)'l', (byte)'i', (byte)'m', (byte)'i', (byte)'t' };
-                ReadOnlySpan<byte> increaseAmount = new[] { (byte)'i', (byte)'n', (byte)'c', (byte)'r', (byte)'e', (byte)'a', (byte)'s', (byte)'e', (byte)'_', (byte)'a', (byte)'m', (byte)'o', (byte)'u', (byte)'n', (byte)'t' };
-                ReadOnlySpan<byte> currentInventoryCount = new[] { (byte)'c', (byte)'u', (byte)'r', (byte)'r', (byte)'e', (byte)'n', (byte)'t', (byte)'_', (byte)'i', (byte)'n', (byte)'v', (byte)'e', (byte)'n', (byte)'t', (byte)'o', (byte)'r', (byte)'y', (byte)'_', (byte)'c', (byte)'o', (byte)'u', (byte)'n', (byte)'t' };
+                var inventoryLimit = Utf8InventoryLimit();
+                var increaseAmount = Utf8IncreaseAmount();
+                var currentInventoryCount = Utf8CurrentInventoryCount();
                 var curInvCountOffset = data.IndexOf(currentInventoryCount) + currentInventoryCount.Length;
                 var inventoryLimitOffset = data.IndexOf(inventoryLimit) + inventoryLimit.Length;
                 var increaseAmountOffset = data.IndexOf(increaseAmount) + increaseAmount.Length;
@@ -133,6 +138,14 @@ namespace KoAR.Core
                 return finalOffset + (inventoryLimitOrder * 12);
             }
         }
+        [Utf8("inventory_limit")]
+        private static partial ReadOnlySpan<byte> Utf8InventoryLimit();
+
+        [Utf8("increase_amount")]
+        private static partial ReadOnlySpan<byte> Utf8IncreaseAmount();
+
+        [Utf8("current_inventory_count")]
+        private static partial ReadOnlySpan<byte> Utf8CurrentInventoryCount();
 
         private void FindEquippedItems(int playerActor)
         {
