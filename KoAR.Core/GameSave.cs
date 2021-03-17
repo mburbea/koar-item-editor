@@ -138,6 +138,7 @@ namespace KoAR.Core
                 return finalOffset + (inventoryLimitOrder * 12);
             }
         }
+
         [Utf8("inventory_limit")]
         private static partial ReadOnlySpan<byte> Utf8InventoryLimit();
 
