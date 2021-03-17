@@ -14,6 +14,7 @@ This is heavily updated editor, rewritten in WPF and modern C# 8 paradigms. A pr
 * Modifying the auto-save, tutorial save, quick save or the end of game save are NOT supported (and may never be). These 4 saves are slightly different formats and if any of these files are corrupted the game can get stuck in an infinite loop. Even deleting the files will still cause an infinite loop.
 
 ### Features
+* Now with support for the Nintendo Switch console release.
 * The inventory view displays and allows modifying items currently in your inventory. It is broken up into equipment categories, and allows user sorting by different columns.
   - Level, which is a hidden stat that controls level and stat requirements for an item and the damage amount for weapons
   - Gems socketed in the item. (Immutable)
@@ -43,7 +44,7 @@ Fork of a really obscure Chinese item editor developed by RenYue for the game [K
 #### CREDITS AND LICENSE
 
 Credits maintained below but I cannot find a license so taking over this for non-commercial purposes and adding the permissive MIT license.
-- Copyright © 2020 Michael Burbea & Amir Burbea (This version)
+- Copyright © 2021 Michael Burbea & Amir Burbea (This version)
 - Copyright © 2019 Jerome Montino (Modified variant)
 - Copyright © 2013 Raziel23x (English version)
 - Copyright © 2012 RenYue (Chinese version)
