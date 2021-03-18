@@ -88,5 +88,17 @@ namespace KoAR.SaveEditor.Properties {
                 this["Upgraded"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int LastFilterUsed {
+            get {
+                return ((int)(this["LastFilterUsed"]));
+            }
+            set {
+                this["LastFilterUsed"] = value;
+            }
+        }
     }
 }

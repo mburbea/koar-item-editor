@@ -11,7 +11,9 @@ namespace KoAR.Core
         public GameSaveHeader(GameSave gameSave)
         {
             _gameSave = gameSave;
-            _dataLengthOffset = gameSave.Bytes.AsSpan().IndexOf(new byte[8] { 0, 0, 0, 0, 0xA, 0, 0, 0 }) - 4;
+            _dataLengthOffset = gameSave.Bytes.AsSpan().IndexOf(gameSave.IsRemaster
+              ? new byte[16] { 0, 0, 0, 0, 0xA, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+              : new byte[8] { 0, 0, 0, 0, 0xA, 0, 0, 0 }) - 4;
         }
 
         public int BodyDataLength
