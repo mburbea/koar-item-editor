@@ -59,32 +59,32 @@ namespace KoAR.Core
             => dictionary.TryGetValue(key, out var res) ? res : defaultValue;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static TEnum SetFlag<TEnum>(this TEnum @enum, TEnum flag, bool on)
-            where TEnum:unmanaged,Enum
+        internal static T SetFlag<T>(this T @enum, T flag, bool on)
+            where T:unmanaged,Enum
         {
-            if (Unsafe.SizeOf<TEnum>() == 1)
+            if (Unsafe.SizeOf<T>() == 1)
             {
-                byte x = (byte)((Unsafe.As<TEnum, byte>(ref @enum) & ~Unsafe.As<TEnum, byte>(ref flag))
-                    | (-Unsafe.As<bool, byte>(ref on) & Unsafe.As<TEnum, byte>(ref flag)));
-                return Unsafe.As<byte, TEnum>(ref x);
+                byte x = (byte)((Unsafe.As<T, byte>(ref @enum) & ~Unsafe.As<T, byte>(ref flag))
+                    | (-Unsafe.As<bool, byte>(ref on) & Unsafe.As<T, byte>(ref flag)));
+                return Unsafe.As<byte, T>(ref x);
             }
-            else if (Unsafe.SizeOf<TEnum>() == 2)
+            else if (Unsafe.SizeOf<T>() == 2)
             {
-                ushort x = (ushort)((Unsafe.As<TEnum, ushort>(ref @enum) & ~Unsafe.As<TEnum, ushort>(ref flag))
-                    | (-Unsafe.As<bool, byte>(ref on) & Unsafe.As<TEnum, ushort>(ref flag)));
-                return Unsafe.As<ushort, TEnum>(ref x);
+                ushort x = (ushort)((Unsafe.As<T, ushort>(ref @enum) & ~Unsafe.As<T, ushort>(ref flag))
+                    | (-Unsafe.As<bool, byte>(ref on) & Unsafe.As<T, ushort>(ref flag)));
+                return Unsafe.As<ushort, T>(ref x);
             }
-            else if (Unsafe.SizeOf<TEnum>() == 4)
+            else if (Unsafe.SizeOf<T>() == 4)
             {
-                uint x = (Unsafe.As<TEnum, uint>(ref @enum) & ~Unsafe.As<TEnum, uint>(ref flag))
-                   | ((uint)-Unsafe.As<bool, byte>(ref on) & Unsafe.As<TEnum, uint>(ref flag));
-                return Unsafe.As<uint, TEnum>(ref x);
+                uint x = (Unsafe.As<T, uint>(ref @enum) & ~Unsafe.As<T, uint>(ref flag))
+                   | ((uint)-Unsafe.As<bool, byte>(ref on) & Unsafe.As<T, uint>(ref flag));
+                return Unsafe.As<uint, T>(ref x);
             }
             else
             {
-                ulong x = (Unsafe.As<TEnum, ulong>(ref @enum) & ~Unsafe.As<TEnum, ulong>(ref flag))
-                   | ((ulong)-(long)Unsafe.As<bool, byte>(ref on) & Unsafe.As<TEnum, ulong>(ref flag));
-                return Unsafe.As<ulong, TEnum>(ref x);
+                ulong x = (Unsafe.As<T, ulong>(ref @enum) & ~Unsafe.As<T, ulong>(ref flag))
+                   | ((ulong)-(long)Unsafe.As<bool, byte>(ref on) & Unsafe.As<T, ulong>(ref flag));
+                return Unsafe.As<ulong, T>(ref x);
             }
         }
 
