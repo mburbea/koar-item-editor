@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace KoAR.Core
 {
-    internal class Container : IEnumerable<(int id, int offset, int dataLength)>
+    internal sealed class Container : IEnumerable<(int id, int offset, int dataLength)>
     {
         private static class Offsets
         {
@@ -22,19 +22,19 @@ namespace KoAR.Core
 
         private int DataLength
         {
-            get => MemoryUtilities.Read<int>(_gameSave.Body, Offset + Offsets.DataLength);
-            set => MemoryUtilities.Write(_gameSave.Body, Offset + Offsets.DataLength, value);
+            get => BitConverter.ToInt32(_gameSave.Body, Offset + Offsets.DataLength);
+            set => BitConverter.TryWriteBytes(_gameSave.Body.AsSpan(Offset + Offsets.DataLength), value);
         }
 
         private int DataLength2
         {
-            get => MemoryUtilities.Read<int>(_gameSave.Body, Offset + Offsets.DataLength2);
-            set => MemoryUtilities.Write(_gameSave.Body, Offset + Offsets.DataLength2, value);
+            get => BitConverter.ToInt32(_gameSave.Body, Offset + Offsets.DataLength2);
+            set => BitConverter.TryWriteBytes(_gameSave.Body.AsSpan(Offset + Offsets.DataLength2), value);
         }
 
         private int Count
         {
-            get => MemoryUtilities.Read<int>(_gameSave.Body, Offset + Offsets.Count);
+            get => BitConverter.ToInt32(_gameSave.Body, Offset + Offsets.Count);
         }
 
         public void UpdateDataLength(int delta)

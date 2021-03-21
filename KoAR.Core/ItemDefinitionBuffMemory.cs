@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace KoAR.Core
 {
-    public class ItemDefinitionBuffMemory : IItemBuffMemory
+    public sealed class ItemDefinitionBuffMemory : IItemBuffMemory
     {
         public static readonly ItemDefinitionBuffMemory Empty = new(Array.Empty<Buff>(), null, null);
 

@@ -40,11 +40,11 @@ namespace KoAR.Core
 
         protected Offset Offsets => new(this);
 
-        public ItemDefinition Definition => Amalur.ItemDefinitions[MemoryUtilities.Read<uint>(Bytes)];
+        public ItemDefinition Definition => Amalur.ItemDefinitions[BitConverter.ToUInt32(Bytes)];
 
-        public float CurrentDurability => MemoryUtilities.Read<float>(Bytes, Offsets.Durability);
+        public float CurrentDurability => BitConverter.ToSingle(Bytes, Offsets.Durability);
 
-        private int BuffCount => MemoryUtilities.Read<int>(Bytes, Offsets.BuffCount);
+        private int BuffCount => BitConverter.ToInt32(Bytes, Offsets.BuffCount);
 
         public bool IsEquipped => false;
 
@@ -52,7 +52,7 @@ namespace KoAR.Core
 
         public virtual bool HasCustomName => Bytes[Offsets.ExtendedInventoryFlags] == 1;
 
-        private int NameLength => MemoryUtilities.Read<int>(Bytes, Offsets.NameLength);
+        private int NameLength => BitConverter.ToInt32(Bytes, Offsets.NameLength);
 
         public string ItemName { get; } = string.Empty;
 
@@ -66,7 +66,10 @@ namespace KoAR.Core
             ? Rarity.Set
             : PlayerBuffs.Select(x => x.Rarity)
                 .Concat(ItemBuffs.List.Select(x => x.Rarity))
-                .Concat(new[] { ItemBuffs.Prefix?.Rarity ?? default, ItemBuffs.Suffix?.Rarity ?? default, Definition.SocketTypes.Any() ? Rarity.Infrequent : Rarity.Common })
+                .Concat(Gems.Select(g=> g.Definition.Buff.Rarity))
+                .Append(ItemBuffs.Prefix?.Rarity ?? default)
+                .Append(ItemBuffs.Suffix?.Rarity ?? default)
+                .Append(Definition.SocketTypes is "" ? default : Rarity.Infrequent)
                 .Max();
 
         public IEnumerable<Socket> GetSockets()

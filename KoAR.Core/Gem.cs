@@ -1,6 +1,9 @@
-﻿namespace KoAR.Core
+﻿using System;
+using System.Runtime.CompilerServices;
+
+namespace KoAR.Core
 {
-    public class Gem
+    public sealed class Gem
     {
         private readonly GameSave _gameSave;
         public Gem(GameSave gameSave, int itemOffset) => (_gameSave, ItemOffset) = (gameSave, itemOffset);
@@ -9,8 +12,8 @@
 
         public GemDefinition Definition
         {
-            get => Amalur.GemDefinitions[MemoryUtilities.Read<uint>(_gameSave.Body, ItemOffset)];
-            set => MemoryUtilities.Write(_gameSave.Body, ItemOffset, value.TypeId);
+            get => Amalur.GemDefinitions[BitConverter.ToUInt32(_gameSave.Body, ItemOffset)];
+            set => Unsafe.WriteUnaligned(ref _gameSave.Body[ItemOffset], value.TypeId);
         }
     }
 }
