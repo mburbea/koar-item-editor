@@ -79,13 +79,13 @@ namespace KoAR.Core
         public Buff? Prefix
         {
             get => Amalur.Buffs.GetOrDefault(BitConverter.ToUInt32(Bytes, Bytes.Length - 8));
-            set => Unsafe.WriteUnaligned(ref Bytes[Bytes.Length - 8], value?.Id ?? 0);
+            set => Unsafe.WriteUnaligned(ref Bytes[^8], value?.Id ?? 0);
         }
 
         public Buff? Suffix
         {
             get => Amalur.Buffs.GetOrDefault(BitConverter.ToUInt32(Bytes, Bytes.Length - 4));
-            set => Unsafe.WriteUnaligned(ref Bytes[Bytes.Length - 4], value?.Id ?? 0);
+            set => Unsafe.WriteUnaligned(ref Bytes[^4], value?.Id ?? 0);
         }
 
         internal byte[] Serialize(bool forced = false)

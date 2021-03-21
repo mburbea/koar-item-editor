@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 
 namespace KoAR.Core
 {
@@ -20,22 +22,22 @@ namespace KoAR.Core
 
         public Container(GameSave gameSave, int offset, ulong pattern) => (_gameSave, Offset, _pattern) = (gameSave, offset, pattern);
 
+        [SuppressMessage("CodeQuality", "IDE0052:Remove unread private members", Justification = "The suggested fix does not compile.")]
         private int DataLength
         {
             get => BitConverter.ToInt32(_gameSave.Body, Offset + Offsets.DataLength);
-            set => BitConverter.TryWriteBytes(_gameSave.Body.AsSpan(Offset + Offsets.DataLength), value);
+            set => Unsafe.WriteUnaligned(ref _gameSave.Body[Offset + Offsets.DataLength], value);
         }
 
+        [SuppressMessage("CodeQuality", "IDE0052:Remove unread private members", Justification = "The suggested fix does not compile.")]
         private int DataLength2
         {
             get => BitConverter.ToInt32(_gameSave.Body, Offset + Offsets.DataLength2);
-            set => BitConverter.TryWriteBytes(_gameSave.Body.AsSpan(Offset + Offsets.DataLength2), value);
+            set => Unsafe.WriteUnaligned(ref _gameSave.Body[Offset + Offsets.DataLength2], value);
         }
 
-        private int Count
-        {
-            get => BitConverter.ToInt32(_gameSave.Body, Offset + Offsets.Count);
-        }
+        [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "Useful for debugging")]
+        private int Count => BitConverter.ToInt32(_gameSave.Body, Offset + Offsets.Count);
 
         public void UpdateDataLength(int delta)
         {
