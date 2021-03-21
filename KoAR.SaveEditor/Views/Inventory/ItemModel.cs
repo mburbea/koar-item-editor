@@ -86,6 +86,7 @@ namespace KoAR.SaveEditor.Views.Inventory
                     return;
                 }
                 this.OnPropertyChanged(nameof(this.AffixCount));
+                this.OnPropertyChanged(nameof(this.Rarity));
                 if (this.Item.Definition.AffixableName)
                 {
                     this.OnPropertyChanged(nameof(DisplayName));
@@ -104,6 +105,7 @@ namespace KoAR.SaveEditor.Views.Inventory
                     return;
                 }
                 this.OnPropertyChanged(nameof(this.AffixCount));
+                this.OnPropertyChanged(nameof(this.Rarity));
                 if (this.Item.Definition.AffixableName)
                 {
                     this.OnPropertyChanged(nameof(DisplayName));

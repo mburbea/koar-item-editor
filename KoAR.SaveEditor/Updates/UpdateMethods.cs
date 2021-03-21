@@ -45,7 +45,7 @@ namespace KoAR.SaveEditor.Updates
                 WorkingDirectory = Path.GetTempPath(),
                 UseShellExecute = false,
                 FileName = "powershell.exe",
-                Arguments = $"-ExecutionPolicy Bypass -File \"{Path.GetFileName(scriptFileName)}\" {Process.GetCurrentProcess().Id} \"{Path.GetFileName(zipFilePath)}\"",
+                Arguments = $"-ExecutionPolicy Bypass -File \"{Path.GetFileName(scriptFileName)}\" {Environment.ProcessId} \"{Path.GetFileName(zipFilePath)}\"",
             }).WaitForExit();
         }
 
@@ -138,7 +138,7 @@ namespace KoAR.SaveEditor.Updates
                 cancellationToken.ThrowIfCancellationRequested();
                 using Stream stream = response.GetResponseStream();
                 cancellationToken.ThrowIfCancellationRequested();
-                return await JsonSerializer.DeserializeAsync<T>(stream, UpdateMethods._jsonOptions).ConfigureAwait(false);
+                return await JsonSerializer.DeserializeAsync<T>(stream, UpdateMethods._jsonOptions, cancellationToken).ConfigureAwait(false);
             }
             catch (WebException e)
             {

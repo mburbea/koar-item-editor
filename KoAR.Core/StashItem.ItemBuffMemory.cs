@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace KoAR.Core
 {
@@ -26,6 +27,7 @@ namespace KoAR.Core
                 }
             }
 
+            [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "Useful for debugging")]
             private int Count => BitConverter.ToInt32(Bytes, Offsets.ItemBuffCount);
 
             public IList<Buff> List { get; } = new List<Buff>();
