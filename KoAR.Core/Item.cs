@@ -60,19 +60,19 @@ namespace KoAR.Core
         public bool IsStolen
         {
             get => Flags.HasFlag(InventoryFlags.IsFromStolenSource);
-            set => Flags = value ? Flags | InventoryFlags.IsFromStolenSource : Flags & ~InventoryFlags.IsFromStolenSource;
+            set => Flags = Flags.SetFlag(InventoryFlags.IsFromStolenSource, value);
         }
 
         public bool IsUnsellable
         {
             get => Flags.HasFlag(InventoryFlags.Unsellable);
-            set => Flags = value ? Flags | InventoryFlags.Unsellable : Flags & ~InventoryFlags.Unsellable;
+            set => Flags = Flags.SetFlag(InventoryFlags.Unsellable, value);
         }
 
         public bool IsUnstashable
         {
             get => Flags.HasFlag(InventoryFlags.Unstashable);
-            set => Flags = value ? Flags | InventoryFlags.Unstashable : Flags & ~InventoryFlags.Unstashable;
+            set => Flags = Flags.SetFlag(InventoryFlags.Unstashable, value);
         }
 
         public ItemDefinition Definition

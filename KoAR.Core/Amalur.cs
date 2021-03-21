@@ -6,6 +6,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -56,6 +57,36 @@ namespace KoAR.Core
         [return: MaybeNull, NotNullIfNotNull("defaultValue")]
         internal static TValue GetOrDefault<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key, TValue? defaultValue = default)
             => dictionary.TryGetValue(key, out var res) ? res : defaultValue;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static TEnum SetFlag<TEnum>(this TEnum @enum, TEnum flag, bool on)
+            where TEnum:unmanaged,Enum
+        {
+            if (Unsafe.SizeOf<TEnum>() == 1)
+            {
+                byte x = (byte)((Unsafe.As<TEnum, byte>(ref @enum) & ~Unsafe.As<TEnum, byte>(ref flag))
+                    | (-Unsafe.As<bool, byte>(ref on) & Unsafe.As<TEnum, byte>(ref flag)));
+                return Unsafe.As<byte, TEnum>(ref x);
+            }
+            else if (Unsafe.SizeOf<TEnum>() == 2)
+            {
+                ushort x = (ushort)((Unsafe.As<TEnum, ushort>(ref @enum) & ~Unsafe.As<TEnum, ushort>(ref flag))
+                    | (-Unsafe.As<bool, byte>(ref on) & Unsafe.As<TEnum, ushort>(ref flag)));
+                return Unsafe.As<ushort, TEnum>(ref x);
+            }
+            else if (Unsafe.SizeOf<TEnum>() == 4)
+            {
+                uint x = (Unsafe.As<TEnum, uint>(ref @enum) & ~Unsafe.As<TEnum, uint>(ref flag))
+                   | ((uint)-Unsafe.As<bool, byte>(ref on) & Unsafe.As<TEnum, uint>(ref flag));
+                return Unsafe.As<uint, TEnum>(ref x);
+            }
+            else
+            {
+                ulong x = (Unsafe.As<TEnum, ulong>(ref @enum) & ~Unsafe.As<TEnum, ulong>(ref flag))
+                   | ((ulong)-(long)Unsafe.As<bool, byte>(ref on) & Unsafe.As<TEnum, ulong>(ref flag));
+                return Unsafe.As<ulong, TEnum>(ref x);
+            }
+        }
 
         public static string FindSaveGameDirectory()
         {
