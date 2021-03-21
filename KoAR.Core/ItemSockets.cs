@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 
 namespace KoAR.Core
 {
-    public class ItemSockets
+    public sealed class ItemSockets
     {
         private static class Offsets
         {
@@ -30,8 +31,8 @@ namespace KoAR.Core
 
         private int this[int index]
         {
-            get => MemoryUtilities.Read<int>(_gameSave.Body, ItemOffset + index);
-            set => MemoryUtilities.Write(_gameSave.Body, ItemOffset + index, value);
+            get => BitConverter.ToInt32(_gameSave.Body, ItemOffset + index);
+            set => Unsafe.WriteUnaligned(ref _gameSave.Body[ItemOffset + index], value);
         }
 
         private int DataLength => this[Offsets.DataLength] + 17;

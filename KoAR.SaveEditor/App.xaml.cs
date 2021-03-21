@@ -14,7 +14,7 @@ namespace KoAR.SaveEditor
     {
         static App() => Type.GetTypeCode(typeof(PlatformCulture)); // Needed to enforce loading of PresentationFramework.Aero.dll before initializing App.
 
-        public static Version Version { get; } = new(Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion);
+        public static Version Version { get; } = new(Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>()!.InformationalVersion);
 
         public static void ShowExceptionDialog(string mainInstruction, Exception exception)
         {

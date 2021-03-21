@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 
 namespace KoAR.Core
 {
-    public partial class Item : IItem
+    public sealed partial class Item : IItem
     {
         public const float DurabilityLowerBound = 0f;
         public const float DurabilityUpperBound = 100f;
@@ -35,14 +35,14 @@ namespace KoAR.Core
 
         public float CurrentDurability
         {
-            get => MemoryUtilities.Read<float>(Bytes, Offsets.CurrentDurability);
-            set => MemoryUtilities.Write(Bytes, Offsets.CurrentDurability, value);
+            get => BitConverter.ToSingle(Bytes, Offsets.CurrentDurability);
+            set => Unsafe.WriteUnaligned(ref Bytes[Offsets.CurrentDurability], value);
         }
 
         internal int DataLength
         {
-            get => MemoryUtilities.Read<int>(Bytes, Offsets.DataLength) + 17;
-            set => MemoryUtilities.Write(Bytes, Offsets.DataLength, value - 17);
+            get => BitConverter.ToInt32(Bytes, Offsets.DataLength) + 17;
+            set => Unsafe.WriteUnaligned(ref Bytes[Offsets.DataLength], value - 17);
         }
 
         public List<Buff> PlayerBuffs { get; } = new();
@@ -55,34 +55,34 @@ namespace KoAR.Core
 
         private ref InventoryFlags Flags => ref Unsafe.As<byte, InventoryFlags>(ref Bytes[Offsets.InventoryFlags]);
 
-        public int Owner => MemoryUtilities.Read<int>(Bytes, Offsets.Owner);
+        public int Owner => BitConverter.ToInt32(Bytes, Offsets.Owner);
 
         public bool IsStolen
         {
-            get => (Flags & InventoryFlags.IsFromStolenSource) == InventoryFlags.IsFromStolenSource;
+            get => Flags.HasFlag(InventoryFlags.IsFromStolenSource);
             set => Flags = value ? Flags | InventoryFlags.IsFromStolenSource : Flags & ~InventoryFlags.IsFromStolenSource;
         }
 
         public bool IsUnsellable
         {
-            get => (Flags & InventoryFlags.Unsellable) == InventoryFlags.Unsellable;
+            get => Flags.HasFlag(InventoryFlags.Unsellable);
             set => Flags = value ? Flags | InventoryFlags.Unsellable : Flags & ~InventoryFlags.Unsellable;
         }
 
         public bool IsUnstashable
         {
-            get => (Flags & InventoryFlags.Unstashable) == InventoryFlags.Unstashable;
+            get => Flags.HasFlag(InventoryFlags.Unstashable);
             set => Flags = value ? Flags | InventoryFlags.Unstashable : Flags & ~InventoryFlags.Unstashable;
         }
 
         public ItemDefinition Definition
         {
-            get => Amalur.ItemDefinitions[MemoryUtilities.Read<uint>(_gameSave.Body, TypeIdOffset)];
+            get => Amalur.ItemDefinitions[BitConverter.ToUInt32(_gameSave.Body, TypeIdOffset)];
             private set
             {
-                var oldType = Amalur.ItemDefinitions[MemoryUtilities.Read<uint>(_gameSave.Body, TypeIdOffset)];
-                MemoryUtilities.Write(_gameSave.Body, TypeIdOffset, value.TypeId);
-                MemoryUtilities.Write(_gameSave.Body, TypeIdOffset + 30 + _levelShiftOffset, value.TypeId);
+                var oldType = Amalur.ItemDefinitions[BitConverter.ToUInt32(_gameSave.Body, TypeIdOffset)];
+                Unsafe.WriteUnaligned(ref _gameSave.Body[TypeIdOffset], value.TypeId);
+                Unsafe.WriteUnaligned(ref _gameSave.Body[TypeIdOffset + 30 + _levelShiftOffset], value.TypeId);
                 if (oldType.Category == EquipmentCategory.Shield && oldType.ArmorType != value.ArmorType)
                 {
                     _gameSave.Body[TypeIdOffset + 14] = value.ArmorType switch
@@ -109,7 +109,7 @@ namespace KoAR.Core
 
         internal byte[] Bytes { get; private set; }
 
-        public int ItemId => MemoryUtilities.Read<int>(Bytes);
+        public int ItemId => BitConverter.ToInt32(Bytes);
 
         public ItemSockets ItemSockets { get; }
 
@@ -118,8 +118,8 @@ namespace KoAR.Core
 
         private int NameLength
         {
-            get => MemoryUtilities.Read<int>(Bytes, Offsets.NameLength);
-            set => MemoryUtilities.Write(Bytes, Offsets.NameLength, value);
+            get => BitConverter.ToInt32(Bytes, Offsets.NameLength);
+            set => Unsafe.WriteUnaligned(ref Bytes[Offsets.NameLength], value);
         }
 
         public Rarity Rarity => Definition.Rarity == Rarity.Set
@@ -127,21 +127,23 @@ namespace KoAR.Core
             : PlayerBuffs.Select(x => x.Rarity)
                 .Concat(ItemBuffs.List.Select(x => x.Rarity))
                 .Concat(ItemSockets.Gems.Select(x => x.Definition.Buff.Rarity))
-                .Concat(new[] { ItemBuffs.Prefix?.Rarity ?? default, ItemBuffs.Suffix?.Rarity ?? default, Definition.SocketTypes.Any() ? Rarity.Infrequent : Rarity.Common })
+                .Append(ItemBuffs.Prefix?.Rarity ?? default)
+                .Append(ItemBuffs.Suffix?.Rarity ?? default)
+                .Append(Definition.SocketTypes is "" ? default : Rarity.Infrequent)
                 .Max();
 
         public string ItemName { get; set; } = string.Empty;
 
         public float MaxDurability
         {
-            get => MemoryUtilities.Read<float>(Bytes, Offsets.MaxDurability);
-            set => MemoryUtilities.Write(Bytes, Offsets.MaxDurability, value);
+            get => BitConverter.ToSingle(Bytes, Offsets.MaxDurability);
+            set => Unsafe.WriteUnaligned(ref Bytes[Offsets.MaxDurability], value);
         }
 
         private int BuffCount
         {
-            get => MemoryUtilities.Read<int>(Bytes, Offsets.BuffCount);
-            set => MemoryUtilities.Write(Bytes, Offsets.BuffCount, value);
+            get => BitConverter.ToInt32(Bytes, Offsets.BuffCount);
+            set => Unsafe.WriteUnaligned(ref Bytes[Offsets.BuffCount], value);
         }
 
         private Offset Offsets => new(this);
@@ -181,7 +183,7 @@ namespace KoAR.Core
                 return Bytes;
             }
             var currentLength = Offsets.PostBuffs - Offsets.FirstBuff;
-            MemoryUtilities.Write(Bytes, Offsets.BuffCount, PlayerBuffs.Count);
+            Unsafe.WriteUnaligned(ref Bytes[Offsets.BuffCount], PlayerBuffs.Count);
             Span<BuffDuration> buffData = PlayerBuffs.Select(buff => new BuffDuration(buff.Id)).ToArray();
             Bytes = MemoryUtilities.ReplaceBytes(Bytes, Offsets.FirstBuff, currentLength, MemoryMarshal.AsBytes(buffData));
             DataLength = Bytes.Length;

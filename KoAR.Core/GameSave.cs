@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using StringLiteral;
+using System.Runtime.CompilerServices;
 
 namespace KoAR.Core
 {
@@ -64,7 +65,7 @@ namespace KoAR.Core
             ReadOnlySpan<byte> data = Body;
             _bagOffset = GetBagOffset(data);
             _gameStateStartOffset = data.IndexOf(new byte[5] { 0xF7, 0x5D, 0x3C, 0x00, 0x0A });
-            var typeSectionOffset = data.IndexOf(new byte[5] { 0x23, 0xCC, 0x58, 0x00, 0x04 }) is int ix && ix == -1 ? data.IndexOf(new byte[5] { 0x23, 0xCC, 0x58, 0x00, 0x03 }) : ix;
+            var typeSectionOffset = data.IndexOf(new byte[5] { 0x23, 0xCC, 0x58, 0x00, 0x04 }) is int ix and not -1 ? ix : data.IndexOf(new byte[5] { 0x23, 0xCC, 0x58, 0x00, 0x03 });
             _dataLengthOffsets = new[]{
                 _gameStateStartOffset + 5, // gameStateSize
                 data.IndexOf(new byte[5] { 0x0C, 0xAE, 0x32, 0x00, 0x00 }) + 5, // unknown length 1
@@ -152,20 +153,21 @@ namespace KoAR.Core
         {
             var data = Body.AsSpan();
             Span<byte> temp = stackalloc byte[12];
-            MemoryUtilities.Write(temp, 0, playerActor);
-            MemoryUtilities.Write(temp, 4, 0x00_7E_F5_41_00_00_00_0Bul);
-            int offset = data.IndexOf(temp);
-            int dataLength = MemoryUtilities.Read<int>(data, offset + 13);
+            Unsafe.WriteUnaligned(ref temp[0], playerActor);
+            Unsafe.WriteUnaligned(ref temp[4], 0x00_7E_F5_41_00_00_00_0Bul);
+            int offset = data.IndexOf(MemoryMarshal.AsBytes(temp));
+            int dataLength = BitConverter.ToInt32(data[(offset + 13)..]);
             // 17 is the loot table
             // 21 is the count of items in the inventory.
             var partInventory = MemoryMarshal.Cast<byte, int>(data.Slice(offset + 17, dataLength));
             var inventoryCount = partInventory[1];
             var equippedItemsCount = partInventory[inventoryCount + 2];
             var equippedData = partInventory.Slice(inventoryCount + 3, equippedItemsCount);
+            var inventoryDict = Items.ToDictionary(x => x.ItemId);
 
             foreach (var itemId in equippedData)
             {
-                if (itemId != 0 && Items.FirstOrDefault(x => x.ItemId == itemId) is { } item)
+                if (itemId != 0 && inventoryDict.TryGetValue(itemId, out var item))
                 {
                     EquippedItems.Add(item);
                 }
@@ -182,18 +184,18 @@ namespace KoAR.Core
 
         public int InventorySize
         {
-            get => MemoryUtilities.Read<int>(Body, _bagOffset);
-            set => MemoryUtilities.Write(Body, _bagOffset, value);
+            get => BitConverter.ToInt32(Body, _bagOffset);
+            set => Unsafe.WriteUnaligned(ref Body[_bagOffset], value);
         }
 
         private int BodyDataLength
         {
-            get => IsRemaster ? MemoryUtilities.Read<int>(Bytes, 8 + _header.Length) : Bytes.Length - BodyStart;
+            get => IsRemaster ? BitConverter.ToInt32(Bytes, 8 + _header.Length) : Bytes.Length - BodyStart;
             set
             {
                 if (IsRemaster)
                 {
-                    MemoryUtilities.Write(Bytes, 8 + _header.Length, value);
+                    Unsafe.WriteUnaligned(ref Bytes[8 + _header.Length], value);
                 }
             }
         }
@@ -215,15 +217,15 @@ namespace KoAR.Core
             {
                 if (offset < itemOffset)
                 {
-                    var oldVal = MemoryUtilities.Read<int>(Body, offset);
-                    MemoryUtilities.Write(Body, offset, delta + oldVal);
+                    var oldVal = BitConverter.ToInt32(Body, offset);
+                    Unsafe.WriteUnaligned(ref Body[offset], delta + oldVal);
                 }
             }
         }
 
         public string SaveFile()
         {
-            var backupPath = Path.Combine(Path.GetDirectoryName(FileName), "backup");
+            var backupPath = Path.Combine(Path.GetDirectoryName(FileName)!, "backup");
             if (!Directory.Exists(backupPath))
             {
                 Directory.CreateDirectory(backupPath);
@@ -239,11 +241,11 @@ namespace KoAR.Core
                     var (bundleStream, bundleLength) = CompressStream(Body, 0, _gameStateStartOffset);
                     var (gameStateStream, gameStateLength) = CompressStream(Body, _gameStateStartOffset, Body.Length - _gameStateStartOffset);
                     BodyDataLength = bundleLength + gameStateLength + 16; //The bundles + 4 int32s (flag, uncompressed length, bundleInfoLength, gameStateLength).
-                    MemoryUtilities.Write(Bytes, BodyStart, CompressedFlag); // zlib
-                    MemoryUtilities.Write(Bytes, BodyStart + 4, _header.BodyDataLength);
-                    MemoryUtilities.Write(Bytes, BodyStart + 8, bundleLength);
+                    Unsafe.WriteUnaligned(ref Bytes[BodyStart], CompressedFlag); // zlib
+                    Unsafe.WriteUnaligned(ref Bytes[BodyStart + 4], _header.BodyDataLength);
+                    Unsafe.WriteUnaligned(ref Bytes[BodyStart + 8], bundleLength);
                     bundleStream.Read(Bytes, BodyStart + 12, bundleLength);
-                    MemoryUtilities.Write(Bytes, BodyStart + 12 + bundleLength, gameStateLength);
+                    Unsafe.WriteUnaligned(ref Bytes[BodyStart + 12 + bundleLength], gameStateLength);
                     gameStateStream.Read(Bytes, BodyStart + 16 + bundleLength, gameStateLength);
                 }
                 else
@@ -251,8 +253,8 @@ namespace KoAR.Core
                     BodyDataLength = Body.Length;
                     Body.CopyTo(Bytes, BodyStart);
                 }
-                MemoryUtilities.Write(Bytes, 0, Crc32Algorithm.Compute(Bytes, 8, Bytes.Length - 8)); // fileCrc
-                MemoryUtilities.Write(Bytes, 4, Crc32Algorithm.Compute(Bytes, 8, _header.Length)); // headerCrc
+                Unsafe.WriteUnaligned(ref Bytes[0], Crc32Algorithm.Compute(Bytes, 8, Bytes.Length - 8)); // fileCrc
+                Unsafe.WriteUnaligned(ref Bytes[4], Crc32Algorithm.Compute(Bytes, 8, _header.Length)); // headerCrc
             }
             else
             {
@@ -268,7 +270,7 @@ namespace KoAR.Core
                 var stream = new MemoryStream();
                 using (var zip = new ZlibStream(stream, CompressionMode.Compress, leaveOpen: true))
                 {
-                    zip.Write(body, start, count);
+                    Unsafe.WriteUnaligned(ref body[start], count);
                 }
                 stream.Seek(0L, SeekOrigin.Begin);
                 return (stream, (int)stream.Length);

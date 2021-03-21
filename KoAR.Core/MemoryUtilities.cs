@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace KoAR.Core
@@ -19,13 +20,5 @@ namespace KoAR.Core
             bytes.AsSpan(offset + length).CopyTo(buffer.AsSpan(offset + newData.Length));
             return buffer;
         }
-
-        public static T Read<T>(ReadOnlySpan<byte> span, int offset = 0)
-            where T : struct
-            => MemoryMarshal.Read<T>(span[offset..]);
-
-        public static void Write<T>(Span<byte> span, int offset, T value)
-            where T : struct
-            => MemoryMarshal.Write(span[offset..], ref value);
     }
 }

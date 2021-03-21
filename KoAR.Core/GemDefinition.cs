@@ -3,7 +3,7 @@ using System.IO;
 
 namespace KoAR.Core
 {
-    public class GemDefinition
+    public sealed class GemDefinition
     {
         private GemDefinition(uint typeId, string name, string internalName, uint buffId, char socketType)
         {

@@ -26,13 +26,13 @@ namespace KoAR.Core
                 }
             }
 
-            private int Count => MemoryUtilities.Read<int>(Bytes, Offsets.ItemBuffCount);
+            private int Count => BitConverter.ToInt32(Bytes, Offsets.ItemBuffCount);
 
             public IList<Buff> List { get; } = new List<Buff>();
 
-            public Buff? Prefix => Amalur.Buffs.GetOrDefault(MemoryUtilities.Read<uint>(Bytes, _endOfSection - 8));
+            public Buff? Prefix => Amalur.Buffs.GetOrDefault(BitConverter.ToUInt32(Bytes, _endOfSection - 8));
 
-            public Buff? Suffix => Amalur.Buffs.GetOrDefault(MemoryUtilities.Read<uint>(Bytes, _endOfSection - 4));
+            public Buff? Suffix => Amalur.Buffs.GetOrDefault(BitConverter.ToUInt32(Bytes, _endOfSection - 4));
         }
     }
 }

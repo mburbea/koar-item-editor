@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 
 namespace KoAR.Core
 {
-    public class ItemBuffMemory : IItemBuffMemory
+    public sealed class ItemBuffMemory : IItemBuffMemory
     {
         internal static List<(Item item, uint instanceId)> SetOfInstances = new();
         private static class Offsets
@@ -61,14 +61,14 @@ namespace KoAR.Core
 
         internal int DataLength
         {
-            get => MemoryUtilities.Read<int>(Bytes, Offsets.DataLength) + 17;
-            set => MemoryUtilities.Write(Bytes, Offsets.DataLength, value - 17);
+            get => BitConverter.ToInt32(Bytes, Offsets.DataLength) + 17;
+            set => Unsafe.WriteUnaligned(ref Bytes[Offsets.DataLength], value - 17);
         }
 
         private int Count
         {
-            get => MemoryUtilities.Read<int>(Bytes, Offsets.BuffCount);
-            set => MemoryUtilities.Write(Bytes, Offsets.BuffCount, value);
+            get => BitConverter.ToInt32(Bytes, Offsets.BuffCount);
+            set => Unsafe.WriteUnaligned(ref Bytes[Offsets.BuffCount], value);
         }
 
         private int ActiveBuffCount => List.Count
@@ -78,14 +78,14 @@ namespace KoAR.Core
 
         public Buff? Prefix
         {
-            get => Amalur.Buffs.GetOrDefault(MemoryUtilities.Read<uint>(Bytes, Bytes.Length - 8));
-            set => MemoryUtilities.Write(Bytes, Bytes.Length - 8, value?.Id ?? 0);
+            get => Amalur.Buffs.GetOrDefault(BitConverter.ToUInt32(Bytes, Bytes.Length - 8));
+            set => Unsafe.WriteUnaligned(ref Bytes[Bytes.Length - 8], value?.Id ?? 0);
         }
 
         public Buff? Suffix
         {
-            get => Amalur.Buffs.GetOrDefault(MemoryUtilities.Read<uint>(Bytes, Bytes.Length - 4));
-            set => MemoryUtilities.Write(Bytes, Bytes.Length - 4, value?.Id ?? 0);
+            get => Amalur.Buffs.GetOrDefault(BitConverter.ToUInt32(Bytes, Bytes.Length - 4));
+            set => Unsafe.WriteUnaligned(ref Bytes[Bytes.Length - 4], value?.Id ?? 0);
         }
 
         internal byte[] Serialize(bool forced = false)
@@ -108,7 +108,7 @@ namespace KoAR.Core
             var selfBuffBytes = MemoryMarshal.AsBytes(List.Select(buff => new BuffDuration(buff.Id)).ToArray().AsSpan());
             Span<byte> buffer = stackalloc byte[8 + activeBuffBytes.Length + selfBuffBytes.Length];
             activeBuffBytes.CopyTo(buffer);
-            MemoryUtilities.Write(buffer, activeBuffBytes.Length + 4, List.Count);
+            Unsafe.WriteUnaligned(ref buffer[activeBuffBytes.Length + 4], List.Count);
             selfBuffBytes.CopyTo(buffer[(activeBuffBytes.Length + 8)..]);
             Bytes = MemoryUtilities.ReplaceBytes(Bytes, Offsets.FirstActiveBuff, currentLength, MemoryMarshal.AsBytes(buffer));
             Count = ActiveBuffCount;

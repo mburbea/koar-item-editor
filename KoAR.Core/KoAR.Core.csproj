@@ -2,7 +2,7 @@
   <PropertyGroup>
     <ProductVersion>8.0.30703</ProductVersion>
     <ProjectGuid>{F204356A-6213-4B0C-A35C-03DA5CE5AC21}</ProjectGuid>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <AssemblyTitle>KoAR Item Editor</AssemblyTitle>
     <NeutralLanguage>en-US</NeutralLanguage>
     <Description>Allows editing of items in KoAR saves.</Description>
@@ -33,11 +33,8 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Crc32.NET" Version="1.2.0" />
-    <PackageReference Include="DotNetZip" Version="1.13.8" />
-    <PackageReference Include="IndexRange" Version="1.0.0" />
+    <PackageReference Include="DotNetZip" Version="1.15.0" />
     <PackageReference Include="StringLiteralGenerator" Version="1.0.1" />
-    <PackageReference Include="System.Memory" Version="4.5.4" />
-    <PackageReference Include="System.Text.Json" Version="4.7.2" />
   </ItemGroup>
   <Target Name="ZipData" BeforeTargets="BeforeBuild">
     <ZipDirectory SourceDirectory="$(MSBuildProjectDirectory)\Data" DestinationFile="$(MSBuildProjectDirectory)\Data.zip" Overwrite="True" />

@@ -142,11 +142,11 @@ namespace KoAR.SaveEditor.Updates
             }
             catch (WebException e)
             {
-                if (((HttpWebResponse)e.Response)?.StatusCode != HttpStatusCode.NotFound)
+                if (e.Response is HttpWebResponse { StatusCode: HttpStatusCode.NotFound })
                 {
-                    throw;
+                    return default;
                 }
-                return default;
+                throw;
             }
         }
 

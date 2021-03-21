@@ -1,6 +1,6 @@
 ﻿namespace KoAR.Core
 {
-    public class QuestItemDefinition
+    public sealed class QuestItemDefinition
     {
         public uint Id { get; set; }
         public string Name { get; set; } = string.Empty;
