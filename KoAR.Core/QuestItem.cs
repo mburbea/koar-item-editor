@@ -19,7 +19,7 @@ namespace KoAR.Core
         public bool IsUnsellable
         {
             get => Flags.HasFlag(InventoryFlags.Unsellable);
-            set => Flags = value ? Flags | InventoryFlags.Unsellable : Flags & ~InventoryFlags.Unsellable;
+            set => Flags = Flags.SetFlag(InventoryFlags.Unsellable, value);
         }
     }
 }
