@@ -18,7 +18,7 @@ namespace KoAR.Core
     {
         static Amalur()
         {
-            #nullable disable
+#nullable disable
             Thread.CurrentThread.CurrentCulture = Thread.CurrentThread.CurrentUICulture =
                 CultureInfo.DefaultThreadCurrentCulture = CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
             var jsonOptions = new JsonSerializerOptions
@@ -36,7 +36,7 @@ namespace KoAR.Core
             GemDefinitions = GemDefinition.ParseFile(gemsStream).ToDictionary(def => def.TypeId);
             using var itemsStream = archive.GetEntry("definitions.csv").Open();
             ItemDefinitions = ItemDefinition.ParseFile(itemsStream).ToDictionary(def => def.TypeId);
-            #nullable enable
+#nullable enable
         }
 
         public static IReadOnlyDictionary<uint, Buff> Buffs { get; }
@@ -60,7 +60,7 @@ namespace KoAR.Core
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T SetFlag<T>(this T @enum, T flag, bool on)
-            where T:unmanaged,Enum
+            where T : struct, Enum
         {
             if (Unsafe.SizeOf<T>() == 1)
             {
