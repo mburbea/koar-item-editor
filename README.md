@@ -1,5 +1,7 @@
 ## Kingdoms of Amalur: Reckoning (and Re-Reckoning) Save Editor
-This is heavily updated editor, rewritten in WPF and modern C# 8 paradigms. A product of Covid-19 quarantine and my frustrations with this game. 
+This is heavily updated editor, rewritten in WPF and modern C# 8 paradigms. A product of Covid-19 quarantine and my frustrations with this game.
+
+[![Build Status](https://dev.azure.com/amirburbea/koar/_apis/build/status/Build%20Save%20Editor?branchName=master)](https://dev.azure.com/amirburbea/koar/_build/latest?definitionId=1&branchName=master)
 
 ### Versioning Strategy
 * Version 3.x will be for the Remaster.
