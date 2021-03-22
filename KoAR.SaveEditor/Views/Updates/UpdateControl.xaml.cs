@@ -31,19 +31,19 @@ namespace KoAR.SaveEditor.Views.Updates
 
         private void RichTextBox_Loaded(object sender, RoutedEventArgs e) => ((RichTextBox)sender).Document = ((UpdateViewModelBase)this.DataContext).Document;
 
-        private void UpdateControl_Loaded(object sender, RoutedEventArgs e)
+        private void UpdateControl_Loaded(object? sender, RoutedEventArgs e)
         {
             this.Loaded -= this.UpdateControl_Loaded;
             (this._window = Window.GetWindow(this)).Closing += this.Window_Closing;
         }
 
-        private void ViewModel_DialogResultChanged(object sender, PropertyChangedEventArgs e)
+        private void ViewModel_DialogResultChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (this._window == null)
             {
                 return;
             }
-            this._window.DialogResult = ((UpdateViewModelBase)sender).DialogResult;
+            this._window.DialogResult = ((UpdateViewModelBase)sender!).DialogResult;
             this._window.Close();
         }
 

@@ -14,13 +14,12 @@ namespace KoAR.SaveEditor.Constructs
 
         public static void SetUpdateOnEnter(TextBox textBox, bool value) => textBox?.SetValue(TextBoxUpdateSource.UpdateOnEnterProperty, BooleanBoxes.GetBox(value));
 
-        private static void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        private static void TextBox_PreviewKeyDown(object? sender, KeyEventArgs e)
         {
-            if (e.Key != Key.Enter)
+            if (e.Key != Key.Enter || sender is not TextBox textBox)
             {
                 return;
             }
-            TextBox textBox = (TextBox)sender;
             BindingExpressionBase? expression = BindingOperations.GetBindingExpressionBase(textBox, TextBox.TextProperty);
             if (expression == null || !expression.ValidateWithoutUpdate())
             {

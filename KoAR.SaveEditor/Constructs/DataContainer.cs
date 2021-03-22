@@ -22,18 +22,18 @@ namespace KoAR.SaveEditor.Constructs
 
         public int CompareTo(DataContainer other) => Comparer.Default.Compare(this.Data, other.Data);
 
-        int IComparable.CompareTo(object obj)
+        int IComparable.CompareTo(object? obj)
         {
             return obj is DataContainer other ? this.CompareTo(other) : throw new ArgumentException($"{nameof(obj)} is not a {nameof(DataContainer)}");
         }
 
-        public override bool Equals(object obj) => obj is DataContainer other && this.Equals(other);
+        public override bool Equals(object? obj) => obj is DataContainer other && this.Equals(other);
 
         public bool Equals(DataContainer other) => Object.Equals(this.Data, other.Data);
 
         public override int GetHashCode() => this.Data == null ? 0 : this.Data.GetHashCode();
 
-        public override string ToString() => this.Data == null ? string.Empty : this.Data.ToString();
+        public override string? ToString() => this.Data == null ? string.Empty : this.Data.ToString();
 
         private sealed class DataContainerCollectionConverter : IValueConverter
         {

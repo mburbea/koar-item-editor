@@ -70,7 +70,7 @@ namespace KoAR.SaveEditor.Views.QuestItems
             }
         }
 
-        private void Item_IsUnsellableChanged(object sender, EventArgs e)
+        private void Item_IsUnsellableChanged(object? sender, EventArgs e)
         {
             this.OnPropertyChanged(nameof(this.AllItemsUnsellable));
             this._mainWindowViewModel.RegisterUnsavedChange();

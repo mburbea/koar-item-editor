@@ -11,7 +11,7 @@ namespace KoAR.SaveEditor.Views
 {
     public abstract class ItemModelBase : NotifierBase, IDisposable
     {
-        protected static readonly MethodInfo _onPropertyChangedMethod = typeof(NotifierBase).GetMethod(nameof(ItemModelBase.OnPropertyChanged), BindingFlags.NonPublic | BindingFlags.Instance);
+        protected static readonly MethodInfo _onPropertyChangedMethod = typeof(NotifierBase).GetMethod(nameof(ItemModelBase.OnPropertyChanged), BindingFlags.NonPublic | BindingFlags.Instance)!;
         protected static readonly char[] _propertyTokens = { '.' };
 
         protected ItemModelBase(IItem item) => this.Item = item;
@@ -98,7 +98,7 @@ namespace KoAR.SaveEditor.Views
     public abstract class ItemModelBase<TItem> : ItemModelBase
         where TItem : IItem
     {
-        private static readonly PropertyInfo _itemProperty = typeof(ItemModelBase<TItem>).GetProperty(nameof(ItemModelBase<TItem>.Item), BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+        private static readonly PropertyInfo _itemProperty = typeof(ItemModelBase<TItem>).GetProperty(nameof(ItemModelBase<TItem>.Item), BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)!;
         private static readonly ParameterExpression _modelParameter = Expression.Parameter(typeof(ItemModelBase<TItem>), "model");
 
         protected ItemModelBase(TItem item)
@@ -115,8 +115,8 @@ namespace KoAR.SaveEditor.Views
 
         private static class ValueSetter<TValue>
         {
-            private static readonly PropertyInfo _defaultProperty = typeof(EqualityComparer<TValue>).GetProperty(nameof(EqualityComparer<TValue>.Default), BindingFlags.Public | BindingFlags.Static);
-            private static readonly MethodInfo _equalsMethod = typeof(EqualityComparer<TValue>).GetMethod(nameof(EqualityComparer<TValue>.Equals), new[] { typeof(TValue), typeof(TValue) });
+            private static readonly PropertyInfo _defaultProperty = typeof(EqualityComparer<TValue>).GetProperty(nameof(EqualityComparer<TValue>.Default), BindingFlags.Public | BindingFlags.Static)!;
+            private static readonly MethodInfo _equalsMethod = typeof(EqualityComparer<TValue>).GetMethod(nameof(EqualityComparer<TValue>.Equals), new[] { typeof(TValue), typeof(TValue) })!;
             private static readonly Dictionary<string, Func<ItemModelBase<TItem>, TValue, bool>> _setters = new();
             private static readonly ParameterExpression _valueParameter = Expression.Parameter(typeof(TValue), "value");
 

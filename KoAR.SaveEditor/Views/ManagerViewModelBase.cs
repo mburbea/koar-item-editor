@@ -74,7 +74,7 @@ namespace KoAR.SaveEditor.Views
             this.OnPropertyChanged(nameof(this.AllItemsStolen));
         }
 
-        protected virtual void OnItemPropertyChanged(TItem item, string propertyName)
+        protected virtual void OnItemPropertyChanged(TItem item, string? propertyName)
         {
             this.MainWindowViewModel.RegisterUnsavedChange();
             if (propertyName == nameof(ItemModelBase.IsStolen))
@@ -101,9 +101,9 @@ namespace KoAR.SaveEditor.Views
             this.OnFilterChange();
         }
 
-        private void Item_PropertyChanged(object sender, PropertyChangedEventArgs e) => this.OnItemPropertyChanged((TItem)sender, e.PropertyName);
+        private void Item_PropertyChanged(object? sender, PropertyChangedEventArgs e) => this.OnItemPropertyChanged((TItem)sender!, e.PropertyName);
 
-        private void ItemFilters_FilterChange(object sender, EventArgs e) => this.OnFilterChange();
+        private void ItemFilters_FilterChange(object? sender, EventArgs e) => this.OnFilterChange();
 
         private void RemoveItemAt(int index)
         {
