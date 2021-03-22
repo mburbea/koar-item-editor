@@ -19,6 +19,12 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(BUILD_BUILDID)' == '' ">
+	<Version>3.0.0</Version>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(BUILD_BUILDID)' != '' ">
+	<Version>3.0.$(BUILD_BUILDID)</Version>
+  </PropertyGroup>
   <ItemGroup>
     <None Remove="Data.zip" />
   </ItemGroup>
