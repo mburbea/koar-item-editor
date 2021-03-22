@@ -6,11 +6,6 @@ namespace KoAR.Core
 {
     public partial class StashItem : IItem
     {
-        protected byte[] Bytes { get; }
-        public List<Buff> PlayerBuffs { get; } = new();
-
-        public Gem[] Gems { get; }
-
         public StashItem(GameSave gameSave, int offset, int dataLength, Gem[] gems)
         {
             ItemOffset = offset;
@@ -33,6 +28,12 @@ namespace KoAR.Core
 
             ItemBuffs = Bytes[Offsets.HasItemBuffs] == 0x14 ? new ItemBuffMemory(this, socketsStart) : Definition.ItemBuffs;
         }
+
+        protected byte[] Bytes { get; }
+
+        public List<Buff> PlayerBuffs { get; } = new();
+
+        public Gem[] Gems { get; }
 
         internal int DataLength => Bytes.Length;
 
@@ -66,7 +67,7 @@ namespace KoAR.Core
             ? Rarity.Set
             : PlayerBuffs.Select(x => x.Rarity)
                 .Concat(ItemBuffs.List.Select(x => x.Rarity))
-                .Concat(Gems.Select(g=> g.Definition.Buff.Rarity))
+                .Concat(Gems.Select(g => g.Definition.Buff.Rarity))
                 .Append(ItemBuffs.Prefix?.Rarity ?? Rarity.Common)
                 .Append(ItemBuffs.Suffix?.Rarity ?? Rarity.Common)
                 .Append(Definition.SocketTypes is "" ? Rarity.Common : Rarity.Infrequent)

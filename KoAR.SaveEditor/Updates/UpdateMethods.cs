@@ -137,7 +137,6 @@ namespace KoAR.SaveEditor.Updates
                 using WebResponse response = await request.GetResponseAsync().ConfigureAwait(false);
                 cancellationToken.ThrowIfCancellationRequested();
                 using Stream stream = response.GetResponseStream();
-                cancellationToken.ThrowIfCancellationRequested();
                 return await JsonSerializer.DeserializeAsync<T>(stream, UpdateMethods._jsonOptions, cancellationToken).ConfigureAwait(false);
             }
             catch (WebException e)
