@@ -67,9 +67,9 @@ namespace KoAR.Core
             : PlayerBuffs.Select(x => x.Rarity)
                 .Concat(ItemBuffs.List.Select(x => x.Rarity))
                 .Concat(Gems.Select(g=> g.Definition.Buff.Rarity))
-                .Append(ItemBuffs.Prefix?.Rarity ?? default)
-                .Append(ItemBuffs.Suffix?.Rarity ?? default)
-                .Append(Definition.SocketTypes is "" ? default : Rarity.Infrequent)
+                .Append(ItemBuffs.Prefix?.Rarity ?? Rarity.Common)
+                .Append(ItemBuffs.Suffix?.Rarity ?? Rarity.Common)
+                .Append(Definition.SocketTypes is "" ? Rarity.Common : Rarity.Infrequent)
                 .Max();
 
         public IEnumerable<Socket> GetSockets()
