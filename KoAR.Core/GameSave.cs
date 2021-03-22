@@ -155,7 +155,7 @@ namespace KoAR.Core
             Span<byte> temp = stackalloc byte[12];
             Unsafe.WriteUnaligned(ref temp[0], playerActor);
             Unsafe.WriteUnaligned(ref temp[4], 0x00_7E_F5_41_00_00_00_0Bul);
-            int offset = data.IndexOf(MemoryMarshal.AsBytes(temp));
+            int offset = data.IndexOf(temp);
             int dataLength = BitConverter.ToInt32(data[(offset + 13)..]);
             // 17 is the loot table
             // 21 is the count of items in the inventory.
