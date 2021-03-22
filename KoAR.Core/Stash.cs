@@ -26,12 +26,11 @@ namespace KoAR.Core
                 : new byte[6] { 0x0A, 0x03, 0, 0, 0, 0 };
             var results = new List<int>();
             var start = 0;
-            var segment = data;
-            while (segment.IndexOf(itemMarker) is int ix and not -1)
+            while (data.IndexOf(itemMarker) is int ix and not -1)
             {
                 results.Add(start + ix - 4);
                 start += ix + itemMarker.Length;
-                segment = segment[(ix + itemMarker.Length)..];
+                data = data[(ix + itemMarker.Length)..];
             }
             return results;
         }
