@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace KoAR.Core
 {
-    public class ItemDefinition
+    public sealed class ItemDefinition
     {
         private static bool TryParseBuffList(string value, [NotNullWhen(true)] out Buff[]? buffs)
         {

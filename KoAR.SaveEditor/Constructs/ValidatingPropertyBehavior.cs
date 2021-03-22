@@ -44,9 +44,9 @@ namespace KoAR.SaveEditor.Constructs
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">Event arguments.</param>
-        private static void DependencyProperty_ValueChanged(object sender, EventArgs e)
+        private static void DependencyProperty_ValueChanged(object? sender, EventArgs e)
         {
-            DependencyObject dependencyObject = (DependencyObject)sender;
+            DependencyObject dependencyObject = (DependencyObject)sender!;
             DependencyProperty? property = ValidatingPropertyBehavior.GetValidatingProperty(dependencyObject);
             if (property != null)
             {

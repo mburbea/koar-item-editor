@@ -6,6 +6,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -24,15 +25,15 @@ namespace KoAR.Core
                 PropertyNamingPolicy = JsonSnakeCaseNamingPolicy.Instance,
                 Converters = { new JsonStringEnumConverter() }
             };
-            using var zipStream = Assembly.GetExecutingAssembly().GetManifestResourceStream($"{typeof(Amalur).Namespace}.Data.zip");
+            using var zipStream = Assembly.GetExecutingAssembly().GetManifestResourceStream($"{typeof(Amalur).Namespace}.Data.zip")!;
             using var archive = new ZipArchive(zipStream, ZipArchiveMode.Read);
-            using var buffsStream = archive.GetEntry("buffs.json").Open();
-            Buffs = JsonSerializer.DeserializeAsync<Buff[]>(buffsStream, jsonOptions).Result.ToDictionary(buff => buff.Id);
-            using var questItemsStream = archive.GetEntry("questItemDefinitions.json").Open();
-            QuestItemDefinitions = JsonSerializer.DeserializeAsync<QuestItemDefinition[]>(questItemsStream, jsonOptions).Result.ToDictionary(def => def.Id);
-            using var gemsStream = archive.GetEntry("gemDefinitions.csv").Open();
+            using var buffsStream = archive.GetEntry("buffs.json")!.Open();
+            Buffs = JsonSerializer.DeserializeAsync<Buff[]>(buffsStream, jsonOptions).AsTask().Result!.ToDictionary(buff => buff.Id);
+            using var questItemsStream = archive.GetEntry("questItemDefinitions.json")!.Open();
+            QuestItemDefinitions = JsonSerializer.DeserializeAsync<QuestItemDefinition[]>(questItemsStream, jsonOptions).AsTask().Result!.ToDictionary(def => def.Id);
+            using var gemsStream = archive.GetEntry("gemDefinitions.csv")!.Open();
             GemDefinitions = GemDefinition.ParseFile(gemsStream).ToDictionary(def => def.TypeId);
-            using var itemsStream = archive.GetEntry("definitions.csv").Open();
+            using var itemsStream = archive.GetEntry("definitions.csv")!.Open();
             ItemDefinitions = ItemDefinition.ParseFile(itemsStream).ToDictionary(def => def.TypeId);
         }
 
@@ -40,7 +41,7 @@ namespace KoAR.Core
         public static IReadOnlyDictionary<uint, GemDefinition> GemDefinitions { get; }
         public static IReadOnlyDictionary<uint, ItemDefinition> ItemDefinitions { get; }
         public static IReadOnlyDictionary<uint, QuestItemDefinition> QuestItemDefinitions { get; }
-        public static ReadOnlySpan<uint> PlayerTypeIds => MemoryMarshal.Cast<byte, uint>(new byte[16]{
+        public static ReadOnlySpan<uint> PlayerTypeIds => MemoryMarshal.Cast<byte, uint>((ReadOnlySpan<byte>)new byte[16]{
             0x6D, 0x38, 0x0A, 0x00, // playerHumanMale
             0x6E, 0x38, 0x0A, 0x00, // playerHumanFemale
             0x6F, 0x38, 0x0A, 0x00, // playerElfMale
@@ -53,7 +54,36 @@ namespace KoAR.Core
 
         [return: MaybeNull, NotNullIfNotNull("defaultValue")]
         internal static TValue GetOrDefault<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key, TValue? defaultValue = default)
-            where TValue : class => dictionary.TryGetValue(key, out TValue res) ? res : defaultValue;
+            => dictionary.TryGetValue(key, out var res) ? res : defaultValue;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static T SetFlag<T>(this T @enum, T flag, bool on) where T : struct, Enum
+        {
+            if (Unsafe.SizeOf<T>() == 1)
+            {
+                byte x = (byte)((Unsafe.As<T, byte>(ref @enum) & ~Unsafe.As<T, byte>(ref flag))
+                    | (-Unsafe.As<bool, byte>(ref on) & Unsafe.As<T, byte>(ref flag)));
+                return Unsafe.As<byte, T>(ref x);
+            }
+            else if (Unsafe.SizeOf<T>() == 2)
+            {
+                ushort x = (ushort)((Unsafe.As<T, ushort>(ref @enum) & ~Unsafe.As<T, ushort>(ref flag))
+                    | (-Unsafe.As<bool, byte>(ref on) & Unsafe.As<T, ushort>(ref flag)));
+                return Unsafe.As<ushort, T>(ref x);
+            }
+            else if (Unsafe.SizeOf<T>() == 4)
+            {
+                uint x = (Unsafe.As<T, uint>(ref @enum) & ~Unsafe.As<T, uint>(ref flag))
+                   | ((uint)-Unsafe.As<bool, byte>(ref on) & Unsafe.As<T, uint>(ref flag));
+                return Unsafe.As<uint, T>(ref x);
+            }
+            else
+            {
+                ulong x = (Unsafe.As<T, ulong>(ref @enum) & ~Unsafe.As<T, ulong>(ref flag))
+                   | ((ulong)-(long)Unsafe.As<bool, byte>(ref on) & Unsafe.As<T, ulong>(ref flag));
+                return Unsafe.As<ulong, T>(ref x);
+            }
+        }
 
         public static string FindSaveGameDirectory()
         {

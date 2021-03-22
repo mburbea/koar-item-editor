@@ -130,7 +130,7 @@ namespace KoAR.SaveEditor.Constructs
             tabItem?.SetValue(TabContent._persistedContentProperty, value);
         }
 
-        private static void TabControl_ContentTemplatePropertiesChanged(object sender, EventArgs e)
+        private static void TabControl_ContentTemplatePropertiesChanged(object? sender, EventArgs e)
         {
             throw new InvalidOperationException($"Can not assign to {nameof(TabControl.ContentTemplate)} or {nameof(TabControl.ContentTemplateSelector)} when Persist is true.");
         }

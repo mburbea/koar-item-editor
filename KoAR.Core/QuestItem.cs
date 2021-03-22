@@ -2,7 +2,7 @@
 
 namespace KoAR.Core
 {
-    public class QuestItem
+    public sealed class QuestItem
     {
         private readonly GameSave _gameSave;
         private readonly QuestItemDefinition _definition;
@@ -18,8 +18,8 @@ namespace KoAR.Core
 
         public bool IsUnsellable
         {
-            get => (Flags & InventoryFlags.Unsellable) == InventoryFlags.Unsellable;
-            set => Flags = value ? Flags | InventoryFlags.Unsellable : Flags & ~InventoryFlags.Unsellable;
+            get => Flags.HasFlag(InventoryFlags.Unsellable);
+            set => Flags = Flags.SetFlag(InventoryFlags.Unsellable, value);
         }
     }
 }

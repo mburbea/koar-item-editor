@@ -35,15 +35,15 @@ namespace KoAR.SaveEditor.Constructs
         }
 
         [MaybeNull]
-        object IDictionary.this[object key]
+        object? IDictionary.this[object key]
         {
             get => this.GetTemplate(key);
-            set => this._dictionary[key] = (DataTemplate)value;
+            set => this._dictionary[key] = (DataTemplate)value!;
         }
 
         public void Add(object key, DataTemplate value) => this._dictionary.Add(key, value);
 
-        void IDictionary.Add(object key, object value) => this._dictionary.Add(key, (DataTemplate)value);
+        void IDictionary.Add(object key, object? value) => this._dictionary.Add(key, (DataTemplate)value!);
 
         public void Clear() => this._dictionary.Clear();
 

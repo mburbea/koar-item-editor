@@ -143,7 +143,7 @@ namespace KoAR.SaveEditor.Views.Main
                 return;
             }
             this.GameSave = gameSave;
-            Settings.Default.LastDirectory = Path.GetFullPath(Path.GetDirectoryName(dialog.FileName));
+            Settings.Default.LastDirectory = Path.GetFullPath(Path.GetDirectoryName(dialog.FileName)!);
             Settings.Default.LastFilterUsed = dialog.FilterIndex;
             this.InventoryManager = new(this);
             this.StashManager = this.GameSave.Stash != null ? new(this) : default;
@@ -165,9 +165,9 @@ namespace KoAR.SaveEditor.Views.Main
             MessageBox.Show(Application.Current.MainWindow, $"Save successful! Original save backed up as {backupPath}.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private async void Application_Activated(object sender, EventArgs e)
+        private async void Application_Activated(object? sender, EventArgs e)
         {
-            Application application = (Application)sender;
+            Application application = (Application)sender!;
             application.Activated -= this.Application_Activated;
             application.MainWindow.Closing += this.MainWindow_Closing;
             try

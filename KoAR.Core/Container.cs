@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 
 namespace KoAR.Core
 {
-    internal class Container : IEnumerable<(int id, int offset, int dataLength)>
+    internal sealed class Container : IEnumerable<(int id, int offset, int dataLength)>
     {
         private static class Offsets
         {
@@ -20,22 +22,22 @@ namespace KoAR.Core
 
         public Container(GameSave gameSave, int offset, ulong pattern) => (_gameSave, Offset, _pattern) = (gameSave, offset, pattern);
 
+        [SuppressMessage("CodeQuality", "IDE0052:Remove unread private members", Justification = "The suggested fix does not compile.")]
         private int DataLength
         {
-            get => MemoryUtilities.Read<int>(_gameSave.Body, Offset + Offsets.DataLength);
-            set => MemoryUtilities.Write(_gameSave.Body, Offset + Offsets.DataLength, value);
+            get => BitConverter.ToInt32(_gameSave.Body, Offset + Offsets.DataLength);
+            set => Unsafe.WriteUnaligned(ref _gameSave.Body[Offset + Offsets.DataLength], value);
         }
 
+        [SuppressMessage("CodeQuality", "IDE0052:Remove unread private members", Justification = "The suggested fix does not compile.")]
         private int DataLength2
         {
-            get => MemoryUtilities.Read<int>(_gameSave.Body, Offset + Offsets.DataLength2);
-            set => MemoryUtilities.Write(_gameSave.Body, Offset + Offsets.DataLength2, value);
+            get => BitConverter.ToInt32(_gameSave.Body, Offset + Offsets.DataLength2);
+            set => Unsafe.WriteUnaligned(ref _gameSave.Body[Offset + Offsets.DataLength2], value);
         }
 
-        private int Count
-        {
-            get => MemoryUtilities.Read<int>(_gameSave.Body, Offset + Offsets.Count);
-        }
+        [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "Useful for debugging")]
+        private int Count => BitConverter.ToInt32(_gameSave.Body, Offset + Offsets.Count);
 
         public void UpdateDataLength(int delta)
         {

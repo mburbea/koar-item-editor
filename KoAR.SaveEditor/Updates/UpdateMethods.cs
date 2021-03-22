@@ -31,8 +31,8 @@ namespace KoAR.SaveEditor.Updates
                 WorkingDirectory = Path.GetTempPath(),
                 UseShellExecute = false,
                 FileName = "powershell.exe",
-                Arguments = $"-ExecutionPolicy Bypass -File \"{Path.GetFileName(scriptFileName)}\" {Process.GetCurrentProcess().Id} \"{Path.GetFileName(zipFilePath)}\"",
-            }).WaitForExit();
+                Arguments = $"-ExecutionPolicy Bypass -File \"{Path.GetFileName(scriptFileName)}\" {Environment.ProcessId} \"{Path.GetFileName(zipFilePath)}\"",
+            })!.WaitForExit();
         }
 
         /// <summary>
@@ -115,12 +115,11 @@ namespace KoAR.SaveEditor.Updates
                 using WebResponse response = await request.GetResponseAsync().ConfigureAwait(false);
                 cancellationToken.ThrowIfCancellationRequested();
                 using Stream stream = response.GetResponseStream();
-                cancellationToken.ThrowIfCancellationRequested();
-                return await JsonSerializer.DeserializeAsync<T>(stream, UpdateMethods._jsonOptions).ConfigureAwait(false);
+                return await JsonSerializer.DeserializeAsync<T>(stream, UpdateMethods._jsonOptions, cancellationToken).ConfigureAwait(false);
             }
             catch (WebException e)
             {
-                if (((HttpWebResponse)e.Response)?.StatusCode != HttpStatusCode.NotFound)
+                if (e.Response is not HttpWebResponse { StatusCode: HttpStatusCode.NotFound })
                 {
                     throw;
                 }
@@ -185,7 +184,8 @@ namespace KoAR.SaveEditor.Updates
 
         private sealed class Tag
         {
-            private static readonly Regex _regex = new(@"^v(?<version>\d+\.\d+\.\d+)$", RegexOptions.ExplicitCapture);
+            private static readonly Regex _regex = new(@"^v(?<version>\d+\.\d+\.\d+)$", RegexOptions.ExplicitCapture | RegexOptions.Compiled);
+
             private Version? _version;
 
             public string Name { get; set; } = string.Empty;

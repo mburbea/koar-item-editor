@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Diagnostics;
-using System.IO;
-using System.IO.Compression;
-using System.Text;
-using Microsoft.Data.SqlClient;
-using Disposable;
+﻿using System.Linq;
 using KoAR.Core;
-using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
-using System.Buffers.Binary;
 
 namespace ItemTesting
 {

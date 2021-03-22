@@ -93,7 +93,7 @@ namespace KoAR.SaveEditor.Views.Inventory
             this.OnPropertyChanged(nameof(this.AllItemsUnstashable));
         }
 
-        protected override void OnItemPropertyChanged(ItemModel item, string propertyName)
+        protected override void OnItemPropertyChanged(ItemModel item, string? propertyName)
         {
             base.OnItemPropertyChanged(item, propertyName);
             this.GameSave.WriteEquipmentBytes(item.Item);

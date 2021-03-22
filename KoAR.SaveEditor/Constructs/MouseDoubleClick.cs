@@ -46,9 +46,9 @@ namespace KoAR.SaveEditor.Constructs
             (control ?? throw new ArgumentNullException(nameof(control))).SetValue(MouseDoubleClick.CommandTargetProperty, value);
         }
 
-        private static void Control_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private static void Control_MouseDoubleClick(object? sender, MouseButtonEventArgs e)
         {
-            Control control = (Control)sender;
+            Control control = (Control)sender!;
             ICommand? command = MouseDoubleClick.GetCommand(control);
             command?.TryExecute(MouseDoubleClick.GetCommandParameter(control), MouseDoubleClick.GetCommandTarget(control) ?? control);
         }

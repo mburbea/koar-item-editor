@@ -201,10 +201,8 @@ namespace KoAR.SaveEditor.Views.Updates
                 byte[] buffer = new byte[8192];
                 while (bytesTransferred < release.ZipFileSize)
                 {
-                    cancellationToken.ThrowIfCancellationRequested();
-                    int count = await stream.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false);
-                    cancellationToken.ThrowIfCancellationRequested();
-                    await fileStream.WriteAsync(buffer, 0, count).ConfigureAwait(false);
+                    int count = await stream.ReadAsync(buffer.AsMemory(0, buffer.Length), cancellationToken).ConfigureAwait(false);
+                    await fileStream.WriteAsync(buffer.AsMemory(0, count), cancellationToken).ConfigureAwait(false);
                     bytesTransferred += count;
                     bytesPerInterval += count;
                 }
@@ -221,7 +219,7 @@ namespace KoAR.SaveEditor.Views.Updates
 
             void ReportProgress() => (this.BytesTransferred, this.Speed) = (bytesTransferred, bytesPerInterval * 1000d / interval);
 
-            void Timer_Tick(object sender, EventArgs e) => ReportProgress();
+            void Timer_Tick(object? sender, EventArgs e) => ReportProgress();
         }
     }
 }

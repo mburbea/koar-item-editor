@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 
 namespace KoAR.Core
 {
-    public class GameSaveHeader
+    public sealed class GameSaveHeader
     {
         private const int RemasterHeaderLength = 6 * 1024 - 8;
         private readonly int _dataLengthOffset;
@@ -18,8 +19,8 @@ namespace KoAR.Core
 
         public int BodyDataLength
         {
-            get => MemoryUtilities.Read<int>(_gameSave.Bytes, _dataLengthOffset);
-            set => MemoryUtilities.Write(_gameSave.Bytes, _dataLengthOffset, value);
+            get => BitConverter.ToInt32(_gameSave.Bytes, _dataLengthOffset);
+            set => Unsafe.WriteUnaligned(ref _gameSave.Bytes[_dataLengthOffset], value);
         }
 
         public int Length => _gameSave.IsRemaster ? RemasterHeaderLength : _dataLengthOffset + 12;

@@ -1,7 +1,10 @@
-﻿namespace KoAR.Core
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace KoAR.Core
 {
     public partial class StashItem
     {
+        [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Offsets class.")]
         protected readonly struct Offset
         {
             private readonly StashItem _item;

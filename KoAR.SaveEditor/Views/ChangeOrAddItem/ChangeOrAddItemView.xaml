@@ -7,7 +7,7 @@
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs"
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views"
     xmlns:local="clr-namespace:KoAR.SaveEditor.Views.ChangeOrAddItem"
-    xmlns:s="clr-namespace:System;assembly=mscorlib"
+    xmlns:s="clr-namespace:System;assembly=System.Runtime"
     xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
     mc:Ignorable="d" d:DataContext="{d:DesignInstance local:ChangeOrAddItemViewModel}"
     Icon="/app.ico" SizeToContent="WidthAndHeight" MinWidth="400" WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
