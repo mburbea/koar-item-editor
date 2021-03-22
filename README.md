@@ -4,6 +4,7 @@ This is heavily updated editor, rewritten in WPF and modern C# 8 paradigms. A pr
 [![Build Status](https://dev.azure.com/amirburbea/koar/_apis/build/status/Build%20Save%20Editor?branchName=master)](https://dev.azure.com/amirburbea/koar/_build/latest?definitionId=1&branchName=master)
 
 ### Versioning Strategy
+* Version 4.x will be .net 5?
 * Version 3.x will be for the Remaster.
 * Version 2.x will be for the Original. 
   - The current final 2.x release is the following: https://github.com/mburbea/koar-item-editor/releases/tag/v2.1.189
