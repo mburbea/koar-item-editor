@@ -10,7 +10,7 @@
     xmlns:inventory="clr-namespace:KoAR.SaveEditor.Views.Inventory"
     xmlns:stash="clr-namespace:KoAR.SaveEditor.Views.Stash"
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs" 
-    xmlns:s="clr-namespace:System;assembly=mscorlib" 
+    xmlns:s="clr-namespace:System;assembly=System.Runtime" 
     xmlns:aero="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
     mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type local:MainWindowViewModel}}"
     Width="1366" Height="768" WindowStartupLocation="CenterScreen" 

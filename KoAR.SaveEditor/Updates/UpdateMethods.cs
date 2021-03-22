@@ -206,7 +206,8 @@ namespace KoAR.SaveEditor.Updates
 
         private sealed class Tag
         {
-            private static readonly Regex _regex = new(@"^v(?<version>\d+\.\d+\.\d+)$", RegexOptions.ExplicitCapture);
+            private static readonly Regex _regex = new(@"^v(?<version>\d+\.\d+\.\d+)$", RegexOptions.ExplicitCapture | RegexOptions.Compiled);
+
             private Version? _version;
 
             public string Name { get; set; } = string.Empty;
