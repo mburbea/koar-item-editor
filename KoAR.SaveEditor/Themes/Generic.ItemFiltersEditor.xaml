@@ -3,7 +3,7 @@
     xmlns:core="clr-namespace:KoAR.Core;assembly=KoAR.Core"
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs"
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views"
-    xmlns:s="clr-namespace:System;assembly=mscorlib">
+    xmlns:s="clr-namespace:System;assembly=System.Runtime">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/PresentationFramework.Aero;component/Themes/Aero.NormalColor.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Templates/TextBoxErrorTemplate.xaml" />
