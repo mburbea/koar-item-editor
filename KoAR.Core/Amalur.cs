@@ -57,8 +57,7 @@ namespace KoAR.Core
             => dictionary.TryGetValue(key, out var res) ? res : defaultValue;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static T SetFlag<T>(this T @enum, T flag, bool on)
-            where T : struct, Enum
+        internal static T SetFlag<T>(this T @enum, T flag, bool on) where T : struct, Enum
         {
             if (Unsafe.SizeOf<T>() == 1)
             {

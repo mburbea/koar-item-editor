@@ -24,6 +24,7 @@
     <NeutralLanguage>en-US</NeutralLanguage>
     <UserSecretsId>08a013c8-a2ef-43c0-9e42-9500e36a74d4</UserSecretsId>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+	<ProduceReferenceAssembly>false</ProduceReferenceAssembly>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>
