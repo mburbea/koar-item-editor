@@ -139,6 +139,6 @@ namespace KoAR.SaveEditor.Views.Inventory
             base.Dispose(disposing);
         }
 
-        private void Buffs_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) => this.OnPropertyChanged(nameof(this.Rarity));
+        private void Buffs_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e) => this.OnPropertyChanged(nameof(this.Rarity));
     }
 }

@@ -32,7 +32,7 @@ namespace KoAR.SaveEditor.Updates
                 UseShellExecute = false,
                 FileName = "powershell.exe",
                 Arguments = $"-ExecutionPolicy Bypass -File \"{Path.GetFileName(scriptFileName)}\" {Environment.ProcessId} \"{Path.GetFileName(zipFilePath)}\"",
-            }).WaitForExit();
+            })!.WaitForExit();
         }
 
         /// <summary>

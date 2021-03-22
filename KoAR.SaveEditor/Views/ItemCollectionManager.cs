@@ -151,7 +151,7 @@ namespace KoAR.SaveEditor.Views
             this._listView.AddHandler(ButtonBase.ClickEvent, new RoutedEventHandler(this.GridViewColumn_Click));
         }
 
-        private void CollectionView_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) => this.Dispatcher.InvokeAsync(this.OnViewChanged);
+        private void CollectionView_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e) => this.Dispatcher.InvokeAsync(this.OnViewChanged);
 
         private void GridViewColumn_Click(object sender, RoutedEventArgs e)
         {

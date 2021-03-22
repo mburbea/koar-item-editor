@@ -34,9 +34,9 @@ namespace KoAR.SaveEditor.Constructs
             ViewSort.TrySetComparer(source, (IComparer?)e.NewValue);
         }
 
-        private static void Source_ViewChanged(object sender, EventArgs e)
+        private static void Source_ViewChanged(object? sender, EventArgs e)
         {
-            CollectionViewSource source = (CollectionViewSource)sender;
+            CollectionViewSource source = (CollectionViewSource)sender!;
             ViewSort.TrySetComparer(source, ViewSort.GetComparer(source));
         }
 

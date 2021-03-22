@@ -102,7 +102,7 @@ namespace KoAR.SaveEditor.Constructs
 
             public bool Equals(Segment other) => (this.Text, this.IsMatch) == (other.Text, other.IsMatch);
 
-            public override bool Equals(object obj) => obj is Segment other && this.Equals(other);
+            public override bool Equals(object? obj) => obj is Segment other && this.Equals(other);
 
             public override int GetHashCode() => (this.Text, this.IsMatch).GetHashCode();
         }

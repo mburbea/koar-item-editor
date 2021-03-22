@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace KoAR.SaveEditor.Constructs
@@ -18,9 +19,9 @@ namespace KoAR.SaveEditor.Constructs
             item?.SetValue(ItemSelection.SelectItemOnClickProperty, BooleanBoxes.GetBox(value));
         }
 
-        private static void Item_PreviewMouseLeftButtonDown(object sender, RoutedEventArgs e)
+        private static void Item_PreviewMouseLeftButtonDown(object? sender, RoutedEventArgs e)
         {
-            DependencyObject d = (DependencyObject)sender;
+            DependencyObject d = (DependencyObject)sender!;
             ListBoxItem? item = d as ListBoxItem ?? d.FindVisualTreeAncestor<ListBoxItem>();
             if (item != null)
             {
