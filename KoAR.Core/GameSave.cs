@@ -1,13 +1,13 @@
 ﻿using Force.Crc32;
 using Ionic.Zlib;
+using StringLiteral;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
-using StringLiteral;
-using System.Runtime.CompilerServices;
 
 namespace KoAR.Core
 {
@@ -122,7 +122,6 @@ namespace KoAR.Core
             }
             FindEquippedItems(playerActor);
 
-
             static int GetBagOffset(ReadOnlySpan<byte> data)
             {
                 var inventoryLimit = Utf8InventoryLimit();
@@ -138,6 +137,31 @@ namespace KoAR.Core
 
                 return finalOffset + (inventoryLimitOrder * 12);
             }
+
+            void FindEquippedItems(int playerActor)
+            {
+                var data = Body.AsSpan();
+                Span<byte> temp = stackalloc byte[12];
+                Unsafe.WriteUnaligned(ref temp[0], playerActor);
+                Unsafe.WriteUnaligned(ref temp[4], 0x00_7E_F5_41_00_00_00_0Bul);
+                int offset = data.IndexOf(temp);
+                int dataLength = BitConverter.ToInt32(data[(offset + 13)..]);
+                // 17 is the loot table
+                // 21 is the count of items in the inventory.
+                var partInventory = MemoryMarshal.Cast<byte, int>(data.Slice(offset + 17, dataLength));
+                var inventoryCount = partInventory[1];
+                var equippedItemsCount = partInventory[inventoryCount + 2];
+                var equippedData = partInventory.Slice(inventoryCount + 3, equippedItemsCount);
+                var inventoryDict = Items.ToDictionary(x => x.ItemId);
+
+                foreach (var itemId in equippedData)
+                {
+                    if (itemId != 0 && inventoryDict.TryGetValue(itemId, out var item))
+                    {
+                        EquippedItems.Add(item);
+                    }
+                }
+            }
         }
 
         [Utf8("inventory_limit")]
@@ -148,31 +172,6 @@ namespace KoAR.Core
 
         [Utf8("current_inventory_count")]
         private static partial ReadOnlySpan<byte> Utf8CurrentInventoryCount();
-
-        private void FindEquippedItems(int playerActor)
-        {
-            var data = Body.AsSpan();
-            Span<byte> temp = stackalloc byte[12];
-            Unsafe.WriteUnaligned(ref temp[0], playerActor);
-            Unsafe.WriteUnaligned(ref temp[4], 0x00_7E_F5_41_00_00_00_0Bul);
-            int offset = data.IndexOf(temp);
-            int dataLength = BitConverter.ToInt32(data[(offset + 13)..]);
-            // 17 is the loot table
-            // 21 is the count of items in the inventory.
-            var partInventory = MemoryMarshal.Cast<byte, int>(data.Slice(offset + 17, dataLength));
-            var inventoryCount = partInventory[1];
-            var equippedItemsCount = partInventory[inventoryCount + 2];
-            var equippedData = partInventory.Slice(inventoryCount + 3, equippedItemsCount);
-            var inventoryDict = Items.ToDictionary(x => x.ItemId);
-
-            foreach (var itemId in equippedData)
-            {
-                if (itemId != 0 && inventoryDict.TryGetValue(itemId, out var item))
-                {
-                    EquippedItems.Add(item);
-                }
-            }
-        }
 
         public Encoding Encoding => IsRemaster ? Encoding.UTF8 : Encoding.Default;
         public bool IsRemaster { get; }
