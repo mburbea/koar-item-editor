@@ -2,7 +2,7 @@
 This is heavily updated editor, rewritten in WPF and modern C# 8 paradigms. A product of Covid-19 quarantine and my frustrations with this game. 
 
 ### Versioning Strategy
-* Version 4.x will be .net 5.0?
+* Version 4.x will be .net 5.0.4?
 * Version 3.x will be for the Remaster.
 * Version 2.x will be for the Original. 
   - The current final 2.x release is the following: https://github.com/mburbea/koar-item-editor/releases/tag/v2.1.189
