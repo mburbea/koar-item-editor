@@ -14,7 +14,7 @@ namespace KoAR.SaveEditor.Constructs
             this._canExecute = canExecute;
         }
 
-        event EventHandler ICommand.CanExecuteChanged
+        event EventHandler? ICommand.CanExecuteChanged
         {
             add
             {
@@ -32,11 +32,11 @@ namespace KoAR.SaveEditor.Constructs
             }
         }
 
-        bool ICommand.CanExecute(object parameter) => this.CanExecute();
+        bool ICommand.CanExecute(object? parameter) => this.CanExecute();
 
         public bool CanExecute() => this._canExecute == null || this._canExecute();
 
-        void ICommand.Execute(object parameter) => this.Execute();
+        void ICommand.Execute(object? parameter) => this.Execute();
 
         public void Execute()
         {
@@ -58,17 +58,17 @@ namespace KoAR.SaveEditor.Constructs
             this._canExecute = canExecute;
         }
 
-        event EventHandler ICommand.CanExecuteChanged
+        event EventHandler? ICommand.CanExecuteChanged
         {
             add => CommandManager.RequerySuggested += value;
             remove => CommandManager.RequerySuggested -= value;
         }
 
-        bool ICommand.CanExecute(object parameter) => parameter is T converted && this.CanExecute(converted);
+        bool ICommand.CanExecute(object? parameter) => parameter is T converted && this.CanExecute(converted);
 
         public bool CanExecute(T parameter) => this._canExecute == null || this._canExecute(parameter);
 
-        void ICommand.Execute(object parameter)
+        void ICommand.Execute(object? parameter)
         {
             if (parameter is T converted)
             {
