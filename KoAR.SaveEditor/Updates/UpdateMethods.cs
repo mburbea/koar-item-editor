@@ -29,12 +29,9 @@ namespace KoAR.SaveEditor.Updates
             client.DefaultRequestHeaders.Accept.TryParseAdd("application/vnd.github.v3+json");
             client.DefaultRequestHeaders.UserAgent.TryParseAdd("application/vnd.github.v3+json");
             using StreamReader reader = new(UpdateMethods.GetResourceFileStream("github.credentials"));
-            string? credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes(reader.ReadToEnd()));
-
-            if (credentials is not "")
-            {
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", credentials);
-            }
+            client.DefaultRequestHeaders.Authorization = Convert.ToBase64String(Encoding.ASCII.GetBytes(reader.ReadToEnd())) is { Length: > 0 } credentials
+                ? new("Basic", credentials)
+                : null;
             return client;
         }
 
