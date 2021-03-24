@@ -134,7 +134,7 @@ namespace KoAR.SaveEditor.Updates
         private static async Task<string> ExtractPowershellScript()
         {
             string fileName = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.ps1");
-            using FileStream fileStream = File.Create(fileName);
+            using FileStream fileStream = File.OpenWrite(fileName);
             await UpdateMethods.GetResourceFileStream("update.ps1").CopyToAsync(fileStream).ConfigureAwait(false);
             return fileName;
         }
