@@ -1,6 +1,4 @@
-﻿using KoAR.SaveEditor.Updates;
-
-namespace KoAR.SaveEditor.Views.Updates
+﻿namespace KoAR.SaveEditor.Views.Updates
 {
     public sealed class UpdateViewModel : UpdateViewModelBase
     {
