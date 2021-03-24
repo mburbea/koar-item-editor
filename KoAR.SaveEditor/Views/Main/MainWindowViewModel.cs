@@ -172,8 +172,7 @@ namespace KoAR.SaveEditor.Views.Main
             application.MainWindow.Closing += this.MainWindow_Closing;
             try
             {
-                using CancellationTokenSource source = new();
-                source.CancelAfter(2500);
+                using CancellationTokenSource source = new(2500);
                 if (Settings.Default.Acknowledged3x)
                 {
                     await this.UpdateNotifier.CheckForUpdatesAsync(source.Token).ConfigureAwait(false);
@@ -280,12 +279,71 @@ namespace KoAR.SaveEditor.Views.Main
             );
         }
 
-        private void OpenOriginalUpdateWindow(IReleaseInfo release)
+        public void OpenOriginalUpdateWindow(IReleaseInfo release)
         {
             Settings.Default.Save();
             using OriginalUpdateViewModel viewModel = new(release);
             UpdateWindow window = new() { DataContext = viewModel, Owner = Application.Current.MainWindow };
             window.ShowDialog();
+        }
+
+        public async void ShowHelp()
+        {
+            TaskDialogResult dialogResult = TaskDialog.Show(new()
+            {
+                Title = $"KoAR Save Editor",
+                MainInstruction = "Help",
+                MainIcon = VistaTaskDialogIcon.Information,
+                CommandButtons = new[] {
+                    $"Ok\nClose this window",
+                    $"Found a bug? File a new github bug report.\nRequires a free account",
+                    $"Downgrade to v2.\n I am running Reckoning",
+                },
+                AllowDialogCancellation = true,
+                FooterText = " ", // Dialog looks a bit weird without a footer.
+                Content = @"This version of the editor is only tested against the remaster. 
+If you're on the original and are running into errors consider downgrading.
+
+1. Your saves are usually not in the same folder as the game. 
+The editor attemps to make educated guesses as to the save file directory.
+
+2. When modifying item names, do NOT use special characters.
+
+3. Editing equipped items is restricted, and even still may cause game crashes."
+            });
+
+            if (dialogResult.CommandButtonResult == 1)
+            {
+                Process.Start($"https://github.com/mburbea/koar-item-editor/issues/new?labels=bug&template=bug_report.md");
+            }
+            else if (dialogResult.CommandButtonResult == 2)
+            {
+                bool dispatched = false;
+                using CancellationTokenSource source = new(2500);
+                try
+                {
+                    IReleaseInfo? release = await UpdateMethods.FetchLatest2xReleaseAsync(source.Token).ConfigureAwait(false);
+                    if (release != null)
+                    {
+                        dispatched = true;
+                        Application.Current.Dispatcher.Invoke(new Action<IReleaseInfo>(this.OpenOriginalUpdateWindow), release);
+                    }
+                    else
+                    {
+                    }
+                }
+                catch(OperationCanceledException)
+                {
+                }
+                finally
+                {
+                    if(!dispatched)
+                    {
+                        // this might fail if the github is down, for now let's try to open a browser window to nexusmods."
+                        Process.Start("https://www.nexusmods.com/kingdomsofamalurreckoning/mods/10?tab=files");
+                    }
+                }
+            }
         }
 
         private bool OpenUpdateWindow()

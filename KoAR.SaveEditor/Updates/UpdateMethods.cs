@@ -36,22 +36,22 @@ namespace KoAR.SaveEditor.Updates
         }
 
         /// <summary>
-        /// Fetches the latest 2.x release.
+        /// Fetches the latest release with the specified <paramref name="majorVersion"/>.
         /// </summary>
+        /// <param name="majorVersion">The major version of the release.</param>
         /// <param name="cancellationToken">Optionally used to propagate cancellation requests.</param>
         /// <returns>Information related to a release. Returns <see langword="null"/> if not found or an error occurs.</returns>
-        public static async Task<IReleaseInfo?> FetchLatest2xReleaseAsync(CancellationToken cancellationToken = default)
+        public static async Task<IReleaseInfo?> FetchLatestVersionedRelease(int majorVersion, CancellationToken cancellationToken = default)
         {
             try
             {
                 foreach (Tag tag in await UpdateMethods.FetchTagsAsync(cancellationToken).ConfigureAwait(false))
                 {
-                    if (tag.Version.Major != 2)
+                    if (tag.Version.Major != majorVersion)
                     {
                         continue;
                     }
-                    Release? release = await UpdateMethods.FetchReleaseAsync(tag.Name, cancellationToken).ConfigureAwait(false);
-                    if (release != null && release.HasUpdateAsset)
+                    if (await UpdateMethods.FetchReleaseAsync(tag.Name, cancellationToken).ConfigureAwait(false) is { HasUpdateAsset: true } release)
                     {
                         return release;
                     }
@@ -62,6 +62,14 @@ namespace KoAR.SaveEditor.Updates
             }
             return default;
         }
+
+        /// <summary>
+        /// Fetches the latest 2.x release.
+        /// </summary>
+        /// <param name="cancellationToken">Optionally used to propagate cancellation requests.</param>
+        /// <returns>Information related to a release. Returns <see langword="null"/> if not found or an error occurs.</returns>
+        public static Task<IReleaseInfo?> FetchLatest2xReleaseAsync(CancellationToken cancellationToken = default) =>
+            UpdateMethods.FetchLatestVersionedRelease(2, cancellationToken);
 
         /// <summary>
         /// Fetches an array of the interim update releases for the current major version of the application to the latest.
