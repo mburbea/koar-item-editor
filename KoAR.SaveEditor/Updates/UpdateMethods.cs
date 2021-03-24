@@ -5,6 +5,9 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -18,8 +21,23 @@ namespace KoAR.SaveEditor.Updates
 {
     public static class UpdateMethods
     {
-        private static readonly Lazy<string?> _credentials = new(UpdateMethods.LoadCredentials);
         private static readonly JsonSerializerOptions _jsonOptions = new() { PropertyNamingPolicy = JsonSnakeCaseNamingPolicy.Instance };
+        private static readonly HttpClient _client = InitializeClient();
+
+        private static HttpClient InitializeClient()
+        {
+            HttpClient client = new();
+            client.DefaultRequestHeaders.Accept.TryParseAdd("application/vnd.github.v3+json");
+            client.DefaultRequestHeaders.UserAgent.TryParseAdd("application/vnd.github.v3+json");
+            using StreamReader reader = new(UpdateMethods.GetResourceFileStream("github.credentials"));
+            string? credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes(reader.ReadToEnd()));
+
+            if (credentials is not "")
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", credentials);
+            }
+            return client;
+        }
 
         public static bool CheckForNet5()
         {
@@ -40,13 +58,15 @@ namespace KoAR.SaveEditor.Updates
         public static async void ExecuteUpdate(string zipFilePath)
         {
             string scriptFileName = await UpdateMethods.ExtractPowershellScript().ConfigureAwait(false);
-            await Process.Start(new ProcessStartInfo
+            using var process = Process.Start(new ProcessStartInfo
             {
                 WorkingDirectory = Path.GetTempPath(),
                 UseShellExecute = false,
                 FileName = "powershell.exe",
                 Arguments = $"-ExecutionPolicy Bypass -File \"{Path.GetFileName(scriptFileName)}\" {Environment.ProcessId} \"{Path.GetFileName(zipFilePath)}\"",
-            })!.WaitForExitAsync().ConfigureAwait(false);
+            });
+            await process!.WaitForExitAsync().ConfigureAwait(false);
+            process.WaitForExit();
         }
 
         /// <summary>
@@ -95,12 +115,12 @@ namespace KoAR.SaveEditor.Updates
         {
             try
             {
-                List<string> tagNames = (await UpdateMethods.FetchTagsAsync(cancellationToken).ConfigureAwait(false))
+                string[] tagNames = (await UpdateMethods.FetchTagsAsync(cancellationToken).ConfigureAwait(false))
                     .Where(tag => tag.Version.Major == App.Version.Major && tag.Version > App.Version)
                     .Take(maxReleases)
                     .Select(tag => tag.Name)
-                    .ToList();
-                Release[] array = (await Task.WhenAll(tagNames.Select(tag => UpdateMethods.FetchReleaseAsync(tag, cancellationToken))).ConfigureAwait(false))
+                    .ToArray();
+                Release[] array = (await Task.WhenAll(Array.ConvertAll(tagNames, tag => UpdateMethods.FetchReleaseAsync(tag, cancellationToken))).ConfigureAwait(false))
                     .OfType<Release>()
                     .Where(release => release.HasUpdateAsset)
                     .ToArray();
@@ -124,24 +144,15 @@ namespace KoAR.SaveEditor.Updates
         }
 
         private static async Task<T?> FetchDataAsync<T>(string suffix, CancellationToken cancellationToken)
-            where T : class
         {
             try
             {
-                HttpWebRequest request = WebRequest.CreateHttp($"https://api.github.com/repos/mburbea/koar-item-editor/{suffix}");
-                request.UserAgent = request.Accept = "application/vnd.github.v3+json";
-                if (UpdateMethods._credentials.Value is string credentials)
-                {
-                    request.Headers.Add(HttpRequestHeader.Authorization, credentials);
-                }
-                using WebResponse response = await request.GetResponseAsync().ConfigureAwait(false);
-                cancellationToken.ThrowIfCancellationRequested();
-                using Stream stream = response.GetResponseStream();
-                return await JsonSerializer.DeserializeAsync<T>(stream, UpdateMethods._jsonOptions, cancellationToken).ConfigureAwait(false);
+                return await UpdateMethods._client.GetFromJsonAsync<T>($"https://api.github.com/repos/mburbea/koar-item-editor/{suffix}", _jsonOptions, cancellationToken)
+                    .ConfigureAwait(false);
             }
-            catch (WebException e)
+            catch (HttpRequestException e)
             {
-                if (e.Response is not HttpWebResponse { StatusCode: HttpStatusCode.NotFound })
+                if (e.StatusCode != HttpStatusCode.NotFound)
                 {
                     throw;
                 }
@@ -160,12 +171,6 @@ namespace KoAR.SaveEditor.Updates
         private static async Task<Tag[]> FetchTagsAsync(CancellationToken cancellationToken) => (await UpdateMethods.FetchDataAsync<Tag[]>("tags", cancellationToken).ConfigureAwait(false))!;
 
         private static Stream GetResourceFileStream(string name) => Application.GetResourceStream(new($"/Updates/{name}", UriKind.Relative)).Stream;
-
-        private static string? LoadCredentials()
-        {
-            using StreamReader reader = new(UpdateMethods.GetResourceFileStream("github.credentials"));
-            return reader.EndOfStream ? default : $"Basic {Convert.ToBase64String(Encoding.ASCII.GetBytes(reader.ReadToEnd()))}";
-        }
 
         private sealed class Release : IReleaseInfo
         {
