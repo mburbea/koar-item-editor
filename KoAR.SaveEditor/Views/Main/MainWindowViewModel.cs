@@ -175,6 +175,8 @@ namespace KoAR.SaveEditor.Views.Main
                 using CancellationTokenSource source = new(2500);
                 if (Settings.Default.Acknowledged3x)
                 {
+                    var netVersion = this.CheckDotnetVersion();
+                    Console.WriteLine(netVersion);
                     await this.UpdateNotifier.CheckForUpdatesAsync(source.Token).ConfigureAwait(false);
                 }
                 else
@@ -245,6 +247,23 @@ namespace KoAR.SaveEditor.Views.Main
                     return false;
             }
             return true; // Cancel.
+        }
+
+        private Version? CheckDotnetVersion()
+        {
+            string arch = Environment.Is64BitProcess ? "x64" : "x86";
+            using RegistryKey baseKey = Registry.LocalMachine.OpenSubKey($@"SOFTWARE\dotnet\Setup\InstalledVersions\{arch}\sharedhost");
+            if (baseKey?.GetValue("Version") is string { Length: not 0 } versionString)
+            {
+                // Check for version string with extra info not applicable to
+                // a version number and strip it out (6.0.0-preview.2.21154.6)
+                if (versionString.IndexOf('-') is int ix and not -1)
+                {
+                    versionString = versionString[0..ix];
+                }
+                return Version.TryParse(versionString, out Version result) ? result : null;
+            }
+            return null;
         }
 
         private async void CheckForUpdate()
