@@ -253,17 +253,10 @@ namespace KoAR.SaveEditor.Views.Main
         {
             string arch = Environment.Is64BitProcess ? "x64" : "x86";
             using RegistryKey baseKey = Registry.LocalMachine.OpenSubKey($@"SOFTWARE\dotnet\Setup\InstalledVersions\{arch}\sharedhost");
-            if (baseKey?.GetValue("Version") is string { Length: not 0 } versionString)
-            {
-                // Check for version string with extra info not applicable to
-                // a version number and strip it out (6.0.0-preview.2.21154.6)
-                if (versionString.IndexOf('-') is int ix and not -1)
-                {
-                    versionString = versionString[0..ix];
-                }
-                return Version.TryParse(versionString, out Version result) ? result : null;
-            }
-            return null;
+            return baseKey?.GetValue("Version") is string { Length: not 0 } value
+                && Version.TryParse(value.IndexOf('-') is int ix and not -1 ? value[0..ix] : value, out Version result)
+                ? result
+                : null;
         }
 
         private async void CheckForUpdate()
