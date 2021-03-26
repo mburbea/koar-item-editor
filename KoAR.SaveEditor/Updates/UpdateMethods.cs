@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -11,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using KoAR.Core;
+using Microsoft.Win32;
 
 namespace KoAR.SaveEditor.Updates
 {
@@ -18,6 +20,19 @@ namespace KoAR.SaveEditor.Updates
     {
         private static readonly Lazy<string?> _credentials = new(UpdateMethods.LoadCredentials);
         private static readonly JsonSerializerOptions _jsonOptions = new() { PropertyNamingPolicy = JsonSnakeCaseNamingPolicy.Instance };
+
+        public static bool CheckForNet5()
+        {
+            string arch = Environment.Is64BitProcess ? "x64" : "x86";
+            using RegistryKey baseKey = Registry.LocalMachine.OpenSubKey($@"SOFTWARE\dotnet\Setup\InstalledVersions\{arch}\sharedhost");
+            // Check for version string with extra info not applicable to
+            // a version number and strip it out (6.0.0-preview.2.21154.6)
+            return baseKey?.GetValue("Version") is string { Length: > 0 } value &&
+                value.IndexOf('.') is int index &&
+                index >= 0 &&
+                int.TryParse(value[..index], NumberStyles.Integer, CultureInfo.InvariantCulture, out int major) &&
+                major >= 5;
+        }
 
         /// <summary>
         /// Given the path to a zip file containing an update, executes the update process.
