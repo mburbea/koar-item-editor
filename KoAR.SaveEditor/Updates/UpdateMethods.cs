@@ -28,8 +28,7 @@ namespace KoAR.SaveEditor.Updates
             // Check for version string with extra info not applicable to
             // a version number and strip it out (6.0.0-preview.2.21154.6)
             return baseKey?.GetValue("Version") is string { Length: > 0 } value &&
-                value.IndexOf('.') is int index &&
-                index >= 0 &&
+                value.IndexOf('.') is int index and > -1 &&
                 int.TryParse(value[..index], NumberStyles.Integer, CultureInfo.InvariantCulture, out int major) &&
                 major >= 5;
         }
