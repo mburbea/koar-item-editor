@@ -124,7 +124,7 @@ namespace KoAR.SaveEditor.Updates
                 return await UpdateMethods._client.GetFromJsonAsync<T>($"https://api.github.com/repos/mburbea/koar-item-editor/{suffix}", _jsonOptions, cancellationToken)
                     .ConfigureAwait(false);
             }
-            catch (HttpRequestException e) when(e.StatusCode == HttpStatusCode.NotFound)
+            catch (HttpRequestException e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
                 return default;
             }
