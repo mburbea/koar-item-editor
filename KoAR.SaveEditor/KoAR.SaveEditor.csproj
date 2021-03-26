@@ -11,6 +11,7 @@
     <Product>Kingdoms of Amalur: Reckoning Save Editor</Product>
     <Copyright>Copyright © Michael Burbea &amp; Amir Burbea 2020</Copyright>
     <OutputPath>bin\$(Configuration)\</OutputPath>
+    <UseWindowsForms>true</UseWindowsForms>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>app.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
