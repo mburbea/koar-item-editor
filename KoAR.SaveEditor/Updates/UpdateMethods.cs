@@ -19,7 +19,7 @@ namespace KoAR.SaveEditor.Updates
 {
     public static class UpdateMethods
     {
-        private static readonly string? _credentials = UpdateMethods.ReadCredentials();
+        private static readonly HttpClient _client = InitializeClient();
         private static readonly JsonSerializerOptions _jsonOptions = new() { PropertyNamingPolicy = JsonSnakeCaseNamingPolicy.Instance };
 
         public static bool CheckForNet5()
@@ -130,12 +130,8 @@ namespace KoAR.SaveEditor.Updates
         {
             try
             {
-                using HttpClientHandler handler = new() { AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip };
-                using HttpClient client = new(handler);
-                client.DefaultRequestHeaders.Accept.TryParseAdd("application/vnd.github.v3+json");
-                client.DefaultRequestHeaders.UserAgent.TryParseAdd("application/vnd.github.v3+json");
-                client.DefaultRequestHeaders.Authorization = UpdateMethods._credentials != null ? new("Basic", UpdateMethods._credentials) : null;
-                return await client.GetFromJsonAsync<T>($"https://api.github.com/repos/mburbea/koar-item-editor/{suffix}", UpdateMethods._jsonOptions, cancellationToken).ConfigureAwait(false);
+                return await UpdateMethods._client.GetFromJsonAsync<T>($"https://api.github.com/repos/mburbea/koar-item-editor/{suffix}", UpdateMethods._jsonOptions, cancellationToken)
+                    .ConfigureAwait(false);
             }
             catch (HttpRequestException e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
@@ -155,11 +151,19 @@ namespace KoAR.SaveEditor.Updates
 
         private static Stream GetResourceFileStream(string name) => Application.GetResourceStream(new($"/Updates/{name}", UriKind.Relative)).Stream;
 
-        private static string? ReadCredentials()
+        private static HttpClient InitializeClient()
         {
+            HttpClient client = new(new SocketsHttpHandler { AutomaticDecompression = DecompressionMethods.All });
+            client.DefaultRequestHeaders.Accept.TryParseAdd("application/vnd.github.v3+json");
+            client.DefaultRequestHeaders.AcceptEncoding.TryParseAdd("gzip, deflate, br");
+            client.DefaultRequestHeaders.UserAgent.TryParseAdd("application/vnd.github.v3+json");
             using StreamReader reader = new(UpdateMethods.GetResourceFileStream("github.credentials"));
-            return reader.ReadToEnd() is { Length: > 0 } text ? Convert.ToBase64String(Encoding.ASCII.GetBytes(text)) : null;
+            client.DefaultRequestHeaders.Authorization = Convert.ToBase64String(Encoding.ASCII.GetBytes(reader.ReadToEnd())) is { Length: > 0 } credentials
+                ? new("Basic", credentials)
+                : null;
+            return client;
         }
+
 
         private sealed class Release : IReleaseInfo
         {
