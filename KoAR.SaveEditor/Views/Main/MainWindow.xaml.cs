@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Windows;
 using System.Windows.Input;
 using KoAR.SaveEditor.Properties;
-using TaskDialogInterop;
 
 namespace KoAR.SaveEditor.Views.Main
 {
