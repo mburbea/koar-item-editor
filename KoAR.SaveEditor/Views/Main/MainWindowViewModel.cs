@@ -188,7 +188,7 @@ namespace KoAR.SaveEditor.Views.Main
                 },
                 SizeToContent = true,
                 AllowCancel = true,
-                //Footer = { Text = " " }, // Dialog looks a bit weird without a footer.
+                Footer = new(" "), // Dialog looks a bit weird without a footer.
                 Text = @"This version of the editor is only tested against the remaster.
 If you're on the original and are running into errors consider downgrading.
 
@@ -260,7 +260,7 @@ The editor attemps to make educated guesses as to the save file directory.
                                 { $"Downgrade to v{release.Version}.", "I am running Reckoning" }
                             },
                             AllowCancel = true,
-                            Footer = { Text = " " } // Dialog looks a bit weird without a footer.
+                            Footer = new(" ") // Dialog looks a bit weird without a footer.
                         });
                         TaskDialogButton result = dialog.Show();
                         Settings.Default.Acknowledged3x = true;
@@ -301,7 +301,7 @@ The editor attemps to make educated guesses as to the save file directory.
                 Icon = TaskDialogStandardIcon.Warning,
                 CustomButtonStyle = TaskDialogCustomButtonStyle.CommandLinks,
                 AllowCancel = true,
-                //Footer = new(" ") // Dialog looks a bit weird without a footer.
+                Footer = new(" ") // Dialog looks a bit weird without a footer.
             });
             TaskDialogButton result = dialog.Show(new WindowInteropHelper(Application.Current.MainWindow).Handle);
             if (result == dialog.Page.CustomButtons[0])
