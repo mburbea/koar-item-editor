@@ -34,8 +34,11 @@ namespace KoAR.SaveEditor
             dialog.Show();
             if (dialog.Page.CheckBox.Checked)
             {
-                string title = $"{content} (in v{App.Version})";
-                Process.Start($"https://github.com/mburbea/koar-item-editor/issues/new?labels=bug&template=bug_report.md&title={WebUtility.UrlEncode(title)}");
+                string title = $"{content} (in v{App.Version})";                
+                Process.Start(new ProcessStartInfo($"https://github.com/mburbea/koar-item-editor/issues/new?labels=bug&template=bug_report.md&title={WebUtility.UrlEncode(title)}")
+                {
+                    UseShellExecute = true
+                })?.Dispose();
             }
         }
 

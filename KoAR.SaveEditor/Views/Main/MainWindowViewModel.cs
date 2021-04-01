@@ -202,7 +202,10 @@ The editor attemps to make educated guesses as to the save file directory.
             TaskDialogButton result = dialog.Show(new WindowInteropHelper(Application.Current.MainWindow).Handle);
             if (result == dialog.Page.CustomButtons[1])
             {
-                Process.Start("https://github.com/mburbea/koar-item-editor/issues/new?labels=bug&template=bug_report.md");
+                Process.Start(new ProcessStartInfo("https://github.com/mburbea/koar-item-editor/issues/new?labels=bug&template=bug_report.md")
+                {
+                    UseShellExecute = true
+                })?.Dispose();
             }
             else if (result == dialog.Page.CustomButtons[2])
             {
@@ -225,7 +228,10 @@ The editor attemps to make educated guesses as to the save file directory.
                     if (!dispatched)
                     {
                         // this might fail if the github is down or your internet sucks. For now let's try to open a browser window to nexusmods."
-                        Process.Start("https://www.nexusmods.com/kingdomsofamalurreckoning/mods/10?tab=files");
+                        Process.Start(new ProcessStartInfo("https://www.nexusmods.com/kingdomsofamalurreckoning/mods/10?tab=files")
+                        {
+                            UseShellExecute = true
+                        })?.Dispose();
                     }
                 }
             }
