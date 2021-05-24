@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -11,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using KoAR.Core;
+using Microsoft.Win32;
 
 namespace KoAR.SaveEditor.Updates
 {
@@ -18,6 +20,18 @@ namespace KoAR.SaveEditor.Updates
     {
         private static readonly Lazy<string?> _credentials = new(UpdateMethods.LoadCredentials);
         private static readonly JsonSerializerOptions _jsonOptions = new() { PropertyNamingPolicy = JsonSnakeCaseNamingPolicy.Instance };
+
+        public static bool CheckForNet5()
+        {
+            string arch = Environment.Is64BitProcess ? "x64" : "x86";
+            using RegistryKey baseKey = Registry.LocalMachine.OpenSubKey($@"SOFTWARE\dotnet\Setup\InstalledVersions\{arch}\sharedhost");
+            // Check for version string with extra info not applicable to
+            // a version number and strip it out (6.0.0-preview.2.21154.6)
+            return baseKey?.GetValue("Version") is string { Length: > 0 } value &&
+                value.IndexOf('.') is int index and > -1 &&
+                int.TryParse(value[..index], NumberStyles.Integer, CultureInfo.InvariantCulture, out int major) &&
+                major >= 5;
+        }
 
         /// <summary>
         /// Given the path to a zip file containing an update, executes the update process.
@@ -36,22 +50,22 @@ namespace KoAR.SaveEditor.Updates
         }
 
         /// <summary>
-        /// Fetches the latest 2.x release.
+        /// Fetches the latest release with the specified <paramref name="majorVersion"/>.
         /// </summary>
+        /// <param name="majorVersion">The major version of the release.</param>
         /// <param name="cancellationToken">Optionally used to propagate cancellation requests.</param>
         /// <returns>Information related to a release. Returns <see langword="null"/> if not found or an error occurs.</returns>
-        public static async Task<IReleaseInfo?> FetchLatest2xReleaseAsync(CancellationToken cancellationToken = default)
+        public static async Task<IReleaseInfo?> FetchLatestVersionedRelease(int majorVersion, CancellationToken cancellationToken = default)
         {
             try
             {
                 foreach (Tag tag in await UpdateMethods.FetchTagsAsync(cancellationToken).ConfigureAwait(false))
                 {
-                    if (tag.Version.Major != 2)
+                    if (tag.Version.Major != majorVersion)
                     {
                         continue;
                     }
-                    Release? release = await UpdateMethods.FetchReleaseAsync(tag.Name, cancellationToken).ConfigureAwait(false);
-                    if (release != null && release.HasUpdateAsset)
+                    if (await UpdateMethods.FetchReleaseAsync(tag.Name, cancellationToken).ConfigureAwait(false) is { HasUpdateAsset: true } release)
                     {
                         return release;
                     }
@@ -62,6 +76,14 @@ namespace KoAR.SaveEditor.Updates
             }
             return default;
         }
+
+        /// <summary>
+        /// Fetches the latest 2.x release.
+        /// </summary>
+        /// <param name="cancellationToken">Optionally used to propagate cancellation requests.</param>
+        /// <returns>Information related to a release. Returns <see langword="null"/> if not found or an error occurs.</returns>
+        public static Task<IReleaseInfo?> FetchLatest2xReleaseAsync(CancellationToken cancellationToken = default) =>
+            UpdateMethods.FetchLatestVersionedRelease(2, cancellationToken);
 
         /// <summary>
         /// Fetches an array of the interim update releases for the current major version of the application to the latest.

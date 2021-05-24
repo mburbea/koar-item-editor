@@ -33,7 +33,7 @@ namespace KoAR.Core
             IsRemaster = BitConverter.ToInt32(Bytes, 8) == 0;
             SaveType = IsRemaster switch
             {
-                true when Path.GetExtension(fileName) is "" && Bytes.Length != 4_462_592 => SaveType.Switch,
+                true when Path.GetExtension(fileName) is "" => SaveType.Switch,
                 true => SaveType.Remaster,
                 false => SaveType.Original,
             };
@@ -151,11 +151,10 @@ namespace KoAR.Core
         private void FindEquippedItems(int playerActor)
         {
             var data = Body.AsSpan();
-            ReadOnlySpan<byte> signature = new byte[9] { 0x0B, 0x00, 0x00, 0x00, 0x41, 0xF5, 0x7E, 0x00, (byte)(SaveType == SaveType.Switch ? 0x05 : 0x04) };
-            Span<byte> temp = stackalloc byte[13];
+            Span<byte> temp = stackalloc byte[12];
             MemoryUtilities.Write(temp, 0, playerActor);
-            signature.CopyTo(temp[4..]);
-            int offset = data.IndexOf(MemoryMarshal.AsBytes(temp));
+            MemoryUtilities.Write(temp, 4, 0x00_7E_F5_41_00_00_00_0Bul);
+            int offset = data.IndexOf(temp);
             int dataLength = MemoryUtilities.Read<int>(data, offset + 13);
             // 17 is the loot table
             // 21 is the count of items in the inventory.
