@@ -92,8 +92,7 @@ namespace KoAR.SaveEditor.Constructs
                 return;
             }
             double offset = Math.Max(this._scrollViewer.HorizontalOffset - 2d, 0d);
-            TabItem? tabItem = this.GetItemByOffset(offset);
-            if (tabItem != null)
+            if (this.GetItemByOffset(offset) is TabItem tabItem)
             {
                 this.ScrollToItem(tabItem);
             }
@@ -106,8 +105,7 @@ namespace KoAR.SaveEditor.Constructs
                 return;
             }
             double offset = Math.Min(this._scrollViewer.HorizontalOffset + this._scrollViewer.ViewportWidth + 2d, this._scrollViewer.ExtentWidth);
-            TabItem? tabItem = this.GetItemByOffset(offset);
-            if (tabItem != null)
+            if (this.GetItemByOffset(offset) is TabItem tabItem)
             {
                 this.ScrollToItem(tabItem);
             }
@@ -132,16 +130,17 @@ namespace KoAR.SaveEditor.Constructs
 
         private void ScrollToSelectedItem()
         {
-            if (this._scrollViewer != null && this.ItemContainerGenerator.ContainerFromItem(this.SelectedItem) is TabItem tabItem)
+            if (this._scrollViewer == null || this.ItemContainerGenerator.ContainerFromItem(this.SelectedItem) is not TabItem tabItem)
             {
-                if (tabItem.IsLoaded)
-                {
-                    this.ScrollToItem(tabItem);
-                }
-                else
-                {
-                    tabItem.Loaded += this.TabItem_Loaded;
-                }
+                return;
+            }
+            if (tabItem.IsLoaded)
+            {
+                this.ScrollToItem(tabItem);
+            }
+            else
+            {
+                tabItem.Loaded += this.TabItem_Loaded;
             }
         }
 
