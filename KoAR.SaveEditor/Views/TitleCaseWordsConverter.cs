@@ -12,13 +12,13 @@ namespace KoAR.SaveEditor.Views
 
         object IValueConverter.Convert([AllowNull] object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value?.ToString() is string text
-                ? text.IndexOfAny(TitleCaseWordsConverter._allCaps, 1) switch
-                  {
-                      int index when index != -1 => $"{text.Substring(0, index)} {text.Substring(index)}",
-                      _ => text
-                  }
-                : DependencyProperty.UnsetValue;
+            if (value?.ToString() is not string text)
+            {
+                return DependencyProperty.UnsetValue;
+            }
+            return text.IndexOfAny(TitleCaseWordsConverter._allCaps, 1) is int index and not -1
+                ? $"{text[..index]} {text[index..]}"
+                : text;
         }
 
         object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();

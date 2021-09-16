@@ -100,11 +100,15 @@ namespace KoAR.SaveEditor.Constructs
 
             public static implicit operator Segment(string text) => new(text, false);
 
+            public static bool operator ==(Segment left, Segment right) => left.Equals(right);
+
+            public static bool operator !=(Segment left, Segment right) => !left.Equals(right);
+
             public bool Equals(Segment other) => (this.Text, this.IsMatch) == (other.Text, other.IsMatch);
 
             public override bool Equals(object? obj) => obj is Segment other && this.Equals(other);
 
-            public override int GetHashCode() => (this.Text, this.IsMatch).GetHashCode();
+            public override int GetHashCode() => HashCode.Combine(this.Text, this.IsMatch);
         }
     }
 }
