@@ -13,8 +13,10 @@ using KoAR.SaveEditor.Views.Inventory;
 using KoAR.SaveEditor.Views.Stash;
 using KoAR.SaveEditor.Views.Updates;
 using Microsoft.Win32;
-using KPreisser.UI;
 using System.Windows.Interop;
+using KPreisser.UI;
+using TaskDialog2 = System.Windows.Forms.TaskDialog;
+using TaskDialog2Icon = System.Windows.Forms.TaskDialogIcon;
 
 namespace KoAR.SaveEditor.Views.Main
 {
@@ -129,12 +131,13 @@ namespace KoAR.SaveEditor.Views.Main
             }
             catch (NotSupportedException e)
             {
-                TaskDialog.Show(
-                    title: "KoAR Save Editor",
-                    instruction: "File Not Supported",
-                    text: e.Message,
-                    icon: TaskDialogStandardIcon.Error
-                );
+                TaskDialog2.ShowDialog(new()
+                {
+                    Caption = "KoAR Save Editor",
+                    Heading = "File Not Supported",
+                    Text = e.Message,
+                    Icon = TaskDialog2Icon.Error
+                });
                 return;
             }
             catch (Exception e)
