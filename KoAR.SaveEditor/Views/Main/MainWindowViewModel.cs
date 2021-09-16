@@ -242,38 +242,7 @@ The editor attemps to make educated guesses as to the save file directory.
             try
             {
                 using CancellationTokenSource source = new(2500);
-                if (Settings.Default.Acknowledged3x)
-                {
-                    await this.UpdateNotifier.CheckForUpdatesAsync(source.Token).ConfigureAwait(false);
-                }
-                else
-                {
-                    IReleaseInfo? release = await UpdateMethods.FetchLatest2xReleaseAsync(source.Token).ConfigureAwait(false);
-                    if (release != null)
-                    {
-                        TaskDialog dialog = new(new()
-                        {
-                            Title = "KoAR Save Editor",
-                            Instruction = $"Downgrade to v{release.Version}?",
-                            Text = $"You are currently running v{App.Version}. 3.x releases are only tested against Re-Reckoning. If you are playing Reckoning you should consider downgrading.",
-                            Icon = TaskDialogStandardIcon.Warning,
-                            CustomButtonStyle = TaskDialogCustomButtonStyle.CommandLinks,
-                            CustomButtons = {
-                                { "Continue with current version.", "I am running Re-Reckoning or willing to experiment" },
-                                { $"Downgrade to v{release.Version}.", "I am running Reckoning" }
-                            },
-                            AllowCancel = true,
-                            Footer = new(" ") // Dialog looks a bit weird without a footer.
-                        });
-                        TaskDialogButton result = dialog.Show();
-                        Settings.Default.Acknowledged3x = true;
-                        if (result == dialog.Page.CustomButtons[1])
-                        {
-                            application.Dispatcher.Invoke(new Action<IReleaseInfo>(this.OpenOriginalUpdateWindow), release);
-                            return;
-                        }
-                    }
-                }
+                await this.UpdateNotifier.CheckForUpdatesAsync(source.Token).ConfigureAwait(false);
             }
             catch (OperationCanceledException)
             {
