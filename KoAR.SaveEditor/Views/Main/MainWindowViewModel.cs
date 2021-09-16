@@ -173,6 +173,67 @@ namespace KoAR.SaveEditor.Views.Main
             MessageBox.Show(Application.Current.MainWindow, $"Save successful! Original save backed up as {backupPath}.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
+        public async void ShowHelp()
+        {
+            TaskDialog dialog = new(new()
+            {
+                Title = $"KoAR Save Editor",
+                Instruction = "Help",
+                Icon = TaskDialogStandardIcon.Information,
+                CustomButtonStyle = TaskDialogCustomButtonStyle.CommandLinks,
+                CustomButtons = {
+                    { "Ok.","Close this window" },
+                    { "Found a bug? File a new github bug report.", "Requires a free account" },
+                    { "Downgrade to v2.", "I am running Reckoning" },
+                },
+                SizeToContent = true,
+                AllowCancel = true,
+                Footer = new(" "), // Dialog looks a bit weird without a footer.
+                Text = @"This version of the editor is only tested against the remaster.
+If you're on the original and are running into errors consider downgrading.
+1. Your saves are usually not in the same folder as the game.
+The editor attemps to make educated guesses as to the save file directory.
+2. When modifying item names, do NOT use special characters.
+3. Editing equipped items is restricted, and even still may cause game crashes."
+            });
+            TaskDialogButton result = dialog.Show(new WindowInteropHelper(Application.Current.MainWindow).Handle);
+            if (result == dialog.Page.CustomButtons[1])
+            {
+                Process.Start(new ProcessStartInfo("https://github.com/mburbea/koar-item-editor/issues/new?labels=bug&template=bug_report.md")
+                {
+                    UseShellExecute = true
+                })?.Dispose();
+            }
+            else if (result == dialog.Page.CustomButtons[2])
+            {
+                bool dispatched = false;
+                using CancellationTokenSource source = new(2500);
+                try
+                {
+                    IReleaseInfo? release = await UpdateMethods.FetchLatest2xReleaseAsync(source.Token).ConfigureAwait(false);
+                    if (release != null)
+                    {
+                        dispatched = true;
+                        Application.Current.Dispatcher.Invoke(new Action<IReleaseInfo>(this.OpenOriginalUpdateWindow), release);
+                    }
+                }
+                catch (OperationCanceledException)
+                {
+                }
+                finally
+                {
+                    if (!dispatched)
+                    {
+                        // this might fail if the github is down or your internet sucks. For now let's try to open a browser window to nexusmods."
+                        Process.Start(new ProcessStartInfo("https://www.nexusmods.com/kingdomsofamalurreckoning/mods/10?tab=files")
+                        {
+                            UseShellExecute = true
+                        })?.Dispose();
+                    }
+                }
+            }
+        }
+
         private async void Application_Activated(object? sender, EventArgs e)
         {
             Application application = (Application)sender!;

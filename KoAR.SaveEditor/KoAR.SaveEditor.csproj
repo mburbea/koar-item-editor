@@ -215,7 +215,6 @@
     <PackageReference Include="KPreisser.UI.TaskDialog" Version="1.0.0" />
     <PackageReference Include="MdXaml_migfree" Version="1.9.0" />
     <PackageReference Include="MdXaml_migfree" Version="1.9.0" />
-    <PackageReference Include="WPFTaskDialog" Version="1.7.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\KoAR.Core\KoAR.Core.csproj" />
