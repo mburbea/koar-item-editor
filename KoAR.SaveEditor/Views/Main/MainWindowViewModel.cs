@@ -14,9 +14,10 @@ using KoAR.SaveEditor.Views.Stash;
 using KoAR.SaveEditor.Views.Updates;
 using Microsoft.Win32;
 using System.Windows.Interop;
-using KPreisser.UI;
-using TaskDialog2 = System.Windows.Forms.TaskDialog;
-using TaskDialog2Icon = System.Windows.Forms.TaskDialogIcon;
+using TaskDialog = System.Windows.Forms.TaskDialog;
+using TaskDialogButton = System.Windows.Forms.TaskDialogButton;
+using TaskDialogIcon = System.Windows.Forms.TaskDialogIcon;
+using TaskDialogCommandLinkButton = System.Windows.Forms.TaskDialogCommandLinkButton;
 
 namespace KoAR.SaveEditor.Views.Main
 {
@@ -131,12 +132,12 @@ namespace KoAR.SaveEditor.Views.Main
             }
             catch (NotSupportedException e)
             {
-                TaskDialog2.ShowDialog(new()
+                TaskDialog.ShowDialog(new()
                 {
                     Caption = "KoAR Save Editor",
                     Heading = "File Not Supported",
                     Text = e.Message,
-                    Icon = TaskDialog2Icon.Error
+                    Icon = TaskDialogIcon.Error
                 });
                 return;
             }
@@ -155,14 +156,6 @@ namespace KoAR.SaveEditor.Views.Main
             this.Mode = Mode.Inventory;
         }
 
-        public void OpenOriginalUpdateWindow(IReleaseInfo release)
-        {
-            Settings.Default.Save();
-            using OriginalUpdateViewModel viewModel = new(release);
-            UpdateWindow window = new() { DataContext = viewModel, Owner = Application.Current.MainWindow };
-            window.ShowDialog();
-        }
-
         public void RegisterUnsavedChange() => this.HasUnsavedChanges = true;
 
         public void SaveFile()
@@ -178,63 +171,71 @@ namespace KoAR.SaveEditor.Views.Main
 
         public async void ShowHelp()
         {
-            TaskDialog dialog = new(new()
+            TaskDialogButton button = TaskDialog.ShowDialog(new WindowInteropHelper(Application.Current.MainWindow).Handle, new()
             {
-                Title = $"KoAR Save Editor",
-                Instruction = "Help",
-                Icon = TaskDialogStandardIcon.Information,
-                CustomButtonStyle = TaskDialogCustomButtonStyle.CommandLinks,
-                CustomButtons = {
-                    { "Ok.","Close this window" },
-                    { "Found a bug? File a new github bug report.", "Requires a free account" },
-                    { "Downgrade to v2.", "I am running Reckoning" },
+                Caption = "KoAR Save Editor",
+                Heading = "Help",
+                Icon = TaskDialogIcon.Information,
+                Buttons =
+                {
+                    new TaskDialogCommandLinkButton("OK", "Close this window") { Tag = 0 },
+                    new TaskDialogCommandLinkButton("Found a bug? File a new github bug report.", "Requires a free account") { Tag = 1 },
+                    new TaskDialogCommandLinkButton("Downgrade to v2.", "I am running Reckoning") { Tag = 2 },
                 },
                 SizeToContent = true,
                 AllowCancel = true,
-                Footer = new(" "), // Dialog looks a bit weird without a footer.
                 Text = @"This version of the editor is only tested against the remaster.
 If you're on the original and are running into errors consider downgrading.
 1. Your saves are usually not in the same folder as the game.
 The editor attemps to make educated guesses as to the save file directory.
 2. When modifying item names, do NOT use special characters.
-3. Editing equipped items is restricted, and even still may cause game crashes."
+3. Editing equipped items is restricted, and even still may cause game crashes.",
+                Footnote = new(" ")
             });
-            TaskDialogButton result = dialog.Show(new WindowInteropHelper(Application.Current.MainWindow).Handle);
-            if (result == dialog.Page.CustomButtons[1])
+            if (button is not { Tag: int tag and > 0 })
             {
+                return;
+            }
+            if (tag == 1) {
                 Process.Start(new ProcessStartInfo("https://github.com/mburbea/koar-item-editor/issues/new?labels=bug&template=bug_report.md")
                 {
                     UseShellExecute = true
                 })?.Dispose();
+                return;
             }
-            else if (result == dialog.Page.CustomButtons[2])
+            bool dispatched = false;
+            using CancellationTokenSource source = new(2500);
+            try
             {
-                bool dispatched = false;
-                using CancellationTokenSource source = new(2500);
-                try
+                IReleaseInfo? release = await UpdateMethods.FetchLatest2xReleaseAsync(source.Token).ConfigureAwait(false);
+                if (release != null)
                 {
-                    IReleaseInfo? release = await UpdateMethods.FetchLatest2xReleaseAsync(source.Token).ConfigureAwait(false);
-                    if (release != null)
-                    {
-                        dispatched = true;
-                        Application.Current.Dispatcher.Invoke(new Action<IReleaseInfo>(this.OpenOriginalUpdateWindow), release);
-                    }
-                }
-                catch (OperationCanceledException)
-                {
-                }
-                finally
-                {
-                    if (!dispatched)
-                    {
-                        // this might fail if the github is down or your internet sucks. For now let's try to open a browser window to nexusmods."
-                        Process.Start(new ProcessStartInfo("https://www.nexusmods.com/kingdomsofamalurreckoning/mods/10?tab=files")
-                        {
-                            UseShellExecute = true
-                        })?.Dispose();
-                    }
+                    dispatched = true;
+                    Application.Current.Dispatcher.Invoke(new Action<IReleaseInfo>(MainWindowViewModel.OpenOriginalUpdateWindow), release);
                 }
             }
+            catch (OperationCanceledException)
+            {
+            }
+            finally
+            {
+                if (!dispatched)
+                {
+                    // this might fail if the github is down or your internet sucks. For now let's try to open a browser window to nexusmods."
+                    Process.Start(new ProcessStartInfo("https://www.nexusmods.com/kingdomsofamalurreckoning/mods/10?tab=files")
+                    {
+                        UseShellExecute = true
+                    })?.Dispose();
+                }
+            }
+        }
+
+        private static void OpenOriginalUpdateWindow(IReleaseInfo release)
+        {
+            Settings.Default.Save();
+            using OriginalUpdateViewModel viewModel = new(release);
+            UpdateWindow window = new() { DataContext = viewModel, Owner = Application.Current.MainWindow };
+            window.ShowDialog();
         }
 
         private async void Application_Activated(object? sender, EventArgs e)
@@ -256,34 +257,32 @@ The editor attemps to make educated guesses as to the save file directory.
             }
         }
 
-        private bool CancelDueToUnsavedChanges(TaskDialogCustomButton proceedText, TaskDialogCustomButton saveProceedText, TaskDialogCustomButton cancelDescription)
+        private bool CancelDueToUnsavedChanges(TaskDialogCommandLinkButton proceedButton, TaskDialogCommandLinkButton saveProceedButton, TaskDialogCommandLinkButton cancelButton)
         {
             if (!this.HasUnsavedChanges)
             {
                 return false;
             }
-            TaskDialog dialog = new(new()
+            var button = TaskDialog.ShowDialog(new WindowInteropHelper(Application.Current.MainWindow).Handle,new()
             {
-                Instruction = "Unsaved Changes Detected!",
+                Heading = "Unsaved Changes Detected!",
                 Text = "Changed were made to the equipment that have not been saved.",
-                CustomButtons =
+                Buttons =
                 {
-                    proceedText,
-                    saveProceedText,
-                    cancelDescription
+                    proceedButton,
+                    saveProceedButton,
+                    cancelButton
                 },
-                Title = "KoAR Save Editor",
-                Icon = TaskDialogStandardIcon.Warning,
-                CustomButtonStyle = TaskDialogCustomButtonStyle.CommandLinks,
+                Caption = "KoAR Save Editor",
+                Icon = TaskDialogIcon.Warning,
                 AllowCancel = true,
-                Footer = new(" ") // Dialog looks a bit weird without a footer.
+                Footnote = new(" ") // Dialog looks a bit weird without a footer.
             });
-            TaskDialogButton result = dialog.Show(new WindowInteropHelper(Application.Current.MainWindow).Handle);
-            if (result == dialog.Page.CustomButtons[0])
+            if (button == proceedButton)
             {
                 return false;
             }
-            else if (result == dialog.Page.CustomButtons[1])
+            else if (button == saveProceedButton)
             {
                 this.SaveFile();
                 return false;

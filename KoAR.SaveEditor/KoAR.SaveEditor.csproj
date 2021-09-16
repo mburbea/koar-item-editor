@@ -212,7 +212,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="KPreisser.UI.TaskDialog" Version="1.0.0" />
     <PackageReference Include="MdXaml_migfree" Version="1.9.0" />
     <PackageReference Include="MdXaml_migfree" Version="1.9.0" />
   </ItemGroup>
