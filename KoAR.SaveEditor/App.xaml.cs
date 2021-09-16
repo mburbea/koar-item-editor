@@ -3,10 +3,10 @@ using System.Diagnostics;
 using System.Net;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Threading;
 using KoAR.SaveEditor.Properties;
 using Microsoft.Windows.Themes;
-using KPreisser.UI;
 
 namespace KoAR.SaveEditor
 {
@@ -19,20 +19,21 @@ namespace KoAR.SaveEditor
         public static void ShowExceptionDialog(string mainInstruction, Exception exception)
         {
             string content = $"{exception.GetType().FullName}: {exception.Message}";
-            TaskDialog dialog = new(new()
+            TaskDialogPage page = new()
             {
-                Title = "KoAR Save Editor",
-                Instruction = mainInstruction,
+                Caption = "KoAR Save Editor",
+                Heading = mainInstruction,
                 Text = content,
-                Expander = {
+                Expander = new()
+                {
                     Text = exception.StackTrace,
-                    ExpandFooterArea = true,
+                    Position = TaskDialogExpanderPosition.AfterFootnote,
                 },
-                CheckBox = new("Open GitHub bug report? (requires free account)"),
-                Icon = TaskDialogStandardIcon.Error,
-            });
-            dialog.Show();
-            if (dialog.Page.CheckBox.Checked)
+                Verification = new("Open GitHub bug report? (requires free account)"),
+                Icon = TaskDialogIcon.Error,
+            };
+            TaskDialog.ShowDialog(page);
+            if (page.Verification!.Checked)
             {
                 string title = $"{content} (in v{App.Version})";                
                 Process.Start(new ProcessStartInfo($"https://github.com/mburbea/koar-item-editor/issues/new?labels=bug&template=bug_report.md&title={WebUtility.UrlEncode(title)}")
