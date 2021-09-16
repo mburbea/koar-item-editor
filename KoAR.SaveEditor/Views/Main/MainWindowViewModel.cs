@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Windows;
+using System.Windows.Interop;
 using System.Windows.Threading;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
@@ -13,11 +14,10 @@ using KoAR.SaveEditor.Views.Inventory;
 using KoAR.SaveEditor.Views.Stash;
 using KoAR.SaveEditor.Views.Updates;
 using Microsoft.Win32;
-using System.Windows.Interop;
 using TaskDialog = System.Windows.Forms.TaskDialog;
 using TaskDialogButton = System.Windows.Forms.TaskDialogButton;
-using TaskDialogIcon = System.Windows.Forms.TaskDialogIcon;
 using TaskDialogCommandLinkButton = System.Windows.Forms.TaskDialogCommandLinkButton;
+using TaskDialogIcon = System.Windows.Forms.TaskDialogIcon;
 
 namespace KoAR.SaveEditor.Views.Main
 {
