@@ -65,17 +65,15 @@ namespace KoAR.SaveEditor.Views
         private static void ItemProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             ItemDefinitionControl control = (ItemDefinitionControl)d;
-            if (e.OldValue != null)
+            if (e.OldValue is ItemModelBase oldItem)
             {
-                ItemModelBase oldItem = (ItemModelBase)e.OldValue;
                 PropertyChangedEventManager.RemoveHandler(oldItem, control.Item_DefinitionChanged, nameof(oldItem.Definition));
             }
-            ItemModelBase? item = (ItemModelBase)e.NewValue;
-            if (item != null)
+            if (e.NewValue is ItemModelBase newItem)
             {
-                control.Definition = item.Definition;
-                PropertyChangedEventManager.AddHandler(item, control.Item_DefinitionChanged, nameof(item.Definition));
-                control.Sockets = item.Item.GetSockets();
+                control.Definition = newItem.Definition;
+                PropertyChangedEventManager.AddHandler(newItem, control.Item_DefinitionChanged, nameof(newItem.Definition));
+                control.Sockets = newItem.Item.GetSockets();
             }
             else
             {

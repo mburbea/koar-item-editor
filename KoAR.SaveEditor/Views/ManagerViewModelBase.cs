@@ -59,7 +59,8 @@ namespace KoAR.SaveEditor.Views
         protected void AddItem(TItem item)
         {
             this.AttachEvents(item);
-            this._items.Add(item);
+            this._items.Add(item); 
+            this.FilteredItems = this.Items.GetFilteredItems(this.ItemFilters);
         }
 
         protected virtual void AttachEvents(TItem item) => PropertyChangedEventManager.AddHandler(item, this.Item_PropertyChanged, string.Empty);
@@ -109,6 +110,7 @@ namespace KoAR.SaveEditor.Views
             using TItem item = this._items[index];
             this.DetachEvents(item);
             this._items.RemoveAt(index);
+            this.FilteredItems = this.Items.GetFilteredItems(this.ItemFilters);
         }
     }
 }

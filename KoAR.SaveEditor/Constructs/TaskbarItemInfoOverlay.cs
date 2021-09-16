@@ -53,8 +53,7 @@ namespace KoAR.SaveEditor.Constructs
             {
                 return;
             }
-            object? content = TaskbarItemInfoOverlay.GetContent(info);
-            if (content == null)
+            if (TaskbarItemInfoOverlay.GetContent(info) is not object content)
             {
                 info.Overlay = null;
                 return;
