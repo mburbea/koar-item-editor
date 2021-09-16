@@ -26,10 +26,9 @@ namespace KoAR.SaveEditor.Constructs
             dependencyObject?.SetValue(ValidatingPropertyBehavior.ValidatingPropertyProperty, property);
         }
 
-        private static void DependencyProperty_ValueChanged(object sender, EventArgs e)
+        private static void DependencyProperty_ValueChanged(object? sender, EventArgs e)
         {
-            DependencyObject dependencyObject = (DependencyObject)sender;
-            if (ValidatingPropertyBehavior.GetValidatingProperty(dependencyObject) is DependencyProperty property)
+            if (sender is DependencyObject dependencyObject && ValidatingPropertyBehavior.GetValidatingProperty(dependencyObject) is DependencyProperty property)
             {
                 dependencyObject.Validate(property);
             }
