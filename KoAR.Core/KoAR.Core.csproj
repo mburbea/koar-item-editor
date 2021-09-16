@@ -34,9 +34,9 @@
     <EmbeddedResource Include="Data.zip" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Crc32.NET" Version="1.2.0" />
     <PackageReference Include="DotNetZip" Version="1.15.0" />
     <PackageReference Include="StringLiteralGenerator" Version="1.1.0" />
+    <PackageReference Include="System.IO.Hashing" Version="6.0.0-rc.1.21451.13" />
   </ItemGroup>
   <Target Name="ZipData" BeforeTargets="BeforeBuild">
     <ZipDirectory SourceDirectory="$(MSBuildProjectDirectory)\Data" DestinationFile="$(MSBuildProjectDirectory)\Data.zip" Overwrite="True" />

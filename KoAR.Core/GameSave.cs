@@ -1,9 +1,9 @@
-﻿using Force.Crc32;
-using Ionic.Zlib;
+﻿using Ionic.Zlib;
 using StringLiteral;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Hashing;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -252,8 +252,8 @@ namespace KoAR.Core
                     BodyDataLength = Body.Length;
                     Body.CopyTo(Bytes, BodyStart);
                 }
-                Unsafe.WriteUnaligned(ref Bytes[0], Crc32Algorithm.Compute(Bytes, 8, Bytes.Length - 8)); // fileCrc
-                Unsafe.WriteUnaligned(ref Bytes[4], Crc32Algorithm.Compute(Bytes, 8, _header.Length)); // headerCrc
+                Crc32.Hash(Bytes.AsSpan(8), Bytes);
+                Crc32.Hash(Bytes.AsSpan(8, _header.Length), Bytes.AsSpan(4,4));
             }
             else
             {
