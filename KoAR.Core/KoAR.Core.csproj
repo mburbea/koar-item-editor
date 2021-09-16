@@ -36,7 +36,7 @@
   <ItemGroup>
     <PackageReference Include="Crc32.NET" Version="1.2.0" />
     <PackageReference Include="DotNetZip" Version="1.15.0" />
-    <PackageReference Include="StringLiteralGenerator" Version="1.0.1" />
+    <PackageReference Include="StringLiteralGenerator" Version="1.1.0" />
   </ItemGroup>
   <Target Name="ZipData" BeforeTargets="BeforeBuild">
     <ZipDirectory SourceDirectory="$(MSBuildProjectDirectory)\Data" DestinationFile="$(MSBuildProjectDirectory)\Data.zip" Overwrite="True" />

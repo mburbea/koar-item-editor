@@ -213,7 +213,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MdXaml_migfree" Version="1.9.0" />
-    <PackageReference Include="MdXaml_migfree" Version="1.9.0" />
+    <PackageReference Include="MdXaml_migfree" Version="1.11.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\KoAR.Core\KoAR.Core.csproj" />
