@@ -9,7 +9,6 @@ using System.Windows.Threading;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
 using KoAR.SaveEditor.Properties;
-using KoAR.SaveEditor.Updates;
 using KoAR.SaveEditor.Views.Inventory;
 using KoAR.SaveEditor.Views.Stash;
 using KoAR.SaveEditor.Views.Updates;
@@ -166,76 +165,19 @@ namespace KoAR.SaveEditor.Views.Main
             }
             string backupPath = this.GameSave.SaveFile();
             this.HasUnsavedChanges = false;
-            MessageBox.Show(Application.Current.MainWindow, $"Save successful! Original save backed up as {backupPath}.", "KoAR Save Editor", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-
-        public async void ShowHelp()
-        {
-            TaskDialogButton button = TaskDialog.ShowDialog(new WindowInteropHelper(Application.Current.MainWindow).Handle, new()
+            TaskDialog.ShowDialog(new WindowInteropHelper(Application.Current.MainWindow).Handle, new()
             {
                 Caption = "KoAR Save Editor",
-                Heading = "Help",
-                Icon = TaskDialogIcon.Information,
-                Buttons =
+                Heading = "Save Successful!",
+                Text = $"Original save backed up as {backupPath}.",
+                Buttons = 
                 {
-                    new TaskDialogCommandLinkButton("OK", "Close this window") { Tag = 0 },
-                    new TaskDialogCommandLinkButton("Found a bug? File a new github bug report.", "Requires a free account") { Tag = 1 },
-                    new TaskDialogCommandLinkButton("Downgrade to v2.", "I am running Reckoning") { Tag = 2 },
+                    TaskDialogButton.OK 
                 },
-                SizeToContent = true,
+                DefaultButton = TaskDialogButton.OK,
                 AllowCancel = true,
-                Text = @"This version of the editor is only tested against the remaster.
-If you're on the original and are running into errors consider downgrading.
-1. Your saves are usually not in the same folder as the game.
-The editor attemps to make educated guesses as to the save file directory.
-2. When modifying item names, do NOT use special characters.
-3. Editing equipped items is restricted, and even still may cause game crashes.",
-                Footnote = new(" ")
+                Icon = TaskDialogIcon.Information,
             });
-            if (button is not { Tag: int tag and > 0 })
-            {
-                return;
-            }
-            if (tag == 1) {
-                Process.Start(new ProcessStartInfo("https://github.com/mburbea/koar-item-editor/issues/new?labels=bug&template=bug_report.md")
-                {
-                    UseShellExecute = true
-                })?.Dispose();
-                return;
-            }
-            bool dispatched = false;
-            using CancellationTokenSource source = new(2500);
-            try
-            {
-                IReleaseInfo? release = await UpdateMethods.FetchLatest2xReleaseAsync(source.Token).ConfigureAwait(false);
-                if (release != null)
-                {
-                    dispatched = true;
-                    Application.Current.Dispatcher.Invoke(new Action<IReleaseInfo>(MainWindowViewModel.OpenOriginalUpdateWindow), release);
-                }
-            }
-            catch (OperationCanceledException)
-            {
-            }
-            finally
-            {
-                if (!dispatched)
-                {
-                    // this might fail if the github is down or your internet sucks. For now let's try to open a browser window to nexusmods."
-                    Process.Start(new ProcessStartInfo("https://www.nexusmods.com/kingdomsofamalurreckoning/mods/10?tab=files")
-                    {
-                        UseShellExecute = true
-                    })?.Dispose();
-                }
-            }
-        }
-
-        private static void OpenOriginalUpdateWindow(IReleaseInfo release)
-        {
-            Settings.Default.Save();
-            using OriginalUpdateViewModel viewModel = new(release);
-            UpdateWindow window = new() { DataContext = viewModel, Owner = Application.Current.MainWindow };
-            window.ShowDialog();
         }
 
         private async void Application_Activated(object? sender, EventArgs e)
@@ -263,7 +205,7 @@ The editor attemps to make educated guesses as to the save file directory.
             {
                 return false;
             }
-            var button = TaskDialog.ShowDialog(new WindowInteropHelper(Application.Current.MainWindow).Handle,new()
+            var button = TaskDialog.ShowDialog(new WindowInteropHelper(Application.Current.MainWindow).Handle, new()
             {
                 Heading = "Unsaved Changes Detected!",
                 Text = "Changed were made to the equipment that have not been saved.",
