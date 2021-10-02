@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
-using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Interop;
 using System.Windows.Threading;
 using KoAR.Core;
@@ -12,11 +12,8 @@ using KoAR.SaveEditor.Properties;
 using KoAR.SaveEditor.Views.Inventory;
 using KoAR.SaveEditor.Views.Stash;
 using KoAR.SaveEditor.Views.Updates;
-using Microsoft.Win32;
-using TaskDialog = System.Windows.Forms.TaskDialog;
-using TaskDialogButton = System.Windows.Forms.TaskDialogButton;
-using TaskDialogCommandLinkButton = System.Windows.Forms.TaskDialogCommandLinkButton;
-using TaskDialogIcon = System.Windows.Forms.TaskDialogIcon;
+using Application = System.Windows.Application;
+using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
 namespace KoAR.SaveEditor.Views.Main
 {
@@ -33,7 +30,7 @@ namespace KoAR.SaveEditor.Views.Main
         {
             this.CheckForUpdateCommand = new(this.CheckForUpdate, () => !this._isCheckingForUpdate);
             this.OpenUpdateWindowCommand = new(() => this.OpenUpdateWindow());
-            if (!(bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(Window)).DefaultValue)
+            if (!(bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(dependencyObject: new()).DefaultValue)
             {
                 Application.Current.Activated += this.Application_Activated;
             }
@@ -170,9 +167,9 @@ namespace KoAR.SaveEditor.Views.Main
                 Caption = "KoAR Save Editor",
                 Heading = "Save Successful!",
                 Text = $"Original save backed up as {backupPath}.",
-                Buttons = 
+                Buttons =
                 {
-                    TaskDialogButton.OK 
+                    TaskDialogButton.OK
                 },
                 DefaultButton = TaskDialogButton.OK,
                 AllowCancel = true,
