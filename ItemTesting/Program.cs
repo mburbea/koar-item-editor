@@ -1,8 +1,12 @@
-﻿using System.Linq;
+﻿using System;
+using System.IO;
+using System.Linq;
+using System.Text;
 using KoAR.Core;
 
 namespace ItemTesting
 {
+
     //    static class Program
     //    {
     //        static byte[] GetBytesFromText(string text)
@@ -39,21 +43,7 @@ namespace ItemTesting
     //            }
     //            return results;
     //        }
-    //        static void ConvertSymbolsToCsv(string inPath, string outPath)
-    //        {
-    //            foreach (var file in Directory.EnumerateFiles(inPath, "symbol_table_*.bin", SearchOption.TopDirectoryOnly))
-    //            {
-    //                var fileInfo = new FileInfo(file);
-    //                var data = File.ReadAllBytes(file);
-    //                var elementCount = BitConverter.ToInt32(data, 0);
-    //                var firstString = 8 + elementCount * 12;
 
-    //                File.WriteAllLines(Path.Combine(outPath, fileInfo.Name["symbol_table_".Length..^4] + ".csv"),
-    //                    Enumerable.Range(0, elementCount)
-    //                    .Select(x => (id: BitConverter.ToInt32(data, 4 + x * 12), s: BitConverter.ToInt32(data, 4 + x * 12 + 4), e: BitConverter.ToInt32(data, 4 + x * 12 + 8)))
-    //                    .Select(y => $"{y.id:X6},{Encoding.Default.GetString(data[(firstString + y.s)..(firstString + y.e)])}").Prepend("id,value"));
-    //            }
-    //        }
 
     //        private static char[] AllCaps = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
     //        private static DisposableLocalDb LocalDb;
@@ -76,6 +66,22 @@ namespace ItemTesting
     //        }
     static class Program
     {
+
+                static void ConvertSymbolsToCsv(string inPath, string outPath)
+                {
+                    foreach (var file in Directory.EnumerateFiles(inPath, "symbol_table_*.bin", SearchOption.TopDirectoryOnly))
+                    {
+                        var fileInfo = new FileInfo(file);
+                        var data = File.ReadAllBytes(file);
+                        var elementCount = BitConverter.ToInt32(data, 0);
+                        var firstString = 8 + elementCount * 12;
+
+                File.WriteAllText(Path.Combine(outPath, fileInfo.Name["symbol_table_".Length..^4] + ".lua"),
+                    "{\n"+string.Join(",\n", Enumerable.Range(0, elementCount)
+                    .Select(x => (id: BitConverter.ToInt32(data, 4 + x * 12), s: BitConverter.ToInt32(data, 4 + x * 12 + 4), e: BitConverter.ToInt32(data, 4 + x * 12 + 8)))
+                    .Select(y => $"{{'{y.id:X6}','{Encoding.Default.GetString(data[(firstString + y.s)..(firstString + y.e - 1)])}'}}"))+"\n}");
+                    }
+                }
         //static void Main()
         //{
         //    const string path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save77.sav";
@@ -91,12 +97,7 @@ namespace ItemTesting
         //}
         static void Main()
         {
-            GameSave gameSave = new(@"C:\Program Files (x86)\Steam\userdata\107335713\1041720\remote\autocloud\save\svd_fmt_5_7.sav");
-            foreach (var (key, item) in Amalur.ItemDefinitions.Take(2000))
-            {
-                gameSave.Stash.AddItem(item);
-            }
-            gameSave.SaveFile();
+            ConvertSymbolsToCsv(@"C:\e\", @"C:\e\o\");
         }
     }
 }

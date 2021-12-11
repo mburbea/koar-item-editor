@@ -87,13 +87,13 @@ namespace KoAR.SaveEditor.Views.Main
                 }
             }
 
-            static void OpenInBrowser(string url) => Process.Start(new ProcessStartInfo(url) { UseShellExecute = true })?.Dispose();
+            static void OpenInBrowser(string url) => Process.Start(startInfo: new(url) { UseShellExecute = true })?.Dispose();
 
             void OpenOriginalUpdateWindow(IReleaseInfo release)
             {
                 using OriginalUpdateViewModel viewModel = new(release);
                 UpdateWindow window = new() { DataContext = viewModel, Owner = this };
-                _ = window.ShowDialog();
+                window.ShowDialog();
             }
         }
 

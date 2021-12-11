@@ -27,14 +27,14 @@ namespace KoAR.SaveEditor.Updates
         public static async void ExecuteUpdate(string zipFilePath)
         {
             string scriptFileName = await UpdateMethods.ExtractPowershellScript().ConfigureAwait(false);
-            using var process = Process.Start(new ProcessStartInfo
+            using Process process = Process.Start(new ProcessStartInfo
             {
                 WorkingDirectory = Path.GetTempPath(),
                 UseShellExecute = false,
                 FileName = "powershell.exe",
                 Arguments = $"-ExecutionPolicy Bypass -File \"{Path.GetFileName(scriptFileName)}\" {Environment.ProcessId} \"{Path.GetFileName(zipFilePath)}\"",
-            });
-            await process!.WaitForExitAsync().ConfigureAwait(false);
+            })!;
+            await process.WaitForExitAsync().ConfigureAwait(false);
             process.WaitForExit();
         }
 

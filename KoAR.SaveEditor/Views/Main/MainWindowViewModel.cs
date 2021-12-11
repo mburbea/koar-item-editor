@@ -202,7 +202,7 @@ namespace KoAR.SaveEditor.Views.Main
             {
                 return false;
             }
-            var button = TaskDialog.ShowDialog(new WindowInteropHelper(Application.Current.MainWindow).Handle, new()
+            TaskDialogButton button = TaskDialog.ShowDialog(new WindowInteropHelper(Application.Current.MainWindow).Handle, new()
             {
                 Heading = "Unsaved Changes Detected!",
                 Text = "Changed were made to the equipment that have not been saved.",
