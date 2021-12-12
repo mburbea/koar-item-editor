@@ -128,9 +128,9 @@ namespace ItemTesting
         static void Main()
         {
             ConvertSymbolsToCsv(@"C:\e\", @"C:\e\o");
-            const string path = @"C:\Program Files (x86)\Steam\userdata\107335713\1041720\remote\autocloud\save\svd_fmt_5_19.sav";
+            const string path = @"..\..\..\..\svd_fmt_5_19.sav";
             GameSave gs = new(path);
-            foreach (var item in gs.Items.Where(x=> x.Definition.Category == EquipmentCategory.Unknown))
+            foreach (var item in gs.Items.Where(x=> x.Definition.Category.IsUnknown()))
             {
                 var id = item.Definition.TypeId;
                 if (item.ItemSockets is null) continue;
