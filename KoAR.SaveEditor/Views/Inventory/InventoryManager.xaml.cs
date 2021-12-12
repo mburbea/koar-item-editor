@@ -1,7 +1,6 @@
-﻿namespace KoAR.SaveEditor.Views.Inventory
+﻿namespace KoAR.SaveEditor.Views.Inventory;
+
+partial class InventoryManager
 {
-    partial class InventoryManager
-    {
-        public InventoryManager() => this.InitializeComponent();
-    }
+    public InventoryManager() => this.InitializeComponent();
 }

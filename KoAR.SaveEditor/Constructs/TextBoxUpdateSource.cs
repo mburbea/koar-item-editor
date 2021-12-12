@@ -3,54 +3,53 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 
-namespace KoAR.SaveEditor.Constructs
+namespace KoAR.SaveEditor.Constructs;
+
+public static class TextBoxUpdateSource
 {
-    public static class TextBoxUpdateSource
+    public static readonly DependencyProperty UpdateOnEnterProperty = DependencyProperty.RegisterAttached("UpdateOnEnter", typeof(bool), typeof(TextBoxUpdateSource),
+        new(BooleanBoxes.False, TextBoxUpdateSource.UpdateOnEnterProperty_ValueChanged));
+
+    public static bool GetUpdateOnEnter(TextBox textBox) => textBox != null && (bool)textBox.GetValue(TextBoxUpdateSource.UpdateOnEnterProperty);
+
+    public static void SetUpdateOnEnter(TextBox textBox, bool value) => textBox?.SetValue(TextBoxUpdateSource.UpdateOnEnterProperty, BooleanBoxes.GetBox(value));
+
+    private static void TextBox_PreviewKeyDown(object? sender, KeyEventArgs e)
     {
-        public static readonly DependencyProperty UpdateOnEnterProperty = DependencyProperty.RegisterAttached("UpdateOnEnter", typeof(bool), typeof(TextBoxUpdateSource),
-            new(BooleanBoxes.False, TextBoxUpdateSource.UpdateOnEnterProperty_ValueChanged));
-
-        public static bool GetUpdateOnEnter(TextBox textBox) => textBox != null && (bool)textBox.GetValue(TextBoxUpdateSource.UpdateOnEnterProperty);
-
-        public static void SetUpdateOnEnter(TextBox textBox, bool value) => textBox?.SetValue(TextBoxUpdateSource.UpdateOnEnterProperty, BooleanBoxes.GetBox(value));
-
-        private static void TextBox_PreviewKeyDown(object? sender, KeyEventArgs e)
+        if (e.Key != Key.Enter || sender is not TextBox textBox)
         {
-            if (e.Key != Key.Enter || sender is not TextBox textBox)
-            {
-                return;
-            }
-            BindingExpressionBase? expression = BindingOperations.GetBindingExpressionBase(textBox, TextBox.TextProperty);
-            if (expression == null || !expression.ValidateWithoutUpdate())
-            {
-                return;
-            }
-            BindingMode mode = expression.ParentBindingBase switch
-            {
-                MultiBinding multiBinding => multiBinding.Mode,
-                Binding binding => binding.Mode,
-                _ => BindingMode.OneTime
-            };
-            if (mode == BindingMode.Default || mode == BindingMode.TwoWay || mode == BindingMode.OneWayToSource)
-            {
-                expression.UpdateSource();
-            }
+            return;
         }
-
-        private static void UpdateOnEnterProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        BindingExpressionBase? expression = BindingOperations.GetBindingExpressionBase(textBox, TextBox.TextProperty);
+        if (expression == null || !expression.ValidateWithoutUpdate())
         {
-            if (d is not TextBox textBox)
-            {
-                return;
-            }
-            if ((bool)e.OldValue)
-            {
-                WeakEventManager<TextBox, KeyEventArgs>.RemoveHandler(textBox, nameof(textBox.PreviewKeyDown), TextBoxUpdateSource.TextBox_PreviewKeyDown);
-            }
-            if ((bool)e.NewValue)
-            {
-                WeakEventManager<TextBox, KeyEventArgs>.AddHandler(textBox, nameof(textBox.PreviewKeyDown), TextBoxUpdateSource.TextBox_PreviewKeyDown);
-            }
+            return;
+        }
+        BindingMode mode = expression.ParentBindingBase switch
+        {
+            MultiBinding multiBinding => multiBinding.Mode,
+            Binding binding => binding.Mode,
+            _ => BindingMode.OneTime
+        };
+        if (mode == BindingMode.Default || mode == BindingMode.TwoWay || mode == BindingMode.OneWayToSource)
+        {
+            expression.UpdateSource();
+        }
+    }
+
+    private static void UpdateOnEnterProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is not TextBox textBox)
+        {
+            return;
+        }
+        if ((bool)e.OldValue)
+        {
+            WeakEventManager<TextBox, KeyEventArgs>.RemoveHandler(textBox, nameof(textBox.PreviewKeyDown), TextBoxUpdateSource.TextBox_PreviewKeyDown);
+        }
+        if ((bool)e.NewValue)
+        {
+            WeakEventManager<TextBox, KeyEventArgs>.AddHandler(textBox, nameof(textBox.PreviewKeyDown), TextBoxUpdateSource.TextBox_PreviewKeyDown);
         }
     }
 }

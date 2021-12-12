@@ -10,204 +10,203 @@ using System.Windows.Input;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
 
-namespace KoAR.SaveEditor.Views
+namespace KoAR.SaveEditor.Views;
+
+public sealed class ItemCollectionManager : Control
 {
-    public sealed class ItemCollectionManager : Control
+    public static readonly DependencyProperty AllItemsStolenProperty = DependencyProperty.Register(nameof(ItemCollectionManager.AllItemsStolen), typeof(bool?), typeof(ItemCollectionManager),
+        new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+
+    public static readonly DependencyProperty AllItemsUnsellableProperty = DependencyProperty.Register(nameof(ItemCollectionManager.AllItemsUnsellable), typeof(bool?), typeof(ItemCollectionManager),
+        new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+
+    public static readonly DependencyProperty AllItemsUnstashableProperty = DependencyProperty.Register(nameof(ItemCollectionManager.AllItemsUnstashable), typeof(bool?), typeof(ItemCollectionManager),
+        new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+
+    public static readonly DependencyProperty ChangeDefinitionCommandProperty = DependencyProperty.Register(nameof(ItemCollectionManager.ChangeDefinitionCommand), typeof(ICommand), typeof(ItemCollectionManager));
+
+    public static readonly DependencyProperty CollectionViewProperty;
+
+    public static readonly DependencyProperty DeleteItemCommandProperty = DependencyProperty.Register(nameof(ItemCollectionManager.DeleteItemCommand), typeof(ICommand), typeof(ItemCollectionManager));
+
+    public static readonly DependencyProperty ItemsProperty = DependencyProperty.Register(nameof(ItemCollectionManager.Items), typeof(IReadOnlyList<ItemModelBase>), typeof(ItemCollectionManager),
+        new(ItemCollectionManager.ItemsProperty_ValueChanged));
+
+    public static readonly DependencyProperty ModeProperty;
+
+    public static readonly DependencyProperty PropertyNameProperty = DependencyProperty.RegisterAttached("PropertyName", typeof(string), typeof(ItemCollectionManager),
+        new());
+
+    public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register(nameof(ItemCollectionManager.SelectedItem), typeof(object), typeof(ItemCollectionManager),
+        new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+
+    public static readonly DependencyProperty SearchTextProperty = DependencyProperty.RegisterAttached(nameof(ItemCollectionManager.SearchText), typeof(string), typeof(ItemCollectionManager),
+        new());
+
+    public static readonly DependencyProperty SortDirectionProperty = DependencyProperty.RegisterAttached(nameof(ItemCollectionManager.SortDirection), typeof(ListSortDirection), typeof(ItemCollectionManager),
+        new());
+
+    public static readonly DependencyProperty SortPropertyProperty = DependencyProperty.RegisterAttached(nameof(ItemCollectionManager.SortProperty), typeof(string), typeof(ItemCollectionManager),
+        new(nameof(ItemModelBase.Level)));
+
+    private static readonly DependencyPropertyKey _collectionViewPropertyKey = DependencyProperty.RegisterReadOnly(nameof(ItemCollectionManager.CollectionView), typeof(CollectionView), typeof(ItemCollectionManager),
+        new(ItemCollectionManager.CollectionView_ValueChanged));
+
+    private static readonly DependencyPropertyKey _modePropertyKey = DependencyProperty.RegisterReadOnly(nameof(ItemCollectionManager.Mode), typeof(Mode), typeof(ItemCollectionManager),
+        new());
+
+    private ListView? _listView;
+
+    static ItemCollectionManager()
     {
-        public static readonly DependencyProperty AllItemsStolenProperty = DependencyProperty.Register(nameof(ItemCollectionManager.AllItemsStolen), typeof(bool?), typeof(ItemCollectionManager),
-            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+        ItemCollectionManager.CollectionViewProperty = ItemCollectionManager._collectionViewPropertyKey.DependencyProperty;
+        ItemCollectionManager.ModeProperty = ItemCollectionManager._modePropertyKey.DependencyProperty;
+        FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(ItemCollectionManager), new FrameworkPropertyMetadata(typeof(ItemCollectionManager)));
+    }
 
-        public static readonly DependencyProperty AllItemsUnsellableProperty = DependencyProperty.Register(nameof(ItemCollectionManager.AllItemsUnsellable), typeof(bool?), typeof(ItemCollectionManager),
-            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+    public bool? AllItemsStolen
+    {
+        get => (bool?)this.GetValue(ItemCollectionManager.AllItemsStolenProperty);
+        set => this.SetValue(ItemCollectionManager.AllItemsStolenProperty, value.HasValue ? BooleanBoxes.GetBox(value.Value) : null);
+    }
 
-        public static readonly DependencyProperty AllItemsUnstashableProperty = DependencyProperty.Register(nameof(ItemCollectionManager.AllItemsUnstashable), typeof(bool?), typeof(ItemCollectionManager),
-            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+    public bool? AllItemsUnsellable
+    {
+        get => (bool?)this.GetValue(ItemCollectionManager.AllItemsUnsellableProperty);
+        set => this.SetValue(ItemCollectionManager.AllItemsUnsellableProperty, value.HasValue ? BooleanBoxes.GetBox(value.Value) : null);
+    }
 
-        public static readonly DependencyProperty ChangeDefinitionCommandProperty = DependencyProperty.Register(nameof(ItemCollectionManager.ChangeDefinitionCommand), typeof(ICommand), typeof(ItemCollectionManager));
+    public bool? AllItemsUnstashable
+    {
+        get => (bool?)this.GetValue(ItemCollectionManager.AllItemsUnstashableProperty);
+        set => this.SetValue(ItemCollectionManager.AllItemsUnstashableProperty, value.HasValue ? BooleanBoxes.GetBox(value.Value) : null);
+    }
 
-        public static readonly DependencyProperty CollectionViewProperty;
+    public ICommand? ChangeDefinitionCommand
+    {
+        get => (ICommand?)this.GetValue(ItemCollectionManager.ChangeDefinitionCommandProperty);
+        set => this.SetValue(ItemCollectionManager.ChangeDefinitionCommandProperty, value);
+    }
 
-        public static readonly DependencyProperty DeleteItemCommandProperty = DependencyProperty.Register(nameof(ItemCollectionManager.DeleteItemCommand), typeof(ICommand), typeof(ItemCollectionManager));
+    public ICollectionView? CollectionView
+    {
+        get => (ICollectionView?)this.GetValue(ItemCollectionManager.CollectionViewProperty);
+        private set => this.SetValue(ItemCollectionManager._collectionViewPropertyKey, value);
+    }
 
-        public static readonly DependencyProperty ItemsProperty = DependencyProperty.Register(nameof(ItemCollectionManager.Items), typeof(IReadOnlyList<ItemModelBase>), typeof(ItemCollectionManager),
-            new(ItemCollectionManager.ItemsProperty_ValueChanged));
+    public ICommand? DeleteItemCommand
+    {
+        get => (ICommand?)this.GetValue(ItemCollectionManager.DeleteItemCommandProperty);
+        set => this.SetValue(ItemCollectionManager.DeleteItemCommandProperty, value);
+    }
 
-        public static readonly DependencyProperty ModeProperty;
+    public IReadOnlyList<ItemModelBase>? Items
+    {
+        get => (IReadOnlyList<ItemModelBase>?)this.GetValue(ItemCollectionManager.ItemsProperty);
+        set => this.SetValue(ItemCollectionManager.ItemsProperty, value);
+    }
 
-        public static readonly DependencyProperty PropertyNameProperty = DependencyProperty.RegisterAttached("PropertyName", typeof(string), typeof(ItemCollectionManager),
-            new());
+    public Mode Mode
+    {
+        get => (Mode)this.GetValue(ItemCollectionManager.ModeProperty);
+        private set => this.SetValue(ItemCollectionManager._modePropertyKey, value);
+    }
 
-        public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register(nameof(ItemCollectionManager.SelectedItem), typeof(object), typeof(ItemCollectionManager),
-            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+    public string? SearchText
+    {
+        get => (string?)this.GetValue(ItemCollectionManager.SearchTextProperty);
+        set => this.SetValue(ItemCollectionManager.SearchTextProperty, value);
+    }
 
-        public static readonly DependencyProperty SearchTextProperty = DependencyProperty.RegisterAttached(nameof(ItemCollectionManager.SearchText), typeof(string), typeof(ItemCollectionManager),
-            new());
+    public object? SelectedItem
+    {
+        get => (object?)this.GetValue(ItemCollectionManager.SelectedItemProperty);
+        set => this.SetValue(ItemCollectionManager.SelectedItemProperty, value);
+    }
 
-        public static readonly DependencyProperty SortDirectionProperty = DependencyProperty.RegisterAttached(nameof(ItemCollectionManager.SortDirection), typeof(ListSortDirection), typeof(ItemCollectionManager),
-            new());
+    public ListSortDirection SortDirection
+    {
+        get => (ListSortDirection)this.GetValue(ItemCollectionManager.SortDirectionProperty);
+        set => this.SetValue(ItemCollectionManager.SortDirectionProperty, value);
+    }
 
-        public static readonly DependencyProperty SortPropertyProperty = DependencyProperty.RegisterAttached(nameof(ItemCollectionManager.SortProperty), typeof(string), typeof(ItemCollectionManager),
-            new(nameof(ItemModelBase.Level)));
+    public string SortProperty
+    {
+        get => (string)this.GetValue(ItemCollectionManager.SortPropertyProperty);
+        set => this.SetValue(ItemCollectionManager.SortPropertyProperty, value);
+    }
 
-        private static readonly DependencyPropertyKey _collectionViewPropertyKey = DependencyProperty.RegisterReadOnly(nameof(ItemCollectionManager.CollectionView), typeof(CollectionView), typeof(ItemCollectionManager),
-            new(ItemCollectionManager.CollectionView_ValueChanged));
+    public static string? GetPropertyName(GridViewColumn column) => (string?)column?.GetValue(ItemCollectionManager.PropertyNameProperty);
 
-        private static readonly DependencyPropertyKey _modePropertyKey = DependencyProperty.RegisterReadOnly(nameof(ItemCollectionManager.Mode), typeof(Mode), typeof(ItemCollectionManager),
-            new());
+    public static void SetPropertyName(GridViewColumn column, string? value) => column?.SetValue(ItemCollectionManager.PropertyNameProperty, value);
 
-        private ListView? _listView;
-
-        static ItemCollectionManager()
+    public override void OnApplyTemplate()
+    {
+        base.OnApplyTemplate();
+        if ((this._listView = this.Template.FindName("PART_ListView", this) as ListView) == null)
         {
-            ItemCollectionManager.CollectionViewProperty = ItemCollectionManager._collectionViewPropertyKey.DependencyProperty;
-            ItemCollectionManager.ModeProperty = ItemCollectionManager._modePropertyKey.DependencyProperty;
-            FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(ItemCollectionManager), new FrameworkPropertyMetadata(typeof(ItemCollectionManager)));
+            return;
         }
+        ListViewAutoSize.AutoSizeColumns(this._listView);
+        this._listView.AddHandler(ButtonBase.ClickEvent, new RoutedEventHandler(this.GridViewColumn_Click));
+    }
 
-        public bool? AllItemsStolen
+    private void CollectionView_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e) => this.Dispatcher.InvokeAsync(this.OnViewChanged);
+
+    private void GridViewColumn_Click(object sender, RoutedEventArgs e)
+    {
+        if (e.OriginalSource is GridViewColumnHeader header && ItemCollectionManager.GetPropertyName(header.Column) is string propertyName && this.CollectionView?.SortDescriptions is { } descriptions)
         {
-            get => (bool?)this.GetValue(ItemCollectionManager.AllItemsStolenProperty);
-            set => this.SetValue(ItemCollectionManager.AllItemsStolenProperty, value.HasValue ? BooleanBoxes.GetBox(value.Value) : null);
+            SortDescription current = descriptions[1];
+            descriptions[1] = new(
+                this.SortProperty = propertyName,
+                this.SortDirection = propertyName == current.PropertyName
+                    ? (ListSortDirection)((int)current.Direction ^ 1)
+                    : ListSortDirection.Ascending
+            );
         }
+    }
 
-        public bool? AllItemsUnsellable
+    private void OnViewChanged()
+    {
+        if (this._listView == null)
         {
-            get => (bool?)this.GetValue(ItemCollectionManager.AllItemsUnsellableProperty);
-            set => this.SetValue(ItemCollectionManager.AllItemsUnsellableProperty, value.HasValue ? BooleanBoxes.GetBox(value.Value) : null);
+            return;
         }
-
-        public bool? AllItemsUnstashable
+        ListViewAutoSize.AutoSizeColumns(this._listView);
+        ListCollectionView collectionView = (ListCollectionView)this._listView.ItemsSource;
+        if (!collectionView.IsEmpty)
         {
-            get => (bool?)this.GetValue(ItemCollectionManager.AllItemsUnstashableProperty);
-            set => this.SetValue(ItemCollectionManager.AllItemsUnstashableProperty, value.HasValue ? BooleanBoxes.GetBox(value.Value) : null);
+            this._listView.ScrollIntoView(collectionView.GetItemAt(0));
         }
+    }
 
-        public ICommand? ChangeDefinitionCommand
+    private static void CollectionView_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        ItemCollectionManager itemsView = (ItemCollectionManager)d;
+        if (e.OldValue != null)
         {
-            get => (ICommand?)this.GetValue(ItemCollectionManager.ChangeDefinitionCommandProperty);
-            set => this.SetValue(ItemCollectionManager.ChangeDefinitionCommandProperty, value);
+            CollectionChangedEventManager.RemoveHandler((ListCollectionView)e.OldValue, itemsView.CollectionView_CollectionChanged);
         }
-
-        public ICollectionView? CollectionView
+        if (e.NewValue != null)
         {
-            get => (ICollectionView?)this.GetValue(ItemCollectionManager.CollectionViewProperty);
-            private set => this.SetValue(ItemCollectionManager._collectionViewPropertyKey, value);
+            CollectionChangedEventManager.AddHandler((ListCollectionView)e.NewValue, itemsView.CollectionView_CollectionChanged);
+            itemsView.Dispatcher.InvokeAsync(itemsView.OnViewChanged);
         }
+    }
 
-        public ICommand? DeleteItemCommand
+    private static void ItemsProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        ItemCollectionManager itemsView = (ItemCollectionManager)d;
+        itemsView.Mode = e.NewValue is IEnumerable<ItemModelBase<StashItem>> ? Mode.Stash : default;
+        itemsView.CollectionView = e.NewValue == null ? null : new ListCollectionView((IList)e.NewValue)
         {
-            get => (ICommand?)this.GetValue(ItemCollectionManager.DeleteItemCommandProperty);
-            set => this.SetValue(ItemCollectionManager.DeleteItemCommandProperty, value);
-        }
-
-        public IReadOnlyList<ItemModelBase>? Items
-        {
-            get => (IReadOnlyList<ItemModelBase>?)this.GetValue(ItemCollectionManager.ItemsProperty);
-            set => this.SetValue(ItemCollectionManager.ItemsProperty, value);
-        }
-
-        public Mode Mode
-        {
-            get => (Mode)this.GetValue(ItemCollectionManager.ModeProperty);
-            private set => this.SetValue(ItemCollectionManager._modePropertyKey, value);
-        }
-
-        public string? SearchText
-        {
-            get => (string?)this.GetValue(ItemCollectionManager.SearchTextProperty);
-            set => this.SetValue(ItemCollectionManager.SearchTextProperty, value);
-        }
-
-        public object? SelectedItem
-        {
-            get => (object?)this.GetValue(ItemCollectionManager.SelectedItemProperty);
-            set => this.SetValue(ItemCollectionManager.SelectedItemProperty, value);
-        }
-
-        public ListSortDirection SortDirection
-        {
-            get => (ListSortDirection)this.GetValue(ItemCollectionManager.SortDirectionProperty);
-            set => this.SetValue(ItemCollectionManager.SortDirectionProperty, value);
-        }
-
-        public string SortProperty
-        {
-            get => (string)this.GetValue(ItemCollectionManager.SortPropertyProperty);
-            set => this.SetValue(ItemCollectionManager.SortPropertyProperty, value);
-        }
-
-        public static string? GetPropertyName(GridViewColumn column) => (string?)column?.GetValue(ItemCollectionManager.PropertyNameProperty);
-
-        public static void SetPropertyName(GridViewColumn column, string? value) => column?.SetValue(ItemCollectionManager.PropertyNameProperty, value);
-
-        public override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
-            if ((this._listView = this.Template.FindName("PART_ListView", this) as ListView) == null)
-            {
-                return;
-            }
-            ListViewAutoSize.AutoSizeColumns(this._listView);
-            this._listView.AddHandler(ButtonBase.ClickEvent, new RoutedEventHandler(this.GridViewColumn_Click));
-        }
-
-        private void CollectionView_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e) => this.Dispatcher.InvokeAsync(this.OnViewChanged);
-
-        private void GridViewColumn_Click(object sender, RoutedEventArgs e)
-        {
-            if (e.OriginalSource is GridViewColumnHeader header && ItemCollectionManager.GetPropertyName(header.Column) is string propertyName && this.CollectionView?.SortDescriptions is { } descriptions)
-            {
-                SortDescription current = descriptions[1];
-                descriptions[1] = new(
-                    this.SortProperty = propertyName,
-                    this.SortDirection = propertyName == current.PropertyName
-                        ? (ListSortDirection)((int)current.Direction ^ 1)
-                        : ListSortDirection.Ascending
-                );
-            }
-        }
-
-        private void OnViewChanged()
-        {
-            if (this._listView == null)
-            {
-                return;
-            }
-            ListViewAutoSize.AutoSizeColumns(this._listView);
-            ListCollectionView collectionView = (ListCollectionView)this._listView.ItemsSource;
-            if (!collectionView.IsEmpty)
-            {
-                this._listView.ScrollIntoView(collectionView.GetItemAt(0));
-            }
-        }
-
-        private static void CollectionView_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ItemCollectionManager itemsView = (ItemCollectionManager)d;
-            if (e.OldValue != null)
-            {
-                CollectionChangedEventManager.RemoveHandler((ListCollectionView)e.OldValue, itemsView.CollectionView_CollectionChanged);
-            }
-            if (e.NewValue != null)
-            {
-                CollectionChangedEventManager.AddHandler((ListCollectionView)e.NewValue, itemsView.CollectionView_CollectionChanged);
-                itemsView.Dispatcher.InvokeAsync(itemsView.OnViewChanged);
-            }
-        }
-
-        private static void ItemsProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ItemCollectionManager itemsView = (ItemCollectionManager)d;
-            itemsView.Mode = e.NewValue is IEnumerable<ItemModelBase<StashItem>> ? Mode.Stash : default;
-            itemsView.CollectionView = e.NewValue == null ? null : new ListCollectionView((IList)e.NewValue)
-            {
-                SortDescriptions =
+            SortDescriptions =
                 {
                     new SortDescription(nameof(ItemModelBase.Category), ListSortDirection.Ascending),
                     new SortDescription(itemsView.SortProperty, itemsView.SortDirection),
                     new SortDescription(nameof(ItemModelBase.DisplayName), ListSortDirection.Ascending)
                 }
-            };
-        }
+        };
     }
 }

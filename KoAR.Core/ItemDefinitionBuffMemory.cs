@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace KoAR.Core
+namespace KoAR.Core;
+
+public sealed class ItemDefinitionBuffMemory : IItemBuffMemory
 {
-    public sealed class ItemDefinitionBuffMemory : IItemBuffMemory
-    {
-        public static readonly ItemDefinitionBuffMemory Empty = new(Array.Empty<Buff>(), null, null);
+    public static readonly ItemDefinitionBuffMemory Empty = new(Array.Empty<Buff>(), null, null);
 
-        internal ItemDefinitionBuffMemory(Buff[] list, Buff? prefix, Buff? suffix) => (List, Prefix, Suffix) = (list, prefix, suffix);
+    internal ItemDefinitionBuffMemory(Buff[] list, Buff? prefix, Buff? suffix) => (List, Prefix, Suffix) = (list, prefix, suffix);
 
-        public IList<Buff> List { get; }
+    public IList<Buff> List { get; }
 
-        public Buff? Prefix { get; }
+    public Buff? Prefix { get; }
 
-        public Buff? Suffix { get; }
-    }
+    public Buff? Suffix { get; }
 }

@@ -1,9 +1,8 @@
-﻿namespace KoAR.Core
+﻿namespace KoAR.Core;
+
+public enum SaveType
 {
-    public enum SaveType
-    {
-        Original,
-        Remaster,
-        Switch
-    }
+    Original,
+    Remaster,
+    Switch
 }

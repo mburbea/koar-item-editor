@@ -1,7 +1,6 @@
-﻿namespace KoAR.SaveEditor.Views.Stash
+﻿namespace KoAR.SaveEditor.Views.Stash;
+
+partial class StashManager
 {
-    partial class StashManager
-    {
-        public StashManager() => this.InitializeComponent();
-    }
+    public StashManager() => this.InitializeComponent();
 }

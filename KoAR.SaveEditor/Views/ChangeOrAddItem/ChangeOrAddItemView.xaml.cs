@@ -1,22 +1,21 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 
-namespace KoAR.SaveEditor.Views.ChangeOrAddItem
+namespace KoAR.SaveEditor.Views.ChangeOrAddItem;
+
+partial class ChangeOrAddItemView
 {
-    partial class ChangeOrAddItemView
+    static ChangeOrAddItemView() => CommandManager.RegisterClassCommandBinding(typeof(ChangeOrAddItemView), new CommandBinding(ApplicationCommands.Close, (sender, e) => ((Window)sender).Close()));
+
+    public ChangeOrAddItemView() => this.InitializeComponent();
+
+    protected override void OnKeyDown(KeyEventArgs e)
     {
-        static ChangeOrAddItemView() => CommandManager.RegisterClassCommandBinding(typeof(ChangeOrAddItemView), new CommandBinding(ApplicationCommands.Close, (sender, e) => ((Window)sender).Close()));
-
-        public ChangeOrAddItemView() => this.InitializeComponent();
-
-        protected override void OnKeyDown(KeyEventArgs e)
+        if (e.Key != Key.Escape)
         {
-            if (e.Key != Key.Escape)
-            {
-                base.OnKeyDown(e);
-                return;
-            }
-            this.Close();
+            base.OnKeyDown(e);
+            return;
         }
+        this.Close();
     }
 }

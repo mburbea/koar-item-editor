@@ -1,12 +1,11 @@
-﻿namespace KoAR.SaveEditor.Views.Updates
-{
-    public sealed class UpdateViewModel : UpdateViewModelBase
-    {
-        public UpdateViewModel(UpdateInfo update)
-            : base(update.Releases)
-        {
-        }
+﻿namespace KoAR.SaveEditor.Views.Updates;
 
-        public override string Title => "Update Available";
+public sealed class UpdateViewModel : UpdateViewModelBase
+{
+    public UpdateViewModel(UpdateInfo update)
+        : base(update.Releases)
+    {
     }
+
+    public override string Title => "Update Available";
 }

@@ -1,7 +1,6 @@
-﻿namespace KoAR.SaveEditor.Views.QuestItems
+﻿namespace KoAR.SaveEditor.Views.QuestItems;
+
+partial class QuestItemsWindow
 {
-    partial class QuestItemsWindow
-    {
-        public QuestItemsWindow() => this.InitializeComponent();
-    }
+    public QuestItemsWindow() => this.InitializeComponent();
 }

@@ -2,18 +2,17 @@
 using System.Windows.Controls;
 using KoAR.Core;
 
-namespace KoAR.SaveEditor.Views
+namespace KoAR.SaveEditor.Views;
+
+public sealed class BuffDescriptionIcon : Control
 {
-    public sealed class BuffDescriptionIcon : Control
+    public static readonly DependencyProperty DescriptionProperty = DependencyProperty.Register(nameof(BuffDescriptionIcon.Description), typeof(BuffDescription), typeof(BuffDescriptionIcon));
+
+    static BuffDescriptionIcon() => FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(BuffDescriptionIcon), new FrameworkPropertyMetadata(typeof(BuffDescriptionIcon)));
+
+    public BuffDescription? Description
     {
-        public static readonly DependencyProperty DescriptionProperty = DependencyProperty.Register(nameof(BuffDescriptionIcon.Description), typeof(BuffDescription), typeof(BuffDescriptionIcon));
-
-        static BuffDescriptionIcon() => FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(BuffDescriptionIcon), new FrameworkPropertyMetadata(typeof(BuffDescriptionIcon)));
-
-        public BuffDescription? Description
-        {
-            get => (BuffDescription?)this.GetValue(BuffDescriptionIcon.DescriptionProperty);
-            set => this.SetValue(BuffDescriptionIcon.DescriptionProperty, value);
-        }
+        get => (BuffDescription?)this.GetValue(BuffDescriptionIcon.DescriptionProperty);
+        set => this.SetValue(BuffDescriptionIcon.DescriptionProperty, value);
     }
 }

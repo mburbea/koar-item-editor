@@ -1,19 +1,18 @@
 ﻿using System;
 
-namespace KoAR.SaveEditor.Updates
+namespace KoAR.SaveEditor.Updates;
+
+public interface IReleaseInfo
 {
-    public interface IReleaseInfo
-    {
-        string Body { get; }
+    string Body { get; }
 
-        string Name { get; }
+    string Name { get; }
 
-        DateTime PublishedAt { get; }
-        
-        Version Version { get; }
+    DateTime PublishedAt { get; }
 
-        int ZipFileSize { get; }
+    Version Version { get; }
 
-        string ZipFileUri { get; }
-    }
+    int ZipFileSize { get; }
+
+    string ZipFileUri { get; }
 }

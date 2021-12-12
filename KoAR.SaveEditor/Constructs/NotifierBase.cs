@@ -2,30 +2,29 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace KoAR.SaveEditor.Constructs
+namespace KoAR.SaveEditor.Constructs;
+
+public abstract class NotifierBase : INotifyPropertyChanged
 {
-    public abstract class NotifierBase : INotifyPropertyChanged
+    protected NotifierBase()
     {
-        protected NotifierBase()
-        {
-        }
+    }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            this.PropertyChanged?.Invoke(this, new(propertyName));
-        }
+    protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
+    {
+        this.PropertyChanged?.Invoke(this, new(propertyName));
+    }
 
-        protected bool SetValue<T>(ref T field, T value, [CallerMemberName] string propertyName = "")
+    protected bool SetValue<T>(ref T field, T value, [CallerMemberName] string propertyName = "")
+    {
+        if (EqualityComparer<T>.Default.Equals(field, value))
         {
-            if (EqualityComparer<T>.Default.Equals(field, value))
-            {
-                return false;
-            }
-            field = value;
-            this.OnPropertyChanged(propertyName);
-            return true;
+            return false;
         }
+        field = value;
+        this.OnPropertyChanged(propertyName);
+        return true;
     }
 }

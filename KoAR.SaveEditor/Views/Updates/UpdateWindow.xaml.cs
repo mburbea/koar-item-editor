@@ -1,7 +1,6 @@
-﻿namespace KoAR.SaveEditor.Views.Updates
+﻿namespace KoAR.SaveEditor.Views.Updates;
+
+partial class UpdateWindow
 {
-    partial class UpdateWindow
-    {
-        public UpdateWindow() => this.InitializeComponent();
-    }
+    public UpdateWindow() => this.InitializeComponent();
 }

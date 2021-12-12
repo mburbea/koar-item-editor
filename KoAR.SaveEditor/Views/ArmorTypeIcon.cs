@@ -2,19 +2,18 @@
 using System.Windows.Controls;
 using KoAR.Core;
 
-namespace KoAR.SaveEditor.Views
+namespace KoAR.SaveEditor.Views;
+
+public sealed class ArmorTypeIcon : Control
 {
-    public sealed class ArmorTypeIcon : Control
+    public static readonly DependencyProperty ArmorTypeProperty = DependencyProperty.Register(nameof(ArmorTypeIcon.ArmorType), typeof(ArmorType), typeof(ArmorTypeIcon),
+        new(ArmorType.None));
+
+    static ArmorTypeIcon() => FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(ArmorTypeIcon), new FrameworkPropertyMetadata(typeof(ArmorTypeIcon)));
+
+    public ArmorType ArmorType
     {
-        public static readonly DependencyProperty ArmorTypeProperty = DependencyProperty.Register(nameof(ArmorTypeIcon.ArmorType), typeof(ArmorType), typeof(ArmorTypeIcon),
-            new(ArmorType.None));
-
-        static ArmorTypeIcon() => FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(ArmorTypeIcon), new FrameworkPropertyMetadata(typeof(ArmorTypeIcon)));
-
-        public ArmorType ArmorType
-        {
-            get => (ArmorType)this.GetValue(ArmorTypeIcon.ArmorTypeProperty);
-            set => this.SetValue(ArmorTypeIcon.ArmorTypeProperty, value);
-        }
+        get => (ArmorType)this.GetValue(ArmorTypeIcon.ArmorTypeProperty);
+        set => this.SetValue(ArmorTypeIcon.ArmorTypeProperty, value);
     }
 }

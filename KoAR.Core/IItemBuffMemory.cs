@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 
-namespace KoAR.Core
+namespace KoAR.Core;
+
+public interface IItemBuffMemory
 {
-    public interface IItemBuffMemory
-    {
-        IList<Buff> List { get; }
-        Buff? Prefix { get; }
-        Buff? Suffix { get; }
-    }
+    IList<Buff> List { get; }
+    Buff? Prefix { get; }
+    Buff? Suffix { get; }
 }
