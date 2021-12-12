@@ -85,7 +85,7 @@ namespace KoAR.SaveEditor.Views
 
         public abstract bool UnsupportedFormat { get; }
 
-        public bool IsUnknown => Category.IsUnknown();
+        public bool IsUnknown => this.Category.IsUnknown();
 
         public void Dispose()
         {

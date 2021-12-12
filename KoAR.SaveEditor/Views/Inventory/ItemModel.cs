@@ -114,7 +114,7 @@ namespace KoAR.SaveEditor.Views.Inventory
             }
         }
 
-        public override bool UnsupportedFormat => this.Item.ItemBuffs.UnsupportedFormat;
+        public override bool UnsupportedFormat => this.Item.ItemBuffs.UnsupportedFormat || this.IsUnknown;
 
         public void AddItemBuff(Buff buff) => this._itemBuffs.Add(buff);
 

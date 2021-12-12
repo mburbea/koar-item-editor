@@ -17,6 +17,7 @@
     <constructs:NegatedBooleanConverter x:Key="NegatedBooleanConverter" />
     <constructs:HexConverter x:Key="HexConverter" />
     <constructs:LittleEndianConverter x:Key="LittleEndianConverter" />
+    <constructs:AndConverter x:Key="AndConverter" />
     <constructs:GrayscaleConverter x:Key="GrayscaleConverter" />
     <BitmapImage x:Key="Delete" UriSource="/KoAR.SaveEditor;component/Resources/Delete.png" po:Freeze="True" />
     <BitmapImage x:Key="Ellipsis" UriSource="/KoAR.SaveEditor;component/Resources/Ellipsis.png" po:Freeze="True" />
@@ -220,6 +221,12 @@
                                                     </views:ItemDefinitionControl.Style>
                                                 </views:ItemDefinitionControl>
                                                 <TextBox VerticalAlignment="Center" Margin="1,0" Text="{Binding ItemName}">
+                                                    <TextBox.IsEnabled>
+                                                        <MultiBinding Converter="{StaticResource AndConverter}">
+                                                            <Binding Path="IsEquipped" Converter="{StaticResource NegatedBooleanConverter}" />
+                                                            <Binding Path="IsUnknown" Converter="{StaticResource NegatedBooleanConverter}" />
+                                                        </MultiBinding>
+                                                    </TextBox.IsEnabled>
                                                     <constructs:Watermarking.ContentTemplate>
                                                         <DataTemplate>
                                                             <TextBlock Text="{Binding}" FontStyle="Italic" />
