@@ -211,10 +211,10 @@
                                                             <Style.Triggers>
                                                                 <MultiDataTrigger>
                                                                     <MultiDataTrigger.Conditions>
-                                                                        <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True" />
-                                                                        <Condition Binding="{Binding SelectedItem.IsEquipped}" Value="False" />
-                                                                        <Condition Binding="{Binding SelectedItem.IsUnknown}" Value="False" />
                                                                         <Condition Binding="{Binding Value, Source={StaticResource Mode}}" Value="Inventory" />
+                                                                        <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True" />
+                                                                        <Condition Binding="{Binding SelectedItem.IsEquipped, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}" Value="False" />
+                                                                        <Condition Binding="{Binding SelectedItem.IsUnknown, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}" Value="False" />
                                                                     </MultiDataTrigger.Conditions>
                                                                     <Setter Property="Visibility" Value="Collapsed" />
                                                                 </MultiDataTrigger>
@@ -239,8 +239,10 @@
                                                             <Style.Triggers>
                                                                 <MultiDataTrigger>
                                                                     <MultiDataTrigger.Conditions>
-                                                                        <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True" />
                                                                         <Condition Binding="{Binding Value, Source={StaticResource Mode}}" Value="Inventory" />
+                                                                        <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True" />
+                                                                        <Condition Binding="{Binding SelectedItem.IsEquipped, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}" Value="False" />
+                                                                        <Condition Binding="{Binding SelectedItem.IsUnknown, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}" Value="False" />
                                                                     </MultiDataTrigger.Conditions>
                                                                     <Setter Property="Visibility" Value="Visible" />
                                                                     <Setter Property="constructs:TextBoxSelect.SelectOnFocus" Value="True" />
