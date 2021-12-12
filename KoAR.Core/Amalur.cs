@@ -31,8 +31,8 @@ namespace KoAR.Core
             Buffs = JsonSerializer.DeserializeAsync<Buff[]>(buffsStream, jsonOptions).AsTask().Result!.ToDictionary(buff => buff.Id);
             using var questItemsStream = archive.GetEntry("questItemDefinitions.json")!.Open();
             QuestItemDefinitions = JsonSerializer.DeserializeAsync<QuestItemDefinition[]>(questItemsStream, jsonOptions).AsTask().Result!.ToDictionary(def => def.Id);
-            using var gemsStream = archive.GetEntry("gemDefinitions.csv")!.Open();
-            GemDefinitions = GemDefinition.ParseFile(gemsStream).ToDictionary(def => def.TypeId);
+            using var gemsStream = archive.GetEntry("gemDefinitions.json")!.Open();
+            GemDefinitions = JsonSerializer.DeserializeAsync<GemDefinition[]>(gemsStream, jsonOptions).AsTask().Result!.ToDictionary(def => def.TypeId);
             using var itemsStream = archive.GetEntry("definitions.csv")!.Open();
             ItemDefinitions = ItemDefinition.ParseFile(itemsStream).ToDictionary(def => def.TypeId);
         }

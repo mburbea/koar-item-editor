@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -95,9 +96,30 @@ namespace ItemTesting
         //        Console.WriteLine(item.Definition.Name);
         //    }
         //}
+
+        static Dictionary<uint, string> Dict = BuildSimtypeDict();
+
+        private static Dictionary<uint, string> BuildSimtypeDict()
+        {
+            var data = File.ReadAllBytes(@"C:\e\symbol_table_simtype.bin");
+            var elementCount = BitConverter.ToInt32(data, 0);
+            var firstString = 8 + elementCount * 12;
+            return Enumerable.Range(0, elementCount).Select(x => (id: BitConverter.ToUInt32(data, 4 + x * 12), s: BitConverter.ToInt32(data, 4 + x * 12 + 4), e: BitConverter.ToInt32(data, 4 + x * 12 + 8)))
+                .ToDictionary(x => x.id, y => Encoding.Default.GetString(data[(firstString + y.s)..(firstString + y.e - 1)]));
+        }
+
         static void Main()
         {
-            ConvertSymbolsToCsv(@"C:\e\", @"C:\e\o\");
+            const string path = @"C:\Program Files (x86)\Steam\userdata\107335713\1041720\remote\autocloud\save\svd_fmt_5_19.sav";
+            GameSave gs = new(path);
+/*            foreach (var i in gs.Crap)
+            {
+                if (i is 0x06C18B or 0x1A69DF or 0x71561) continue;
+                var n = Dict[i];
+                if (n.StartsWith("bag_") || n.StartsWith("recipe_") || n.StartsWith("alchemypotion_")) continue;
+                Console.WriteLine(Dict[i]);
+            }
+            Console.Read();*/
         }
     }
 }
