@@ -116,7 +116,7 @@ namespace KoAR.SaveEditor.Views.Inventory
 
         private bool CanAddPlayerBuff(uint buffId) => this.SelectedItem != null && buffId != 0u;
 
-        private bool CanChangeDefinition(ItemModel item) => !item.IsEquipped;
+        private bool CanChangeDefinition(ItemModel item) => !item.IsEquipped && !item.IsUnknown;
 
         private bool CanDeleteItemBuff(Buff buff) => this.SelectedItem != null && buff != null;
 

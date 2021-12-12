@@ -23,5 +23,11 @@
             or Hands
             or Feet
             or Shield;
+
+        public static bool IsUnknown(this EquipmentCategory category) =>
+#if DEBUG
+            category == EquipmentCategory.Unknown ||
+#endif
+            false;
     }
 }

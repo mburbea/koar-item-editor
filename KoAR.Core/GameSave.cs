@@ -79,7 +79,6 @@ namespace KoAR.Core
             var itemSocketsLocs = _itemSocketsContainer.ToDictionary(x => x.id, x => (x.offset, x.dataLength));
             int dataLength, playerActor = 0;
             var candidates = new List<(int id, int typeIdOffset, QuestItemDefinition? questItemDef)>();
-
             for (int ixOfActor = _dataLengthOffsets[^1] + 4; BitConverter.ToInt32(Body, ixOfActor) == 0x00_75_2D_06; ixOfActor += dataLength)
             {
                 dataLength = 9 + BitConverter.ToInt32(Body, ixOfActor + 5);
@@ -102,21 +101,33 @@ namespace KoAR.Core
                 {
                     playerActor = id;
                 }
+                #if DEBUG
+                else
+                {
+                    candidates.Add((id, typeIdOffset, null));
+                }
+                #endif
             }
             foreach (var (id, typeIdOffset, questItemDef) in candidates)
             {
-                var (itemOffset, itemLength) = itemLocs[id];
-                if (BitConverter.ToInt32(Body, itemOffset + 17) == playerActor)
+                if (itemLocs.TryGetValue(id, out var loc))
                 {
-                    if (questItemDef != null)
+                    var (itemOffset, itemLength) = loc;
+                    if (BitConverter.ToInt32(Body, itemOffset + 17) == playerActor)
                     {
-                        QuestItems.Add(new(this, questItemDef, itemOffset + itemLength - 3));
-                    }
-                    else
-                    {
-                        var (itemBuffsOffset, itemBuffsLength) = itemBuffsLocs[id];
-                        var (itemGemsOffset, itemGemsLength) = itemSocketsLocs[id];
-                        Items.Add(new(this, typeIdOffset, itemOffset, itemLength, itemBuffsOffset, itemBuffsLength, itemGemsOffset, itemGemsLength));
+                        if (questItemDef != null)
+                        {
+                            QuestItems.Add(new(this, questItemDef, itemOffset + itemLength - 3));
+                        }
+                        else
+                        {
+                            var (itemBuffsOffset, itemBuffsLength) = itemBuffsLocs[id];
+                            var (itemGemsOffset, itemGemsLength) = itemSocketsLocs.GetValueOrDefault(id);
+                            if (itemGemsOffset > 0)
+                            { 
+                                Items.Add(new(this, typeIdOffset, itemOffset, itemLength, itemBuffsOffset, itemBuffsLength, itemGemsOffset, itemGemsLength));
+                            }
+                        }
                     }
                 }
             }
@@ -253,7 +264,7 @@ namespace KoAR.Core
                     Body.CopyTo(Bytes, BodyStart);
                 }
                 Crc32.Hash(Bytes.AsSpan(8), Bytes);
-                Crc32.Hash(Bytes.AsSpan(8, _header.Length), Bytes.AsSpan(4,4));
+                Crc32.Hash(Bytes.AsSpan(8, _header.Length), Bytes.AsSpan(4, 4));
             }
             else
             {

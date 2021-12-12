@@ -19,6 +19,9 @@
         Sceptre,
         Staff,
         Necklace,
-        Ring
+        Ring,
+#if DEBUG
+        Unknown = 999
+#endif
     }
 }

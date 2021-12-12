@@ -49,7 +49,7 @@ namespace KoAR.Core
                 return false;
             }
             definition = new(category, typeId, level, entries[3], entries[4], maxDurability, rarity, entries[7],
-                element, armorType, Amalur.Buffs.GetOrDefault(prefix), Amalur.Buffs.GetOrDefault(suffix), itemBuffs, playerBuffs, hasVariants);
+                element, armorType, Amalur.Buffs.GetValueOrDefault(prefix), Amalur.Buffs.GetValueOrDefault(suffix), itemBuffs, playerBuffs, hasVariants);
             return true;
         }
 
@@ -65,6 +65,18 @@ namespace KoAR.Core
                 }
             }
         }
+
+        #if DEBUG
+        internal ItemDefinition(uint typeId)
+        {
+            Category = EquipmentCategory.Unknown;
+            TypeId = typeId;
+            Name = InternalName = Amalur.SimTypes[typeId];
+            SocketTypes = "";
+            ItemBuffs = ItemDefinitionBuffMemory.Empty;
+            PlayerBuffs = Array.Empty<Buff>();
+        }
+        #endif
 
         internal ItemDefinition(EquipmentCategory category, uint typeId, byte level, string name, string internalName, float maxDurability, Rarity rarity,
             string socketTypes, Element element, ArmorType armorType, Buff? prefix, Buff? suffix, Buff[] itemBuffs, Buff[] playerBuffs, bool hasVariants)

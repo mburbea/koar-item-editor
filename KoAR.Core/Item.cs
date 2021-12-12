@@ -77,7 +77,11 @@ namespace KoAR.Core
 
         public ItemDefinition Definition
         {
-            get => Amalur.ItemDefinitions[BitConverter.ToUInt32(_gameSave.Body, TypeIdOffset)];
+            get => Amalur.ItemDefinitions.GetValueOrDefault(BitConverter.ToUInt32(_gameSave.Body, TypeIdOffset)
+                #if DEBUG
+                , new(BitConverter.ToUInt32(_gameSave.Body, TypeIdOffset))
+                #endif
+                )!;
             private set
             {
                 var oldType = Amalur.ItemDefinitions[BitConverter.ToUInt32(_gameSave.Body, TypeIdOffset)];
@@ -95,7 +99,6 @@ namespace KoAR.Core
                 }
             }
         }
-
 
         private readonly byte _levelShiftOffset;
         private readonly GameSave _gameSave;

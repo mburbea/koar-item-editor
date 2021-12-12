@@ -18,6 +18,7 @@
         <Grid.Resources>
             <constructs:NegatedBooleanConverter x:Key="NegatedBooleanConverter" />
             <constructs:AndConverter x:Key="AndConverter" />
+            <constructs:OrConverter x:Key="OrConverter" />
             <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
                 <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                 <Setter Property="Validation.ErrorTemplate" Value="{StaticResource TextBoxErrorTemplate}" />
@@ -115,6 +116,7 @@
                                     <MultiBinding Converter="{StaticResource AndConverter}">
                                         <Binding Path="SelectedItem.UnsupportedFormat" Converter="{StaticResource NegatedBooleanConverter}" />
                                         <Binding Path="SelectedItem.IsEquipped" Converter="{StaticResource NegatedBooleanConverter}" />
+                                        <Binding Path="SelectedItem.IsUnknown" Converter="{StaticResource NegatedBooleanConverter}" />
                                     </MultiBinding>
                                 </views:BuffSelector.IsEnabled>
                             </views:BuffSelector>
@@ -125,6 +127,7 @@
                                     <MultiBinding Converter="{StaticResource AndConverter}">
                                         <Binding Path="SelectedItem.UnsupportedFormat" Converter="{StaticResource NegatedBooleanConverter}" />
                                         <Binding Path="SelectedItem.IsEquipped" Converter="{StaticResource NegatedBooleanConverter}" />
+                                        <Binding Path="SelectedItem.IsUnknown" Converter="{StaticResource NegatedBooleanConverter}" />
                                     </MultiBinding>
                                 </views:BuffSelector.IsEnabled>
                             </views:BuffSelector>
@@ -150,7 +153,13 @@
                         </views:BuffCollectionManager.HeaderTemplate>
                     </views:BuffCollectionManager>
                     <views:BuffCollectionManager Margin="4,4,4,0" Header="{Binding SelectedItem}" BuffsFilter="Player" Collection="{Binding SelectedItem.PlayerBuffs}" 
-                        AddBuffCommand="{Binding AddPlayerBuffCommand}" DeleteBuffCommand="{Binding DeletePlayerBuffCommand}" UnsupportedFormat="{Binding SelectedItem.IsEquipped}">
+                        AddBuffCommand="{Binding AddPlayerBuffCommand}" DeleteBuffCommand="{Binding DeletePlayerBuffCommand}">
+                        <views:BuffCollectionManager.UnsupportedFormat>
+                            <MultiBinding Converter="{StaticResource OrConverter}">
+                                <Binding Path="SelectedItem.IsEquipped" />
+                                <Binding Path="SelectedItem.IsUnknown" />
+                            </MultiBinding>
+                        </views:BuffCollectionManager.UnsupportedFormat>
                         <views:BuffCollectionManager.HeaderTemplate>
                             <DataTemplate DataType="{x:Type views:ItemModelBase}">
                                 <TextBlock>

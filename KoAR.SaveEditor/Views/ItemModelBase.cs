@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -83,6 +84,8 @@ namespace KoAR.SaveEditor.Views
         public ItemDefinition Definition => this.Item.Definition;
 
         public abstract bool UnsupportedFormat { get; }
+
+        public bool IsUnknown => Category.IsUnknown();
 
         public void Dispose()
         {

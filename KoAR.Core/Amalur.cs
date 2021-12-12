@@ -35,12 +35,20 @@ namespace KoAR.Core
             GemDefinitions = JsonSerializer.DeserializeAsync<GemDefinition[]>(gemsStream, jsonOptions).AsTask().Result!.ToDictionary(def => def.TypeId);
             using var itemsStream = archive.GetEntry("definitions.csv")!.Open();
             ItemDefinitions = ItemDefinition.ParseFile(itemsStream).ToDictionary(def => def.TypeId);
+            using var simTypesStream = archive.GetEntry("simtype.csv")!.Open();
+            using var reader = new StreamReader(simTypesStream);
+            SimTypes = Enumerable.Repeat(reader, int.MaxValue)
+                .Select(r => reader.ReadLine())
+                .TakeWhile(r => r is { })
+                .Select(l => l.Split(','))
+                .ToDictionary(k => uint.Parse(k[0]), v => v[1]);
         }
 
         public static IReadOnlyDictionary<uint, Buff> Buffs { get; }
         public static IReadOnlyDictionary<uint, GemDefinition> GemDefinitions { get; }
         public static IReadOnlyDictionary<uint, ItemDefinition> ItemDefinitions { get; }
         public static IReadOnlyDictionary<uint, QuestItemDefinition> QuestItemDefinitions { get; }
+        public static IReadOnlyDictionary<uint, string> SimTypes { get; }
         public static ReadOnlySpan<uint> PlayerTypeIds => MemoryMarshal.Cast<byte, uint>((ReadOnlySpan<byte>)new byte[16]{
             0x6D, 0x38, 0x0A, 0x00, // playerHumanMale
             0x6E, 0x38, 0x0A, 0x00, // playerHumanFemale
@@ -50,11 +58,7 @@ namespace KoAR.Core
 
         internal static char[] Separator { get; } = { ',' };
 
-        public static Buff GetBuff(uint buffId) => Buffs.GetOrDefault(buffId, new() { Id = buffId, Name = "Unknown" });
-
-        [return: MaybeNull, NotNullIfNotNull("defaultValue")]
-        internal static TValue GetOrDefault<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key, TValue? defaultValue = default)
-            => dictionary.TryGetValue(key, out var res) ? res : defaultValue;
+        public static Buff GetBuff(uint buffId) => Buffs.GetValueOrDefault(buffId, new() { Id = buffId, Name = "Unknown" });
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T SetFlag<T>(this T @enum, T flag, bool on) where T : struct, Enum
