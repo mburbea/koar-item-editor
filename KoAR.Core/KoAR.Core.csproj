@@ -10,8 +10,8 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-	  <Version Condition=" '$(BUILD_BUILDID)' == '' ">3.0.0</Version>
-	  <Version Condition=" '$(BUILD_BUILDID)' != '' ">3.0.$(BUILD_BUILDID)</Version>
+      <Version Condition=" '$(BUILD_BUILDID)' == '' ">3.0.0</Version>
+      <Version Condition=" '$(BUILD_BUILDID)' != '' ">3.0.$(BUILD_BUILDID)</Version>
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -22,10 +22,10 @@
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(BUILD_BUILDID)' == '' ">
-	<Version>3.0.0</Version>
+    <Version>3.0.0</Version>
   </PropertyGroup>
   <PropertyGroup Condition="'$(BUILD_BUILDID)' != '' ">
-	<Version>3.0.$(BUILD_BUILDID)</Version>
+    <Version>3.0.$(BUILD_BUILDID)</Version>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Data.zip" />
@@ -38,10 +38,16 @@
     <PackageReference Include="StringLiteralGenerator" Version="1.1.0" />
     <PackageReference Include="System.IO.Hashing" Version="6.0.0-rc.1.21451.13" />
   </ItemGroup>
-  <Target Name="ZipData" BeforeTargets="BeforeBuild">
-    <ZipDirectory SourceDirectory="$(MSBuildProjectDirectory)\Data" DestinationFile="$(MSBuildProjectDirectory)\Data.zip" Overwrite="True" />
+  <ItemGroup>
+    <MySourceFiles Include="$(MSBuildProjectDirectory)\Data\*.*"/>
+  </ItemGroup>
+  <Target Name="CopyToOut" BeforeTargets="BeforeBuild">
+      <Copy SourceFiles="@(MySourceFiles)" DestinationFolder="$(OutDir)\Data"/>
+      <WriteLinesToFile File="$(OutDir)\Data\simtype.csv" Lines="" Overwrite="True" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU'" />
+      <ZipDirectory SourceDirectory="$(OutDir)\Data" DestinationFile="$(MSBuildProjectDirectory)\Data.zip" Overwrite="True" />
   </Target>
   <Target Name="CleanUp" AfterTargets="Build">
-    <WriteLinesToFile File="$(MSBuildProjectDirectory)\Data.zip" Lines="" Overwrite="True" />
+    <RemoveDir Directories="$(OutDir)\Data"/>
+    <WriteLinesToFile File="$(MSBuildProjectDirectory)\Data.zip" Lines="" Overwrite="True"/>
   </Target>
 </Project>
