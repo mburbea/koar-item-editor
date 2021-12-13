@@ -14,8 +14,6 @@ public record GemDefinition(
     char SocketType
     )
 {
-    private Buff[] _buffs = null!;
-
     public Buff Buff => Amalur.GetBuff(BuffId);
 }
 

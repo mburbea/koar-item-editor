@@ -19,7 +19,7 @@ public sealed class ItemDefinition
         var results = value.Length == 0 ? Array.Empty<Buff>() : new Buff[value.Length / 6];
         for (int i = 0; i < results.Length; i++)
         {
-            if (!uint.TryParse(value.Substring(i * 6, 6), NumberStyles.HexNumber, null, out uint buffId))
+            if (!uint.TryParse(value.AsSpan(i * 6, 6), NumberStyles.HexNumber, null, out uint buffId))
             {
                 return false;
             }

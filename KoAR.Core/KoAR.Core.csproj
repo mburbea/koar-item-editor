@@ -2,7 +2,7 @@
   <PropertyGroup>
     <ProductVersion>8.0.30703</ProductVersion>
     <ProjectGuid>{F204356A-6213-4B0C-A35C-03DA5CE5AC21}</ProjectGuid>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyTitle>KoAR Item Editor</AssemblyTitle>
     <NeutralLanguage>en-US</NeutralLanguage>
     <Description>Allows editing of items in KoAR saves.</Description>
@@ -34,20 +34,20 @@
     <EmbeddedResource Include="Data.zip" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="DotNetZip" Version="1.15.0" />
+    <PackageReference Include="DotNetZip" Version="1.16.0" />
     <PackageReference Include="StringLiteralGenerator" Version="1.1.0" />
-    <PackageReference Include="System.IO.Hashing" Version="6.0.0-rc.1.21451.13" />
+    <PackageReference Include="System.IO.Hashing" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <MySourceFiles Include="$(MSBuildProjectDirectory)\Data\*.*"/>
+    <MySourceFiles Include="$(MSBuildProjectDirectory)\Data\*.*" />
   </ItemGroup>
   <Target Name="CopyToOut" BeforeTargets="BeforeBuild">
-      <Copy SourceFiles="@(MySourceFiles)" DestinationFolder="$(OutDir)\Data"/>
+      <Copy SourceFiles="@(MySourceFiles)" DestinationFolder="$(OutDir)\Data" />
       <WriteLinesToFile File="$(OutDir)\Data\simtype.csv" Lines="" Overwrite="True" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU'" />
       <ZipDirectory SourceDirectory="$(OutDir)\Data" DestinationFile="$(MSBuildProjectDirectory)\Data.zip" Overwrite="True" />
   </Target>
   <Target Name="CleanUp" AfterTargets="Build">
-    <RemoveDir Directories="$(OutDir)\Data"/>
-    <WriteLinesToFile File="$(MSBuildProjectDirectory)\Data.zip" Lines="" Overwrite="True"/>
+    <RemoveDir Directories="$(OutDir)\Data" />
+    <WriteLinesToFile File="$(MSBuildProjectDirectory)\Data.zip" Lines="" Overwrite="True" />
   </Target>
 </Project>
