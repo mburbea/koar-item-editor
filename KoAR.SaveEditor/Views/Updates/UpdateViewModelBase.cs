@@ -28,6 +28,11 @@ public abstract class UpdateViewModelBase : NotifierBase, IDisposable
     private Exception? _error;
     private double _speed;
 
+    protected UpdateViewModelBase(params IReleaseInfo[] releases)
+        : this((IReadOnlyCollection<IReleaseInfo>)releases)
+    {
+    }
+
     protected UpdateViewModelBase(IReadOnlyCollection<IReleaseInfo> releases)
     {
         this.Document = UpdateViewModelBase.CreateDocument(this.Releases = releases);

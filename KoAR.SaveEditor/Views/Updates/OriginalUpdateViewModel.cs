@@ -5,7 +5,7 @@ namespace KoAR.SaveEditor.Views.Updates;
 public sealed class OriginalUpdateViewModel : UpdateViewModelBase
 {
     public OriginalUpdateViewModel(IReleaseInfo target)
-        : base(new[] { target })
+        : base(target)
     {
     }
 
