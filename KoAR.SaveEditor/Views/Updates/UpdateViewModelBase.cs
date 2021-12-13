@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -178,11 +179,13 @@ public abstract class UpdateViewModelBase : NotifierBase, IDisposable
 
     private async Task DownloadAndUpdateAsync()
     {
-        await this.DownloadUpdateAsync().ConfigureAwait(false);
-        UpdateMethods.ExecuteUpdate(this._zipFilePath);
+        if (await this.DownloadUpdateAsync().ConfigureAwait(false))
+        {
+            UpdateMethods.ExecuteUpdate(this._zipFilePath);
+        }
     }
 
-    private async Task DownloadUpdateAsync()
+    private async Task<bool> DownloadUpdateAsync()
     {
         (this.BytesTransferred, this.Speed, this.Error) = (default, default, default);
         const int interval = 250;
@@ -193,10 +196,8 @@ public abstract class UpdateViewModelBase : NotifierBase, IDisposable
             CancellationToken cancellationToken = this._cancellationTokenSource.Token;
             timer.Start();
             IReleaseInfo release = this.Releases.First();
-            HttpWebRequest request = WebRequest.CreateHttp(release.ZipFileUri);
-            using WebResponse response = await request.GetResponseAsync().ConfigureAwait(false);
-            cancellationToken.ThrowIfCancellationRequested();
-            using Stream stream = response.GetResponseStream();
+            using HttpClient client = new();
+            using Stream stream = await client.GetStreamAsync(release.ZipFileUri, cancellationToken);
             using FileStream fileStream = File.Create(this._zipFilePath);
             byte[] buffer = new byte[8192];
             while (bytesTransferred < release.ZipFileSize)
@@ -207,10 +208,12 @@ public abstract class UpdateViewModelBase : NotifierBase, IDisposable
                 bytesPerInterval += count;
             }
             await this._dispatcher.InvokeAsync(ReportProgress);
+            return true;
         }
         catch (Exception e)
         {
             await this._dispatcher.InvokeAsync(() => this.Error = e);
+            return false;
         }
         finally
         {
