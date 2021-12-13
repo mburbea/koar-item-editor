@@ -31,7 +31,6 @@ public sealed class ItemDefinition
 
     private static bool TryLoadFromRow(string[] entries, [NotNullWhen(true)] out ItemDefinition? definition)
     {
-        definition = null;
         if (entries.Length != 15
             || !Enum.TryParse(entries[0], true, out EquipmentCategory category)
             || !uint.TryParse(entries[1], NumberStyles.HexNumber, null, out uint typeId)
@@ -46,6 +45,7 @@ public sealed class ItemDefinition
             || !TryParseBuffList(entries[13], out var playerBuffs)
             || !bool.TryParse(entries[14], out bool hasVariants))
         {
+            definition = null;
             return false;
         }
         definition = new(category, typeId, level, entries[3], entries[4], maxDurability, rarity, entries[7],
