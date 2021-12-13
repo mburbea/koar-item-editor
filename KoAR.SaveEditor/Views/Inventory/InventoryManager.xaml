@@ -32,7 +32,7 @@
         <DockPanel Margin="4">
             <views:ItemFiltersEditor DockPanel.Dock="Top" Items="{Binding Items}" ItemFilters="{Binding ItemFilters}" />
             <views:ItemCollectionManager Items="{Binding FilteredItems}" SelectedItem="{Binding SelectedItem}" ChangeDefinitionCommand="{Binding ChangeDefinitionCommand}"
-                AllItemsUnstashable="{Binding AllItemsUnstashable}" AllItemsUnsellable="{Binding AllItemsUnsellable}" AllItemsStolen="{Binding AllItemsStolen}" 
+                AllItemsStashable="{Binding AllItemsStashable}" AllItemsSellable="{Binding AllItemsSellable}" AllItemsStolen="{Binding AllItemsStolen}" 
                 SearchText="{Binding ItemFilters.ItemName}" />
         </DockPanel>
         <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Stretch" Background="{x:Static SystemColors.ControlBrush}" FocusVisualStyle="{x:Null}" />

@@ -14,6 +14,8 @@ public sealed class ItemModel : ItemModelBase<Item>
 {
     private static readonly PropertyInfo _itemProperty = typeof(ItemModelBase<Item>).GetProperty(nameof(ItemModel.Item), BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)!;
     private static readonly ParameterExpression _modelParameter = Expression.Parameter(typeof(ItemModel), "model");
+    private static readonly MethodInfo _onPropertyChangedMethod = typeof(NotifierBase).GetMethod(nameof(ItemModel.OnPropertyChanged), BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly)!;
+    private static readonly char[] _propertyTokens = { '.' };
 
     private readonly NotifyingCollection<Buff> _itemBuffs;
     private readonly NotifyingCollection<Buff> _playerBuffs;
@@ -33,21 +35,21 @@ public sealed class ItemModel : ItemModelBase<Item>
         set => this.SetItemValue(value);
     }
 
+    public bool IsSellable
+    {
+        get => !this.Item.IsUnsellable;
+        set => this.SetItemValue(!value, nameof(this.Item.IsUnsellable));
+    }
+
+    public bool IsStashable
+    {
+        get => !this.Item.IsUnstashable;
+        set => this.SetItemValue(!value, nameof(this.Item.IsUnstashable));
+    }
+
     public override bool IsStolen
     {
         get => base.IsStolen;
-        set => this.SetItemValue(value);
-    }
-
-    public bool IsUnsellable
-    {
-        get => this.Item.IsUnsellable;
-        set => this.SetItemValue(value);
-    }
-
-    public bool IsUnstashable
-    {
-        get => this.Item.IsUnstashable;
         set => this.SetItemValue(value);
     }
 
@@ -172,7 +174,7 @@ public sealed class ItemModel : ItemModelBase<Item>
 
         private static Func<ItemModel, TValue, bool> CreateSetter(string propertyPath, string propertyName)
         {
-            MemberExpression propertyExpression = propertyPath.Split(ItemModelBase._propertyTokens).Aggregate(
+            MemberExpression propertyExpression = propertyPath.Split(ItemModel._propertyTokens).Aggregate(
                 Expression.Property(
                     ItemModel._modelParameter,
                     ItemModel._itemProperty
@@ -198,7 +200,7 @@ public sealed class ItemModel : ItemModelBase<Item>
                         ),
                         Expression.Call(
                             ItemModel._modelParameter,
-                            ItemModelBase._onPropertyChangedMethod,
+                            ItemModel._onPropertyChangedMethod,
                             Expression.Constant(propertyName)
                         ),
                         Expression.Constant(BooleanBoxes.True)

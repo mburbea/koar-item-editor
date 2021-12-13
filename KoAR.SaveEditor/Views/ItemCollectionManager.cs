@@ -14,13 +14,13 @@ namespace KoAR.SaveEditor.Views;
 
 public sealed class ItemCollectionManager : Control
 {
+    public static readonly DependencyProperty AllItemsSellableProperty = DependencyProperty.Register(nameof(ItemCollectionManager.AllItemsSellable), typeof(bool?), typeof(ItemCollectionManager),
+        new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+
+    public static readonly DependencyProperty AllItemsStashableProperty = DependencyProperty.Register(nameof(ItemCollectionManager.AllItemsStashable), typeof(bool?), typeof(ItemCollectionManager),
+        new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+
     public static readonly DependencyProperty AllItemsStolenProperty = DependencyProperty.Register(nameof(ItemCollectionManager.AllItemsStolen), typeof(bool?), typeof(ItemCollectionManager),
-        new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
-
-    public static readonly DependencyProperty AllItemsUnsellableProperty = DependencyProperty.Register(nameof(ItemCollectionManager.AllItemsUnsellable), typeof(bool?), typeof(ItemCollectionManager),
-        new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
-
-    public static readonly DependencyProperty AllItemsUnstashableProperty = DependencyProperty.Register(nameof(ItemCollectionManager.AllItemsUnstashable), typeof(bool?), typeof(ItemCollectionManager),
         new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
     public static readonly DependencyProperty ChangeDefinitionCommandProperty = DependencyProperty.Register(nameof(ItemCollectionManager.ChangeDefinitionCommand), typeof(ICommand), typeof(ItemCollectionManager));
@@ -64,22 +64,22 @@ public sealed class ItemCollectionManager : Control
         FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(ItemCollectionManager), new FrameworkPropertyMetadata(typeof(ItemCollectionManager)));
     }
 
+    public bool? AllItemsSellable
+    {
+        get => (bool?)this.GetValue(ItemCollectionManager.AllItemsSellableProperty);
+        set => this.SetValue(ItemCollectionManager.AllItemsSellableProperty, value.HasValue ? BooleanBoxes.GetBox(value.Value) : null);
+    }
+
+    public bool? AllItemsStashable
+    {
+        get => (bool?)this.GetValue(ItemCollectionManager.AllItemsStashableProperty);
+        set => this.SetValue(ItemCollectionManager.AllItemsStashableProperty, value.HasValue ? BooleanBoxes.GetBox(value.Value) : null);
+    }
+
     public bool? AllItemsStolen
     {
         get => (bool?)this.GetValue(ItemCollectionManager.AllItemsStolenProperty);
         set => this.SetValue(ItemCollectionManager.AllItemsStolenProperty, value.HasValue ? BooleanBoxes.GetBox(value.Value) : null);
-    }
-
-    public bool? AllItemsUnsellable
-    {
-        get => (bool?)this.GetValue(ItemCollectionManager.AllItemsUnsellableProperty);
-        set => this.SetValue(ItemCollectionManager.AllItemsUnsellableProperty, value.HasValue ? BooleanBoxes.GetBox(value.Value) : null);
-    }
-
-    public bool? AllItemsUnstashable
-    {
-        get => (bool?)this.GetValue(ItemCollectionManager.AllItemsUnstashableProperty);
-        set => this.SetValue(ItemCollectionManager.AllItemsUnstashableProperty, value.HasValue ? BooleanBoxes.GetBox(value.Value) : null);
     }
 
     public ICommand? ChangeDefinitionCommand

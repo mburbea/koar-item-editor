@@ -37,26 +37,26 @@ public sealed class InventoryManagerViewModel : ManagerViewModelBase<ItemModel>
         }
     }
 
-    public bool? AllItemsUnsellable
+    public bool? AllItemsSellable
     {
-        get => this.FilteredItems.GetSelectAllCheckBoxValue(item => item.IsUnsellable);
+        get => this.FilteredItems.GetSelectAllCheckBoxValue(item => item.IsSellable);
         set
         {
             foreach (ItemModel item in this.FilteredItems)
             {
-                item.IsUnsellable = value.GetValueOrDefault();
+                item.IsSellable = value.GetValueOrDefault();
             }
         }
     }
 
-    public bool? AllItemsUnstashable
+    public bool? AllItemsStashable
     {
-        get => this.FilteredItems.GetSelectAllCheckBoxValue(item => item.IsUnstashable);
+        get => this.FilteredItems.GetSelectAllCheckBoxValue(item => item.IsStashable);
         set
         {
             foreach (ItemModel item in this.FilteredItems)
             {
-                item.IsUnstashable = value.GetValueOrDefault();
+                item.IsStashable = value.GetValueOrDefault();
             }
         }
     }
@@ -89,8 +89,8 @@ public sealed class InventoryManagerViewModel : ManagerViewModelBase<ItemModel>
     protected override void OnFilterChange()
     {
         base.OnFilterChange();
-        this.OnPropertyChanged(nameof(this.AllItemsUnsellable));
-        this.OnPropertyChanged(nameof(this.AllItemsUnstashable));
+        this.OnPropertyChanged(nameof(this.AllItemsSellable));
+        this.OnPropertyChanged(nameof(this.AllItemsStashable));
     }
 
     protected override void OnItemPropertyChanged(ItemModel item, string? propertyName)
@@ -99,11 +99,11 @@ public sealed class InventoryManagerViewModel : ManagerViewModelBase<ItemModel>
         this.GameSave.WriteEquipmentBytes(item.Item);
         switch (propertyName)
         {
-            case nameof(ItemModel.IsUnsellable):
-                this.OnPropertyChanged(nameof(this.AllItemsUnsellable));
+            case nameof(ItemModel.IsSellable):
+                this.OnPropertyChanged(nameof(this.AllItemsSellable));
                 break;
-            case nameof(ItemModel.IsUnstashable):
-                this.OnPropertyChanged(nameof(this.AllItemsUnstashable));
+            case nameof(ItemModel.IsStashable):
+                this.OnPropertyChanged(nameof(this.AllItemsStashable));
                 break;
         }
     }

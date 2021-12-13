@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
 
@@ -8,9 +7,6 @@ namespace KoAR.SaveEditor.Views;
 
 public abstract class ItemModelBase : NotifierBase, IDisposable
 {
-    protected static readonly MethodInfo _onPropertyChangedMethod = typeof(NotifierBase).GetMethod(nameof(ItemModelBase.OnPropertyChanged), BindingFlags.NonPublic | BindingFlags.Instance)!;
-    protected static readonly char[] _propertyTokens = { '.' };
-
     protected ItemModelBase(IItem item) => this.Item = item;
 
     public int AffixCount => (this.Prefix == null ? 0 : 1) + (this.Suffix == null ? 0 : 1);

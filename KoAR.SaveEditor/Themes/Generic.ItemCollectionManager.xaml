@@ -14,7 +14,6 @@
     <constructs:FloatConverter x:Key="SingleConverter" />
     <constructs:EqualityConverter x:Key="EqualityConverter" />
     <constructs:StringIsNullOrEmptyConverter x:Key="StringIsNullOrEmptyConverter" />
-    <constructs:NegatedBooleanConverter x:Key="NegatedBooleanConverter" />
     <constructs:HexConverter x:Key="HexConverter" />
     <constructs:LittleEndianConverter x:Key="LittleEndianConverter" />
     <constructs:AndConverter x:Key="AndConverter" />
@@ -223,12 +222,6 @@
                                                     </views:ItemDefinitionControl.Style>
                                                 </views:ItemDefinitionControl>
                                                 <TextBox VerticalAlignment="Center" Margin="1,0" Text="{Binding ItemName}">
-                                                    <TextBox.IsEnabled>
-                                                        <MultiBinding Converter="{StaticResource AndConverter}">
-                                                            <Binding Path="IsEquipped" Converter="{StaticResource NegatedBooleanConverter}" />
-                                                            <Binding Path="IsUnknown" Converter="{StaticResource NegatedBooleanConverter}" />
-                                                        </MultiBinding>
-                                                    </TextBox.IsEnabled>
                                                     <constructs:Watermarking.ContentTemplate>
                                                         <DataTemplate>
                                                             <TextBlock Text="{Binding}" FontStyle="Italic" />
@@ -415,7 +408,7 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Width="Auto" views:ItemCollectionManager.PropertyName="IsUnsellable" 
+                                <GridViewColumn Width="Auto" views:ItemCollectionManager.PropertyName="IsSellable" 
                                     constructs:ColumnVisibility.IsHidden="{Binding Value, Source={StaticResource Mode}, Converter={StaticResource EqualityConverter}, ConverterParameter={x:Static views:Mode.Stash}}">
                                     <GridViewColumn.Header>
                                         <StackPanel Orientation="Horizontal">
@@ -424,7 +417,7 @@
                                                     <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
                                                         <Style.Triggers>
                                                             <DataTrigger Binding="{Binding Value, Source={StaticResource Mode}}" Value="Inventory">
-                                                                <Setter Property="IsChecked" Value="{Binding AllItemsUnsellable, Converter={StaticResource NegatedBooleanConverter}, RelativeSource={RelativeSource TemplatedParent}}" />
+                                                                <Setter Property="IsChecked" Value="{Binding AllItemsSellable, RelativeSource={RelativeSource TemplatedParent}}" />
                                                             </DataTrigger>
                                                         </Style.Triggers>
                                                     </Style>
@@ -440,7 +433,7 @@
                                                     <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
                                                         <Style.Triggers>
                                                             <DataTrigger Binding="{Binding Value, Source={StaticResource Mode}}" Value="Inventory">
-                                                                <Setter Property="IsChecked" Value="{Binding IsUnsellable, Converter={StaticResource NegatedBooleanConverter}}" />
+                                                                <Setter Property="IsChecked" Value="{Binding IsSellable}" />
                                                             </DataTrigger>
                                                         </Style.Triggers>
                                                     </Style>
@@ -449,7 +442,7 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Width="Auto" views:ItemCollectionManager.PropertyName="IsUnstashable" 
+                                <GridViewColumn Width="Auto" views:ItemCollectionManager.PropertyName="IsStashable" 
                                     constructs:ColumnVisibility.IsHidden="{Binding Value, Source={StaticResource Mode}, Converter={StaticResource EqualityConverter}, ConverterParameter={x:Static views:Mode.Stash}}">
                                     <GridViewColumn.Header>
                                         <StackPanel Orientation="Horizontal">
@@ -458,7 +451,7 @@
                                                     <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
                                                         <Style.Triggers>
                                                             <DataTrigger Binding="{Binding Value, Source={StaticResource Mode}}" Value="Inventory">
-                                                                <Setter Property="IsChecked" Value="{Binding AllItemsUnstashable, Converter={StaticResource NegatedBooleanConverter}, RelativeSource={RelativeSource TemplatedParent}}" />
+                                                                <Setter Property="IsChecked" Value="{Binding AllItemsStashable, RelativeSource={RelativeSource TemplatedParent}}" />
                                                             </DataTrigger>
                                                         </Style.Triggers>
                                                     </Style>
@@ -474,7 +467,7 @@
                                                     <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
                                                         <Style.Triggers>
                                                             <DataTrigger Binding="{Binding Value, Source={StaticResource Mode}}" Value="Inventory">
-                                                                <Setter Property="IsChecked" Value="{Binding IsUnstashable, Converter={StaticResource NegatedBooleanConverter}}" />
+                                                                <Setter Property="IsChecked" Value="{Binding IsStashable}" />
                                                             </DataTrigger>
                                                         </Style.Triggers>
                                                     </Style>
