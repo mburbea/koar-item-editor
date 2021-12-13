@@ -87,6 +87,7 @@ public abstract class UpdateViewModelBase : NotifierBase, IDisposable
         }
         this.Cancel();
         this._downloadTask.ContinueWith(delegate { this.DeleteFile(); }, TaskContinuationOptions.None);
+        GC.SuppressFinalize(this);
     }
 
     private static Brush CreateAlternateBrush()

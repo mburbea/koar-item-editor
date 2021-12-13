@@ -14,7 +14,7 @@ namespace KoAR.SaveEditor.Views;
 public sealed class BitmapConverter : IValueConverter, IMultiValueConverter
 {
     private static readonly Dictionary<string, BitmapImage> _bitmaps = BitmapConverter.DiscoverBitmaps();
-    private static readonly BitmapImage _fallback = BitmapConverter.CreateFrozenBitmap(() => new());
+    private static readonly BitmapImage _fallback = BitmapConverter.Freeze(new());
 
     object IValueConverter.Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
@@ -54,13 +54,6 @@ public sealed class BitmapConverter : IValueConverter, IMultiValueConverter
 
     object[] IMultiValueConverter.ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture) => throw new NotImplementedException();
 
-    private static BitmapImage CreateFrozenBitmap(Func<BitmapImage> factory)
-    {
-        BitmapImage image = factory();
-        image.Freeze();
-        return image;
-    }
-
     private static Dictionary<string, BitmapImage> DiscoverBitmaps()
     {
         Assembly assembly = Assembly.GetExecutingAssembly();
@@ -71,9 +64,15 @@ public sealed class BitmapConverter : IValueConverter, IMultiValueConverter
             .Where(path => path.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
             .ToDictionary(
                 name => Path.GetFileNameWithoutExtension(name)!,
-                name => BitmapConverter.CreateFrozenBitmap(() => new(new($"pack://application:,,,/{assembly.GetName().Name};component/{name}"))),
+                name => BitmapConverter.Freeze(new(new($"pack://application:,,,/{assembly.GetName().Name};component/{name}"))),
                 StringComparer.OrdinalIgnoreCase
             );
+    }
+
+    private static BitmapImage Freeze(BitmapImage image)
+    {
+        image.Freeze();
+        return image;
     }
 
     private static BitmapImage GetFallback(object? parameter)

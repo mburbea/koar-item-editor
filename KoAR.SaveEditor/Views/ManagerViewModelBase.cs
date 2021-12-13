@@ -54,6 +54,7 @@ public abstract class ManagerViewModelBase<TItem> : NotifierBase, IDisposable
             item.Dispose();
         }
         this.ItemFilters.FilterChange -= this.ItemFilters_FilterChange;
+        GC.SuppressFinalize(this);
     }
 
     protected void AddItem(TItem item)

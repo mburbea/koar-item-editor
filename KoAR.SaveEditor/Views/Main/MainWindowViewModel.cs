@@ -252,7 +252,7 @@ public sealed class MainWindowViewModel : NotifierBase
         }
     }
 
-    private void MainWindow_Closing(object sender, CancelEventArgs e)
+    private void MainWindow_Closing(object? sender, CancelEventArgs e)
     {
         e.Cancel = this.CancelDueToUnsavedChanges(
             new("Quit without saving."),
