@@ -150,7 +150,6 @@ public static class UpdateMethods
         return client;
     }
 
-
     private sealed class Release : IReleaseInfo
     {
         private Version? _version;
