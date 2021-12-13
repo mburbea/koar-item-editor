@@ -56,8 +56,7 @@ public sealed class ItemDefinition
     internal static IEnumerable<ItemDefinition> ParseFile(Stream stream)
     {
         using var reader = new StreamReader(stream);
-        reader.ReadLine();
-        while (reader.ReadLine() is string line)
+        foreach (var line in reader.ReadLines().Skip(1))
         {
             if (TryLoadFromRow(line.Split(Amalur.Separator), out var definition))
             {

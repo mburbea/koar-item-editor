@@ -36,11 +36,10 @@ public static class Amalur
         ItemDefinitions = ItemDefinition.ParseFile(itemsStream).ToDictionary(def => def.TypeId);
         using var simTypesStream = archive.GetEntry("simtype.csv")!.Open();
         using var reader = new StreamReader(simTypesStream);
-        SimTypes = Enumerable.Repeat(reader, int.MaxValue)
-            .Select(r => reader.ReadLine())
-            .TakeWhile(r => r is { })
-            .Select(l => l!.Split(','))
-            .ToDictionary(k => uint.Parse(k[0]), v => v[1]);
+        SimTypes = reader
+            .ReadLines()
+            .Select(l => l.Split(','))
+            .ToDictionary(arr => uint.Parse(arr[0]), arr => arr[1]);
     }
 
     public static IReadOnlyDictionary<uint, Buff> Buffs { get; }
@@ -110,5 +109,13 @@ public static class Amalur
         {
         }
         return Environment.CurrentDirectory;
+    }
+
+    public static IEnumerable<string> ReadLines(this TextReader reader)
+    {
+        while (reader.ReadLine() is { } line)
+        {
+            yield return line;
+        }
     }
 }
