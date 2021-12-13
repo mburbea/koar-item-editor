@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading;
-
-namespace KoAR.Core;
+﻿namespace KoAR.Core;
 
 public record GemDefinition(
     uint TypeId,
