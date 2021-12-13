@@ -225,6 +225,10 @@ public abstract class UpdateViewModelBase : NotifierBase, IDisposable
 
         void ReportProgress() => (this.BytesTransferred, this.Speed) = (bytesTransferred, bytesPerInterval * 1000d / interval);
 
-        void Timer_Tick(object? sender, EventArgs e) => ReportProgress();
+        void Timer_Tick(object? sender, EventArgs e)
+        {
+            ReportProgress();
+            bytesPerInterval = 0;
+        }
     }
 }
