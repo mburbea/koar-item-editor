@@ -54,8 +54,6 @@ public static class Amalur
             0x70, 0x38, 0x0A, 0x00,  // playerElfFemale
         });
 
-    internal static char[] Separator { get; } = { ',' };
-
     public static Buff GetBuff(uint buffId) => Buffs.GetValueOrDefault(buffId, new() { Id = buffId, Name = "Unknown" });
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

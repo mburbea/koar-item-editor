@@ -58,7 +58,7 @@ public sealed class ItemDefinition
         using var reader = new StreamReader(stream);
         foreach (var line in reader.ReadLines().Skip(1))
         {
-            if (TryLoadFromRow(line.Split(Amalur.Separator), out var definition))
+            if (TryLoadFromRow(line.Split(','), out var definition))
             {
                 yield return definition;
             }

@@ -15,7 +15,6 @@ public sealed class ItemModel : ItemModelBase<Item>
     private static readonly PropertyInfo _itemProperty = typeof(ItemModelBase<Item>).GetProperty(nameof(ItemModel.Item), BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)!;
     private static readonly ParameterExpression _modelParameter = Expression.Parameter(typeof(ItemModel), "model");
     private static readonly MethodInfo _onPropertyChangedMethod = typeof(NotifierBase).GetMethod(nameof(ItemModel.OnPropertyChanged), BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly)!;
-    private static readonly char[] _propertyTokens = { '.' };
 
     private readonly NotifyingCollection<Buff> _itemBuffs;
     private readonly NotifyingCollection<Buff> _playerBuffs;
@@ -174,7 +173,7 @@ public sealed class ItemModel : ItemModelBase<Item>
 
         private static Func<ItemModel, TValue, bool> CreateSetter(string propertyPath, string propertyName)
         {
-            MemberExpression propertyExpression = propertyPath.Split(ItemModel._propertyTokens).Aggregate(
+            MemberExpression propertyExpression = propertyPath.Split('.').Aggregate(
                 Expression.Property(
                     ItemModel._modelParameter,
                     ItemModel._itemProperty
