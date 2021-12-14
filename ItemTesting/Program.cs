@@ -277,7 +277,8 @@ static class Program
 
         const string path = @"..\..\..\..\svd_fmt_5_19.sav";
         GameSave gs = new(path);
-        var fists = gs.Items.Where(x => x.Definition.Category == EquipmentCategory.Unknown).Select(x => x.Definition.TypeId);
+        var fists = gs.Items.Where(x => x.Definition.Category.IsUnknown()).Select(x => x.Definition.TypeId).ToArray();
+        Array.ForEach(fists, Console.WriteLine);
         
             
         WriteParentFile(gs);
