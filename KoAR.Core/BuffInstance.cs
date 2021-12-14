@@ -5,29 +5,14 @@ using System.Runtime.InteropServices;
 namespace KoAR.Core;
 
 [StructLayout(LayoutKind.Sequential)]
-public readonly struct BuffInstance
+public readonly record struct BuffInstance(uint InstanceId, uint BuffId, ulong Duration = ulong.MaxValue)
 {
-    public readonly uint InstanceId;
-    public readonly uint BuffId;
-    public readonly ulong Duration;
-
-    public BuffInstance(uint instanceId, uint buffId) => (InstanceId, BuffId, Duration) = (instanceId, buffId, ulong.MaxValue);
-
-    public void Deconstruct(out uint instanceId, out uint buffId, out ulong duration) => (instanceId, buffId, duration) = (InstanceId, BuffId, Duration);
-
     public static Span<BuffInstance> ReadList(ref Span<byte> data) => BuffMethods.ReadList<BuffInstance>(ref data);
 }
 
 [StructLayout(LayoutKind.Sequential)]
-public readonly struct BuffDuration
-{
-    public readonly uint BuffId;
-    public readonly uint Duration;
-
-    public BuffDuration(uint buffId) => (BuffId, Duration) = (buffId, uint.MaxValue);
-
-    public void Deconstruct(out uint buffId, out uint duration) => (buffId, duration) = (BuffId, Duration);
-
+public readonly record struct BuffDuration(uint BuffId, uint Duration = uint.MaxValue)
+{ 
     public static Span<BuffDuration> ReadList(ref Span<byte> data) => BuffMethods.ReadList<BuffDuration>(ref data);
 }
 

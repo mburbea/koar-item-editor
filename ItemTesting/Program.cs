@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using KoAR.Core;
 
 namespace ItemTesting;
@@ -67,9 +70,10 @@ namespace ItemTesting;
 static class Program
 {
 
-    static void ConvertSymbolsToLua(string inPath, string outPath)
+    static void ConvertSymbolsToLua(string inPath, string outPath, params string[] files)
     {
-        foreach (var file in Directory.EnumerateFiles(inPath, "symbol_table_*.bin", SearchOption.TopDirectoryOnly))
+        foreach (var file in Directory.EnumerateFiles(inPath, "symbol_table_*.bin", SearchOption.TopDirectoryOnly)
+            .Where(x => files.Length == 0 || files.Contains(Path.GetFileNameWithoutExtension(x)["symbol_table_".Length..])))
         {
             var fileInfo = new FileInfo(file);
             var data = File.ReadAllBytes(file);
@@ -77,7 +81,7 @@ static class Program
             var firstString = 8 + elementCount * 12;
 
             File.WriteAllText(Path.Combine(outPath, fileInfo.Name["symbol_table_".Length..^4] + ".lua"),
-                "{\n" + string.Join(",\n", Enumerable.Range(0, elementCount)
+                "return {\n" + string.Join(",\n", Enumerable.Range(0, elementCount)
                 .Select(x => (id: BitConverter.ToInt32(data, 4 + x * 12), s: BitConverter.ToInt32(data, 4 + x * 12 + 4), e: BitConverter.ToInt32(data, 4 + x * 12 + 8)))
                 .Select(y => $"{{'{y.id:X6}','{Encoding.Default.GetString(data[(firstString + y.s)..(firstString + y.e - 1)])}'}}")) + "\n}");
         }
@@ -113,7 +117,60 @@ static class Program
     //    }
     //}
 
-    static readonly Dictionary<uint, string> Dict = BuildSimtypeDict();
+    static void Deconstruct(this ulong input, out uint simtype, out int fileSize) => (simtype, fileSize) = ((uint)(input & uint.MaxValue), (int)(input >> 32));
+
+    static void CreateBatchArchive(string file, string outZip)
+    {
+        if (File.Exists(outZip))
+        {
+            return;
+        }
+        using var zip = new ZipArchive(File.Create(outZip), ZipArchiveMode.Create);
+        ReadOnlySpan<byte> data = File.ReadAllBytes(file);
+        int entryCount = BitConverter.ToInt32(data);
+        var assets = MemoryMarshal.Cast<byte, ulong>(data.Slice(4, entryCount * sizeof(ulong)));
+        var remaining = data[(sizeof(int) + entryCount * sizeof(ulong))..];
+        foreach (var (id, fileSize) in assets)
+        {
+            if (!SimtypeDict.TryGetValue(id, out var name))
+            {
+                name = id.ToString();
+                Console.WriteLine($"Unknown simtypeId:{id}");
+            }
+            using var entry = zip.CreateEntry($"{name}.simtype_bxml").Open();
+            entry.Write(remaining[..fileSize]);
+            remaining = remaining[fileSize..];
+        }
+    }
+
+    static Dictionary<uint, uint> BuildParentDict()
+    {
+        using var zarchive = ZipFile.OpenRead(@"..\..\..\simtypes_unpacked.zip");
+        var buffer = (stackalloc byte[44]);
+        var dictionary = new Dictionary<uint, uint>();
+        foreach (var entry in zarchive.Entries)
+        {
+            var sname = Path.GetFileNameWithoutExtension(entry.Name);
+            if (ReverseSimtype.TryGetValue(sname, out var typeId))
+            {
+                using var stream = entry.Open();
+                stream.Read(buffer);
+                var parentId = BitConverter.ToUInt32(buffer[40..]);
+
+                SimtypeDict.TryGetValue(parentId, out var parentName);
+                dictionary.Add(typeId, parentId);
+            }
+        }
+        return dictionary;
+    }
+
+    static readonly Dictionary<uint, string> SimtypeDict = BuildSimtypeDict();
+    static readonly HashSet<string> Supers;
+    static readonly Dictionary<string, uint> ReverseSimtype = SimtypeDict.ToDictionary(x => x.Value, x => x.Key);
+
+    static readonly Dictionary<uint, uint> ParentDict = BuildParentDict();
+
+    static readonly HashSet<uint> ScalingVariants = BuildVariants();
 
     private static Dictionary<uint, string> BuildSimtypeDict()
     {
@@ -124,23 +181,106 @@ static class Program
             .ToDictionary(x => x.id, y => Encoding.Default.GetString(data[(firstString + y.s)..(firstString + y.e - 1)]));
     }
 
+
+    static void WriteParentFile(GameSave gs)
+    {
+        File.WriteAllLines(@"C:\Program Files (x86)\Steam\steamapps\common\Kingdoms of Amalur Re-Reckoning\mods\resources\parent.lua",
+        gs.Items.Select(item => Entry(item)).Prepend("return {").Append("}"));
+
+        static string Entry(Item item)
+        {
+            var typeId = item.Definition.TypeId;
+            var internalName = SimtypeDict[typeId];
+            bool isMerchant = internalName.Contains("merchant") && typeId != 0x0AD192;
+            bool affixableName = isMerchant || internalName.Contains("common");
+            var s = $@"[{typeId}] = {{
+    internal_name='{internalName}'";
+            if (item.Definition.Name != internalName)
+            {
+                s += $",\n    old_name=\"{item.Definition.Name}\"";
+            }
+            if (item.ItemBuffs.Prefix is { Id: { } prefix })
+            {
+                s += $",\n    prefix={prefix}";
+            }
+            if (item.ItemBuffs.Suffix is { Id: { } suffix })
+            {
+                s += $",\n    suffix={suffix}";
+            }
+            if (ParentDict[item.Definition.TypeId] is { } parentId and > 0)
+            {
+                s += $",\n    parent_name='{SimtypeDict[parentId]}'";
+            }
+            if (isMerchant)
+            {
+                s += $",\n    is_merchant=true";
+            }
+            if (affixableName)
+            {
+                s += $",\n    affixable_name=true";
+            }
+            if (ScalingVariants.Contains(typeId))
+            {
+                s += $",\n    has_variants=true";
+            }
+            return s + "},";
+        }
+    }
+
+    static HashSet<uint> BuildVariants()
+    {
+        var scalingVariants = new HashSet<uint>();
+        foreach (var (id, parentId) in ParentDict)
+        {
+            var name = SimtypeDict[id];
+            if (parentId == 0 || name.Contains("parent", StringComparison.OrdinalIgnoreCase)
+                || name.Contains("dev_", StringComparison.OrdinalIgnoreCase)
+                || name.Contains("socket", StringComparison.OrdinalIgnoreCase)
+                || name.Contains("merchant", StringComparison.OrdinalIgnoreCase)
+                || name.Contains("common", StringComparison.OrdinalIgnoreCase)
+                || name.Length == 0)
+            {
+                continue;
+            }
+            var parentName = SimtypeDict[parentId];
+            if(Regex.IsMatch(name, @"primal\d\d$", RegexOptions.Compiled))
+            {
+                scalingVariants.Add(id);
+                continue;
+            }
+            if (name.AsSpan(0, name.LastIndexOf('_') is int ix and > -1 ? ix : (name.Length - 1)).SequenceEqual(parentName.AsSpan(0, parentName.LastIndexOf('_') is int pix and > -1 ? pix : (parentName.Length - 1)))) 
+            {
+                scalingVariants.Add(id);
+                continue;
+            }
+
+            if (name[^1] == 'a')
+            {
+                var buffer = (stackalloc char[name.Length]);
+                name.CopyTo(buffer);
+                buffer[^1] = 'b';
+                if(ReverseSimtype.ContainsKey(new string(buffer)))
+                {
+                    scalingVariants.Add(id);
+                    continue;
+                }
+            }
+        }
+        return scalingVariants;
+    }
     static void Main()
     {
-        ConvertSymbolsToCsv(@"C:\e\", @"C:\e\o");
+        Span<uint> a = new uint[] { 1806007, 1642834, 1474026, 1436546, 1415259, 1373427, 1351793, 1307402, 753153, 751641, 635751, 598989, 577807, 577806, 577805, 577804, 527193, 495310, 486912, 457026, 441022, 440618, 218844, 218240, 217568 };
+        File.WriteAllBytes(@"C:\e\o\f.bin", MemoryMarshal.AsBytes(a).ToArray());
+        ConvertSymbolsToLua(@"C:\e\", @"C:\Program Files (x86)\Steam\steamapps\common\Kingdoms of Amalur Re-Reckoning\mods\resources\","simtype","buff");
+        CreateBatchArchive(@"C:\e\134225858_ksmt.batch", @"..\..\..\simtypes_unpacked.zip");
+
         const string path = @"..\..\..\..\svd_fmt_5_19.sav";
         GameSave gs = new(path);
-        foreach (var item in gs.Items.Where(x => x.Definition.Category.IsUnknown()))
-        {
-            var id = item.Definition.TypeId;
-            if (item.ItemSockets is null) continue;
-            var n = Dict[id];
-            if (n.StartsWith("bag_") || n.StartsWith("recipe_") || n.StartsWith("alchemypotion_")) continue;
-            Console.WriteLine($"{Dict[id]},{item.ItemBuffs.Prefix?.Id},{item.ItemBuffs.Suffix?.Id}");
-
-        }
-        Console.Read();
+        WriteParentFile(gs);
     }
 }
+
 
 //        {
 //            static string FormatAsStr(IEnumerable<uint> effects) => string.Join("", effects.Select(x => $"{x:X6}"));

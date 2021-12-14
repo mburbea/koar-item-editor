@@ -86,6 +86,9 @@ public sealed partial class GameSave
             var id = BitConverter.ToInt32(Body, ixOfActor + 9);
             var typeIdOffset = ixOfActor + 13;
             var typeId = BitConverter.ToUInt32(Body, typeIdOffset);
+            if(Amalur.MagicTypeIds.Contains(typeId))
+            {
+            }
             if (Amalur.ItemDefinitions.ContainsKey(typeId))
             {
                 candidates.Add((id, typeIdOffset, null));
