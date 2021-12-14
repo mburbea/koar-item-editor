@@ -88,6 +88,7 @@ public sealed partial class GameSave
             var typeId = BitConverter.ToUInt32(Body, typeIdOffset);
             if(Amalur.MagicTypeIds.Contains(typeId))
             {
+                continue;
             }
             if (Amalur.ItemDefinitions.ContainsKey(typeId))
             {

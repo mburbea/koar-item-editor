@@ -29,6 +29,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Data.zip" />
+    <None Remove="Data\a.txt" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Data.zip" />
@@ -40,6 +41,9 @@
   </ItemGroup>
   <ItemGroup>
     <MySourceFiles Include="$(MSBuildProjectDirectory)\Data\*.*" />
+  </ItemGroup>
+  <ItemGroup>
+    <MySourceFiles Remove="Data\definitions.csv" />
   </ItemGroup>
   <Target Name="CopyToOut" BeforeTargets="BeforeBuild">
       <Copy SourceFiles="@(MySourceFiles)" DestinationFolder="$(OutDir)\Data" />
