@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace KoAR.Core;
 
-public sealed partial class ItemDefinition
+public sealed partial class ItemDefinition : IDefinition
 {
 #if DEBUG
     internal ItemDefinition(uint typeId)
@@ -60,8 +60,10 @@ public sealed partial class ItemDefinition
     public bool HasVariants { get; }
     public bool IsMerchant { get; }
     public IItemBuffMemory ItemBuffs { get; }
+    public bool RequiresFatesworn => Name.StartsWith("mit_")
 
     public IEnumerable<Socket> GetSockets() => SocketTypes.Select(socket => new Socket(socket));
+    
 
     public string CategoryDisplayName => this switch
     {

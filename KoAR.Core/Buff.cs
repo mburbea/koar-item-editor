@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace KoAR.Core;
 
-public class Buff
+public class Buff : IDefinition
 {
     public uint Id { get; set; }
     public string? Modifier { get; set; }
@@ -19,6 +19,8 @@ public class Buff
     public string TitleText => (((BuffTypes.TransientOrAffix & BuffType) == BuffType ? Modifier : Flavor) ?? Name).Replace('\n', '.');
 
     public string ShortDisplayText => $"{TitleText} [{(Descriptions.Any() ? string.Join(";", Descriptions.Select(x => x.Text)) : "None")}]";
+
+    public bool RequiresFatesworn => Name.StartsWith("mit_");
 }
 
 public class BuffDescription
