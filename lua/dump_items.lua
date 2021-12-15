@@ -200,7 +200,8 @@ for _,item in ipairs(PLAYER.get_pocket_contents("Default")) do
                 player_buffs = normal,
                 is_merchant = entry.is_merchant,
                 affixable_name = entry.affixable_name,
-                has_variants = entry.has_variants
+                has_variants = entry.has_variants,
+                desc =TYPE.get_inventory_description(simtype)
             }
     end
 end

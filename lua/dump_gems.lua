@@ -59,8 +59,7 @@ local tbl = {}
 for _,row in ipairs(simtypes) do
     local k,v = row[1], row[2]
     if (not (contains(v,'spear') 
-        or contains(v,'invalid') 
-        or starts_with(v,'ao_')
+        or contains(v,'invalid')
     )) then
         local simtype = SIMTYPE_ID(v)
         local meta = TYPE.get_component_meta_type(simtype)

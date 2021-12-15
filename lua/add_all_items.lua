@@ -9,10 +9,10 @@ local function starts_with(str, start)
  end
  
 function add_all_items(vals)
-    local allowed = {Weapon=true,Torso=true,Hands=true,Legs=true,Hat=true,Feet=true,Shield=true,Ring=true,Necklace=true,Robe=true,Cap=true,Magic=true}
+    local allowed = {Weapon=true,Torso=true,Hands=true,Legs=true,Hat=true,Feet=true,Shield=true,Ring=true,Necklace=true,Robe=true,Cap=true}
     for i,row in ipairs(vals) do
         local k,v = row[1],row[2]
-        if (not (contains(v,'spear') or contains(v,'invalid') or starts_with(v,'ao_'))) then
+        if (not (contains(v,'spear') or contains(v,'invalid'))) then
             local simt = SIMTYPE_ID(v)
             local r = TYPE.get_equip_type(simt,1)
             if(not PLAYER.has_item(simt) and r~=nil and allowed[r]) then
