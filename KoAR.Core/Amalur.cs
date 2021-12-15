@@ -127,8 +127,8 @@ public static class Amalur
     public static int ReadAll(this ZLibStream stream, Span<byte> buffer)
     {
         var totalAmountRead = 0;
-        while(stream.Read(buffer) is int read and > 0)
-        { 
+        while (stream.Read(buffer) is int read and > 0)
+        {
             totalAmountRead += read;
             buffer = buffer[read..];
         }
