@@ -60,7 +60,7 @@ public sealed partial class ItemDefinition : IDefinition
     public bool HasVariants { get; }
     public bool IsMerchant { get; }
     public IItemBuffMemory ItemBuffs { get; }
-    public bool RequiresFatesworn => Name.StartsWith("mit_")
+    public bool RequiresFatesworn => Name.StartsWith("mit_");
 
     public IEnumerable<Socket> GetSockets() => SocketTypes.Select(socket => new Socket(socket));
     
