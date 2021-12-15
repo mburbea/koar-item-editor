@@ -1,9 +1,8 @@
-﻿using Ionic.Zlib;
-using StringLiteral;
+﻿using StringLiteral;
 using System;
 using System.Collections.Generic;
 using System.IO;
-//using System.IO.Compression;
+using System.IO.Compression;
 using System.IO.Hashing;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -50,12 +49,13 @@ public sealed partial class GameSave
             Body = new byte[_header.BodyDataLength];
             var bundleInfoStart = BodyStart + 12;
             var bundleInfoSize = BitConverter.ToInt32(Bytes, bundleInfoStart - 4);
-            using var bundleInfoData = new ZlibStream(new MemoryStream(Bytes, bundleInfoStart, bundleInfoSize), CompressionMode.Decompress);
-            var endOfBundle = bundleInfoData.Read(Body, 0, Body.Length);
+            using var bundleInfoData = new ZLibStream(new MemoryStream(Bytes, bundleInfoStart, bundleInfoSize), CompressionMode.Decompress);
+            File.WriteAllBytes(@"C:\e\repro.zlib", new MemoryStream(Bytes, bundleInfoStart, bundleInfoSize).ToArray());
+            var endOfBundle = bundleInfoData.ReadAll(Body);
             var gameStateStart = bundleInfoStart + bundleInfoSize + 4;
             var gameStateSize = BitConverter.ToInt32(Bytes, gameStateStart - 4);
-            using var gameStateData = new ZlibStream(new MemoryStream(Bytes, gameStateStart, gameStateSize), CompressionMode.Decompress);
-            gameStateData.Read(Body, endOfBundle, Body.Length - endOfBundle);
+            using var gameStateData = new ZLibStream(new MemoryStream(Bytes, gameStateStart, gameStateSize), CompressionMode.Decompress);
+            gameStateData.ReadAll(Body.AsSpan(endOfBundle,Body.Length - endOfBundle));
         }
         else
         {
@@ -287,9 +287,9 @@ public sealed partial class GameSave
         static (Stream, int) CompressStream(byte[] body, int start, int count)
         {
             var stream = new MemoryStream();
-            using (var zip = new ZlibStream(stream, CompressionMode.Compress, leaveOpen: true))
+            using (var zip = new ZLibStream(stream, CompressionMode.Compress, leaveOpen: true))
             {
-                Unsafe.WriteUnaligned(ref body[start], count);
+                zip.Write(body, start, count);
             }
             stream.Seek(0L, SeekOrigin.Begin);
             return (stream, (int)stream.Length);

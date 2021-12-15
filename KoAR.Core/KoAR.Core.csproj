@@ -35,8 +35,7 @@
     <EmbeddedResource Include="Data.zip" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="DotNetZip" Version="1.16.0" />
-    <PackageReference Include="StringLiteralGenerator" Version="1.1.0" />
+    <PackageReference Include="StringLiteralGenerator" Version="2.0.0" />
     <PackageReference Include="System.IO.Hashing" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
@@ -44,8 +43,8 @@
   </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <MySourceFiles Remove="Data\definitions.csv" />
-	<MySourceFiles Remove="Data\simtype.csv"/>
-	<MySourceFiles Remove="Data\magic.json"/>
+	  <MySourceFiles Remove="Data\simtype.csv" />
+	  <MySourceFiles Remove="Data\magic.json" />
   </ItemGroup>
   <Target Name="CopyToOut" BeforeTargets="BeforeBuild">
       <Copy SourceFiles="@(MySourceFiles)" DestinationFolder="$(OutDir)\Data" />
