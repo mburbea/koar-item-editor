@@ -1,12 +1,5 @@
 local simtypes = dofile('.\\mods\\resources\\simtype.lua')
 
-local lib = "KoreUtils.dll"
-
-FileOpenWrite = package.loadlib(lib, "FileOpenWrite")
-FileWrite = package.loadlib(lib, "FileWrite")
-FileClose = package.loadlib(lib, "FileClose")
-FileFlush = package.loadlib(lib, "FileFlush")
-
 function contains(word, toFind)
     return string.find(string.lower(word), toFind) and true or false
 end

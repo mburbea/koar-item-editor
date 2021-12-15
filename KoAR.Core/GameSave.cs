@@ -66,7 +66,12 @@ public sealed partial class GameSave
         ReadOnlySpan<byte> data = Body;
         _bagOffset = GetBagOffset(data);
         _gameStateStartOffset = data.IndexOf(new byte[5] { 0xF7, 0x5D, 0x3C, 0x00, 0x0A });
-        var typeSectionOffset = data.IndexOf(new byte[5] { 0x23, 0xCC, 0x58, 0x00, 0x04 }) is int ix and not -1 ? ix : data.IndexOf(new byte[5] { 0x23, 0xCC, 0x58, 0x00, 0x03 });
+        var typeSectionOffset =
+            data.IndexOf(new byte[5] { 0x23, 0xCC, 0x58, 0x00, 0x06 }) is int ix and > -1 
+            ? ix 
+            : data.IndexOf(new byte[5] { 0x23, 0xCC, 0x58, 0x00, 0x04 }) is int pix and > -1 
+                ? pix 
+                : data.IndexOf(new byte[5] { 0x23, 0xCC, 0x58, 0x00, 0x03 });
         _dataLengthOffsets = new[]{
                 _gameStateStartOffset + 5, // gameStateSize
                 data.IndexOf(new byte[5] { 0x0C, 0xAE, 0x32, 0x00, 0x00 }) + 5, // unknown length 1

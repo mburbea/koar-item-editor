@@ -68,6 +68,7 @@ function determine_category(actor)
         cats['Greathammer'] = 'Hammer'
         cats['Bow']='Longbow'
         cats['Chakram']='Chakrams'
+        cats['Fists']='Fists'
         return cats[inventory_win.get_weapon_type(actor)]
     elseif(e == 'Robe') then
         return "Robes"
@@ -95,15 +96,23 @@ function get_buffs(actor,prefix,suffix)
     local first_normal = nil
     for _,buff in ipairs(ACTOR.get_owner_buffs_from_object(actor) or {}) do
         local id = tonumber(tostring(buff):sub(5,10),16)
-        if(id ~= prefix and id ~= suffix) then
+        if(id == prefix) then
+            prefix = nil
+        elseif(id == suffix)then
+            suffix = nil        
+        else
             first_normal = first_normal or id
-            normal[#normal + 1] = tonumber(id,16)
+            normal[#normal + 1] = id
         end
     end
     for i,buff in ipairs(ACTOR.get_self_buffs_from_object(actor) or {}) do
-        local id = tostring(buff):sub(5,10):upper()
-        if(id ~=prefix and id ~= suffix) then
-            selfs[#selfs + 1] = tonumber(id,16)
+        local id = tonumber(tostring(buff):sub(5,10),16)
+        if(id == prefix) then
+            prefix = nil
+        elseif(id == suffix)then
+            suffix = nil        
+        else
+            selfs[#selfs + 1] = id
         end
     end
     return selfs, normal, first_normal
@@ -169,7 +178,7 @@ for _,item in ipairs(PLAYER.get_pocket_contents("Default")) do
     local typeId = tonumber(tostring(simtype):sub(5,10),16)
     local entry = parent[typeId]
     local category = determine_category(item)
-    if(category =='Magic') then
+    if(category =='Magic' or category=='Fists') then
         magic[#magic+1] = typeId
     elseif(entry ~= nil) then
         local selfs,normal,first_normal = get_buffs(item, entry.prefix, entry.suffix)

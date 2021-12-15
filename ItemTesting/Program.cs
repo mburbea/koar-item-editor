@@ -103,6 +103,18 @@ static class Program
         }
     }
 
+    static void CreateSimTypeCsv(string inPath, string outPath)
+    {
+        var fileInfo = new FileInfo(inPath);
+        var data = File.ReadAllBytes(inPath);
+        var elementCount = BitConverter.ToInt32(data, 0);
+        var firstString = 8 + elementCount * 12;
+        File.WriteAllLines(outPath,
+                Enumerable.Range(0, elementCount)
+                .Select(x => (id: BitConverter.ToInt32(data, 4 + x * 12), s: BitConverter.ToInt32(data, 4 + x * 12 + 4), e: BitConverter.ToInt32(data, 4 + x * 12 + 8)))
+                .Select(y => $"{y.id},{Encoding.Default.GetString(data[(firstString + y.s)..(firstString + y.e - 1)])}"));
+    }
+
     //static void Main()
     //{
     //    const string path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save77.sav";
@@ -119,12 +131,12 @@ static class Program
 
     static void Deconstruct(this ulong input, out uint simtype, out int fileSize) => (simtype, fileSize) = ((uint)(input & uint.MaxValue), (int)(input >> 32));
 
-    static void CreateBatchArchive(string file, string outZip)
+    static bool CreateBatchArchive(string file, string outZip)
     {
-        if (File.Exists(outZip))
-        {
-            return;
-        }
+        //if (File.Exists(outZip))
+        //{
+        //    return;
+        //}
         using var zip = new ZipArchive(File.Create(outZip), ZipArchiveMode.Create);
         ReadOnlySpan<byte> data = File.ReadAllBytes(file);
         int entryCount = BitConverter.ToInt32(data);
@@ -141,6 +153,7 @@ static class Program
             entry.Write(remaining[..fileSize]);
             remaining = remaining[fileSize..];
         }
+        return true;
     }
 
     static Dictionary<uint, uint> BuildParentDict()
@@ -163,10 +176,11 @@ static class Program
         }
         return dictionary;
     }
-
     static readonly Dictionary<uint, string> SimtypeDict = BuildSimtypeDict();
     static readonly HashSet<string> Supers;
     static readonly Dictionary<string, uint> ReverseSimtype = SimtypeDict.ToDictionary(x => x.Value, x => x.Key);
+    static readonly bool WhoCares = CreateBatchArchive(@"C:\e\134225858_ksmt.batch", @"..\..\..\simtypes_unpacked.zip");
+
 
     static readonly Dictionary<uint, uint> ParentDict = BuildParentDict();
 
@@ -270,16 +284,25 @@ static class Program
     }
     static void Main()
     {
-        Span<uint> a = new uint[] { 1806007, 1642834, 1474026, 1436546, 1415259, 1373427, 1351793, 1307402, 753153, 751641, 635751, 598989, 577807, 577806, 577805, 577804, 527193, 495310, 486912, 457026, 441022, 440618, 218844, 218240, 217568 };
-        File.WriteAllBytes(@"C:\e\o\f.bin", MemoryMarshal.AsBytes(a).ToArray());
+        //CreateSimTypeCsv(@"C:\e\symbol_table_simtype.bin", @"..\..\..\simtype.csv");
+        ulong s = 0x00_1c41a5_00_00_03_40;
+        var (var1, var2) = s;
+        Console.WriteLine($"{{SL1={var1},SL2={var2}}}");
         ConvertSymbolsToLua(@"C:\e\", @"C:\Program Files (x86)\Steam\steamapps\common\Kingdoms of Amalur Re-Reckoning\mods\resources\","simtype","buff");
-        CreateBatchArchive(@"C:\e\134225858_ksmt.batch", @"..\..\..\simtypes_unpacked.zip");
+        
 
         const string path = @"..\..\..\..\svd_fmt_5_19.sav";
         GameSave gs = new(path);
-        var fists = gs.Items.Where(x => x.Definition.Category.IsUnknown()).Select(x => x.Definition.TypeId).ToArray();
-        Array.ForEach(fists, Console.WriteLine);
-        
+        foreach (var item in gs.Items)
+        {
+            if(item.PlayerBuffs.Any(x => !item.Definition.PlayerBuffs.Contains(x))
+                || item.ItemBuffs.List.Any(l => !item.Definition.ItemBuffs.List.Contains(l)))
+                    {
+                Console.WriteLine("Well shit!");
+                Console.WriteLine(item.Definition.Name);
+                Console.WriteLine(item.Definition.TypeId);
+            }
+        }
             
         WriteParentFile(gs);
     }
