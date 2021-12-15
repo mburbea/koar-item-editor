@@ -50,7 +50,6 @@ public sealed partial class GameSave
             var bundleInfoStart = BodyStart + 12;
             var bundleInfoSize = BitConverter.ToInt32(Bytes, bundleInfoStart - 4);
             using var bundleInfoData = new ZLibStream(new MemoryStream(Bytes, bundleInfoStart, bundleInfoSize), CompressionMode.Decompress);
-            File.WriteAllBytes(@"C:\e\repro.zlib", new MemoryStream(Bytes, bundleInfoStart, bundleInfoSize).ToArray());
             var endOfBundle = bundleInfoData.ReadAll(Body);
             var gameStateStart = bundleInfoStart + bundleInfoSize + 4;
             var gameStateSize = BitConverter.ToInt32(Bytes, gameStateStart - 4);
