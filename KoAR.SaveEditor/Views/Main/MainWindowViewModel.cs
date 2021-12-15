@@ -96,7 +96,7 @@ public sealed class MainWindowViewModel : NotifierBase
         {
             Title = "Open Save File...",
             DefaultExt = ".sav",
-            Filter = "Save Files (*.sav)|*.sav|Switch Save Files|*.*",
+            Filter = "Save Files (*.sav)|*.sav|PS4 Save Files (*.bin)|*.bin|Switch Save Files|*.*",
             FilterIndex = Settings.Default.LastFilterUsed,
             CheckFileExists = true,
             InitialDirectory = Path.GetFullPath(string.IsNullOrEmpty(Settings.Default.LastDirectory)

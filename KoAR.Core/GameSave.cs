@@ -40,7 +40,7 @@ public sealed partial class GameSave
             false => SaveType.Original,
         };
         var pattern = SaveType == SaveType.Switch ? SwitchFilePattern : RemasterFilePattern;
-        if (IsRemaster && !Path.GetFileNameWithoutExtension(fileName).StartsWith(pattern))
+        if (IsRemaster && Path.GetExtension(fileName) != ".bin" && !Path.GetFileNameWithoutExtension(fileName).StartsWith(pattern))
         {
             throw new NotSupportedException($"Save file is not a user save and changing them can lead to the game infinite looping. The editor only supports saves that start with {pattern}.");
         }
