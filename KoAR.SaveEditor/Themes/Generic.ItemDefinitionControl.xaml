@@ -22,7 +22,8 @@
                 <ControlTemplate TargetType="{x:Type views:ItemDefinitionControl}">
                     <StackPanel Orientation="Horizontal">
                         <Grid SnapsToDevicePixels="True" VerticalAlignment="Center" Margin="2,0">
-                            <Image Height="24" DataContext="{TemplateBinding Definition}">
+                            <Image Height="24" DataContext="{TemplateBinding Definition}"
+                                views:FateswornAdorner.RequiresFatesworn="{Binding Definition.RequiresFatesworn, RelativeSource={RelativeSource TemplatedParent}}">
                                 <Image.ToolTip>
                                     <ToolTip Content="{Binding}">
                                         <ToolTip.ContentTemplate>
@@ -73,7 +74,6 @@
                                         <Setter Property="Visibility" Value="Collapsed" />
                                     </Style>
                                 </Grid.Style>
-                                <Ellipse Fill="White" Stroke="White" StrokeThickness="1" />
                                 <Ellipse Fill="LimeGreen" Stroke="White" StrokeThickness=".5" />
                                 <Viewbox Height="10" Width="10" StretchDirection="Both" Stretch="Uniform" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,0.5,0,0">
                                     <TextBlock Text="E" TextAlignment="Center" Foreground="White" VerticalAlignment="Center" />
