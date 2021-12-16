@@ -86,7 +86,7 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
             this._indicator,
             CultureInfo.CurrentCulture,
             FlowDirection.LeftToRight,
-            new(((Control)PresentationSource.FromVisual(this.AdornedElement).RootVisual).FontFamily, FontStyles.Normal, FontWeights.Normal, FontStretches.Normal),
+            new(Window.GetWindow(this.AdornedElement).FontFamily, FontStyles.Normal, FontWeights.Normal, FontStretches.Normal),
             this._fontSize,
             this._foreground,
             1d
