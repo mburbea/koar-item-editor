@@ -1,32 +1,42 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
+using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
 
 namespace KoAR.SaveEditor.Views
 {
-    public sealed class FateswornAdorner : Adorner
+    public sealed class FateswornAdorner : Adorner, IDisposable
     {
+        private static readonly DependencyProperty _adornerProperty = DependencyProperty.RegisterAttached(nameof(Adorner), typeof(FateswornAdorner), typeof(FateswornAdorner));
+        private static readonly BooleanToVisibilityConverter _booleanToVisibilityConverter = new();
         private static readonly Pen _whitePen = FateswornAdorner.CreateWhitePen();
 
-        private static readonly DependencyProperty _adornerProperty = DependencyProperty.RegisterAttached(nameof(Adorner), typeof(FateswornAdorner), typeof(FateswornAdorner));
-
-        public static readonly DependencyProperty RequiresFateswornProperty = DependencyProperty.RegisterAttached("RequiresFatesworn", typeof(bool), typeof(FateswornAdorner),
+        public static readonly DependencyProperty RequiresFateswornProperty = DependencyProperty.RegisterAttached(nameof(IDefinition.RequiresFatesworn), typeof(bool), typeof(FateswornAdorner),
             new PropertyMetadata(BooleanBoxes.False, FateswornAdorner.RequiresFateswornProperty_ValueChanged));
 
-        public FateswornAdorner(UIElement adornedElement)
+        private readonly AdornerLayer _adornerLayer;
+
+        private FateswornAdorner(FrameworkElement adornedElement)
             : base(adornedElement)
         {
+            (this._adornerLayer = AdornerLayer.GetAdornerLayer(adornedElement)).Add(this);
             this.IsHitTestVisible = false;
-            (this.AdornerLayer = AdornerLayer.GetAdornerLayer(adornedElement)).Add(this);
+            BindingOperations.SetBinding(this, UIElement.VisibilityProperty, new Binding
+            { 
+                Path = new(UIElement.IsVisibleProperty),
+                Source = this.AdornedElement, 
+                Converter = FateswornAdorner._booleanToVisibilityConverter,
+            });
         }
 
-        public AdornerLayer AdornerLayer { get; }
+        public static bool GetRequiresFatesworn(FrameworkElement element) => (bool)element.GetValue(FateswornAdorner.RequiresFateswornProperty);
 
-        public static bool GetRequiresFatesworn(FrameworkElement d) => (bool)d.GetValue(FateswornAdorner.RequiresFateswornProperty);
-
-        public static void SetRequiresFatesworn(FrameworkElement d, bool value) => d.SetValue(FateswornAdorner.RequiresFateswornProperty, BooleanBoxes.GetBox(value));
+        public static void SetRequiresFatesworn(FrameworkElement element, bool value) => element.SetValue(FateswornAdorner.RequiresFateswornProperty, BooleanBoxes.GetBox(value));
 
         private static void RequiresFateswornProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -36,32 +46,24 @@ namespace KoAR.SaveEditor.Views
             }
             if ((bool)e.NewValue)
             {
-                if (element.IsLoaded)
-                {
-                    FateswornAdorner.AttachAdorner(element);
-                }
-                else
-                {
-                    element.Loaded += FateswornAdorner.Element_Loaded;
-                }
+                FateswornAdorner.AttachAdorner(element);
             }
             else
             {
-                if (element.IsLoaded)
-                {
-                    FateswornAdorner.DetachAdorner(element);
-                }
-                else
-                {
-                    element.Loaded -= FateswornAdorner.Element_Loaded;
-                }
+                FateswornAdorner.DetachAdorner(element);
             }
         }
 
         private static void AttachAdorner(FrameworkElement element)
         {
-            element.SetValue(FateswornAdorner._adornerProperty, new FateswornAdorner(element));
-            element.IsVisibleChanged += FateswornAdorner.Element_IsVisibleChanged;
+            if (!element.IsLoaded)
+            {
+                element.Loaded += FateswornAdorner.Element_Loaded;
+            }
+            else
+            {
+                element.SetValue(FateswornAdorner._adornerProperty, new FateswornAdorner(element));
+            }
         }
 
         private static Pen CreateWhitePen()
@@ -73,20 +75,15 @@ namespace KoAR.SaveEditor.Views
 
         private static void DetachAdorner(FrameworkElement element)
         {
-            FateswornAdorner? adorner = (FateswornAdorner?)element.GetValue(FateswornAdorner._adornerProperty);
+            using FateswornAdorner? adorner = (FateswornAdorner?)element.GetValue(FateswornAdorner._adornerProperty);
             if (adorner == null)
             {
-                return;
+                element.Loaded -= FateswornAdorner.Element_Loaded;
             }
-            element.IsVisibleChanged -= FateswornAdorner.Element_IsVisibleChanged;
-            adorner.AdornerLayer.Remove(adorner);
-            element.ClearValue(FateswornAdorner._adornerProperty);
-        }
-
-        private static void Element_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            FateswornAdorner adorner = (FateswornAdorner)((DependencyObject)sender).GetValue(FateswornAdorner._adornerProperty);
-            adorner.OnVisibilityChanged();
+            else
+            {
+                element.ClearValue(FateswornAdorner._adornerProperty);
+            }
         }
 
         private static void Element_Loaded(object sender, RoutedEventArgs e)
@@ -96,9 +93,10 @@ namespace KoAR.SaveEditor.Views
             element.Loaded -= FateswornAdorner.Element_Loaded;
         }
 
-        private void OnVisibilityChanged()
+        public void Dispose()
         {
-            this.Visibility = this.AdornedElement.IsVisible ? Visibility.Visible : Visibility.Hidden;
+            BindingOperations.ClearBinding(this, UIElement.VisibilityProperty);
+            this._adornerLayer.Remove(this);
         }
 
         protected override void OnRender(DrawingContext drawingContext)
@@ -109,12 +107,21 @@ namespace KoAR.SaveEditor.Views
                 Brushes.MediumPurple,
                 FateswornAdorner._whitePen,
                 new(bounds.Width - radius, bounds.Height - radius),
-                radius,
-                radius
+                radius - FateswornAdorner._whitePen.Thickness,
+                radius - FateswornAdorner._whitePen.Thickness
+            );
+            FormattedText formattedText = new(
+                "F",
+                CultureInfo.CurrentCulture,
+                FlowDirection.LeftToRight,
+                new(((Control)PresentationSource.FromVisual(this.AdornedElement).RootVisual).FontFamily, FontStyles.Normal, FontWeights.Normal, FontStretches.Normal),
+                10,
+                Brushes.White,
+                1d
             );
             drawingContext.DrawText(
-                new("F", CultureInfo.InvariantCulture, FlowDirection.LeftToRight, new("Segoe UI"), 10, Brushes.White, 1.25),
-                new(bounds.Width - radius - 2, bounds.Height - radius - 4)
+                formattedText,
+                new(bounds.Width - radius - formattedText.Width * 0.5, bounds.Height - radius - formattedText.Height * 0.5)
             );
             base.OnRender(drawingContext);
         }
