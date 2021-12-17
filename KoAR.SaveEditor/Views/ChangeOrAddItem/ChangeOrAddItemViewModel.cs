@@ -23,10 +23,11 @@ public sealed class ChangeOrAddItemViewModel : NotifierBase
     private int _rarityFilter;
     private bool _retainStats;
 
-    public ChangeOrAddItemViewModel(ItemModelBase? item = null)
+    public ChangeOrAddItemViewModel(GameSave gameSave, ItemModelBase? item = null)
     {
-        this._definition = (this.Item = item)?.Definition ?? Amalur.ItemDefinitions.Values.First();
         this._category = item?.Category ?? ChangeOrAddItemViewModel._defaultCategory;
+        this._definition = (this.Item = item)?.Definition ?? gameSave.ItemDefinitions.First();
+        this.GameSave = gameSave;
         this.ProcessCommand = new(this.Process, () => this._definition != null);
         this.OnFilterChanged();
     }
@@ -92,6 +93,8 @@ public sealed class ChangeOrAddItemViewModel : NotifierBase
         }
     }
 
+    public GameSave GameSave { get; }
+
     public ItemModelBase? Item { get; }
 
     public DelegateCommand ProcessCommand { get; }
@@ -125,7 +128,7 @@ public sealed class ChangeOrAddItemViewModel : NotifierBase
     private void OnFilterChanged()
     {
         ItemDefinition? selectedItem = this._definition;
-        this.Definitions = Amalur.ItemDefinitions.Values.Where(this.IsMatch).ToArray();
+        this.Definitions = this.GameSave.ItemDefinitions.Where(this.IsMatch).ToArray();
         if (selectedItem == null || !this.Definitions.Contains(selectedItem))
         {
             this.Definition = this.Definitions.FirstOrDefault();

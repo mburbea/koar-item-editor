@@ -128,7 +128,7 @@ public sealed class InventoryManagerViewModel : ManagerViewModelBase<ItemModel>
         {
             return;
         }
-        ChangeOrAddItemViewModel viewModel = new(item);
+        ChangeOrAddItemViewModel viewModel = new(this.GameSave, item);
         ChangeOrAddItemView view = new()
         {
             Owner = Application.Current.MainWindow,

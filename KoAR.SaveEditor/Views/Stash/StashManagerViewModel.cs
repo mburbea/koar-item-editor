@@ -22,7 +22,7 @@ public sealed class StashManagerViewModel : ManagerViewModelBase<StashItemModel>
 
     private void AddItem()
     {
-        ChangeOrAddItemViewModel viewModel = new();
+        ChangeOrAddItemViewModel viewModel = new(this.GameSave);
         ChangeOrAddItemView view = new()
         {
             Owner = Application.Current.MainWindow,
