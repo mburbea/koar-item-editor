@@ -19,11 +19,11 @@ public sealed class GameSaveHeader
           : new byte[8] { 0, 0, 0, 0, 0xA, 0, 0, 0 }) - 4;
         if(gameSave.IsRemaster)
         {
-            var packageListStart = gameSave.Bytes.AsSpan().IndexOf(new byte[8] { 0, 0, 0, 1, 0, 0, 0, 2 });
-            var arrayLength = (int)gameSave.Bytes[packageListStart -1];
+            var packageListStart = gameSave.Bytes.AsSpan().IndexOf(new byte[8] { 0, 0, 0, 1, 0, 0, 0, 2 }) + 3;
+            var arrayLength = BitConverter.ToInt32(gameSave.Bytes.AsSpan(packageListStart - 4));
             var slice = gameSave.Bytes.AsSpan(packageListStart, 4 * arrayLength);
             var packageList = MemoryMarshal.Cast<byte, int>(slice);
-            IsFateswornAware = packageList.Contains(0x0C_00_00_00);
+            IsFateswornAware = packageList.Contains(12);
         }
     }
 
