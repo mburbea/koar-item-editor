@@ -4,7 +4,7 @@ using KoAR.SaveEditor.Constructs;
 
 namespace KoAR.SaveEditor.Views;
 
-internal class EquippedAdorner : IndicatorAdornerBase
+public sealed class EquippedAdorner : IndicatorAdornerBase
 {
     public static readonly DependencyProperty IsEquippedProperty = DependencyProperty.RegisterAttached(nameof(ItemModelBase.IsEquipped), typeof(bool), typeof(EquippedAdorner),
         new PropertyMetadata(BooleanBoxes.False, EquippedAdorner.IsEquippedProperty_ValueChanged));
@@ -24,7 +24,7 @@ internal class EquippedAdorner : IndicatorAdornerBase
         }
         if ((bool)e.NewValue)
         {
-            IndicatorAdornerBase.AttachAdorner<EquippedAdorner>(element);
+            IndicatorAdornerBase.AttachAdorner(element, new EquippedAdorner(element));
         }
         else
         {
