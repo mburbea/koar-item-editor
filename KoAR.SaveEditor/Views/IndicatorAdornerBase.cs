@@ -85,11 +85,11 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
         };
     }
 
-    protected static void AttachAdorner<TAdorner>(FrameworkElement element, TAdorner adorner)
-        where TAdorner : IndicatorAdornerBase => AdornerAttacher<TAdorner>.AttachAdorner(element, adorner);
-
     protected static void DetachAdorner<TAdorner>(FrameworkElement element)
         where TAdorner : IndicatorAdornerBase => AdornerAttacher<TAdorner>.DetachAdorner(element);
+
+    protected static void SetAdorner<TAdorner>(FrameworkElement element, TAdorner adorner)
+        where TAdorner : IndicatorAdornerBase => AdornerAttacher<TAdorner>.SetAdorner(element, adorner);
 
     protected override void OnRender(DrawingContext drawingContext)
     {
@@ -172,13 +172,13 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
     {
         private static readonly DependencyProperty _adornerProperty = DependencyProperty.RegisterAttached(typeof(TAdorner).FullName, typeof(TAdorner), typeof(AdornerAttacher<TAdorner>));
 
-        public static void AttachAdorner(FrameworkElement element, TAdorner adorner) => element.SetValue(AdornerAttacher<TAdorner>._adornerProperty, adorner);
-
         public static void DetachAdorner(FrameworkElement element)
         {
             using TAdorner? adorner = (TAdorner?)element.GetValue(AdornerAttacher<TAdorner>._adornerProperty);
             element.ClearValue(AdornerAttacher<TAdorner>._adornerProperty);
         }
+
+        public static void SetAdorner(FrameworkElement element, TAdorner adorner) => element.SetValue(AdornerAttacher<TAdorner>._adornerProperty, adorner);
     }
 
     private static class Constants

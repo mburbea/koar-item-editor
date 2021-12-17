@@ -25,7 +25,7 @@ public sealed class FateswornAdorner : IndicatorAdornerBase
         }
         if ((bool)e.NewValue)
         {
-            IndicatorAdornerBase.AttachAdorner(element, new FateswornAdorner(element));
+            IndicatorAdornerBase.SetAdorner(element, new FateswornAdorner(element));
         }
         else
         {

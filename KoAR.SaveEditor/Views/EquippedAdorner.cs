@@ -24,7 +24,7 @@ public sealed class EquippedAdorner : IndicatorAdornerBase
         }
         if ((bool)e.NewValue)
         {
-            IndicatorAdornerBase.AttachAdorner(element, new EquippedAdorner(element));
+            IndicatorAdornerBase.SetAdorner(element, new EquippedAdorner(element));
         }
         else
         {
