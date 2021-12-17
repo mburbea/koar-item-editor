@@ -28,14 +28,14 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
     private readonly string _indicator;
     private readonly Pen _stroke;
 
-    protected IndicatorAdornerBase(FrameworkElement adornedElement, AdornerPosition adornerPosition, Brush background, Brush foreground, char indicator)
+    protected IndicatorAdornerBase(FrameworkElement adornedElement, AdornerPosition adornerPosition, Brush background, Brush foreground, string indicator)
         : base(adornedElement)
     {
-        this.IsHitTestVisible = false;
+        this.IsHitTestVisible = true;
         this._adornerPosition = adornerPosition;
         this._background = background;
         this._foreground = foreground;
-        this._indicator = char.ToString(indicator);
+        this._indicator = indicator;
         if (foreground is not SolidColorBrush { Color: Color color })
         {
             this._stroke = IndicatorAdornerBase.CreateFrozenPen(foreground);

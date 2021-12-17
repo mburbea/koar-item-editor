@@ -15,9 +15,7 @@ internal class EquippedAdorner : IndicatorAdornerBase
         new PropertyMetadata(BooleanBoxes.False, EquippedAdorner.IsEquippedProperty_ValueChanged));
 
     private EquippedAdorner(FrameworkElement adornedElement)
-        : base(adornedElement, AdornerPosition.LowerLeft, background: Brushes.LimeGreen, foreground: Brushes.White, 'E')
-    {
-    }
+        : base(adornedElement, AdornerPosition.LowerLeft, background: Brushes.LimeGreen, foreground: Brushes.White, "E") => this.ToolTip = "Equipped";
 
     public static bool GetIsEquipped(FrameworkElement element) => (bool)element.GetValue(EquippedAdorner.IsEquippedProperty);
 

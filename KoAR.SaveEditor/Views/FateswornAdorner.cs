@@ -11,9 +11,7 @@ public sealed class FateswornAdorner : IndicatorAdornerBase
         new PropertyMetadata(BooleanBoxes.False, FateswornAdorner.RequiresFateswornProperty_ValueChanged));
 
     private FateswornAdorner(FrameworkElement adornedElement)
-        : base(adornedElement, AdornerPosition.LowerRight, background: Brushes.MediumPurple, foreground: Brushes.White, 'F')
-    {
-    }
+        : base(adornedElement, AdornerPosition.LowerRight, background: Brushes.MediumPurple, foreground: Brushes.White, "F") => this.ToolTip = "Fatesworn";
 
     public static bool GetRequiresFatesworn(FrameworkElement element) => (bool)element.GetValue(FateswornAdorner.RequiresFateswornProperty);
 
