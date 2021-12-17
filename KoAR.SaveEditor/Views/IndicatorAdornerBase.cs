@@ -155,7 +155,7 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
             ParameterExpression parameter = Expression.Parameter(typeof(FrameworkElement), nameof(parameter));
             Expression<Func<FrameworkElement, TAdorner>> lambdaExpression = Expression.Lambda<Func<FrameworkElement, TAdorner>>(
                 Expression.New(
-                    typeof(TAdorner).GetConstructor(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, new[] { typeof(FrameworkElement) })!,
+                    typeof(TAdorner).GetConstructor(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { typeof(FrameworkElement) }, null)!,
                     parameter
                 ),
                 parameter

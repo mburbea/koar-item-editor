@@ -3,7 +3,7 @@
     <ProjectGuid>{F0B155CB-061D-4E8C-BEEC-F0BDCF1BF9E0}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <LangVersion>10.0</LangVersion>
-    <TargetFramework>net6.0-windows8.0</TargetFramework>
+    <TargetFramework>net5.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

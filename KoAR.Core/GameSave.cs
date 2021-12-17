@@ -1,8 +1,8 @@
-﻿using StringLiteral;
+﻿using Ionic.Zlib;
+using StringLiteral;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Compression;
 using System.IO.Hashing;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -49,11 +49,11 @@ public sealed partial class GameSave
             Body = new byte[_header.BodyDataLength];
             var bundleInfoStart = BodyStart + 12;
             var bundleInfoSize = BitConverter.ToInt32(Bytes, bundleInfoStart - 4);
-            using var bundleInfoData = new ZLibStream(new MemoryStream(Bytes, bundleInfoStart, bundleInfoSize), CompressionMode.Decompress);
+            using var bundleInfoData = new ZlibStream(new MemoryStream(Bytes, bundleInfoStart, bundleInfoSize), CompressionMode.Decompress);
             var endOfBundle = bundleInfoData.ReadAll(Body);
             var gameStateStart = bundleInfoStart + bundleInfoSize + 4;
             var gameStateSize = BitConverter.ToInt32(Bytes, gameStateStart - 4);
-            using var gameStateData = new ZLibStream(new MemoryStream(Bytes, gameStateStart, gameStateSize), CompressionMode.Decompress);
+            using var gameStateData = new ZlibStream(new MemoryStream(Bytes, gameStateStart, gameStateSize), CompressionMode.Decompress);
             gameStateData.ReadAll(Body.AsSpan(endOfBundle,Body.Length - endOfBundle));
         }
         else
@@ -286,7 +286,7 @@ public sealed partial class GameSave
         static (Stream, int) CompressStream(byte[] body, int start, int count)
         {
             var stream = new MemoryStream();
-            using (var zip = new ZLibStream(stream, CompressionMode.Compress, leaveOpen: true))
+            using (var zip = new ZlibStream(stream, CompressionMode.Compress, leaveOpen: true))
             {
                 zip.Write(body, start, count);
             }
