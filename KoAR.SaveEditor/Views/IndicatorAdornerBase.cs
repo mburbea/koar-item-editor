@@ -136,7 +136,7 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
         if (!IndicatorAdornerBase._scaleTransformCache.TryGetValue((width, height), out ScaleTransform? transform))
         {
             IndicatorAdornerBase._scaleTransformCache.Add(
-                (width, height), 
+                (width, height),
                 transform = IndicatorAdornerBase.Freeze(new ScaleTransform(width / Constants.Dimension, height / Constants.Dimension))
             );
         }
@@ -183,7 +183,7 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
 
     private static class Constants
     {
-        public const double Dimension = 24d;
+        public const double Dimension = 24;
         public const double FontSize = 10;
         public const double Radius = 6;
         public const double StrokeThickness = 0.5;
