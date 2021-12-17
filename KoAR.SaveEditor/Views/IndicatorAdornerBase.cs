@@ -11,11 +11,6 @@ namespace KoAR.SaveEditor.Views;
 
 public abstract class IndicatorAdornerBase : Adorner, IDisposable
 {
-    private const double _dimension = 24d;
-    private const double _fontSize = 10;
-    private const double _radius = 6;
-    private const double _strokeThickness = 0.5;
-
     private static readonly BooleanToVisibilityConverter _booleanToVisibilityConverter = new();
     private static readonly Dictionary<Color, Pen> _penCache = new();
     private static readonly Dictionary<(double, double), ScaleTransform> _scaleTransformCache = new();
@@ -76,7 +71,7 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
     public override GeneralTransform GetDesiredTransform(GeneralTransform transform)
     {
         Rect bounds;
-        if (!this.AdornedElement.IsVisible || (bounds = VisualTreeHelper.GetDescendantBounds(this.AdornedElement)).Width == IndicatorAdornerBase._dimension && bounds.Height == IndicatorAdornerBase._dimension)
+        if (!this.AdornedElement.IsVisible || (bounds = VisualTreeHelper.GetDescendantBounds(this.AdornedElement)).Width == Constants.Dimension && bounds.Height == Constants.Dimension)
         {
             return base.GetDesiredTransform(transform);
         }
@@ -99,24 +94,24 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
     protected override void OnRender(DrawingContext drawingContext)
     {
         double centerX = this._adornerPosition is AdornerPosition.LowerRight or AdornerPosition.UpperRight
-            ? IndicatorAdornerBase._dimension - IndicatorAdornerBase._radius
-            : IndicatorAdornerBase._radius;
+            ? Constants.Dimension - Constants.Radius
+            : Constants.Radius;
         double centerY = this._adornerPosition is AdornerPosition.LowerRight or AdornerPosition.LowerLeft
-            ? IndicatorAdornerBase._dimension - IndicatorAdornerBase._radius
-            : IndicatorAdornerBase._radius;
+            ? Constants.Dimension - Constants.Radius
+            : Constants.Radius;
         drawingContext.DrawEllipse(
             this._background,
             this._stroke,
             new(centerX, centerY),
-            IndicatorAdornerBase._radius - IndicatorAdornerBase._strokeThickness,
-            IndicatorAdornerBase._radius - IndicatorAdornerBase._strokeThickness
+            Constants.Radius - Constants.StrokeThickness,
+            Constants.Radius - Constants.StrokeThickness
         );
         FormattedText formattedText = new(
             this._indicator,
             CultureInfo.CurrentCulture,
             FlowDirection.LeftToRight,
             new(Window.GetWindow(this.AdornedElement).FontFamily, FontStyles.Normal, FontWeights.Normal, FontStretches.Normal),
-            IndicatorAdornerBase._fontSize,
+            Constants.FontSize,
             this._foreground,
             1d
         );
@@ -127,7 +122,7 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
         base.OnRender(drawingContext);
     }
 
-    private static Pen CreateFrozenPen(Brush brush) => IndicatorAdornerBase.Freeze(new Pen(brush, IndicatorAdornerBase._strokeThickness));
+    private static Pen CreateFrozenPen(Brush brush) => IndicatorAdornerBase.Freeze(new Pen(brush, Constants.StrokeThickness));
 
     private static TFreezable Freeze<TFreezable>(TFreezable freezable)
         where TFreezable : Freezable
@@ -142,7 +137,7 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
         {
             IndicatorAdornerBase._scaleTransformCache.Add(
                 (width, height), 
-                transform = IndicatorAdornerBase.Freeze(new ScaleTransform(width / IndicatorAdornerBase._dimension, height / IndicatorAdornerBase._dimension))
+                transform = IndicatorAdornerBase.Freeze(new ScaleTransform(width / Constants.Dimension, height / Constants.Dimension))
             );
         }
         return transform;
@@ -184,5 +179,13 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
             using TAdorner? adorner = (TAdorner?)element.GetValue(AdornerAttacher<TAdorner>._adornerProperty);
             element.ClearValue(AdornerAttacher<TAdorner>._adornerProperty);
         }
+    }
+
+    private static class Constants
+    {
+        public const double Dimension = 24d;
+        public const double FontSize = 10;
+        public const double Radius = 6;
+        public const double StrokeThickness = 0.5;
     }
 }
