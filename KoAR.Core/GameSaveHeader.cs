@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Buffers.Binary;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -8,6 +7,7 @@ namespace KoAR.Core;
 public sealed class GameSaveHeader
 {
     private const int RemasterHeaderLength = 6 * 1024 - 8;
+    private const int FateswornPackageId = 12;
     private readonly int _dataLengthOffset;
     private readonly GameSave _gameSave;
 
@@ -19,11 +19,9 @@ public sealed class GameSaveHeader
           : new byte[8] { 0, 0, 0, 0, 0xA, 0, 0, 0 }) - 4;
         if(gameSave.IsRemaster)
         {
-            var packageListStart = gameSave.Bytes.AsSpan().IndexOf(new byte[8] { 0, 0, 0, 1, 0, 0, 0, 2 }) + 3;
-            var arrayLength = BitConverter.ToInt32(gameSave.Bytes.AsSpan(packageListStart - 4));
-            var slice = gameSave.Bytes.AsSpan(packageListStart, 4 * arrayLength);
-            var packageList = MemoryMarshal.Cast<byte, int>(slice);
-            IsFateswornAware = packageList.Contains(12);
+            var packagesList = gameSave.Bytes.AsSpan(gameSave.Bytes.AsSpan().IndexOf(new byte[8] { 0, 0, 0, 1, 0, 0, 0, 2 }) -1);
+            IsFateswornAware = MemoryMarshal.Cast<byte, int>(packagesList.Slice(4, 4 * BitConverter.ToInt32(packagesList)))
+                .Contains(FateswornPackageId);
         }
     }
 
@@ -36,5 +34,4 @@ public sealed class GameSaveHeader
     public int Length => _gameSave.IsRemaster ? RemasterHeaderLength : _dataLengthOffset + 12;
 
     public bool IsFateswornAware { get; }
-
 }
