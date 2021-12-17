@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml;
+using System.Xml.Linq;
 using KoAR.Core;
 
 namespace ItemTesting;
@@ -69,7 +72,50 @@ namespace ItemTesting;
 //        }
 static class Program
 {
-
+    static void ParseOutItemInformationTemplate()
+    {
+        using Stream stream = File.OpenRead(Path.Join(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\item_information_template.xml"));
+        XDocument document = XDocument.Load(stream);
+        foreach (var g in from node in document.Root.Descendants("tex")
+                          where node.NodeType == XmlNodeType.Element
+                          let texture = node.Attribute("texture").Value
+                          group node by texture into g
+                          select g)
+        {
+            string filePath = Path.Join(@"..\..\..\", $"{g.Key}.png");
+            if (!File.Exists(filePath))
+            {
+                continue;
+            }
+            string targetFolder = @"..\..\..\..\KoAR.SaveEditor\Resources\Buffs\";
+            if (!Directory.Exists(targetFolder))
+            {
+                Directory.CreateDirectory(targetFolder);
+            }
+            using Bitmap source = (Bitmap)Image.FromFile(filePath);
+            foreach (var element in g)
+            {
+                string id = (element.Attribute("id_string") ?? element.Parent.Attribute("id_string")).Value;
+                if (File.Exists(Path.Join(targetFolder, $"{id}.png")))
+                {
+                    continue;
+                }
+                int left = int.Parse(element.Attribute("left").Value);
+                int top = int.Parse(element.Attribute("top").Value);
+                int right = int.Parse(element.Attribute("right").Value);
+                int bottom = int.Parse(element.Attribute("bottom").Value);
+                if (left == right - 1)
+                {
+                    Console.WriteLine(id);
+                }
+                else
+                {
+                    using Bitmap clone = source.Clone(new Rectangle(left, top, right - left, bottom - top), source.PixelFormat);
+                    clone.Save(Path.Join(targetFolder, $"{id}.png"));
+                }
+            }
+        }
+    }
     static void ConvertSymbolsToLua(string inPath, string outPath, params string[] files)
     {
         foreach (var file in Directory.EnumerateFiles(inPath, "symbol_table_*.bin", SearchOption.TopDirectoryOnly)
@@ -284,6 +330,7 @@ static class Program
     }
     static void Main()
     {
+        ParseOutItemInformationTemplate();
         //CreateSimTypeCsv(@"C:\e\symbol_table_simtype.bin", @"..\..\..\simtype.csv");
         ulong s = 0x00_1c41a5_00_00_03_40;
         var (var1, var2) = s;
