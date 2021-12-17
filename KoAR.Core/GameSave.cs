@@ -44,6 +44,9 @@ public sealed partial class GameSave
             throw new NotSupportedException($"Save file is not a user save and changing them can lead to the game infinite looping. The editor only supports saves that start with {pattern}.");
         }
         _header = new(this);
+        Buffs = !_header.IsFateswornAware ? Amalur.Buffs.Values.Where(x => !x.RequiresFatesworn) : Amalur.Buffs.Values;
+        ItemDefinitions = !_header.IsFateswornAware ? Amalur.ItemDefinitions.Values.Where(x => !x.RequiresFatesworn) : Amalur.ItemDefinitions.Values; 
+
         if (BitConverter.ToInt32(Bytes, BodyStart) == CompressedFlag)
         {
             Body = new byte[_header.BodyDataLength];
@@ -218,6 +221,10 @@ public sealed partial class GameSave
         }
     }
 
+    public IEnumerable<Buff> Buffs { get; }
+
+    public IEnumerable<ItemDefinition> ItemDefinitions { get; }
+    
     public List<Item> Items { get; } = new();
 
     public HashSet<Item> EquippedItems { get; } = new();
