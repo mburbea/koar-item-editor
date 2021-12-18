@@ -26,13 +26,13 @@ public sealed class ChaosTierAdorner : IndicatorAdornerBase
         {
             return;
         }
-        if (e.NewValue is string s)
+        if (e.NewValue is string tier)
         {
-            if (ChaosTierAdorner._factories.GetValueOrDefault(s) is not { } factory)
+            if (ChaosTierAdorner._factories.GetValueOrDefault(tier) is not { } factory)
             {
-                _factories[s] = factory = element => new(element, s);
+                ChaosTierAdorner._factories.Add(tier, factory = element => new(element, tier));
             }
-            IndicatorAdornerBase.AttachAdorner<ChaosTierAdorner>(element, factory);
+            IndicatorAdornerBase.AttachAdorner(element, factory);
         }
         else
         {

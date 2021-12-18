@@ -10,7 +10,7 @@ public sealed class FateswornAdorner : IndicatorAdornerBase
     public static readonly DependencyProperty RequiresFateswornProperty = DependencyProperty.RegisterAttached(nameof(IDefinition.RequiresFatesworn), typeof(bool), typeof(FateswornAdorner),
         new PropertyMetadata(BooleanBoxes.False, FateswornAdorner.RequiresFateswornProperty_ValueChanged));
 
-    public FateswornAdorner(FrameworkElement adornedElement)
+    private FateswornAdorner(FrameworkElement adornedElement)
         : base(adornedElement, AdornerPosition.LowerRight, background: Brushes.MediumPurple, foreground: Brushes.White, "F") => this.ToolTip = "Fatesworn";
 
     public static bool GetRequiresFatesworn(FrameworkElement element) => (bool)element.GetValue(FateswornAdorner.RequiresFateswornProperty);
