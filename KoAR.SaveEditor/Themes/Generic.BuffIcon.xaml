@@ -14,26 +14,24 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type views:BuffIcon}">
-                    <AdornerDecorator>
-                        <views:BuffDescriptionIcon Width="{TemplateBinding Width}" Height="{TemplateBinding Height}">
-                            <views:BuffDescriptionIcon.Style>
-                                <Style TargetType="{x:Type views:BuffDescriptionIcon}">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Buff, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource EqualityConverter}}" Value="False">
-                                            <Setter Property="Description" Value="{x:Static core:BuffDescription.Empty}" />
-                                        </DataTrigger>
-                                        <MultiDataTrigger>
-                                            <MultiDataTrigger.Conditions>
-                                                <Condition Binding="{Binding Buff, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource EqualityConverter}}" Value="False" />
-                                                <Condition Binding="{Binding Buff.Descriptions.Length, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource EqualityConverter}, ConverterParameter={StaticResource Zero}}" Value="False" />
-                                            </MultiDataTrigger.Conditions>
-                                            <Setter Property="Description" Value="{Binding Buff.Descriptions/, RelativeSource={RelativeSource TemplatedParent}}" />
-                                        </MultiDataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </views:BuffDescriptionIcon.Style>
-                        </views:BuffDescriptionIcon>
-                    </AdornerDecorator>
+                    <views:BuffDescriptionIcon Width="{TemplateBinding Width}" Height="{TemplateBinding Height}">
+                        <views:BuffDescriptionIcon.Style>
+                            <Style TargetType="{x:Type views:BuffDescriptionIcon}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Buff, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource EqualityConverter}}" Value="False">
+                                        <Setter Property="Description" Value="{x:Static core:BuffDescription.Empty}" />
+                                    </DataTrigger>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding Buff, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource EqualityConverter}}" Value="False" />
+                                            <Condition Binding="{Binding Buff.Descriptions.Length, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource EqualityConverter}, ConverterParameter={StaticResource Zero}}" Value="False" />
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Description" Value="{Binding Buff.Descriptions/, RelativeSource={RelativeSource TemplatedParent}}" />
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </views:BuffDescriptionIcon.Style>
+                    </views:BuffDescriptionIcon>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

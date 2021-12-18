@@ -493,8 +493,12 @@
                                                 </Style>
                                             </DataTemplate.Resources>
                                             <StackPanel Orientation="Horizontal">
-                                                <views:BuffIcon Margin="1,0" Buff="{Binding Prefix}" />
-                                                <views:BuffIcon Margin="1,0" Buff="{Binding Suffix}" />
+                                                <AdornerDecorator>
+                                                    <views:BuffIcon Margin="1,0" Buff="{Binding Prefix}" />
+                                                </AdornerDecorator>
+                                                <AdornerDecorator>
+                                                    <views:BuffIcon Margin="1,0" Buff="{Binding Suffix}" />
+                                                </AdornerDecorator>
                                             </StackPanel>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
@@ -515,7 +519,9 @@
                                                                 <Setter Property="ContentTemplate" Value="{StaticResource BuffToolTipTemplate}" />
                                                             </Style>
                                                         </DataTemplate.Resources>
-                                                        <views:BuffIcon Buff="{Binding}" Margin="1,0" ToolTip="{Binding}" />
+                                                        <AdornerDecorator>
+                                                            <views:BuffIcon Buff="{Binding}" Margin="1,0" ToolTip="{Binding}" />
+                                                        </AdornerDecorator>
                                                     </DataTemplate>
                                                 </ItemsControl.ItemTemplate>
                                             </ItemsControl>
@@ -538,7 +544,9 @@
                                                                 <Setter Property="ContentTemplate" Value="{StaticResource BuffToolTipTemplate}" />
                                                             </Style>
                                                         </DataTemplate.Resources>
-                                                        <views:BuffIcon Buff="{Binding}" Margin="1,0" ToolTip="{Binding}" />
+                                                        <AdornerDecorator>
+                                                            <views:BuffIcon Buff="{Binding}" Margin="1,0" ToolTip="{Binding}" />
+                                                        </AdornerDecorator>
                                                     </DataTemplate>
                                                 </ItemsControl.ItemTemplate>
                                             </ItemsControl>

@@ -74,16 +74,6 @@
                                 </Style>
                             </views:RarityIcon.Style>
                         </views:RarityIcon>
-                        <AdornerDecorator>
-                            <Image Height="18" SnapsToDevicePixels="True" VerticalAlignment="Center" Margin="2,0"
-                                Source="{Binding Source={StaticResource ChaosTier}, Converter={StaticResource BitmapConverter}}"
-                                Visibility="{Binding Definition.HasChaosTier, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                views:ChaosTierAdorner.ChaosTier="{Binding Definition.ChaosTier, RelativeSource={RelativeSource TemplatedParent}}" >
-                                <Image.ToolTip>
-                                    <TextBlock Text="{Binding Definition.ChaosTier, RelativeSource={RelativeSource TemplatedParent}, StringFormat='Chaos Tier: {0}'}"/>
-                                </Image.ToolTip>
-                            </Image>
-                        </AdornerDecorator>
                         <constructs:SearchableText VerticalAlignment="Center" Margin="2,0" SearchText="{TemplateBinding SearchText}">
                             <constructs:SearchableText.Style>
                                 <Style TargetType="{x:Type constructs:SearchableText}">
@@ -118,6 +108,16 @@
                         <Image Height="24" SnapsToDevicePixels="True" VerticalAlignment="Center" Margin="2,0" ToolTip="Merchant Item"
                             Source="{Binding Source={StaticResource Merchant}, Converter={StaticResource BitmapConverter}}"
                             Visibility="{Binding Definition.IsMerchant, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        <AdornerDecorator>
+                            <Image Height="18" SnapsToDevicePixels="True" VerticalAlignment="Center" Margin="2,0"
+                                Source="{Binding Source={StaticResource ChaosTier}, Converter={StaticResource BitmapConverter}}"
+                                Visibility="{Binding Definition.HasChaosTier, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                views:ChaosTierAdorner.ChaosTier="{Binding Definition.ChaosTier, RelativeSource={RelativeSource TemplatedParent}}">
+                                <Image.ToolTip>
+                                    <TextBlock Text="{Binding Definition.ChaosTier, RelativeSource={RelativeSource TemplatedParent}, StringFormat='Chaos Tier: {0}'}"/>
+                                </Image.ToolTip>
+                            </Image>
+                        </AdornerDecorator>
                         <ItemsControl ItemsSource="{TemplateBinding Sockets}" VerticalAlignment="Center">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
@@ -126,7 +126,9 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate DataType="{x:Type core:Socket}">
-                                    <views:SocketIcon Socket="{Binding}" Margin="1,0" />
+                                    <AdornerDecorator>
+                                        <views:SocketIcon Socket="{Binding}" Margin="1,0" />
+                                    </AdornerDecorator>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
