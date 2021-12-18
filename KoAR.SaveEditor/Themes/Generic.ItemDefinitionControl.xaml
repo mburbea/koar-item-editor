@@ -75,7 +75,7 @@
                         </views:RarityIcon>
                         <Image Height="24" SnapsToDevicePixels="True" VerticalAlignment="Center" Margin="2,0"
                             Source="{Binding Source={StaticResource ChaosTier}, Converter={StaticResource BitmapConverter}}"
-                            Visibility="{Binding Definition.ChaosTier.HasValue, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Visibility="{Binding Definition.HasChaosTier, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}}"
                             views:ChaosTierAdorner.ChaosTier="{Binding Definition.ChaosTier, RelativeSource={RelativeSource TemplatedParent}}">
                             <Image.ToolTip>
                                 <TextBlock Text="{Binding Definition.ChaosTier, RelativeSource={RelativeSource TemplatedParent}, StringFormat='Chaos Tier: {0}'}"/>

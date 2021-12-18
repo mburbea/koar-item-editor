@@ -43,14 +43,10 @@ public sealed partial class ItemDefinition : IDefinition
         IsMerchant = isMerchant;
         AffixableName = affixableName;
         HasVariants = hasVariants;
-        if(internalName.StartsWith("mit") && internalName.Contains("chaos"))
+        if(internalName.StartsWith("mit") && internalName.Contains("chaos") && !internalName.EndsWith("parent"))
         {
             HasVariants = true;
             ChaosTier = char.ToUpperInvariant(internalName[^1]);
-            if(ChaosTier == 'T')
-            {
-                ChaosTier = '0';
-            }
         }
     }
 
@@ -71,6 +67,7 @@ public sealed partial class ItemDefinition : IDefinition
     public IItemBuffMemory ItemBuffs { get; }
     public bool RequiresFatesworn => InternalName.StartsWith("mit_");
     public char? ChaosTier { get; }
+    public bool HasChaosTier => ChaosTier.HasValue;
 
     public IEnumerable<Socket> GetSockets() => SocketTypes.Select(socket => new Socket(socket));
     
