@@ -60,6 +60,10 @@
     <None Remove="Resources\buffs\Bleeding_dot_duration.png" />
     <None Remove="Resources\buffs\Bleeding_resistance.png" />
     <None Remove="Resources\buffs\BlockDamageMitigationPercent.png" />
+    <None Remove="Resources\buffs\Chaos_damage_amount.png" />
+    <None Remove="Resources\buffs\Chaos_dot_amount.png" />
+    <None Remove="Resources\buffs\Chaos_dot_duration.png" />
+    <None Remove="Resources\buffs\Chaos_resistance.png" />
     <None Remove="Resources\buffs\Charm_dot_duration.png" />
     <None Remove="Resources\buffs\cooldownreduction.png" />
     <None Remove="Resources\buffs\critical.png" />
@@ -127,6 +131,7 @@
     <None Remove="Resources\buffs\Total_damage_amount.png" />
     <None Remove="Resources\buffs\total_damage_resistance.png" />
     <None Remove="Resources\buffs\Total_dot_duration.png" />
+    <None Remove="Resources\categories\ChaosTier.png" />
     <None Remove="Resources\Chakrams.png" />
     <None Remove="Resources\Chakrams_Fire.png" />
     <None Remove="Resources\Chakrams_Lightning.png" />
@@ -231,6 +236,10 @@
     <Resource Include="Resources\buffs\Bleeding_dot_duration.png" />
     <Resource Include="Resources\buffs\Bleeding_resistance.png" />
     <Resource Include="Resources\buffs\BlockDamageMitigationPercent.png" />
+    <Resource Include="Resources\buffs\Chaos_damage_amount.png" />
+    <Resource Include="Resources\buffs\Chaos_dot_amount.png" />
+    <Resource Include="Resources\buffs\Chaos_dot_duration.png" />
+    <Resource Include="Resources\buffs\Chaos_resistance.png" />
     <Resource Include="Resources\buffs\Charm_dot_duration.png" />
     <Resource Include="Resources\buffs\cooldownreduction.png" />
     <Resource Include="Resources\buffs\critical.png" />
@@ -301,6 +310,7 @@
     <Resource Include="Resources\categories\Chakrams_Fire.png" />
     <Resource Include="Resources\categories\Chakrams_Lightning.png" />
     <Resource Include="Resources\categories\Chakrams_Primal.png" />
+    <Resource Include="Resources\categories\ChaosTier.png" />
     <Resource Include="Resources\categories\Daggers_Primal.png" />
     <Resource Include="Resources\categories\Faeblades_Primal.png" />
     <Resource Include="Resources\categories\Feet.png" />

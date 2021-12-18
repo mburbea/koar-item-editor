@@ -39,10 +39,14 @@ public sealed partial class ItemDefinition : IDefinition
         ItemBuffs = itemBuffs.Length == 0 && prefix is null && suffix is null
             ? ItemDefinitionBuffMemory.Empty
             : new(itemBuffs, prefix, suffix);
-        // merchant search is case sensitive to avoid affixing the Merchant's hat.
         IsMerchant = isMerchant;
         AffixableName = affixableName;
         HasVariants = hasVariants;
+        if(internalName.StartsWith("mit") && internalName.Contains("chaos"))
+        {
+            HasVariants = true;
+            ChaosTier = char.ToUpperInvariant(internalName[^1]);
+        }
     }
 
     public EquipmentCategory Category { get; }
@@ -61,6 +65,7 @@ public sealed partial class ItemDefinition : IDefinition
     public bool IsMerchant { get; }
     public IItemBuffMemory ItemBuffs { get; }
     public bool RequiresFatesworn => InternalName.StartsWith("mit_");
+    public char? ChaosTier { get; }
 
     public IEnumerable<Socket> GetSockets() => SocketTypes.Select(socket => new Socket(socket));
     

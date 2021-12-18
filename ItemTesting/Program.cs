@@ -179,10 +179,10 @@ static class Program
 
     static bool CreateBatchArchive(string file, string outZip)
     {
-        //if (File.Exists(outZip))
-        //{
-        //    return;
-        //}
+        if (File.Exists(outZip))
+        {
+            return true;
+        }
         using var zip = new ZipArchive(File.Create(outZip), ZipArchiveMode.Create);
         ReadOnlySpan<byte> data = File.ReadAllBytes(file);
         int entryCount = BitConverter.ToInt32(data);
@@ -293,6 +293,16 @@ static class Program
         foreach (var (id, parentId) in ParentDict)
         {
             var name = SimtypeDict[id];
+            if(name.StartsWith("mit_") && name.Contains("chaos"))
+            {
+                continue;
+            }
+            if(name.StartsWith("mit_") && !name.Contains("socket") &&
+                (name.Contains("common06b") || name.Contains("common07b") || name.Contains("common06c") || name.Contains("common07c")))
+            {
+                scalingVariants.Add(id);
+                continue;
+            }
             if (parentId == 0 || name.Contains("parent", StringComparison.OrdinalIgnoreCase)
                 || name.Contains("dev_", StringComparison.OrdinalIgnoreCase)
                 || name.Contains("socket", StringComparison.OrdinalIgnoreCase)
@@ -340,18 +350,8 @@ static class Program
 
         const string path = @"..\..\..\..\svd_fmt_5_19.sav";
         GameSave gs = new(path);
-        foreach (var item in gs.Items)
-        {
-            if(item.PlayerBuffs.Any(x => !item.Definition.PlayerBuffs.Contains(x))
-                || item.ItemBuffs.List.Any(l => !item.Definition.ItemBuffs.List.Contains(l)))
-                    {
-                Console.WriteLine("Well shit!");
-                Console.WriteLine(item.Definition.Name);
-                Console.WriteLine(item.Definition.TypeId);
-            }
-        }
-            
         WriteParentFile(gs);
+        File.WriteAllLines(@"C:\e\o\crap.csv", gs.Items.Where(x => x.Definition.ChaosTier != null).Select(x => x.Definition.Name));
     }
 }
 

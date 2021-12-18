@@ -10,6 +10,8 @@
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <constructs:EqualityConverter x:Key="EqualityConverter" />
             <s:String x:Key="Merchant">Merchant</s:String>
+            <s:String x:Key="ChaosTier">ChaosTier</s:String>
+
         </Style.Resources>
         <Style.Triggers>
             <Trigger Property="Definition" Value="{x:Null}">
@@ -23,7 +25,8 @@
                     <StackPanel Orientation="Horizontal" SnapsToDevicePixels="True" VerticalAlignment="Center" Margin="2,0">
                         <Image Height="24" DataContext="{TemplateBinding Definition}"
                             views:FateswornAdorner.RequiresFatesworn="{Binding Definition.RequiresFatesworn, RelativeSource={RelativeSource TemplatedParent}}"
-                            views:EquippedAdorner.IsEquipped="{Binding Item.IsEquipped, RelativeSource={RelativeSource TemplatedParent}}">
+                            views:EquippedAdorner.IsEquipped="{Binding Item.IsEquipped, RelativeSource={RelativeSource TemplatedParent}}"
+                            views:ChaosTierAdorner.ChaosTier="{Binding Definition.ChaosTier, RelativeSource={RelativeSource TemplatedParent}}">
                             <Image.ToolTip>
                                 <ToolTip Content="{Binding}">
                                     <ToolTip.ContentTemplate>
