@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Media;
 using KoAR.Core;
 
@@ -6,6 +8,8 @@ namespace KoAR.SaveEditor.Views;
 
 public sealed class ChaosTierAdorner : IndicatorAdornerBase
 {
+    private static readonly Dictionary<string, Func<FrameworkElement, ChaosTierAdorner>> _factories = new();
+
     public static readonly DependencyProperty ChaosTierProperty = DependencyProperty.RegisterAttached(nameof(ItemDefinition.ChaosTier), typeof(string), typeof(ChaosTierAdorner),
         new PropertyMetadata(null, ChaosTierAdorner.ChaosTierProperty_ValueChanged));
 
@@ -24,7 +28,11 @@ public sealed class ChaosTierAdorner : IndicatorAdornerBase
         }
         if (e.NewValue is string s)
         {
-            IndicatorAdornerBase.AttachAdorner<ChaosTierAdorner>(element, element => new ChaosTierAdorner(element, s));
+            if (ChaosTierAdorner._factories.GetValueOrDefault(s) is not { } factory)
+            {
+                _factories[s] = factory = element => new(element, s);
+            }
+            IndicatorAdornerBase.AttachAdorner<ChaosTierAdorner>(element, factory);
         }
         else
         {

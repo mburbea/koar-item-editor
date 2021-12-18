@@ -200,6 +200,7 @@ public sealed partial class GameSave
 
     public Encoding Encoding => IsRemaster ? Encoding.UTF8 : Encoding.Default;
     public bool IsRemaster { get; }
+    public bool IsFateswornAware => _header.IsFateswornAware;
     public SaveType SaveType { get; }
     private int BodyStart => 8 + _header.Length + 4;
     public byte[] Bytes { get; internal set; }

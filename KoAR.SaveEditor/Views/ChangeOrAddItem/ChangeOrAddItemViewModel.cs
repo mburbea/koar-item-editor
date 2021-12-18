@@ -21,6 +21,7 @@ public sealed class ChangeOrAddItemViewModel : NotifierBase
     private IReadOnlyList<ItemDefinition>? _definitions;
     private int _elementFilter;
     private int _rarityFilter;
+    private int _fateswornFilter;
     private bool _retainStats;
 
     public ChangeOrAddItemViewModel(GameSave gameSave, ItemModelBase? item = null)
@@ -65,6 +66,10 @@ public sealed class ChangeOrAddItemViewModel : NotifierBase
             {
                 this.OnPropertyChanged(nameof(this.ArmorTypeFilter));
             }
+            if (Interlocked.Exchange(ref this._fateswornFilter, default) != default)
+            {
+                this.OnPropertyChanged(nameof(this.FateswornFilter));
+            }
             this.OnFilterChanged();
         }
     }
@@ -93,6 +98,18 @@ public sealed class ChangeOrAddItemViewModel : NotifierBase
         }
     }
 
+    public bool FateswornFilter
+    {
+        get => this._fateswornFilter != 0;
+        set
+        {
+            if (this.SetValue(ref this._fateswornFilter, value ? 1 : 0))
+            {
+                this.OnFilterChanged();
+            }
+
+        }
+    }
     public GameSave GameSave { get; }
 
     public ItemModelBase? Item { get; }
@@ -122,7 +139,8 @@ public sealed class ChangeOrAddItemViewModel : NotifierBase
         return this.Category == item.Category &&
             (this.ElementFilter == default || this.ElementFilter == item.Element) &&
             (this.ArmorTypeFilter == default || this.ArmorTypeFilter == item.ArmorType) &&
-            (this.RarityFilter == default || this.RarityFilter == item.Rarity);
+            (this.RarityFilter == default || this.RarityFilter == item.Rarity) &&
+            (this.FateswornFilter == default || this.FateswornFilter == item.RequiresFatesworn);
     }
 
     private void OnFilterChanged()
