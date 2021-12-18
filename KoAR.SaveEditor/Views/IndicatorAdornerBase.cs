@@ -6,41 +6,85 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace KoAR.SaveEditor.Views;
 
 public abstract class IndicatorAdornerBase : Adorner, IDisposable
 {
     private static readonly BooleanToVisibilityConverter _booleanToVisibilityConverter = new();
-    private static readonly Dictionary<Color, Pen> _penCache = new();
-    private static readonly Dictionary<(double, double), ScaleTransform> _scaleTransformCache = new();
 
     private readonly AdornerPosition _adornerPosition;
     private readonly Brush _background;
     private readonly Brush _foreground;
     private readonly string _indicator;
     private readonly Pen _stroke;
+    private readonly Viewbox _viewbox;
     private AdornerLayer? _adornerLayer;
 
     protected IndicatorAdornerBase(FrameworkElement adornedElement, AdornerPosition adornerPosition, Brush background, Brush foreground, string indicator)
         : base(adornedElement)
     {
         this._adornerPosition = adornerPosition;
-        this._background = background;
-        this._foreground = foreground;
-        this._indicator = indicator;
-        if (foreground is not SolidColorBrush { Color: Color color })
+
+        (int row, int column) = adornerPosition switch
         {
-            this._stroke = IndicatorAdornerBase.CreateFrozenPen(foreground);
-        }
-        else if (IndicatorAdornerBase._penCache.TryGetValue(color, out Pen? pen))
+            AdornerPosition.UpperLeft => (0, 0),
+            AdornerPosition.UpperRight => (0, 1),
+            AdornerPosition.LowerLeft => (1, 0),
+            AdornerPosition.LowerRight => (1, 1),
+            _ => (0, 0),
+        };
+
+
+        Grid grid = new()
         {
-            this._stroke = pen;
-        }
-        else
+            RowDefinitions = { new() { Height = GridLength.Auto }, new() { Height = GridLength.Auto } },
+            ColumnDefinitions = { new() { Width = GridLength.Auto }, new() { Width = GridLength.Auto } },
+        };
+        Ellipse ellipse = new()
         {
-            IndicatorAdornerBase._penCache.Add(color, this._stroke = IndicatorAdornerBase.CreateFrozenPen(foreground));
-        }
+            Fill = background,
+            Stroke = foreground,
+            StrokeThickness = Constants.StrokeThickness,
+            HorizontalAlignment = HorizontalAlignment.Stretch,
+            VerticalAlignment = VerticalAlignment.Stretch,
+        };
+        Grid.SetRow(ellipse, row);
+        Grid.SetColumn(ellipse, column);
+        grid.Children.Add(ellipse);
+        TextBlock textBlock = new()
+        {
+            Text = indicator,
+            Foreground = foreground,
+            FontSize = Constants.FontSize,
+            HorizontalAlignment = HorizontalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Center,
+        };
+        Grid.SetRow(textBlock, row);
+        Grid.SetColumn(textBlock, column);
+        grid.Children.Add(textBlock);
+        this._viewbox = new()
+        {
+            Stretch = Stretch.Uniform,
+            StretchDirection = StretchDirection.Both,
+            Child = grid,
+        };
+        //this._background = background;
+        //this._foreground = foreground;
+        //this._indicator = indicator;
+        //if (foreground is not SolidColorBrush { Color: Color color })
+        //{
+        //    this._stroke = IndicatorAdornerBase.CreateFrozenPen(foreground);
+        //}
+        //else if (IndicatorAdornerBase._penCache.TryGetValue(color, out Pen? pen))
+        //{
+        //    this._stroke = pen;
+        //}
+        //else
+        //{
+        //    IndicatorAdornerBase._penCache.Add(color, this._stroke = IndicatorAdornerBase.CreateFrozenPen(foreground));
+        //}
         this.AttachToAdornedElement();
     }
 
@@ -53,6 +97,22 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
     }
 
     public new FrameworkElement AdornedElement => (FrameworkElement)base.AdornedElement;
+
+    protected override Size ArrangeOverride(Size finalSize)
+    {
+        this._viewbox.Arrange(new(finalSize));
+        return finalSize;
+    }
+
+    protected override Size MeasureOverride(Size constraint)
+    {
+        this._viewbox.Measure(this.AdornedElement.RenderSize);
+        return this._viewbox.RenderSize;
+    }
+
+    protected override int VisualChildrenCount => 1;
+
+    protected override Visual GetVisualChild(int index) => this._viewbox;
 
     public virtual void Dispose()
     {
@@ -68,29 +128,13 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
         GC.SuppressFinalize(this);
     }
 
-    public override GeneralTransform GetDesiredTransform(GeneralTransform transform)
-    {
-        Rect bounds;
-        if (!this.AdornedElement.IsVisible || (bounds = VisualTreeHelper.GetDescendantBounds(this.AdornedElement)).Width == Constants.Dimension && bounds.Height == Constants.Dimension)
-        {
-            return base.GetDesiredTransform(transform);
-        }
-        return new GeneralTransformGroup
-        {
-            Children =
-            {
-                IndicatorAdornerBase.GetScaleTransform(bounds.Width, bounds.Height),
-                base.GetDesiredTransform(transform)
-            }
-        };
-    }
-
     protected static void DetachAdorner<TAdorner>(FrameworkElement element)
         where TAdorner : IndicatorAdornerBase => AdornerAttacher<TAdorner>.DetachAdorner(element);
 
     protected static void SetAdorner<TAdorner>(FrameworkElement element, TAdorner adorner)
         where TAdorner : IndicatorAdornerBase => AdornerAttacher<TAdorner>.SetAdorner(element, adorner);
 
+    /*
     protected override void OnRender(DrawingContext drawingContext)
     {
         double centerX = this._adornerPosition is AdornerPosition.LowerRight or AdornerPosition.UpperRight
@@ -130,18 +174,7 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
         freezable.Freeze();
         return freezable;
     }
-
-    private static ScaleTransform GetScaleTransform(double width, double height)
-    {
-        if (!IndicatorAdornerBase._scaleTransformCache.TryGetValue((width, height), out ScaleTransform? transform))
-        {
-            IndicatorAdornerBase._scaleTransformCache.Add(
-                (width, height),
-                transform = IndicatorAdornerBase.Freeze(new ScaleTransform(width / Constants.Dimension, height / Constants.Dimension))
-            );
-        }
-        return transform;
-    }
+    */
 
     private void AdornedElement_Loaded(object sender, RoutedEventArgs e)
     {
@@ -157,9 +190,8 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
             return;
         }
         (this._adornerLayer = AdornerLayer.GetAdornerLayer(this.AdornedElement)).Add(this);
-        BindingOperations.SetBinding(this, UIElement.VisibilityProperty, new Binding
+        this.SetBinding(UIElement.VisibilityProperty, new Binding(nameof(UIElement.IsVisible))
         {
-            Path = new(UIElement.IsVisibleProperty),
             Source = this.AdornedElement,
             Converter = IndicatorAdornerBase._booleanToVisibilityConverter,
         });

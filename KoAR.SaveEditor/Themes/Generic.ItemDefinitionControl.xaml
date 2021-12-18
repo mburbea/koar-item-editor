@@ -11,7 +11,6 @@
             <constructs:EqualityConverter x:Key="EqualityConverter" />
             <s:String x:Key="Merchant">Merchant</s:String>
             <s:String x:Key="ChaosTier">ChaosTier</s:String>
-
         </Style.Resources>
         <Style.Triggers>
             <Trigger Property="Definition" Value="{x:Null}">
