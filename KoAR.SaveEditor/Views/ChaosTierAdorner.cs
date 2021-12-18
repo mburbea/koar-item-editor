@@ -1,7 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Media;
 using KoAR.Core;
-using KoAR.SaveEditor.Constructs;
 
 namespace KoAR.SaveEditor.Views;
 
@@ -11,7 +10,7 @@ internal class ChaosTierAdorner : IndicatorAdornerBase
         new PropertyMetadata(null, ChaosTierAdorner.ChaosTierProperty_ValueChanged));
 
     private ChaosTierAdorner(FrameworkElement adornedElement, char chaosTier)
-        : base(adornedElement, AdornerPosition.UpperLeft, background: Brushes.CadetBlue, foreground: Brushes.White, chaosTier.ToString()) => this.ToolTip = $"Chaos Tier: {chaosTier}";
+        : base(adornedElement, AdornerPosition.UpperRight, background: Brushes.CadetBlue, foreground: Brushes.White, chaosTier.ToString()) => this.IsHitTestVisible = false;
 
     public static char? GetChaosTier(FrameworkElement element) => (char?)element.GetValue(ChaosTierAdorner.ChaosTierProperty);
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
@@ -46,6 +47,10 @@ public sealed partial class ItemDefinition : IDefinition
         {
             HasVariants = true;
             ChaosTier = char.ToUpperInvariant(internalName[^1]);
+            if(ChaosTier == 'T')
+            {
+                ChaosTier = '0';
+            }
         }
     }
 

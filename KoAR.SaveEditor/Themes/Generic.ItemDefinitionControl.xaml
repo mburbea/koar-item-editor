@@ -25,8 +25,7 @@
                     <StackPanel Orientation="Horizontal" SnapsToDevicePixels="True" VerticalAlignment="Center" Margin="2,0">
                         <Image Height="24" DataContext="{TemplateBinding Definition}"
                             views:FateswornAdorner.RequiresFatesworn="{Binding Definition.RequiresFatesworn, RelativeSource={RelativeSource TemplatedParent}}"
-                            views:EquippedAdorner.IsEquipped="{Binding Item.IsEquipped, RelativeSource={RelativeSource TemplatedParent}}"
-                            views:ChaosTierAdorner.ChaosTier="{Binding Definition.ChaosTier, RelativeSource={RelativeSource TemplatedParent}}">
+                            views:EquippedAdorner.IsEquipped="{Binding Item.IsEquipped, RelativeSource={RelativeSource TemplatedParent}}">
                             <Image.ToolTip>
                                 <ToolTip Content="{Binding}">
                                     <ToolTip.ContentTemplate>
@@ -74,6 +73,14 @@
                                 </Style>
                             </views:RarityIcon.Style>
                         </views:RarityIcon>
+                        <Image Height="24" SnapsToDevicePixels="True" VerticalAlignment="Center" Margin="2,0"
+                            Source="{Binding Source={StaticResource ChaosTier}, Converter={StaticResource BitmapConverter}}"
+                            Visibility="{Binding Definition.ChaosTier.HasValue, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            views:ChaosTierAdorner.ChaosTier="{Binding Definition.ChaosTier, RelativeSource={RelativeSource TemplatedParent}}">
+                            <Image.ToolTip>
+                                <TextBlock Text="{Binding Definition.ChaosTier, RelativeSource={RelativeSource TemplatedParent}, StringFormat='Chaos Tier: {0}'}"/>
+                            </Image.ToolTip>
+                        </Image>
                         <constructs:SearchableText VerticalAlignment="Center" Margin="2,0" SearchText="{TemplateBinding SearchText}">
                             <constructs:SearchableText.Style>
                                 <Style TargetType="{x:Type constructs:SearchableText}">
