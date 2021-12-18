@@ -28,6 +28,9 @@ public sealed partial class GameSave
     private readonly GameSaveHeader _header;
     private int _originalBodyLength;
 
+    private static IReadOnlyCollection<TValue> FilterToApplicable<TValue>(IEnumerable<TValue> values, bool isFateswornAware)
+        where TValue : IDefinition => isFateswornAware ? (IReadOnlyCollection<TValue>)values : values.Where(x => !x.RequiresFatesworn).ToArray();
+
     public GameSave(string fileName)
     {
         Bytes = File.ReadAllBytes(FileName = fileName);
@@ -44,12 +47,8 @@ public sealed partial class GameSave
             throw new NotSupportedException($"Save file is not a user save and changing them can lead to the game infinite looping. The editor only supports saves that start with {pattern}.");
         }
         _header = new(this);
-        Buffs = (IReadOnlyCollection<Buff>)(!_header.IsFateswornAware 
-            ? Amalur.Buffs.Values.Where(x => !x.RequiresFatesworn).ToArray() 
-            : Amalur.Buffs.Values);
-        ItemDefinitions = (IReadOnlyCollection<ItemDefinition>)(!_header.IsFateswornAware
-            ? Amalur.ItemDefinitions.Values.Where(x => !x.RequiresFatesworn).ToArray() 
-            : Amalur.ItemDefinitions.Values);
+        Buffs = FilterToApplicable(Amalur.Buffs.Values, _header.IsFateswornAware);
+        ItemDefinitions = FilterToApplicable(Amalur.ItemDefinitions.Values, _header.IsFateswornAware);
 
         if (BitConverter.ToInt32(Bytes, BodyStart) == CompressedFlag)
         {
@@ -61,7 +60,7 @@ public sealed partial class GameSave
             var gameStateStart = bundleInfoStart + bundleInfoSize + 4;
             var gameStateSize = BitConverter.ToInt32(Bytes, gameStateStart - 4);
             using var gameStateData = new ZlibStream(new MemoryStream(Bytes, gameStateStart, gameStateSize), CompressionMode.Decompress);
-            gameStateData.ReadAll(Body.AsSpan(endOfBundle,Body.Length - endOfBundle));
+            gameStateData.ReadAll(Body.AsSpan(endOfBundle, Body.Length - endOfBundle));
         }
         else
         {
@@ -73,10 +72,10 @@ public sealed partial class GameSave
         _bagOffset = GetBagOffset(data);
         _gameStateStartOffset = data.IndexOf(new byte[5] { 0xF7, 0x5D, 0x3C, 0x00, 0x0A });
         var typeSectionOffset =
-            data.IndexOf(new byte[5] { 0x23, 0xCC, 0x58, 0x00, 0x06 }) is int ix and > -1 
-            ? ix 
-            : data.IndexOf(new byte[5] { 0x23, 0xCC, 0x58, 0x00, 0x04 }) is int pix and > -1 
-                ? pix 
+            data.IndexOf(new byte[5] { 0x23, 0xCC, 0x58, 0x00, 0x06 }) is int ix and > -1
+            ? ix
+            : data.IndexOf(new byte[5] { 0x23, 0xCC, 0x58, 0x00, 0x04 }) is int pix and > -1
+                ? pix
                 : data.IndexOf(new byte[5] { 0x23, 0xCC, 0x58, 0x00, 0x03 });
         _dataLengthOffsets = new[]{
                 _gameStateStartOffset + 5, // gameStateSize
@@ -228,7 +227,7 @@ public sealed partial class GameSave
     public IReadOnlyCollection<Buff> Buffs { get; }
 
     public IReadOnlyCollection<ItemDefinition> ItemDefinitions { get; }
-    
+
     public List<Item> Items { get; } = new();
 
     public HashSet<Item> EquippedItems { get; } = new();

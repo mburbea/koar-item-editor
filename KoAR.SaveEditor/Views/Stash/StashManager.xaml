@@ -91,14 +91,14 @@
                                 <RowDefinition />
                             </Grid.RowDefinitions>
                             <TextBlock Text="Prefix:" Margin="2" VerticalAlignment="Center" TextAlignment="Right"/>
-                            <views:BuffSelector Grid.Column="1" Filter="Prefix"
+                            <views:BuffSelector Grid.Column="1" Buffs="{Binding GameSave.Buffs}" Filter="Prefix"
                                 MinWidth="100" Margin="2" IsEnabled="False" SelectedBuff="{Binding SelectedItem.Prefix}" />
                             <TextBlock Grid.Row="1" Text="Suffix:" Margin="2" VerticalAlignment="Center" TextAlignment="Right"/>
-                            <views:BuffSelector Grid.Row="1" Grid.Column="1" Filter="Suffix"
+                            <views:BuffSelector Grid.Row="1" Grid.Column="1" Buffs="{Binding GameSave.Buffs}" Filter="Suffix"
                                 MinWidth="100" Margin="2" IsEnabled="False" SelectedBuff="{Binding SelectedItem.Suffix}" />
                         </Grid>
                     </GroupBox>
-                    <views:BuffCollectionManager Margin="4,4,4,0" Header="{Binding SelectedItem}" BuffsFilter="Item" Collection="{Binding SelectedItem.ItemBuffs}" 
+                    <views:BuffCollectionManager Margin="4,4,4,0" Header="{Binding SelectedItem}" Buffs="{Binding GameSave.Buffs}" BuffsFilter="Item" Collection="{Binding SelectedItem.ItemBuffs}" 
                         UnsupportedFormat="{Binding SelectedItem.UnsupportedFormat}">
                         <views:BuffCollectionManager.HeaderTemplate>
                             <DataTemplate DataType="{x:Type views:ItemModelBase}">
@@ -117,7 +117,7 @@
                             </DataTemplate>
                         </views:BuffCollectionManager.HeaderTemplate>
                     </views:BuffCollectionManager>
-                    <views:BuffCollectionManager Margin="4,4,4,0" Header="{Binding SelectedItem}" BuffsFilter="Player" Collection="{Binding SelectedItem.PlayerBuffs}">
+                    <views:BuffCollectionManager Margin="4,4,4,0" Header="{Binding SelectedItem}" Buffs="{Binding GameSave.Buffs}" BuffsFilter="Player" Collection="{Binding SelectedItem.PlayerBuffs}">
                         <views:BuffCollectionManager.HeaderTemplate>
                             <DataTemplate DataType="{x:Type views:ItemModelBase}">
                                 <TextBlock>

@@ -111,7 +111,8 @@
                                 <RowDefinition />
                             </Grid.RowDefinitions>
                             <TextBlock Text="Prefix:" Margin="2" VerticalAlignment="Center" TextAlignment="Right"/>
-                            <views:BuffSelector Grid.Column="1" Filter="Prefix" MinWidth="100" Margin="2" SelectedBuff="{Binding SelectedItem.Prefix}">
+                            <views:BuffSelector Grid.Column="1" Buffs="{Binding GameSave.Buffs}" Filter="Prefix" 
+                                MinWidth="100" Margin="2" SelectedBuff="{Binding SelectedItem.Prefix}">
                                 <views:BuffSelector.IsEnabled>
                                     <MultiBinding Converter="{StaticResource AndConverter}">
                                         <Binding Path="SelectedItem.UnsupportedFormat" Converter="{StaticResource NegatedBooleanConverter}" />
@@ -121,7 +122,7 @@
                                 </views:BuffSelector.IsEnabled>
                             </views:BuffSelector>
                             <TextBlock Grid.Row="1" Text="Suffix:" Margin="2" VerticalAlignment="Center" TextAlignment="Right"/>
-                            <views:BuffSelector Grid.Row="1" Grid.Column="1" Filter="Suffix"
+                            <views:BuffSelector Grid.Row="1" Grid.Column="1" Buffs="{Binding GameSave.Buffs}" Filter="Suffix"
                                 MinWidth="100" Margin="2" SelectedBuff="{Binding SelectedItem.Suffix}">
                                 <views:BuffSelector.IsEnabled>
                                     <MultiBinding Converter="{StaticResource AndConverter}">
@@ -133,7 +134,7 @@
                             </views:BuffSelector>
                         </Grid>
                     </GroupBox>
-                    <views:BuffCollectionManager Margin="4,4,4,0" Header="{Binding SelectedItem}" BuffsFilter="Item" Collection="{Binding SelectedItem.ItemBuffs}" 
+                    <views:BuffCollectionManager Margin="4,4,4,0" Header="{Binding SelectedItem}" Buffs="{Binding GameSave.Buffs}" BuffsFilter="Item" Collection="{Binding SelectedItem.ItemBuffs}" 
                         AddBuffCommand="{Binding AddItemBuffCommand}" DeleteBuffCommand="{Binding DeleteItemBuffCommand}" UnsupportedFormat="{Binding SelectedItem.UnsupportedFormat}">
                         <views:BuffCollectionManager.HeaderTemplate>
                             <DataTemplate DataType="{x:Type views:ItemModelBase}">
@@ -152,7 +153,7 @@
                             </DataTemplate>
                         </views:BuffCollectionManager.HeaderTemplate>
                     </views:BuffCollectionManager>
-                    <views:BuffCollectionManager Margin="4,4,4,0" Header="{Binding SelectedItem}" BuffsFilter="Player" Collection="{Binding SelectedItem.PlayerBuffs}" 
+                    <views:BuffCollectionManager Margin="4,4,4,0" Header="{Binding SelectedItem}" Buffs="{Binding GameSave.Buffs}" BuffsFilter="Player" Collection="{Binding SelectedItem.PlayerBuffs}" 
                         AddBuffCommand="{Binding AddPlayerBuffCommand}" DeleteBuffCommand="{Binding DeletePlayerBuffCommand}">
                         <views:BuffCollectionManager.UnsupportedFormat>
                             <MultiBinding Converter="{StaticResource OrConverter}">

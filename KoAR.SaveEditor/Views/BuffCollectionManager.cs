@@ -11,6 +11,8 @@ public sealed class BuffCollectionManager : Control
 {
     public static readonly DependencyProperty AddBuffCommandProperty = DependencyProperty.Register(nameof(BuffCollectionManager.AddBuffCommand), typeof(ICommand), typeof(BuffCollectionManager));
 
+    public static readonly DependencyProperty BuffsProperty = DependencyProperty.Register(nameof(BuffCollectionManager.Buffs), typeof(IReadOnlyCollection<Buff>), typeof(BuffCollectionManager));
+
     public static readonly DependencyProperty BuffsFilterProperty = DependencyProperty.Register(nameof(BuffCollectionManager.BuffsFilter), typeof(BuffsFilter), typeof(BuffCollectionManager));
 
     public static readonly DependencyProperty CollectionProperty = DependencyProperty.Register(nameof(BuffCollectionManager.Collection), typeof(IReadOnlyCollection<Buff>), typeof(BuffCollectionManager));
@@ -35,6 +37,12 @@ public sealed class BuffCollectionManager : Control
     {
         get => (ICommand?)this.GetValue(BuffCollectionManager.AddBuffCommandProperty);
         set => this.SetValue(BuffCollectionManager.AddBuffCommandProperty, value);
+    }
+
+    public IReadOnlyCollection<Buff> Buffs
+    {
+        get => (IReadOnlyCollection < Buff > )this.GetValue(BuffCollectionManager.BuffsProperty);
+        set => this.SetValue(BuffCollectionManager.BuffsProperty, value);
     }
 
     public BuffsFilter BuffsFilter

@@ -32,7 +32,7 @@ public abstract class ManagerViewModelBase<TItem> : NotifierBase, IDisposable
         private set => this.SetValue(ref this._filteredItems, value);
     }
 
-    protected GameSave GameSave => this.MainWindowViewModel.GameSave!;
+    public GameSave GameSave => this.MainWindowViewModel.GameSave!;
 
     public ItemFilters ItemFilters { get; } = new();
 
