@@ -43,10 +43,14 @@ public sealed partial class ItemDefinition : IDefinition
         IsMerchant = isMerchant;
         AffixableName = affixableName;
         HasVariants = hasVariants;
-        if(internalName.StartsWith("mit") && internalName.Contains("chaos") && !internalName.EndsWith("parent"))
+        if (internalName.StartsWith("mit_") && internalName.Contains("chaos") && !internalName.EndsWith("parent"))
         {
             HasVariants = true;
             ChaosTier = char.ToUpperInvariant(internalName[^1]).ToString();
+        }
+        if (internalName.StartsWith("mit_") && (internalName.Contains("set") || internalName.Contains("unique")))
+        {
+            HasVariants = true;
         }
     }
 
@@ -70,7 +74,7 @@ public sealed partial class ItemDefinition : IDefinition
     public bool HasChaosTier => ChaosTier is { };
 
     public IEnumerable<Socket> GetSockets() => SocketTypes.Select(socket => new Socket(socket));
-    
+
 
     public string CategoryDisplayName => this switch
     {

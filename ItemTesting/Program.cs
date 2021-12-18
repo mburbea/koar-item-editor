@@ -303,6 +303,11 @@ static class Program
                 scalingVariants.Add(id);
                 continue;
             }
+            if(name.StartsWith("mit_") && (name.Contains("set")|| name.Contains("id")))
+            {
+                scalingVariants.Add(id);
+                continue;
+            }
             if (parentId == 0 || name.Contains("parent", StringComparison.OrdinalIgnoreCase)
                 || name.Contains("dev_", StringComparison.OrdinalIgnoreCase)
                 || name.Contains("socket", StringComparison.OrdinalIgnoreCase)
