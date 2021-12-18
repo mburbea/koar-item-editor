@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using System.IO;
 using System.Linq;
 
 namespace KoAR.Core;
@@ -24,7 +20,7 @@ public sealed partial class ItemDefinition : IDefinition
 
     private ItemDefinition(EquipmentCategory category, uint typeId, byte level, string name, string internalName, float maxDurability, Rarity rarity,
         string socketTypes, Element element, ArmorType armorType, Buff? prefix, Buff? suffix,
-        Buff[] itemBuffs, Buff[] playerBuffs, bool isMerchant, bool affixableName, bool hasVariants)
+        Buff[] itemBuffs, Buff[] playerBuffs, bool isMerchant, bool affixableName, bool hasVariants, string chaosTier)
     {
         Category = category;
         TypeId = typeId;
@@ -43,15 +39,8 @@ public sealed partial class ItemDefinition : IDefinition
         IsMerchant = isMerchant;
         AffixableName = affixableName;
         HasVariants = hasVariants;
-        if (internalName.StartsWith("mit_") && internalName.Contains("chaos") && !internalName.EndsWith("parent"))
-        {
-            HasVariants = true;
-            ChaosTier = char.ToUpperInvariant(internalName[^1]).ToString();
-        }
-        if (internalName.StartsWith("mit_") && (internalName.Contains("set") || internalName.Contains("unique")))
-        {
-            HasVariants = true;
-        }
+        ChaosTier = chaosTier;
+        RequiresFatesworn = internalName.StartsWith("mit_");
     }
 
     public EquipmentCategory Category { get; }
@@ -69,7 +58,7 @@ public sealed partial class ItemDefinition : IDefinition
     public bool HasVariants { get; }
     public bool IsMerchant { get; }
     public IItemBuffMemory ItemBuffs { get; }
-    public bool RequiresFatesworn => InternalName.StartsWith("mit_");
+    public bool RequiresFatesworn { get; } 
     public string? ChaosTier { get; }
     public bool HasChaosTier => ChaosTier is { };
 

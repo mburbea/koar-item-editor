@@ -253,6 +253,13 @@ static class Program
             var internalName = SimtypeDict[typeId];
             bool isMerchant = internalName.Contains("merchant") && typeId != 0x0AD192;
             bool affixableName = isMerchant || internalName.Contains("common");
+            bool hasVariants = ScalingVariants.Contains(typeId);
+            string chaosTier = null;
+            if (internalName.StartsWith("mit_") && internalName.Contains("chaos") && !internalName.EndsWith("parent"))
+            {
+                hasVariants = true;
+                chaosTier = char.ToUpperInvariant(internalName[^1]).ToString();
+            }
             var s = $@"[{typeId}] = {{
     internal_name='{internalName}'";
             if (item.Definition.Name != internalName)
@@ -279,9 +286,13 @@ static class Program
             {
                 s += $",\n    affixable_name=true";
             }
-            if (ScalingVariants.Contains(typeId))
+            if (hasVariants)
             {
                 s += $",\n    has_variants=true";
+            }
+            if (chaosTier is { })
+            {
+                s += $",\n   chaos_tier='{chaosTier}'";
             }
             return s + "},";
         }
@@ -295,6 +306,7 @@ static class Program
             var name = SimtypeDict[id];
             if(name.StartsWith("mit_") && name.Contains("chaos"))
             {
+                //handled in the other func;
                 continue;
             }
             if(name.StartsWith("mit_") && !name.Contains("socket") &&
@@ -303,7 +315,7 @@ static class Program
                 scalingVariants.Add(id);
                 continue;
             }
-            if(name.StartsWith("mit_") && (name.Contains("set")|| name.Contains("id")))
+            if(name.StartsWith("mit_") && (name.Contains("set")|| name.Contains("unique")))
             {
                 scalingVariants.Add(id);
                 continue;
