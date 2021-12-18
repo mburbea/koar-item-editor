@@ -14,19 +14,13 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
 {
     private static readonly BooleanToVisibilityConverter _booleanToVisibilityConverter = new();
 
-    private readonly AdornerPosition _adornerPosition;
-    private readonly Brush _background;
-    private readonly Brush _foreground;
-    private readonly string _indicator;
-    private readonly Pen _stroke;
     private readonly Viewbox _viewbox;
     private AdornerLayer? _adornerLayer;
 
     protected IndicatorAdornerBase(FrameworkElement adornedElement, AdornerPosition adornerPosition, Brush background, Brush foreground, string indicator)
         : base(adornedElement)
     {
-        this._adornerPosition = adornerPosition;
-
+        
         (int row, int column) = adornerPosition switch
         {
             AdornerPosition.UpperLeft => (0, 0),
