@@ -57,12 +57,14 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type views:SocketIcon}">
-                    <Image Height="{TemplateBinding Height}" Width="{TemplateBinding Width}"
+                    <AdornerDecorator>
+                        <Image Height="{TemplateBinding Height}" Width="{TemplateBinding Width}"
                         Source="{Binding IconName, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BitmapConverter}}">
-                        <Image.ToolTip>
-                            <ToolTip Content="{TemplateBinding Socket}" ContentTemplate="{StaticResource SocketContentTemplate}" />
-                        </Image.ToolTip>
-                    </Image>
+                            <Image.ToolTip>
+                                <ToolTip Content="{TemplateBinding Socket}" ContentTemplate="{StaticResource SocketContentTemplate}" />
+                            </Image.ToolTip>
+                        </Image>
+                    </AdornerDecorator>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

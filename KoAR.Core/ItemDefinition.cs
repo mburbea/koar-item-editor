@@ -46,7 +46,7 @@ public sealed partial class ItemDefinition : IDefinition
         if(internalName.StartsWith("mit") && internalName.Contains("chaos") && !internalName.EndsWith("parent"))
         {
             HasVariants = true;
-            ChaosTier = char.ToUpperInvariant(internalName[^1]);
+            ChaosTier = char.ToUpperInvariant(internalName[^1]).ToString();
         }
     }
 
@@ -66,8 +66,8 @@ public sealed partial class ItemDefinition : IDefinition
     public bool IsMerchant { get; }
     public IItemBuffMemory ItemBuffs { get; }
     public bool RequiresFatesworn => InternalName.StartsWith("mit_");
-    public char? ChaosTier { get; }
-    public bool HasChaosTier => ChaosTier.HasValue;
+    public string? ChaosTier { get; }
+    public bool HasChaosTier => ChaosTier is { };
 
     public IEnumerable<Socket> GetSockets() => SocketTypes.Select(socket => new Socket(socket));
     

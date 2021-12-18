@@ -3,18 +3,18 @@ using System.Windows.Media;
 using KoAR.Core;
 
 namespace KoAR.SaveEditor.Views;
-/*
+
 public sealed class ChaosTierAdorner : IndicatorAdornerBase
 {
-    public static readonly DependencyProperty ChaosTierProperty = DependencyProperty.RegisterAttached(nameof(ItemDefinition.ChaosTier), typeof(char?), typeof(ChaosTierAdorner),
+    public static readonly DependencyProperty ChaosTierProperty = DependencyProperty.RegisterAttached(nameof(ItemDefinition.ChaosTier), typeof(string), typeof(ChaosTierAdorner),
         new PropertyMetadata(null, ChaosTierAdorner.ChaosTierProperty_ValueChanged));
 
-    private ChaosTierAdorner(FrameworkElement adornedElement, char chaosTier)
-        : base(adornedElement, AdornerPosition.UpperRight, background: Brushes.CadetBlue, foreground: Brushes.White, chaosTier.ToString()) => this.IsHitTestVisible = false;
+    private ChaosTierAdorner(FrameworkElement adornedElement, string chaosTier)
+        : base(adornedElement, AdornerPosition.UpperRight, background: Brushes.CadetBlue, foreground: Brushes.White, chaosTier) => this.IsHitTestVisible = false;
 
-    public static char? GetChaosTier(FrameworkElement element) => (char?)element.GetValue(ChaosTierAdorner.ChaosTierProperty);
+    public static string? GetChaosTier(FrameworkElement element) => (string?)element.GetValue(ChaosTierAdorner.ChaosTierProperty);
 
-    public static void SetChaosTier(FrameworkElement element, char? value) => element.SetValue(ChaosTierAdorner.ChaosTierProperty, value);
+    public static void SetChaosTier(FrameworkElement element, string? value) => element.SetValue(ChaosTierAdorner.ChaosTierProperty, value);
 
     private static void ChaosTierProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
@@ -22,9 +22,9 @@ public sealed class ChaosTierAdorner : IndicatorAdornerBase
         {
             return;
         }
-        if (e.NewValue is char tier)
+        if (e.NewValue is string s)
         {
-            IndicatorAdornerBase.SetAdorner(element, new ChaosTierAdorner(element, tier));
+            IndicatorAdornerBase.AttachAdorner<ChaosTierAdorner>(element, element => new ChaosTierAdorner(element, s));
         }
         else
         {
@@ -32,4 +32,3 @@ public sealed class ChaosTierAdorner : IndicatorAdornerBase
         }
     }
 }
-*/
