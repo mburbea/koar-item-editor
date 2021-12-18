@@ -4,7 +4,7 @@ using KoAR.Core;
 
 namespace KoAR.SaveEditor.Views;
 
-internal class ChaosTierAdorner : IndicatorAdornerBase
+public sealed class ChaosTierAdorner : IndicatorAdornerBase
 {
     public static readonly DependencyProperty ChaosTierProperty = DependencyProperty.RegisterAttached(nameof(ItemDefinition.ChaosTier), typeof(char?), typeof(ChaosTierAdorner),
         new PropertyMetadata(null, ChaosTierAdorner.ChaosTierProperty_ValueChanged));

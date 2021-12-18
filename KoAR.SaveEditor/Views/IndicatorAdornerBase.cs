@@ -1,58 +1,73 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace KoAR.SaveEditor.Views;
 
 public abstract class IndicatorAdornerBase : Adorner, IDisposable
 {
     private static readonly BooleanToVisibilityConverter _booleanToVisibilityConverter = new();
-    private static readonly Dictionary<Color, Pen> _penCache = new();
-    private static readonly Dictionary<(double, double), ScaleTransform> _scaleTransformCache = new();
 
-    private readonly AdornerPosition _adornerPosition;
-    private readonly Brush _background;
-    private readonly Brush _foreground;
-    private readonly string _indicator;
-    private readonly Pen _stroke;
+    private readonly Border _contentPresenter;
     private AdornerLayer? _adornerLayer;
 
     protected IndicatorAdornerBase(FrameworkElement adornedElement, AdornerPosition adornerPosition, Brush background, Brush foreground, string indicator)
         : base(adornedElement)
     {
-        this._adornerPosition = adornerPosition;
-        this._background = background;
-        this._foreground = foreground;
-        this._indicator = indicator;
-        if (foreground is not SolidColorBrush { Color: Color color })
+        FrameworkElementFactory gridFactory = new(typeof(Grid));
+        FrameworkElementFactory ellipseFactory = new(typeof(Ellipse));
+        ellipseFactory.SetValue(Shape.FillProperty, background);
+        ellipseFactory.SetValue(Shape.StrokeProperty, foreground);
+        ellipseFactory.SetValue(Shape.StrokeThicknessProperty, 0.5);
+        gridFactory.AppendChild(ellipseFactory);
+        FrameworkElementFactory viewBoxFactory = new(typeof(Viewbox));
+        viewBoxFactory.SetValue(Viewbox.StretchProperty, Stretch.Uniform);
+        viewBoxFactory.SetValue(Viewbox.StretchDirectionProperty, StretchDirection.Both);
+        FrameworkElementFactory textBlockFactory = new(typeof(TextBlock));
+        textBlockFactory.SetBinding(TextBlock.TextProperty, new Binding { Mode = BindingMode.OneTime });
+        textBlockFactory.SetValue(TextBlock.ForegroundProperty, foreground);
+        textBlockFactory.SetValue(FrameworkElement.HorizontalAlignmentProperty, HorizontalAlignment.Center);
+        textBlockFactory.SetValue(FrameworkElement.VerticalAlignmentProperty, VerticalAlignment.Center);
+        viewBoxFactory.AppendChild(textBlockFactory);
+        gridFactory.AppendChild(viewBoxFactory);
+        FrameworkElementFactory uniformGridFactory = new(typeof(UniformGrid));
+        uniformGridFactory.SetValue(UniformGrid.RowsProperty, 2);
+        uniformGridFactory.SetValue(UniformGrid.ColumnsProperty, 2);
+        for (int i = 0; i < (int)adornerPosition; i++)
         {
-            this._stroke = IndicatorAdornerBase.CreateFrozenPen(foreground);
+            uniformGridFactory.AppendChild(new(typeof(Border)));
         }
-        else if (IndicatorAdornerBase._penCache.TryGetValue(color, out Pen? pen))
+        uniformGridFactory.AppendChild(gridFactory);
+        this._contentPresenter = new Border
         {
-            this._stroke = pen;
-        }
-        else
-        {
-            IndicatorAdornerBase._penCache.Add(color, this._stroke = IndicatorAdornerBase.CreateFrozenPen(foreground));
-        }
+            Background = Brushes.Transparent,
+            Child = new ContentPresenter()
+            {
+                Content = indicator,
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Stretch,
+                ContentTemplate = new() { VisualTree = uniformGridFactory },
+            }
+        };
         this.AttachToAdornedElement();
     }
 
     protected enum AdornerPosition
     {
+        UpperLeft = 0,
+        UpperRight,
         LowerLeft,
         LowerRight,
-        UpperLeft,
-        UpperRight,
     }
 
     public new FrameworkElement AdornedElement => (FrameworkElement)base.AdornedElement;
+
+    protected override int VisualChildrenCount => 1;
 
     public virtual void Dispose()
     {
@@ -68,79 +83,24 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
         GC.SuppressFinalize(this);
     }
 
-    public override GeneralTransform GetDesiredTransform(GeneralTransform transform)
-    {
-        Rect bounds;
-        if (!this.AdornedElement.IsVisible || (bounds = VisualTreeHelper.GetDescendantBounds(this.AdornedElement)).Width == Constants.Dimension && bounds.Height == Constants.Dimension)
-        {
-            return base.GetDesiredTransform(transform);
-        }
-        return new GeneralTransformGroup
-        {
-            Children =
-            {
-                IndicatorAdornerBase.GetScaleTransform(bounds.Width, bounds.Height),
-                base.GetDesiredTransform(transform)
-            }
-        };
-    }
-
     protected static void DetachAdorner<TAdorner>(FrameworkElement element)
         where TAdorner : IndicatorAdornerBase => AdornerAttacher<TAdorner>.DetachAdorner(element);
 
     protected static void SetAdorner<TAdorner>(FrameworkElement element, TAdorner adorner)
         where TAdorner : IndicatorAdornerBase => AdornerAttacher<TAdorner>.SetAdorner(element, adorner);
 
-    protected override void OnRender(DrawingContext drawingContext)
+    protected override Size ArrangeOverride(Size finalSize)
     {
-        double centerX = this._adornerPosition is AdornerPosition.LowerRight or AdornerPosition.UpperRight
-            ? Constants.Dimension - Constants.Radius
-            : Constants.Radius;
-        double centerY = this._adornerPosition is AdornerPosition.LowerRight or AdornerPosition.LowerLeft
-            ? Constants.Dimension - Constants.Radius
-            : Constants.Radius;
-        drawingContext.DrawEllipse(
-            this._background,
-            this._stroke,
-            new(centerX, centerY),
-            Constants.Radius - Constants.StrokeThickness,
-            Constants.Radius - Constants.StrokeThickness
-        );
-        FormattedText formattedText = new(
-            this._indicator,
-            CultureInfo.CurrentCulture,
-            FlowDirection.LeftToRight,
-            new(Window.GetWindow(this.AdornedElement).FontFamily, FontStyles.Normal, FontWeights.Normal, FontStretches.Normal),
-            Constants.FontSize,
-            this._foreground,
-            1d
-        );
-        drawingContext.DrawText(
-            formattedText,
-            new(centerX - formattedText.Width * 0.5, centerY - formattedText.Height * 0.5)
-        );
-        base.OnRender(drawingContext);
+        this._contentPresenter.Arrange(new(finalSize));
+        return finalSize;
     }
 
-    private static Pen CreateFrozenPen(Brush brush) => IndicatorAdornerBase.Freeze(new Pen(brush, Constants.StrokeThickness));
+    protected override Visual GetVisualChild(int index) => this._contentPresenter;
 
-    private static TFreezable Freeze<TFreezable>(TFreezable freezable)
-        where TFreezable : Freezable
+    protected override Size MeasureOverride(Size constraint)
     {
-        freezable.Freeze();
-        return freezable;
-    }
-
-    private static ScaleTransform GetScaleTransform(double width, double height)
-    {
-        if (!IndicatorAdornerBase._scaleTransformCache.TryGetValue((width, height), out ScaleTransform? transform))
-        {
-            IndicatorAdornerBase._scaleTransformCache.Add(
-                (width, height),
-                transform = IndicatorAdornerBase.Freeze(new ScaleTransform(width / Constants.Dimension, height / Constants.Dimension))
-            );
-        }
-        return transform;
+        this._contentPresenter.Measure(this.AdornedElement.RenderSize);
+        return this.AdornedElement.RenderSize;
     }
 
     private void AdornedElement_Loaded(object sender, RoutedEventArgs e)
@@ -157,9 +117,8 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
             return;
         }
         (this._adornerLayer = AdornerLayer.GetAdornerLayer(this.AdornedElement)).Add(this);
-        BindingOperations.SetBinding(this, UIElement.VisibilityProperty, new Binding
+        this.SetBinding(UIElement.VisibilityProperty, new Binding(nameof(UIElement.IsVisible))
         {
-            Path = new(UIElement.IsVisibleProperty),
             Source = this.AdornedElement,
             Converter = IndicatorAdornerBase._booleanToVisibilityConverter,
         });
@@ -179,13 +138,5 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
         }
 
         public static void SetAdorner(FrameworkElement element, TAdorner adorner) => element.SetValue(AdornerAttacher<TAdorner>._adornerProperty, adorner);
-    }
-
-    private static class Constants
-    {
-        public const double Dimension = 24;
-        public const double FontSize = 10;
-        public const double Radius = 6;
-        public const double StrokeThickness = 0.5;
     }
 }
