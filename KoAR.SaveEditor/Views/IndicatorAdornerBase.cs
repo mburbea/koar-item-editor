@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -53,7 +54,7 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
         };
         this.SetBinding(UIElement.VisibilityProperty, new Binding(nameof(UIElement.IsVisible))
         {
-            Source = this.AdornedElement,
+            Source = adornedElement,
             Converter = IndicatorAdornerBase._booleanToVisibilityConverter,
         });
         this.ClipToBounds = true;
@@ -66,8 +67,6 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
         LowerLeft,
         LowerRight,
     }
-
-    public new FrameworkElement AdornedElement => (FrameworkElement)base.AdornedElement;
 
     protected override int VisualChildrenCount => 1;
 
@@ -101,17 +100,8 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
         where TAdorner : IndicatorAdornerBase
     {
         private static readonly DependencyProperty _adornerProperty = DependencyProperty.RegisterAttached(typeof(TAdorner).FullName, typeof(TAdorner), typeof(AdornerAttacher<TAdorner>));
-        private static readonly DependencyProperty _factoryProperty = DependencyProperty.RegisterAttached(typeof(Func<FrameworkElement, TAdorner>).FullName, typeof(Func<FrameworkElement, TAdorner>), typeof(AdornerAttacher<TAdorner>));
         private static readonly Lazy<Func<FrameworkElement, TAdorner>> _defaultFactory = new(AdornerAttacher<TAdorner>.CreateFactory, false);
-
-        private static Func<FrameworkElement, TAdorner> CreateFactory()
-        {
-            ParameterExpression frameworkElem = Expression.Parameter(typeof(FrameworkElement));
-            return Expression.Lambda<Func<FrameworkElement, TAdorner>>(
-                Expression.New(typeof(TAdorner).GetConstructor(new[] { typeof(FrameworkElement) })!, frameworkElem),
-                frameworkElem
-            ).Compile()!;
-        }
+        private static readonly DependencyProperty _factoryProperty = DependencyProperty.RegisterAttached(typeof(Func<FrameworkElement, TAdorner>).FullName, typeof(Func<FrameworkElement, TAdorner>), typeof(AdornerAttacher<TAdorner>));
 
         public static void AttachAdorner(FrameworkElement element, Func<FrameworkElement, TAdorner>? factory = default)
         {
@@ -124,25 +114,42 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
             else
             {
                 element.SetValue(AdornerAttacher<TAdorner>._factoryProperty, factory);
-                element.Loaded += Element_Loaded;
+                element.Loaded += AdornerAttacher<TAdorner>.Element_Loaded;
             }
-        }
-
-        private static void Element_Loaded(object sender, RoutedEventArgs e)
-        {
-            FrameworkElement element = (FrameworkElement)sender;
-            element.Loaded -= Element_Loaded;
-            AttachAdorner(element, (Func<FrameworkElement, TAdorner>?)element.GetValue(_factoryProperty));
-            element.ClearValue(_factoryProperty);
         }
 
         public static void DetachAdorner(FrameworkElement element)
         {
             using TAdorner? adorner = (TAdorner?)element.GetValue(AdornerAttacher<TAdorner>._adornerProperty);
-            AdornerLayer adornerLayer = element.FindVisualTreeAncestor<AdornerLayer>() ?? AdornerLayer.GetAdornerLayer(element);
-            adornerLayer.Remove(adorner);
-            element.SetValue(AdornerAttacher<TAdorner>._adornerProperty, null);
-            element.Loaded -= Element_Loaded;
+            if (adorner != null)
+            {
+                (element.FindVisualTreeAncestor<AdornerLayer>() ?? AdornerLayer.GetAdornerLayer(element)).Remove(adorner);
+            }
+            else
+            {
+                element.Loaded -= AdornerAttacher<TAdorner>.Element_Loaded;
+            }
+            element.ClearValue(AdornerAttacher<TAdorner>._adornerProperty);
+        }
+
+        private static Func<FrameworkElement, TAdorner> CreateFactory()
+        {
+            ParameterExpression parameter = Expression.Parameter(typeof(FrameworkElement));
+            return Expression.Lambda<Func<FrameworkElement, TAdorner>>(
+                Expression.New(
+                    typeof(TAdorner).GetConstructor(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { typeof(FrameworkElement) }, null)!,
+                    parameter
+                ),
+                parameter
+            ).Compile()!;
+        }
+
+        private static void Element_Loaded(object sender, RoutedEventArgs e)
+        {
+            FrameworkElement element = (FrameworkElement)sender;
+            element.Loaded -= AdornerAttacher<TAdorner>.Element_Loaded;
+            AdornerAttacher<TAdorner>.AttachAdorner(element, (Func<FrameworkElement, TAdorner>?)element.GetValue(AdornerAttacher<TAdorner>._factoryProperty));
+            element.ClearValue(AdornerAttacher<TAdorner>._factoryProperty);
         }
     }
 }

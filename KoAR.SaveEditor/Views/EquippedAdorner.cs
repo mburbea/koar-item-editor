@@ -9,7 +9,7 @@ public sealed class EquippedAdorner : IndicatorAdornerBase
     public static readonly DependencyProperty IsEquippedProperty = DependencyProperty.RegisterAttached(nameof(ItemModelBase.IsEquipped), typeof(bool), typeof(EquippedAdorner),
         new PropertyMetadata(BooleanBoxes.False, EquippedAdorner.IsEquippedProperty_ValueChanged));
 
-    public EquippedAdorner(FrameworkElement adornedElement)
+    private EquippedAdorner(FrameworkElement adornedElement)
         : base(adornedElement, AdornerPosition.LowerLeft, background: Brushes.LimeGreen, foreground: Brushes.White, "E") => this.ToolTip = "Equipped";
 
     public static bool GetIsEquipped(FrameworkElement element) => (bool)element.GetValue(EquippedAdorner.IsEquippedProperty);
