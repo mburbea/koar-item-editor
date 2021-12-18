@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace KoAR.Core;
 
-namespace KoAR.Core
+public enum SaveType
 {
-    public enum SaveType
-    {
-        Original,
-        Remaster,
-        Switch
-    }
+    Original,
+    Remaster,
+    Switch
 }

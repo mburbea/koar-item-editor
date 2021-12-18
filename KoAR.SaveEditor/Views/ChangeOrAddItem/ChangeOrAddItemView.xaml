@@ -7,10 +7,15 @@
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs"
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views"
     xmlns:local="clr-namespace:KoAR.SaveEditor.Views.ChangeOrAddItem"
-    xmlns:s="clr-namespace:System;assembly=mscorlib"
+    xmlns:s="clr-namespace:System;assembly=System.Runtime"
     xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
     mc:Ignorable="d" d:DataContext="{d:DesignInstance local:ChangeOrAddItemViewModel}"
     Icon="/app.ico" SizeToContent="WidthAndHeight" MinWidth="400" WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
+    <Window.Resources>
+        <ResourceDictionary>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        </ResourceDictionary>
+    </Window.Resources>
     <Window.Style>
         <Style TargetType="{x:Type Window}" BasedOn="{StaticResource {x:Type Window}}">
             <Style.Triggers>
@@ -61,6 +66,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -167,6 +173,8 @@
                         </ListBox>
                     </GroupBox>
                 </UniformGrid>
+                <CheckBox Margin="4" Content="Fatesworn Only?" IsChecked="{Binding FateswornFilter}" FocusVisualStyle="{x:Null}" HorizontalAlignment="Stretch" Grid.Row="3"
+                            Visibility="{Binding GameSave.IsFateswornAware, Converter={StaticResource BooleanToVisibilityConverter}}" />
             </Grid>
         </GroupBox>
         <ComboBox ItemsSource="{Binding Source={StaticResource Definitions}}" SelectedItem="{Binding Definition}" TextSearch.TextPath="Name"

@@ -3,108 +3,111 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace KoAR.SaveEditor.Constructs
+namespace KoAR.SaveEditor.Constructs;
+
+public sealed class SearchableText : Control
 {
-    public sealed class SearchableText : Control
+    public static readonly DependencyProperty SearchTextProperty = DependencyProperty.Register(nameof(SearchableText.SearchText), typeof(string), typeof(SearchableText),
+        new(SearchableText.SearchTextProperty_ValueChanged));
+
+    public static readonly DependencyProperty SegmentsProperty;
+
+    public static readonly DependencyProperty TextProperty = DependencyProperty.Register(nameof(SearchableText.Text), typeof(string), typeof(SearchableText),
+        new(SearchableText.TextProperty_ValueChanged));
+
+    private static readonly DependencyPropertyKey _segmentsPropertyKey = DependencyProperty.RegisterReadOnly(nameof(SearchableText.Segments), typeof(IReadOnlyList<Segment>), typeof(SearchableText),
+        new(Array.Empty<Segment>()));
+
+    static SearchableText()
     {
-        public static readonly DependencyProperty SearchTextProperty = DependencyProperty.Register(nameof(SearchableText.SearchText), typeof(string), typeof(SearchableText),
-            new(SearchableText.SearchTextProperty_ValueChanged));
+        SearchableText.SegmentsProperty = SearchableText._segmentsPropertyKey.DependencyProperty;
+        FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(SearchableText), new FrameworkPropertyMetadata(typeof(SearchableText)));
+    }
 
-        public static readonly DependencyProperty SegmentsProperty;
+    public string? SearchText
+    {
+        get => (string?)this.GetValue(SearchableText.SearchTextProperty);
+        set => this.SetValue(SearchableText.SearchTextProperty, value);
+    }
 
-        public static readonly DependencyProperty TextProperty = DependencyProperty.Register(nameof(SearchableText.Text), typeof(string), typeof(SearchableText),
-            new(SearchableText.TextProperty_ValueChanged));
+    public IReadOnlyList<Segment> Segments
+    {
+        get => (IReadOnlyList<Segment>)this.GetValue(SearchableText.SegmentsProperty);
+        private set => this.SetValue(SearchableText._segmentsPropertyKey, value);
+    }
 
-        private static readonly DependencyPropertyKey _segmentsPropertyKey = DependencyProperty.RegisterReadOnly(nameof(SearchableText.Segments), typeof(IReadOnlyList<Segment>), typeof(SearchableText),
-            new(Array.Empty<Segment>()));
+    public string? Text
+    {
+        get => (string?)this.GetValue(SearchableText.TextProperty);
+        set => this.SetValue(SearchableText.TextProperty, value);
+    }
 
-        static SearchableText()
+    private static IReadOnlyList<Segment> ComputeSegments(string? text, string? searchText)
+    {
+        if (text == null || text.Length == 0)
         {
-            SearchableText.SegmentsProperty = SearchableText._segmentsPropertyKey.DependencyProperty;
-            FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(SearchableText), new FrameworkPropertyMetadata(typeof(SearchableText)));
+            return Array.Empty<Segment>();
         }
-
-        public string? SearchText
+        if (searchText == null || searchText.Length == 0 || searchText.Length > text.Length)
         {
-            get => (string?)this.GetValue(SearchableText.SearchTextProperty);
-            set => this.SetValue(SearchableText.SearchTextProperty, value);
+            return new[] { (Segment)text };
         }
-
-        public IReadOnlyList<Segment> Segments
+        List<Segment> list = new();
+        int start = 0;
+        while (start < text.Length)
         {
-            get => (IReadOnlyList<Segment>)this.GetValue(SearchableText.SegmentsProperty);
-            private set => this.SetValue(SearchableText._segmentsPropertyKey, value);
-        }
-
-        public string? Text
-        {
-            get => (string?)this.GetValue(SearchableText.TextProperty);
-            set => this.SetValue(SearchableText.TextProperty, value);
-        }
-
-        private static IReadOnlyList<Segment> ComputeSegments(string? text, string? searchText)
-        {
-            if (text == null || text.Length == 0)
+            int index = text.IndexOf(searchText, start, StringComparison.InvariantCultureIgnoreCase);
+            if (index == -1)
             {
-                return Array.Empty<Segment>();
+                break;
             }
-            if (searchText == null || searchText.Length == 0 || searchText.Length > text.Length)
+            if (index != start)
             {
-                return new[] { (Segment)text };
+                list.Add(text[start..index]);
             }
-            List<Segment> list = new();
-            int start = 0;
-            while (start < text.Length)
-            {
-                int index = text.IndexOf(searchText, start, StringComparison.InvariantCultureIgnoreCase);
-                if (index == -1)
-                {
-                    break;
-                }
-                if (index != start)
-                {
-                    list.Add(text[start..index]);
-                }
-                list.Add(new(text.Substring(index, searchText.Length), true));
-                start = index + searchText.Length;
-            }
-            if (start < text.Length)
-            {
-                list.Add(text[start..]);
-            }
-            return list;
+            list.Add(new(text.Substring(index, searchText.Length), true));
+            start = index + searchText.Length;
         }
-
-        private static void SearchTextProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        if (start < text.Length)
         {
-            SearchableText control = (SearchableText)d;
-            control.Segments = SearchableText.ComputeSegments(control.Text, (string?)e.NewValue);
+            list.Add(text[start..]);
         }
+        return list;
+    }
 
-        private static void TextProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    private static void SearchTextProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        SearchableText control = (SearchableText)d;
+        control.Segments = SearchableText.ComputeSegments(control.Text, (string?)e.NewValue);
+    }
+
+    private static void TextProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        SearchableText control = (SearchableText)d;
+        control.Segments = SearchableText.ComputeSegments((string?)e.NewValue, control.SearchText);
+    }
+
+    public readonly struct Segment : IEquatable<Segment>
+    {
+        public Segment(string text, bool isMatch)
         {
-            SearchableText control = (SearchableText)d;
-            control.Segments = SearchableText.ComputeSegments((string?)e.NewValue, control.SearchText);
+            (this.Text, this.IsMatch) = (text, isMatch);
         }
 
-        public readonly struct Segment : IEquatable<Segment>
-        {
-            public Segment(string text, bool isMatch)
-            {
-                (this.Text, this.IsMatch) = (text, isMatch);
-            }
+        public bool IsMatch { get; }
 
-            public bool IsMatch { get; }
+        public string Text { get; }
 
-            public string Text { get; }
+        public static implicit operator Segment(string text) => new(text, false);
 
-            public static implicit operator Segment(string text) => new(text, false);
+        public static bool operator ==(Segment left, Segment right) => left.Equals(right);
 
-            public bool Equals(Segment other) => (this.Text, this.IsMatch) == (other.Text, other.IsMatch);
+        public static bool operator !=(Segment left, Segment right) => !left.Equals(right);
 
-            public override bool Equals(object obj) => obj is Segment other && this.Equals(other);
+        public bool Equals(Segment other) => (this.Text, this.IsMatch) == (other.Text, other.IsMatch);
 
-            public override int GetHashCode() => (this.Text, this.IsMatch).GetHashCode();
-        }
+        public override bool Equals(object? obj) => obj is Segment other && this.Equals(other);
+
+        public override int GetHashCode() => HashCode.Combine(this.Text, this.IsMatch);
     }
 }

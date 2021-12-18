@@ -1,88 +1,85 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 
-namespace KoAR.SaveEditor.Constructs
+namespace KoAR.SaveEditor.Constructs;
+
+/// <summary>
+/// A behavior which allows running validation rules on a binding without updating either side of the binding.
+/// </summary>
+public static class ValidatingPropertyBehavior
 {
-    /// <summary>
-    /// A behavior which allows running validation rules on a binding without updating either side of the binding.
-    /// </summary>
-    public static class ValidatingPropertyBehavior
+    public static readonly DependencyProperty ValidatingPropertyProperty = DependencyProperty.RegisterAttached("ValidatingProperty", typeof(DependencyProperty), typeof(ValidatingPropertyBehavior),
+        new(ValidatingPropertyBehavior.ValidatingPropertyProperty_PropertyChanged));
+
+    public static DependencyProperty? GetValidatingProperty(DependencyObject dependencyObject)
     {
-        public static readonly DependencyProperty ValidatingPropertyProperty = DependencyProperty.RegisterAttached("ValidatingProperty", typeof(DependencyProperty), typeof(ValidatingPropertyBehavior),
-            new(ValidatingPropertyBehavior.ValidatingPropertyProperty_PropertyChanged));
+        return (DependencyProperty?)dependencyObject?.GetValue(ValidatingPropertyBehavior.ValidatingPropertyProperty);
+    }
 
-        public static DependencyProperty? GetValidatingProperty(DependencyObject dependencyObject)
+    public static void SetValidatingProperty(DependencyObject dependencyObject, DependencyProperty? property)
+    {
+        dependencyObject?.SetValue(ValidatingPropertyBehavior.ValidatingPropertyProperty, property);
+    }
+
+    private static void DependencyProperty_ValueChanged(object? sender, EventArgs e)
+    {
+        if (sender is DependencyObject dependencyObject && ValidatingPropertyBehavior.GetValidatingProperty(dependencyObject) is DependencyProperty property)
         {
-            return (DependencyProperty?)dependencyObject?.GetValue(ValidatingPropertyBehavior.ValidatingPropertyProperty);
+            dependencyObject.Validate(property);
         }
+    }
 
-        public static void SetValidatingProperty(DependencyObject dependencyObject, DependencyProperty? property)
+    private static void Validate(object value, IEnumerable<ValidationRule>? validationRules, BindingExpressionBase bindingExpression)
+    {
+        if (validationRules != null)
         {
-            dependencyObject?.SetValue(ValidatingPropertyBehavior.ValidatingPropertyProperty, property);
-        }
-
-        private static void DependencyProperty_ValueChanged(object sender, EventArgs e)
-        {
-            DependencyObject dependencyObject = (DependencyObject)sender;
-            if (ValidatingPropertyBehavior.GetValidatingProperty(dependencyObject) is DependencyProperty property)
+            foreach (ValidationRule rule in validationRules)
             {
-                dependencyObject.Validate(property);
-            }
-        }
-
-        private static void Validate(object value, IEnumerable<ValidationRule>? validationRules, BindingExpressionBase bindingExpression)
-        {
-            if (validationRules != null)
-            {
-                foreach (ValidationRule rule in validationRules)
+                if (rule.Validate(value, null) is { IsValid: false, ErrorContent: object errorContent })
                 {
-                    if (rule.Validate(value, null) is { IsValid: false, ErrorContent: object errorContent })
-                    {
-                        Validation.MarkInvalid(bindingExpression, new(rule, bindingExpression.ParentBindingBase, errorContent, null));
-                        return;
-                    }
+                    Validation.MarkInvalid(bindingExpression, new(rule, bindingExpression.ParentBindingBase, errorContent, null));
+                    return;
                 }
             }
-            Validation.ClearInvalid(bindingExpression);
         }
+        Validation.ClearInvalid(bindingExpression);
+    }
 
-        private static void Validate(this DependencyObject dependencyObject, DependencyProperty dependencyProperty)
+    private static void Validate(this DependencyObject dependencyObject, DependencyProperty dependencyProperty)
+    {
+        BindingExpressionBase bindingExpression = BindingOperations.GetBindingExpressionBase(dependencyObject, dependencyProperty);
+        if (bindingExpression == null)
         {
-            BindingExpressionBase bindingExpression = BindingOperations.GetBindingExpressionBase(dependencyObject, dependencyProperty);
-            if (bindingExpression == null)
-            {
-                return;
-            }
-            ICollection<ValidationRule> rules = bindingExpression.ParentBindingBase switch
-            {
-                Binding binding => binding.ValidationRules,
-                MultiBinding multiBinding => multiBinding.ValidationRules,
-                _ => Array.Empty<ValidationRule>()
-            };
-            if (rules.Count > 0)
-            {
-                ValidatingPropertyBehavior.Validate(dependencyObject.GetValue(dependencyProperty), rules, bindingExpression);
-            }
+            return;
         }
-
-        private static void ValidatingPropertyProperty_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        ICollection<ValidationRule> rules = bindingExpression.ParentBindingBase switch
         {
-            if (e.OldValue != null)
-            {
-                DependencyProperty property = (DependencyProperty)e.OldValue;
-                DependencyPropertyDescriptor.FromProperty(property, d.GetType()).RemoveValueChanged(d, ValidatingPropertyBehavior.DependencyProperty_ValueChanged);
-            }
-            if (e.NewValue != null)
-            {
-                DependencyProperty property = (DependencyProperty)e.NewValue;
-                DependencyPropertyDescriptor.FromProperty(property, d.GetType()).AddValueChanged(d, ValidatingPropertyBehavior.DependencyProperty_ValueChanged);
-                d.Validate(property);
-            }
+            Binding binding => binding.ValidationRules,
+            MultiBinding multiBinding => multiBinding.ValidationRules,
+            _ => Array.Empty<ValidationRule>()
+        };
+        if (rules.Count > 0)
+        {
+            ValidatingPropertyBehavior.Validate(dependencyObject.GetValue(dependencyProperty), rules, bindingExpression);
+        }
+    }
+
+    private static void ValidatingPropertyProperty_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (e.OldValue != null)
+        {
+            DependencyProperty property = (DependencyProperty)e.OldValue;
+            DependencyPropertyDescriptor.FromProperty(property, d.GetType()).RemoveValueChanged(d, ValidatingPropertyBehavior.DependencyProperty_ValueChanged);
+        }
+        if (e.NewValue != null)
+        {
+            DependencyProperty property = (DependencyProperty)e.NewValue;
+            DependencyPropertyDescriptor.FromProperty(property, d.GetType()).AddValueChanged(d, ValidatingPropertyBehavior.DependencyProperty_ValueChanged);
+            d.Validate(property);
         }
     }
 }

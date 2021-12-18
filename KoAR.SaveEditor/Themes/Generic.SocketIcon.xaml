@@ -53,11 +53,12 @@
         <Setter Property="Width" Value="18" />
         <Setter Property="Height" Value="18" />
         <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="views:FateswornAdorner.RequiresFatesworn" Value="{Binding Socket.Gem.Definition.RequiresFatesworn, RelativeSource={RelativeSource Self}}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type views:SocketIcon}">
                     <Image Height="{TemplateBinding Height}" Width="{TemplateBinding Width}"
-                        Source="{Binding IconName, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BitmapConverter}}">
+                    Source="{Binding IconName, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BitmapConverter}}">
                         <Image.ToolTip>
                             <ToolTip Content="{TemplateBinding Socket}" ContentTemplate="{StaticResource SocketContentTemplate}" />
                         </Image.ToolTip>

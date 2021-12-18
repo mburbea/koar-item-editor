@@ -1,47 +1,46 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace KoAR.SaveEditor.Constructs
+namespace KoAR.SaveEditor.Constructs;
+
+public static class ItemSelection
 {
-    public static class ItemSelection
+    public static readonly DependencyProperty SelectItemOnClickProperty = DependencyProperty.RegisterAttached("SelectItemOnClick", typeof(bool), typeof(ItemSelection),
+        new(BooleanBoxes.False, ItemSelection.SelectItemOnClickProperty_ValueChanged));
+
+    public static bool GetSelectItemOnClick(ListBoxItem item)
     {
-        public static readonly DependencyProperty SelectItemOnClickProperty = DependencyProperty.RegisterAttached("SelectItemOnClick", typeof(bool), typeof(ItemSelection),
-            new(BooleanBoxes.False, ItemSelection.SelectItemOnClickProperty_ValueChanged));
+        return item != null && (bool)item.GetValue(ItemSelection.SelectItemOnClickProperty);
+    }
 
-        public static bool GetSelectItemOnClick(ListBoxItem item)
+    public static void SetSelectItemOnClick(ListBoxItem item, bool value)
+    {
+        item?.SetValue(ItemSelection.SelectItemOnClickProperty, BooleanBoxes.GetBox(value));
+    }
+
+    private static void Item_PreviewMouseLeftButtonDown(object? sender, RoutedEventArgs e)
+    {
+        DependencyObject d = (DependencyObject)sender!;
+        ListBoxItem? item = d as ListBoxItem ?? d.FindVisualTreeAncestor<ListBoxItem>();
+        if (item != null)
         {
-            return item != null && (bool)item.GetValue(ItemSelection.SelectItemOnClickProperty);
+            item.IsSelected = true;
         }
+    }
 
-        public static void SetSelectItemOnClick(ListBoxItem item, bool value)
+    private static void SelectItemOnClickProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is not ListBoxItem item)
         {
-            item?.SetValue(ItemSelection.SelectItemOnClickProperty, BooleanBoxes.GetBox(value));
+            return;
         }
-
-        private static void Item_PreviewMouseLeftButtonDown(object sender, RoutedEventArgs e)
+        if ((bool)e.OldValue)
         {
-            DependencyObject d = (DependencyObject)sender;
-            ListBoxItem? item = d as ListBoxItem ?? d.FindVisualTreeAncestor<ListBoxItem>();
-            if (item != null)
-            {
-                item.IsSelected = true;
-            }
+            WeakEventManager<UIElement, RoutedEventArgs>.RemoveHandler(item, nameof(UIElement.PreviewMouseLeftButtonDown), ItemSelection.Item_PreviewMouseLeftButtonDown);
         }
-
-        private static void SelectItemOnClickProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        if ((bool)e.NewValue)
         {
-            if (d is not ListBoxItem item)
-            {
-                return;
-            }
-            if ((bool)e.OldValue)
-            {
-                WeakEventManager<UIElement, RoutedEventArgs>.RemoveHandler(item, nameof(UIElement.PreviewMouseLeftButtonDown), ItemSelection.Item_PreviewMouseLeftButtonDown);
-            }
-            if ((bool)e.NewValue)
-            {
-                WeakEventManager<UIElement, RoutedEventArgs>.AddHandler(item, nameof(UIElement.PreviewMouseLeftButtonDown), ItemSelection.Item_PreviewMouseLeftButtonDown);
-            }
+            WeakEventManager<UIElement, RoutedEventArgs>.AddHandler(item, nameof(UIElement.PreviewMouseLeftButtonDown), ItemSelection.Item_PreviewMouseLeftButtonDown);
         }
     }
 }

@@ -1,117 +1,378 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.IO.Compression;
-using System.Text;
-using Microsoft.Data.SqlClient;
-using Disposable;
-using KoAR.Core;
+using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Text.RegularExpressions;
-using System.Buffers.Binary;
+using System.Xml;
+using System.Xml.Linq;
+using KoAR.Core;
 
-namespace ItemTesting
+namespace ItemTesting;
+
+//    static class Program
+//    {
+//        static byte[] GetBytesFromText(string text)
+//        {
+//            List<byte> list = new List<byte>();
+//            foreach (string word in text.Trim().Split(' '))
+//            {
+//                string txt = word.Trim();
+//                list.Add(byte.Parse(txt, NumberStyles.HexNumber));
+//            }
+//            return list.ToArray();
+//        }
+
+//        static string GetBytesString(byte[] b) => string.Join(' ', b.Select(x => x.ToString("X2")));
+//        static void PrintByteString(byte[] b) => Console.WriteLine(GetBytesString(b));
+//        static void WriteByteArray(byte[] b, string path) => File.WriteAllText(path, string.Join(", ", b.Select(x => $"0x{x:X2}")));
+//        static void PrintRuler()
+//        {
+//            Console.WriteLine(string.Join(' ', Enumerable.Range(0, 40).Select(x => x.ToString("D2"))));
+//            Console.WriteLine(new string('-', 120));
+//        }
+
+//        static List<int> GetAllIndices(ReadOnlySpan<byte> data, ReadOnlySpan<byte> sequence)
+//        {
+//            var results = new List<int>();
+//            int ix = data.IndexOf(sequence);
+//            int start = 0;
+
+//            while (ix != -1)
+//            {
+//                results.Add(start + ix);
+//                start += ix + sequence.Length;
+//                ix = data.Slice(start).IndexOf(sequence);
+//            }
+//            return results;
+//        }
+
+
+//        private static char[] AllCaps = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
+//        private static DisposableLocalDb LocalDb;
+
+//        public static void BulkInsertTable(string name, IEnumerable<object[]> table,
+//            string initializer = "id = 0,hex=space(8), name = space(8000)")
+//        {
+//            using var conn = new SqlConnection(LocalDb.ConnectionString);
+//            conn.Open();
+//            using var cmd = new SqlCommand($"select {initializer} into {name} where 1=0;", conn);
+//            cmd.ExecuteNonQuery();
+//            using var bulk = new SqlBulkCopy(conn)
+//            {
+//                DestinationTableName = name,
+//                BatchSize = 10_000,
+//                EnableStreaming = true
+//            };
+//            using var adapter = new DbDataReaderAdapter(table);
+//            bulk.WriteToServer(adapter);
+//        }
+static class Program
 {
-    //    static class Program
-    //    {
-    //        static byte[] GetBytesFromText(string text)
-    //        {
-    //            List<byte> list = new List<byte>();
-    //            foreach (string word in text.Trim().Split(' '))
-    //            {
-    //                string txt = word.Trim();
-    //                list.Add(byte.Parse(txt, NumberStyles.HexNumber));
-    //            }
-    //            return list.ToArray();
-    //        }
-
-    //        static string GetBytesString(byte[] b) => string.Join(' ', b.Select(x => x.ToString("X2")));
-    //        static void PrintByteString(byte[] b) => Console.WriteLine(GetBytesString(b));
-    //        static void WriteByteArray(byte[] b, string path) => File.WriteAllText(path, string.Join(", ", b.Select(x => $"0x{x:X2}")));
-    //        static void PrintRuler()
-    //        {
-    //            Console.WriteLine(string.Join(' ', Enumerable.Range(0, 40).Select(x => x.ToString("D2"))));
-    //            Console.WriteLine(new string('-', 120));
-    //        }
-
-    //        static List<int> GetAllIndices(ReadOnlySpan<byte> data, ReadOnlySpan<byte> sequence)
-    //        {
-    //            var results = new List<int>();
-    //            int ix = data.IndexOf(sequence);
-    //            int start = 0;
-
-    //            while (ix != -1)
-    //            {
-    //                results.Add(start + ix);
-    //                start += ix + sequence.Length;
-    //                ix = data.Slice(start).IndexOf(sequence);
-    //            }
-    //            return results;
-    //        }
-    //        static void ConvertSymbolsToCsv(string inPath, string outPath)
-    //        {
-    //            foreach (var file in Directory.EnumerateFiles(inPath, "symbol_table_*.bin", SearchOption.TopDirectoryOnly))
-    //            {
-    //                var fileInfo = new FileInfo(file);
-    //                var data = File.ReadAllBytes(file);
-    //                var elementCount = BitConverter.ToInt32(data, 0);
-    //                var firstString = 8 + elementCount * 12;
-
-    //                File.WriteAllLines(Path.Combine(outPath, fileInfo.Name["symbol_table_".Length..^4] + ".csv"),
-    //                    Enumerable.Range(0, elementCount)
-    //                    .Select(x => (id: BitConverter.ToInt32(data, 4 + x * 12), s: BitConverter.ToInt32(data, 4 + x * 12 + 4), e: BitConverter.ToInt32(data, 4 + x * 12 + 8)))
-    //                    .Select(y => $"{y.id:X6},{Encoding.Default.GetString(data[(firstString + y.s)..(firstString + y.e)])}").Prepend("id,value"));
-    //            }
-    //        }
-
-    //        private static char[] AllCaps = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
-    //        private static DisposableLocalDb LocalDb;
-
-    //        public static void BulkInsertTable(string name, IEnumerable<object[]> table,
-    //            string initializer = "id = 0,hex=space(8), name = space(8000)")
-    //        {
-    //            using var conn = new SqlConnection(LocalDb.ConnectionString);
-    //            conn.Open();
-    //            using var cmd = new SqlCommand($"select {initializer} into {name} where 1=0;", conn);
-    //            cmd.ExecuteNonQuery();
-    //            using var bulk = new SqlBulkCopy(conn)
-    //            {
-    //                DestinationTableName = name,
-    //                BatchSize = 10_000,
-    //                EnableStreaming = true
-    //            };
-    //            using var adapter = new DbDataReaderAdapter(table);
-    //            bulk.WriteToServer(adapter);
-    //        }
-    static class Program
+    static void ParseOutItemInformationTemplate()
     {
-        //static void Main()
-        //{
-        //    const string path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save77.sav";
-        //    //const string path = @"..\..\..\..\9190114save90.sav";
-        //    Amalur.Initialize(@"..\..\..\..\Koar.SaveEditor\");
-        //    GameSave gameSave = new GameSave(path);
-
-        //    Console.WriteLine(gameSave.Stash.Items.Count);
-        //    foreach (var item in gameSave.Stash.Items)
-        //    {
-        //        Console.WriteLine(item.Definition.Name);
-        //    }
-        //}
-        static void Main()
+        using Stream stream = File.OpenRead(Path.Join(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\item_information_template.xml"));
+        XDocument document = XDocument.Load(stream);
+        foreach (var g in from node in document.Root.Descendants("tex")
+                          where node.NodeType == XmlNodeType.Element
+                          let texture = node.Attribute("texture").Value
+                          group node by texture into g
+                          select g)
         {
-            GameSave gameSave = new(@"C:\Program Files (x86)\Steam\userdata\107335713\1041720\remote\autocloud\save\svd_fmt_5_7.sav");
-            foreach (var (key, item) in Amalur.ItemDefinitions.Take(2000))
+            string filePath = Path.Join(@"..\..\..\", $"{g.Key}.png");
+            if (!File.Exists(filePath))
             {
-                gameSave.Stash.AddItem(item);
+                continue;
             }
-            gameSave.SaveFile();
+            string targetFolder = @"..\..\..\..\KoAR.SaveEditor\Resources\Buffs\";
+            if (!Directory.Exists(targetFolder))
+            {
+                Directory.CreateDirectory(targetFolder);
+            }
+            using Bitmap source = (Bitmap)Image.FromFile(filePath);
+            foreach (var element in g)
+            {
+                string id = (element.Attribute("id_string") ?? element.Parent.Attribute("id_string")).Value;
+                if (File.Exists(Path.Join(targetFolder, $"{id}.png")))
+                {
+                    continue;
+                }
+                int left = int.Parse(element.Attribute("left").Value);
+                int top = int.Parse(element.Attribute("top").Value);
+                int right = int.Parse(element.Attribute("right").Value);
+                int bottom = int.Parse(element.Attribute("bottom").Value);
+                if (left == right - 1)
+                {
+                    Console.WriteLine(id);
+                }
+                else
+                {
+                    using Bitmap clone = source.Clone(new Rectangle(left, top, right - left, bottom - top), source.PixelFormat);
+                    clone.Save(Path.Join(targetFolder, $"{id}.png"));
+                }
+            }
         }
     }
+    static void ConvertSymbolsToLua(string inPath, string outPath, params string[] files)
+    {
+        foreach (var file in Directory.EnumerateFiles(inPath, "symbol_table_*.bin", SearchOption.TopDirectoryOnly)
+            .Where(x => files.Length == 0 || files.Contains(Path.GetFileNameWithoutExtension(x)["symbol_table_".Length..])))
+        {
+            var fileInfo = new FileInfo(file);
+            var data = File.ReadAllBytes(file);
+            var elementCount = BitConverter.ToInt32(data, 0);
+            var firstString = 8 + elementCount * 12;
+
+            File.WriteAllText(Path.Combine(outPath, fileInfo.Name["symbol_table_".Length..^4] + ".lua"),
+                "return {\n" + string.Join(",\n", Enumerable.Range(0, elementCount)
+                .Select(x => (id: BitConverter.ToInt32(data, 4 + x * 12), s: BitConverter.ToInt32(data, 4 + x * 12 + 4), e: BitConverter.ToInt32(data, 4 + x * 12 + 8)))
+                .Select(y => $"{{'{y.id:X6}','{Encoding.Default.GetString(data[(firstString + y.s)..(firstString + y.e - 1)])}'}}")) + "\n}");
+        }
+    }
+
+    static void ConvertSymbolsToCsv(string inPath, string outPath)
+    {
+        foreach (var file in Directory.EnumerateFiles(inPath, "symbol_table_*.bin", SearchOption.TopDirectoryOnly))
+        {
+            var fileInfo = new FileInfo(file);
+            var data = File.ReadAllBytes(file);
+            var elementCount = BitConverter.ToInt32(data, 0);
+            var firstString = 8 + elementCount * 12;
+
+            File.WriteAllLines(Path.Combine(outPath, fileInfo.Name["symbol_table_".Length..^4] + ".csv"),
+                Enumerable.Range(0, elementCount)
+                .Select(x => (id: BitConverter.ToInt32(data, 4 + x * 12), s: BitConverter.ToInt32(data, 4 + x * 12 + 4), e: BitConverter.ToInt32(data, 4 + x * 12 + 8)))
+                .Select(y => $"{y.id},{Encoding.Default.GetString(data[(firstString + y.s)..(firstString + y.e - 1)])}"));
+        }
+    }
+
+    static void CreateSimTypeCsv(string inPath, string outPath)
+    {
+        var fileInfo = new FileInfo(inPath);
+        var data = File.ReadAllBytes(inPath);
+        var elementCount = BitConverter.ToInt32(data, 0);
+        var firstString = 8 + elementCount * 12;
+        File.WriteAllLines(outPath,
+                Enumerable.Range(0, elementCount)
+                .Select(x => (id: BitConverter.ToInt32(data, 4 + x * 12), s: BitConverter.ToInt32(data, 4 + x * 12 + 4), e: BitConverter.ToInt32(data, 4 + x * 12 + 8)))
+                .Select(y => $"{y.id},{Encoding.Default.GetString(data[(firstString + y.s)..(firstString + y.e - 1)])}"));
+    }
+
+    //static void Main()
+    //{
+    //    const string path = @"C:\Program Files (x86)\Steam\userdata\107335713\102500\remote\9190114save77.sav";
+    //    //const string path = @"..\..\..\..\9190114save90.sav";
+    //    Amalur.Initialize(@"..\..\..\..\Koar.SaveEditor\");
+    //    GameSave gameSave = new GameSave(path);
+
+    //    Console.WriteLine(gameSave.Stash.Items.Count);
+    //    foreach (var item in gameSave.Stash.Items)
+    //    {
+    //        Console.WriteLine(item.Definition.Name);
+    //    }
+    //}
+
+    static void Deconstruct(this ulong input, out uint simtype, out int fileSize) => (simtype, fileSize) = ((uint)(input & uint.MaxValue), (int)(input >> 32));
+
+    static bool CreateBatchArchive(string file, string outZip)
+    {
+        if (File.Exists(outZip))
+        {
+            return true;
+        }
+        using var zip = new ZipArchive(File.Create(outZip), ZipArchiveMode.Create);
+        ReadOnlySpan<byte> data = File.ReadAllBytes(file);
+        int entryCount = BitConverter.ToInt32(data);
+        var assets = MemoryMarshal.Cast<byte, ulong>(data.Slice(4, entryCount * sizeof(ulong)));
+        var remaining = data[(sizeof(int) + entryCount * sizeof(ulong))..];
+        foreach (var (id, fileSize) in assets)
+        {
+            if (!SimtypeDict.TryGetValue(id, out var name))
+            {
+                name = id.ToString();
+                Console.WriteLine($"Unknown simtypeId:{id}");
+            }
+            using var entry = zip.CreateEntry($"{name}.simtype_bxml").Open();
+            entry.Write(remaining[..fileSize]);
+            remaining = remaining[fileSize..];
+        }
+        return true;
+    }
+
+    static Dictionary<uint, uint> BuildParentDict()
+    {
+        using var zarchive = ZipFile.OpenRead(@"..\..\..\simtypes_unpacked.zip");
+        var buffer = (stackalloc byte[44]);
+        var dictionary = new Dictionary<uint, uint>();
+        foreach (var entry in zarchive.Entries)
+        {
+            var sname = Path.GetFileNameWithoutExtension(entry.Name);
+            if (ReverseSimtype.TryGetValue(sname, out var typeId))
+            {
+                using var stream = entry.Open();
+                stream.Read(buffer);
+                var parentId = BitConverter.ToUInt32(buffer[40..]);
+
+                SimtypeDict.TryGetValue(parentId, out var parentName);
+                dictionary.Add(typeId, parentId);
+            }
+        }
+        return dictionary;
+    }
+    static readonly Dictionary<uint, string> SimtypeDict = BuildSimtypeDict();
+    static readonly HashSet<string> Supers;
+    static readonly Dictionary<string, uint> ReverseSimtype = SimtypeDict.ToDictionary(x => x.Value, x => x.Key);
+    static readonly bool WhoCares = CreateBatchArchive(@"C:\e\134225858_ksmt.batch", @"..\..\..\simtypes_unpacked.zip");
+
+
+    static readonly Dictionary<uint, uint> ParentDict = BuildParentDict();
+
+    static readonly HashSet<uint> ScalingVariants = BuildVariants();
+
+    private static Dictionary<uint, string> BuildSimtypeDict()
+    {
+        var data = File.ReadAllBytes(@"C:\e\symbol_table_simtype.bin");
+        var elementCount = BitConverter.ToInt32(data, 0);
+        var firstString = 8 + elementCount * 12;
+        return Enumerable.Range(0, elementCount).Select(x => (id: BitConverter.ToUInt32(data, 4 + x * 12), s: BitConverter.ToInt32(data, 4 + x * 12 + 4), e: BitConverter.ToInt32(data, 4 + x * 12 + 8)))
+            .ToDictionary(x => x.id, y => Encoding.Default.GetString(data[(firstString + y.s)..(firstString + y.e - 1)]));
+    }
+
+
+    static void WriteParentFile(GameSave gs)
+    {
+        File.WriteAllLines(@"C:\Program Files (x86)\Steam\steamapps\common\Kingdoms of Amalur Re-Reckoning\mods\resources\parent.lua",
+        gs.Items.Select(item => Entry(item)).Prepend("return {").Append("}"));
+
+        static string Entry(Item item)
+        {
+            var typeId = item.Definition.TypeId;
+            var internalName = SimtypeDict[typeId];
+            bool isMerchant = internalName.Contains("merchant") && typeId != 0x0AD192;
+            bool affixableName = isMerchant || internalName.Contains("common");
+            bool hasVariants = ScalingVariants.Contains(typeId);
+            string chaosTier = null;
+            if (internalName.StartsWith("mit_") && internalName.Contains("chaos") && !internalName.EndsWith("parent"))
+            {
+                hasVariants = true;
+                chaosTier = char.ToUpperInvariant(internalName[^1]).ToString();
+            }
+            var s = $@"[{typeId}] = {{
+    internal_name='{internalName}'";
+            if (item.Definition.Name != internalName)
+            {
+                s += $",\n    old_name=\"{item.Definition.Name}\"";
+            }
+            if (item.ItemBuffs.Prefix is { Id: { } prefix })
+            {
+                s += $",\n    prefix={prefix}";
+            }
+            if (item.ItemBuffs.Suffix is { Id: { } suffix })
+            {
+                s += $",\n    suffix={suffix}";
+            }
+            if (ParentDict[item.Definition.TypeId] is { } parentId and > 0)
+            {
+                s += $",\n    parent_name='{SimtypeDict[parentId]}'";
+            }
+            if (isMerchant)
+            {
+                s += $",\n    is_merchant=true";
+            }
+            if (affixableName)
+            {
+                s += $",\n    affixable_name=true";
+            }
+            if (hasVariants)
+            {
+                s += $",\n    has_variants=true";
+            }
+            if (chaosTier is { })
+            {
+                s += $",\n   chaos_tier='{chaosTier}'";
+            }
+            return s + "},";
+        }
+    }
+
+    static HashSet<uint> BuildVariants()
+    {
+        var scalingVariants = new HashSet<uint>();
+        foreach (var (id, parentId) in ParentDict)
+        {
+            var name = SimtypeDict[id];
+            if(name.StartsWith("mit_") && name.Contains("chaos"))
+            {
+                //handled in the other func;
+                continue;
+            }
+            if(name.StartsWith("mit_") && !name.Contains("socket") &&
+                (name.Contains("common06b") || name.Contains("common07b") || name.Contains("common06c") || name.Contains("common07c")))
+            {
+                scalingVariants.Add(id);
+                continue;
+            }
+            if(name.StartsWith("mit_") && (name.Contains("set")|| name.Contains("unique")))
+            {
+                scalingVariants.Add(id);
+                continue;
+            }
+            if (parentId == 0 || name.Contains("parent", StringComparison.OrdinalIgnoreCase)
+                || name.Contains("dev_", StringComparison.OrdinalIgnoreCase)
+                || name.Contains("socket", StringComparison.OrdinalIgnoreCase)
+                || name.Contains("merchant", StringComparison.OrdinalIgnoreCase)
+                || name.Contains("common", StringComparison.OrdinalIgnoreCase)
+                || name.Length == 0)
+            {
+                continue;
+            }
+            var parentName = SimtypeDict[parentId];
+            if(Regex.IsMatch(name, @"primal\d\d$", RegexOptions.Compiled))
+            {
+                scalingVariants.Add(id);
+                continue;
+            }
+            if (name.AsSpan(0, name.LastIndexOf('_') is int ix and > -1 ? ix : (name.Length - 1)).SequenceEqual(parentName.AsSpan(0, parentName.LastIndexOf('_') is int pix and > -1 ? pix : (parentName.Length - 1)))) 
+            {
+                scalingVariants.Add(id);
+                continue;
+            }
+
+            if (name[^1] == 'a')
+            {
+                var buffer = (stackalloc char[name.Length]);
+                name.CopyTo(buffer);
+                buffer[^1] = 'b';
+                if(ReverseSimtype.ContainsKey(new string(buffer)))
+                {
+                    scalingVariants.Add(id);
+                    continue;
+                }
+            }
+        }
+        return scalingVariants;
+    }
+    static void Main()
+    {
+        ParseOutItemInformationTemplate();
+        //CreateSimTypeCsv(@"C:\e\symbol_table_simtype.bin", @"..\..\..\simtype.csv");
+        ulong s = 0x00_1c41a5_00_00_03_40;
+        var (var1, var2) = s;
+        Console.WriteLine($"{{SL1={var1},SL2={var2}}}");
+        ConvertSymbolsToLua(@"C:\e\", @"C:\Program Files (x86)\Steam\steamapps\common\Kingdoms of Amalur Re-Reckoning\mods\resources\","simtype","buff");
+        
+
+        const string path = @"..\..\..\..\svd_fmt_5_19.sav";
+        GameSave gs = new(path);
+        WriteParentFile(gs);
+        File.WriteAllLines(@"C:\e\o\crap.csv", gs.Items.Where(x => x.Definition.ChaosTier != null).Select(x => x.Definition.Name));
+    }
 }
+
+
 //        {
 //            static string FormatAsStr(IEnumerable<uint> effects) => string.Join("", effects.Select(x => $"{x:X6}"));
 

@@ -2,14 +2,16 @@
   <PropertyGroup>
     <ProductVersion>8.0.30703</ProductVersion>
     <ProjectGuid>{F204356A-6213-4B0C-A35C-03DA5CE5AC21}</ProjectGuid>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <AssemblyTitle>KoAR Item Editor</AssemblyTitle>
     <NeutralLanguage>en-US</NeutralLanguage>
     <Description>Allows editing of items in KoAR saves.</Description>
-    <LangVersion>9.0</LangVersion>
+    <LangVersion>10.0</LangVersion>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+      <Version Condition=" '$(BUILD_BUILDID)' == '' ">3.0.0</Version>
+      <Version Condition=" '$(BUILD_BUILDID)' != '' ">3.0.$(BUILD_BUILDID)</Version>
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -20,29 +22,37 @@
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(BUILD_BUILDID)' == '' ">
-	<Version>3.0.0</Version>
+    <Version>3.0.0</Version>
   </PropertyGroup>
   <PropertyGroup Condition="'$(BUILD_BUILDID)' != '' ">
-	<Version>3.0.$(BUILD_BUILDID)</Version>
+    <Version>3.0.$(BUILD_BUILDID)</Version>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Data.zip" />
+    <None Remove="Data\a.txt" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Data.zip" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Crc32.NET" Version="1.2.0" />
-    <PackageReference Include="DotNetZip" Version="1.13.8" />
-    <PackageReference Include="IndexRange" Version="1.0.0" />
-    <PackageReference Include="StringLiteralGenerator" Version="1.0.1" />
-    <PackageReference Include="System.Memory" Version="4.5.4" />
-    <PackageReference Include="System.Text.Json" Version="4.7.2" />
+    <PackageReference Include="DotNetZip" Version="1.16.0" />
+    <PackageReference Include="StringLiteralGenerator" Version="2.0.0" />
+    <PackageReference Include="System.IO.Hashing" Version="6.0.0" />
   </ItemGroup>
-  <Target Name="ZipData" BeforeTargets="BeforeBuild">
-    <ZipDirectory SourceDirectory="$(MSBuildProjectDirectory)\Data" DestinationFile="$(MSBuildProjectDirectory)\Data.zip" Overwrite="True" />
+  <ItemGroup>
+    <MySourceFiles Include="$(MSBuildProjectDirectory)\Data\*.*" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <MySourceFiles Remove="Data\definitions.csv" />
+	  <MySourceFiles Remove="Data\simtype.csv" />
+	  <MySourceFiles Remove="Data\magic.json" />
+  </ItemGroup>
+  <Target Name="CopyToOut" BeforeTargets="BeforeBuild">
+      <Copy SourceFiles="@(MySourceFiles)" DestinationFolder="$(OutDir)\Data" />
+      <ZipDirectory SourceDirectory="$(OutDir)\Data" DestinationFile="$(MSBuildProjectDirectory)\Data.zip" Overwrite="True" />
   </Target>
   <Target Name="CleanUp" AfterTargets="Build">
+    <RemoveDir Directories="$(OutDir)\Data" />
     <WriteLinesToFile File="$(MSBuildProjectDirectory)\Data.zip" Lines="" Overwrite="True" />
   </Target>
 </Project>

@@ -1,14 +1,11 @@
-﻿using KoAR.SaveEditor.Updates;
+﻿namespace KoAR.SaveEditor.Views.Updates;
 
-namespace KoAR.SaveEditor.Views.Updates
+public sealed class UpdateViewModel : UpdateViewModelBase
 {
-    public sealed class UpdateViewModel : UpdateViewModelBase
+    public UpdateViewModel(UpdateInfo update)
+        : base(update.Releases)
     {
-        public UpdateViewModel(UpdateInfo update)
-            : base(update.Releases)
-        {
-        }
-
-        public override string Title => "Update Available";
     }
+
+    public override string Title => "Update Available";
 }

@@ -1,13 +1,12 @@
-﻿namespace KoAR.Core
+﻿namespace KoAR.Core;
+
+public enum Element
 {
-    public enum Element
-    {
-        None,
-        Fire,
-        Ice,
-        Lightning,
-        Primal,
-        Bleeding,
-        Poison
-    }
+    None,
+    Fire,
+    Ice,
+    Lightning,
+    Primal,
+    Bleeding,
+    Poison
 }

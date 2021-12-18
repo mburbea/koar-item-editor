@@ -1,0 +1,1304 @@
+[
+  {
+    "internal_name": "gem_physical_01",
+    "socket_type": "W",
+    "buff_id": 499544,
+    "type_id": 510297,
+    "name": "Strengthening Gem"
+  },
+  {
+    "internal_name": "parent_gem_all",
+    "socket_type": "W",
+    "buff_id": 0,
+    "type_id": 510298,
+    "name": "Gem"
+  },
+  {
+    "internal_name": "gem_poison_01",
+    "socket_type": "W",
+    "buff_id": 1850755,
+    "type_id": 518417,
+    "name": "Gem of Decay"
+  },
+  {
+    "internal_name": "gem_bleeding_01",
+    "socket_type": "W",
+    "buff_id": 502306,
+    "type_id": 518418,
+    "name": "Gem of Carnage"
+  },
+  {
+    "internal_name": "gem_piercing_01",
+    "socket_type": "W",
+    "buff_id": 499549,
+    "type_id": 518439,
+    "name": "Scout's Gem"
+  },
+  {
+    "internal_name": "gem_ice_01",
+    "socket_type": "W",
+    "buff_id": 499591,
+    "type_id": 518447,
+    "name": "Gem of Ice"
+  },
+  {
+    "internal_name": "gem_fire_01",
+    "socket_type": "W",
+    "buff_id": 499596,
+    "type_id": 518455,
+    "name": "Gem of Fire"
+  },
+  {
+    "internal_name": "gem_lightning_01",
+    "socket_type": "W",
+    "buff_id": 499741,
+    "type_id": 518458,
+    "name": "Gem of Lightning"
+  },
+  {
+    "internal_name": "gem_lifeleech_01",
+    "socket_type": "W",
+    "buff_id": 1289751,
+    "type_id": 518473,
+    "name": "Gem of Leeching"
+  },
+  {
+    "internal_name": "gem_manaleech_01",
+    "socket_type": "W",
+    "buff_id": 1289758,
+    "type_id": 518474,
+    "name": "Gem of Voracity"
+  },
+  {
+    "internal_name": "gem_magicmodifier_01",
+    "socket_type": "E",
+    "buff_id": 1320429,
+    "type_id": 518477,
+    "name": "Gem of the Seer"
+  },
+  {
+    "internal_name": "gem_physical_02",
+    "socket_type": "W",
+    "buff_id": 499546,
+    "type_id": 528152,
+    "name": "Invigorating Gem"
+  },
+  {
+    "internal_name": "gem_physical_03",
+    "socket_type": "W",
+    "buff_id": 1313735,
+    "type_id": 528153,
+    "name": "Bolstering Gem"
+  },
+  {
+    "internal_name": "gem_piercing_02",
+    "socket_type": "W",
+    "buff_id": 499588,
+    "type_id": 528154,
+    "name": "Seeker's Gem"
+  },
+  {
+    "internal_name": "gem_piercing_03",
+    "socket_type": "W",
+    "buff_id": 1313832,
+    "type_id": 528155,
+    "name": "Stalker's Gem"
+  },
+  {
+    "internal_name": "gem_lifeleech_02",
+    "socket_type": "W",
+    "buff_id": 1289757,
+    "type_id": 528156,
+    "name": "Gem of Bloodthirst"
+  },
+  {
+    "internal_name": "gem_lifeleech_03",
+    "socket_type": "W",
+    "buff_id": 1850767,
+    "type_id": 528157,
+    "name": "Gem of Devouring"
+  },
+  {
+    "internal_name": "gem_manaleech_02",
+    "socket_type": "W",
+    "buff_id": 1289760,
+    "type_id": 528158,
+    "name": "Gem of Ravening"
+  },
+  {
+    "internal_name": "gem_manaleech_03",
+    "socket_type": "W",
+    "buff_id": 1850769,
+    "type_id": 528159,
+    "name": "Gem of Ferocity"
+  },
+  {
+    "internal_name": "gem_totaldamage_01",
+    "socket_type": "E",
+    "buff_id": 1314207,
+    "type_id": 528160,
+    "name": "Overwhelming Gem"
+  },
+  {
+    "internal_name": "gem_daydamage_01",
+    "socket_type": "U",
+    "buff_id": 526768,
+    "type_id": 528161,
+    "name": "Gem of Dawn"
+  },
+  {
+    "internal_name": "gem_daydamage_02",
+    "socket_type": "U",
+    "buff_id": 526790,
+    "type_id": 528162,
+    "name": "Gem of Light"
+  },
+  {
+    "internal_name": "gem_daydamage_03",
+    "socket_type": "U",
+    "buff_id": 1851984,
+    "type_id": 528163,
+    "name": "Gem of Radiance"
+  },
+  {
+    "internal_name": "gem_nightdamage_01",
+    "socket_type": "U",
+    "buff_id": 526791,
+    "type_id": 528164,
+    "name": "Gem of Dusk"
+  },
+  {
+    "internal_name": "gem_nightdamage_02",
+    "socket_type": "U",
+    "buff_id": 526793,
+    "type_id": 528165,
+    "name": "Gem of Gloom"
+  },
+  {
+    "internal_name": "gem_nightdamage_03",
+    "socket_type": "U",
+    "buff_id": 1851999,
+    "type_id": 528166,
+    "name": "Gem of Night"
+  },
+  {
+    "internal_name": "gem_fire_02",
+    "socket_type": "W",
+    "buff_id": 499598,
+    "type_id": 528170,
+    "name": "Gem of Conflagration"
+  },
+  {
+    "internal_name": "gem_fire_03",
+    "socket_type": "W",
+    "buff_id": 1313964,
+    "type_id": 528171,
+    "name": "Gem of Combustion"
+  },
+  {
+    "internal_name": "gem_ice_02",
+    "socket_type": "W",
+    "buff_id": 499593,
+    "type_id": 528172,
+    "name": "Gem of Snow"
+  },
+  {
+    "internal_name": "gem_ice_03",
+    "socket_type": "W",
+    "buff_id": 1313889,
+    "type_id": 528173,
+    "name": "Gem of Frost"
+  },
+  {
+    "internal_name": "gem_lightning_02",
+    "socket_type": "W",
+    "buff_id": 499744,
+    "type_id": 528174,
+    "name": "Gem of Thunder"
+  },
+  {
+    "internal_name": "gem_lightning_03",
+    "socket_type": "W",
+    "buff_id": 1314127,
+    "type_id": 528175,
+    "name": "Gem of Sparks"
+  },
+  {
+    "internal_name": "gem_poison_02",
+    "socket_type": "W",
+    "buff_id": 1850757,
+    "type_id": 528176,
+    "name": "Gem of Venom"
+  },
+  {
+    "internal_name": "gem_poison_03",
+    "socket_type": "W",
+    "buff_id": 1850759,
+    "type_id": 528177,
+    "name": "Gem of Putrefication"
+  },
+  {
+    "internal_name": "gem_bleeding_02",
+    "socket_type": "W",
+    "buff_id": 502304,
+    "type_id": 528322,
+    "name": "Gem of Hemorrhaging"
+  },
+  {
+    "internal_name": "gem_bleeding_03",
+    "socket_type": "W",
+    "buff_id": 1319542,
+    "type_id": 528323,
+    "name": "Gem of Slaughter"
+  },
+  {
+    "internal_name": "obsolete_charmgem",
+    "socket_type": "W",
+    "buff_id": 0,
+    "type_id": 528324,
+    "name": "Gem of Fascination"
+  },
+  {
+    "internal_name": "old_gem_armorreduce_01",
+    "socket_type": "W",
+    "buff_id": 0,
+    "type_id": 528339,
+    "name": "Corrosive Gem"
+  },
+  {
+    "internal_name": "old_gem_armorreduce_02",
+    "socket_type": "W",
+    "buff_id": 0,
+    "type_id": 528356,
+    "name": "Eroding Gem"
+  },
+  {
+    "internal_name": "old_gem_armorreduce_03",
+    "socket_type": "W",
+    "buff_id": 0,
+    "type_id": 528357,
+    "name": "Caustic Gem"
+  },
+  {
+    "internal_name": "gem_armorspecific_01",
+    "socket_type": "A",
+    "buff_id": 500425,
+    "type_id": 528370,
+    "name": "Superior Gem"
+  },
+  {
+    "internal_name": "gem_armorspecific_02",
+    "socket_type": "A",
+    "buff_id": 500426,
+    "type_id": 528371,
+    "name": "Exceptional Gem"
+  },
+  {
+    "internal_name": "gem_armorspecific_03",
+    "socket_type": "A",
+    "buff_id": 500428,
+    "type_id": 528377,
+    "name": "Flawless Gem"
+  },
+  {
+    "internal_name": "gem_armortotal_01",
+    "socket_type": "E",
+    "buff_id": 527082,
+    "type_id": 528387,
+    "name": "Paramount Gem"
+  },
+  {
+    "internal_name": "gem_fireresistance_01",
+    "socket_type": "A",
+    "buff_id": 1949697,
+    "type_id": 528397,
+    "name": "Gem of Fire Shield"
+  },
+  {
+    "internal_name": "gem_fireresistance_02",
+    "socket_type": "A",
+    "buff_id": 1949699,
+    "type_id": 528402,
+    "name": "Gem of Fire Aversion"
+  },
+  {
+    "internal_name": "gem_fireresistance_03",
+    "socket_type": "A",
+    "buff_id": 1949700,
+    "type_id": 528403,
+    "name": "Gem of Fire Hindrance"
+  },
+  {
+    "internal_name": "gem_iceresistance_01",
+    "socket_type": "A",
+    "buff_id": 1949692,
+    "type_id": 528404,
+    "name": "Gem of Ice Shield"
+  },
+  {
+    "internal_name": "gem_iceresistance_02",
+    "socket_type": "A",
+    "buff_id": 1949694,
+    "type_id": 528405,
+    "name": "Gem of Ice Aversion"
+  },
+  {
+    "internal_name": "gem_iceresistance_03",
+    "socket_type": "A",
+    "buff_id": 1949695,
+    "type_id": 528406,
+    "name": "Gem of Ice Hindrance"
+  },
+  {
+    "internal_name": "gem_lightningresistance_01",
+    "socket_type": "A",
+    "buff_id": 1949702,
+    "type_id": 528407,
+    "name": "Gem of Lightning Shield"
+  },
+  {
+    "internal_name": "gem_lightningresistance_02",
+    "socket_type": "A",
+    "buff_id": 1949704,
+    "type_id": 528412,
+    "name": "Gem of Lightning Aversion"
+  },
+  {
+    "internal_name": "gem_lightningresistance_03",
+    "socket_type": "A",
+    "buff_id": 1949705,
+    "type_id": 528413,
+    "name": "Gem of Lightning Hindrance"
+  },
+  {
+    "internal_name": "gem_bleedingresistance_01",
+    "socket_type": "A",
+    "buff_id": 502362,
+    "type_id": 528422,
+    "name": "Gem of Mending"
+  },
+  {
+    "internal_name": "gem_bleedingresistance_02",
+    "socket_type": "A",
+    "buff_id": 502365,
+    "type_id": 528425,
+    "name": "Gem of Clotting"
+  },
+  {
+    "internal_name": "gem_bleedingresistance_03",
+    "socket_type": "A",
+    "buff_id": 1850904,
+    "type_id": 528427,
+    "name": "Gem of Coagulation"
+  },
+  {
+    "internal_name": "gem_poisonresistance_01",
+    "socket_type": "A",
+    "buff_id": 2031916,
+    "type_id": 528430,
+    "name": "Gem of Antivenin"
+  },
+  {
+    "internal_name": "gem_poisonresistance_02",
+    "socket_type": "A",
+    "buff_id": 2031917,
+    "type_id": 528434,
+    "name": "Gem of Remedy"
+  },
+  {
+    "internal_name": "gem_poisonresistance_03",
+    "socket_type": "A",
+    "buff_id": 2031918,
+    "type_id": 528437,
+    "name": "Gem of Elixir"
+  },
+  {
+    "internal_name": "gem_manaincrease_01",
+    "socket_type": "U",
+    "buff_id": 501538,
+    "type_id": 528500,
+    "name": "Diviner's Gem"
+  },
+  {
+    "internal_name": "gem_manaincrease_02",
+    "socket_type": "U",
+    "buff_id": 501540,
+    "type_id": 528502,
+    "name": "Augur's Gem"
+  },
+  {
+    "internal_name": "gem_manaincrease_03",
+    "socket_type": "U",
+    "buff_id": 1852051,
+    "type_id": 528505,
+    "name": "Mage's Gem"
+  },
+  {
+    "internal_name": "gem_healthincrease_01",
+    "socket_type": "U",
+    "buff_id": 501567,
+    "type_id": 528506,
+    "name": "Crusader's Gem"
+  },
+  {
+    "internal_name": "gem_healthincrease_02",
+    "socket_type": "U",
+    "buff_id": 501571,
+    "type_id": 528507,
+    "name": "Paladin's Gem"
+  },
+  {
+    "internal_name": "gem_healthincrease_03",
+    "socket_type": "U",
+    "buff_id": 1852024,
+    "type_id": 528511,
+    "name": "Templar's Gem"
+  },
+  {
+    "internal_name": "gem_healthregen_01",
+    "socket_type": "U",
+    "buff_id": 501573,
+    "type_id": 528517,
+    "name": "Soothing Gem"
+  },
+  {
+    "internal_name": "gem_healthregen_02",
+    "socket_type": "U",
+    "buff_id": 501582,
+    "type_id": 528524,
+    "name": "Revitalizing Gem"
+  },
+  {
+    "internal_name": "gem_healthregen_03",
+    "socket_type": "U",
+    "buff_id": 501584,
+    "type_id": 528533,
+    "name": "Renewing Gem"
+  },
+  {
+    "internal_name": "gem_manaregen_01",
+    "socket_type": "U",
+    "buff_id": 501587,
+    "type_id": 528538,
+    "name": "Stimulating Gem"
+  },
+  {
+    "internal_name": "gem_manaregen_02",
+    "socket_type": "U",
+    "buff_id": 501590,
+    "type_id": 528539,
+    "name": "Restoring Gem"
+  },
+  {
+    "internal_name": "gem_manaregen_03",
+    "socket_type": "U",
+    "buff_id": 501591,
+    "type_id": 528548,
+    "name": "Infusing Gem"
+  },
+  {
+    "internal_name": "gem_criticalchance_01",
+    "socket_type": "U",
+    "buff_id": 502384,
+    "type_id": 528933,
+    "name": "Gem of Skill"
+  },
+  {
+    "internal_name": "gem_criticalchance_02",
+    "socket_type": "U",
+    "buff_id": 502387,
+    "type_id": 528942,
+    "name": "Gem of Accuracy"
+  },
+  {
+    "internal_name": "gem_criticalchance_03",
+    "socket_type": "U",
+    "buff_id": 1851062,
+    "type_id": 528943,
+    "name": "Gem of Precision"
+  },
+  {
+    "internal_name": "gem_highlifedamage_01",
+    "socket_type": "U",
+    "buff_id": 527125,
+    "type_id": 528947,
+    "name": "Assailant's Gem"
+  },
+  {
+    "internal_name": "gem_highlifedamage_02",
+    "socket_type": "U",
+    "buff_id": 527133,
+    "type_id": 528949,
+    "name": "Invader's Gem"
+  },
+  {
+    "internal_name": "gem_highlifedamage_03",
+    "socket_type": "U",
+    "buff_id": 1851944,
+    "type_id": 528950,
+    "name": "Conqueror's Gem"
+  },
+  {
+    "internal_name": "gem_lowlifedamage_01",
+    "socket_type": "U",
+    "buff_id": 527136,
+    "type_id": 528975,
+    "name": "Bully's Gem"
+  },
+  {
+    "internal_name": "gem_lowlifedamage_02",
+    "socket_type": "U",
+    "buff_id": 534412,
+    "type_id": 528976,
+    "name": "Oppressor's Gem"
+  },
+  {
+    "internal_name": "gem_lowlifedamage_03",
+    "socket_type": "U",
+    "buff_id": 1851946,
+    "type_id": 528977,
+    "name": "Tormentor's Gem"
+  },
+  {
+    "internal_name": "gem_golddrop_01",
+    "socket_type": "E",
+    "buff_id": 527189,
+    "type_id": 528995,
+    "name": "Gem of Bounty"
+  },
+  {
+    "internal_name": "gem_xpincrease_01",
+    "socket_type": "E",
+    "buff_id": 527181,
+    "type_id": 528996,
+    "name": "Gem of Achievement"
+  },
+  {
+    "internal_name": "gem_xpincrease_02",
+    "socket_type": "E",
+    "buff_id": 527186,
+    "type_id": 529022,
+    "name": "Gem of Expansion"
+  },
+  {
+    "internal_name": "gem_xpincrease_03",
+    "socket_type": "E",
+    "buff_id": 527187,
+    "type_id": 529023,
+    "name": "Gem of Ascendance"
+  },
+  {
+    "internal_name": "gem_golddrop_02",
+    "socket_type": "E",
+    "buff_id": 527190,
+    "type_id": 529024,
+    "name": "Gem of Prosperity"
+  },
+  {
+    "internal_name": "gem_golddrop_03",
+    "socket_type": "E",
+    "buff_id": 527191,
+    "type_id": 529025,
+    "name": "Gem of Wealth"
+  },
+  {
+    "internal_name": "gem_stun_03",
+    "socket_type": "U",
+    "buff_id": 499764,
+    "type_id": 557388,
+    "name": "Gem of Stupefication"
+  },
+  {
+    "internal_name": "gem_stun_02",
+    "socket_type": "U",
+    "buff_id": 499763,
+    "type_id": 557389,
+    "name": "Gem of Disorientation"
+  },
+  {
+    "internal_name": "gem_stun_01",
+    "socket_type": "U",
+    "buff_id": 499757,
+    "type_id": 557390,
+    "name": "Gem of Confusion"
+  },
+  {
+    "internal_name": "socketableitem_hp_guide_gem",
+    "socket_type": "W",
+    "buff_id": 499821,
+    "type_id": 564687,
+    "name": "Guide's Gem"
+  },
+  {
+    "internal_name": "socketableitem_hp_medium_gem",
+    "socket_type": "A",
+    "buff_id": 1850913,
+    "type_id": 564693,
+    "name": "Medium's Gem"
+  },
+  {
+    "internal_name": "gem_physicalresistance_01",
+    "socket_type": "A",
+    "buff_id": 505377,
+    "type_id": 565043,
+    "name": "Gem of Shifting"
+  },
+  {
+    "internal_name": "gem_physicalresistance_02",
+    "socket_type": "A",
+    "buff_id": 505384,
+    "type_id": 565370,
+    "name": "Gem of Phasing"
+  },
+  {
+    "internal_name": "gem_physicalresistance_03",
+    "socket_type": "A",
+    "buff_id": 1850913,
+    "type_id": 565371,
+    "name": "Gem of Displacing"
+  },
+  {
+    "internal_name": "gem_epic_allabilities_03",
+    "socket_type": "E",
+    "buff_id": 1642776,
+    "type_id": 1643434,
+    "name": "Gem of Enlightenment"
+  },
+  {
+    "internal_name": "gem_epic_finesseabilities_03",
+    "socket_type": "E",
+    "buff_id": 1642773,
+    "type_id": 1643436,
+    "name": "Rogue's Gem"
+  },
+  {
+    "internal_name": "gem_epic_mightabilities_03",
+    "socket_type": "E",
+    "buff_id": 1642775,
+    "type_id": 1643437,
+    "name": "Warrior's Gem"
+  },
+  {
+    "internal_name": "gem_epic_sorceryabilities_03",
+    "socket_type": "E",
+    "buff_id": 1642774,
+    "type_id": 1643438,
+    "name": "Sorcerer's Gem"
+  },
+  {
+    "internal_name": "gem_epic_golddrop_03",
+    "socket_type": "E",
+    "buff_id": 1642769,
+    "type_id": 1643439,
+    "name": "Gem of Opulence"
+  },
+  {
+    "internal_name": "gem_epic_magicdamage_03",
+    "socket_type": "E",
+    "buff_id": 1642768,
+    "type_id": 1643440,
+    "name": "Gem of Magic Resonance"
+  },
+  {
+    "internal_name": "gem_epic_manaandhealth_03",
+    "socket_type": "E",
+    "buff_id": 1642771,
+    "type_id": 1643441,
+    "name": "Gem of Unrivaled Vitality"
+  },
+  {
+    "internal_name": "gem_epic_retaliatory_dot_fire_03",
+    "socket_type": "E",
+    "buff_id": 1642778,
+    "type_id": 1643443,
+    "name": "Gem of Summer's Vengeance"
+  },
+  {
+    "internal_name": "gem_epic_retaliatory_dot_ice_03",
+    "socket_type": "E",
+    "buff_id": 1642779,
+    "type_id": 1643444,
+    "name": "Gem of Winter's Vengeance"
+  },
+  {
+    "internal_name": "gem_epic_retaliatory_dot_lightning_03",
+    "socket_type": "E",
+    "buff_id": 1642780,
+    "type_id": 1643445,
+    "name": "Gem of Tempest's Vengeance"
+  },
+  {
+    "internal_name": "gem_epic_retaliatory_dot_poison_03",
+    "socket_type": "E",
+    "buff_id": 1642781,
+    "type_id": 1643446,
+    "name": "Gem of Plague's Vengeance"
+  },
+  {
+    "internal_name": "gem_epic_retaliatory_dot_stun_03",
+    "socket_type": "E",
+    "buff_id": 1642782,
+    "type_id": 1643447,
+    "name": "Gem of Paralyzing Vengeance"
+  },
+  {
+    "internal_name": "gem_epic_xpgained_03",
+    "socket_type": "E",
+    "buff_id": 1642770,
+    "type_id": 1643449,
+    "name": "Gem of the Assiduous"
+  },
+  {
+    "internal_name": "gem_epic_damageanddefense_03",
+    "socket_type": "E",
+    "buff_id": 1643890,
+    "type_id": 1643891,
+    "name": "Gem of the Subjugator"
+  },
+  {
+    "internal_name": "gem_epic_allabilities_01",
+    "socket_type": "E",
+    "buff_id": 1730870,
+    "type_id": 1730711,
+    "name": "Gem of Cultivation"
+  },
+  {
+    "internal_name": "gem_epic_allabilities_02",
+    "socket_type": "E",
+    "buff_id": 1730871,
+    "type_id": 1730712,
+    "name": "Gem of Wisdom"
+  },
+  {
+    "internal_name": "gem_epic_damageanddefense_01",
+    "socket_type": "E",
+    "buff_id": 1730865,
+    "type_id": 1730715,
+    "name": "Gem of the Vanquisher"
+  },
+  {
+    "internal_name": "gem_epic_damageanddefense_02",
+    "socket_type": "E",
+    "buff_id": 1730866,
+    "type_id": 1730716,
+    "name": "Gem of the Conqueror"
+  },
+  {
+    "internal_name": "gem_epic_finesseabilities_01",
+    "socket_type": "E",
+    "buff_id": 1730863,
+    "type_id": 1730717,
+    "name": "Rascal's Gem"
+  },
+  {
+    "internal_name": "gem_epic_finesseabilities_02",
+    "socket_type": "E",
+    "buff_id": 1730864,
+    "type_id": 1730718,
+    "name": "Outlaw's Gem"
+  },
+  {
+    "internal_name": "gem_epic_golddrop_01",
+    "socket_type": "E",
+    "buff_id": 1730916,
+    "type_id": 1730719,
+    "name": "Gem of Abundance"
+  },
+  {
+    "internal_name": "gem_epic_golddrop_02",
+    "socket_type": "E",
+    "buff_id": 1730917,
+    "type_id": 1730721,
+    "name": "Gem of Affluence"
+  },
+  {
+    "internal_name": "gem_epic_magicdamage_01",
+    "socket_type": "E",
+    "buff_id": 1730861,
+    "type_id": 1730722,
+    "name": "Gem of Mystic Sonority"
+  },
+  {
+    "internal_name": "gem_epic_magicdamage_02",
+    "socket_type": "E",
+    "buff_id": 1730862,
+    "type_id": 1730723,
+    "name": "Gem of Magic Amplification"
+  },
+  {
+    "internal_name": "gem_epic_manaandhealth_01",
+    "socket_type": "E",
+    "buff_id": 1730859,
+    "type_id": 1730725,
+    "name": "Gem of Attenuation"
+  },
+  {
+    "internal_name": "gem_epic_manaandhealth_02",
+    "socket_type": "E",
+    "buff_id": 1730860,
+    "type_id": 1730726,
+    "name": "Gem of Mitigation"
+  },
+  {
+    "internal_name": "gem_epic_mightabilities_01",
+    "socket_type": "E",
+    "buff_id": 1730855,
+    "type_id": 1730727,
+    "name": "Scrapper's Gem"
+  },
+  {
+    "internal_name": "gem_epic_mightabilities_02",
+    "socket_type": "E",
+    "buff_id": 1730856,
+    "type_id": 1730728,
+    "name": "Fighter's Gem"
+  },
+  {
+    "internal_name": "gem_epic_retaliatory_dot_fire_01",
+    "socket_type": "E",
+    "buff_id": 1730891,
+    "type_id": 1730729,
+    "name": "Gem of Fiery Reprisal"
+  },
+  {
+    "internal_name": "gem_epic_retaliatory_dot_fire_02",
+    "socket_type": "E",
+    "buff_id": 1730854,
+    "type_id": 1730730,
+    "name": "Gem of Infernal Retribution"
+  },
+  {
+    "internal_name": "gem_epic_retaliatory_dot_ice_01",
+    "socket_type": "E",
+    "buff_id": 1730853,
+    "type_id": 1730731,
+    "name": "Gem of Icy Reprisal"
+  },
+  {
+    "internal_name": "gem_epic_retaliatory_dot_ice_02",
+    "socket_type": "E",
+    "buff_id": 1730935,
+    "type_id": 1730732,
+    "name": "Gem of Frozen Retribution"
+  },
+  {
+    "internal_name": "gem_epic_retaliatory_dot_lightning_01",
+    "socket_type": "E",
+    "buff_id": 1730851,
+    "type_id": 1730734,
+    "name": "Gem of Shocking Reprisal"
+  },
+  {
+    "internal_name": "gem_epic_retaliatory_dot_lightning_02",
+    "socket_type": "E",
+    "buff_id": 1730852,
+    "type_id": 1730736,
+    "name": "Gem of Electrifying Retribution"
+  },
+  {
+    "internal_name": "gem_epic_retaliatory_dot_poison_01",
+    "socket_type": "E",
+    "buff_id": 1730849,
+    "type_id": 1730737,
+    "name": "Gem of Infectious Reprisal"
+  },
+  {
+    "internal_name": "gem_epic_retaliatory_dot_poison_02",
+    "socket_type": "E",
+    "buff_id": 1730850,
+    "type_id": 1730738,
+    "name": "Gem of Pestilential Retribution"
+  },
+  {
+    "internal_name": "gem_epic_retaliatory_dot_stun_01",
+    "socket_type": "E",
+    "buff_id": 1730847,
+    "type_id": 1730739,
+    "name": "Gem of Arresting Reprisal"
+  },
+  {
+    "internal_name": "gem_epic_retaliatory_dot_stun_02",
+    "socket_type": "E",
+    "buff_id": 1730848,
+    "type_id": 1730740,
+    "name": "Gem of Debilitating Retribution"
+  },
+  {
+    "internal_name": "gem_epic_sorceryabilities_01",
+    "socket_type": "E",
+    "buff_id": 1730845,
+    "type_id": 1730742,
+    "name": "Magician's Gem"
+  },
+  {
+    "internal_name": "gem_epic_sorceryabilities_02",
+    "socket_type": "E",
+    "buff_id": 1730846,
+    "type_id": 1730743,
+    "name": "Wizard's Gem"
+  },
+  {
+    "internal_name": "gem_epic_xpgained_01",
+    "socket_type": "E",
+    "buff_id": 1730843,
+    "type_id": 1730744,
+    "name": "Gem of the Attentive"
+  },
+  {
+    "internal_name": "gem_epic_xpgained_02",
+    "socket_type": "E",
+    "buff_id": 1730844,
+    "type_id": 1730745,
+    "name": "Gem of the Diligent"
+  },
+  {
+    "internal_name": "gem_epic_manacostdecrease_01",
+    "socket_type": "E",
+    "buff_id": 1730857,
+    "type_id": 1731115,
+    "name": "Gem of Transfiguration"
+  },
+  {
+    "internal_name": "gem_epic_manacostdecrease_02",
+    "socket_type": "E",
+    "buff_id": 1730858,
+    "type_id": 1731116,
+    "name": "Gem of Reclamation"
+  },
+  {
+    "internal_name": "gem_epic_manacostdecrease_03",
+    "socket_type": "E",
+    "buff_id": 1642777,
+    "type_id": 1731117,
+    "name": "Gem of Abatement"
+  },
+  {
+    "internal_name": "gem_unique01",
+    "socket_type": "W",
+    "buff_id": 1822095,
+    "type_id": 1822035,
+    "name": "Farraglen's Gem"
+  },
+  {
+    "internal_name": "parent_gem_weapon",
+    "socket_type": "W",
+    "buff_id": 0,
+    "type_id": 1874680,
+    "name": "Gem"
+  },
+  {
+    "internal_name": "parent_gem_armor",
+    "socket_type": "A",
+    "buff_id": 0,
+    "type_id": 1874681,
+    "name": "Gem"
+  },
+  {
+    "internal_name": "parent_gem_utility",
+    "socket_type": "U",
+    "buff_id": 0,
+    "type_id": 1874682,
+    "name": "Gem"
+  },
+  {
+    "internal_name": "parent_gem_epic",
+    "socket_type": "E",
+    "buff_id": 0,
+    "type_id": 1874693,
+    "name": "Gem"
+  },
+  {
+    "internal_name": "gem_elementalresistance_01",
+    "socket_type": "A",
+    "buff_id": 1949707,
+    "type_id": 1890331,
+    "name": "Gem of Protection"
+  },
+  {
+    "internal_name": "gem_elementalresistance_02",
+    "socket_type": "A",
+    "buff_id": 1949709,
+    "type_id": 1890332,
+    "name": "Gem of Refuge"
+  },
+  {
+    "internal_name": "gem_elementalresistance_03",
+    "socket_type": "A",
+    "buff_id": 1949710,
+    "type_id": 1890333,
+    "name": "Gem of Shelter"
+  },
+  {
+    "internal_name": "gem_fire_04",
+    "socket_type": "W",
+    "buff_id": 1850750,
+    "type_id": 1903486,
+    "name": "Gem of Incineration"
+  },
+  {
+    "internal_name": "gem_ice_04",
+    "socket_type": "W",
+    "buff_id": 1850751,
+    "type_id": 1903487,
+    "name": "Gem of Winter"
+  },
+  {
+    "internal_name": "gem_lightning_04",
+    "socket_type": "W",
+    "buff_id": 1850752,
+    "type_id": 1903488,
+    "name": "Gem of Tempest"
+  },
+  {
+    "internal_name": "gem_manaleech_04",
+    "socket_type": "W",
+    "buff_id": 1850770,
+    "type_id": 1903489,
+    "name": "Gem of Gluttony"
+  },
+  {
+    "internal_name": "gem_physical_04",
+    "socket_type": "W",
+    "buff_id": 1313737,
+    "type_id": 1903491,
+    "name": "Galvanizing Gem"
+  },
+  {
+    "internal_name": "gem_poison_04",
+    "socket_type": "W",
+    "buff_id": 1850761,
+    "type_id": 1903493,
+    "name": "Gem of Rot"
+  },
+  {
+    "internal_name": "gem_piercing_04",
+    "socket_type": "W",
+    "buff_id": 1313834,
+    "type_id": 1903514,
+    "name": "Saboteur's Gem"
+  },
+  {
+    "internal_name": "gem_lifeleech_04",
+    "socket_type": "W",
+    "buff_id": 1850768,
+    "type_id": 1903518,
+    "name": "Gem of Bloodletting"
+  },
+  {
+    "internal_name": "gem_stun_04",
+    "socket_type": "U",
+    "buff_id": 1883482,
+    "type_id": 1903526,
+    "name": "Gem of Staggering"
+  },
+  {
+    "internal_name": "gem_manaregen_04",
+    "socket_type": "U",
+    "buff_id": 501592,
+    "type_id": 1903527,
+    "name": "Rejuvenating Gem"
+  },
+  {
+    "internal_name": "gem_manaincrease_04",
+    "socket_type": "U",
+    "buff_id": 1852052,
+    "type_id": 1903529,
+    "name": "Oracle's Gem"
+  },
+  {
+    "internal_name": "gem_healthincrease_04",
+    "socket_type": "U",
+    "buff_id": 1852025,
+    "type_id": 1903530,
+    "name": "Hero's Gem"
+  },
+  {
+    "internal_name": "gem_healthregen_04",
+    "socket_type": "U",
+    "buff_id": 501585,
+    "type_id": 1903531,
+    "name": "Regenerating Gem"
+  },
+  {
+    "internal_name": "gem_elementalresistance_04",
+    "socket_type": "A",
+    "buff_id": 1949711,
+    "type_id": 1903551,
+    "name": "Gem of Haven"
+  },
+  {
+    "internal_name": "gem_fireresistance_04",
+    "socket_type": "A",
+    "buff_id": 1949701,
+    "type_id": 1903552,
+    "name": "Gem of Fire Attenuation"
+  },
+  {
+    "internal_name": "gem_iceresistance_04",
+    "socket_type": "A",
+    "buff_id": 1949696,
+    "type_id": 1903553,
+    "name": "Gem of Ice Attenuation"
+  },
+  {
+    "internal_name": "gem_lightningresistance_04",
+    "socket_type": "A",
+    "buff_id": 1949706,
+    "type_id": 1903554,
+    "name": "Gem of Lightning Attenuation"
+  },
+  {
+    "internal_name": "gem_physicalresistance_04",
+    "socket_type": "A",
+    "buff_id": 1850914,
+    "type_id": 1903555,
+    "name": "Gem of Tempering"
+  },
+  {
+    "internal_name": "gem_armorflat_01",
+    "socket_type": "A",
+    "buff_id": 500437,
+    "type_id": 1903567,
+    "name": "Rigid Gem"
+  },
+  {
+    "internal_name": "gem_armorflat_02",
+    "socket_type": "A",
+    "buff_id": 500439,
+    "type_id": 1903622,
+    "name": "Shielded Gem"
+  },
+  {
+    "internal_name": "gem_armorflat_03",
+    "socket_type": "A",
+    "buff_id": 1319231,
+    "type_id": 1903689,
+    "name": "Tempered Gem"
+  },
+  {
+    "internal_name": "gem_armorflat_04",
+    "socket_type": "A",
+    "buff_id": 1850887,
+    "type_id": 1903690,
+    "name": "Impregnable Gem"
+  },
+  {
+    "internal_name": "gem_epic_xpgained_04",
+    "socket_type": "E",
+    "buff_id": 1903714,
+    "type_id": 1903699,
+    "name": "Gem of the Enlightened"
+  },
+  {
+    "internal_name": "gem_criticaldamage_01",
+    "socket_type": "W",
+    "buff_id": 527108,
+    "type_id": 1910306,
+    "name": "Gem of Justice"
+  },
+  {
+    "internal_name": "gem_criticaldamage_02",
+    "socket_type": "W",
+    "buff_id": 527115,
+    "type_id": 1910307,
+    "name": "Gem of Magnitude"
+  },
+  {
+    "internal_name": "gem_criticaldamage_03",
+    "socket_type": "W",
+    "buff_id": 1851458,
+    "type_id": 1910308,
+    "name": "Gem of Amplitude"
+  },
+  {
+    "internal_name": "gem_poisonresistance_04",
+    "socket_type": "A",
+    "buff_id": 2031919,
+    "type_id": 2036042,
+    "name": "Gem of Antidote"
+  },
+  {
+    "internal_name": "mit_gem_chaos_weapon_01",
+    "socket_type": "W",
+    "buff_id": 2691485,
+    "type_id": 2691473,
+    "name": "Decayer's Gem"
+  },
+  {
+    "internal_name": "mit_gem_chaos_weapon_02",
+    "socket_type": "W",
+    "buff_id": 2691486,
+    "type_id": 2691474,
+    "name": "Gem of Corrosion"
+  },
+  {
+    "internal_name": "mit_gem_chaos_weapon_03",
+    "socket_type": "W",
+    "buff_id": 2691487,
+    "type_id": 2691475,
+    "name": "Gem of Disintegration"
+  },
+  {
+    "internal_name": "mit_gem_chaos_armor_01_renamed_for_hash_collision",
+    "socket_type": "A",
+    "buff_id": 2691488,
+    "type_id": 2691476,
+    "name": "Gem of Frailty"
+  },
+  {
+    "internal_name": "mit_gem_chaos_armor_02",
+    "socket_type": "A",
+    "buff_id": 2691489,
+    "type_id": 2691477,
+    "name": "Ravager's Gem"
+  },
+  {
+    "internal_name": "mit_gem_chaos_armor_03",
+    "socket_type": "A",
+    "buff_id": 2691490,
+    "type_id": 2691478,
+    "name": "Erosion Gem"
+  },
+  {
+    "internal_name": "mit_gem_chaos_utility_01",
+    "socket_type": "U",
+    "buff_id": 2691491,
+    "type_id": 2691479,
+    "name": "Gem of Mortification"
+  },
+  {
+    "internal_name": "mit_gem_chaos_utility_02",
+    "socket_type": "U",
+    "buff_id": 2691492,
+    "type_id": 2691480,
+    "name": "Velocity Gem"
+  },
+  {
+    "internal_name": "mit_gem_chaos_utility_03",
+    "socket_type": "U",
+    "buff_id": 2691493,
+    "type_id": 2691481,
+    "name": "Atrophy Gem"
+  },
+  {
+    "internal_name": "mit_gem_chaos_epic_01",
+    "socket_type": "E",
+    "buff_id": 2691494,
+    "type_id": 2691482,
+    "name": "Maelstrom Gem"
+  },
+  {
+    "internal_name": "mit_gem_chaos_epic_02",
+    "socket_type": "E",
+    "buff_id": 2691495,
+    "type_id": 2691483,
+    "name": "Gem of Entropy"
+  },
+  {
+    "internal_name": "mit_gem_chaos_epic_03",
+    "socket_type": "E",
+    "buff_id": 2691496,
+    "type_id": 2691484,
+    "name": "Chaos Obliteration Gem"
+  }
+]

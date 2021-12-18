@@ -1,10 +1,9 @@
-﻿namespace KoAR.Core
+﻿namespace KoAR.Core;
+
+public enum ArmorType
 {
-    public enum ArmorType
-    {
-        None,
-        Might,
-        Finesse,
-        Sorcery
-    }
+    None,
+    Might,
+    Finesse,
+    Sorcery
 }

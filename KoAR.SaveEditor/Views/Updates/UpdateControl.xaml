@@ -6,7 +6,7 @@
     xmlns:editor="clr-namespace:KoAR.SaveEditor"
     xmlns:local="clr-namespace:KoAR.SaveEditor.Views.Updates"
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs"
-    xmlns:s="clr-namespace:System;assembly=mscorlib"
+    xmlns:s="clr-namespace:System;assembly=System.Runtime"
     mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type local:UpdateViewModelBase}}">
     <UserControl.Resources>
         <ResourceDictionary>

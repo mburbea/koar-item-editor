@@ -1,10 +1,10 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+    xmlns:core="clr-namespace:KoAR.Core;assembly=KoAR.Core"
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs"
     xmlns:views="clr-namespace:KoAR.SaveEditor.Views"
-    xmlns:inventory="clr-namespace:KoAR.SaveEditor.Views.Inventory"
-    xmlns:core="clr-namespace:KoAR.Core;assembly=KoAR.Core">
+    xmlns:inventory="clr-namespace:KoAR.SaveEditor.Views.Inventory">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/PresentationFramework.Aero;component/Themes/Aero.NormalColor.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Templates/TextBoxErrorTemplate.xaml" />
@@ -14,9 +14,9 @@
     <constructs:FloatConverter x:Key="SingleConverter" />
     <constructs:EqualityConverter x:Key="EqualityConverter" />
     <constructs:StringIsNullOrEmptyConverter x:Key="StringIsNullOrEmptyConverter" />
-    <constructs:NegatedBooleanConverter x:Key="NegatedBooleanConverter" />
     <constructs:HexConverter x:Key="HexConverter" />
     <constructs:LittleEndianConverter x:Key="LittleEndianConverter" />
+    <constructs:AndConverter x:Key="AndConverter" />
     <constructs:GrayscaleConverter x:Key="GrayscaleConverter" />
     <BitmapImage x:Key="Delete" UriSource="/KoAR.SaveEditor;component/Resources/Delete.png" po:Freeze="True" />
     <BitmapImage x:Key="Ellipsis" UriSource="/KoAR.SaveEditor;component/Resources/Ellipsis.png" po:Freeze="True" />
@@ -210,8 +210,10 @@
                                                             <Style.Triggers>
                                                                 <MultiDataTrigger>
                                                                     <MultiDataTrigger.Conditions>
-                                                                        <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True" />
                                                                         <Condition Binding="{Binding Value, Source={StaticResource Mode}}" Value="Inventory" />
+                                                                        <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True" />
+                                                                        <Condition Binding="{Binding SelectedItem.IsEquipped, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}" Value="False" />
+                                                                        <Condition Binding="{Binding SelectedItem.IsUnknown, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}" Value="False" />
                                                                     </MultiDataTrigger.Conditions>
                                                                     <Setter Property="Visibility" Value="Collapsed" />
                                                                 </MultiDataTrigger>
@@ -230,8 +232,10 @@
                                                             <Style.Triggers>
                                                                 <MultiDataTrigger>
                                                                     <MultiDataTrigger.Conditions>
-                                                                        <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True" />
                                                                         <Condition Binding="{Binding Value, Source={StaticResource Mode}}" Value="Inventory" />
+                                                                        <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" Value="True" />
+                                                                        <Condition Binding="{Binding SelectedItem.IsEquipped, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}" Value="False" />
+                                                                        <Condition Binding="{Binding SelectedItem.IsUnknown, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}" Value="False" />
                                                                     </MultiDataTrigger.Conditions>
                                                                     <Setter Property="Visibility" Value="Visible" />
                                                                     <Setter Property="constructs:TextBoxSelect.SelectOnFocus" Value="True" />
@@ -404,7 +408,7 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Width="Auto" views:ItemCollectionManager.PropertyName="IsUnsellable" 
+                                <GridViewColumn Width="Auto" views:ItemCollectionManager.PropertyName="IsSellable" 
                                     constructs:ColumnVisibility.IsHidden="{Binding Value, Source={StaticResource Mode}, Converter={StaticResource EqualityConverter}, ConverterParameter={x:Static views:Mode.Stash}}">
                                     <GridViewColumn.Header>
                                         <StackPanel Orientation="Horizontal">
@@ -413,7 +417,7 @@
                                                     <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
                                                         <Style.Triggers>
                                                             <DataTrigger Binding="{Binding Value, Source={StaticResource Mode}}" Value="Inventory">
-                                                                <Setter Property="IsChecked" Value="{Binding AllItemsUnsellable, Converter={StaticResource NegatedBooleanConverter}, RelativeSource={RelativeSource TemplatedParent}}" />
+                                                                <Setter Property="IsChecked" Value="{Binding AllItemsSellable, RelativeSource={RelativeSource TemplatedParent}}" />
                                                             </DataTrigger>
                                                         </Style.Triggers>
                                                     </Style>
@@ -429,7 +433,7 @@
                                                     <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
                                                         <Style.Triggers>
                                                             <DataTrigger Binding="{Binding Value, Source={StaticResource Mode}}" Value="Inventory">
-                                                                <Setter Property="IsChecked" Value="{Binding IsUnsellable, Converter={StaticResource NegatedBooleanConverter}}" />
+                                                                <Setter Property="IsChecked" Value="{Binding IsSellable}" />
                                                             </DataTrigger>
                                                         </Style.Triggers>
                                                     </Style>
@@ -438,7 +442,7 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Width="Auto" views:ItemCollectionManager.PropertyName="IsUnstashable" 
+                                <GridViewColumn Width="Auto" views:ItemCollectionManager.PropertyName="IsStashable" 
                                     constructs:ColumnVisibility.IsHidden="{Binding Value, Source={StaticResource Mode}, Converter={StaticResource EqualityConverter}, ConverterParameter={x:Static views:Mode.Stash}}">
                                     <GridViewColumn.Header>
                                         <StackPanel Orientation="Horizontal">
@@ -447,7 +451,7 @@
                                                     <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
                                                         <Style.Triggers>
                                                             <DataTrigger Binding="{Binding Value, Source={StaticResource Mode}}" Value="Inventory">
-                                                                <Setter Property="IsChecked" Value="{Binding AllItemsUnstashable, Converter={StaticResource NegatedBooleanConverter}, RelativeSource={RelativeSource TemplatedParent}}" />
+                                                                <Setter Property="IsChecked" Value="{Binding AllItemsStashable, RelativeSource={RelativeSource TemplatedParent}}" />
                                                             </DataTrigger>
                                                         </Style.Triggers>
                                                     </Style>
@@ -463,7 +467,7 @@
                                                     <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
                                                         <Style.Triggers>
                                                             <DataTrigger Binding="{Binding Value, Source={StaticResource Mode}}" Value="Inventory">
-                                                                <Setter Property="IsChecked" Value="{Binding IsUnstashable, Converter={StaticResource NegatedBooleanConverter}}" />
+                                                                <Setter Property="IsChecked" Value="{Binding IsStashable}" />
                                                             </DataTrigger>
                                                         </Style.Triggers>
                                                     </Style>
@@ -489,8 +493,12 @@
                                                 </Style>
                                             </DataTemplate.Resources>
                                             <StackPanel Orientation="Horizontal">
-                                                <views:BuffIcon Margin="1,0" Buff="{Binding Prefix}" />
-                                                <views:BuffIcon Margin="1,0" Buff="{Binding Suffix}" />
+                                                <AdornerDecorator>
+                                                    <views:BuffIcon Margin="1,0" Buff="{Binding Prefix}" />
+                                                </AdornerDecorator>
+                                                <AdornerDecorator>
+                                                    <views:BuffIcon Margin="1,0" Buff="{Binding Suffix}" />
+                                                </AdornerDecorator>
                                             </StackPanel>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
@@ -511,7 +519,9 @@
                                                                 <Setter Property="ContentTemplate" Value="{StaticResource BuffToolTipTemplate}" />
                                                             </Style>
                                                         </DataTemplate.Resources>
-                                                        <views:BuffIcon Buff="{Binding}" Margin="1,0" ToolTip="{Binding}" />
+                                                        <AdornerDecorator>
+                                                            <views:BuffIcon Buff="{Binding}" Margin="1,0" ToolTip="{Binding}" />
+                                                        </AdornerDecorator>
                                                     </DataTemplate>
                                                 </ItemsControl.ItemTemplate>
                                             </ItemsControl>
@@ -534,7 +544,9 @@
                                                                 <Setter Property="ContentTemplate" Value="{StaticResource BuffToolTipTemplate}" />
                                                             </Style>
                                                         </DataTemplate.Resources>
-                                                        <views:BuffIcon Buff="{Binding}" Margin="1,0" ToolTip="{Binding}" />
+                                                        <AdornerDecorator>
+                                                            <views:BuffIcon Buff="{Binding}" Margin="1,0" ToolTip="{Binding}" />
+                                                        </AdornerDecorator>
                                                     </DataTemplate>
                                                 </ItemsControl.ItemTemplate>
                                             </ItemsControl>

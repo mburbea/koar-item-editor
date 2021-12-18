@@ -1,24 +1,26 @@
-﻿namespace KoAR.Core
+﻿namespace KoAR.Core;
+
+public enum EquipmentCategory
 {
-    public enum EquipmentCategory
-    {
-        Hat = 1,
-        Torso,
-        Robes,
-        Legs,
-        Hands,
-        Feet,
-        Shield,
-        Chakrams,
-        Daggers,
-        Faeblades,
-        Greatsword,
-        Hammer,
-        Longbow,
-        Longsword,
-        Sceptre,
-        Staff,
-        Necklace,
-        Ring
-    }
+    Hat = 1,
+    Torso,
+    Robes,
+    Legs,
+    Hands,
+    Feet,
+    Shield,
+    Chakrams,
+    Daggers,
+    Faeblades,
+    Greatsword,
+    Hammer,
+    Longbow,
+    Longsword,
+    Sceptre,
+    Staff,
+    Necklace,
+    Ring,
+#if DEBUG
+    Unknown = 999
+#endif
 }
