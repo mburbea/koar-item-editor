@@ -3,7 +3,7 @@ using System.Windows.Media;
 using KoAR.Core;
 
 namespace KoAR.SaveEditor.Views;
-
+/*
 public sealed class ChaosTierAdorner : IndicatorAdornerBase
 {
     public static readonly DependencyProperty ChaosTierProperty = DependencyProperty.RegisterAttached(nameof(ItemDefinition.ChaosTier), typeof(char?), typeof(ChaosTierAdorner),
@@ -32,3 +32,4 @@ public sealed class ChaosTierAdorner : IndicatorAdornerBase
         }
     }
 }
+*/

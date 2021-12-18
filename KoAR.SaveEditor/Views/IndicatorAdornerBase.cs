@@ -6,6 +6,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using KoAR.SaveEditor.Constructs;
 
 namespace KoAR.SaveEditor.Views;
 
@@ -13,8 +14,7 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
 {
     private static readonly BooleanToVisibilityConverter _booleanToVisibilityConverter = new();
 
-    private readonly Border _contentPresenter;
-    private AdornerLayer? _adornerLayer;
+    private readonly UIElement _element;
 
     protected IndicatorAdornerBase(FrameworkElement adornedElement, AdornerPosition adornerPosition, Brush background, Brush foreground, string indicator)
         : base(adornedElement)
@@ -43,18 +43,18 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
             uniformGridFactory.AppendChild(new(typeof(Border)));
         }
         uniformGridFactory.AppendChild(gridFactory);
-        this._contentPresenter = new Border
+        this._element = new ContentPresenter()
         {
-            Background = Brushes.Transparent,
-            Child = new ContentPresenter()
-            {
-                Content = indicator,
-                HorizontalAlignment = HorizontalAlignment.Stretch,
-                VerticalAlignment = VerticalAlignment.Stretch,
-                ContentTemplate = new() { VisualTree = uniformGridFactory },
-            }
+            Content = indicator,
+            Opacity = 0.75,
+            ContentTemplate = new() { VisualTree = uniformGridFactory },
         };
-        this.AttachToAdornedElement();
+        this.SetBinding(UIElement.VisibilityProperty, new Binding(nameof(UIElement.IsVisible))
+        {
+            Source = this.AdornedElement,
+            Converter = IndicatorAdornerBase._booleanToVisibilityConverter,
+        });
+        this.ClipToBounds = true;
     }
 
     protected enum AdornerPosition
@@ -71,72 +71,66 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
 
     public virtual void Dispose()
     {
-        if (this._adornerLayer != null)
-        {
-            BindingOperations.ClearBinding(this, UIElement.VisibilityProperty);
-            this._adornerLayer.Remove(this);
-        }
-        else
-        {
-            this.RemoveLoadedListener();
-        }
+        BindingOperations.ClearBinding(this, UIElement.VisibilityProperty);
         GC.SuppressFinalize(this);
     }
+
+    protected static void AttachAdorner<TAdorner>(FrameworkElement element, object? arg = null)
+        where TAdorner : IndicatorAdornerBase => AdornerAttacher<TAdorner>.AttachAdorner(element);
 
     protected static void DetachAdorner<TAdorner>(FrameworkElement element)
         where TAdorner : IndicatorAdornerBase => AdornerAttacher<TAdorner>.DetachAdorner(element);
 
-    protected static void SetAdorner<TAdorner>(FrameworkElement element, TAdorner adorner)
-        where TAdorner : IndicatorAdornerBase => AdornerAttacher<TAdorner>.SetAdorner(element, adorner);
-
     protected override Size ArrangeOverride(Size finalSize)
     {
-        this._contentPresenter.Arrange(new(finalSize));
+        this._element.Arrange(new(finalSize));
         return finalSize;
     }
 
-    protected override Visual GetVisualChild(int index) => this._contentPresenter;
+    protected override Visual GetVisualChild(int index) => this._element;
 
     protected override Size MeasureOverride(Size constraint)
     {
-        this._contentPresenter.Measure(this.AdornedElement.RenderSize);
+        this._element.Measure(this.AdornedElement.RenderSize);
         return this.AdornedElement.RenderSize;
     }
-
-    private void AdornedElement_Loaded(object sender, RoutedEventArgs e)
-    {
-        this.RemoveLoadedListener();
-        this.AttachToAdornedElement();
-    }
-
-    private void AttachToAdornedElement()
-    {
-        if (!this.AdornedElement.IsLoaded)
-        {
-            this.AdornedElement.Loaded += this.AdornedElement_Loaded;
-            return;
-        }
-        (this._adornerLayer = AdornerLayer.GetAdornerLayer(this.AdornedElement)).Add(this);
-        this.SetBinding(UIElement.VisibilityProperty, new Binding(nameof(UIElement.IsVisible))
-        {
-            Source = this.AdornedElement,
-            Converter = IndicatorAdornerBase._booleanToVisibilityConverter,
-        });
-    }
-
-    private void RemoveLoadedListener() => this.AdornedElement.Loaded -= this.AdornedElement_Loaded;
 
     private static class AdornerAttacher<TAdorner>
         where TAdorner : IndicatorAdornerBase
     {
         private static readonly DependencyProperty _adornerProperty = DependencyProperty.RegisterAttached(typeof(TAdorner).FullName, typeof(TAdorner), typeof(AdornerAttacher<TAdorner>));
+        private static readonly DependencyProperty _factoryProperty = DependencyProperty.RegisterAttached(typeof(Func<TAdorner>).FullName, typeof(Func<TAdorner>), typeof(AdornerAttacher<TAdorner>));
+
+        public static void AttachAdorner(FrameworkElement element, Func<FrameworkElement,TAdorner>? factory = default)
+        {
+            if (element.IsLoaded)
+            {
+                TAdorner adorner = (factory?? (e=>(TAdorner)Activator.CreateInstance(typeof(TAdorner), new[] { e })!))(element);
+                element.SetValue(AdornerAttacher<TAdorner>._adornerProperty, adorner);
+                AdornerLayer.GetAdornerLayer(element).Add(adorner);
+            }
+            else
+            {
+                element.SetValue(AdornerAttacher < TAdorner > ._factoryProperty, factory);
+                element.Loaded += Element_Loaded;
+            }
+        }
+
+        private static void Element_Loaded(object sender, RoutedEventArgs e)
+        {
+            FrameworkElement element = (FrameworkElement)sender;
+            element.Loaded -= Element_Loaded;
+            AttachAdorner(element,(Func<FrameworkElement,TAdorner>?)element.GetValue(_factoryProperty));
+            element.ClearValue(_factoryProperty);
+        }
 
         public static void DetachAdorner(FrameworkElement element)
         {
             using TAdorner? adorner = (TAdorner?)element.GetValue(AdornerAttacher<TAdorner>._adornerProperty);
-            element.ClearValue(AdornerAttacher<TAdorner>._adornerProperty);
+            AdornerLayer adornerLayer = element.FindVisualTreeAncestor<AdornerLayer>() ?? AdornerLayer.GetAdornerLayer(element);
+            adornerLayer.Remove(adorner);
+            element.SetValue(AdornerAttacher<TAdorner>._adornerProperty, null);
+            element.Loaded -= Element_Loaded;
         }
-
-        public static void SetAdorner(FrameworkElement element, TAdorner adorner) => element.SetValue(AdornerAttacher<TAdorner>._adornerProperty, adorner);
     }
 }
