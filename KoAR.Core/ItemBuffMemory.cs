@@ -39,13 +39,16 @@ public sealed class ItemBuffMemory : IItemBuffMemory
             .Where(t => t.gem.Definition.Buff.ApplyType == ApplyType.OnObject)
             .Select(t => GetSocketInstanceId(t.slot))
             .ToArray();
+
+        var prefixInstanceId = GetAffixInstanceId(Prefix);
+        var suffixInstanceId = GetAffixInstanceId(Suffix);
         foreach (var (instanceId, buffId, _) in activeBuffs)
         {
             var buff = Amalur.GetBuff(buffId);
-            if (GetSelfBuffInstanceId(List.IndexOf(buff)) != instanceId
-                && instanceId != GetAffixInstanceId(Prefix)
-                && instanceId != GetAffixInstanceId(Suffix)
-                && !socketInstances.Contains(instanceId))
+            if (!(GetSelfBuffInstanceId(List.IndexOf(buff)) == instanceId
+                || instanceId == prefixInstanceId
+                || instanceId == suffixInstanceId
+                || socketInstances.Contains(instanceId)))
             {
                 SetOfInstances.Add((item, instanceId));
                 UnsupportedFormat = true;
@@ -110,7 +113,7 @@ public sealed class ItemBuffMemory : IItemBuffMemory
         activeBuffBytes.CopyTo(buffer);
         Unsafe.WriteUnaligned(ref buffer[activeBuffBytes.Length + 4], List.Count);
         selfBuffBytes.CopyTo(buffer[(activeBuffBytes.Length + 8)..]);
-        Bytes = MemoryUtilities.ReplaceBytes(Bytes, Offsets.FirstActiveBuff, currentLength, MemoryMarshal.AsBytes(buffer));
+        Bytes = MemoryUtilities.ReplaceBytes(Bytes, Offsets.FirstActiveBuff, currentLength, buffer);
         Count = ActiveBuffCount;
         DataLength = Bytes.Length;
         return Bytes;

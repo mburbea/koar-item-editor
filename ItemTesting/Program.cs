@@ -358,10 +358,7 @@ static class Program
     static void Main()
     {
         ParseOutItemInformationTemplate();
-        //CreateSimTypeCsv(@"C:\e\symbol_table_simtype.bin", @"..\..\..\simtype.csv");
-        ulong s = 0x00_1c41a5_00_00_03_40;
-        var (var1, var2) = s;
-        Console.WriteLine($"{{SL1={var1},SL2={var2}}}");
+        //CreateSimTypeCsv(@"C:\e\symbol_table_globalobjectref.bin", @"..\..\..\gor.csv");
         ConvertSymbolsToLua(@"C:\e\", @"C:\Program Files (x86)\Steam\steamapps\common\Kingdoms of Amalur Re-Reckoning\mods\resources\","simtype","buff");
         
 
