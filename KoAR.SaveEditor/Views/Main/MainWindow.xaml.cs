@@ -60,7 +60,7 @@ partial class MainWindow
         }
         if (tag == 1)
         {
-            App.OpenInBrowser("https://github.com/mburbea/koar-item-editor/issues/new?labels=bug&template=bug_report.md");
+            App.CreateGithubIssue("Enter title here");
             return;
         }
         using CancellationTokenSource source = new(2500);
