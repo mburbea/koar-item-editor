@@ -64,15 +64,15 @@ partial class MainWindow
             OpenInBrowser("https://github.com/mburbea/koar-item-editor/issues/new?labels=bug&template=bug_report.md");
             return;
         }
-        bool dispatched = false;
         using CancellationTokenSource source = new(2500);
+        IReleaseInfo? release = default;
         try
         {
-            IReleaseInfo? release = await UpdateMethods.FetchLatest2xReleaseAsync(source.Token).ConfigureAwait(false);
-            if (release != null)
+            if ((release = await UpdateMethods.FetchLatest2xReleaseAsync(source.Token)) != null)
             {
-                dispatched = true;
-                this.Dispatcher.Invoke(new Action<IReleaseInfo>(OpenOriginalUpdateWindow), release);
+                using OriginalUpdateViewModel viewModel = new(release);
+                UpdateWindow window = new() { DataContext = viewModel, Owner = this };
+                window.ShowDialog();
             }
         }
         catch (OperationCanceledException)
@@ -80,21 +80,14 @@ partial class MainWindow
         }
         finally
         {
-            if (!dispatched)
+            if (release is null)
             {
-                // this might fail if the github is down or your internet sucks. For now let's try to open a browser window to nexusmods."
+                // this might fail if the github is down or your internet sucks. For now let's try to open a browser window to nexusmods.
                 OpenInBrowser("https://www.nexusmods.com/kingdomsofamalurreckoning/mods/10?tab=files");
             }
         }
 
         static void OpenInBrowser(string url) => Process.Start(startInfo: new(url) { UseShellExecute = true })?.Dispose();
-
-        void OpenOriginalUpdateWindow(IReleaseInfo release)
-        {
-            using OriginalUpdateViewModel viewModel = new(release);
-            UpdateWindow window = new() { DataContext = viewModel, Owner = this };
-            window.ShowDialog();
-        }
     }
 
     private void Open_Executed(object sender, ExecutedRoutedEventArgs e) => this.ViewModel.OpenFile();
