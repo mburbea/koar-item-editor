@@ -167,10 +167,7 @@ public sealed class MainWindowViewModel : NotifierBase
             Caption = "KoAR Save Editor",
             Heading = "Save Successful!",
             Text = $"Original save backed up as {backupPath}.",
-            Buttons =
-                {
-                    TaskDialogButton.OK
-                },
+            Buttons = { TaskDialogButton.OK },
             DefaultButton = TaskDialogButton.OK,
             AllowCancel = true,
             Icon = TaskDialogIcon.Information,
@@ -185,14 +182,14 @@ public sealed class MainWindowViewModel : NotifierBase
         try
         {
             using CancellationTokenSource source = new(2500);
-            await this.UpdateNotifier.CheckForUpdatesAsync(source.Token).ConfigureAwait(false);
+            await this.UpdateNotifier.CheckForUpdatesAsync(source.Token);
         }
         catch (OperationCanceledException)
         {
         }
-        if (Debugger.IsAttached || this.UpdateNotifier.Update == null || !application.Dispatcher.Invoke(this.OpenUpdateWindow))
+        if (Debugger.IsAttached || this.UpdateNotifier.Update == null || !this.OpenUpdateWindow())
         {
-            await application.Dispatcher.InvokeAsync(this.OpenFile);
+            this.OpenFile();
         }
     }
 
@@ -207,11 +204,11 @@ public sealed class MainWindowViewModel : NotifierBase
             Heading = "Unsaved Changes Detected!",
             Text = "Changed were made to the equipment that have not been saved.",
             Buttons =
-                {
-                    proceedButton,
-                    saveProceedButton,
-                    cancelButton
-                },
+            {
+                proceedButton,
+                saveProceedButton,
+                cancelButton
+            },
             Caption = "KoAR Save Editor",
             Icon = TaskDialogIcon.Warning,
             AllowCancel = true,
@@ -221,7 +218,7 @@ public sealed class MainWindowViewModel : NotifierBase
         {
             return false;
         }
-        else if (button == saveProceedButton)
+        if (button == saveProceedButton)
         {
             this.SaveFile();
             return false;
@@ -236,20 +233,28 @@ public sealed class MainWindowViewModel : NotifierBase
             this.IsCheckingForUpdate = true;
             using CancellationTokenSource source = new();
             source.CancelAfter(15000); // 15s
-            await this.UpdateNotifier.CheckForUpdatesAsync(source.Token).ConfigureAwait(false);
+            await this.UpdateNotifier.CheckForUpdatesAsync(source.Token);
         }
         catch
         {
-            // Do Nothing.
+            return;
         }
         finally
         {
             this.IsCheckingForUpdate = false;
-            if (this.UpdateNotifier.Update != null)
-            {
-                this._dispatcher.Invoke(this.OpenUpdateWindow);
-            }
         }
+        if (this.UpdateNotifier.Update != null)
+        {
+            this.OpenUpdateWindow();
+            return;
+        }
+        TaskDialog.ShowDialog(new()
+        {
+            Caption = "KoAR Save Editor",
+            Heading = "KoAR Save Editor is up to date.",
+            Text = $"You are already running the latest version (v{App.Version}).",
+            Icon = TaskDialogIcon.Information
+        });
     }
 
     private void MainWindow_Closing(object? sender, CancelEventArgs e)
