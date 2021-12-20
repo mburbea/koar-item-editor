@@ -16,6 +16,12 @@ partial class App
 
     public static Version Version { get; } = new(Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>()!.InformationalVersion);
 
+    public static void CreateGithubIssue(string titlePrefix) => App.OpenInBrowser(
+        $"https://github.com/mburbea/koar-item-editor/issues/new?labels=bug&template=bug_report.md&title={WebUtility.UrlEncode($"{titlePrefix} (in v{App.Version})")}"
+    );
+
+    public static void OpenInBrowser(string url) => Process.Start(startInfo: new(url) { UseShellExecute = true })?.Dispose();
+
     public static void ShowExceptionDialog(string mainInstruction, Exception exception)
     {
         string content = $"{exception.GetType().FullName}: {exception.Message}";
@@ -35,11 +41,7 @@ partial class App
         TaskDialog.ShowDialog(page);
         if (page.Verification!.Checked)
         {
-            string title = $"{content} (in v{App.Version})";
-            Process.Start(new ProcessStartInfo($"https://github.com/mburbea/koar-item-editor/issues/new?labels=bug&template=bug_report.md&title={WebUtility.UrlEncode(title)}")
-            {
-                UseShellExecute = true
-            })?.Dispose();
+            App.CreateGithubIssue(content);
         }
     }
 
