@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -61,7 +60,7 @@ partial class MainWindow
         }
         if (tag == 1)
         {
-            OpenInBrowser("https://github.com/mburbea/koar-item-editor/issues/new?labels=bug&template=bug_report.md");
+            App.OpenInBrowser("https://github.com/mburbea/koar-item-editor/issues/new?labels=bug&template=bug_report.md");
             return;
         }
         using CancellationTokenSource source = new(2500);
@@ -83,11 +82,9 @@ partial class MainWindow
             if (release is null)
             {
                 // this might fail if the github is down or your internet sucks. For now let's try to open a browser window to nexusmods.
-                OpenInBrowser("https://www.nexusmods.com/kingdomsofamalurreckoning/mods/10?tab=files");
+                App.OpenInBrowser("https://www.nexusmods.com/kingdomsofamalurreckoning/mods/10?tab=files");
             }
         }
-
-        static void OpenInBrowser(string url) => Process.Start(startInfo: new(url) { UseShellExecute = true })?.Dispose();
     }
 
     private void Open_Executed(object sender, ExecutedRoutedEventArgs e) => this.ViewModel.OpenFile();
