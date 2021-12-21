@@ -49,8 +49,12 @@ public static class UpdateMethods
     {
         try
         {
-            foreach (Tag tag in (await UpdateMethods.FetchTagsAsync(cancellationToken).ConfigureAwait(false)).Where(tag => tag.Version.Major == majorVersion))
+            foreach (Tag tag in await UpdateMethods.FetchTagsAsync(cancellationToken).ConfigureAwait(false))
             {
+                if (tag.Version.Major != majorVersion)
+                {
+                    continue;
+                }
                 if (await UpdateMethods.FetchReleaseAsync(tag.Name, cancellationToken).ConfigureAwait(false) is { HasUpdateAsset: true } release)
                 {
                     return release;
