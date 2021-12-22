@@ -49,7 +49,7 @@ partial class UpdateControl
 
     private void Window_Closing(object? sender, CancelEventArgs e)
     {
-        ((Window)sender!).Closing -= Window_Closing;
+        ((Window)sender!).Closing -= this.Window_Closing;
         UpdateViewModelBase viewModel = (UpdateViewModelBase)this.DataContext;
         PropertyChangedEventManager.RemoveHandler(viewModel, this.ViewModel_DialogResultChanged, nameof(viewModel.DialogResult));
     }

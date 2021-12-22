@@ -111,10 +111,10 @@ public abstract class UpdateViewModelBase : NotifierBase, IDisposable
             section.Blocks.Add(new Paragraph
             {
                 Inlines =
-                    {
-                        new Run($"{release.Name}{Environment.NewLine}Released:") { FontWeight = FontWeights.SemiBold },
-                        new Run($" {GetDescriptiveText(DateTime.UtcNow - release.PublishedAt)} ago."),
-                    }
+                {
+                    new Run($"{release.Name}{Environment.NewLine}Released:") { FontWeight = FontWeights.SemiBold },
+                    new Run($" {GetDescriptiveText(DateTime.UtcNow - release.PublishedAt)} ago."),
+                }
             });
             section.Blocks.AddRange(engine.Transform(release.Body).Blocks.ToList());
             document.Blocks.Add(section);
