@@ -68,7 +68,7 @@ public static class UpdateMethods
         try
         {
             Release[] array = (await UpdateMethods.FetchReleasesAsync(cancellationToken).ConfigureAwait(false))
-                .Where(release => release.Version.Major == App.Version.Major && release.Version > App.Version)
+                .Where(release => release.Version.Major == App.Version.Major && release.Version > App.Version && release.HasUpdateAsset)
                 .Take(maxReleases)
                 .ToArray();
             if (array.Length != 0)
