@@ -58,7 +58,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type views:SocketIcon}">
                     <Image Height="{TemplateBinding Height}" Width="{TemplateBinding Width}"
-                    Source="{Binding IconName, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BitmapConverter}}">
+                        Source="{Binding IconName, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BitmapConverter}}">
                         <Image.ToolTip>
                             <ToolTip Content="{TemplateBinding Socket}" ContentTemplate="{StaticResource SocketContentTemplate}" />
                         </Image.ToolTip>
