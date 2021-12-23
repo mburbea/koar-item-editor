@@ -44,21 +44,12 @@ public static class UpdateMethods
     /// <param name="majorVersion">The major version of the release.</param>
     /// <param name="cancellationToken">Optionally used to propagate cancellation requests.</param>
     /// <returns>Information related to a release. Returns <see langword="null"/> if not found or an error occurs.</returns>
-    public static async Task<IReleaseInfo?> FetchLatestVersionedReleaseAsync(int majorVersion, CancellationToken cancellationToken = default)
+    public static async Task<IReleaseInfo?> FetchLatest2xReleaseAsync(CancellationToken cancellationToken = default)
     {
         try
         {
-            foreach (Tag tag in await UpdateMethods.FetchTagsAsync(cancellationToken).ConfigureAwait(false))
-            {
-                if (tag.Version.Major != majorVersion)
-                {
-                    continue;
-                }
-                if (await UpdateMethods.FetchReleaseAsync(tag.Name, cancellationToken).ConfigureAwait(false) is { HasUpdateAsset: true } release)
-                {
-                    return release;
-                }
-            }
+            const string tagName = "v2.1.189";
+            return await UpdateMethods.FetchReleaseAsync(tagName, cancellationToken).ConfigureAwait(false);
         }
         catch
         {
