@@ -82,7 +82,14 @@ function set_all(set, val, ...)
     return set
 end
 
-function determine_armor_type(first_buff)
+function determine_armor_type(first_buff,item)
+    if(ACTOR.get_finesse_requirement_unbuffed(item) > 0) then
+        return 'Finesse'
+    elseif(ACTOR.get_might_requirement_unbuffed(item) > 0) then
+        return 'Might'
+    elseif(ACTOR.get_intellect_requirement_unbuffed(item) > 0) then
+        return 'Sorcery'
+    end
     local tbl = {}
     set_all(tbl,'Finesse', 532186, 532187, 532188, 532189, 532190, 537333)
     set_all(tbl,'Might', 1908352, 1908353, 1908354, 1908355, 1908356, 537334)
@@ -193,7 +200,7 @@ for _,item in ipairs(PLAYER.get_pocket_contents("Default")) do
                 rarity = rarity_text[buff_utils.get_item_rarity(item)],
                 socket_types = get_socket_info(item),
                 element = determine_element(item, entry.internal_name, entry.parent_name),
-                armor_type = determine_armor_type(first_normal),
+                armor_type = determine_armor_type(first_normal, item),
                 prefix = entry.prefix,
                 suffix = entry.suffix,
                 item_buffs = selfs,
@@ -201,7 +208,7 @@ for _,item in ipairs(PLAYER.get_pocket_contents("Default")) do
                 is_merchant = entry.is_merchant,
                 affixable_name = entry.affixable_name,
                 has_variants = entry.has_variants,
-                desc =TYPE.get_inventory_description(simtype)
+                chaos_tier = entry.chaos_tier
             }
     end
 end

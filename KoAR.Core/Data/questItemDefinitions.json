@@ -1,2932 +1,6167 @@
 [
   {
-    "name": "Mysterious claw",
     "internal_name": "questitem_sq051_claw",
-    "id": 276720
+    "id": 276720,
+    "name": "Mysterious claw"
   },
   {
-    "name": "Ratofer's Boots",
     "internal_name": "questitem_sq06_boots",
-    "id": 362991
+    "id": 362991,
+    "name": "Ratofer's Boots"
   },
   {
-    "name": "Bag of Ratofer's Silverware",
     "internal_name": "questitem_sq06_silverware",
-    "id": 362992
+    "id": 362992,
+    "name": "Bag of Ratofer's Silverware"
   },
   {
-    "name": "Ratofer's Kerchief",
     "internal_name": "questitem_sq06_kerchief",
-    "id": 362993
+    "id": 362993,
+    "name": "Ratofer's Kerchief"
   },
   {
-    "name": "Ratofer's Snuffbox",
     "internal_name": "questitem_sq06_snuffbox",
-    "id": 362994
+    "id": 362994,
+    "name": "Ratofer's Snuffbox"
   },
   {
-    "name": "Ratofer's Daggers",
     "internal_name": "questitem_sq06_dagger",
-    "id": 362995
+    "id": 362995,
+    "name": "Ratofer's Daggers"
   },
   {
-    "name": "Ratofer's Ring",
     "internal_name": "questitem_sq06_ring",
-    "id": 362996
+    "id": 362996,
+    "name": "Ratofer's Ring"
   },
   {
-    "name": "Ratofer's Charter",
     "internal_name": "questitem_sq06_charter",
-    "id": 362997
+    "id": 362997,
+    "name": "Ratofer's Charter"
   },
   {
-    "name": "Misse Homestead Sign",
     "internal_name": "questitem_sq01_sign",
-    "id": 380733
+    "id": 380733,
+    "name": "Misse Homestead Sign"
   },
   {
-    "name": "Palace Retainer's Chain",
     "internal_name": "questitem_sq12_chain",
-    "id": 385461
+    "id": 385461,
+    "name": "Palace Retainer's Chain"
   },
   {
-    "name": "Draught of the Wandering Well",
     "internal_name": "questitem_sq01_springwater",
-    "id": 438171
+    "id": 438171,
+    "name": "Draught of the Wandering Well"
   },
   {
-    "name": "Eye of Amman",
     "internal_name": "questitem_sq07_eyeofberebescu",
-    "id": 439424
+    "id": 439424,
+    "name": "Eye of Amman"
   },
   {
-    "name": "Ravensfeet",
     "internal_name": "questitem_sq07_ravensfeet",
-    "id": 442763
+    "id": 442763,
+    "name": "Ravensfeet"
   },
   {
-    "name": "Empty bottle of \"Cupella\" wine",
     "internal_name": "questitem_sq07_cupellawine",
-    "id": 442776
+    "id": 442776,
+    "name": "Empty bottle of \"Cupella\" wine"
   },
   {
-    "name": "Grim's Stealth Kit",
     "internal_name": "tmp_tr01_stealthpotion",
-    "id": 457190
+    "id": 457190,
+    "name": "Grim's Stealth Kit"
   },
   {
-    "name": "Buru's Boots",
     "internal_name": "questitem_tr02_burusboots",
-    "id": 457799
+    "id": 457799,
+    "name": "Buru's Boots"
   },
   {
-    "name": "Sun Stone",
     "internal_name": "questitem_sa_sunstone",
-    "id": 461817
+    "id": 461817,
+    "name": "Sun Stone"
   },
   {
-    "name": "Golden Statue",
     "internal_name": "questitem_tr21_goldstatue",
-    "id": 462664
+    "id": 462664,
+    "name": "Golden Statue"
   },
   {
-    "name": "Medical Supplies",
     "internal_name": "questitem_tr21_medicalsupplies",
-    "id": 462665
+    "id": 462665,
+    "name": "Medical Supplies"
   },
   {
-    "name": "House of Ballads Ring",
     "internal_name": "questitem_hm01_signetring",
-    "id": 464225
+    "id": 464225,
+    "name": "House of Ballads Ring"
   },
   {
-    "name": "Stinky Carrion",
     "internal_name": "questitem_tr02_stinkystuff",
-    "id": 467162
+    "id": 467162,
+    "name": "Stinky Carrion"
   },
   {
-    "name": "Ornate Box",
     "internal_name": "questitem_tr03_ornatebox",
-    "id": 467742
+    "id": 467742,
+    "name": "Ornate Box"
   },
   {
-    "name": "Heart of Sibun",
     "internal_name": "questitem_kv03_artifact",
-    "id": 467827
+    "id": 467827,
+    "name": "Heart of Sibun"
   },
   {
-    "name": "The Master's Pick",
     "internal_name": "questitem_tr03_masterspick",
-    "id": 469017
+    "id": 469017,
+    "name": "The Master's Pick"
   },
   {
-    "name": "Bust of Odonata",
     "internal_name": "questitem_ffq01_watergoblinbust",
-    "id": 470883
+    "id": 470883,
+    "name": "Bust of Odonata"
   },
   {
-    "name": "Crystal",
     "internal_name": "object_hm04_mirrorfragment_1",
-    "id": 472265
+    "id": 472265,
+    "name": "Crystal"
   },
   {
-    "name": "Crystal",
     "internal_name": "object_hm04_mirrorfragment_2",
-    "id": 472271
+    "id": 472271,
+    "name": "Crystal"
   },
   {
-    "name": "Crystal",
     "internal_name": "object_hm04_mirrorfragment_3",
-    "id": 472272
+    "id": 472272,
+    "name": "Crystal"
   },
   {
-    "name": "A Barghest's Beating Heart",
     "internal_name": "questitem_sa04_barghestheart",
-    "id": 472307
+    "id": 472307,
+    "name": "A Barghest's Beating Heart"
   },
   {
-    "name": "Frost Stone",
     "internal_name": "questitem_sa_froststone",
-    "id": 472442
+    "id": 472442,
+    "name": "Frost Stone"
   },
   {
-    "name": "Tear of Mitharu",
     "internal_name": "questitem_tr05_mitharushard",
-    "id": 474479
+    "id": 474479,
+    "name": "Tear of Mitharu"
   },
   {
-    "name": "Aethan Engar's Letter",
     "internal_name": "questitem_sa04_engarsnote",
-    "id": 476662
+    "id": 476662,
+    "name": "Aethan Engar's Letter"
   },
   {
-    "name": "Storm Stone",
     "internal_name": "questitem_sa_stormstone",
-    "id": 485283
+    "id": 485283,
+    "name": "Storm Stone"
   },
   {
-    "name": "The Brutalizer",
     "internal_name": "questitem_sa03_thebrutalizer",
-    "id": 488735
+    "id": 488735,
+    "name": "The Brutalizer"
   },
   {
-    "name": "Agony and Death",
     "internal_name": "questitem_sa03_agonyanddeath",
-    "id": 488736
+    "id": 488736,
+    "name": "Agony and Death"
   },
   {
-    "name": "Glass of Ambient",
     "internal_name": "questitem_tr06_jemsheeshard",
-    "id": 494815
+    "id": 494815,
+    "name": "Glass of Ambient"
   },
   {
-    "name": "Whistle",
     "internal_name": "questitem_hm06_prismere_fife",
-    "id": 501505
+    "id": 501505,
+    "name": "Whistle"
   },
   {
-    "name": "Missives of Sable (shrouded)",
     "internal_name": "questitem_tr07_shroudfull",
-    "id": 501664
+    "id": 501664,
+    "name": "Missives of Sable (shrouded)"
   },
   {
-    "name": "Bag of Winds",
     "internal_name": "questitem_tr08_bagofwinds",
-    "id": 504087
+    "id": 504087,
+    "name": "Bag of Winds"
   },
   {
-    "name": "Antelope Head",
     "internal_name": "questitem_ffq04_antelopetrophy",
-    "id": 518143
+    "id": 518143,
+    "name": "Antelope Head"
   },
   {
-    "name": "Silver Chain",
     "internal_name": "questitem_sq13_magicitem",
-    "id": 521983
+    "id": 521983,
+    "name": "Silver Chain"
   },
   {
-    "name": "Potion of Amplification",
     "internal_name": "questitem_sq19_potion",
-    "id": 523295
+    "id": 523295,
+    "name": "Potion of Amplification"
   },
   {
-    "name": "Canneroc Gossamer",
     "internal_name": "questitem_sq18_cannerocsilk_obsolete",
-    "id": 529405
+    "id": 529405,
+    "name": "Canneroc Gossamer"
   },
   {
-    "name": "Silkfarmer Remains",
     "internal_name": "questitem_ffq05_urn_1",
-    "id": 531756
+    "id": 531756,
+    "name": "Silkfarmer Remains"
   },
   {
-    "name": "A Shard of Nyralim",
     "internal_name": "questitem_sq22_nyralimshard",
-    "id": 533428
+    "id": 533428,
+    "name": "A Shard of Nyralim"
   },
   {
-    "name": "Slithersting",
     "internal_name": "questitem_sq22_sword",
-    "id": 533490
+    "id": 533490,
+    "name": "Slithersting"
   },
   {
-    "name": "Flametongue",
     "internal_name": "questitem_sq22_staff",
-    "id": 533492
+    "id": 533492,
+    "name": "Flametongue"
   },
   {
-    "name": "Wintergale",
     "internal_name": "questitem_sq22_bow",
-    "id": 533497
+    "id": 533497,
+    "name": "Wintergale"
   },
   {
-    "name": "Processed Silver",
     "internal_name": "questitem_m0_sq06_processedsilver",
-    "id": 543134
+    "id": 543134,
+    "name": "Processed Silver"
   },
   {
-    "name": "Ratofer's Daggers",
     "internal_name": "questitem_sq24_ratoferdagger",
-    "id": 543264
+    "id": 543264,
+    "name": "Ratofer's Daggers"
   },
   {
-    "name": "Ratofer's Ring",
     "internal_name": "questitem_sq24_cleanring",
-    "id": 543546
+    "id": 543546,
+    "name": "Ratofer's Ring"
   },
   {
-    "name": "Gem Lattice",
     "internal_name": "questitem_sq25_gears",
-    "id": 544302
+    "id": 544302,
+    "name": "Gem Lattice"
   },
   {
-    "name": "Mana Pendulum",
     "internal_name": "questitem_sq25_tubing",
-    "id": 544303
+    "id": 544303,
+    "name": "Mana Pendulum"
   },
   {
-    "name": "Belt of Fluidity",
     "internal_name": "questitem_sq25_hidebelt",
-    "id": 544304
+    "id": 544304,
+    "name": "Belt of Fluidity"
   },
   {
-    "name": "Rivener Tarsus",
     "internal_name": "hp02_staff_result",
-    "id": 553149
+    "id": 553149,
+    "name": "Rivener Tarsus"
   },
   {
-    "name": "Dark Sliver",
     "internal_name": "hp02_staff_target_01",
-    "id": 553173
+    "id": 553173,
+    "name": "Dark Sliver"
   },
   {
-    "name": "Crack of Dawn",
     "internal_name": "hp02_staff_target_02",
-    "id": 553174
+    "id": 553174,
+    "name": "Crack of Dawn"
   },
   {
-    "name": "The God Fang",
     "internal_name": "hp02_staff_target_03",
-    "id": 553175
+    "id": 553175,
+    "name": "The God Fang"
   },
   {
-    "name": "Codex of Destiny",
     "internal_name": "questitem_mq03_codex",
-    "id": 557529
+    "id": 557529,
+    "name": "Codex of Destiny"
   },
   {
-    "name": "Purendal",
+    "internal_name": "questitem_sq31_gastyrkey",
+    "id": 569951,
+    "name": "Gastyr Key"
+  },
+  {
     "internal_name": "weapon_hp_purendal",
-    "id": 570043
+    "id": 570043,
+    "name": "Purendal"
   },
   {
-    "name": "Master's Tallow",
+    "internal_name": "questitem_sq33_key",
+    "id": 572933,
+    "name": "Inititation Chamber Key"
+  },
+  {
     "internal_name": "questitem_sq46_ore",
-    "id": 576338
+    "id": 576338,
+    "name": "Master's Tallow"
   },
   {
-    "name": "Aurenda's Light",
+    "internal_name": "component_sq46_hildebiersblade",
+    "id": 578490,
+    "name": "Hildebier's Blade"
+  },
+  {
     "internal_name": "questitem_sq44_macguffin",
-    "id": 579088
+    "id": 579088,
+    "name": "Aurenda's Light"
   },
   {
-    "name": "Erathi Windchime",
+    "internal_name": "questitem_sq35_hreidkey",
+    "id": 584242,
+    "name": "Hreid's Key"
+  },
+  {
     "internal_name": "questitem_mq09_chime",
-    "id": 590450
+    "id": 590450,
+    "name": "Erathi Windchime"
   },
   {
-    "name": "Rose-of-Shadows",
     "internal_name": "questitem_sq62_poison",
-    "id": 594245
+    "id": 594245,
+    "name": "Rose-of-Shadows"
   },
   {
-    "name": "Ore sample",
     "internal_name": "questitem_sq53_ore",
-    "id": 594801
+    "id": 594801,
+    "name": "Ore sample"
   },
   {
-    "name": "Notes of Octienne's Crimes",
     "internal_name": "book_mq08_journal",
-    "id": 596100
+    "id": 596100,
+    "name": "Notes of Octienne's Crimes"
   },
   {
-    "name": "Deed of Purity",
     "internal_name": "questitem_sq53_deed",
-    "id": 597152
+    "id": 597152,
+    "name": "Deed of Purity"
   },
   {
-    "name": "Missives of Sable",
+    "internal_name": "support_component_sq55_ampulla",
+    "id": 603282,
+    "name": "Fae Ampulla"
+  },
+  {
+    "internal_name": "component_sq55_headdress",
+    "id": 603303,
+    "name": "Azurite Headdress"
+  },
+  {
     "internal_name": "questitem_tr01_artifact",
-    "id": 612795
+    "id": 612795,
+    "name": "Missives of Sable"
   },
   {
-    "name": "Mysterious Cure",
     "internal_name": "questitem_sq66_cure",
-    "id": 615974
+    "id": 615974,
+    "name": "Mysterious Cure"
   },
   {
-    "name": "Storage case",
     "internal_name": "questitem_hm04_crystalcase",
-    "id": 621325
+    "id": 621325,
+    "name": "Storage case"
   },
   {
-    "name": "Crystal",
     "internal_name": "questitem_hm04_finalcrystal",
-    "id": 622755
+    "id": 622755,
+    "name": "Crystal"
   },
   {
-    "name": "Two Knights and a Troll, Part II",
     "internal_name": "object_hm02_book_songofsirsagrell",
-    "id": 624483
+    "id": 624483,
+    "name": "Two Knights and a Troll, Part II"
   },
   {
-    "name": "Two Knights and a Troll, Part I",
     "internal_name": "object_hm02_book_balladofbloodybones",
-    "id": 624484
+    "id": 624484,
+    "name": "Two Knights and a Troll, Part I"
   },
   {
-    "name": "Two Knights and a Troll, Part V",
     "internal_name": "object_hm02_book_twoknightsandtroll",
-    "id": 624528
+    "id": 624528,
+    "name": "Two Knights and a Troll, Part V"
   },
   {
-    "name": "Two Knights and a Troll, Part IV",
     "internal_name": "object_hm02_book_cursedkingdom",
-    "id": 624673
+    "id": 624673,
+    "name": "Two Knights and a Troll, Part IV"
   },
   {
-    "name": "Two Knights and a Troll, Part III",
     "internal_name": "object_hm02_book_oleyncureseeker",
-    "id": 624674
+    "id": 624674,
+    "name": "Two Knights and a Troll, Part III"
   },
   {
-    "name": "Age of Enchantment",
     "internal_name": "object_hm02_book_ageofenchantment",
-    "id": 624675
+    "id": 624675,
+    "name": "Age of Enchantment"
   },
   {
-    "name": "Hero and the Maid",
     "internal_name": "object_hm02_book_heroandthemaid",
-    "id": 624676
+    "id": 624676,
+    "name": "Hero and the Maid"
   },
   {
-    "name": "The Great Inheritance",
     "internal_name": "object_hm02_book_thegreatinheritance",
-    "id": 624677
+    "id": 624677,
+    "name": "The Great Inheritance"
   },
   {
-    "name": "Ordination Rites",
     "internal_name": "item_gorhart_ordinationtome",
-    "id": 640107
+    "id": 640107,
+    "name": "Ordination Rites"
   },
   {
-    "name": "Til's Collection I",
     "internal_name": "book_gorhart_tilscollection_1",
-    "id": 640138
+    "id": 640138,
+    "name": "Til's Collection I"
   },
   {
-    "name": "Til's Collection II",
     "internal_name": "book_gorhart_tilscollection_2",
-    "id": 640139
+    "id": 640139,
+    "name": "Til's Collection II"
   },
   {
-    "name": "Til's Collection III",
     "internal_name": "book_gorhart_tilscollection_3",
-    "id": 640140
+    "id": 640140,
+    "name": "Til's Collection III"
   },
   {
-    "name": "Til's Collection IV",
     "internal_name": "book_gorhart_tilscollection_4",
-    "id": 640142
+    "id": 640142,
+    "name": "Til's Collection IV"
   },
   {
-    "name": "Til's Collection V",
     "internal_name": "book_gorhart_tilscollection_5",
-    "id": 640143
+    "id": 640143,
+    "name": "Til's Collection V"
   },
   {
-    "name": "Til's Collection VI",
     "internal_name": "book_gorhart_tilscollection_6",
-    "id": 640144
+    "id": 640144,
+    "name": "Til's Collection VI"
   },
   {
-    "name": "Til's Collection VII",
     "internal_name": "book_gorhart_tilscollection_7",
-    "id": 640148
+    "id": 640148,
+    "name": "Til's Collection VII"
   },
   {
-    "name": "Til's Collection VIII",
     "internal_name": "book_gorhart_tilscollection_8",
-    "id": 640151
+    "id": 640151,
+    "name": "Til's Collection VIII"
   },
   {
-    "name": "Til's Collection X",
     "internal_name": "book_gorhart_tilscollection_10",
-    "id": 640153
+    "id": 640153,
+    "name": "Til's Collection X"
   },
   {
-    "name": "Erathi Token",
     "internal_name": "questitem_kv07_coin",
-    "id": 645024
+    "id": 645024,
+    "name": "Erathi Token"
   },
   {
-    "name": "Wedding Ring",
     "internal_name": "item_gorhart_camdensring",
-    "id": 645853
+    "id": 645853,
+    "name": "Wedding Ring"
   },
   {
-    "name": "Resurrection Potion",
     "internal_name": "questitem_hm05_prismereink",
-    "id": 650315
+    "id": 650315,
+    "name": "Resurrection Potion"
   },
   {
-    "name": "Rithen Amulet",
     "internal_name": "questitem_tr06_amulet",
-    "id": 658454
+    "id": 658454,
+    "name": "Rithen Amulet"
   },
   {
-    "name": "Buru's Boots",
     "internal_name": "questitem_tr06_burusboots",
-    "id": 662464
+    "id": 662464,
+    "name": "Buru's Boots"
   },
   {
-    "name": "King's Token",
     "internal_name": "socketableitem_hm07_prismere",
-    "id": 672385
+    "id": 672385,
+    "name": "King's Token"
   },
   {
-    "name": "Shroud of Omission",
     "internal_name": "questitem_tr07_shroud",
-    "id": 676530
+    "id": 676530,
+    "name": "Shroud of Omission"
   },
   {
-    "name": "Missives of Sable (shrouded)",
     "internal_name": "questitem_tr08_shroudfull",
-    "id": 679808
+    "id": 679808,
+    "name": "Missives of Sable (shrouded)"
   },
   {
-    "name": "Red Legion dagger",
     "internal_name": "questitem_sq23_dagger",
-    "id": 692490
+    "id": 692490,
+    "name": "Red Legion dagger"
   },
   {
-    "name": "Red Legion dagger",
     "internal_name": "questitem_sq23_dagger_2",
-    "id": 692884
+    "id": 692884,
+    "name": "Red Legion dagger"
   },
   {
-    "name": "Red Legion dagger",
     "internal_name": "questitem_sq23_dagger_3",
-    "id": 692885
+    "id": 692885,
+    "name": "Red Legion dagger"
   },
   {
-    "name": "Donnel Cutty's Ring",
+    "internal_name": "questitem_sq23_delfskey",
+    "id": 695183,
+    "name": "Brother Delf's key"
+  },
+  {
     "internal_name": "questitem_sa04_donnelcuttysring",
-    "id": 699902
+    "id": 699902,
+    "name": "Donnel Cutty's Ring"
   },
   {
-    "name": "Honey-Berry mash",
     "internal_name": "questitem_sq12_carrot",
-    "id": 702355
+    "id": 702355,
+    "name": "Honey-Berry mash"
   },
   {
-    "name": "Aewald's Notes",
     "internal_name": "questitem_ffq15_page_1",
-    "id": 711419
+    "id": 711419,
+    "name": "Aewald's Notes"
   },
   {
-    "name": "Dulstan's Notes",
+    "internal_name": "questitem_sq17_cathruskey",
+    "id": 711461,
+    "name": "Cathrus Key"
+  },
+  {
     "internal_name": "questitem_ffq15_page_2",
-    "id": 711485
+    "id": 711485,
+    "name": "Dulstan's Notes"
   },
   {
-    "name": "Kallas' Notes",
     "internal_name": "questitem_ffq15_page_3",
-    "id": 711486
+    "id": 711486,
+    "name": "Kallas' Notes"
   },
   {
-    "name": "Odi's Notes",
     "internal_name": "questitem_ffq15_page_4",
-    "id": 711487
+    "id": 711487,
+    "name": "Odi's Notes"
   },
   {
-    "name": "Wildfrold's Notes",
     "internal_name": "questitem_ffq15_page_5",
-    "id": 711488
+    "id": 711488,
+    "name": "Wildfrold's Notes"
   },
   {
-    "name": "Buru's Boots",
     "internal_name": "rogue_unique06_feet",
-    "id": 712188
+    "id": 712188,
+    "name": "Buru's Boots"
   },
   {
-    "name": "Dusk Shard",
     "internal_name": "envquestitem_sq36_duskshard",
-    "id": 721187
+    "id": 721187,
+    "name": "Dusk Shard"
   },
   {
-    "name": "Ratofer's Ring",
     "internal_name": "questitem_ffq18_ring",
-    "id": 734559
+    "id": 734559,
+    "name": "Ratofer's Ring"
   },
   {
-    "name": "Invoice from Sigra Thorin",
     "internal_name": "questitem_ffq22_invoice_1",
-    "id": 735990
+    "id": 735990,
+    "name": "Invoice from Sigra Thorin"
   },
   {
-    "name": "Bodan's Amulet",
     "internal_name": "questitem_ffq20_bodancirclet",
-    "id": 747690
+    "id": 747690,
+    "name": "Bodan's Amulet"
   },
   {
-    "name": "Heric's Amulet",
     "internal_name": "questitem_ffq20_hericcirclet",
-    "id": 747748
+    "id": 747748,
+    "name": "Heric's Amulet"
   },
   {
-    "name": "Motus Mining (Days 1-12)",
     "internal_name": "questitem_ffq25_gnomenote",
-    "id": 749131
+    "id": 749131,
+    "name": "Motus Mining (Days 1-12)"
   },
   {
-    "name": "Culminite deposit",
     "internal_name": "questitem_ffq26_ore_deposit",
-    "id": 750221
+    "id": 750221,
+    "name": "Culminite deposit"
   },
   {
-    "name": "The Everburning Candle",
     "internal_name": "questitem_sa06_candle",
-    "id": 754591
+    "id": 754591,
+    "name": "The Everburning Candle"
   },
   {
-    "name": "Motus Mining (Days 1-24)",
     "internal_name": "questitem_ffq25_gnomenote_2",
-    "id": 755286
+    "id": 755286,
+    "name": "Motus Mining (Days 1-24)"
   },
   {
-    "name": "Motus Mining (Days 25-44)",
     "internal_name": "questitem_ffq25_gnomenote_3",
-    "id": 755287
+    "id": 755287,
+    "name": "Motus Mining (Days 25-44)"
   },
   {
-    "name": "Motus Mining (Days 45-50)",
     "internal_name": "questitem_ffq25_gnomenote_4",
-    "id": 755288
+    "id": 755288,
+    "name": "Motus Mining (Days 45-50)"
   },
   {
-    "name": "Motus Mining (Day 51)",
     "internal_name": "questitem_ffq25_gnomenote_5",
-    "id": 755289
+    "id": 755289,
+    "name": "Motus Mining (Day 51)"
   },
   {
-    "name": "Deed to Skoria Mine",
     "internal_name": "questitem_sq52_deed",
-    "id": 757089
+    "id": 757089,
+    "name": "Deed to Skoria Mine"
   },
   {
-    "name": "The Dark Empyrean",
     "internal_name": "questitem_sa06_puzzlebook",
-    "id": 757500
+    "id": 757500,
+    "name": "The Dark Empyrean"
   },
   {
-    "name": "Imelda's Charm",
+    "internal_name": "questitem_sq24_vaultkey",
+    "id": 757668,
+    "name": "Key to Corgan Hold Vault"
+  },
+  {
     "internal_name": "questitem_ffq32_imeldacharm",
-    "id": 760360
+    "id": 760360,
+    "name": "Imelda's Charm"
   },
   {
-    "name": "Death Notice: Frea Almar",
     "internal_name": "questitem_ffq24_deathnotice_1",
-    "id": 760703
+    "id": 760703,
+    "name": "Death Notice: Frea Almar"
   },
   {
-    "name": "Death Notice: Erran Brant",
     "internal_name": "questitem_ffq24_deathnotice_2",
-    "id": 760705
+    "id": 760705,
+    "name": "Death Notice: Erran Brant"
   },
   {
-    "name": "Death Notice: Mal Dydyn",
     "internal_name": "questitem_ffq24_deathnotice_3",
-    "id": 760706
+    "id": 760706,
+    "name": "Death Notice: Mal Dydyn"
   },
   {
-    "name": "Skoria Family Ring",
+    "internal_name": "questitem_sq54_cagekey",
+    "id": 806627,
+    "name": "Whitestone Cage Key"
+  },
+  {
     "internal_name": "questitem_sq53_skoriaring",
-    "id": 815199
+    "id": 815199,
+    "name": "Skoria Family Ring"
   },
   {
-    "name": "Darkvari Treasure Map",
     "internal_name": "questitem_sq54_darkvarimap",
-    "id": 854510
+    "id": 854510,
+    "name": "Darkvari Treasure Map"
   },
   {
-    "name": "Mysterious Parchment",
     "internal_name": "questitem_sq54_mysteriousparchment",
-    "id": 854861
+    "id": 854861,
+    "name": "Mysterious Parchment"
   },
   {
-    "name": "Warsworn Ledger",
     "internal_name": "questitem_ffq31_warswornledger",
-    "id": 999278
+    "id": 999278,
+    "name": "Warsworn Ledger"
   },
   {
-    "name": "Jayck's Knife",
     "internal_name": "questitem_ffq35_jayckdagger",
-    "id": 1164003
+    "id": 1164003,
+    "name": "Jayck's Knife"
   },
   {
-    "name": "Poison Gland",
     "internal_name": "questitem_ffq36_poisongland",
-    "id": 1164419
+    "id": 1164419,
+    "name": "Poison Gland"
   },
   {
-    "name": "Vernt Sword",
     "internal_name": "questitem_ffq37_verntsword",
-    "id": 1164976
+    "id": 1164976,
+    "name": "Vernt Sword"
   },
   {
-    "name": "Silkfarmer Remains",
     "internal_name": "questitem_ffq05_urn_2",
-    "id": 1240811
+    "id": 1240811,
+    "name": "Silkfarmer Remains"
   },
   {
-    "name": "Silkfarmer Remains",
     "internal_name": "questitem_ffq05_urn_3",
-    "id": 1240812
+    "id": 1240812,
+    "name": "Silkfarmer Remains"
   },
   {
-    "name": "Silkfarmer Remains",
     "internal_name": "questitem_ffq05_urn_4",
-    "id": 1240813
+    "id": 1240813,
+    "name": "Silkfarmer Remains"
   },
   {
-    "name": "Silkfarmer Remains",
     "internal_name": "questitem_ffq05_urn_5",
-    "id": 1240814
+    "id": 1240814,
+    "name": "Silkfarmer Remains"
   },
   {
-    "name": "Silkfarmer Remains",
     "internal_name": "questitem_ffq05_urn_6",
-    "id": 1240818
+    "id": 1240818,
+    "name": "Silkfarmer Remains"
   },
   {
-    "name": "Paling Wand",
+    "internal_name": "questitem_sq41_nilkernskey",
+    "id": 1241355,
+    "name": "Nil Kerns' Key"
+  },
+  {
     "internal_name": "questitem_sq50_palingwand",
-    "id": 1253121
+    "id": 1253121,
+    "name": "Paling Wand"
   },
   {
-    "name": "Boggart Mask",
+    "internal_name": "reagent_sq75_searstalk",
+    "id": 1254116,
+    "name": "Searstalk"
+  },
+  {
     "internal_name": "questitem_sq83_boggartmask",
-    "id": 1254915
+    "id": 1254915,
+    "name": "Boggart Mask"
   },
   {
-    "name": "Troll Skull",
     "internal_name": "questitem_sq83_trollskull",
-    "id": 1254916
+    "id": 1254916,
+    "name": "Troll Skull"
   },
   {
-    "name": "Barghest Skin",
     "internal_name": "questitem_sq83_barghestskin",
-    "id": 1254930
+    "id": 1254930,
+    "name": "Barghest Skin"
   },
   {
-    "name": "Spider Egg",
     "internal_name": "questitem_sq83_spideregg",
-    "id": 1254931
+    "id": 1254931,
+    "name": "Spider Egg"
   },
   {
-    "name": "Leanashe Tentacle",
     "internal_name": "questitem_sq83_leanashetentacle",
-    "id": 1254932
+    "id": 1254932,
+    "name": "Leanashe Tentacle"
   },
   {
-    "name": "A Paragon Thresh Claw",
     "internal_name": "questitem_sq19_threshclaw",
-    "id": 1256965
+    "id": 1256965,
+    "name": "A Paragon Thresh Claw"
   },
   {
-    "name": "Plagueshield",
+    "internal_name": "questitem_sq150_key_mayorscave",
+    "id": 1257226,
+    "name": "Key to Mayor's Cave"
+  },
+  {
     "internal_name": "questitem_sq86_plagueshield1",
-    "id": 1270942
+    "id": 1270942,
+    "name": "Plagueshield"
   },
   {
-    "name": "Letter for Esklad",
     "internal_name": "questitem_sq87_letter",
-    "id": 1273016
+    "id": 1273016,
+    "name": "Letter for Esklad"
   },
   {
-    "name": "Courdan's Letter",
     "internal_name": "questitem_sq58_letter",
-    "id": 1274287
+    "id": 1274287,
+    "name": "Courdan's Letter"
   },
   {
-    "name": "Parwen's Orders",
     "internal_name": "questitem_sq58_orders",
-    "id": 1274288
+    "id": 1274288,
+    "name": "Parwen's Orders"
   },
   {
-    "name": "Rialte Brocaire",
     "internal_name": "questitem_sq02_rialtebrocaire",
-    "id": 1274855
+    "id": 1274855,
+    "name": "Rialte Brocaire"
   },
   {
-    "name": "Zephyranth",
     "internal_name": "questitem_sq02_zephyranth",
-    "id": 1274857
+    "id": 1274857,
+    "name": "Zephyranth"
   },
   {
-    "name": "Letter to Mattix Dace",
     "internal_name": "questitem_sq02_letter",
-    "id": 1274858
+    "id": 1274858,
+    "name": "Letter to Mattix Dace"
   },
   {
-    "name": "Bloodstone",
     "internal_name": "questitem_sq02_gem",
-    "id": 1275079
+    "id": 1275079,
+    "name": "Bloodstone"
   },
   {
-    "name": "Threadbare Circlet",
     "internal_name": "questitem_sq02_circlet",
-    "id": 1275080
+    "id": 1275080,
+    "name": "Threadbare Circlet"
   },
   {
-    "name": "Rose of Kandrian",
     "internal_name": "questitem_sq02_rose",
-    "id": 1275081
+    "id": 1275081,
+    "name": "Rose of Kandrian"
   },
   {
-    "name": "Plagueshield",
     "internal_name": "questitem_sq86_plagueshield2",
-    "id": 1275350
+    "id": 1275350,
+    "name": "Plagueshield"
   },
   {
-    "name": "Feride's Report",
     "internal_name": "questitem_sq59_report",
-    "id": 1278654
+    "id": 1278654,
+    "name": "Feride's Report"
   },
   {
-    "name": "Painting of Galafor",
+    "internal_name": "questitem_sq59_key",
+    "id": 1278659,
+    "name": "Consistorium Key"
+  },
+  {
     "internal_name": "questitem_sq11_painting",
-    "id": 1282403
+    "id": 1282403,
+    "name": "Painting of Galafor"
   },
   {
-    "name": "Sunspar Box",
     "internal_name": "questitem_sq11_box",
-    "id": 1282406
+    "id": 1282406,
+    "name": "Sunspar Box"
   },
   {
-    "name": "Ancient Volume",
     "internal_name": "questitem_sq11_book",
-    "id": 1282409
+    "id": 1282409,
+    "name": "Ancient Volume"
   },
   {
-    "name": "Jade Urn",
     "internal_name": "questitem_sq11_urn",
-    "id": 1282415
+    "id": 1282415,
+    "name": "Jade Urn"
   },
   {
-    "name": "Tyrenium Ring",
     "internal_name": "questitem_sq11_ring",
-    "id": 1282462
+    "id": 1282462,
+    "name": "Tyrenium Ring"
   },
   {
-    "name": "Winter Court Necklace",
     "internal_name": "questitem_sq11_necklace",
-    "id": 1282501
+    "id": 1282501,
+    "name": "Winter Court Necklace"
   },
   {
-    "name": "Reddle's Invitiation",
     "internal_name": "questitem_sq57_reddleinvitation",
-    "id": 1292138
+    "id": 1292138,
+    "name": "Reddle's Invitiation"
   },
   {
-    "name": "Azo's Wish",
     "internal_name": "questitem_sq78_azoring_1",
-    "id": 1296375
+    "id": 1296375,
+    "name": "Azo's Wish"
   },
   {
-    "name": "Azo's Wealth",
     "internal_name": "questitem_sq78_azoring_2",
-    "id": 1296376
+    "id": 1296376,
+    "name": "Azo's Wealth"
   },
   {
-    "name": "Azo's Wisdom",
     "internal_name": "questitem_sq78_azoring_3",
-    "id": 1296377
+    "id": 1296377,
+    "name": "Azo's Wisdom"
   },
   {
-    "name": "Essence of Valor",
     "internal_name": "questitem_mq15_essence",
-    "id": 1302629
+    "id": 1302629,
+    "name": "Essence of Valor"
   },
   {
-    "name": "Amrynthian Band",
     "internal_name": "questitem_sq02_amrynthianband",
-    "id": 1304065
+    "id": 1304065,
+    "name": "Amrynthian Band"
   },
   {
-    "name": "Adessa II",
     "internal_name": "questitem_ffq49_book2",
-    "id": 1304781
+    "id": 1304781,
+    "name": "Adessa II"
   },
   {
-    "name": "Adessa III",
     "internal_name": "questitem_ffq49_book3",
-    "id": 1304782
+    "id": 1304782,
+    "name": "Adessa III"
   },
   {
-    "name": "Adessa IV",
     "internal_name": "questitem_ffq49_book4",
-    "id": 1304783
+    "id": 1304783,
+    "name": "Adessa IV"
   },
   {
-    "name": "Adessa V",
     "internal_name": "questitem_ffq49_book5",
-    "id": 1304784
+    "id": 1304784,
+    "name": "Adessa V"
   },
   {
-    "name": "Adessa VI",
     "internal_name": "questitem_ffq49_book6",
-    "id": 1304785
+    "id": 1304785,
+    "name": "Adessa VI"
   },
   {
-    "name": "Adessa VII",
     "internal_name": "questitem_ffq49_book7",
-    "id": 1304786
+    "id": 1304786,
+    "name": "Adessa VII"
   },
   {
-    "name": "Adessa VIII",
     "internal_name": "questitem_ffq49_book8",
-    "id": 1304787
+    "id": 1304787,
+    "name": "Adessa VIII"
   },
   {
-    "name": "Heartstone",
     "internal_name": "questitem_fp01_heartstone_empty",
-    "id": 1307630
+    "id": 1307630,
+    "name": "Heartstone"
   },
   {
-    "name": "Uror",
     "internal_name": "questitem_sq97_statuea",
-    "id": 1310146
+    "id": 1310146,
+    "name": "Uror"
   },
   {
-    "name": "Veshani",
     "internal_name": "questitem_sq97_statueb",
-    "id": 1310147
+    "id": 1310147,
+    "name": "Veshani"
   },
   {
-    "name": "Atropos",
     "internal_name": "questitem_sq97_statuec",
-    "id": 1310148
+    "id": 1310148,
+    "name": "Atropos"
   },
   {
-    "name": "Cookie",
     "internal_name": "questitem_qa01_cookie",
-    "id": 1313733
+    "id": 1313733,
+    "name": "Cookie"
   },
   {
-    "name": "Capstan's Knife",
     "internal_name": "questitem_sq95_capstansknife",
-    "id": 1321654
+    "id": 1321654,
+    "name": "Capstan's Knife"
   },
   {
-    "name": null,
     "internal_name": "questitem_qa01_drink",
-    "id": 1332352
+    "id": 1332352,
+    "name": null
   },
   {
-    "name": "A Maiden' s Ring",
     "internal_name": "questitem_ffq04_maidensring",
-    "id": 1332646
+    "id": 1332646,
+    "name": "A Maiden' s Ring"
   },
   {
-    "name": "Antelope Head",
     "internal_name": "questitem_ffq04_antelopetrophy2",
-    "id": 1333110
+    "id": 1333110,
+    "name": "Antelope Head"
   },
   {
-    "name": "Antelope Head",
     "internal_name": "questitem_ffq04_antelopetrophy3",
-    "id": 1333111
+    "id": 1333111,
+    "name": "Antelope Head"
   },
   {
-    "name": "Antelope Head",
     "internal_name": "questitem_ffq04_antelopetrophy4",
-    "id": 1333112
+    "id": 1333112,
+    "name": "Antelope Head"
   },
   {
-    "name": "Kobold Clan Totem",
     "internal_name": "envquestitem_sq108_banner",
-    "id": 1336234
+    "id": 1336234,
+    "name": "Kobold Clan Totem"
   },
   {
-    "name": "Petrichor",
     "internal_name": "questitem_ffq53_petrichor",
-    "id": 1343845
+    "id": 1343845,
+    "name": "Petrichor"
   },
   {
-    "name": "Map piece",
     "internal_name": "questitem_ffq58_mappiece1",
-    "id": 1348745
+    "id": 1348745,
+    "name": "Map piece"
   },
   {
-    "name": "Map piece",
     "internal_name": "questitem_ffq58_mappiece2",
-    "id": 1349189
+    "id": 1349189,
+    "name": "Map piece"
   },
   {
-    "name": "Map piece",
     "internal_name": "questitem_ffq58_mappiece3",
-    "id": 1349190
+    "id": 1349190,
+    "name": "Map piece"
   },
   {
-    "name": "Map piece",
     "internal_name": "questitem_ffq58_mappiece4",
-    "id": 1349191
+    "id": 1349191,
+    "name": "Map piece"
   },
   {
-    "name": null,
     "internal_name": "questitem_ffq58_mapcomplete",
-    "id": 1349288
+    "id": 1349288,
+    "name": null
   },
   {
-    "name": null,
     "internal_name": "questitem_sq111_pendant",
-    "id": 1352903
+    "id": 1352903,
+    "name": null
   },
   {
-    "name": "Ost's Commendation",
     "internal_name": "questitem_kv01_commendation",
-    "id": 1354843
+    "id": 1354843,
+    "name": "Ost's Commendation"
   },
   {
-    "name": "Heart of Sibun",
     "internal_name": "envquestitem_kv03_heartofsibun",
-    "id": 1361191
+    "id": 1361191,
+    "name": "Heart of Sibun"
   },
   {
-    "name": "Aster Map",
     "internal_name": "questitem_ffq20_astermap",
-    "id": 1367411
+    "id": 1367411,
+    "name": "Aster Map"
   },
   {
-    "name": "Seed",
     "internal_name": "questitem_sq04_seed",
-    "id": 1367928
+    "id": 1367928,
+    "name": "Seed"
   },
   {
-    "name": "Osgar Krast's Blade",
     "internal_name": "questitem_kv01_dagger_osgarkrast",
-    "id": 1379014
+    "id": 1379014,
+    "name": "Osgar Krast's Blade"
   },
   {
-    "name": "Medgar Krast's Blade",
     "internal_name": "questitem_kv01_dagger_medgarkrast",
-    "id": 1379015
+    "id": 1379015,
+    "name": "Medgar Krast's Blade"
   },
   {
-    "name": "Invoice from Sigra Thorin",
     "internal_name": "questitem_ffq22_invoice_2",
-    "id": 1382003
+    "id": 1382003,
+    "name": "Invoice from Sigra Thorin"
   },
   {
-    "name": "Invoice from Sigra Thorin",
     "internal_name": "questitem_ffq22_invoice_3",
-    "id": 1382004
+    "id": 1382004,
+    "name": "Invoice from Sigra Thorin"
   },
   {
-    "name": "Invoice from Sigra Thorin",
     "internal_name": "questitem_ffq22_invoice_4",
-    "id": 1382005
+    "id": 1382005,
+    "name": "Invoice from Sigra Thorin"
   },
   {
-    "name": "Invoice from Sigra Thorin",
     "internal_name": "questitem_ffq22_invoice_5",
-    "id": 1382007
+    "id": 1382007,
+    "name": "Invoice from Sigra Thorin"
   },
   {
-    "name": "Contract (Seal Broken)",
     "internal_name": "questitem_sq14_scroll_readable",
-    "id": 1382480
+    "id": 1382480,
+    "name": "Contract (Seal Broken)"
   },
   {
-    "name": "Contract (Sealed)",
     "internal_name": "questitem_sq14_scroll_sealed",
-    "id": 1382482
+    "id": 1382482,
+    "name": "Contract (Sealed)"
   },
   {
-    "name": "Bolgan eye",
     "internal_name": "questitem_sq115_bolganeye",
-    "id": 1386561
+    "id": 1386561,
+    "name": "Bolgan eye"
   },
   {
-    "name": "Verdant Blades",
     "internal_name": "questitem_sq116_verdantblade",
-    "id": 1388394
+    "id": 1388394,
+    "name": "Verdant Blades"
   },
   {
-    "name": "Royal Seal of Ansilla",
+    "internal_name": "questitem_sq116_ansillakey",
+    "id": 1388395,
+    "name": "The Ansilla Key"
+  },
+  {
     "internal_name": "questitem_sq116_houseseal",
-    "id": 1388396
+    "id": 1388396,
+    "name": "Royal Seal of Ansilla"
   },
   {
-    "name": "Drewn's Ring",
     "internal_name": "questitem_sq116_drewnsring",
-    "id": 1388821
+    "id": 1388821,
+    "name": "Drewn's Ring"
   },
   {
-    "name": "Vernis' Report",
     "internal_name": "questitem_sq118_venrisorders",
-    "id": 1391869
+    "id": 1391869,
+    "name": "Vernis' Report"
   },
   {
-    "name": "Arduath Totem",
     "internal_name": "questitem_tr02_arduathtotem",
-    "id": 1428116
+    "id": 1428116,
+    "name": "Arduath Totem"
   },
   {
-    "name": "Ruby Gemstone",
     "internal_name": "questitem_sq68_rubygemstone",
-    "id": 1432331
+    "id": 1432331,
+    "name": "Ruby Gemstone"
   },
   {
-    "name": "Amphora (Empty)",
     "internal_name": "questitem_sq120_vessel_0",
-    "id": 1440650
+    "id": 1440650,
+    "name": "Amphora (Empty)"
   },
   {
-    "name": "Amphora (Partly Filled)",
     "internal_name": "questitem_sq120_vessel_1",
-    "id": 1440755
+    "id": 1440755,
+    "name": "Amphora (Partly Filled)"
   },
   {
-    "name": "Amphora (Partly Filled)",
     "internal_name": "questitem_sq120_vessel_2",
-    "id": 1440756
+    "id": 1440756,
+    "name": "Amphora (Partly Filled)"
   },
   {
-    "name": "Amphora (Full)",
     "internal_name": "questitem_sq120_vessel_3",
-    "id": 1440757
+    "id": 1440757,
+    "name": "Amphora (Full)"
   },
   {
-    "name": "Silver Phial",
     "internal_name": "questitem_sq67_silverphial",
-    "id": 1444706
+    "id": 1444706,
+    "name": "Silver Phial"
   },
   {
-    "name": "Ceremonial Figurine",
     "internal_name": "questitem_sq120_ceremonialitem",
-    "id": 1446207
+    "id": 1446207,
+    "name": "Ceremonial Figurine"
   },
   {
-    "name": "Poisoned Wine",
     "internal_name": "questitem_sq63_poisonwine",
-    "id": 1449510
+    "id": 1449510,
+    "name": "Poisoned Wine"
   },
   {
-    "name": "Lapidus Root",
     "internal_name": "envquestitem_sq63_lapidus",
-    "id": 1452836
+    "id": 1452836,
+    "name": "Lapidus Root"
   },
   {
-    "name": "Old Red Ledger",
     "internal_name": "questitem_sq123_macguffin",
-    "id": 1453939
+    "id": 1453939,
+    "name": "Old Red Ledger"
   },
   {
-    "name": "Notice of Duty",
     "internal_name": "questitem_sq122_notice_1",
-    "id": 1459407
+    "id": 1459407,
+    "name": "Notice of Duty"
   },
   {
-    "name": "Notice of Duty",
     "internal_name": "questitem_sq122_notice_2",
-    "id": 1459414
+    "id": 1459414,
+    "name": "Notice of Duty"
   },
   {
-    "name": "Notice of Duty",
     "internal_name": "questitem_sq122_notice_3",
-    "id": 1459415
+    "id": 1459415,
+    "name": "Notice of Duty"
   },
   {
-    "name": "Notice of Duty",
     "internal_name": "questitem_sq122_notice_4",
-    "id": 1459416
+    "id": 1459416,
+    "name": "Notice of Duty"
   },
   {
-    "name": "Maybryn Wine",
     "internal_name": "questitem_sq149_wine",
-    "id": 1476583
+    "id": 1476583,
+    "name": "Maybryn Wine"
   },
   {
-    "name": "Engraved Varani Daggers",
     "internal_name": "questitem_sq126_daggers",
-    "id": 1485791
+    "id": 1485791,
+    "name": "Engraved Varani Daggers"
   },
   {
-    "name": "Letter from Varani ambassador",
     "internal_name": "questitem_sq126_letter",
-    "id": 1485794
+    "id": 1485794,
+    "name": "Letter from Varani ambassador"
   },
   {
-    "name": "Ysa Honor Brand Blades",
     "internal_name": "questitem_ffq60_curvedblade",
-    "id": 1492458
+    "id": 1492458,
+    "name": "Ysa Honor Brand Blades"
   },
   {
-    "name": "Ysa Honor Brand fulcrum",
     "internal_name": "questitem_ffq60_fulcrum",
-    "id": 1492864
+    "id": 1492864,
+    "name": "Ysa Honor Brand fulcrum"
   },
   {
-    "name": "Ysa Honor Brand bindings",
     "internal_name": "questitem_ffq60_bindings",
-    "id": 1492930
+    "id": 1492930,
+    "name": "Ysa Honor Brand bindings"
   },
   {
-    "name": "Ysa Honor Brand grip",
     "internal_name": "questitem_ffq60_grip",
-    "id": 1492989
+    "id": 1492989,
+    "name": "Ysa Honor Brand grip"
   },
   {
-    "name": "Bristletongue Seeds",
     "internal_name": "questitem_sq84_seeds",
-    "id": 1500541
+    "id": 1500541,
+    "name": "Bristletongue Seeds"
   },
   {
-    "name": "Mysterious Note",
     "internal_name": "questitem_sq84_note",
-    "id": 1501052
+    "id": 1501052,
+    "name": "Mysterious Note"
   },
   {
-    "name": "Strange Leaf",
     "internal_name": "questitem_ffq61_grass01",
-    "id": 1508105
+    "id": 1508105,
+    "name": "Strange Leaf"
   },
   {
-    "name": "St. Hadwyn's Beads",
     "internal_name": "amulet_unique34_01",
-    "id": 1509130
+    "id": 1509130,
+    "name": "St. Hadwyn's Beads"
   },
   {
-    "name": "Water Vessel",
     "internal_name": "questitem_sq93_vial",
-    "id": 1521383
+    "id": 1521383,
+    "name": "Water Vessel"
   },
   {
-    "name": "Crumpled Note",
     "internal_name": "hv02_note",
-    "id": 1527277
+    "id": 1527277,
+    "name": "Crumpled Note"
   },
   {
-    "name": "Heart of Sibun",
     "internal_name": "questitem_kvsq02_heartofsibun",
-    "id": 1527353
+    "id": 1527353,
+    "name": "Heart of Sibun"
   },
   {
-    "name": "Small, White VIal",
     "internal_name": "questitem_hv02_vial",
-    "id": 1527447
+    "id": 1527447,
+    "name": "Small, White VIal"
   },
   {
-    "name": "The Book of Gentle Beasts",
     "internal_name": "envquestitem_kvsq03_book",
-    "id": 1533569
+    "id": 1533569,
+    "name": "The Book of Gentle Beasts"
   },
   {
-    "name": "Marriage Band",
     "internal_name": "questitem_kvsq04_weddingband",
-    "id": 1536982
+    "id": 1536982,
+    "name": "Marriage Band"
   },
   {
-    "name": "Grinning Vane's Armband",
     "internal_name": "questitem_kvsq06_vanesarmband",
-    "id": 1539185
+    "id": 1539185,
+    "name": "Grinning Vane's Armband"
   },
   {
-    "name": "Eldric's Staff",
     "internal_name": "questitem_kvsq07_staff",
-    "id": 1540183
+    "id": 1540183,
+    "name": "Eldric's Staff"
   },
   {
-    "name": "Sacred Tract",
     "internal_name": "questitem_kvsq08_scroll",
-    "id": 1540662
+    "id": 1540662,
+    "name": "Sacred Tract"
   },
   {
-    "name": "Surgeon's Blades",
     "internal_name": "questitem_kvsq09_scalpels",
-    "id": 1541274
+    "id": 1541274,
+    "name": "Surgeon's Blades"
   },
   {
-    "name": "Spider Stingers",
     "internal_name": "questitem_kvsq10_spiderbit",
-    "id": 1541341
+    "id": 1541341,
+    "name": "Spider Stingers"
   },
   {
-    "name": "Sylvanite Blade Shipment",
     "internal_name": "item_hv04_sylvanite",
-    "id": 1554182
+    "id": 1554182,
+    "name": "Sylvanite Blade Shipment"
   },
   {
-    "name": "Summer Court Imperial",
     "internal_name": "sq133_item_summercourtimperial",
-    "id": 1556597
+    "id": 1556597,
+    "name": "Summer Court Imperial"
   },
   {
-    "name": "Fae Stone",
     "internal_name": "sq125_stone",
-    "id": 1556683
+    "id": 1556683,
+    "name": "Fae Stone"
   },
   {
-    "name": "Breath of Arba",
     "internal_name": "questitem_sq82_staff",
-    "id": 1568558
+    "id": 1568558,
+    "name": "Breath of Arba"
   },
   {
-    "name": "Sorrogweth Fungus",
+    "internal_name": "questitem_sq137_key",
+    "id": 1569019,
+    "name": "Warden's Emblem"
+  },
+  {
     "internal_name": "envquestitem_sq139_fungus",
-    "id": 1571989
+    "id": 1571989,
+    "name": "Sorrogweth Fungus"
   },
   {
-    "name": "Prepared Raw Prismere",
     "internal_name": "questitem_ffq68_prismere_raw",
-    "id": 1574046
+    "id": 1574046,
+    "name": "Prepared Raw Prismere"
   },
   {
-    "name": "Torch",
     "internal_name": "questitem_sq94_torch",
-    "id": 1577694
+    "id": 1577694,
+    "name": "Torch"
   },
   {
-    "name": null,
     "internal_name": "questitem_sq67_shard_01",
-    "id": 1590000
+    "id": 1590000,
+    "name": null
   },
   {
-    "name": "A Bloodsoaked Journal",
     "internal_name": "questitem_sq128_journal",
-    "id": 1602813
+    "id": 1602813,
+    "name": "A Bloodsoaked Journal"
   },
   {
-    "name": "Dead Man's Journal",
     "internal_name": "questitem_ffq61_journal",
-    "id": 1605143
+    "id": 1605143,
+    "name": "Dead Man's Journal"
   },
   {
-    "name": "Collections Purse",
     "internal_name": "questitem_sq147_collectionspurse",
-    "id": 1611856
+    "id": 1611856,
+    "name": "Collections Purse"
   },
   {
-    "name": "Engraved Hammer",
     "internal_name": "questitem_ffq73_gregor_hammer",
-    "id": 1612017
+    "id": 1612017,
+    "name": "Engraved Hammer"
   },
   {
-    "name": "Jillian's Amulet",
     "internal_name": "questitem_ffq74_jillian_amulet",
-    "id": 1612044
+    "id": 1612044,
+    "name": "Jillian's Amulet"
   },
   {
-    "name": "Fae Flower",
     "internal_name": "questitem_ffq75_asela_flower",
-    "id": 1612051
+    "id": 1612051,
+    "name": "Fae Flower"
   },
   {
-    "name": "Unique Sword",
     "internal_name": "questitem_ffq76_saresa_sword",
-    "id": 1612052
+    "id": 1612052,
+    "name": "Unique Sword"
   },
   {
-    "name": "Proper Trading Practices",
     "internal_name": "questitem_ffq77_cadeth_bookoftrade",
-    "id": 1612065
+    "id": 1612065,
+    "name": "Proper Trading Practices"
   },
   {
-    "name": "Slightly Worn Book",
     "internal_name": "questitem_ffq78_zohvari_bookofrhymes",
-    "id": 1612066
+    "id": 1612066,
+    "name": "Slightly Worn Book"
   },
   {
-    "name": "Crystal Shard Fragment",
     "internal_name": "questitem_ffq79_worick_crystalshard",
-    "id": 1612067
+    "id": 1612067,
+    "name": "Crystal Shard Fragment"
   },
   {
-    "name": "Grilricas' Medallion",
     "internal_name": "questitem_trsq01_grilriacsmedallion",
-    "id": 1621194
+    "id": 1621194,
+    "name": "Grilricas' Medallion"
   },
   {
-    "name": "St. Eadric's Pall",
     "internal_name": "questitem_trsq01_eadricsremains",
-    "id": 1621195
+    "id": 1621195,
+    "name": "St. Eadric's Pall"
   },
   {
-    "name": "Draug's Toothpicks",
     "internal_name": "questitem_trsq01_draugstoothpicks",
-    "id": 1621199
+    "id": 1621199,
+    "name": "Draug's Toothpicks"
   },
   {
-    "name": "Carasta's Contract",
+    "internal_name": "questitem_trsq01_key",
+    "id": 1622710,
+    "name": "Gunnar Frode's Key"
+  },
+  {
+    "internal_name": "questitem_sq119_doorkey",
+    "id": 1631508,
+    "name": "Ghennig Tower Key"
+  },
+  {
     "internal_name": "questitem_sq149_contract",
-    "id": 1632173
+    "id": 1632173,
+    "name": "Carasta's Contract"
   },
   {
-    "name": "Carasta's Contract - Signed",
     "internal_name": "questitem_sq149_contract_signed",
-    "id": 1632174
+    "id": 1632174,
+    "name": "Carasta's Contract - Signed"
   },
   {
-    "name": "Wyvyrn-Gifre Signet",
     "internal_name": "questitem_trsq02_wgsignet",
-    "id": 1632575
+    "id": 1632575,
+    "name": "Wyvyrn-Gifre Signet"
   },
   {
-    "name": "Chalice of Forced Vintage",
     "internal_name": "questitem_trsq02_vintagemaker",
-    "id": 1632745
+    "id": 1632745,
+    "name": "Chalice of Forced Vintage"
   },
   {
-    "name": "Cowl of the Maiden",
     "internal_name": "questitem_trsq02_matroncirclet",
-    "id": 1632750
+    "id": 1632750,
+    "name": "Cowl of the Maiden"
   },
   {
-    "name": "Death Notice: Tak Edstar",
     "internal_name": "questitem_ffq24_deathnotice_4",
-    "id": 1634819
+    "id": 1634819,
+    "name": "Death Notice: Tak Edstar"
   },
   {
-    "name": "Death Notice: Ina Sawerth",
     "internal_name": "questitem_ffq24_deathnotice_5",
-    "id": 1634849
+    "id": 1634849,
+    "name": "Death Notice: Ina Sawerth"
   },
   {
-    "name": "Death Notice: Astley Golgoti",
     "internal_name": "questitem_ffq24_deathnotice_6",
-    "id": 1634859
+    "id": 1634859,
+    "name": "Death Notice: Astley Golgoti"
   },
   {
-    "name": "Death Notice: Joanne Gortan",
     "internal_name": "questitem_ffq24_deathnotice_7",
-    "id": 1634862
+    "id": 1634862,
+    "name": "Death Notice: Joanne Gortan"
   },
   {
-    "name": "Death Notice: Ram Leodwald",
     "internal_name": "questitem_ffq24_deathnotice_8",
-    "id": 1634863
+    "id": 1634863,
+    "name": "Death Notice: Ram Leodwald"
   },
   {
-    "name": "Key to Mayor's Cottage",
+    "internal_name": "questitem_sq150_key_mayorsvilla",
+    "id": 1637986,
+    "name": "Key to Mayor's Villa"
+  },
+  {
     "internal_name": "questitem_sq150_mayorscottage",
-    "id": 1637990
+    "id": 1637990,
+    "name": "Key to Mayor's Cottage"
   },
   {
-    "name": "Confession of Mayor Taklari",
     "internal_name": "questitem_sq150_travelersdocument",
-    "id": 1638706
+    "id": 1638706,
+    "name": "Confession of Mayor Taklari"
   },
   {
-    "name": "Glass of Ambient",
     "internal_name": "obj_tr06_glassofambient",
-    "id": 1643316
+    "id": 1643316,
+    "name": "Glass of Ambient"
   },
   {
-    "name": "Notice of Seizure",
     "internal_name": "questitem_tr03_contrabandnotice",
-    "id": 1646539
+    "id": 1646539,
+    "name": "Notice of Seizure"
   },
   {
-    "name": "Eloren's Note to Guian",
     "internal_name": "questitem_tr03_stebicnote",
-    "id": 1646540
+    "id": 1646540,
+    "name": "Eloren's Note to Guian"
   },
   {
-    "name": "Maun's Note",
+    "internal_name": "questitem_trsq03_darkvarikey",
+    "id": 1646717,
+    "name": "Darkvari Key"
+  },
+  {
+    "internal_name": "questitem_trsq03_cynrickey",
+    "id": 1646720,
+    "name": "Maun's Key"
+  },
+  {
+    "internal_name": "questitem_trsq03_zungarkey",
+    "id": 1646721,
+    "name": "Zungar Key"
+  },
+  {
+    "internal_name": "questitem_trsq03_triplekey",
+    "id": 1646722,
+    "name": "Maun's Triple Key"
+  },
+  {
+    "internal_name": "questitem_sq119_khlerankey",
+    "id": 1646762,
+    "name": "Khleran's Key"
+  },
+  {
     "internal_name": "questitem_trsq03_maunsnote",
-    "id": 1646878
+    "id": 1646878,
+    "name": "Maun's Note"
   },
   {
-    "name": "Slavers Contract",
     "internal_name": "questitem_sq61_contract",
-    "id": 1651336
+    "id": 1651336,
+    "name": "Slavers Contract"
   },
   {
-    "name": "Ansilla Doll",
     "internal_name": "questitem_ffq84_doll_1",
-    "id": 1652925
+    "id": 1652925,
+    "name": "Ansilla Doll"
   },
   {
-    "name": "Ansilla Doll",
     "internal_name": "questitem_ffq84_doll_2",
-    "id": 1652934
+    "id": 1652934,
+    "name": "Ansilla Doll"
   },
   {
-    "name": "Ansilla Doll",
     "internal_name": "questitem_ffq84_doll_3",
-    "id": 1652937
+    "id": 1652937,
+    "name": "Ansilla Doll"
   },
   {
-    "name": "Ansilla Doll",
     "internal_name": "questitem_ffq84_doll_4",
-    "id": 1652938
+    "id": 1652938,
+    "name": "Ansilla Doll"
   },
   {
-    "name": "Ansilla Doll",
     "internal_name": "questitem_ffq84_doll_5",
-    "id": 1652939
+    "id": 1652939,
+    "name": "Ansilla Doll"
   },
   {
-    "name": "Letter from Lord Erran Gastyr",
     "internal_name": "questitem_sq114_brunletter",
-    "id": 1664320
+    "id": 1664320,
+    "name": "Letter from Lord Erran Gastyr"
   },
   {
-    "name": "Tuatha Dagger",
+    "internal_name": "questitem_sq151_key",
+    "id": 1666162,
+    "name": "Ansilla Dungeon key"
+  },
+  {
     "internal_name": "questitem_sq151_dagger",
-    "id": 1666165
+    "id": 1666165,
+    "name": "Tuatha Dagger"
   },
   {
-    "name": "Gloamfrost",
     "internal_name": "hp02_staff_result_2",
-    "id": 1684120
+    "id": 1684120,
+    "name": "Gloamfrost"
   },
   {
-    "name": "Ender's Fire",
     "internal_name": "hp02_staff_result_3",
-    "id": 1684122
+    "id": 1684122,
+    "name": "Ender's Fire"
   },
   {
-    "name": "Relic",
     "internal_name": "questitem_sq121_relic",
-    "id": 1684309
+    "id": 1684309,
+    "name": "Relic"
   },
   {
-    "name": "Note from Reddle Mane",
     "internal_name": "questitem_sq57_reddlenote",
-    "id": 1686169
+    "id": 1686169,
+    "name": "Note from Reddle Mane"
   },
   {
-    "name": "Note from Courdan Passant",
     "internal_name": "questitem_sq57_courdannote",
-    "id": 1686170
+    "id": 1686170,
+    "name": "Note from Courdan Passant"
   },
   {
-    "name": "Letter from Feride Ouet",
     "internal_name": "questitem_sq57_feridenote",
-    "id": 1686174
+    "id": 1686174,
+    "name": "Letter from Feride Ouet"
   },
   {
-    "name": "The Flame of Rhyderk",
+    "internal_name": "questitem_sq57_villakey",
+    "id": 1687359,
+    "name": "Villa Key"
+  },
+  {
     "internal_name": "questitem_ballads_lore_1",
-    "id": 1694724
+    "id": 1694724,
+    "name": "The Flame of Rhyderk"
   },
   {
-    "name": "Shadow of Enfamanir",
     "internal_name": "questitem_ballads_lore_2",
-    "id": 1694743
+    "id": 1694743,
+    "name": "Shadow of Enfamanir"
   },
   {
-    "name": "Treasures of Meropis",
     "internal_name": "questitem_ballads_lore_3",
-    "id": 1694748
+    "id": 1694748,
+    "name": "Treasures of Meropis"
   },
   {
-    "name": "Cureseeker",
     "internal_name": "questitem_ballads_lore_4",
-    "id": 1694749
+    "id": 1694749,
+    "name": "Cureseeker"
   },
   {
-    "name": "Signet Ring of Lord Kandrian",
+    "internal_name": "questitem_sq26_vaultkey",
+    "id": 1700091,
+    "name": "Dolve Wayle Vault Key"
+  },
+  {
     "internal_name": "questitem_sq97_kandriansring",
-    "id": 1700692
+    "id": 1700692,
+    "name": "Signet Ring of Lord Kandrian"
   },
   {
-    "name": "Farewell Note",
     "internal_name": "mq17_alyn_note",
-    "id": 1702718
+    "id": 1702718,
+    "name": "Farewell Note"
   },
   {
-    "name": "Motus Handbook",
     "internal_name": "questitem_sq153_motushandbook",
-    "id": 1704223
+    "id": 1704223,
+    "name": "Motus Handbook"
   },
   {
-    "name": "Blade of Rhyderk",
     "internal_name": "questitem_hmsq01_blade",
-    "id": 1707669
+    "id": 1707669,
+    "name": "Blade of Rhyderk"
   },
   {
-    "name": "Adessa I",
     "internal_name": "questitem_ffq49_startbook",
-    "id": 1707674
+    "id": 1707674,
+    "name": "Adessa I"
   },
   {
-    "name": "Finding the Aster Inheritance",
     "internal_name": "questitem_ffq20_letter",
-    "id": 1718930
+    "id": 1718930,
+    "name": "Finding the Aster Inheritance"
   },
   {
-    "name": "Kobold Vial",
     "internal_name": "questitem_ffq21_koboldvial",
-    "id": 1726826
+    "id": 1726826,
+    "name": "Kobold Vial"
   },
   {
-    "name": "Crudok Vial",
     "internal_name": "questitem_ffq21_crudokvial",
-    "id": 1726827
+    "id": 1726827,
+    "name": "Crudok Vial"
   },
   {
-    "name": "Ettin Vial",
     "internal_name": "questitem_ffq21_ettinvial",
-    "id": 1726828
+    "id": 1726828,
+    "name": "Ettin Vial"
   },
   {
-    "name": "Jottun Vial",
     "internal_name": "questitem_ffq21_jottunvial",
-    "id": 1726829
+    "id": 1726829,
+    "name": "Jottun Vial"
   },
   {
-    "name": "Kobold Vial",
     "internal_name": "questitem_ffq21_koboldvialfull",
-    "id": 1729518
+    "id": 1729518,
+    "name": "Kobold Vial"
   },
   {
-    "name": "Crudok Vial",
     "internal_name": "questitem_ffq21_crudokvialfull",
-    "id": 1729519
+    "id": 1729519,
+    "name": "Crudok Vial"
   },
   {
-    "name": "Ettin Vial",
     "internal_name": "questitem_ffq21_ettinvialfull",
-    "id": 1729522
+    "id": 1729522,
+    "name": "Ettin Vial"
   },
   {
-    "name": "Jottun Vial",
     "internal_name": "questitem_ffq21_jottunvialfull",
-    "id": 1729523
+    "id": 1729523,
+    "name": "Jottun Vial"
   },
   {
-    "name": "Murghan Charm",
     "internal_name": "questitem_sq103_murghancharm",
-    "id": 1731039
+    "id": 1731039,
+    "name": "Murghan Charm"
   },
   {
-    "name": "Calovar's Relic",
     "internal_name": "questitem_sq96_edgarstone",
-    "id": 1745482
+    "id": 1745482,
+    "name": "Calovar's Relic"
   },
   {
-    "name": "Buru's Boots",
     "internal_name": "rogue_unique07_feet_a",
-    "id": 1754856
+    "id": 1754856,
+    "name": "Buru's Boots"
   },
   {
-    "name": "Selkie Veil",
     "internal_name": "mage_unique07_head_a",
-    "id": 1756168
+    "id": 1756168,
+    "name": "Selkie Veil"
   },
   {
-    "name": "Selkie Veil",
     "internal_name": "mage_unique07_head_b",
-    "id": 1756182
+    "id": 1756182,
+    "name": "Selkie Veil"
   },
   {
-    "name": "Selkie Veil",
     "internal_name": "mage_unique07_head_c",
-    "id": 1756183
+    "id": 1756183,
+    "name": "Selkie Veil"
   },
   {
-    "name": "Selkie Veil",
     "internal_name": "mage_unique07_head_d",
-    "id": 1756184
+    "id": 1756184,
+    "name": "Selkie Veil"
   },
   {
-    "name": "Selkie Veil",
     "internal_name": "mage_unique07_head_e",
-    "id": 1756185
+    "id": 1756185,
+    "name": "Selkie Veil"
   },
   {
-    "name": "Selkie Veil",
     "internal_name": "mage_unique07_head_f",
-    "id": 1756186
+    "id": 1756186,
+    "name": "Selkie Veil"
   },
   {
-    "name": "Selkie Veil",
     "internal_name": "mage_unique07_head_g",
-    "id": 1756187
+    "id": 1756187,
+    "name": "Selkie Veil"
   },
   {
-    "name": "Selkie Veil",
     "internal_name": "mage_unique07_head_h",
-    "id": 1756188
+    "id": 1756188,
+    "name": "Selkie Veil"
   },
   {
-    "name": "Buru's Boots",
     "internal_name": "rogue_unique07_feet_b",
-    "id": 1756375
+    "id": 1756375,
+    "name": "Buru's Boots"
   },
   {
-    "name": "Buru's Boots",
     "internal_name": "rogue_unique07_feet_c",
-    "id": 1756376
+    "id": 1756376,
+    "name": "Buru's Boots"
   },
   {
-    "name": "Buru's Boots",
     "internal_name": "rogue_unique07_feet_d",
-    "id": 1756377
+    "id": 1756377,
+    "name": "Buru's Boots"
   },
   {
-    "name": "Buru's Boots",
     "internal_name": "rogue_unique07_feet_e",
-    "id": 1756378
+    "id": 1756378,
+    "name": "Buru's Boots"
   },
   {
-    "name": "Buru's Boots",
     "internal_name": "rogue_unique07_feet_f",
-    "id": 1756379
+    "id": 1756379,
+    "name": "Buru's Boots"
   },
   {
-    "name": "Alleia's Ring",
+    "internal_name": "questitem_sq67_cagekey",
+    "id": 1766977,
+    "name": "Cage Key"
+  },
+  {
     "internal_name": "questitem_sq68_alleiasring",
-    "id": 1769757
+    "id": 1769757,
+    "name": "Alleia's Ring"
   },
   {
-    "name": "Ceremonial Faeblades",
     "internal_name": "questitem_sq56_faeblades",
-    "id": 1774451
+    "id": 1774451,
+    "name": "Ceremonial Faeblades"
   },
   {
-    "name": "Staff of the Sun",
     "internal_name": "questitem_sq56_staff",
-    "id": 1775720
+    "id": 1775720,
+    "name": "Staff of the Sun"
   },
   {
-    "name": "Robes of Elona",
     "internal_name": "questitem_sq56_robes",
-    "id": 1775730
+    "id": 1775730,
+    "name": "Robes of Elona"
   },
   {
-    "name": "Mystic Hammer Remains",
     "internal_name": "questitem_kv07_mystichammer_ruined",
-    "id": 1775954
+    "id": 1775954,
+    "name": "Mystic Hammer Remains"
   },
   {
-    "name": "Antelope Head",
     "internal_name": "questitem_ffq04_antelopetrophy5",
-    "id": 1778587
+    "id": 1778587,
+    "name": "Antelope Head"
   },
   {
-    "name": "Antelope Head",
     "internal_name": "questitem_ffq04_antelopetrophy6",
-    "id": 1778588
+    "id": 1778588,
+    "name": "Antelope Head"
   },
   {
-    "name": "Antelope Head",
     "internal_name": "questitem_ffq04_antelopetrophy7",
-    "id": 1778598
+    "id": 1778598,
+    "name": "Antelope Head"
   },
   {
-    "name": "Antelope Head",
     "internal_name": "questitem_ffq04_antelopetrophy8",
-    "id": 1778599
+    "id": 1778599,
+    "name": "Antelope Head"
   },
   {
-    "name": "Amulet of Rithen",
     "internal_name": "amulet_unique35",
-    "id": 1783849
+    "id": 1783849,
+    "name": "Amulet of Rithen"
   },
   {
-    "name": "Ballads Signet Ring",
     "internal_name": "ring_unique43",
-    "id": 1783980
+    "id": 1783980,
+    "name": "Ballads Signet Ring"
   },
   {
-    "name": "Maiden's Ring",
     "internal_name": "ring_unique38",
-    "id": 1784385
+    "id": 1784385,
+    "name": "Maiden's Ring"
   },
   {
-    "name": "Deed to Sandstone Villa",
     "internal_name": "questitem_sq152_housedeed",
-    "id": 1790916
+    "id": 1790916,
+    "name": "Deed to Sandstone Villa"
   },
   {
-    "name": "Hellbane",
     "internal_name": "questitem_sq02_hellbane",
-    "id": 1799102
+    "id": 1799102,
+    "name": "Hellbane"
   },
   {
-    "name": "Omnibus Arcana",
     "internal_name": "questitem_sasq01_emptytome1",
-    "id": 1800393
+    "id": 1800393,
+    "name": "Omnibus Arcana"
   },
   {
-    "name": "Omnibus Arcana",
     "internal_name": "questitem_sasq01_emptytome2",
-    "id": 1800394
+    "id": 1800394,
+    "name": "Omnibus Arcana"
   },
   {
-    "name": "Omnibus Arcana",
     "internal_name": "questitem_sasq01_emptytome3",
-    "id": 1800395
+    "id": 1800395,
+    "name": "Omnibus Arcana"
   },
   {
-    "name": "Omnibus Arcana",
     "internal_name": "questitem_sasq01_emptytome4",
-    "id": 1800396
+    "id": 1800396,
+    "name": "Omnibus Arcana"
   },
   {
-    "name": "Omnibus Arcana",
     "internal_name": "questitem_sasq01_emptytome5",
-    "id": 1800397
+    "id": 1800397,
+    "name": "Omnibus Arcana"
   },
   {
-    "name": "Bogstaunch",
     "internal_name": "questitem_ffq29_bogstaunch",
-    "id": 1800820
+    "id": 1800820,
+    "name": "Bogstaunch"
   },
   {
-    "name": "Cassera's Journal",
     "internal_name": "questitem_sasq03_casserajournal",
-    "id": 1802329
+    "id": 1802329,
+    "name": "Cassera's Journal"
   },
   {
-    "name": "Aloren's Journal",
     "internal_name": "questitem_sasq03_alorenjournal",
-    "id": 1802466
+    "id": 1802466,
+    "name": "Aloren's Journal"
   },
   {
-    "name": "Bertran's Journal",
     "internal_name": "questitem_sasq03_bertranjournal",
-    "id": 1802468
+    "id": 1802468,
+    "name": "Bertran's Journal"
   },
   {
-    "name": "Belne's Sword of Ire",
     "internal_name": "sword1h_unique18a",
-    "id": 1806710
+    "id": 1806710,
+    "name": "Belne's Sword of Ire"
   },
   {
-    "name": "Belne's Sword of Ire",
     "internal_name": "sword1h_unique18b",
-    "id": 1806711
+    "id": 1806711,
+    "name": "Belne's Sword of Ire"
   },
   {
-    "name": "Belne's Sword of Ire",
     "internal_name": "sword1h_unique18c",
-    "id": 1806712
+    "id": 1806712,
+    "name": "Belne's Sword of Ire"
   },
   {
-    "name": "Belne's Sword of Ire",
     "internal_name": "sword1h_unique18d",
-    "id": 1806713
+    "id": 1806713,
+    "name": "Belne's Sword of Ire"
   },
   {
-    "name": "Belne's Sword of Ire",
     "internal_name": "sword1h_unique18e",
-    "id": 1806714
+    "id": 1806714,
+    "name": "Belne's Sword of Ire"
   },
   {
-    "name": "Belne's Sword of Ire",
     "internal_name": "sword1h_unique18f",
-    "id": 1806715
+    "id": 1806715,
+    "name": "Belne's Sword of Ire"
   },
   {
-    "name": "Belne's Sword of Ire",
     "internal_name": "sword1h_unique18g",
-    "id": 1806716
+    "id": 1806716,
+    "name": "Belne's Sword of Ire"
   },
   {
-    "name": "Belne's Sword of Ire",
     "internal_name": "sword1h_unique18h",
-    "id": 1806717
+    "id": 1806717,
+    "name": "Belne's Sword of Ire"
   },
   {
-    "name": "Belne's Staff of Ire",
     "internal_name": "staff_unique15a",
-    "id": 1806797
+    "id": 1806797,
+    "name": "Belne's Staff of Ire"
   },
   {
-    "name": "Belne's Staff of Ire",
     "internal_name": "staff_unique15b",
-    "id": 1806798
+    "id": 1806798,
+    "name": "Belne's Staff of Ire"
   },
   {
-    "name": "Belne's Staff of Ire",
     "internal_name": "staff_unique15c",
-    "id": 1806799
+    "id": 1806799,
+    "name": "Belne's Staff of Ire"
   },
   {
-    "name": "Belne's Staff of Ire",
     "internal_name": "staff_unique15d",
-    "id": 1806800
+    "id": 1806800,
+    "name": "Belne's Staff of Ire"
   },
   {
-    "name": "Belne's Staff of Ire",
     "internal_name": "staff_unique15e",
-    "id": 1806801
+    "id": 1806801,
+    "name": "Belne's Staff of Ire"
   },
   {
-    "name": "Belne's Staff of Ire",
     "internal_name": "staff_unique15f",
-    "id": 1806802
+    "id": 1806802,
+    "name": "Belne's Staff of Ire"
   },
   {
-    "name": "Belne's Staff of Ire",
     "internal_name": "staff_unique15g",
-    "id": 1806803
+    "id": 1806803,
+    "name": "Belne's Staff of Ire"
   },
   {
-    "name": "Belne's Staff of Ire",
     "internal_name": "staff_unique15h",
-    "id": 1806804
+    "id": 1806804,
+    "name": "Belne's Staff of Ire"
   },
   {
-    "name": "Belne's Daggers of Ire",
     "internal_name": "daggers_unique09a",
-    "id": 1806826
+    "id": 1806826,
+    "name": "Belne's Daggers of Ire"
   },
   {
-    "name": "Belne's Daggers of Ire",
     "internal_name": "daggers_unique09b",
-    "id": 1806827
+    "id": 1806827,
+    "name": "Belne's Daggers of Ire"
   },
   {
-    "name": "Belne's Daggers of Ire",
     "internal_name": "daggers_unique09c",
-    "id": 1806828
+    "id": 1806828,
+    "name": "Belne's Daggers of Ire"
   },
   {
-    "name": "Belne's Daggers of Ire",
     "internal_name": "daggers_unique09d",
-    "id": 1806829
+    "id": 1806829,
+    "name": "Belne's Daggers of Ire"
   },
   {
-    "name": "Belne's Daggers of Ire",
     "internal_name": "daggers_unique09e",
-    "id": 1806830
+    "id": 1806830,
+    "name": "Belne's Daggers of Ire"
   },
   {
-    "name": "Belne's Daggers of Ire",
     "internal_name": "daggers_unique09f",
-    "id": 1806831
+    "id": 1806831,
+    "name": "Belne's Daggers of Ire"
   },
   {
-    "name": "Belne's Daggers of Ire",
     "internal_name": "daggers_unique09g",
-    "id": 1806833
+    "id": 1806833,
+    "name": "Belne's Daggers of Ire"
   },
   {
-    "name": "Belne's Daggers of Ire",
     "internal_name": "daggers_unique09h",
-    "id": 1806834
+    "id": 1806834,
+    "name": "Belne's Daggers of Ire"
   },
   {
-    "name": "Spidersac Ichor",
+    "internal_name": "questitem_sq108_spear",
+    "id": 1813122,
+    "name": "Kobold Dagger"
+  },
+  {
     "internal_name": "questitem_sq109_spidergland",
-    "id": 1817309
+    "id": 1817309,
+    "name": "Spidersac Ichor"
   },
   {
-    "name": "Jottun Stew Grist",
     "internal_name": "questitem_sq109_jottungrist",
-    "id": 1817456
+    "id": 1817456,
+    "name": "Jottun Stew Grist"
   },
   {
-    "name": "Fennwrac Flower",
     "internal_name": "envquestitem_sq109_herb",
-    "id": 1817463
+    "id": 1817463,
+    "name": "Fennwrac Flower"
   },
   {
-    "name": "Ariel's Pack",
     "internal_name": "questitem_sq36_arielspack",
-    "id": 1818240
+    "id": 1818240,
+    "name": "Ariel's Pack"
   },
   {
-    "name": "Ancient Artifact",
     "internal_name": "questitem_sq36_ancientartifact",
-    "id": 1818241
+    "id": 1818241,
+    "name": "Ancient Artifact"
   },
   {
-    "name": "Speakstone",
     "internal_name": "sq56_speakstone",
-    "id": 1823095
+    "id": 1823095,
+    "name": "Speakstone"
   },
   {
-    "name": "Kiftal's Elixer",
     "internal_name": "questitem_sq139_kiftalselixer",
-    "id": 1825740
+    "id": 1825740,
+    "name": "Kiftal's Elixer"
   },
   {
-    "name": "Fellfire Bloom",
     "internal_name": "sq133_centuryblossom",
-    "id": 1825874
+    "id": 1825874,
+    "name": "Fellfire Bloom"
   },
   {
-    "name": "Kora Petal",
     "internal_name": "sq124_millenniumpetal",
-    "id": 1829200
+    "id": 1829200,
+    "name": "Kora Petal"
   },
   {
-    "name": "Fae Potion",
     "internal_name": "sq124_poultice",
-    "id": 1829907
+    "id": 1829907,
+    "name": "Fae Potion"
   },
   {
-    "name": "Amulet of the Sun",
     "internal_name": "questitem_sq55_amulet",
-    "id": 1831690
+    "id": 1831690,
+    "name": "Amulet of the Sun"
   },
   {
-    "name": "Shattered Tuatha Weapon",
     "internal_name": "questitem_sq137_component",
-    "id": 1857728
+    "id": 1857728,
+    "name": "Shattered Tuatha Weapon"
   },
   {
-    "name": "Brother Padric's Travel Notes",
     "internal_name": "questitem_sq155_journal",
-    "id": 1862537
+    "id": 1862537,
+    "name": "Brother Padric's Travel Notes"
   },
   {
-    "name": "Strange Red Stone",
     "internal_name": "questitem_ffq69_thing_a",
-    "id": 1874462
+    "id": 1874462,
+    "name": "Strange Red Stone"
   },
   {
-    "name": "Strange Blue Stone",
     "internal_name": "questitem_ffq69_thing_b",
-    "id": 1874469
+    "id": 1874469,
+    "name": "Strange Blue Stone"
   },
   {
-    "name": "Strange Purple Stone",
     "internal_name": "questitem_ffq69_thing_c",
-    "id": 1874518
+    "id": 1874518,
+    "name": "Strange Purple Stone"
   },
   {
-    "name": "Strange Green Stone",
     "internal_name": "questitem_ffq69_thing_d",
-    "id": 1874519
+    "id": 1874519,
+    "name": "Strange Green Stone"
   },
   {
-    "name": "Cipher of Ethene",
     "internal_name": "dlc2_questitem_mq_cipher",
-    "id": 1937604
+    "id": 1937604,
+    "name": "Cipher of Ethene"
   },
   {
-    "name": "Heart of Sibun",
     "internal_name": "questitem_kv03_heartofsibun",
-    "id": 1939312
+    "id": 1939312,
+    "name": "Heart of Sibun"
   },
   {
-    "name": "Kobold Clan Totem",
     "internal_name": "questitem_sq108_totem",
-    "id": 1939340
+    "id": 1939340,
+    "name": "Kobold Clan Totem"
   },
   {
-    "name": "Explosive",
     "internal_name": "dlc1_mq01_explosive",
-    "id": 1940498
+    "id": 1940498,
+    "name": "Explosive"
   },
   {
-    "name": "Astrolabe",
     "internal_name": "dlc1_mq02_astrolabe",
-    "id": 1941817
+    "id": 1941817,
+    "name": "Astrolabe"
   },
   {
-    "name": "Bundle of Emberwood",
     "internal_name": "dlc1_material_wood",
-    "id": 1941985
+    "id": 1941985,
+    "name": "Bundle of Emberwood"
   },
   {
-    "name": "Bundle of Seasteel",
     "internal_name": "dlc1_material_metal",
-    "id": 1942003
+    "id": 1942003,
+    "name": "Bundle of Seasteel"
   },
   {
-    "name": "Bundle of Sailcloth",
     "internal_name": "dlc1_material_cloth",
-    "id": 1942014
+    "id": 1942014,
+    "name": "Bundle of Sailcloth"
   },
   {
-    "name": "Bundle of Beachstone",
     "internal_name": "dlc1_material_clay",
-    "id": 1942015
+    "id": 1942015,
+    "name": "Bundle of Beachstone"
   },
   {
-    "name": "Bundle of Bearhide",
     "internal_name": "dlc1_material_leather",
-    "id": 1942016
+    "id": 1942016,
+    "name": "Bundle of Bearhide"
   },
   {
-    "name": "Plagueshield",
     "internal_name": "questitem_sq86_plagueshield3",
-    "id": 1946119
+    "id": 1946119,
+    "name": "Plagueshield"
   },
   {
-    "name": "Kollossae Litany",
     "internal_name": "dlc2_questitem_sq05_scroll1",
-    "id": 1947526
+    "id": 1947526,
+    "name": "Kollossae Litany"
   },
   {
-    "name": "Kollossae Litany",
     "internal_name": "dlc2_questitem_sq05_scroll2",
-    "id": 1947527
+    "id": 1947527,
+    "name": "Kollossae Litany"
   },
   {
-    "name": "Kollossae Litany",
     "internal_name": "dlc2_questitem_sq05_scroll3",
-    "id": 1947528
+    "id": 1947528,
+    "name": "Kollossae Litany"
   },
   {
-    "name": "Kollossae Litany",
     "internal_name": "dlc2_questitem_sq05_scroll4",
-    "id": 1947529
+    "id": 1947529,
+    "name": "Kollossae Litany"
   },
   {
-    "name": "Kollossae Litany",
     "internal_name": "dlc2_questitem_sq05_scroll5",
-    "id": 1947530
+    "id": 1947530,
+    "name": "Kollossae Litany"
   },
   {
-    "name": "Pteryx Vanes",
     "internal_name": "dlc2_questitem_mq03_pteryxfeathers",
-    "id": 1947780
+    "id": 1947780,
+    "name": "Pteryx Vanes"
   },
   {
-    "name": "Lykos' Rat Bait",
     "internal_name": "dlc2_sq01_questitem_bait",
-    "id": 1948785
+    "id": 1948785,
+    "name": "Lykos' Rat Bait"
   },
   {
-    "name": "Amphora",
     "internal_name": "dlc2_questitem_sq07_amphora",
-    "id": 1948796
+    "id": 1948796,
+    "name": "Amphora"
   },
   {
-    "name": "The Tome of Contrition",
+    "internal_name": "dlc2_questitem_sq07_amphorakey",
+    "id": 1952832,
+    "name": "Amphora Chest Key"
+  },
+  {
     "internal_name": "dlc1_object_sq04_ancienttome",
-    "id": 1957958
+    "id": 1957958,
+    "name": "The Tome of Contrition"
   },
   {
-    "name": "Map fragment - Northern Coast",
     "internal_name": "dlc1_questitem_ffq01_piece1_map1",
-    "id": 1963541
+    "id": 1963541,
+    "name": "Map fragment - Northern Coast"
   },
   {
-    "name": "Map fragment - Northern Coast",
     "internal_name": "dlc1_questitem_ffq01_piece2_map1",
-    "id": 1963542
+    "id": 1963542,
+    "name": "Map fragment - Northern Coast"
   },
   {
-    "name": "Map fragment - Northern Coast",
     "internal_name": "dlc1_questitem_ffq01_piece3_map1",
-    "id": 1963543
+    "id": 1963543,
+    "name": "Map fragment - Northern Coast"
   },
   {
-    "name": "Map fragment - Scuttle Beach",
     "internal_name": "dlc1_questitem_ffq01_piece1_map2",
-    "id": 1963544
+    "id": 1963544,
+    "name": "Map fragment - Scuttle Beach"
   },
   {
-    "name": "Map fragment - Scuttle Beach",
     "internal_name": "dlc1_questitem_ffq01_piece2_map2",
-    "id": 1963545
+    "id": 1963545,
+    "name": "Map fragment - Scuttle Beach"
   },
   {
-    "name": "Map fragment - Scuttle Beach",
     "internal_name": "dlc1_questitem_ffq01_piece3_map2",
-    "id": 1963546
+    "id": 1963546,
+    "name": "Map fragment - Scuttle Beach"
   },
   {
-    "name": "Map fragment - The Jawbone",
     "internal_name": "dlc1_questitem_ffq01_piece1_map3",
-    "id": 1963547
+    "id": 1963547,
+    "name": "Map fragment - The Jawbone"
   },
   {
-    "name": "Map fragment - The Jawbone",
     "internal_name": "dlc1_questitem_ffq01_piece2_map3",
-    "id": 1963548
+    "id": 1963548,
+    "name": "Map fragment - The Jawbone"
   },
   {
-    "name": "Map fragment - The Jawbone",
     "internal_name": "dlc1_questitem_ffq01_piece3_map3",
-    "id": 1963549
+    "id": 1963549,
+    "name": "Map fragment - The Jawbone"
   },
   {
-    "name": "Map fragment - Cape Solace",
     "internal_name": "dlc1_questitem_ffq01_piece1_map4",
-    "id": 1963550
+    "id": 1963550,
+    "name": "Map fragment - Cape Solace"
   },
   {
-    "name": "Map fragment - Cape Solace",
     "internal_name": "dlc1_questitem_ffq01_piece2_map4",
-    "id": 1963551
+    "id": 1963551,
+    "name": "Map fragment - Cape Solace"
   },
   {
-    "name": "Map fragment - Cape Solace",
     "internal_name": "dlc1_questitem_ffq01_piece3_map4",
-    "id": 1963552
+    "id": 1963552,
+    "name": "Map fragment - Cape Solace"
   },
   {
-    "name": "Dvergan map - Northern Coast",
     "internal_name": "dlc1_questitem_ffq01_map1",
-    "id": 1963553
+    "id": 1963553,
+    "name": "Dvergan map - Northern Coast"
   },
   {
-    "name": "Dvergan map - Scuttle Beach",
     "internal_name": "dlc1_questitem_ffq01_map2",
-    "id": 1963554
+    "id": 1963554,
+    "name": "Dvergan map - Scuttle Beach"
   },
   {
-    "name": "Dvergan map - The Jawbone",
     "internal_name": "dlc1_questitem_ffq01_map3",
-    "id": 1963555
+    "id": 1963555,
+    "name": "Dvergan map - The Jawbone"
   },
   {
-    "name": "Dvergan map - Cape Solace",
     "internal_name": "dlc1_questitem_ffq01_map4",
-    "id": 1963556
+    "id": 1963556,
+    "name": "Dvergan map - Cape Solace"
   },
   {
-    "name": "Letter to Heliodorus",
+    "internal_name": "dlc1_object_sq07_key",
+    "id": 1965904,
+    "name": "Prison Ship Cage Key"
+  },
+  {
     "internal_name": "dlc2_questitem_sq09_heliodorusletter",
-    "id": 1966608
+    "id": 1966608,
+    "name": "Letter to Heliodorus"
   },
   {
-    "name": "Letter to Dareios",
     "internal_name": "dlc2_questitem_sq09_dareiosletter",
-    "id": 1966612
+    "id": 1966612,
+    "name": "Letter to Dareios"
   },
   {
-    "name": "Letter to Korrinna",
     "internal_name": "dlc2_questitem_sq09_korrinnaletter",
-    "id": 1966615
+    "id": 1966615,
+    "name": "Letter to Korrinna"
   },
   {
-    "name": "Opened Ansilla Doll",
     "internal_name": "questitem_ffq84_useddoll_5",
-    "id": 1969392
+    "id": 1969392,
+    "name": "Opened Ansilla Doll"
   },
   {
-    "name": "Opened Ansilla Doll",
     "internal_name": "questitem_ffq84_useddoll_4",
-    "id": 1969393
+    "id": 1969393,
+    "name": "Opened Ansilla Doll"
   },
   {
-    "name": "Opened Ansilla Doll",
     "internal_name": "questitem_ffq84_useddoll_3",
-    "id": 1969394
+    "id": 1969394,
+    "name": "Opened Ansilla Doll"
   },
   {
-    "name": "Opened Ansilla Doll",
     "internal_name": "questitem_ffq84_useddoll_2",
-    "id": 1969395
+    "id": 1969395,
+    "name": "Opened Ansilla Doll"
   },
   {
-    "name": "Opened Ansilla Doll",
     "internal_name": "questitem_ffq84_useddoll_1",
-    "id": 1969396
+    "id": 1969396,
+    "name": "Opened Ansilla Doll"
   },
   {
-    "name": "Marauder Totem",
     "internal_name": "dlc2_questitem_ffq03_pteryxtalon",
-    "id": 1973920
+    "id": 1973920,
+    "name": "Marauder Totem"
   },
   {
-    "name": "Denric's Journal, I",
     "internal_name": "dlc2_book_denricjournal_1",
-    "id": 1984838
+    "id": 1984838,
+    "name": "Denric's Journal, I"
   },
   {
-    "name": "Denric's Journal, II",
     "internal_name": "dlc2_book_denricjournal_2",
-    "id": 1984839
+    "id": 1984839,
+    "name": "Denric's Journal, II"
   },
   {
-    "name": "Denric's Journal, III",
     "internal_name": "dlc2_book_denricjournal_3",
-    "id": 1984840
+    "id": 1984840,
+    "name": "Denric's Journal, III"
   },
   {
-    "name": "Arkes' Circlet",
     "internal_name": "dlc2_questitem_mq03_arkescirclet",
-    "id": 1985912
+    "id": 1985912,
+    "name": "Arkes' Circlet"
   },
   {
-    "name": "Foundation Report",
     "internal_name": "dlc2_sq12_report",
-    "id": 1991412
+    "id": 1991412,
+    "name": "Foundation Report"
   },
   {
-    "name": "Brooch Heirloom",
     "internal_name": "dlc2_questitem_sq14_brooch",
-    "id": 1991479
+    "id": 1991479,
+    "name": "Brooch Heirloom"
   },
   {
-    "name": "Idol",
     "internal_name": "dlc2_questitem_sq14_flute",
-    "id": 1991494
+    "id": 1991494,
+    "name": "Idol"
   },
   {
-    "name": "Mason's Hammer",
     "internal_name": "dlc2_questitem_sq14_masonhammer",
-    "id": 1991495
+    "id": 1991495,
+    "name": "Mason's Hammer"
   },
   {
-    "name": "Family Ring",
     "internal_name": "dlc2_questitem_sq09_ring",
-    "id": 1992137
+    "id": 1992137,
+    "name": "Family Ring"
   },
   {
-    "name": "Hystis' Journal",
     "internal_name": "dlc2_questitem_sq09_journal",
-    "id": 1992138
+    "id": 1992138,
+    "name": "Hystis' Journal"
   },
   {
-    "name": "Broken Cipher of Ethene",
     "internal_name": "dlc2_questitem_mq_cipher_broken",
-    "id": 1992774
+    "id": 1992774,
+    "name": "Broken Cipher of Ethene"
   },
   {
-    "name": "Akara's Heart",
+    "internal_name": "dlc2_questitem_sq09_key",
+    "id": 1992822,
+    "name": "Heliodorus' Chest Key"
+  },
+  {
     "internal_name": "dlc1_questitem_sq08_amulet",
-    "id": 1994222
+    "id": 1994222,
+    "name": "Akara's Heart"
   },
   {
-    "name": "Cage Key",
     "internal_name": "dlc1_questitem_sq08_potion",
-    "id": 1994765
+    "id": 1994765,
+    "name": "Cage Key"
   },
   {
-    "name": "Kollossae History, I",
     "internal_name": "dlc2_book_kollossaehistory_1",
-    "id": 1998629
+    "id": 1998629,
+    "name": "Kollossae History, I"
   },
   {
-    "name": "Kollossae History, II",
     "internal_name": "dlc2_book_kollossaehistory_2",
-    "id": 1998630
+    "id": 1998630,
+    "name": "Kollossae History, II"
   },
   {
-    "name": "Kollossae History, III",
     "internal_name": "dlc2_book_kollossaehistory_3",
-    "id": 1998631
+    "id": 1998631,
+    "name": "Kollossae History, III"
   },
   {
-    "name": "Voyage of the Barufakir",
     "internal_name": "dlc1_book_voyageofthebarufakir_translated",
-    "id": 2004943
+    "id": 2004943,
+    "name": "Voyage of the Barufakir"
   },
   {
-    "name": "Ancient Dvergan Text",
     "internal_name": "dlc1_book_voyageofthebarufakir_untranslated",
-    "id": 2004944
+    "id": 2004944,
+    "name": "Ancient Dvergan Text"
   },
   {
-    "name": "Scav Vial",
     "internal_name": "dlc1_questitem_ph05b_scavvialfull",
-    "id": 2009113
+    "id": 2009113,
+    "name": "Scav Vial"
   },
   {
-    "name": "Scav Vial",
     "internal_name": "dlc1_questitem_ph05b_scavvial",
-    "id": 2009114
+    "id": 2009114,
+    "name": "Scav Vial"
   },
   {
-    "name": "Boggart Vial",
     "internal_name": "dlc1_questitem_ph05b_boggartvialfull",
-    "id": 2009115
+    "id": 2009115,
+    "name": "Boggart Vial"
   },
   {
-    "name": "Boggart Vial",
     "internal_name": "dlc1_questitem_ph05b_boggartvial",
-    "id": 2009116
+    "id": 2009116,
+    "name": "Boggart Vial"
   },
   {
-    "name": "Faer Gorta Vial",
     "internal_name": "dlc1_questitem_ph05b_faergortavialfull",
-    "id": 2009117
+    "id": 2009117,
+    "name": "Faer Gorta Vial"
   },
   {
-    "name": "Faer Gorta Vial",
     "internal_name": "dlc1_questitem_ph05b_faergortavial",
-    "id": 2009118
+    "id": 2009118,
+    "name": "Faer Gorta Vial"
   },
   {
-    "name": "Murghan Vial",
     "internal_name": "dlc1_questitem_ph05b_murghanvialfull",
-    "id": 2009119
+    "id": 2009119,
+    "name": "Murghan Vial"
   },
   {
-    "name": "Murghan Vial",
     "internal_name": "dlc1_questitem_ph05b_murghanvial",
-    "id": 2009120
+    "id": 2009120,
+    "name": "Murghan Vial"
   },
   {
-    "name": "Root Golem Vial",
     "internal_name": "dlc1_questitem_ph05b_rootgolemvial",
-    "id": 2009121
+    "id": 2009121,
+    "name": "Root Golem Vial"
   },
   {
-    "name": "Root Golem Vial",
     "internal_name": "dlc1_questitem_ph05b_rootgolemvialfull",
-    "id": 2009122
+    "id": 2009122,
+    "name": "Root Golem Vial"
   },
   {
-    "name": "Oath of Fealty",
     "internal_name": "dlc2_book_ratking_fealtyoath",
-    "id": 2012801
+    "id": 2012801,
+    "name": "Oath of Fealty"
   },
   {
-    "name": "Ancient Dvergan Text",
     "internal_name": "dlc1_book_princekalevasjournal_untranslated",
-    "id": 2031069
+    "id": 2031069,
+    "name": "Ancient Dvergan Text"
   },
   {
-    "name": "Prince Kaleva's Journal",
     "internal_name": "dlc1_book_princekalevasjournal_translated",
-    "id": 2031070
+    "id": 2031070,
+    "name": "Prince Kaleva's Journal"
   },
   {
-    "name": "The Two-Faced Troll",
     "internal_name": "dlc1_book_thetwofacedtroll_translated",
-    "id": 2031071
+    "id": 2031071,
+    "name": "The Two-Faced Troll"
   },
   {
-    "name": "Ancient Varani Text",
     "internal_name": "dlc1_book_thetwofacedtroll_untranslated",
-    "id": 2031072
+    "id": 2031072,
+    "name": "Ancient Varani Text"
   },
   {
-    "name": "Ancient Almain Text",
     "internal_name": "dlc1_book_bloodyjournal_untranslated",
-    "id": 2031073
+    "id": 2031073,
+    "name": "Ancient Almain Text"
   },
   {
-    "name": "Bloody Journal",
     "internal_name": "dlc1_book_bloodyjournal_translated",
-    "id": 2031074
+    "id": 2031074,
+    "name": "Bloody Journal"
   },
   {
-    "name": "Ancient Dvergan Text",
     "internal_name": "dlc1_book_thebarelegssisters_untranslated",
-    "id": 2031078
+    "id": 2031078,
+    "name": "Ancient Dvergan Text"
   },
   {
-    "name": "The Barelegs Sisters",
     "internal_name": "dlc1_book_thebarelegssisters_translated",
-    "id": 2031079
+    "id": 2031079,
+    "name": "The Barelegs Sisters"
   },
   {
-    "name": "On Creating Demand",
     "internal_name": "dlc1_book_ondemand_translated",
-    "id": 2031080
+    "id": 2031080,
+    "name": "On Creating Demand"
   },
   {
-    "name": "Ancient Varani Text",
     "internal_name": "dlc1_book_ondemand_untranslated",
-    "id": 2031081
+    "id": 2031081,
+    "name": "Ancient Varani Text"
   },
   {
-    "name": "Ancient Gnomish Text",
     "internal_name": "dlc1_book_thecrymbil_untranslated",
-    "id": 2031102
+    "id": 2031102,
+    "name": "Ancient Gnomish Text"
   },
   {
-    "name": "The Crymbil",
     "internal_name": "dlc1_book_thecrymbil_translated",
-    "id": 2031103
+    "id": 2031103,
+    "name": "The Crymbil"
   },
   {
-    "name": "The Bashful Peregrine",
     "internal_name": "dlc1_book_bashfulperegrine_translated",
-    "id": 2031104
+    "id": 2031104,
+    "name": "The Bashful Peregrine"
   },
   {
-    "name": "Ancient Alfar Text",
     "internal_name": "dlc1_book_bashfulperegrine_untranslated",
-    "id": 2031105
+    "id": 2031105,
+    "name": "Ancient Alfar Text"
   },
   {
-    "name": "Ancient Almain Text",
     "internal_name": "dlc1_book_aislingtwelvefingers_untranslated",
-    "id": 2031106
+    "id": 2031106,
+    "name": "Ancient Almain Text"
   },
   {
-    "name": "Ancient Dvergan Text",
     "internal_name": "dlc1_book_thevirtuesofseasteel_untranslated",
-    "id": 2031107
+    "id": 2031107,
+    "name": "Ancient Dvergan Text"
   },
   {
-    "name": "Aisling Twelve Fingers",
     "internal_name": "dlc1_book_aislingtwelvefingers_translated",
-    "id": 2031108
+    "id": 2031108,
+    "name": "Aisling Twelve Fingers"
   },
   {
-    "name": "The Virtues of Seasteel",
     "internal_name": "dlc1_book_thevirtuesofseasteel_translated",
-    "id": 2031109
+    "id": 2031109,
+    "name": "The Virtues of Seasteel"
   },
   {
-    "name": "Ancient Alfar Text",
     "internal_name": "dlc1_book_theringmaker_untranslated",
-    "id": 2031110
+    "id": 2031110,
+    "name": "Ancient Alfar Text"
   },
   {
-    "name": "Ancient Dvergan Text",
     "internal_name": "dlc1_book_theseasteelgolems_untranslated",
-    "id": 2031111
+    "id": 2031111,
+    "name": "Ancient Dvergan Text"
   },
   {
-    "name": "The Ring Maker",
     "internal_name": "dlc1_book_theringmaker_translated",
-    "id": 2031112
+    "id": 2031112,
+    "name": "The Ring Maker"
   },
   {
-    "name": "The Seasteel Golems",
     "internal_name": "dlc1_book_theseasteelgolems_translated",
-    "id": 2031113
+    "id": 2031113,
+    "name": "The Seasteel Golems"
   },
   {
-    "name": "Mysterious Cure",
     "internal_name": "questitem_sq66_cure_unusable",
-    "id": 2032973
+    "id": 2032973,
+    "name": "Mysterious Cure"
   },
   {
-    "name": "Primal Magic",
     "internal_name": "dlc2_book_primalmagic",
-    "id": 2034658
+    "id": 2034658,
+    "name": "Primal Magic"
   },
   {
-    "name": "Sister Ceanna's Note",
     "internal_name": "dlc1_ph01b_sisterceannnote",
-    "id": 2034750
+    "id": 2034750,
+    "name": "Sister Ceanna's Note"
   },
   {
-    "name": "Epistle I",
     "internal_name": "dlc2_book_ettinepistle",
-    "id": 2034766
+    "id": 2034766,
+    "name": "Epistle I"
   },
   {
-    "name": "Idylla Rising",
     "internal_name": "dlc2_book_idyllaascent",
-    "id": 2034770
+    "id": 2034770,
+    "name": "Idylla Rising"
   },
   {
-    "name": "The Mairu, I",
     "internal_name": "dlc2_book_mairu_1",
-    "id": 2034774
+    "id": 2034774,
+    "name": "The Mairu, I"
   },
   {
-    "name": "The Mairu, II",
     "internal_name": "dlc2_book_mairu_2",
-    "id": 2034775
+    "id": 2034775,
+    "name": "The Mairu, II"
   },
   {
-    "name": "Anokatos' Miracle",
     "internal_name": "dlc2_book_anokatosmiracles",
-    "id": 2034865
+    "id": 2034865,
+    "name": "Anokatos' Miracle"
   },
   {
-    "name": "Gallow's Bloom",
     "internal_name": "dlc1_questitem_ph01b_gallowsbloom",
-    "id": 2035087
+    "id": 2035087,
+    "name": "Gallow's Bloom"
   },
   {
-    "name": "Scion's Amulet",
     "internal_name": "dlc1_questitem_mq03_amulet",
-    "id": 2035166
+    "id": 2035166,
+    "name": "Scion's Amulet"
   },
   {
-    "name": "Gallows End Beastiary",
     "internal_name": "dlc1_book_gallowsendbestiary",
-    "id": 2067428
+    "id": 2067428,
+    "name": "Gallows End Beastiary"
   },
   {
-    "name": "Survey of Gallows End",
     "internal_name": "dlc1_book_surveyofgallowsend",
-    "id": 2067431
+    "id": 2067431,
+    "name": "Survey of Gallows End"
   },
   {
-    "name": "Zefwyn's Log",
     "internal_name": "dlc1_book_zefwynslog",
-    "id": 2067730
+    "id": 2067730,
+    "name": "Zefwyn's Log"
   },
   {
-    "name": "Diary of Myfa Rhonwen",
     "internal_name": "dlc1_book_myfadiary",
-    "id": 2067787
+    "id": 2067787,
+    "name": "Diary of Myfa Rhonwen"
   },
   {
-    "name": "Alfar Navy Recruitment Letter",
     "internal_name": "dlc1_book_recruitmentletter",
-    "id": 2071122
+    "id": 2071122,
+    "name": "Alfar Navy Recruitment Letter"
   },
   {
-    "name": "Naros Chronicle",
     "internal_name": "dlc2_book_mqstory_1_1",
-    "id": 2079570
+    "id": 2079570,
+    "name": "Naros Chronicle"
   },
   {
-    "name": "Naros Chronicle",
     "internal_name": "dlc2_book_mqstory_2",
-    "id": 2079571
+    "id": 2079571,
+    "name": "Naros Chronicle"
   },
   {
-    "name": "Naros Chronicle",
     "internal_name": "dlc2_book_mqstory_3_1",
-    "id": 2079572
+    "id": 2079572,
+    "name": "Naros Chronicle"
   },
   {
-    "name": "Naros Chronicle",
     "internal_name": "dlc2_book_mqstory_4",
-    "id": 2079573
+    "id": 2079573,
+    "name": "Naros Chronicle"
   },
   {
-    "name": "Ambrose's Goods",
     "internal_name": "dlc1_questitem_ph01b_ambrosegoods",
-    "id": 2085923
+    "id": 2085923,
+    "name": "Ambrose's Goods"
   },
   {
-    "name": "The Pteryx",
     "internal_name": "dlc2_book_pteryx",
-    "id": 2089165
+    "id": 2089165,
+    "name": "The Pteryx"
   },
   {
-    "name": "Oath of the Primos",
     "internal_name": "dlc2_book_primoshistory",
-    "id": 2089482
+    "id": 2089482,
+    "name": "Oath of the Primos"
   },
   {
-    "name": "Explorer's Journal, I",
     "internal_name": "dlc2_book_nerotelos_1",
-    "id": 2089753
+    "id": 2089753,
+    "name": "Explorer's Journal, I"
   },
   {
-    "name": "Explorer's Journal, II",
     "internal_name": "dlc2_book_nerotelos_2",
-    "id": 2089756
+    "id": 2089756,
+    "name": "Explorer's Journal, II"
   },
   {
-    "name": "Explorer's Journal, III",
     "internal_name": "dlc2_book_nerotelos_3",
-    "id": 2089761
+    "id": 2089761,
+    "name": "Explorer's Journal, III"
   },
   {
-    "name": "Explorer's Journal, IV",
     "internal_name": "dlc2_book_nerotelos_4",
-    "id": 2089762
+    "id": 2089762,
+    "name": "Explorer's Journal, IV"
   },
   {
-    "name": "Explorer's Journal, V",
     "internal_name": "dlc2_book_nerotelos_5",
-    "id": 2089767
+    "id": 2089767,
+    "name": "Explorer's Journal, V"
   },
   {
-    "name": "Explorer's Journal, VI",
     "internal_name": "dlc2_book_nerotelos_6",
-    "id": 2089773
+    "id": 2089773,
+    "name": "Explorer's Journal, VI"
   },
   {
-    "name": "Explorer's Journal, VII",
     "internal_name": "dlc2_book_nerotelos_7",
-    "id": 2089779
+    "id": 2089779,
+    "name": "Explorer's Journal, VII"
   },
   {
-    "name": "Explorer's Journal, VIII",
     "internal_name": "dlc2_book_nerotelos_8",
-    "id": 2089785
+    "id": 2089785,
+    "name": "Explorer's Journal, VIII"
   },
   {
-    "name": "Explorer's Journal, IX",
     "internal_name": "dlc2_book_nerotelos_9",
-    "id": 2089786
+    "id": 2089786,
+    "name": "Explorer's Journal, IX"
   },
   {
-    "name": "Akara Essence Vial",
     "internal_name": "dlc1_questitem_ph01b_akaravialfull",
-    "id": 2090033
+    "id": 2090033,
+    "name": "Akara Essence Vial"
   },
   {
-    "name": "Akara Essence Vial",
     "internal_name": "dlc1_questitem_ph01b_akaravial",
-    "id": 2090034
+    "id": 2090034,
+    "name": "Akara Essence Vial"
   },
   {
-    "name": "Helyc's Journal",
     "internal_name": "dlc2_book_helycjournal",
-    "id": 2090251
+    "id": 2090251,
+    "name": "Helyc's Journal"
   },
   {
-    "name": "Scout Report",
     "internal_name": "dlc2_book_jottunscout",
-    "id": 2090278
+    "id": 2090278,
+    "name": "Scout Report"
   },
   {
-    "name": "Epistle II",
     "internal_name": "dlc2_book_epistle_2",
-    "id": 2091129
+    "id": 2091129,
+    "name": "Epistle II"
   },
   {
-    "name": "Epistle III",
     "internal_name": "dlc2_book_epistle_3",
-    "id": 2091130
+    "id": 2091130,
+    "name": "Epistle III"
   },
   {
-    "name": "Liturgy of the Word",
     "internal_name": "dlc2_book_liturgy",
-    "id": 2091361
+    "id": 2091361,
+    "name": "Liturgy of the Word"
   },
   {
-    "name": "Psalms III",
     "internal_name": "dlc2_book_psalms",
-    "id": 2091861
+    "id": 2091861,
+    "name": "Psalms III"
   },
   {
-    "name": "Psalms I",
     "internal_name": "dlc2_book_psalms_2",
-    "id": 2091863
+    "id": 2091863,
+    "name": "Psalms I"
   },
   {
-    "name": "Psalms II",
     "internal_name": "dlc2_book_psalms_3",
-    "id": 2091869
+    "id": 2091869,
+    "name": "Psalms II"
   },
   {
-    "name": "Titans I",
     "internal_name": "dlc2_book_titans_1",
-    "id": 2092023
+    "id": 2092023,
+    "name": "Titans I"
   },
   {
-    "name": "Letter to Galataea",
     "internal_name": "dlc2_book_pacetorletter_01",
-    "id": 2092053
+    "id": 2092053,
+    "name": "Letter to Galataea"
   },
   {
-    "name": "Naros Chronicle",
     "internal_name": "dlc2_book_mqstory_1_2",
-    "id": 2094053
+    "id": 2094053,
+    "name": "Naros Chronicle"
   },
   {
-    "name": "Naros Chronicle",
     "internal_name": "dlc2_book_mqstory_1_3",
-    "id": 2094054
+    "id": 2094054,
+    "name": "Naros Chronicle"
   },
   {
-    "name": "Naros Chronicle",
     "internal_name": "dlc2_book_mqstory_1_4",
-    "id": 2094055
+    "id": 2094055,
+    "name": "Naros Chronicle"
   },
   {
-    "name": "Naros Chronicle",
     "internal_name": "dlc2_book_mqstory_3_2",
-    "id": 2094505
+    "id": 2094505,
+    "name": "Naros Chronicle"
   },
   {
-    "name": "Naros Chronicle",
     "internal_name": "dlc2_book_mqstory_5_1",
-    "id": 2094577
+    "id": 2094577,
+    "name": "Naros Chronicle"
   },
   {
-    "name": "Naros Chronicle",
     "internal_name": "dlc2_book_mqstory_5_2",
-    "id": 2094578
+    "id": 2094578,
+    "name": "Naros Chronicle"
   },
   {
-    "name": "Naros Chronicle",
     "internal_name": "dlc2_book_mqstory_6_1",
-    "id": 2094588
+    "id": 2094588,
+    "name": "Naros Chronicle"
   },
   {
-    "name": "Naros Chronicle",
     "internal_name": "dlc2_book_mqstory_7_1",
-    "id": 2094592
+    "id": 2094592,
+    "name": "Naros Chronicle"
   },
   {
-    "name": "Titans II",
     "internal_name": "dlc2_book_titans_2",
-    "id": 2094772
+    "id": 2094772,
+    "name": "Titans II"
   },
   {
-    "name": "Titans III",
     "internal_name": "dlc2_book_titans_3",
-    "id": 2094773
+    "id": 2094773,
+    "name": "Titans III"
   },
   {
-    "name": "Titans IV",
     "internal_name": "dlc2_book_titans_4",
-    "id": 2094774
+    "id": 2094774,
+    "name": "Titans IV"
   },
   {
-    "name": "Titans V",
     "internal_name": "dlc2_book_titans_5",
-    "id": 2094775
+    "id": 2094775,
+    "name": "Titans V"
   },
   {
-    "name": "Titans VI",
     "internal_name": "dlc2_book_titans_6",
-    "id": 2094776
+    "id": 2094776,
+    "name": "Titans VI"
   },
   {
-    "name": "Titans VII",
     "internal_name": "dlc2_book_titans_7",
-    "id": 2094777
+    "id": 2094777,
+    "name": "Titans VII"
   },
   {
-    "name": "Titans VIII",
     "internal_name": "dlc2_book_titans_8",
-    "id": 2094778
+    "id": 2094778,
+    "name": "Titans VIII"
   },
   {
-    "name": "Titans IX",
     "internal_name": "dlc2_book_titans_9",
-    "id": 2094780
+    "id": 2094780,
+    "name": "Titans IX"
   },
   {
-    "name": "Naros Chronicle",
     "internal_name": "dlc2_book_mqstory_7_2",
-    "id": 2100000
+    "id": 2100000,
+    "name": "Naros Chronicle"
   },
   {
-    "name": "Naros Chronicle",
     "internal_name": "dlc2_book_mqstory_8_1",
-    "id": 2100002
+    "id": 2100002,
+    "name": "Naros Chronicle"
   },
   {
-    "name": "Amphora",
     "internal_name": "dlc2_questitem_sq07_filledamphora",
-    "id": 2102632
+    "id": 2102632,
+    "name": "Amphora"
   },
   {
-    "name": "Naros Chronicle",
     "internal_name": "dlc2_book_mqstory_8_2",
-    "id": 2104175
+    "id": 2104175,
+    "name": "Naros Chronicle"
   },
   {
-    "name": "Naros Chronicle",
     "internal_name": "dlc2_book_mqstory_9_1",
-    "id": 2104381
+    "id": 2104381,
+    "name": "Naros Chronicle"
   },
   {
-    "name": "Naros Chronicle",
     "internal_name": "dlc2_book_mqstory_9_1_01",
-    "id": 2106202
+    "id": 2106202,
+    "name": "Naros Chronicle"
   },
   {
-    "name": "Naros Chronicle",
     "internal_name": "dlc2_book_mqstory_8_2_01",
-    "id": 2106203
+    "id": 2106203,
+    "name": "Naros Chronicle"
   },
   {
-    "name": "Naros Chronicle",
     "internal_name": "dlc2_book_mqstory_8_1_01",
-    "id": 2106204
+    "id": 2106204,
+    "name": "Naros Chronicle"
   },
   {
-    "name": "Naros Chronicle",
     "internal_name": "dlc2_book_mqstory_7_2_01",
-    "id": 2106205
+    "id": 2106205,
+    "name": "Naros Chronicle"
   },
   {
-    "name": "Naros Chronicle",
     "internal_name": "dlc2_book_mqstory_7_1_01",
-    "id": 2106206
+    "id": 2106206,
+    "name": "Naros Chronicle"
   },
   {
-    "name": "Naros Chronicle",
     "internal_name": "dlc2_book_mqstory_6_1_01",
-    "id": 2106207
+    "id": 2106207,
+    "name": "Naros Chronicle"
   },
   {
-    "name": "Naros Chronicle",
     "internal_name": "dlc2_book_mqstory_5_2_01",
-    "id": 2106208
+    "id": 2106208,
+    "name": "Naros Chronicle"
   },
   {
-    "name": "Naros Chronicle",
     "internal_name": "dlc2_book_mqstory_5_1_01",
-    "id": 2106209
+    "id": 2106209,
+    "name": "Naros Chronicle"
   },
   {
-    "name": "Naros Chronicle",
     "internal_name": "dlc2_book_mqstory_4_01",
-    "id": 2106210
+    "id": 2106210,
+    "name": "Naros Chronicle"
   },
   {
-    "name": "Naros Chronicle",
     "internal_name": "dlc2_book_mqstory_3_2_01",
-    "id": 2106211
+    "id": 2106211,
+    "name": "Naros Chronicle"
   },
   {
-    "name": "Naros Chronicle",
     "internal_name": "dlc2_book_mqstory_3_1_01",
-    "id": 2106212
+    "id": 2106212,
+    "name": "Naros Chronicle"
   },
   {
-    "name": "Naros Chronicle",
     "internal_name": "dlc2_book_mqstory_2_01",
-    "id": 2106213
+    "id": 2106213,
+    "name": "Naros Chronicle"
   },
   {
-    "name": "Naros Chronicle",
     "internal_name": "dlc2_book_mqstory_1_4_01",
-    "id": 2106214
+    "id": 2106214,
+    "name": "Naros Chronicle"
   },
   {
-    "name": "Naros Chronicle",
     "internal_name": "dlc2_book_mqstory_1_3_01",
-    "id": 2106215
+    "id": 2106215,
+    "name": "Naros Chronicle"
   },
   {
-    "name": "Naros Chronicle",
     "internal_name": "dlc2_book_mqstory_1_2_01",
-    "id": 2106216
+    "id": 2106216,
+    "name": "Naros Chronicle"
   },
   {
-    "name": "Naros Chronicle",
     "internal_name": "dlc2_book_mqstory_1_1_01",
-    "id": 2106217
+    "id": 2106217,
+    "name": "Naros Chronicle"
   },
   {
-    "name": "The Black Atoll",
     "internal_name": "dlc1_questitem_ph01b_painting",
-    "id": 2114132
+    "id": 2114132,
+    "name": "The Black Atoll"
   },
   {
-    "name": null,
-    "internal_name": "dlc3_questitem_sq05_pestal",
-    "id": 2117387
+    "internal_name": "ao_sq_pa_004_dungeon_key",
+    "id": 2600238,
+    "name": "Waterfall Key"
   },
   {
-    "name": null,
-    "internal_name": "dlc3_questitem_sq05_grain",
-    "id": 2117438
+    "internal_name": "ao_sq_pa_004_corpse_item_1",
+    "id": 2600250,
+    "name": "Yellowed Letter"
   },
   {
-    "name": null,
-    "internal_name": "dlc3_questitem_sq05_hammer",
-    "id": 2117452
+    "internal_name": "ao_sq_pa_004_corpse_item_2",
+    "id": 2600251,
+    "name": "Cheap Ring"
   },
   {
-    "name": null,
-    "internal_name": "dlc3_questitem_sq05_pot",
-    "id": 2117454
+    "internal_name": "ao_sq_pa_004_corpse_item_3",
+    "id": 2600252,
+    "name": "Rusty Key"
   },
   {
-    "name": null,
-    "internal_name": "dlc3_questitem_sq05_keg",
-    "id": 2117466
+    "internal_name": "ao_sq_pa_004_corpse_item_4",
+    "id": 2600253,
+    "name": "Broken Tool"
   },
   {
-    "name": null,
-    "internal_name": "dlc3_questitem_sq05_boggartdoll",
-    "id": 2117475
+    "internal_name": "ao_sq_pa_004_effie_notes",
+    "id": 2600270,
+    "name": "Research Notes"
   },
   {
-    "name": null,
-    "internal_name": "dlc3_questitem_sq01_erathicure",
-    "id": 2118780
+    "internal_name": "mit_chaos_iron",
+    "id": 2600391,
+    "name": "Chaos Matter"
   },
   {
-    "name": null,
-    "internal_name": "dlc3_questitem_sq03_stone_of_foresight",
-    "id": 2119524
+    "internal_name": "ao_mq_010_border_permit",
+    "id": 2601213,
+    "name": "Border Permit"
   },
   {
-    "name": null,
-    "internal_name": "dlc3_questitem_sq07_deadguyarmor",
-    "id": 2120234
+    "internal_name": "ao_tq_rc_003_niskaru_fang",
+    "id": 2601302,
+    "name": "Niskaru Fang"
   },
   {
-    "name": null,
-    "internal_name": "dlc3_sq09_hymnal",
-    "id": 2137245
+    "internal_name": "ao_mq_030_puzzle_hint",
+    "id": 2601566,
+    "name": "Orella's Notes"
   },
   {
-    "name": null,
-    "internal_name": "dlc3_sq09_hymnal_reward",
-    "id": 2138239
+    "internal_name": "mit_tq_ss_006_chaos_hearth",
+    "id": 2601602,
+    "name": "Heart of Chaos"
+  },
+  {
+    "internal_name": "mit_quest_item_parent",
+    "id": 2601603,
+    "name": null
+  },
+  {
+    "internal_name": "mit_mq_20_rusty_sword",
+    "id": 2601604,
+    "name": "Broken Chaos Sword"
+  },
+  {
+    "internal_name": "mit_chaos_flame_item",
+    "id": 2601706,
+    "name": "Chaos Flame"
+  },
+  {
+    "internal_name": "mit_cynocs_eye_item",
+    "id": 2601729,
+    "name": "Cynoc's Eye"
+  },
+  {
+    "internal_name": "mit_tome_of_synthesis_item",
+    "id": 2601807,
+    "name": "Tome of Synthesis"
+  },
+  {
+    "internal_name": "ao_mq_032_grand_library_hints",
+    "id": 2601826,
+    "name": "King Reynor's Writings"
+  },
+  {
+    "internal_name": "mit_erathi_nexus_item",
+    "id": 2601902,
+    "name": "Erathi Nexus"
+  },
+  {
+    "internal_name": "ao_sq_pa_001_border_permit",
+    "id": 2602404,
+    "name": "Border Permit"
+  },
+  {
+    "internal_name": "mit_sq_gc_006_key",
+    "id": 2602506,
+    "name": "Warehouse Key"
+  },
+  {
+    "internal_name": "ao_fq_re_001_lyennas_family_heirloom",
+    "id": 2602615,
+    "name": "Lyenna's Necklace"
+  },
+  {
+    "internal_name": "ao_sq_cp_003_shopping_list",
+    "id": 2603618,
+    "name": "Colet's Shopping List"
+  },
+  {
+    "internal_name": "ao_fq_gc_003_ivans_notes",
+    "id": 2603705,
+    "name": "Ivan's Research"
+  },
+  {
+    "internal_name": "ao_sq_pa_006_flute",
+    "id": 2603816,
+    "name": "Adelena's Flute"
+  },
+  {
+    "internal_name": "mit_boggart_wood",
+    "id": 2603818,
+    "name": "Boggart Wood"
+  },
+  {
+    "internal_name": "ao_sq_re_007_abyss_notes",
+    "id": 2604115,
+    "name": "Atarum Price Notes"
+  },
+  {
+    "internal_name": "ao_sq_pa_007_head_sinder",
+    "id": 2604209,
+    "name": "Sinder's token"
+  },
+  {
+    "internal_name": "ao_sq_pa_007_head_rendi",
+    "id": 2604210,
+    "name": "Rendi Walsh's token"
+  },
+  {
+    "internal_name": "ao_sq_pa_007_head_sorcha",
+    "id": 2604211,
+    "name": "Sorcha Donohue's token"
+  },
+  {
+    "internal_name": "ao_sq_pa_007_head_cyrus",
+    "id": 2604212,
+    "name": "Cyrus Pepper's token"
+  },
+  {
+    "internal_name": "ao_sq_pa_007_head_nora",
+    "id": 2604213,
+    "name": "Nora Pepper's token"
+  },
+  {
+    "internal_name": "ao_sq_re_001_dungeon_key",
+    "id": 2604309,
+    "name": "The Salon Magisterium Key"
+  },
+  {
+    "internal_name": "ao_sq_re_001_invitation",
+    "id": 2604336,
+    "name": "Invitation to Labor Auction"
+  },
+  {
+    "internal_name": "ao_tq_ch_001_silk",
+    "id": 2604703,
+    "name": "Skein of Chaos Silk"
+  },
+  {
+    "internal_name": "ao_sq_cp_001_trophy_ice_troll",
+    "id": 2604804,
+    "name": "Troll Finger"
+  },
+  {
+    "internal_name": "ao_sq_cp_001_trophy_prismere_troll",
+    "id": 2604806,
+    "name": "Troll Tusk"
+  },
+  {
+    "internal_name": "ao_sq_cp_001_trophy_jottun_runelord",
+    "id": 2604807,
+    "name": "Frosthammer Fragment"
+  },
+  {
+    "internal_name": "ao_sq_cp_001_trophy_root_golem",
+    "id": 2604808,
+    "name": "Ancient Root"
+  },
+  {
+    "internal_name": "ao_tq_cp_002_mountain_barghest_tears",
+    "id": 2606203,
+    "name": "Frozen Barghest Tear"
+  },
+  {
+    "internal_name": "ao_tq_gc_004_talisman",
+    "id": 2606302,
+    "name": "Preordained Talisman"
+  },
+  {
+    "internal_name": "ao_tq_ch_005_meat_1",
+    "id": 2606403,
+    "name": "Barghest Haunch"
+  },
+  {
+    "internal_name": "ao_tq_ch_005_meat_2",
+    "id": 2606404,
+    "name": "Sprite Wing"
+  },
+  {
+    "internal_name": "ao_tq_ch_005_meat_3",
+    "id": 2606405,
+    "name": "Boggart Sprig"
+  },
+  {
+    "internal_name": "ao_tq_ch_005_meat_4",
+    "id": 2606406,
+    "name": "Troll Schnitzel"
+  },
+  {
+    "internal_name": "ao_sq_re_003_kobold_gunpowder",
+    "id": 2606625,
+    "name": "Black Powder"
+  },
+  {
+    "internal_name": "ao_mq_010_preordained_text_01",
+    "id": 2606717,
+    "name": "Mysterious Tract"
+  },
+  {
+    "internal_name": "ao_mq_010_preordained_text_02",
+    "id": 2606718,
+    "name": "Smuggler's Notes"
+  },
+  {
+    "internal_name": "ao_fq_pl_006_letter",
+    "id": 2607203,
+    "name": "Letter to Goyen Reen"
+  },
+  {
+    "internal_name": "ao_mq_000_intro_letter",
+    "id": 2607702,
+    "name": "Mysterious Letter"
+  },
+  {
+    "internal_name": "ao_mq_000_letter",
+    "id": 2607703,
+    "name": "Elza's Last Words"
+  },
+  {
+    "internal_name": "ao_sq_re_006_diary",
+    "id": 2608207,
+    "name": "Aiden's Diary"
+  },
+  {
+    "internal_name": "mit_sword1h_unique02",
+    "id": 2671059,
+    "name": "Rusty Chaos Sword"
+  },
+  {
+    "internal_name": "mit_warrior_set01a_head",
+    "id": 2671368,
+    "name": "Hope of the Fatesworn Helm"
+  },
+  {
+    "internal_name": "mit_warrior_set01a_torso",
+    "id": 2671369,
+    "name": "Hope of the Fatesworn Cuirass"
+  },
+  {
+    "internal_name": "mit_warrior_set01a_hands",
+    "id": 2671370,
+    "name": "Hope of the Fatesworn Gauntlets"
+  },
+  {
+    "internal_name": "mit_warrior_set01a_feet",
+    "id": 2671371,
+    "name": "Hope of the Fatesworn Greaves"
+  },
+  {
+    "internal_name": "mit_warrior_set01a_legs",
+    "id": 2671372,
+    "name": "Hope of the Fatesworn Chausses"
+  },
+  {
+    "internal_name": "mit_warrior_set01b_feet",
+    "id": 2671535,
+    "name": "Hope of the Fatesworn Greaves"
+  },
+  {
+    "internal_name": "mit_warrior_set01b_hands",
+    "id": 2671536,
+    "name": "Hope of the Fatesworn Gauntlets"
+  },
+  {
+    "internal_name": "mit_warrior_set01b_head",
+    "id": 2671537,
+    "name": "Hope of the Fatesworn Helm"
+  },
+  {
+    "internal_name": "mit_warrior_set01b_legs",
+    "id": 2671538,
+    "name": "Hope of the Fatesworn Chausses"
+  },
+  {
+    "internal_name": "mit_warrior_set01b_torso",
+    "id": 2671539,
+    "name": "Hope of the Fatesworn Cuirass"
+  },
+  {
+    "internal_name": "mit_warrior_set01c_feet",
+    "id": 2671540,
+    "name": "Hope of the Fatesworn Greaves"
+  },
+  {
+    "internal_name": "mit_warrior_set01c_hands",
+    "id": 2671541,
+    "name": "Hope of the Fatesworn Gauntlets"
+  },
+  {
+    "internal_name": "mit_warrior_set01c_head",
+    "id": 2671542,
+    "name": "Hope of the Fatesworn Helm"
+  },
+  {
+    "internal_name": "mit_warrior_set01c_legs",
+    "id": 2671543,
+    "name": "Hope of the Fatesworn Chausses"
+  },
+  {
+    "internal_name": "mit_warrior_set01c_torso",
+    "id": 2671544,
+    "name": "Hope of the Fatesworn Cuirass"
+  },
+  {
+    "internal_name": "mit_greathammer_chaos_parent",
+    "id": 2690000,
+    "name": "Chaos Hammer"
+  },
+  {
+    "internal_name": "mit_sword1h_chaos_parent",
+    "id": 2690001,
+    "name": "Chaos Longsword"
+  },
+  {
+    "internal_name": "mit_sword2h_chaos_parent",
+    "id": 2690002,
+    "name": "Chaos Greatsword"
+  },
+  {
+    "internal_name": "mit_daggers_chaos_parent",
+    "id": 2690003,
+    "name": "Chaos Daggers"
+  },
+  {
+    "internal_name": "mit_longbow_chaos_parent",
+    "id": 2690004,
+    "name": "Chaos Longbow"
+  },
+  {
+    "internal_name": "mit_mirrorblades_chaos_parent",
+    "id": 2690005,
+    "name": "Chaos Faeblades"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_fire_parent",
+    "id": 2690006,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_ice_parent",
+    "id": 2690007,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_lightning_parent",
+    "id": 2690008,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_fire_parent",
+    "id": 2690009,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_ice_parent",
+    "id": 2690010,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_lightning_parent",
+    "id": 2690011,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_staff_chaos_fire_parent",
+    "id": 2690012,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_ice_parent",
+    "id": 2690013,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_lightning_parent",
+    "id": 2690014,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_greathammer_chaos01a",
+    "id": 2690020,
+    "name": "Chaos Hammer"
+  },
+  {
+    "internal_name": "mit_greathammer_chaos01b",
+    "id": 2690021,
+    "name": "Chaos Hammer"
+  },
+  {
+    "internal_name": "mit_greathammer_chaos01c",
+    "id": 2690022,
+    "name": "Chaos Hammer"
+  },
+  {
+    "internal_name": "mit_greathammer_chaos01d",
+    "id": 2690023,
+    "name": "Chaos Hammer"
+  },
+  {
+    "internal_name": "mit_greathammer_chaos01e",
+    "id": 2690024,
+    "name": "Chaos Hammer"
+  },
+  {
+    "internal_name": "mit_greathammer_chaos02a",
+    "id": 2690025,
+    "name": "Chaos Hammer"
+  },
+  {
+    "internal_name": "mit_greathammer_chaos02b",
+    "id": 2690026,
+    "name": "Chaos Hammer"
+  },
+  {
+    "internal_name": "mit_greathammer_chaos02c",
+    "id": 2690027,
+    "name": "Chaos Hammer"
+  },
+  {
+    "internal_name": "mit_greathammer_chaos02d",
+    "id": 2690028,
+    "name": "Chaos Hammer"
+  },
+  {
+    "internal_name": "mit_greathammer_chaos02e",
+    "id": 2690029,
+    "name": "Chaos Hammer"
+  },
+  {
+    "internal_name": "mit_greathammer_chaos03a",
+    "id": 2690030,
+    "name": "Chaos Hammer"
+  },
+  {
+    "internal_name": "mit_greathammer_chaos03b",
+    "id": 2690031,
+    "name": "Chaos Hammer"
+  },
+  {
+    "internal_name": "mit_greathammer_chaos03c",
+    "id": 2690032,
+    "name": "Chaos Hammer"
+  },
+  {
+    "internal_name": "mit_greathammer_chaos03d",
+    "id": 2690033,
+    "name": "Chaos Hammer"
+  },
+  {
+    "internal_name": "mit_greathammer_chaos03e",
+    "id": 2690034,
+    "name": "Chaos Hammer"
+  },
+  {
+    "internal_name": "mit_greathammer_chaos04a",
+    "id": 2690035,
+    "name": "Chaos Hammer"
+  },
+  {
+    "internal_name": "mit_greathammer_chaos04b",
+    "id": 2690036,
+    "name": "Chaos Hammer"
+  },
+  {
+    "internal_name": "mit_greathammer_chaos04c",
+    "id": 2690037,
+    "name": "Chaos Hammer"
+  },
+  {
+    "internal_name": "mit_greathammer_chaos04d",
+    "id": 2690038,
+    "name": "Chaos Hammer"
+  },
+  {
+    "internal_name": "mit_greathammer_chaos04e",
+    "id": 2690039,
+    "name": "Chaos Hammer"
+  },
+  {
+    "internal_name": "mit_greathammer_chaos05a",
+    "id": 2690040,
+    "name": "Chaos Hammer"
+  },
+  {
+    "internal_name": "mit_greathammer_chaos05b",
+    "id": 2690041,
+    "name": "Chaos Hammer"
+  },
+  {
+    "internal_name": "mit_greathammer_chaos05c",
+    "id": 2690042,
+    "name": "Chaos Hammer"
+  },
+  {
+    "internal_name": "mit_greathammer_chaos05d",
+    "id": 2690043,
+    "name": "Chaos Hammer"
+  },
+  {
+    "internal_name": "mit_greathammer_chaos05e",
+    "id": 2690044,
+    "name": "Chaos Hammer"
+  },
+  {
+    "internal_name": "mit_greathammer_chaos06a",
+    "id": 2690045,
+    "name": "Chaos Hammer"
+  },
+  {
+    "internal_name": "mit_greathammer_chaos06b",
+    "id": 2690046,
+    "name": "Chaos Hammer"
+  },
+  {
+    "internal_name": "mit_greathammer_chaos06c",
+    "id": 2690047,
+    "name": "Chaos Hammer"
+  },
+  {
+    "internal_name": "mit_greathammer_chaos06d",
+    "id": 2690048,
+    "name": "Chaos Hammer"
+  },
+  {
+    "internal_name": "mit_greathammer_chaos06e",
+    "id": 2690049,
+    "name": "Chaos Hammer"
+  },
+  {
+    "internal_name": "mit_sword1h_chaos01a",
+    "id": 2690050,
+    "name": "Chaos Longsword"
+  },
+  {
+    "internal_name": "mit_sword1h_chaos01b",
+    "id": 2690051,
+    "name": "Chaos Longsword"
+  },
+  {
+    "internal_name": "mit_sword1h_chaos01c",
+    "id": 2690052,
+    "name": "Chaos Longsword"
+  },
+  {
+    "internal_name": "mit_sword1h_chaos01d",
+    "id": 2690053,
+    "name": "Chaos Longsword"
+  },
+  {
+    "internal_name": "mit_sword1h_chaos01e",
+    "id": 2690054,
+    "name": "Chaos Longsword"
+  },
+  {
+    "internal_name": "mit_sword1h_chaos02a",
+    "id": 2690055,
+    "name": "Chaos Longsword"
+  },
+  {
+    "internal_name": "mit_sword1h_chaos02b",
+    "id": 2690056,
+    "name": "Chaos Longsword"
+  },
+  {
+    "internal_name": "mit_sword1h_chaos02c",
+    "id": 2690057,
+    "name": "Chaos Longsword"
+  },
+  {
+    "internal_name": "mit_sword1h_chaos02d",
+    "id": 2690058,
+    "name": "Chaos Longsword"
+  },
+  {
+    "internal_name": "mit_sword1h_chaos02e",
+    "id": 2690059,
+    "name": "Chaos Longsword"
+  },
+  {
+    "internal_name": "mit_sword1h_chaos03a",
+    "id": 2690060,
+    "name": "Chaos Longsword"
+  },
+  {
+    "internal_name": "mit_sword1h_chaos03b",
+    "id": 2690061,
+    "name": "Chaos Longsword"
+  },
+  {
+    "internal_name": "mit_sword1h_chaos03c",
+    "id": 2690062,
+    "name": "Chaos Longsword"
+  },
+  {
+    "internal_name": "mit_sword1h_chaos03d",
+    "id": 2690063,
+    "name": "Chaos Longsword"
+  },
+  {
+    "internal_name": "mit_sword1h_chaos03e",
+    "id": 2690064,
+    "name": "Chaos Longsword"
+  },
+  {
+    "internal_name": "mit_sword1h_chaos04a",
+    "id": 2690065,
+    "name": "Chaos Longsword"
+  },
+  {
+    "internal_name": "mit_sword1h_chaos04b",
+    "id": 2690066,
+    "name": "Chaos Longsword"
+  },
+  {
+    "internal_name": "mit_sword1h_chaos04c",
+    "id": 2690067,
+    "name": "Chaos Longsword"
+  },
+  {
+    "internal_name": "mit_sword1h_chaos04d",
+    "id": 2690068,
+    "name": "Chaos Longsword"
+  },
+  {
+    "internal_name": "mit_sword1h_chaos04e",
+    "id": 2690069,
+    "name": "Chaos Longsword"
+  },
+  {
+    "internal_name": "mit_sword1h_chaos05a",
+    "id": 2690070,
+    "name": "Chaos Longsword"
+  },
+  {
+    "internal_name": "mit_sword1h_chaos05b",
+    "id": 2690071,
+    "name": "Chaos Longsword"
+  },
+  {
+    "internal_name": "mit_sword1h_chaos05c",
+    "id": 2690072,
+    "name": "Chaos Longsword"
+  },
+  {
+    "internal_name": "mit_sword1h_chaos05d",
+    "id": 2690073,
+    "name": "Chaos Longsword"
+  },
+  {
+    "internal_name": "mit_sword1h_chaos05e",
+    "id": 2690074,
+    "name": "Chaos Longsword"
+  },
+  {
+    "internal_name": "mit_sword1h_chaos06a",
+    "id": 2690075,
+    "name": "Chaos Longsword"
+  },
+  {
+    "internal_name": "mit_sword1h_chaos06b",
+    "id": 2690076,
+    "name": "Chaos Longsword"
+  },
+  {
+    "internal_name": "mit_sword1h_chaos06c",
+    "id": 2690077,
+    "name": "Chaos Longsword"
+  },
+  {
+    "internal_name": "mit_sword1h_chaos06d",
+    "id": 2690078,
+    "name": "Chaos Longsword"
+  },
+  {
+    "internal_name": "mit_sword1h_chaos06e",
+    "id": 2690079,
+    "name": "Chaos Longsword"
+  },
+  {
+    "internal_name": "mit_sword2h_chaos01a",
+    "id": 2690080,
+    "name": "Chaos Greatsword"
+  },
+  {
+    "internal_name": "mit_sword2h_chaos01b",
+    "id": 2690081,
+    "name": "Chaos Greatsword"
+  },
+  {
+    "internal_name": "mit_sword2h_chaos01c",
+    "id": 2690082,
+    "name": "Chaos Greatsword"
+  },
+  {
+    "internal_name": "mit_sword2h_chaos01d",
+    "id": 2690083,
+    "name": "Chaos Greatsword"
+  },
+  {
+    "internal_name": "mit_sword2h_chaos01e",
+    "id": 2690084,
+    "name": "Chaos Greatsword"
+  },
+  {
+    "internal_name": "mit_sword2h_chaos02a",
+    "id": 2690085,
+    "name": "Chaos Greatsword"
+  },
+  {
+    "internal_name": "mit_sword2h_chaos02b",
+    "id": 2690086,
+    "name": "Chaos Greatsword"
+  },
+  {
+    "internal_name": "mit_sword2h_chaos02c",
+    "id": 2690087,
+    "name": "Chaos Greatsword"
+  },
+  {
+    "internal_name": "mit_sword2h_chaos02d",
+    "id": 2690088,
+    "name": "Chaos Greatsword"
+  },
+  {
+    "internal_name": "mit_sword2h_chaos02e",
+    "id": 2690089,
+    "name": "Chaos Greatsword"
+  },
+  {
+    "internal_name": "mit_sword2h_chaos03a",
+    "id": 2690090,
+    "name": "Chaos Greatsword"
+  },
+  {
+    "internal_name": "mit_sword2h_chaos03b",
+    "id": 2690091,
+    "name": "Chaos Greatsword"
+  },
+  {
+    "internal_name": "mit_sword2h_chaos03c",
+    "id": 2690092,
+    "name": "Chaos Greatsword"
+  },
+  {
+    "internal_name": "mit_sword2h_chaos03d",
+    "id": 2690093,
+    "name": "Chaos Greatsword"
+  },
+  {
+    "internal_name": "mit_sword2h_chaos03e",
+    "id": 2690094,
+    "name": "Chaos Greatsword"
+  },
+  {
+    "internal_name": "mit_sword2h_chaos04a",
+    "id": 2690095,
+    "name": "Chaos Greatsword"
+  },
+  {
+    "internal_name": "mit_sword2h_chaos04b",
+    "id": 2690096,
+    "name": "Chaos Greatsword"
+  },
+  {
+    "internal_name": "mit_sword2h_chaos04c",
+    "id": 2690097,
+    "name": "Chaos Greatsword"
+  },
+  {
+    "internal_name": "mit_sword2h_chaos04d",
+    "id": 2690098,
+    "name": "Chaos Greatsword"
+  },
+  {
+    "internal_name": "mit_sword2h_chaos04e",
+    "id": 2690099,
+    "name": "Chaos Greatsword"
+  },
+  {
+    "internal_name": "mit_sword2h_chaos05a",
+    "id": 2690100,
+    "name": "Chaos Greatsword"
+  },
+  {
+    "internal_name": "mit_sword2h_chaos05b",
+    "id": 2690101,
+    "name": "Chaos Greatsword"
+  },
+  {
+    "internal_name": "mit_sword2h_chaos05c",
+    "id": 2690102,
+    "name": "Chaos Greatsword"
+  },
+  {
+    "internal_name": "mit_sword2h_chaos05d",
+    "id": 2690103,
+    "name": "Chaos Greatsword"
+  },
+  {
+    "internal_name": "mit_sword2h_chaos05e",
+    "id": 2690104,
+    "name": "Chaos Greatsword"
+  },
+  {
+    "internal_name": "mit_sword2h_chaos06a",
+    "id": 2690105,
+    "name": "Chaos Greatsword"
+  },
+  {
+    "internal_name": "mit_sword2h_chaos06b",
+    "id": 2690106,
+    "name": "Chaos Greatsword"
+  },
+  {
+    "internal_name": "mit_sword2h_chaos06c",
+    "id": 2690107,
+    "name": "Chaos Greatsword"
+  },
+  {
+    "internal_name": "mit_sword2h_chaos06d",
+    "id": 2690108,
+    "name": "Chaos Greatsword"
+  },
+  {
+    "internal_name": "mit_sword2h_chaos06e",
+    "id": 2690109,
+    "name": "Chaos Greatsword"
+  },
+  {
+    "internal_name": "mit_daggers_chaos01a",
+    "id": 2690110,
+    "name": "Chaos Daggers"
+  },
+  {
+    "internal_name": "mit_daggers_chaos01b",
+    "id": 2690111,
+    "name": "Chaos Daggers"
+  },
+  {
+    "internal_name": "mit_daggers_chaos01c",
+    "id": 2690112,
+    "name": "Chaos Daggers"
+  },
+  {
+    "internal_name": "mit_daggers_chaos01d",
+    "id": 2690113,
+    "name": "Chaos Daggers"
+  },
+  {
+    "internal_name": "mit_daggers_chaos01e",
+    "id": 2690114,
+    "name": "Chaos Daggers"
+  },
+  {
+    "internal_name": "mit_daggers_chaos02a",
+    "id": 2690115,
+    "name": "Chaos Daggers"
+  },
+  {
+    "internal_name": "mit_daggers_chaos02b",
+    "id": 2690116,
+    "name": "Chaos Daggers"
+  },
+  {
+    "internal_name": "mit_daggers_chaos02c",
+    "id": 2690117,
+    "name": "Chaos Daggers"
+  },
+  {
+    "internal_name": "mit_daggers_chaos02d",
+    "id": 2690118,
+    "name": "Chaos Daggers"
+  },
+  {
+    "internal_name": "mit_daggers_chaos02e",
+    "id": 2690119,
+    "name": "Chaos Daggers"
+  },
+  {
+    "internal_name": "mit_daggers_chaos03a",
+    "id": 2690120,
+    "name": "Chaos Daggers"
+  },
+  {
+    "internal_name": "mit_daggers_chaos03b",
+    "id": 2690121,
+    "name": "Chaos Daggers"
+  },
+  {
+    "internal_name": "mit_daggers_chaos03c",
+    "id": 2690122,
+    "name": "Chaos Daggers"
+  },
+  {
+    "internal_name": "mit_daggers_chaos03d",
+    "id": 2690123,
+    "name": "Chaos Daggers"
+  },
+  {
+    "internal_name": "mit_daggers_chaos03e",
+    "id": 2690124,
+    "name": "Chaos Daggers"
+  },
+  {
+    "internal_name": "mit_daggers_chaos04a",
+    "id": 2690125,
+    "name": "Chaos Daggers"
+  },
+  {
+    "internal_name": "mit_daggers_chaos04b",
+    "id": 2690126,
+    "name": "Chaos Daggers"
+  },
+  {
+    "internal_name": "mit_daggers_chaos04c",
+    "id": 2690127,
+    "name": "Chaos Daggers"
+  },
+  {
+    "internal_name": "mit_daggers_chaos04d",
+    "id": 2690128,
+    "name": "Chaos Daggers"
+  },
+  {
+    "internal_name": "mit_daggers_chaos04e",
+    "id": 2690129,
+    "name": "Chaos Daggers"
+  },
+  {
+    "internal_name": "mit_daggers_chaos05a",
+    "id": 2690130,
+    "name": "Chaos Daggers"
+  },
+  {
+    "internal_name": "mit_daggers_chaos05b",
+    "id": 2690131,
+    "name": "Chaos Daggers"
+  },
+  {
+    "internal_name": "mit_daggers_chaos05c",
+    "id": 2690132,
+    "name": "Chaos Daggers"
+  },
+  {
+    "internal_name": "mit_daggers_chaos05d",
+    "id": 2690133,
+    "name": "Chaos Daggers"
+  },
+  {
+    "internal_name": "mit_daggers_chaos05e",
+    "id": 2690134,
+    "name": "Chaos Daggers"
+  },
+  {
+    "internal_name": "mit_daggers_chaos06a",
+    "id": 2690135,
+    "name": "Chaos Daggers"
+  },
+  {
+    "internal_name": "mit_daggers_chaos06b",
+    "id": 2690136,
+    "name": "Chaos Daggers"
+  },
+  {
+    "internal_name": "mit_daggers_chaos06c",
+    "id": 2690137,
+    "name": "Chaos Daggers"
+  },
+  {
+    "internal_name": "mit_daggers_chaos06d",
+    "id": 2690138,
+    "name": "Chaos Daggers"
+  },
+  {
+    "internal_name": "mit_daggers_chaos06e",
+    "id": 2690139,
+    "name": "Chaos Daggers"
+  },
+  {
+    "internal_name": "mit_longbow_chaos01a",
+    "id": 2690140,
+    "name": "Chaos Longbow"
+  },
+  {
+    "internal_name": "mit_longbow_chaos01b",
+    "id": 2690141,
+    "name": "Chaos Longbow"
+  },
+  {
+    "internal_name": "mit_longbow_chaos01c",
+    "id": 2690142,
+    "name": "Chaos Longbow"
+  },
+  {
+    "internal_name": "mit_longbow_chaos01d",
+    "id": 2690143,
+    "name": "Chaos Longbow"
+  },
+  {
+    "internal_name": "mit_longbow_chaos01e",
+    "id": 2690144,
+    "name": "Chaos Longbow"
+  },
+  {
+    "internal_name": "mit_longbow_chaos02a",
+    "id": 2690145,
+    "name": "Chaos Longbow"
+  },
+  {
+    "internal_name": "mit_longbow_chaos02b",
+    "id": 2690146,
+    "name": "Chaos Longbow"
+  },
+  {
+    "internal_name": "mit_longbow_chaos02c",
+    "id": 2690147,
+    "name": "Chaos Longbow"
+  },
+  {
+    "internal_name": "mit_longbow_chaos02d",
+    "id": 2690148,
+    "name": "Chaos Longbow"
+  },
+  {
+    "internal_name": "mit_longbow_chaos02e",
+    "id": 2690149,
+    "name": "Chaos Longbow"
+  },
+  {
+    "internal_name": "mit_longbow_chaos03a",
+    "id": 2690150,
+    "name": "Chaos Longbow"
+  },
+  {
+    "internal_name": "mit_longbow_chaos03b",
+    "id": 2690151,
+    "name": "Chaos Longbow"
+  },
+  {
+    "internal_name": "mit_longbow_chaos03c",
+    "id": 2690152,
+    "name": "Chaos Longbow"
+  },
+  {
+    "internal_name": "mit_longbow_chaos03d",
+    "id": 2690153,
+    "name": "Chaos Longbow"
+  },
+  {
+    "internal_name": "mit_longbow_chaos03e",
+    "id": 2690154,
+    "name": "Chaos Longbow"
+  },
+  {
+    "internal_name": "mit_longbow_chaos04a",
+    "id": 2690155,
+    "name": "Chaos Longbow"
+  },
+  {
+    "internal_name": "mit_longbow_chaos04b",
+    "id": 2690156,
+    "name": "Chaos Longbow"
+  },
+  {
+    "internal_name": "mit_longbow_chaos04c",
+    "id": 2690157,
+    "name": "Chaos Longbow"
+  },
+  {
+    "internal_name": "mit_longbow_chaos04d",
+    "id": 2690158,
+    "name": "Chaos Longbow"
+  },
+  {
+    "internal_name": "mit_longbow_chaos04e",
+    "id": 2690159,
+    "name": "Chaos Longbow"
+  },
+  {
+    "internal_name": "mit_longbow_chaos05a",
+    "id": 2690160,
+    "name": "Chaos Longbow"
+  },
+  {
+    "internal_name": "mit_longbow_chaos05b",
+    "id": 2690161,
+    "name": "Chaos Longbow"
+  },
+  {
+    "internal_name": "mit_longbow_chaos05c",
+    "id": 2690162,
+    "name": "Chaos Longbow"
+  },
+  {
+    "internal_name": "mit_longbow_chaos05d",
+    "id": 2690163,
+    "name": "Chaos Longbow"
+  },
+  {
+    "internal_name": "mit_longbow_chaos05e",
+    "id": 2690164,
+    "name": "Chaos Longbow"
+  },
+  {
+    "internal_name": "mit_longbow_chaos06a",
+    "id": 2690165,
+    "name": "Chaos Longbow"
+  },
+  {
+    "internal_name": "mit_longbow_chaos06b",
+    "id": 2690166,
+    "name": "Chaos Longbow"
+  },
+  {
+    "internal_name": "mit_longbow_chaos06c",
+    "id": 2690167,
+    "name": "Chaos Longbow"
+  },
+  {
+    "internal_name": "mit_longbow_chaos06d",
+    "id": 2690168,
+    "name": "Chaos Longbow"
+  },
+  {
+    "internal_name": "mit_longbow_chaos06e",
+    "id": 2690169,
+    "name": "Chaos Longbow"
+  },
+  {
+    "internal_name": "mit_mirrorblades_chaos01a",
+    "id": 2690170,
+    "name": "Chaos Faeblades"
+  },
+  {
+    "internal_name": "mit_mirrorblades_chaos01b",
+    "id": 2690171,
+    "name": "Chaos Faeblades"
+  },
+  {
+    "internal_name": "mit_mirrorblades_chaos01c",
+    "id": 2690172,
+    "name": "Chaos Faeblades"
+  },
+  {
+    "internal_name": "mit_mirrorblades_chaos01d",
+    "id": 2690173,
+    "name": "Chaos Faeblades"
+  },
+  {
+    "internal_name": "mit_mirrorblades_chaos01e",
+    "id": 2690174,
+    "name": "Chaos Faeblades"
+  },
+  {
+    "internal_name": "mit_mirrorblades_chaos02a",
+    "id": 2690175,
+    "name": "Chaos Faeblades"
+  },
+  {
+    "internal_name": "mit_mirrorblades_chaos02b",
+    "id": 2690176,
+    "name": "Chaos Faeblades"
+  },
+  {
+    "internal_name": "mit_mirrorblades_chaos02c",
+    "id": 2690177,
+    "name": "Chaos Faeblades"
+  },
+  {
+    "internal_name": "mit_mirrorblades_chaos02d",
+    "id": 2690178,
+    "name": "Chaos Faeblades"
+  },
+  {
+    "internal_name": "mit_mirrorblades_chaos02e",
+    "id": 2690179,
+    "name": "Chaos Faeblades"
+  },
+  {
+    "internal_name": "mit_mirrorblades_chaos03a",
+    "id": 2690180,
+    "name": "Chaos Faeblades"
+  },
+  {
+    "internal_name": "mit_mirrorblades_chaos03b",
+    "id": 2690181,
+    "name": "Chaos Faeblades"
+  },
+  {
+    "internal_name": "mit_mirrorblades_chaos03c",
+    "id": 2690182,
+    "name": "Chaos Faeblades"
+  },
+  {
+    "internal_name": "mit_mirrorblades_chaos03d",
+    "id": 2690183,
+    "name": "Chaos Faeblades"
+  },
+  {
+    "internal_name": "mit_mirrorblades_chaos03e",
+    "id": 2690184,
+    "name": "Chaos Faeblades"
+  },
+  {
+    "internal_name": "mit_mirrorblades_chaos04a",
+    "id": 2690185,
+    "name": "Chaos Faeblades"
+  },
+  {
+    "internal_name": "mit_mirrorblades_chaos04b",
+    "id": 2690186,
+    "name": "Chaos Faeblades"
+  },
+  {
+    "internal_name": "mit_mirrorblades_chaos04c",
+    "id": 2690187,
+    "name": "Chaos Faeblades"
+  },
+  {
+    "internal_name": "mit_mirrorblades_chaos04d",
+    "id": 2690188,
+    "name": "Chaos Faeblades"
+  },
+  {
+    "internal_name": "mit_mirrorblades_chaos04e",
+    "id": 2690189,
+    "name": "Chaos Faeblades"
+  },
+  {
+    "internal_name": "mit_mirrorblades_chaos05a",
+    "id": 2690190,
+    "name": "Chaos Faeblades"
+  },
+  {
+    "internal_name": "mit_mirrorblades_chaos05b",
+    "id": 2690191,
+    "name": "Chaos Faeblades"
+  },
+  {
+    "internal_name": "mit_mirrorblades_chaos05c",
+    "id": 2690192,
+    "name": "Chaos Faeblades"
+  },
+  {
+    "internal_name": "mit_mirrorblades_chaos05d",
+    "id": 2690193,
+    "name": "Chaos Faeblades"
+  },
+  {
+    "internal_name": "mit_mirrorblades_chaos05e",
+    "id": 2690194,
+    "name": "Chaos Faeblades"
+  },
+  {
+    "internal_name": "mit_mirrorblades_chaos06a",
+    "id": 2690195,
+    "name": "Chaos Faeblades"
+  },
+  {
+    "internal_name": "mit_mirrorblades_chaos06b",
+    "id": 2690196,
+    "name": "Chaos Faeblades"
+  },
+  {
+    "internal_name": "mit_mirrorblades_chaos06c",
+    "id": 2690197,
+    "name": "Chaos Faeblades"
+  },
+  {
+    "internal_name": "mit_mirrorblades_chaos06d",
+    "id": 2690198,
+    "name": "Chaos Faeblades"
+  },
+  {
+    "internal_name": "mit_mirrorblades_chaos06e",
+    "id": 2690199,
+    "name": "Chaos Faeblades"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_fire01a",
+    "id": 2690200,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_fire01b",
+    "id": 2690201,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_fire01c",
+    "id": 2690202,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_fire01d",
+    "id": 2690203,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_fire01e",
+    "id": 2690204,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_fire02a",
+    "id": 2690205,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_fire02b",
+    "id": 2690206,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_fire02c",
+    "id": 2690207,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_fire02d",
+    "id": 2690208,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_fire02e",
+    "id": 2690209,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_fire03a",
+    "id": 2690210,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_fire03b",
+    "id": 2690211,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_fire03c",
+    "id": 2690212,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_fire03d",
+    "id": 2690213,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_fire03e",
+    "id": 2690214,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_fire04a",
+    "id": 2690215,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_fire04b",
+    "id": 2690216,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_fire04c",
+    "id": 2690217,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_fire04d",
+    "id": 2690218,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_fire04e",
+    "id": 2690219,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_fire05a",
+    "id": 2690220,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_fire05b",
+    "id": 2690221,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_fire05c",
+    "id": 2690222,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_fire05d",
+    "id": 2690223,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_fire05e",
+    "id": 2690224,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_fire06a",
+    "id": 2690225,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_fire06b",
+    "id": 2690226,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_fire06c",
+    "id": 2690227,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_fire06d",
+    "id": 2690228,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_fire06e",
+    "id": 2690229,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_ice01a",
+    "id": 2690230,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_ice01b",
+    "id": 2690231,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_ice01c",
+    "id": 2690232,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_ice01d",
+    "id": 2690233,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_ice01e",
+    "id": 2690234,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_ice02a",
+    "id": 2690235,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_ice02b",
+    "id": 2690236,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_ice02c",
+    "id": 2690237,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_ice02d",
+    "id": 2690238,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_ice02e",
+    "id": 2690239,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_ice03a",
+    "id": 2690240,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_ice03b",
+    "id": 2690241,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_ice03c",
+    "id": 2690242,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_ice03d",
+    "id": 2690243,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_ice03e",
+    "id": 2690244,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_ice04a",
+    "id": 2690245,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_ice04b",
+    "id": 2690246,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_ice04c",
+    "id": 2690247,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_ice04d",
+    "id": 2690248,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_ice04e",
+    "id": 2690249,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_ice05a",
+    "id": 2690250,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_ice05b",
+    "id": 2690251,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_ice05c",
+    "id": 2690252,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_ice05d",
+    "id": 2690253,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_ice05e",
+    "id": 2690254,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_ice06a",
+    "id": 2690255,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_ice06b",
+    "id": 2690256,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_ice06c",
+    "id": 2690257,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_ice06d",
+    "id": 2690258,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_ice06e",
+    "id": 2690259,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_lightning01a",
+    "id": 2690260,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_lightning01b",
+    "id": 2690261,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_lightning01c",
+    "id": 2690262,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_lightning01d",
+    "id": 2690263,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_lightning01e",
+    "id": 2690264,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_lightning02a",
+    "id": 2690265,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_lightning02b",
+    "id": 2690266,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_lightning02c",
+    "id": 2690267,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_lightning02d",
+    "id": 2690268,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_lightning02e",
+    "id": 2690269,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_lightning03a",
+    "id": 2690270,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_lightning03b",
+    "id": 2690271,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_lightning03c",
+    "id": 2690272,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_lightning03d",
+    "id": 2690273,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_lightning03e",
+    "id": 2690274,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_lightning04a",
+    "id": 2690275,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_lightning04b",
+    "id": 2690276,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_lightning04c",
+    "id": 2690277,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_lightning04d",
+    "id": 2690278,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_lightning04e",
+    "id": 2690279,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_lightning05a",
+    "id": 2690280,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_lightning05b",
+    "id": 2690281,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_lightning05c",
+    "id": 2690282,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_lightning05d",
+    "id": 2690283,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_lightning05e",
+    "id": 2690284,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_lightning06a",
+    "id": 2690285,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_lightning06b",
+    "id": 2690286,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_lightning06c",
+    "id": 2690287,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_lightning06d",
+    "id": 2690288,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_lightning06e",
+    "id": 2690289,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_fire01a",
+    "id": 2690290,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_fire01b",
+    "id": 2690291,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_fire01c",
+    "id": 2690292,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_fire01d",
+    "id": 2690293,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_fire01e",
+    "id": 2690294,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_fire02a",
+    "id": 2690295,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_fire02b",
+    "id": 2690296,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_fire02c",
+    "id": 2690297,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_fire02d",
+    "id": 2690298,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_fire02e",
+    "id": 2690299,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_fire03a",
+    "id": 2690300,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_fire03b",
+    "id": 2690301,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_fire03c",
+    "id": 2690302,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_fire03d",
+    "id": 2690303,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_fire03e",
+    "id": 2690304,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_fire04a",
+    "id": 2690305,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_fire04b",
+    "id": 2690306,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_fire04c",
+    "id": 2690307,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_fire04d",
+    "id": 2690308,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_fire04e",
+    "id": 2690309,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_fire05a",
+    "id": 2690310,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_fire05b",
+    "id": 2690311,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_fire05c",
+    "id": 2690312,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_fire05d",
+    "id": 2690313,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_fire05e",
+    "id": 2690314,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_fire06a",
+    "id": 2690315,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_fire06b",
+    "id": 2690316,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_fire06c",
+    "id": 2690317,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_fire06d",
+    "id": 2690318,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_fire06e",
+    "id": 2690319,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_ice01a",
+    "id": 2690320,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_ice01b",
+    "id": 2690321,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_ice01c",
+    "id": 2690322,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_ice01d",
+    "id": 2690323,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_ice01e",
+    "id": 2690324,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_ice02a",
+    "id": 2690325,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_ice02b",
+    "id": 2690326,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_ice02c",
+    "id": 2690327,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_ice02d",
+    "id": 2690328,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_ice02e",
+    "id": 2690329,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_ice03a",
+    "id": 2690330,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_ice03b",
+    "id": 2690331,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_ice03c",
+    "id": 2690332,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_ice03d",
+    "id": 2690333,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_ice03e",
+    "id": 2690334,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_ice04a",
+    "id": 2690335,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_ice04b",
+    "id": 2690336,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_ice04c",
+    "id": 2690337,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_ice04d",
+    "id": 2690338,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_ice04e",
+    "id": 2690339,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_ice05a",
+    "id": 2690340,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_ice05b",
+    "id": 2690341,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_ice05c",
+    "id": 2690342,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_ice05d",
+    "id": 2690343,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_ice05e",
+    "id": 2690344,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_ice06a",
+    "id": 2690345,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_ice06b",
+    "id": 2690346,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_ice06c",
+    "id": 2690347,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_ice06d",
+    "id": 2690348,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_ice06e",
+    "id": 2690349,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_lightning01a",
+    "id": 2690350,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_lightning01b",
+    "id": 2690351,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_lightning01c",
+    "id": 2690352,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_lightning01d",
+    "id": 2690353,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_lightning01e",
+    "id": 2690354,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_lightning02a",
+    "id": 2690355,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_lightning02b",
+    "id": 2690356,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_lightning02c",
+    "id": 2690357,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_lightning02d",
+    "id": 2690358,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_lightning02e",
+    "id": 2690359,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_lightning03a",
+    "id": 2690360,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_lightning03b",
+    "id": 2690361,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_lightning03c",
+    "id": 2690362,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_lightning03d",
+    "id": 2690363,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_lightning03e",
+    "id": 2690364,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_lightning04a",
+    "id": 2690365,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_lightning04b",
+    "id": 2690366,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_lightning04c",
+    "id": 2690367,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_lightning04d",
+    "id": 2690368,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_lightning04e",
+    "id": 2690369,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_lightning05a",
+    "id": 2690370,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_lightning05b",
+    "id": 2690371,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_lightning05c",
+    "id": 2690372,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_lightning05d",
+    "id": 2690373,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_lightning05e",
+    "id": 2690374,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_lightning06a",
+    "id": 2690375,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_lightning06b",
+    "id": 2690376,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_lightning06c",
+    "id": 2690377,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_lightning06d",
+    "id": 2690378,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_lightning06e",
+    "id": 2690379,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_staff_chaos_fire01a",
+    "id": 2690380,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_fire01b",
+    "id": 2690381,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_fire01c",
+    "id": 2690382,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_fire01d",
+    "id": 2690383,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_fire01e",
+    "id": 2690384,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_fire02a",
+    "id": 2690385,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_fire02b",
+    "id": 2690386,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_fire02c",
+    "id": 2690387,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_fire02d",
+    "id": 2690388,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_fire02e",
+    "id": 2690389,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_fire03a",
+    "id": 2690390,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_fire03b",
+    "id": 2690391,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_fire03c",
+    "id": 2690392,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_fire03d",
+    "id": 2690393,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_fire03e",
+    "id": 2690394,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_fire04a",
+    "id": 2690395,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_fire04b",
+    "id": 2690396,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_fire04c",
+    "id": 2690397,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_fire04d",
+    "id": 2690398,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_fire04e",
+    "id": 2690399,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_fire05a",
+    "id": 2690400,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_fire05b",
+    "id": 2690401,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_fire05c",
+    "id": 2690402,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_fire05d",
+    "id": 2690403,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_fire05e",
+    "id": 2690404,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_fire06a",
+    "id": 2690405,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_fire06b",
+    "id": 2690406,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_fire06c",
+    "id": 2690407,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_fire06d",
+    "id": 2690408,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_fire06e",
+    "id": 2690409,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_ice01a",
+    "id": 2690410,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_ice01b",
+    "id": 2690411,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_ice01c",
+    "id": 2690412,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_ice01d",
+    "id": 2690413,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_ice01e",
+    "id": 2690414,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_ice02a",
+    "id": 2690415,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_ice02b",
+    "id": 2690416,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_ice02c",
+    "id": 2690417,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_ice02d",
+    "id": 2690418,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_ice02e",
+    "id": 2690419,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_ice03a",
+    "id": 2690420,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_ice03b",
+    "id": 2690421,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_ice03c",
+    "id": 2690422,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_ice03d",
+    "id": 2690423,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_ice03e",
+    "id": 2690424,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_ice04a",
+    "id": 2690425,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_ice04b",
+    "id": 2690426,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_ice04c",
+    "id": 2690427,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_ice04d",
+    "id": 2690428,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_ice04e",
+    "id": 2690429,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_ice05a",
+    "id": 2690430,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_ice05b",
+    "id": 2690431,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_ice05c",
+    "id": 2690432,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_ice05d",
+    "id": 2690433,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_ice05e",
+    "id": 2690434,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_ice06a",
+    "id": 2690435,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_ice06b",
+    "id": 2690436,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_ice06c",
+    "id": 2690437,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_ice06d",
+    "id": 2690438,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_ice06e",
+    "id": 2690439,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_lightning01a",
+    "id": 2690440,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_lightning01b",
+    "id": 2690441,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_lightning01c",
+    "id": 2690442,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_lightning01d",
+    "id": 2690443,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_lightning01e",
+    "id": 2690444,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_lightning02a",
+    "id": 2690445,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_lightning02b",
+    "id": 2690446,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_lightning02c",
+    "id": 2690447,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_lightning02d",
+    "id": 2690448,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_lightning02e",
+    "id": 2690449,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_lightning03a",
+    "id": 2690450,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_lightning03b",
+    "id": 2690451,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_lightning03c",
+    "id": 2690452,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_lightning03d",
+    "id": 2690453,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_lightning03e",
+    "id": 2690454,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_lightning04a",
+    "id": 2690455,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_lightning04b",
+    "id": 2690456,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_lightning04c",
+    "id": 2690457,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_lightning04d",
+    "id": 2690458,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_lightning04e",
+    "id": 2690459,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_lightning05a",
+    "id": 2690460,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_lightning05b",
+    "id": 2690461,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_lightning05c",
+    "id": 2690462,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_lightning05d",
+    "id": 2690463,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_lightning05e",
+    "id": 2690464,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_lightning06a",
+    "id": 2690465,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_lightning06b",
+    "id": 2690466,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_lightning06c",
+    "id": 2690467,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_lightning06d",
+    "id": 2690468,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_lightning06e",
+    "id": 2690469,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_fire01f",
+    "id": 2690500,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_fire02f",
+    "id": 2690501,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_fire03f",
+    "id": 2690502,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_fire04f",
+    "id": 2690503,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_fire05f",
+    "id": 2690504,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_fire06f",
+    "id": 2690505,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_ice01f",
+    "id": 2690506,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_ice02f",
+    "id": 2690507,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_ice03f",
+    "id": 2690508,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_ice04f",
+    "id": 2690509,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_ice05f",
+    "id": 2690510,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_ice06f",
+    "id": 2690511,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_lightning01f",
+    "id": 2690512,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_lightning02f",
+    "id": 2690513,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_lightning03f",
+    "id": 2690514,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_lightning04f",
+    "id": 2690515,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_lightning05f",
+    "id": 2690516,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_chakrams_chaos_lightning06f",
+    "id": 2690517,
+    "name": "Chaos Chakrams"
+  },
+  {
+    "internal_name": "mit_daggers_chaos01f",
+    "id": 2690518,
+    "name": "Chaos Daggers"
+  },
+  {
+    "internal_name": "mit_daggers_chaos02f",
+    "id": 2690519,
+    "name": "Chaos Daggers"
+  },
+  {
+    "internal_name": "mit_daggers_chaos03f",
+    "id": 2690520,
+    "name": "Chaos Daggers"
+  },
+  {
+    "internal_name": "mit_daggers_chaos04f",
+    "id": 2690521,
+    "name": "Chaos Daggers"
+  },
+  {
+    "internal_name": "mit_daggers_chaos05f",
+    "id": 2690522,
+    "name": "Chaos Daggers"
+  },
+  {
+    "internal_name": "mit_daggers_chaos06f",
+    "id": 2690523,
+    "name": "Chaos Daggers"
+  },
+  {
+    "internal_name": "mit_greathammer_chaos01f",
+    "id": 2690524,
+    "name": "Chaos Hammer"
+  },
+  {
+    "internal_name": "mit_greathammer_chaos02f",
+    "id": 2690525,
+    "name": "Chaos Hammer"
+  },
+  {
+    "internal_name": "mit_greathammer_chaos03f",
+    "id": 2690526,
+    "name": "Chaos Hammer"
+  },
+  {
+    "internal_name": "mit_greathammer_chaos04f",
+    "id": 2690527,
+    "name": "Chaos Hammer"
+  },
+  {
+    "internal_name": "mit_greathammer_chaos05f",
+    "id": 2690528,
+    "name": "Chaos Hammer"
+  },
+  {
+    "internal_name": "mit_greathammer_chaos06f",
+    "id": 2690529,
+    "name": "Chaos Hammer"
+  },
+  {
+    "internal_name": "mit_longbow_chaos01f",
+    "id": 2690530,
+    "name": "Chaos Longbow"
+  },
+  {
+    "internal_name": "mit_longbow_chaos02f",
+    "id": 2690531,
+    "name": "Chaos Longbow"
+  },
+  {
+    "internal_name": "mit_longbow_chaos03f",
+    "id": 2690532,
+    "name": "Chaos Longbow"
+  },
+  {
+    "internal_name": "mit_longbow_chaos04f",
+    "id": 2690533,
+    "name": "Chaos Longbow"
+  },
+  {
+    "internal_name": "mit_longbow_chaos05f",
+    "id": 2690534,
+    "name": "Chaos Longbow"
+  },
+  {
+    "internal_name": "mit_longbow_chaos06f",
+    "id": 2690535,
+    "name": "Chaos Longbow"
+  },
+  {
+    "internal_name": "mit_mirrorblades_chaos01f",
+    "id": 2690536,
+    "name": "Chaos Faeblades"
+  },
+  {
+    "internal_name": "mit_mirrorblades_chaos02f",
+    "id": 2690537,
+    "name": "Chaos Faeblades"
+  },
+  {
+    "internal_name": "mit_mirrorblades_chaos03f",
+    "id": 2690538,
+    "name": "Chaos Faeblades"
+  },
+  {
+    "internal_name": "mit_mirrorblades_chaos04f",
+    "id": 2690539,
+    "name": "Chaos Faeblades"
+  },
+  {
+    "internal_name": "mit_mirrorblades_chaos05f",
+    "id": 2690540,
+    "name": "Chaos Faeblades"
+  },
+  {
+    "internal_name": "mit_mirrorblades_chaos06f",
+    "id": 2690541,
+    "name": "Chaos Faeblades"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_fire01f",
+    "id": 2690542,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_fire02f",
+    "id": 2690543,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_fire03f",
+    "id": 2690544,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_fire04f",
+    "id": 2690545,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_fire05f",
+    "id": 2690546,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_fire06f",
+    "id": 2690547,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_ice01f",
+    "id": 2690548,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_ice02f",
+    "id": 2690549,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_ice03f",
+    "id": 2690550,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_ice04f",
+    "id": 2690551,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_ice05f",
+    "id": 2690552,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_ice06f",
+    "id": 2690553,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_lightning01f",
+    "id": 2690554,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_lightning02f",
+    "id": 2690555,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_lightning03f",
+    "id": 2690556,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_lightning04f",
+    "id": 2690557,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_lightning05f",
+    "id": 2690558,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_sceptre_chaos_lightning06f",
+    "id": 2690559,
+    "name": "Chaos Sceptre"
+  },
+  {
+    "internal_name": "mit_staff_chaos_fire01f",
+    "id": 2690560,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_fire02f",
+    "id": 2690561,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_fire03f",
+    "id": 2690562,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_fire04f",
+    "id": 2690563,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_fire05f",
+    "id": 2690564,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_fire06f",
+    "id": 2690565,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_ice01f",
+    "id": 2690566,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_ice02f",
+    "id": 2690567,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_ice03f",
+    "id": 2690568,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_ice04f",
+    "id": 2690569,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_ice05f",
+    "id": 2690570,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_ice06f",
+    "id": 2690571,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_lightning01f",
+    "id": 2690572,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_lightning02f",
+    "id": 2690573,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_lightning03f",
+    "id": 2690574,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_lightning04f",
+    "id": 2690575,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_lightning05f",
+    "id": 2690576,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_staff_chaos_lightning06f",
+    "id": 2690577,
+    "name": "Chaos Staff"
+  },
+  {
+    "internal_name": "mit_sword1h_chaos01f",
+    "id": 2690578,
+    "name": "Chaos Longsword"
+  },
+  {
+    "internal_name": "mit_sword1h_chaos02f",
+    "id": 2690579,
+    "name": "Chaos Longsword"
+  },
+  {
+    "internal_name": "mit_sword1h_chaos03f",
+    "id": 2690580,
+    "name": "Chaos Longsword"
+  },
+  {
+    "internal_name": "mit_sword1h_chaos04f",
+    "id": 2690581,
+    "name": "Chaos Longsword"
+  },
+  {
+    "internal_name": "mit_sword1h_chaos05f",
+    "id": 2690582,
+    "name": "Chaos Longsword"
+  },
+  {
+    "internal_name": "mit_sword1h_chaos06f",
+    "id": 2690583,
+    "name": "Chaos Longsword"
+  },
+  {
+    "internal_name": "mit_sword2h_chaos01f",
+    "id": 2690584,
+    "name": "Chaos Greatsword"
+  },
+  {
+    "internal_name": "mit_sword2h_chaos02f",
+    "id": 2690585,
+    "name": "Chaos Greatsword"
+  },
+  {
+    "internal_name": "mit_sword2h_chaos03f",
+    "id": 2690586,
+    "name": "Chaos Greatsword"
+  },
+  {
+    "internal_name": "mit_sword2h_chaos04f",
+    "id": 2690587,
+    "name": "Chaos Greatsword"
+  },
+  {
+    "internal_name": "mit_sword2h_chaos05f",
+    "id": 2690588,
+    "name": "Chaos Greatsword"
+  },
+  {
+    "internal_name": "mit_sword2h_chaos06f",
+    "id": 2690589,
+    "name": "Chaos Greatsword"
+  },
+  {
+    "internal_name": "mit_shard_chaos_01",
+    "id": 2691470,
+    "name": "Chaos Shard"
+  },
+  {
+    "internal_name": "mit_shard_chaos_02",
+    "id": 2691471,
+    "name": "Chaos Shard"
+  },
+  {
+    "internal_name": "mit_shard_chaos_03",
+    "id": 2691472,
+    "name": "Chaos Shard"
+  },
+  {
+    "internal_name": "skillbook_chaossight",
+    "id": 2700006,
+    "name": "Skill Book (Chaos Sight)"
   }
 ]

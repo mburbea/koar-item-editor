@@ -47,8 +47,7 @@ tbl = {}
 for _,row in ipairs(simtypes) do
     local k,v = row[1], row[2]
     if (not (contains(v,'spear') 
-        or contains(v,'invalid') 
-        or starts_with(v,'ao_')
+        or contains(v,'invalid')
         or contains(v,"recipe_")
         or contains(v,"reagent_")
         or contains(v,"component_")
@@ -60,14 +59,13 @@ for _,row in ipairs(simtypes) do
         or starts_with(v, "shard_")
         or v == "unarmed_0"
         or v == "unarmed_1"
-    )) then
+    ) or contains(v,'sq')) then
         local simtype = SIMTYPE_ID(v)
         if(TYPE.is_quest_item(simtype)) then
             tbl[#tbl + 1] = {
                 id =  tonumber(k,16),
                 name = simtype,
                 internal_name = v,
-
             }
         end
     end
