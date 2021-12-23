@@ -5,7 +5,6 @@ using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Interop;
-using System.Windows.Threading;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
 using KoAR.SaveEditor.Properties;
@@ -19,7 +18,6 @@ namespace KoAR.SaveEditor.Views.Main;
 
 public sealed class MainWindowViewModel : NotifierBase
 {
-    private readonly Dispatcher _dispatcher = Dispatcher.CurrentDispatcher;
     private bool _hasUnsavedChanges;
     private InventoryManagerViewModel? _inventoryManager;
     private bool _isCheckingForUpdate;

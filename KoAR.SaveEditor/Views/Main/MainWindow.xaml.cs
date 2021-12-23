@@ -67,7 +67,7 @@ partial class MainWindow
         IReleaseInfo? release = default;
         try
         {
-            if ((release = await UpdateMethods.FetchLatest2xReleaseAsync(source.Token)) != null)
+            if ((release = await UpdateMethods.FetchLatestVersionedReleaseAsync(2, source.Token)) != null)
             {
                 using OriginalUpdateViewModel viewModel = new(release);
                 UpdateWindow window = new() { DataContext = viewModel, Owner = this };

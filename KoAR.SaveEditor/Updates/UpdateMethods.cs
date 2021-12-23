@@ -27,7 +27,7 @@ public static class UpdateMethods
     public static async void ExecuteUpdate(string zipFilePath)
     {
         string scriptFileName = await UpdateMethods.ExtractPowershellScript().ConfigureAwait(false);
-        using Process process = Process.Start(new ProcessStartInfo
+        using Process process = Process.Start(startInfo: new()
         {
             WorkingDirectory = Path.GetTempPath(),
             UseShellExecute = false,
@@ -44,7 +44,7 @@ public static class UpdateMethods
     /// <param name="majorVersion">The major version of the release.</param>
     /// <param name="cancellationToken">Optionally used to propagate cancellation requests.</param>
     /// <returns>Information related to a release. Returns <see langword="null"/> if not found or an error occurs.</returns>
-    public static async Task<IReleaseInfo?> FetchLatestVersionedRelease(int majorVersion, CancellationToken cancellationToken = default)
+    public static async Task<IReleaseInfo?> FetchLatestVersionedReleaseAsync(int majorVersion, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -65,14 +65,6 @@ public static class UpdateMethods
         }
         return default;
     }
-
-    /// <summary>
-    /// Fetches the latest 2.x release.
-    /// </summary>
-    /// <param name="cancellationToken">Optionally used to propagate cancellation requests.</param>
-    /// <returns>Information related to a release. Returns <see langword="null"/> if not found or an error occurs.</returns>
-    public static Task<IReleaseInfo?> FetchLatest2xReleaseAsync(CancellationToken cancellationToken = default) =>
-        UpdateMethods.FetchLatestVersionedRelease(2, cancellationToken);
 
     /// <summary>
     /// Fetches an array of the interim update releases for the current major version of the application to the latest.
@@ -116,8 +108,8 @@ public static class UpdateMethods
     {
         try
         {
-            return await UpdateMethods._client.GetFromJsonAsync<T>($"https://api.github.com/repos/mburbea/koar-item-editor/{suffix}", UpdateMethods._jsonOptions, cancellationToken)
-                .ConfigureAwait(false);
+            string uri = $"https://api.github.com/repos/mburbea/koar-item-editor/{suffix}";
+            return await UpdateMethods._client.GetFromJsonAsync<T>(uri, UpdateMethods._jsonOptions, cancellationToken).ConfigureAwait(false);
         }
         catch (HttpRequestException e) when (e.StatusCode == HttpStatusCode.NotFound)
         {
@@ -169,7 +161,7 @@ public static class UpdateMethods
 
         public Version Version => this._version ??= new(this.TagName.Length != 0 ? this.TagName[1..] : "0.0.0");
 
-        public ReleaseAsset? ZipFileAsset => this._zipFileAsset ??= this.Assets.FirstOrDefault(asset => asset.IsZipFile);
+        public ReleaseAsset? ZipFileAsset => this._zipFileAsset ??= this.Assets.FirstOrDefault(asset => asset.ContentType == "application/zip");
 
         public int ZipFileSize => this.ZipFileAsset?.Size ?? 0;
 
@@ -181,8 +173,6 @@ public static class UpdateMethods
         public string BrowserDownloadUrl { get; set; } = string.Empty;
 
         public string ContentType { get; set; } = string.Empty;
-
-        public bool IsZipFile => this.ContentType == "application/zip";
 
         public int Size { get; set; }
     }
