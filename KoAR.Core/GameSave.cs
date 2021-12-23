@@ -71,11 +71,16 @@ public sealed partial class GameSave
         ReadOnlySpan<byte> data = Body;
         _bagOffset = GetBagOffset(data);
         _gameStateStartOffset = data.IndexOf(new byte[5] { 0xF7, 0x5D, 0x3C, 0x00, 0x0A });
-        var typeSectionOffset = data.IndexOf(new byte[8] { 1, 0, 0, 0, 0x23, 0xCC, 0x58, 0x00 });
+        var typeSectionOffset =
+            data.IndexOf(new byte[5] { 0x23, 0xCC, 0x58, 0x00, 0x06 }) is int ix and > -1
+            ? ix
+            : data.IndexOf(new byte[5] { 0x23, 0xCC, 0x58, 0x00, 0x04 }) is int pix and > -1
+                ? pix
+                : data.IndexOf(new byte[5] { 0x23, 0xCC, 0x58, 0x00, 0x03 });
         _dataLengthOffsets = new[]{
                 _gameStateStartOffset + 5, // gameStateSize
                 data.IndexOf(new byte[5] { 0x0C, 0xAE, 0x32, 0x00, 0x00 }) + 5, // unknown length 1
-                typeSectionOffset + 9, // type section length
+                typeSectionOffset + 5, // type section length
             };
         _itemContainer = new(this, data.IndexOf(new byte[5] { 0xD3, 0x34, 0x43, 0x00, 0x00 }), 0x00_24_D5_68_00_00_00_0Bul);
         _itemBuffsContainer = new(this, data.IndexOf(new byte[5] { 0xBB, 0xD5, 0x43, 0x00, 0x00 }), 0x00_28_60_84_00_00_00_0Bul);
