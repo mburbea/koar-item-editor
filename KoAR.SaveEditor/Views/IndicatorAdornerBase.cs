@@ -124,12 +124,13 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
             if (adorner != null)
             {
                 (element.FindVisualTreeAncestor<AdornerLayer>() ?? AdornerLayer.GetAdornerLayer(element)).Remove(adorner);
+                element.ClearValue(AdornerAttacher<TAdorner>._adornerProperty);
             }
             else
             {
                 element.Loaded -= AdornerAttacher<TAdorner>.Element_Loaded;
+                element.ClearValue(AdornerAttacher<TAdorner>._factoryProperty);
             }
-            element.ClearValue(AdornerAttacher<TAdorner>._adornerProperty);
         }
 
         private static Func<FrameworkElement, TAdorner> CreateFactory()

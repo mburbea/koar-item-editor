@@ -17,7 +17,7 @@ namespace KoAR.SaveEditor.Updates;
 
 public static class UpdateMethods
 {
-    private static readonly HttpClient _client = InitializeClient();
+    private static readonly HttpClient _client = UpdateMethods.InitializeClient();
     private static readonly JsonSerializerOptions _jsonOptions = new() { PropertyNamingPolicy = JsonSnakeCaseNamingPolicy.Instance };
 
     /// <summary>
@@ -44,21 +44,12 @@ public static class UpdateMethods
     /// <param name="majorVersion">The major version of the release.</param>
     /// <param name="cancellationToken">Optionally used to propagate cancellation requests.</param>
     /// <returns>Information related to a release. Returns <see langword="null"/> if not found or an error occurs.</returns>
-    public static async Task<IReleaseInfo?> FetchLatestVersionedReleaseAsync(int majorVersion, CancellationToken cancellationToken = default)
+    public static async Task<IReleaseInfo?> FetchLatest2xReleaseAsync(CancellationToken cancellationToken = default)
     {
         try
         {
-            foreach (Tag tag in await UpdateMethods.FetchTagsAsync(cancellationToken).ConfigureAwait(false))
-            {
-                if (tag.Version.Major != majorVersion)
-                {
-                    continue;
-                }
-                if (await UpdateMethods.FetchReleaseAsync(tag.Name, cancellationToken).ConfigureAwait(false) is { HasUpdateAsset: true } release)
-                {
-                    return release;
-                }
-            }
+            const string tagName = "v2.1.189";
+            return await UpdateMethods.FetchReleaseAsync(tagName, cancellationToken).ConfigureAwait(false);
         }
         catch
         {
@@ -76,14 +67,9 @@ public static class UpdateMethods
     {
         try
         {
-            string[] tagNames = (await UpdateMethods.FetchTagsAsync(cancellationToken).ConfigureAwait(false))
-                .Where(tag => tag.Version.Major == App.Version.Major && tag.Version > App.Version)
+            Release[] array = (await UpdateMethods.FetchReleasesAsync(cancellationToken).ConfigureAwait(false))
+                .Where(release => release.Version.Major == App.Version.Major && release.Version > App.Version && release.HasUpdateAsset)
                 .Take(maxReleases)
-                .Select(tag => tag.Name)
-                .ToArray();
-            Release[] array = (await Task.WhenAll(Array.ConvertAll(tagNames, tag => UpdateMethods.FetchReleaseAsync(tag, cancellationToken))).ConfigureAwait(false))
-                .OfType<Release>()
-                .Where(release => release.HasUpdateAsset)
                 .ToArray();
             if (array.Length != 0)
             {
@@ -125,7 +111,7 @@ public static class UpdateMethods
     /// <returns>A model representing the GitHub release.  Returns <see langword="null"/> if the release was deleted or an error occurs.</returns>
     private static Task<Release?> FetchReleaseAsync(string tag, CancellationToken cancellationToken) => UpdateMethods.FetchDataAsync<Release>($"releases/tags/{tag}", cancellationToken);
 
-    private static async Task<Tag[]> FetchTagsAsync(CancellationToken cancellationToken) => (await UpdateMethods.FetchDataAsync<Tag[]>("tags", cancellationToken).ConfigureAwait(false))!;
+    private static Task<Release[]> FetchReleasesAsync(CancellationToken cancellationToken) => UpdateMethods.FetchDataAsync<Release[]>("releases", cancellationToken)!;
 
     private static Stream GetResourceFileStream(string name) => Application.GetResourceStream(new($"/Updates/{name}", UriKind.Relative)).Stream;
 
@@ -144,6 +130,8 @@ public static class UpdateMethods
 
     private sealed class Release : IReleaseInfo
     {
+        private static readonly Regex _regex = new(@"^v(?<version>\d+\.\d+\.\d+)$", RegexOptions.ExplicitCapture | RegexOptions.Compiled);
+
         private Version? _version;
         private ReleaseAsset? _zipFileAsset;
 
@@ -159,7 +147,7 @@ public static class UpdateMethods
 
         public string TagName { get; set; } = string.Empty;
 
-        public Version Version => this._version ??= new(this.TagName.Length != 0 ? this.TagName[1..] : "0.0.0");
+        public Version Version => this._version ??= new(this.TagName.Length != 0 && Release._regex.IsMatch(this.TagName) ? this.TagName[1..] : "0.0.0");
 
         public ReleaseAsset? ZipFileAsset => this._zipFileAsset ??= this.Assets.FirstOrDefault(asset => asset.ContentType == "application/zip");
 
@@ -175,16 +163,5 @@ public static class UpdateMethods
         public string ContentType { get; set; } = string.Empty;
 
         public int Size { get; set; }
-    }
-
-    private sealed class Tag
-    {
-        private static readonly Regex _regex = new(@"^v(?<version>\d+\.\d+\.\d+)$", RegexOptions.ExplicitCapture | RegexOptions.Compiled);
-
-        private Version? _version;
-
-        public string Name { get; set; } = string.Empty;
-
-        public Version Version => this._version ??= new(Tag._regex.IsMatch(this.Name) ? this.Name[1..] : "0.0.0");
     }
 }
