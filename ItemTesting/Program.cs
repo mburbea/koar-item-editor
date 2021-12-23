@@ -202,6 +202,32 @@ static class Program
         return true;
     }
 
+
+    static bool CreateBatchArchive2(string file, string outZip)
+    {
+        if (File.Exists(outZip))
+        {
+            return true;
+        }
+        using var zip = new ZipArchive(File.Create(outZip), ZipArchiveMode.Create);
+        ReadOnlySpan<byte> data = File.ReadAllBytes(file);
+        int entryCount = BitConverter.ToInt32(data);
+        var assets = MemoryMarshal.Cast<byte, ulong>(data.Slice(4, entryCount * sizeof(ulong)));
+        var remaining = data[(sizeof(int) + entryCount * sizeof(ulong))..];
+        foreach (var (id, fileSize) in assets)
+        {
+            if (!LuaDict.TryGetValue(id, out var name))
+            {
+                name = id.ToString();
+                Console.WriteLine($"Unknown lua:{id}");
+            }
+            using var entry = zip.CreateEntry($"{name}.lua_bxml").Open();
+            entry.Write(remaining[..fileSize]);
+            remaining = remaining[fileSize..];
+        }
+        return true;
+    }
+
     static Dictionary<uint, uint> BuildParentDict()
     {
         using var zarchive = ZipFile.OpenRead(@"..\..\..\simtypes_unpacked.zip");
@@ -223,6 +249,7 @@ static class Program
         return dictionary;
     }
     static readonly Dictionary<uint, string> SimtypeDict = BuildSimtypeDict();
+    static readonly Dictionary<uint, string> LuaDict = BuildSimtypeDict(@"C:\e\symbol_table_luascript.bin");
     static readonly HashSet<string> Supers;
     static readonly Dictionary<string, uint> ReverseSimtype = SimtypeDict.ToDictionary(x => x.Value, x => x.Key);
     static readonly bool WhoCares = CreateBatchArchive(@"C:\e\134225858_ksmt.batch", @"..\..\..\simtypes_unpacked.zip");
@@ -232,9 +259,9 @@ static class Program
 
     static readonly HashSet<uint> ScalingVariants = BuildVariants();
 
-    private static Dictionary<uint, string> BuildSimtypeDict()
+    private static Dictionary<uint, string> BuildSimtypeDict(string bin = @"C:\e\symbol_table_simtype.bin")
     {
-        var data = File.ReadAllBytes(@"C:\e\symbol_table_simtype.bin");
+        var data = File.ReadAllBytes(bin);
         var elementCount = BitConverter.ToInt32(data, 0);
         var firstString = 8 + elementCount * 12;
         return Enumerable.Range(0, elementCount).Select(x => (id: BitConverter.ToUInt32(data, 4 + x * 12), s: BitConverter.ToInt32(data, 4 + x * 12 + 4), e: BitConverter.ToInt32(data, 4 + x * 12 + 8)))
@@ -357,6 +384,7 @@ static class Program
     }
     static void Main()
     {
+        CreateBatchArchive2(@"C:\e\134230570_klua.batch",@"C:\e\o\klua.zip");
         ParseOutItemInformationTemplate();
         //CreateSimTypeCsv(@"C:\e\symbol_table_globalobjectref.bin", @"..\..\..\gor.csv");
         ConvertSymbolsToLua(@"C:\e\", @"C:\Program Files (x86)\Steam\steamapps\common\Kingdoms of Amalur Re-Reckoning\mods\resources\","simtype","buff");

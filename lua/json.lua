@@ -10,6 +10,8 @@ local escape_char_map = {
   [ "\n" ] = "n",
   [ "\r" ] = "r",
   [ "\t" ] = "t",
+  ["„"] = "\"",
+  ["“"] = "\""
 }
 
 local escape_char_map_inv = { [ "/" ] = "/" }
@@ -42,7 +44,7 @@ end
 
 local function encode_ui64(val)
   if name_win.m_editbox == nil then
-    return tostring(val)
+    return encode(tostring(val))
   end
   local str = get_editbox_str(val)
   if(str ~= nil and str ~= '<Invalid Loc Key>' and str ~= '<Loc Key Not Set>') then
@@ -75,7 +77,7 @@ local function encode_table(val)
   else
     -- Treat as an object
     for k, v in pairs(val) do
-      table.insert(res, encode(k) .. ":" .. encode(v))
+      table.insert(res, encode(tostring(k)) .. ":" .. encode(v))
     end
     return "{" .. table.concat(res, ",") .. "}"
   end
