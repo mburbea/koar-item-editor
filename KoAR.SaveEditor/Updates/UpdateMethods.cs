@@ -17,7 +17,7 @@ namespace KoAR.SaveEditor.Updates;
 
 public static class UpdateMethods
 {
-    private static readonly HttpClient _client = InitializeClient();
+    private static readonly HttpClient _client = UpdateMethods.InitializeClient();
     private static readonly JsonSerializerOptions _jsonOptions = new() { PropertyNamingPolicy = JsonSnakeCaseNamingPolicy.Instance };
 
     /// <summary>
