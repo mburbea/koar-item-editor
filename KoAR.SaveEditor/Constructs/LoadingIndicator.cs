@@ -9,7 +9,7 @@ namespace KoAR.SaveEditor.Constructs;
 
 public sealed class LoadingIndicator : Control
 {
-    public static readonly DependencyProperty IsLoadingProperty = DependencyProperty.Register("IsLoading", typeof(bool), typeof(LoadingIndicator));
+    public static readonly DependencyProperty IsLoadingProperty = DependencyProperty.Register(nameof(LoadingIndicator.IsLoading), typeof(bool), typeof(LoadingIndicator));
 
     public static readonly IMultiValueConverter LocationConverter = new CircleLocationConverter();
 

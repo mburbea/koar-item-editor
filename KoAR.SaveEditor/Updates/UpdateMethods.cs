@@ -39,11 +39,11 @@ public static class UpdateMethods
     }
 
     /// <summary>
-    /// Fetches the latest release with the specified <paramref name="majorVersion"/>.
+    /// Fetches the latest 2.x release (v2.1.189).
     /// </summary>
     /// <param name="majorVersion">The major version of the release.</param>
     /// <param name="cancellationToken">Optionally used to propagate cancellation requests.</param>
-    /// <returns>Information related to a release. Returns <see langword="null"/> if not found or an error occurs.</returns>
+    /// <returns>Information related to the release. Returns <see langword="null"/> if not found or an error occurs.</returns>
     public static async Task<IReleaseInfo?> FetchLatest2xReleaseAsync(CancellationToken cancellationToken = default)
     {
         try
@@ -67,14 +67,14 @@ public static class UpdateMethods
     {
         try
         {
-            Release[] array = (await UpdateMethods.FetchReleasesAsync(cancellationToken).ConfigureAwait(false))
+            return (await UpdateMethods.FetchReleasesAsync(cancellationToken).ConfigureAwait(false))
                 .Where(release => release.Version.Major == App.Version.Major && release.Version > App.Version && release.HasUpdateAsset)
                 .Take(maxReleases)
                 .ToArray();
-            if (array.Length != 0)
-            {
-                return array;
-            }
+        }
+        catch (HttpRequestException)
+        {
+            App.OpenInBrowser("https://github.com/mburbea/koar-item-editor/releases/latest");
         }
         catch
         {
@@ -130,7 +130,7 @@ public static class UpdateMethods
 
     private sealed class Release : IReleaseInfo
     {
-        private static readonly Regex _regex = new(@"^v(?<version>\d+\.\d+\.\d+)$", RegexOptions.ExplicitCapture | RegexOptions.Compiled);
+        private static readonly Regex _regex = new(@"^v\d+\.\d+\.\d+$", RegexOptions.Compiled);
 
         private Version? _version;
         private ReleaseAsset? _zipFileAsset;

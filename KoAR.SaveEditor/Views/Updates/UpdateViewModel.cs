@@ -1,9 +1,12 @@
-﻿namespace KoAR.SaveEditor.Views.Updates;
+﻿using System.Collections.Generic;
+using KoAR.SaveEditor.Updates;
+
+namespace KoAR.SaveEditor.Views.Updates;
 
 public sealed class UpdateViewModel : UpdateViewModelBase
 {
-    public UpdateViewModel(UpdateInfo update)
-        : base(update.Releases)
+    public UpdateViewModel(IReadOnlyCollection<IReleaseInfo> updateReleases)
+        : base(updateReleases)
     {
     }
 
