@@ -3,10 +3,10 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using KoAR.SaveEditor.Constructs;
 using Expression = System.Linq.Expressions.Expression;
@@ -16,12 +16,17 @@ namespace KoAR.SaveEditor.Views;
 public abstract class IndicatorAdornerBase : Adorner, IDisposable
 {
     private static readonly BooleanToVisibilityConverter _booleanToVisibilityConverter = new();
+    private static readonly ParameterExpression _elementParameter = Expression.Parameter(typeof(FrameworkElement));
 
-    private readonly UIElement _element;
+    private readonly FrameworkElement _element;
+    private readonly double _heightMultiple;
+    private readonly double _widthMultiple;
 
-    protected IndicatorAdornerBase(FrameworkElement adornedElement, AdornerPosition adornerPosition, Brush background, Brush foreground, string indicator)
+    protected IndicatorAdornerBase(FrameworkElement adornedElement, AdornerPosition position, Brush background, Brush foreground, string indicator)
         : base(adornedElement)
     {
+        this._heightMultiple = position is AdornerPosition.LowerLeft or AdornerPosition.LowerRight ? 0.5 : 0d;
+        this._widthMultiple = position is AdornerPosition.UpperRight or AdornerPosition.LowerRight ? 0.5 : 0d;
         FrameworkElementFactory gridFactory = new(typeof(Grid));
         FrameworkElementFactory ellipseFactory = new(typeof(Ellipse));
         ellipseFactory.SetValue(Shape.FillProperty, background);
@@ -38,26 +43,19 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
         textBlockFactory.SetValue(FrameworkElement.VerticalAlignmentProperty, VerticalAlignment.Center);
         viewBoxFactory.AppendChild(textBlockFactory);
         gridFactory.AppendChild(viewBoxFactory);
-        FrameworkElementFactory uniformGridFactory = new(typeof(UniformGrid));
-        uniformGridFactory.SetValue(UniformGrid.RowsProperty, 2);
-        uniformGridFactory.SetValue(UniformGrid.ColumnsProperty, 2);
-        for (int i = 0; i < (int)adornerPosition; i++)
-        {
-            uniformGridFactory.AppendChild(new(typeof(Border)));
-        }
-        uniformGridFactory.AppendChild(gridFactory);
         this._element = new ContentPresenter()
         {
+            IsHitTestVisible = false,
             ClipToBounds = true,
             Content = indicator,
-            ContentTemplate = new() { VisualTree = uniformGridFactory },
+            ContentTemplate = new() { VisualTree = gridFactory },
         };
         this.SetBinding(UIElement.VisibilityProperty, new Binding(nameof(UIElement.IsVisible))
         {
             Source = adornedElement,
             Converter = IndicatorAdornerBase._booleanToVisibilityConverter,
         });
-        this.ClipToBounds = true;
+        this.IsHitTestVisible = this.ClipToBounds = true;
     }
 
     protected enum AdornerPosition
@@ -68,12 +66,24 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
         LowerRight,
     }
 
-    protected override int VisualChildrenCount => 1;
-
     public virtual void Dispose()
     {
         BindingOperations.ClearBinding(this, UIElement.VisibilityProperty);
         GC.SuppressFinalize(this);
+    }
+
+    public override GeneralTransform GetDesiredTransform(GeneralTransform transform)
+    {
+        Rect bounds = VisualTreeHelper.GetDescendantBounds(this.AdornedElement);
+        return new GeneralTransformGroup
+        {
+            Children =
+            {
+                base.GetDesiredTransform(transform),
+                new ScaleTransform(0.5, 0.5),
+                new TranslateTransform(bounds.Width * this._widthMultiple, bounds.Height * this._heightMultiple)
+            }
+        };
     }
 
     protected static void AttachAdorner<TAdorner>(FrameworkElement element, Func<FrameworkElement, TAdorner>? factory = null)
@@ -88,19 +98,36 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
         return finalSize;
     }
 
-    protected override Visual GetVisualChild(int index) => this._element;
-
     protected override Size MeasureOverride(Size constraint)
     {
-        this._element.Measure(this.AdornedElement.RenderSize);
+        this._element.Measure(constraint);
         return this.AdornedElement.RenderSize;
+    }
+
+    protected override void OnRender(DrawingContext drawingContext)
+    {
+        Rect bounds = VisualTreeHelper.GetDescendantBounds(this.AdornedElement);
+        if (bounds.IsEmpty)
+        {
+            return;
+        }
+        RenderTargetBitmap bitmap = new((int)bounds.Width, (int)bounds.Height, 96, 96, PixelFormats.Pbgra32);
+        DrawingVisual visual = new();
+        using (DrawingContext context = visual.RenderOpen())
+        {
+            VisualBrush brush = new(this._element);
+            context.DrawRectangle(brush, null, new(default, bounds.Size));
+        }
+        bitmap.Render(visual);
+        bitmap.Freeze();
+        drawingContext.DrawImage(bitmap, new(default, bounds.Size));
     }
 
     private static class AdornerAttacher<TAdorner>
         where TAdorner : IndicatorAdornerBase
     {
         private static readonly DependencyProperty _adornerProperty = DependencyProperty.RegisterAttached(typeof(TAdorner).FullName, typeof(TAdorner), typeof(AdornerAttacher<TAdorner>));
-        private static readonly Lazy<Func<FrameworkElement, TAdorner>> _defaultFactory = new(AdornerAttacher<TAdorner>.CreateFactory, false);
+        private static readonly Lazy<Func<FrameworkElement, TAdorner>> _defaultFactory = new(AdornerAttacher<TAdorner>.CreateDefaultFactory, false);
         private static readonly DependencyProperty _factoryProperty = DependencyProperty.RegisterAttached(typeof(Func<FrameworkElement, TAdorner>).FullName, typeof(Func<FrameworkElement, TAdorner>), typeof(AdornerAttacher<TAdorner>));
 
         public static void AttachAdorner(FrameworkElement element, Func<FrameworkElement, TAdorner>? factory = default)
@@ -133,17 +160,13 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
             }
         }
 
-        private static Func<FrameworkElement, TAdorner> CreateFactory()
-        {
-            ParameterExpression parameter = Expression.Parameter(typeof(FrameworkElement));
-            return Expression.Lambda<Func<FrameworkElement, TAdorner>>(
-                Expression.New(
-                    typeof(TAdorner).GetConstructor(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { typeof(FrameworkElement) }, null)!,
-                    parameter
-                ),
-                parameter
-            ).Compile()!;
-        }
+        private static Func<FrameworkElement, TAdorner> CreateDefaultFactory() => Expression.Lambda<Func<FrameworkElement, TAdorner>>(
+            Expression.New(
+                typeof(TAdorner).GetConstructor(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { typeof(FrameworkElement) }, null)!,
+                IndicatorAdornerBase._elementParameter
+            ),
+            IndicatorAdornerBase._elementParameter
+        ).Compile();
 
         private static void Element_Loaded(object sender, RoutedEventArgs e)
         {
