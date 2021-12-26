@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using KoAR.SaveEditor.Updates;
@@ -7,23 +8,24 @@ namespace KoAR.SaveEditor.Views.Updates;
 
 public sealed class UpdateNotifier
 {
-    private UpdateInfo? _update;
+    private IReadOnlyCollection<IReleaseInfo>? _updateReleases;
 
-    public event EventHandler? UpdateChanged;
+    public event EventHandler? HasUpdateChanged;
 
-    public UpdateInfo? Update
+    public bool HasUpdate => this.UpdateReleases is { Count: > 0 };
+
+    public IReadOnlyCollection<IReleaseInfo>? UpdateReleases
     {
-        get => this._update;
+        get => this._updateReleases;
         private set
         {
-            this._update = value;
-            this.UpdateChanged?.Invoke(this, EventArgs.Empty);
+            this._updateReleases = value;
+            this.HasUpdateChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 
     public async Task CheckForUpdatesAsync(CancellationToken cancellationToken = default)
     {
-        IReleaseInfo[]? releases = await UpdateMethods.FetchUpdateReleasesAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
-        this.Update = releases != null ? new(releases) : null;
+        this.UpdateReleases = await UpdateMethods.FetchUpdateReleasesAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
     }
 }
