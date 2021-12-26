@@ -42,7 +42,7 @@ partial class MainWindow
             Buttons =
                 {
                     new TaskDialogCommandLinkButton("OK", "Close this window") { Tag = 0 },
-                    new TaskDialogCommandLinkButton("Found a bug? File a new github bug report.", "Requires a free account") { Tag = 1 },
+                    new TaskDialogCommandLinkButton("Found a bug? File a new GitHub bug report.", "Requires a free account") { Tag = 1 },
                     new TaskDialogCommandLinkButton("Downgrade to v2.", "I am running Reckoning") { Tag = 2 },
                 },
             SizeToContent = true,
