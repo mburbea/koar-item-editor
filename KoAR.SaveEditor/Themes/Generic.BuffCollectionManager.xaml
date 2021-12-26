@@ -6,7 +6,6 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/PresentationFramework.Aero;component/Themes/Aero.NormalColor.xaml" />
         <ResourceDictionary Source="/KoAR.SaveEditor;component/Templates/BuffTemplate.xaml" />
-        <ResourceDictionary Source="/KoAR.SaveEditor;component/Templates/BuffToolTipTemplate.xaml" />
     </ResourceDictionary.MergedDictionaries>
     <BitmapImage x:Key="Copy" UriSource="/KoAR.SaveEditor;component/Resources/Copy.png" po:Freeze="True" />
     <BitmapImage x:Key="Delete" UriSource="/KoAR.SaveEditor;component/Resources/Delete.png" po:Freeze="True" />

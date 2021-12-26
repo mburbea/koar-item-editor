@@ -17,6 +17,7 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
 {
     private static readonly BooleanToVisibilityConverter _booleanToVisibilityConverter = new();
     private static readonly ParameterExpression _elementParameter = Expression.Parameter(typeof(FrameworkElement));
+    private static readonly ScaleTransform _scaleTransform = IndicatorAdornerBase.CreateScaleTransform();
 
     private readonly FrameworkElement _element;
     private readonly double _heightMultiple;
@@ -25,13 +26,13 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
     protected IndicatorAdornerBase(FrameworkElement adornedElement, AdornerPosition position, Brush background, Brush foreground, string indicator)
         : base(adornedElement)
     {
-        this._heightMultiple = position is AdornerPosition.LowerLeft or AdornerPosition.LowerRight ? 0.5 : 0d;
-        this._widthMultiple = position is AdornerPosition.UpperRight or AdornerPosition.LowerRight ? 0.5 : 0d;
+        this._heightMultiple = position is AdornerPosition.LowerLeft or AdornerPosition.LowerRight ? 0.5 : default;
+        this._widthMultiple = position is AdornerPosition.UpperRight or AdornerPosition.LowerRight ? 0.5 : default;
         FrameworkElementFactory gridFactory = new(typeof(Grid));
         FrameworkElementFactory ellipseFactory = new(typeof(Ellipse));
         ellipseFactory.SetValue(Shape.FillProperty, background);
         ellipseFactory.SetValue(Shape.StrokeProperty, foreground);
-        ellipseFactory.SetValue(Shape.StrokeThicknessProperty, 0.5);
+        ellipseFactory.SetValue(Shape.StrokeThicknessProperty, 1d);
         gridFactory.AppendChild(ellipseFactory);
         FrameworkElementFactory viewBoxFactory = new(typeof(Viewbox));
         viewBoxFactory.SetValue(Viewbox.StretchProperty, Stretch.Uniform);
@@ -45,8 +46,6 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
         gridFactory.AppendChild(viewBoxFactory);
         this._element = new ContentPresenter()
         {
-            IsHitTestVisible = false,
-            ClipToBounds = true,
             Content = indicator,
             ContentTemplate = new() { VisualTree = gridFactory },
         };
@@ -55,7 +54,6 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
             Source = adornedElement,
             Converter = IndicatorAdornerBase._booleanToVisibilityConverter,
         });
-        this.IsHitTestVisible = this.ClipToBounds = true;
     }
 
     protected enum AdornerPosition
@@ -80,7 +78,7 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
             Children =
             {
                 base.GetDesiredTransform(transform),
-                new ScaleTransform(0.5, 0.5),
+                IndicatorAdornerBase._scaleTransform,
                 new TranslateTransform(bounds.Width * this._widthMultiple, bounds.Height * this._heightMultiple)
             }
         };
@@ -121,6 +119,13 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
         bitmap.Render(visual);
         bitmap.Freeze();
         drawingContext.DrawImage(bitmap, new(default, bounds.Size));
+    }
+
+    private static ScaleTransform CreateScaleTransform()
+    {
+        ScaleTransform scaleTransform = new(0.5, 0.5);
+        scaleTransform.Freeze();
+        return scaleTransform;
     }
 
     private static class AdornerAttacher<TAdorner>
