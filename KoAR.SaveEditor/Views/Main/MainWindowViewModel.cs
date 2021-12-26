@@ -231,7 +231,7 @@ public sealed class MainWindowViewModel : NotifierBase
         this.IsCheckingForUpdate = false;
         switch (this.UpdateNotifier.UpdateReleases)
         {
-            case { Count: 1 }:
+            case { Count: > 0 }:
                 this.OpenUpdateWindow();
                 break;
             case { Count: 0 }:
