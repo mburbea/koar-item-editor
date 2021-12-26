@@ -88,7 +88,7 @@ public sealed class MainWindowViewModel : NotifierBase
 
     public UpdateNotifier UpdateNotifier { get; } = new();
 
-    public void OpenFile()
+    public void OpenFile(string? fileName = default)
     {
         OpenFileDialog dialog = new()
         {
@@ -97,6 +97,7 @@ public sealed class MainWindowViewModel : NotifierBase
             Filter = "Save Files (*.sav)|*.sav|PS4 Save Files (*.bin)|*.bin|Switch Save Files|*.*",
             FilterIndex = Settings.Default.LastFilterUsed,
             CheckFileExists = true,
+            FileName = fileName,
             InitialDirectory = Path.GetFullPath(string.IsNullOrEmpty(Settings.Default.LastDirectory)
                 ? Amalur.FindSaveGameDirectory()
                 : Settings.Default.LastDirectory)

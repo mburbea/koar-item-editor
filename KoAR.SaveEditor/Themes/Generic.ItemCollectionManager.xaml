@@ -18,8 +18,16 @@
     <constructs:LittleEndianConverter x:Key="LittleEndianConverter" />
     <constructs:AndConverter x:Key="AndConverter" />
     <constructs:GrayscaleConverter x:Key="GrayscaleConverter" />
+    <constructs:IsTypeConverter x:Key="IsTypeConverter" />
     <BitmapImage x:Key="Delete" UriSource="/KoAR.SaveEditor;component/Resources/Delete.png" po:Freeze="True" />
     <BitmapImage x:Key="Ellipsis" UriSource="/KoAR.SaveEditor;component/Resources/Ellipsis.png" po:Freeze="True" />
+    <Style TargetType="{x:Type ToolTip}" BasedOn="{StaticResource {x:Type ToolTip}}" x:Key="BuffToolTipStyle">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Content, RelativeSource={RelativeSource Self}, Converter={StaticResource IsTypeConverter}, ConverterParameter={x:Type core:Buff}}" Value="True">
+                <Setter Property="ContentTemplate" Value="{StaticResource BuffToolTipTemplate}" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
     <Style TargetType="{x:Type Button}" x:Key="CommandButtonStyle">
         <Setter Property="Template">
             <Setter.Value>
@@ -480,9 +488,7 @@
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate DataType="{x:Type views:ItemModelBase}">
                                             <DataTemplate.Resources>
-                                                <Style TargetType="{x:Type ToolTip}" BasedOn="{StaticResource {x:Type ToolTip}}">
-                                                    <Setter Property="ContentTemplate" Value="{StaticResource BuffToolTipTemplate}" />
-                                                </Style>
+                                                <Style TargetType="{x:Type ToolTip}" BasedOn="{StaticResource BuffToolTipStyle}" />
                                                 <Style TargetType="{x:Type views:BuffIcon}">
                                                     <Style.Triggers>
                                                         <Trigger Property="Buff" Value="{x:Null}">
@@ -511,9 +517,7 @@
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate DataType="{x:Type core:Buff}">
                                                         <DataTemplate.Resources>
-                                                            <Style TargetType="{x:Type ToolTip}" BasedOn="{StaticResource {x:Type ToolTip}}">
-                                                                <Setter Property="ContentTemplate" Value="{StaticResource BuffToolTipTemplate}" />
-                                                            </Style>
+                                                            <Style TargetType="{x:Type ToolTip}" BasedOn="{StaticResource BuffToolTipStyle}" />
                                                         </DataTemplate.Resources>
                                                         <views:BuffIcon Buff="{Binding}" Margin="1,0" ToolTip="{Binding}" />
                                                     </DataTemplate>
@@ -534,9 +538,7 @@
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate DataType="{x:Type core:Buff}">
                                                         <DataTemplate.Resources>
-                                                            <Style TargetType="{x:Type ToolTip}" BasedOn="{StaticResource {x:Type ToolTip}}">
-                                                                <Setter Property="ContentTemplate" Value="{StaticResource BuffToolTipTemplate}" />
-                                                            </Style>
+                                                            <Style TargetType="{x:Type ToolTip}" BasedOn="{StaticResource BuffToolTipStyle}" />
                                                         </DataTemplate.Resources>
                                                         <views:BuffIcon Buff="{Binding}" Margin="1,0" ToolTip="{Binding}" />
                                                     </DataTemplate>
