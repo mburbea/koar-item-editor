@@ -97,7 +97,7 @@ public sealed class MainWindowViewModel : NotifierBase
             Filter = "Save Files (*.sav)|*.sav|PS4 Save Files (*.bin)|*.bin|Switch Save Files|*.*",
             FilterIndex = Settings.Default.LastFilterUsed,
             CheckFileExists = true,
-            FileName = fileName,
+            FileName = fileName ?? String.Empty,
             InitialDirectory = Path.GetFullPath(string.IsNullOrEmpty(Settings.Default.LastDirectory)
                 ? Amalur.FindSaveGameDirectory()
                 : Settings.Default.LastDirectory)
@@ -178,15 +178,11 @@ public sealed class MainWindowViewModel : NotifierBase
         Application application = (Application)sender!;
         application.Activated -= this.Application_Activated;
         application.MainWindow.Closing += this.MainWindow_Closing;
-        try
+        using (CancellationTokenSource source = new(2500))
         {
-            using CancellationTokenSource source = new(2500);
             await this.UpdateNotifier.CheckForUpdatesAsync(source.Token);
         }
-        catch (OperationCanceledException)
-        {
-        }
-        if (Debugger.IsAttached || this.UpdateNotifier.Update == null || !this.OpenUpdateWindow())
+        if (Debugger.IsAttached || !this.UpdateNotifier.HasUpdate || !this.OpenUpdateWindow())
         {
             this.OpenFile();
         }
@@ -227,33 +223,27 @@ public sealed class MainWindowViewModel : NotifierBase
 
     private async void CheckForUpdate()
     {
-        try
+        this.IsCheckingForUpdate = true;
+        using (CancellationTokenSource source = new(15000))
         {
-            this.IsCheckingForUpdate = true;
-            using CancellationTokenSource source = new();
-            source.CancelAfter(15000); // 15s
             await this.UpdateNotifier.CheckForUpdatesAsync(source.Token);
         }
-        catch
+        this.IsCheckingForUpdate = false;
+        switch (this.UpdateNotifier.UpdateReleases)
         {
-            return;
+            case { Count: > 0 }:
+                this.OpenUpdateWindow();
+                break;
+            case { Count: 0 }:
+                TaskDialog.ShowDialog(new()
+                {
+                    Caption = "KoAR Save Editor",
+                    Heading = "KoAR Save Editor is up to date.",
+                    Text = $"You are already running the latest version (v{App.Version}).",
+                    Icon = TaskDialogIcon.Information,
+                });
+                break;
         }
-        finally
-        {
-            this.IsCheckingForUpdate = false;
-        }
-        if (this.UpdateNotifier.Update != null)
-        {
-            this.OpenUpdateWindow();
-            return;
-        }
-        TaskDialog.ShowDialog(new()
-        {
-            Caption = "KoAR Save Editor",
-            Heading = "KoAR Save Editor is up to date.",
-            Text = $"You are already running the latest version (v{App.Version}).",
-            Icon = TaskDialogIcon.Information
-        });
     }
 
     private void MainWindow_Closing(object? sender, CancelEventArgs e)
@@ -267,11 +257,11 @@ public sealed class MainWindowViewModel : NotifierBase
 
     private bool OpenUpdateWindow()
     {
-        if (this.UpdateNotifier.Update == null)
+        if (this.UpdateNotifier.UpdateReleases is not { } releases)
         {
             return false;
         }
-        using UpdateViewModel viewModel = new(this.UpdateNotifier.Update);
+        using UpdateViewModel viewModel = new(releases);
         UpdateWindow window = new() { DataContext = viewModel, Owner = Application.Current.MainWindow };
         return window.ShowDialog().GetValueOrDefault();
     }
