@@ -12,13 +12,13 @@ public sealed class ChaosTierAdorner : IndicatorAdornerBase
     public static readonly DependencyProperty ChaosTierProperty = DependencyProperty.RegisterAttached(nameof(ItemDefinition.ChaosTier), typeof(string), typeof(ChaosTierAdorner),
         new PropertyMetadata(null, ChaosTierAdorner.ChaosTierProperty_ValueChanged));
     private static readonly Func<FrameworkElement, ChaosTierAdorner>[] _factories;
-    private static readonly DataTemplate[] _contentTemplates = InitializeTemplates(out ChaosTierAdorner._factories);
+    private static readonly DataTemplate[] _contentTemplates = ChaosTierAdorner.InitializeTemplates(out ChaosTierAdorner._factories);
 
     private static DataTemplate[] InitializeTemplates(out Func<FrameworkElement, ChaosTierAdorner>[] factories)
     {
         DataTemplate[] templates = new DataTemplate[6];
         factories = new Func<FrameworkElement, ChaosTierAdorner>[6];
-        for (char c = 'A'; c < 'G'; c++)
+        for (char c = 'A'; c <= 'F'; c++)
         {
             string tier = c.ToString();
             templates[c - 'A'] = IndicatorAdornerBase.CreateContentTemplate(background: Brushes.CadetBlue, foreground: Brushes.White, tier);
