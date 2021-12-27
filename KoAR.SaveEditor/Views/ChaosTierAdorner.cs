@@ -8,13 +8,17 @@ namespace KoAR.SaveEditor.Views;
 
 public sealed class ChaosTierAdorner : IndicatorAdornerBase
 {
-    private static readonly Dictionary<string, Func<FrameworkElement, ChaosTierAdorner>> _factories = new();
-
     public static readonly DependencyProperty ChaosTierProperty = DependencyProperty.RegisterAttached(nameof(ItemDefinition.ChaosTier), typeof(string), typeof(ChaosTierAdorner),
         new PropertyMetadata(null, ChaosTierAdorner.ChaosTierProperty_ValueChanged));
 
+    private static readonly Dictionary<string, DataTemplate> _contentTemplates = new();
+    private static readonly Dictionary<string, Func<FrameworkElement, ChaosTierAdorner>> _factories = new();
+
     private ChaosTierAdorner(FrameworkElement adornedElement, string chaosTier)
-        : base(adornedElement, AdornerPosition.UpperRight, background: Brushes.CadetBlue, foreground: Brushes.White, chaosTier) => this.IsHitTestVisible = false;
+        : base(adornedElement, AdornerPosition.UpperRight, ChaosTierAdorner._contentTemplates.GetOrAdd(chaosTier, chaosTier => IndicatorAdornerBase.CreateContentTemplate(background: Brushes.CadetBlue, foreground: Brushes.White, chaosTier)))
+    {
+        this.IsHitTestVisible = false;
+    }
 
     public static string? GetChaosTier(FrameworkElement element) => (string?)element.GetValue(ChaosTierAdorner.ChaosTierProperty);
 
@@ -28,11 +32,7 @@ public sealed class ChaosTierAdorner : IndicatorAdornerBase
         }
         if (e.NewValue is string tier)
         {
-            if (ChaosTierAdorner._factories.GetValueOrDefault(tier) is not { } factory)
-            {
-                ChaosTierAdorner._factories.Add(tier, factory = element => new(element, tier));
-            }
-            IndicatorAdornerBase.AttachAdorner(element, factory);
+            IndicatorAdornerBase.AttachAdorner(element, ChaosTierAdorner._factories.GetOrAdd(tier, tier => element => new(element, tier)));
         }
         else
         {

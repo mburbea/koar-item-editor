@@ -22,31 +22,15 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
     private readonly double _heightMultiple;
     private readonly double _widthMultiple;
 
-    protected IndicatorAdornerBase(FrameworkElement adornedElement, AdornerPosition position, Brush background, Brush foreground, string indicator)
+    protected IndicatorAdornerBase(FrameworkElement adornedElement, AdornerPosition position, DataTemplate contentTemplate)
         : base(adornedElement)
     {
         this._heightMultiple = position is AdornerPosition.LowerLeft or AdornerPosition.LowerRight ? 1d : 0d;
         this._widthMultiple = position is AdornerPosition.UpperRight or AdornerPosition.LowerRight ? 1d : 0d;
-        FrameworkElementFactory gridFactory = new(typeof(Grid));
-        FrameworkElementFactory ellipseFactory = new(typeof(Ellipse));
-        ellipseFactory.SetValue(Shape.FillProperty, background);
-        ellipseFactory.SetValue(Shape.StrokeProperty, foreground);
-        ellipseFactory.SetValue(Shape.StrokeThicknessProperty, 1d);
-        gridFactory.AppendChild(ellipseFactory);
-        FrameworkElementFactory viewBoxFactory = new(typeof(Viewbox));
-        viewBoxFactory.SetValue(Viewbox.StretchProperty, Stretch.Uniform);
-        viewBoxFactory.SetValue(Viewbox.StretchDirectionProperty, StretchDirection.Both);
-        FrameworkElementFactory textBlockFactory = new(typeof(TextBlock));
-        textBlockFactory.SetValue(TextBlock.TextProperty, indicator);
-        textBlockFactory.SetValue(TextBlock.ForegroundProperty, foreground);
-        textBlockFactory.SetValue(FrameworkElement.HorizontalAlignmentProperty, HorizontalAlignment.Center);
-        textBlockFactory.SetValue(FrameworkElement.VerticalAlignmentProperty, VerticalAlignment.Center);
-        viewBoxFactory.AppendChild(textBlockFactory);
-        gridFactory.AppendChild(viewBoxFactory);
         this._contentPresenter = new()
         {
             Content = string.Empty,
-            ContentTemplate = new() { VisualTree = gridFactory },
+            ContentTemplate = contentTemplate,
         };
         this.SetBinding(UIElement.VisibilityProperty, new Binding
         {
@@ -64,6 +48,8 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
         LowerRight,
     }
 
+    public new FrameworkElement AdornedElement => (FrameworkElement)base.AdornedElement;
+
     public virtual void Dispose()
     {
         BindingOperations.ClearBinding(this, UIElement.VisibilityProperty);
@@ -72,7 +58,11 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
 
     public override GeneralTransform GetDesiredTransform(GeneralTransform transform)
     {
-        Rect bounds = VisualTreeHelper.GetDescendantBounds(this.AdornedElement);
+        Rect bounds = this.GetAdornedElementBounds();
+        if (bounds.IsEmpty)
+        {
+            return base.GetDesiredTransform(transform);
+        }
         return new GeneralTransformGroup
         {
             Children =
@@ -85,6 +75,27 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
 
     protected static void AttachAdorner<TAdorner>(FrameworkElement element, Func<FrameworkElement, TAdorner>? factory = null)
         where TAdorner : IndicatorAdornerBase => AdornerAttacher<TAdorner>.AttachAdorner(element, factory);
+
+    protected static DataTemplate CreateContentTemplate(Brush background, Brush foreground, string indicator)
+    {
+        FrameworkElementFactory gridFactory = new(typeof(Grid));
+        FrameworkElementFactory ellipseFactory = new(typeof(Ellipse));
+        ellipseFactory.SetValue(Shape.FillProperty, background);
+        ellipseFactory.SetValue(Shape.StrokeProperty, foreground);
+        ellipseFactory.SetValue(Shape.StrokeThicknessProperty, 1d);
+        gridFactory.AppendChild(ellipseFactory);
+        FrameworkElementFactory viewBoxFactory = new(typeof(Viewbox));
+        viewBoxFactory.SetValue(Viewbox.StretchProperty, Stretch.Uniform);
+        viewBoxFactory.SetValue(Viewbox.StretchDirectionProperty, StretchDirection.Both);
+        FrameworkElementFactory textBlockFactory = new(typeof(TextBlock));
+        textBlockFactory.SetValue(TextBlock.TextProperty, indicator);
+        textBlockFactory.SetValue(TextBlock.ForegroundProperty, foreground);
+        textBlockFactory.SetValue(FrameworkElement.HorizontalAlignmentProperty, HorizontalAlignment.Center);
+        textBlockFactory.SetValue(FrameworkElement.VerticalAlignmentProperty, VerticalAlignment.Center);
+        viewBoxFactory.AppendChild(textBlockFactory);
+        gridFactory.AppendChild(viewBoxFactory);
+        return new() { VisualTree = gridFactory };
+    }
 
     protected static void DetachAdorner<TAdorner>(FrameworkElement element)
         where TAdorner : IndicatorAdornerBase => AdornerAttacher<TAdorner>.DetachAdorner(element);
@@ -103,7 +114,7 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
 
     protected override void OnRender(DrawingContext drawingContext)
     {
-        Rect bounds = VisualTreeHelper.GetDescendantBounds(this.AdornedElement);
+        Rect bounds = this.GetAdornedElementBounds();
         if (bounds.IsEmpty)
         {
             return;
@@ -118,6 +129,14 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
         bitmap.Render(visual);
         bitmap.Freeze();
         drawingContext.DrawImage(bitmap, new(default, bounds.Size));
+    }
+
+    private Rect GetAdornedElementBounds()
+    {
+        Rect bounds = VisualTreeHelper.GetDescendantBounds(this.AdornedElement);
+        return bounds.IsEmpty && (this.AdornedElement.ActualHeight > 0d || this.AdornedElement.ActualWidth > 0d)
+            ? new(new(this.AdornedElement.ActualWidth, this.AdornedElement.ActualHeight))
+            : bounds;
     }
 
     private static class AdornerAttacher<TAdorner>
@@ -138,7 +157,7 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
             else
             {
                 element.SetValue(AdornerAttacher<TAdorner>._factoryProperty, factory);
-                element.Loaded += AdornerAttacher<TAdorner>.Element_Loaded;
+                WeakEventManager<FrameworkElement, RoutedEventArgs>.AddHandler(element, nameof(element.Loaded), AdornerAttacher<TAdorner>.Element_Loaded);
             }
         }
 
@@ -147,12 +166,12 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
             using TAdorner? adorner = (TAdorner?)element.GetValue(AdornerAttacher<TAdorner>._adornerProperty);
             if (adorner != null)
             {
-                (element.FindVisualTreeAncestor<AdornerLayer>() ?? AdornerLayer.GetAdornerLayer(element)).Remove(adorner);
+                (adorner.FindVisualTreeAncestor<AdornerLayer>() ?? element.FindVisualTreeAncestor<AdornerLayer>() ?? AdornerLayer.GetAdornerLayer(element)).Remove(adorner);
                 element.ClearValue(AdornerAttacher<TAdorner>._adornerProperty);
             }
             else
             {
-                element.Loaded -= AdornerAttacher<TAdorner>.Element_Loaded;
+                AdornerAttacher<TAdorner>.RemoveLoadedHandler(element);
                 element.ClearValue(AdornerAttacher<TAdorner>._factoryProperty);
             }
         }
@@ -165,12 +184,14 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
             IndicatorAdornerBase._elementParameter
         ).Compile();
 
-        private static void Element_Loaded(object sender, RoutedEventArgs e)
+        private static void Element_Loaded(object? sender, RoutedEventArgs e)
         {
-            FrameworkElement element = (FrameworkElement)sender;
-            element.Loaded -= AdornerAttacher<TAdorner>.Element_Loaded;
+            FrameworkElement element = (FrameworkElement)sender!;
+            AdornerAttacher<TAdorner>.RemoveLoadedHandler(element);
             AdornerAttacher<TAdorner>.AttachAdorner(element, (Func<FrameworkElement, TAdorner>?)element.GetValue(AdornerAttacher<TAdorner>._factoryProperty));
             element.ClearValue(AdornerAttacher<TAdorner>._factoryProperty);
         }
+
+        private static void RemoveLoadedHandler(FrameworkElement element) => WeakEventManager<FrameworkElement, RoutedEventArgs>.RemoveHandler(element, nameof(element.Loaded), AdornerAttacher<TAdorner>.Element_Loaded);
     }
 }
