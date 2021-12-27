@@ -13,6 +13,7 @@
     Icon="/app.ico" SizeToContent="WidthAndHeight" MinWidth="400" WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
     <Window.Resources>
         <ResourceDictionary>
+            <constructs:ArrayConverter x:Key="ArrayConverter" />
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         </ResourceDictionary>
     </Window.Resources>
@@ -81,7 +82,7 @@
                                     <Setter Property="ItemsSource" Value="{Binding Source={StaticResource Categories}}" />
                                 </DataTrigger>
                             </Style.Triggers>
-                            <Setter Property="ItemsSource" Value="{Binding Category, Converter={constructs:Activator {x:Type constructs:ArrayConverter}}, Mode=OneTime}" />
+                            <Setter Property="ItemsSource" Value="{Binding Category, Converter={StaticResource ArrayConverter}, Mode=OneTime}" />
                         </Style>
                     </ComboBox.Style>
                     <ComboBox.ItemTemplate>

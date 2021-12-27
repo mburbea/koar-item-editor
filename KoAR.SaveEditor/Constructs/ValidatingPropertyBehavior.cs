@@ -15,35 +15,26 @@ public static class ValidatingPropertyBehavior
     public static readonly DependencyProperty ValidatingPropertyProperty = DependencyProperty.RegisterAttached("ValidatingProperty", typeof(DependencyProperty), typeof(ValidatingPropertyBehavior),
         new(ValidatingPropertyBehavior.ValidatingPropertyProperty_PropertyChanged));
 
-    public static DependencyProperty? GetValidatingProperty(DependencyObject dependencyObject)
-    {
-        return (DependencyProperty?)dependencyObject?.GetValue(ValidatingPropertyBehavior.ValidatingPropertyProperty);
-    }
+    public static DependencyProperty? GetValidatingProperty(DependencyObject dependencyObject) => (DependencyProperty?)dependencyObject.GetValue(ValidatingPropertyBehavior.ValidatingPropertyProperty);
 
-    public static void SetValidatingProperty(DependencyObject dependencyObject, DependencyProperty? property)
-    {
-        dependencyObject?.SetValue(ValidatingPropertyBehavior.ValidatingPropertyProperty, property);
-    }
+    public static void SetValidatingProperty(DependencyObject dependencyObject, DependencyProperty? property) => dependencyObject.SetValue(ValidatingPropertyBehavior.ValidatingPropertyProperty, property);
 
     private static void DependencyProperty_ValueChanged(object? sender, EventArgs e)
     {
-        if (sender is DependencyObject dependencyObject && ValidatingPropertyBehavior.GetValidatingProperty(dependencyObject) is DependencyProperty property)
+        if (sender is DependencyObject dependencyObject && ValidatingPropertyBehavior.GetValidatingProperty(dependencyObject) is { } property)
         {
             dependencyObject.Validate(property);
         }
     }
 
-    private static void Validate(object value, IEnumerable<ValidationRule>? validationRules, BindingExpressionBase bindingExpression)
+    private static void Validate(object value, IEnumerable<ValidationRule> validationRules, BindingExpressionBase bindingExpression)
     {
-        if (validationRules != null)
+        foreach (ValidationRule rule in validationRules)
         {
-            foreach (ValidationRule rule in validationRules)
+            if (rule.Validate(value, null) is { IsValid: false, ErrorContent: object errorContent })
             {
-                if (rule.Validate(value, null) is { IsValid: false, ErrorContent: object errorContent })
-                {
-                    Validation.MarkInvalid(bindingExpression, new(rule, bindingExpression.ParentBindingBase, errorContent, null));
-                    return;
-                }
+                Validation.MarkInvalid(bindingExpression, new(rule, bindingExpression.ParentBindingBase, errorContent, null));
+                return;
             }
         }
         Validation.ClearInvalid(bindingExpression);
@@ -70,16 +61,14 @@ public static class ValidatingPropertyBehavior
 
     private static void ValidatingPropertyProperty_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        if (e.OldValue != null)
+        if (e.OldValue is DependencyProperty oldProperty)
         {
-            DependencyProperty property = (DependencyProperty)e.OldValue;
-            DependencyPropertyDescriptor.FromProperty(property, d.GetType()).RemoveValueChanged(d, ValidatingPropertyBehavior.DependencyProperty_ValueChanged);
+            DependencyPropertyDescriptor.FromProperty(oldProperty, d.GetType()).RemoveValueChanged(d, ValidatingPropertyBehavior.DependencyProperty_ValueChanged);
         }
-        if (e.NewValue != null)
+        if (e.NewValue is DependencyProperty newProperty)
         {
-            DependencyProperty property = (DependencyProperty)e.NewValue;
-            DependencyPropertyDescriptor.FromProperty(property, d.GetType()).AddValueChanged(d, ValidatingPropertyBehavior.DependencyProperty_ValueChanged);
-            d.Validate(property);
+            DependencyPropertyDescriptor.FromProperty(newProperty, d.GetType()).AddValueChanged(d, ValidatingPropertyBehavior.DependencyProperty_ValueChanged);
+            d.Validate(newProperty);
         }
     }
 }

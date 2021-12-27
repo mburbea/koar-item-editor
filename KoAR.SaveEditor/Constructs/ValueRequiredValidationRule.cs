@@ -5,8 +5,9 @@ namespace KoAR.SaveEditor.Constructs;
 
 public sealed class ValueRequiredValidationRule : ValidationRule
 {
-    public override ValidationResult Validate(object value, CultureInfo cultureInfo)
-    {
-        return value == null || value.Equals(string.Empty) ? new(false, "Value is required.") : ValidationResult.ValidResult;
-    }
+    private static readonly ValidationResult _invalidResult = new(false, "Value is required.");
+
+    public override ValidationResult Validate(object value, CultureInfo cultureInfo) => value == null || value.Equals(string.Empty) 
+        ? ValueRequiredValidationRule._invalidResult 
+        : ValidationResult.ValidResult;
 }

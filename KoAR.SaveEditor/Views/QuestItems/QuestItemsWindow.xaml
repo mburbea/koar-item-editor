@@ -10,6 +10,7 @@
     WindowStartupLocation="CenterOwner" Title="Quest Items - KoAR Save Editor" 
     Height="450" Width="500" ResizeMode="NoResize">
     <Window.Resources>
+        <constructs:EqualityConverter x:Key="EqualityConverter" />
         <constructs:NegatedBooleanConverter x:Key="NegatedBooleanConverter" />
         <CollectionViewSource x:Key="FilteredItems" Source="{Binding FilteredItems}">
             <CollectionViewSource.SortDescriptions>
@@ -92,7 +93,7 @@
                         <Style.Triggers>
                             <DataTrigger Value="False">
                                 <DataTrigger.Binding>
-                                    <MultiBinding Converter="{constructs:Activator {x:Type constructs:EqualityConverter}}">
+                                    <MultiBinding Converter="{StaticResource EqualityConverter}">
                                         <Binding Path="FilteredItems" />
                                         <Binding Path="Items" />
                                     </MultiBinding>

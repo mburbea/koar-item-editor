@@ -6,7 +6,7 @@ namespace KoAR.SaveEditor.Constructs;
 
 public sealed class RegexValidationRule : ValidationRule
 {
-    public string? ErrorText { get; set; }
+    private static readonly ValidationResult _invalidResult = new(false, "Text does not conform to the expected pattern.");
 
     public string? Pattern { get; set; }
 
@@ -15,6 +15,6 @@ public sealed class RegexValidationRule : ValidationRule
         string? text = value as string;
         return string.IsNullOrEmpty(this.Pattern) || string.IsNullOrEmpty(text) || Regex.IsMatch(text, this.Pattern)
             ? ValidationResult.ValidResult
-            : new(false, this.ErrorText ?? "Text does not conform to the expected pattern.");
+            : RegexValidationRule._invalidResult;
     }
 }
