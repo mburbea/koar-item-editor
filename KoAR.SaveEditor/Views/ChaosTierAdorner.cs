@@ -16,15 +16,15 @@ public sealed class ChaosTierAdorner : IndicatorAdornerBase
 
     private static DataTemplate[] InitializeTemplates(out Func<FrameworkElement, ChaosTierAdorner>[] factories)
     {
-        var retVal = new DataTemplate[6];
+        DataTemplate[] templates = new DataTemplate[6];
         factories = new Func<FrameworkElement, ChaosTierAdorner>[6];
         for (char c = 'A'; c < 'G'; c++)
         {
             string tier = c.ToString();
-            retVal[c-'A'] = IndicatorAdornerBase.CreateContentTemplate(background: Brushes.CadetBlue, foreground: Brushes.White, tier);
+            templates[c - 'A'] = IndicatorAdornerBase.CreateContentTemplate(background: Brushes.CadetBlue, foreground: Brushes.White, tier);
             factories[c - 'A'] = element => new ChaosTierAdorner(element, tier);
         }
-        return retVal;
+        return templates;
     }
 
     private ChaosTierAdorner(FrameworkElement adornedElement, string chaosTier)
