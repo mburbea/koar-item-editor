@@ -64,15 +64,6 @@ public static class Amalur
 
     public static Buff GetBuff(uint buffId) => Buffs.GetValueOrDefault(buffId, new() { Id = buffId, Name = "Unknown" });
 
-    public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, Func<TKey, TValue> factory)
-    {
-        if (!dictionary.TryGetValue(key, out TValue? value))
-        {
-            dictionary.Add(key, value = factory(key));
-        }
-        return value;
-    }
-
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static T SetFlag<T>(this T @enum, T flag, bool on) where T : struct, Enum
     {
