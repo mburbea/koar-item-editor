@@ -77,7 +77,7 @@ public abstract class ItemModelBase : NotifierBase, IDisposable
 
     public abstract bool UnsupportedFormat { get; }
 
-    public bool IsUnknown => this.Category.IsUnknown();
+    public bool IsUnknown => this.Category == EquipmentCategory.Unknown;
 
     public void Dispose()
     {

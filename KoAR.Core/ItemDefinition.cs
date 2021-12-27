@@ -6,17 +6,18 @@ namespace KoAR.Core;
 
 public sealed partial class ItemDefinition : IDefinition
 {
-#if DEBUG
     internal ItemDefinition(uint typeId)
     {
         Category = EquipmentCategory.Unknown;
         TypeId = typeId;
-        Name = InternalName = Amalur.SimTypes[typeId];
+#if DEBUG
+        Name = InternalName = Amalur.SimTypes.GetValueOrDefault(typeId, $"Unknown Simtype:{typeId}");
+#endif
+        Name = InternalName = $"Unknown Simtype:{typeId}";
         SocketTypes = "";
         ItemBuffs = ItemDefinitionBuffMemory.Empty;
         PlayerBuffs = Array.Empty<Buff>();
     }
-#endif
 
     private ItemDefinition(EquipmentCategory category, uint typeId, byte level, string name, string internalName, float maxDurability, Rarity rarity,
         string socketTypes, Element element, ArmorType armorType, Buff? prefix, Buff? suffix,
@@ -58,7 +59,7 @@ public sealed partial class ItemDefinition : IDefinition
     public bool HasVariants { get; }
     public bool IsMerchant { get; }
     public IItemBuffMemory ItemBuffs { get; }
-    public bool RequiresFatesworn { get; } 
+    public bool RequiresFatesworn { get; }
     public string? ChaosTier { get; }
     public bool HasChaosTier => ChaosTier is { };
 

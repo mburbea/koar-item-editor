@@ -77,11 +77,7 @@ public sealed partial class Item : IItem
 
     public ItemDefinition Definition
     {
-        get => Amalur.ItemDefinitions.GetValueOrDefault(BitConverter.ToUInt32(_gameSave.Body, TypeIdOffset)
-#if DEBUG
-                , new(BitConverter.ToUInt32(_gameSave.Body, TypeIdOffset))
-#endif
-                )!;
+        get => Amalur.ItemDefinitions.GetValueOrDefault(BitConverter.ToUInt32(_gameSave.Body, TypeIdOffset), new(BitConverter.ToUInt32(_gameSave.Body, TypeIdOffset)));
         private set
         {
             var oldType = Amalur.ItemDefinitions[BitConverter.ToUInt32(_gameSave.Body, TypeIdOffset)];

@@ -123,7 +123,7 @@ public sealed class ItemModel : ItemModelBase<Item>
         }
     }
 
-    public override bool UnsupportedFormat => this.Item.ItemBuffs.UnsupportedFormat || this.IsUnknown;
+    public override bool UnsupportedFormat => this.Item.ItemBuffs.UnsupportedFormat;
 
     public void AddItemBuff(Buff buff) => this._itemBuffs.Add(buff);
 

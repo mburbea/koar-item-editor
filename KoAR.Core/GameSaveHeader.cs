@@ -15,7 +15,7 @@ public sealed class GameSaveHeader
     {
         _gameSave = gameSave;
         _dataLengthOffset = gameSave.Bytes.AsSpan().IndexOf(gameSave.IsRemaster
-          ? new byte[16] { 0, 0, 0, 0, 0xA, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+          ? new byte[12] { 0, 0, 0, 0, 0xA, 0, 0, 0, 0, 0, 0, 0}
           : new byte[8] { 0, 0, 0, 0, 0xA, 0, 0, 0 }) - 4;
         if(gameSave.IsRemaster)
         {
