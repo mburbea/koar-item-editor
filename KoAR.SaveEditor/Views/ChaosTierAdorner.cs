@@ -22,7 +22,7 @@ public sealed class ChaosTierAdorner : IndicatorAdornerBase
         {
             string tier = c.ToString();
             templates[c - 'A'] = IndicatorAdornerBase.CreateContentTemplate(background: Brushes.CadetBlue, foreground: Brushes.White, tier);
-            factories[c - 'A'] = element => new ChaosTierAdorner(element, tier);
+            factories[c - 'A'] = element => new(element, tier);
         }
         return templates;
     }
