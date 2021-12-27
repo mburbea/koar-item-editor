@@ -11,11 +11,21 @@ public sealed class ChaosTierAdorner : IndicatorAdornerBase
 {
     public static readonly DependencyProperty ChaosTierProperty = DependencyProperty.RegisterAttached(nameof(ItemDefinition.ChaosTier), typeof(string), typeof(ChaosTierAdorner),
         new PropertyMetadata(null, ChaosTierAdorner.ChaosTierProperty_ValueChanged));
-    private static readonly string[] _chaosTiers = { "A", "B", "C", "D", "E", "F" };
-    private static readonly DataTemplate[] _contentTemplates = Enumerable.Range(0, ChaosTierAdorner._chaosTiers.Length).Select(i =>
-          IndicatorAdornerBase.CreateContentTemplate(background: Brushes.CadetBlue, foreground: Brushes.White, _chaosTiers[i])).ToArray();
-    private static readonly Func<FrameworkElement, ChaosTierAdorner>[] _factories = Enumerable.Range(0, ChaosTierAdorner._chaosTiers.Length).Select(i =>
-        (FrameworkElement element) => new ChaosTierAdorner(element, _chaosTiers[i])).ToArray();
+    private static readonly Func<FrameworkElement, ChaosTierAdorner>[] _factories;
+    private static readonly DataTemplate[] _contentTemplates = InitializeTemplates(out ChaosTierAdorner._factories);
+
+    private static DataTemplate[] InitializeTemplates(out Func<FrameworkElement, ChaosTierAdorner>[] factories)
+    {
+        var retVal = new DataTemplate[6];
+        factories = new Func<FrameworkElement, ChaosTierAdorner>[6];
+        for (char c = 'A'; c < 'G'; c++)
+        {
+            string tier = c.ToString();
+            retVal[c-'A'] = IndicatorAdornerBase.CreateContentTemplate(background: Brushes.CadetBlue, foreground: Brushes.White, tier);
+            factories[c - 'A'] = element => new ChaosTierAdorner(element, tier);
+        }
+        return retVal;
+    }
 
     private ChaosTierAdorner(FrameworkElement adornedElement, string chaosTier)
         : base(adornedElement, AdornerPosition.UpperRight, ChaosTierAdorner._contentTemplates[chaosTier[0] - 'A']) => this.IsHitTestVisible = false;
