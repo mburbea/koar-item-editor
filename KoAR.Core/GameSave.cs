@@ -112,10 +112,7 @@ public sealed partial class GameSave
             {
                 playerActor = id;
             }
-            else if (Amalur.ExcludedTypeIds.Contains(typeId))
-            {
-            }
-            else
+            else if (!Amalur.ExcludedTypeIds.Contains(typeId))
             {
                 candidates.Add((id, typeIdOffset, null));
             }
