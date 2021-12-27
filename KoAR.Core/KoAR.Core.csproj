@@ -44,8 +44,7 @@
   </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <MySourceFiles Remove="Data\definitions.csv" />
-	  <MySourceFiles Remove="Data\simtype.csv" />
-	  <MySourceFiles Remove="Data\magic.json" />
+	<MySourceFiles Remove="Data\simtype.csv" />
   </ItemGroup>
   <Target Name="CopyToOut" BeforeTargets="BeforeBuild">
       <Copy SourceFiles="@(MySourceFiles)" DestinationFolder="$(OutDir)\Data" />

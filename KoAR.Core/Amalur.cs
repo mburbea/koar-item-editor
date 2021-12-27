@@ -35,6 +35,8 @@ public static class Amalur
         GemDefinitions = JsonSerializer.DeserializeAsync<GemDefinition[]>(gemsStream, jsonOptions).AsTask().Result!.ToDictionary(def => def.TypeId);
         using var itemsStream = archive.GetEntry("definitions.json")!.Open();
         ItemDefinitions = JsonSerializer.DeserializeAsync<ItemDefinition.WireFormat[]>(itemsStream, jsonOptions).AsTask().Result!.ToDictionary(wf => wf.TypeId, wf => (ItemDefinition)wf);
+        using var excludedStream = archive.GetEntry("magic.json")!.Open();
+        ExcludedTypeIds = JsonSerializer.DeserializeAsync<HashSet<uint>>(excludedStream, jsonOptions).AsTask().Result!;
 #if DEBUG
         using var simTypesStream = archive.GetEntry("simtype.csv")!.Open();
         using var reader = new StreamReader(simTypesStream);
@@ -42,8 +44,6 @@ public static class Amalur
             .ReadLines()
             .Select(l => l.Split(','))
             .ToDictionary(arr => uint.Parse(arr[0]), arr => arr[1]);
-        using var magicStream = archive.GetEntry("magic.json")!.Open();
-        MagicTypeIds = JsonSerializer.DeserializeAsync<uint[]>(magicStream, jsonOptions).AsTask().Result!;
 #endif
     }
 
@@ -51,9 +51,9 @@ public static class Amalur
     public static IReadOnlyDictionary<uint, GemDefinition> GemDefinitions { get; }
     public static IReadOnlyDictionary<uint, ItemDefinition> ItemDefinitions { get; }
     public static IReadOnlyDictionary<uint, QuestItemDefinition> QuestItemDefinitions { get; }
+    public static IReadOnlySet<uint> ExcludedTypeIds { get; }
 #if DEBUG
     public static IReadOnlyDictionary<uint, string> SimTypes { get; }
-    public static IReadOnlyList<uint> MagicTypeIds { get; }
 #endif
     public static ReadOnlySpan<uint> PlayerTypeIds => MemoryMarshal.Cast<byte, uint>((ReadOnlySpan<byte>)new byte[16]{
             0x6D, 0x38, 0x0A, 0x00, // playerHumanMale

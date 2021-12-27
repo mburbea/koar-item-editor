@@ -112,15 +112,10 @@ public sealed partial class GameSave
             {
                 playerActor = id;
             }
-#if DEBUG
-            else if (Amalur.MagicTypeIds.Contains(typeId))
-            {
-            }
-            else
+            else if (!Amalur.ExcludedTypeIds.Contains(typeId))
             {
                 candidates.Add((id, typeIdOffset, null));
             }
-#endif
         }
         foreach (var (id, typeIdOffset, questItemDef) in candidates)
         {

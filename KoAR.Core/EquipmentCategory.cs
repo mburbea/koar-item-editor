@@ -20,7 +20,5 @@ public enum EquipmentCategory
     Staff,
     Necklace,
     Ring,
-#if DEBUG
     Unknown = 999
-#endif
 }
