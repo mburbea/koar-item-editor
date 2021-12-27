@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using KoAR.Core;
@@ -10,15 +11,24 @@ public sealed class ChaosTierAdorner : IndicatorAdornerBase
 {
     public static readonly DependencyProperty ChaosTierProperty = DependencyProperty.RegisterAttached(nameof(ItemDefinition.ChaosTier), typeof(string), typeof(ChaosTierAdorner),
         new PropertyMetadata(null, ChaosTierAdorner.ChaosTierProperty_ValueChanged));
+    private static readonly Func<FrameworkElement, ChaosTierAdorner>[] _factories;
+    private static readonly DataTemplate[] _contentTemplates = ChaosTierAdorner.InitializeTemplates(out ChaosTierAdorner._factories);
 
-    private static readonly Dictionary<string, DataTemplate> _contentTemplates = new();
-    private static readonly Dictionary<string, Func<FrameworkElement, ChaosTierAdorner>> _factories = new();
+    private static DataTemplate[] InitializeTemplates(out Func<FrameworkElement, ChaosTierAdorner>[] factories)
+    {
+        DataTemplate[] templates = new DataTemplate[6];
+        factories = new Func<FrameworkElement, ChaosTierAdorner>[6];
+        for (char c = 'A'; c <= 'F'; c++)
+        {
+            string tier = c.ToString();
+            templates[c - 'A'] = IndicatorAdornerBase.CreateContentTemplate(background: Brushes.CadetBlue, foreground: Brushes.White, tier);
+            factories[c - 'A'] = element => new(element, tier);
+        }
+        return templates;
+    }
 
     private ChaosTierAdorner(FrameworkElement adornedElement, string chaosTier)
-        : base(adornedElement, AdornerPosition.UpperRight, ChaosTierAdorner._contentTemplates.GetOrAdd(chaosTier, chaosTier => IndicatorAdornerBase.CreateContentTemplate(background: Brushes.CadetBlue, foreground: Brushes.White, chaosTier)))
-    {
-        this.IsHitTestVisible = false;
-    }
+        : base(adornedElement, AdornerPosition.UpperRight, ChaosTierAdorner._contentTemplates[chaosTier[0] - 'A']) => this.IsHitTestVisible = false;
 
     public static string? GetChaosTier(FrameworkElement element) => (string?)element.GetValue(ChaosTierAdorner.ChaosTierProperty);
 
@@ -32,7 +42,7 @@ public sealed class ChaosTierAdorner : IndicatorAdornerBase
         }
         if (e.NewValue is string tier)
         {
-            IndicatorAdornerBase.AttachAdorner(element, ChaosTierAdorner._factories.GetOrAdd(tier, tier => element => new(element, tier)));
+            IndicatorAdornerBase.AttachAdorner(element, ChaosTierAdorner._factories[tier[0] - 'A']);
         }
         else
         {
