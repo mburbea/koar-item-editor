@@ -18,7 +18,7 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
     private static readonly BooleanToVisibilityConverter _booleanToVisibilityConverter = new();
     private static readonly ParameterExpression _elementParameter = Expression.Parameter(typeof(FrameworkElement));
 
-    private readonly ContentPresenter _element;
+    private readonly ContentPresenter _contentPresenter;
     private readonly double _heightMultiple;
     private readonly double _widthMultiple;
 
@@ -43,7 +43,7 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
         textBlockFactory.SetValue(FrameworkElement.VerticalAlignmentProperty, VerticalAlignment.Center);
         viewBoxFactory.AppendChild(textBlockFactory);
         gridFactory.AppendChild(viewBoxFactory);
-        this._element = new()
+        this._contentPresenter = new()
         {
             Content = string.Empty,
             ContentTemplate = new() { VisualTree = gridFactory },
@@ -91,13 +91,13 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
 
     protected override Size ArrangeOverride(Size finalSize)
     {
-        this._element.Arrange(new(finalSize));
+        this._contentPresenter.Arrange(new(finalSize));
         return finalSize;
     }
 
     protected override Size MeasureOverride(Size constraint)
     {
-        this._element.Measure(constraint);
+        this._contentPresenter.Measure(constraint);
         return this.AdornedElement.RenderSize;
     }
 
@@ -112,7 +112,7 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
         DrawingVisual visual = new();
         using (DrawingContext context = visual.RenderOpen())
         {
-            VisualBrush brush = new(this._element);
+            VisualBrush brush = new(this._contentPresenter);
             context.DrawRectangle(brush, null, new(default, bounds.Size));
         }
         bitmap.Render(visual);
