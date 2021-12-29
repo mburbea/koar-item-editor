@@ -52,7 +52,11 @@ public sealed partial class GameSave
 
         if (BitConverter.ToInt32(Bytes, BodyStart) == CompressedFlag)
         {
-            Body = new byte[_header.BodyDataLength];
+            Body = new byte[BitConverter.ToInt32(Bytes, BodyStart + 4)];
+            if(Body.Length != _header.BodyDataLength)
+            {
+                throw new NotSupportedException($"Save file appears corrupted. The header states that the body should have {_header.BodyDataLength} bytes, but the decompressed size is {Body.Length}");
+            }
             var bundleInfoStart = BodyStart + 12;
             var bundleInfoSize = BitConverter.ToInt32(Bytes, bundleInfoStart - 4);
             using var bundleInfoData = new ZlibStream(new MemoryStream(Bytes, bundleInfoStart, bundleInfoSize), CompressionMode.Decompress);
@@ -206,16 +210,16 @@ public sealed partial class GameSave
     {
         get => BitConverter.ToInt32(Body, _bagOffset);
         set => Unsafe.WriteUnaligned(ref Body[_bagOffset], value);
-    } 
+    }
 
     private int BodyDataLength
     {
-        get => IsRemaster ? BitConverter.ToInt32(Bytes, 8 + _header.Length) : Bytes.Length - BodyStart;
+        get => IsRemaster ? BitConverter.ToInt32(Bytes, BodyStart - 4) : Bytes.Length - BodyStart;
         set
         {
             if (IsRemaster)
             {
-                Unsafe.WriteUnaligned(ref Bytes[8 + _header.Length], value);
+                Unsafe.WriteUnaligned(ref Bytes[BodyStart - 4], value);
             }
         }
     }

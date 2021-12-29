@@ -4,15 +4,10 @@ using System.Text.Json.Serialization;
 
 namespace KoAR.Core;
 
-public class Buff : IDefinition
+
+public record Buff(uint Id, string? Modifier = null, string Name = null!, string? Flavor = null, Rarity Rarity = default, 
+    BuffTypes BuffType = default, ApplyType ApplyType = default) : IDefinition
 {
-    public uint Id { get; set; }
-    public string? Modifier { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public string? Flavor { get; set; }
-    public Rarity Rarity { get; set; }
-    public BuffTypes BuffType { get; set; }
-    public ApplyType ApplyType { get; set; }
     [JsonPropertyName("desc")]
     public BuffDescription[] Descriptions { get; set; } = Array.Empty<BuffDescription>();
 
@@ -23,13 +18,9 @@ public class Buff : IDefinition
     public bool RequiresFatesworn => Name.StartsWith("mit_");
 }
 
-public class BuffDescription
+public record BuffDescription([property: JsonPropertyName("param_icon")] string? Icon, string? Text)
 {
-    public static readonly BuffDescription Empty = new() { Icon = "Default", Text = "None" };
-
-    [JsonPropertyName("param_icon")]
-    public string? Icon { get; set; }
-    public string? Text { get; set; }
+    public static readonly BuffDescription Empty = new(Icon: "Default", Text: "None");
 }
 
 [Flags]

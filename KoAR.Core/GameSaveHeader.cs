@@ -14,14 +14,15 @@ public sealed class GameSaveHeader
     public GameSaveHeader(GameSave gameSave)
     {
         _gameSave = gameSave;
-        _dataLengthOffset = gameSave.Bytes.AsSpan().IndexOf(gameSave.IsRemaster
-          ? new byte[12] { 0, 0, 0, 0, 0xA, 0, 0, 0, 0, 0, 0, 0}
-          : new byte[8] { 0, 0, 0, 0, 0xA, 0, 0, 0 }) - 4;
+        _dataLengthOffset = gameSave.Bytes.AsSpan().IndexOf(
+           new byte[8] { 0, 0, 0, 0, 0xA, 0, 0, 0 }) - 4;
         if(gameSave.IsRemaster)
         {
-            var packagesList = gameSave.Bytes.AsSpan(gameSave.Bytes.AsSpan().IndexOf(new byte[8] { 0, 0, 0, 1, 0, 0, 0, 2 }) -1);
-            IsFateswornAware = MemoryMarshal.Cast<byte, int>(packagesList.Slice(4, 4 * BitConverter.ToInt32(packagesList)))
-                .Contains(FateswornPackageId);
+            var offset = gameSave.Bytes.AsSpan().IndexOf(new byte[8] { 0, 0, 0, 1, 0, 0, 0, 2 }) - 1;
+            var packagesList = MemoryMarshal.Cast<byte, int>(gameSave.Bytes.AsSpan(offset));
+            var length = packagesList[0];
+            _dataLengthOffset = offset + 4 * (length + 1);
+            IsFateswornAware = packagesList.Slice(4, length).Contains(FateswornPackageId);
         }
     }
 

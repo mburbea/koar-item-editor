@@ -42,7 +42,7 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
 
     protected enum AdornerPosition
     {
-        UpperLeft = 0,
+        UpperLeft,
         UpperRight,
         LowerLeft,
         LowerRight,
@@ -58,8 +58,8 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
 
     public override GeneralTransform GetDesiredTransform(GeneralTransform transform)
     {
-        Rect bounds = this.GetAdornedElementBounds();
-        if (bounds.IsEmpty)
+        Size size = this.AdornedElement.RenderSize;
+        if (size.IsEmpty)
         {
             return base.GetDesiredTransform(transform);
         }
@@ -68,7 +68,7 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
             Children =
             {
                 base.GetDesiredTransform(transform),
-                new ScaleTransform(0.5, 0.5, bounds.Width * this._widthMultiple, bounds.Height * this._heightMultiple),
+                new ScaleTransform(0.5, 0.5, size.Width * this._widthMultiple, size.Height * this._heightMultiple),
             }
         };
     }
@@ -114,29 +114,21 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
 
     protected override void OnRender(DrawingContext drawingContext)
     {
-        Rect bounds = this.GetAdornedElementBounds();
-        if (bounds.IsEmpty)
+        Size size = this.AdornedElement.RenderSize;
+        if (size.IsEmpty)
         {
             return;
         }
-        RenderTargetBitmap bitmap = new((int)bounds.Width, (int)bounds.Height, 96, 96, PixelFormats.Pbgra32);
+        RenderTargetBitmap bitmap = new((int)size.Width, (int)size.Height, 96, 96, PixelFormats.Pbgra32);
         DrawingVisual visual = new();
         using (DrawingContext context = visual.RenderOpen())
         {
             VisualBrush brush = new(this._contentPresenter);
-            context.DrawRectangle(brush, null, new(default, bounds.Size));
+            context.DrawRectangle(brush, null, new(size));
         }
         bitmap.Render(visual);
         bitmap.Freeze();
-        drawingContext.DrawImage(bitmap, new(default, bounds.Size));
-    }
-
-    private Rect GetAdornedElementBounds()
-    {
-        Rect bounds = VisualTreeHelper.GetDescendantBounds(this.AdornedElement);
-        return bounds.IsEmpty && (this.AdornedElement.ActualHeight > 0d || this.AdornedElement.ActualWidth > 0d)
-            ? new(new(this.AdornedElement.ActualWidth, this.AdornedElement.ActualHeight))
-            : bounds;
+        drawingContext.DrawImage(bitmap, new(size));
     }
 
     private static class AdornerAttacher<TAdorner>
