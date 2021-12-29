@@ -62,7 +62,7 @@ public static class Amalur
             0x70, 0x38, 0x0A, 0x00,  // playerElfFemale
         });
 
-    public static Buff GetBuff(uint buffId) => Buffs.GetValueOrDefault(buffId, new() { Id = buffId, Name = "Unknown" });
+    public static Buff GetBuff(uint buffId) => Buffs.GetValueOrDefault(buffId, new(buffId, Name: "Unknown"));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static T SetFlag<T>(this T @enum, T flag, bool on) where T : struct, Enum

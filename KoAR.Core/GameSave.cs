@@ -2,6 +2,7 @@
 using StringLiteral;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Hashing;
 using System.Linq;
@@ -55,12 +56,15 @@ public sealed partial class GameSave
             Body = new byte[_header.BodyDataLength];
             var bundleInfoStart = BodyStart + 12;
             var bundleInfoSize = BitConverter.ToInt32(Bytes, bundleInfoStart - 4);
+            var totalSize = BitConverter.ToInt32(Bytes, bundleInfoStart - 8);
+            Debug.Assert(totalSize == _header.BodyDataLength);
             using var bundleInfoData = new ZlibStream(new MemoryStream(Bytes, bundleInfoStart, bundleInfoSize), CompressionMode.Decompress);
             var endOfBundle = bundleInfoData.ReadAll(Body);
             var gameStateStart = bundleInfoStart + bundleInfoSize + 4;
             var gameStateSize = BitConverter.ToInt32(Bytes, gameStateStart - 4);
             using var gameStateData = new ZlibStream(new MemoryStream(Bytes, gameStateStart, gameStateSize), CompressionMode.Decompress);
-            gameStateData.ReadAll(Body.AsSpan(endOfBundle, Body.Length - endOfBundle));
+            gameStateData.ReadAll(Body.AsSpan(endOfBundle));
+            File.WriteAllBytes("test.bin", Body);
         }
         else
         {
@@ -74,9 +78,11 @@ public sealed partial class GameSave
         var typeSectionOffset =
             data.IndexOf(new byte[5] { 0x23, 0xCC, 0x58, 0x00, 0x06 }) is int ix and > -1
             ? ix
-            : data.IndexOf(new byte[5] { 0x23, 0xCC, 0x58, 0x00, 0x04 }) is int pix and > -1
+            : data.IndexOf(new byte[5] {0x23, 0xcc, 0x58,0x00,0x05}) is int oix and > -1
+            ? oix
+                : data.IndexOf(new byte[5] { 0x23, 0xCC, 0x58, 0x00, 0x04 }) is int pix and > -1
                 ? pix
-                : data.IndexOf(new byte[5] { 0x23, 0xCC, 0x58, 0x00, 0x03 });
+                    : data.IndexOf(new byte[5] { 0x23, 0xCC, 0x58, 0x00, 0x03 });
         _dataLengthOffsets = new[]{
                 _gameStateStartOffset + 5, // gameStateSize
                 data.IndexOf(new byte[5] { 0x0C, 0xAE, 0x32, 0x00, 0x00 }) + 5, // unknown length 1

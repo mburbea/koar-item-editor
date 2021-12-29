@@ -42,7 +42,7 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
 
     protected enum AdornerPosition
     {
-        UpperLeft = 0,
+        UpperLeft,
         UpperRight,
         LowerLeft,
         LowerRight,
@@ -124,20 +124,17 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
         using (DrawingContext context = visual.RenderOpen())
         {
             VisualBrush brush = new(this._contentPresenter);
-            context.DrawRectangle(brush, null, new(default, bounds.Size));
+            context.DrawRectangle(brush, null, new(bounds.Size));
         }
         bitmap.Render(visual);
         bitmap.Freeze();
-        drawingContext.DrawImage(bitmap, new(default, bounds.Size));
+        drawingContext.DrawImage(bitmap, new(bounds.Size));
     }
 
-    private Rect GetAdornedElementBounds()
-    {
-        Rect bounds = VisualTreeHelper.GetDescendantBounds(this.AdornedElement);
-        return bounds.IsEmpty && (this.AdornedElement.ActualHeight > 0d || this.AdornedElement.ActualWidth > 0d)
-            ? new(new(this.AdornedElement.ActualWidth, this.AdornedElement.ActualHeight))
+    private Rect GetAdornedElementBounds() =>
+        VisualTreeHelper.GetDescendantBounds(this.AdornedElement) is { IsEmpty: true } bounds
+            ? new(this.AdornedElement.RenderSize)
             : bounds;
-    }
 
     private static class AdornerAttacher<TAdorner>
         where TAdorner : IndicatorAdornerBase

@@ -384,9 +384,9 @@ static class Program
     }
     static void Main()
     {
+        ConvertSymbolsToCsv(@"C:\e\", @"C:\e\o");
         CreateBatchArchive2(@"C:\e\134230570_klua.batch",@"C:\e\o\klua.zip");
         ParseOutItemInformationTemplate();
-        //CreateSimTypeCsv(@"C:\e\symbol_table_globalobjectref.bin", @"..\..\..\gor.csv");
         ConvertSymbolsToLua(@"C:\e\", @"C:\Program Files (x86)\Steam\steamapps\common\Kingdoms of Amalur Re-Reckoning\mods\resources\","simtype","buff");
         
 
