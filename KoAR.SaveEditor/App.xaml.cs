@@ -35,11 +35,11 @@ partial class App
                 Text = exception.StackTrace,
                 Position = TaskDialogExpanderPosition.AfterFootnote,
             },
-            Verification = new("Open GitHub bug report? (requires free account)"),
+            Verification = new("Open GitHub bug report? (Requires a free account)"),
             Icon = TaskDialogIcon.Error,
         };
         TaskDialog.ShowDialog(page);
-        if (page.Verification!.Checked)
+        if (page.Verification is { Checked: true })
         {
             App.CreateGithubIssue(content);
         }

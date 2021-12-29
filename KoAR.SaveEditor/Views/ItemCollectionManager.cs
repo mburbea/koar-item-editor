@@ -155,7 +155,7 @@ public sealed class ItemCollectionManager : Control
 
     private void GridViewColumn_Click(object sender, RoutedEventArgs e)
     {
-        if (e.OriginalSource is GridViewColumnHeader header && ItemCollectionManager.GetPropertyName(header.Column) is string propertyName && this.CollectionView?.SortDescriptions is { } descriptions)
+        if (e.OriginalSource is GridViewColumnHeader header && ItemCollectionManager.GetPropertyName(header.Column) is { } propertyName && this.CollectionView?.SortDescriptions is { } descriptions)
         {
             SortDescription current = descriptions[1];
             descriptions[1] = new(
@@ -174,10 +174,9 @@ public sealed class ItemCollectionManager : Control
             return;
         }
         ListViewAutoSize.AutoSizeColumns(this._listView);
-        ListCollectionView collectionView = (ListCollectionView)this._listView.ItemsSource;
-        if (!collectionView.IsEmpty)
+        if (this._listView.ItemsSource is ListCollectionView { IsEmpty: false } view)
         {
-            this._listView.ScrollIntoView(collectionView.GetItemAt(0));
+            this._listView.ScrollIntoView(view.GetItemAt(0));
         }
     }
 
@@ -202,11 +201,11 @@ public sealed class ItemCollectionManager : Control
         itemsView.CollectionView = e.NewValue == null ? null : new ListCollectionView((IList)e.NewValue)
         {
             SortDescriptions =
-                {
-                    new SortDescription(nameof(ItemModelBase.Category), ListSortDirection.Ascending),
-                    new SortDescription(itemsView.SortProperty, itemsView.SortDirection),
-                    new SortDescription(nameof(ItemModelBase.DisplayName), ListSortDirection.Ascending)
-                }
+            {
+                new(nameof(ItemModelBase.Category), ListSortDirection.Ascending),
+                new(itemsView.SortProperty, itemsView.SortDirection),
+                new(nameof(ItemModelBase.DisplayName), ListSortDirection.Ascending)
+            }
         };
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Interop;
@@ -12,6 +13,8 @@ namespace KoAR.SaveEditor.Views.Main;
 
 partial class MainWindow
 {
+    private IntPtr _handle;
+
     public MainWindow() => this.InitializeComponent();
 
     private MainWindowViewModel ViewModel => (MainWindowViewModel)this.DataContext;
@@ -32,19 +35,25 @@ partial class MainWindow
         base.OnPreviewKeyDown(e);
     }
 
+    protected override void OnSourceInitialized(EventArgs e)
+    {
+        this._handle = ((HwndSource)PresentationSource.FromVisual(this)).Handle;
+        base.OnSourceInitialized(e);
+    }
+
     private async void Help_Executed(object sender, ExecutedRoutedEventArgs e)
     {
-        TaskDialogButton button = TaskDialog.ShowDialog(new WindowInteropHelper(this).Handle, new()
+        TaskDialogButton button = TaskDialog.ShowDialog(this._handle, new()
         {
             Caption = "KoAR Save Editor",
             Heading = "Help",
             Icon = TaskDialogIcon.Information,
             Buttons =
-                {
-                    new TaskDialogCommandLinkButton("OK", "Close this window") { Tag = 0 },
-                    new TaskDialogCommandLinkButton("Found a bug? File a new GitHub bug report.", "Requires a free account") { Tag = 1 },
-                    new TaskDialogCommandLinkButton("Downgrade to v2.", "I am running Reckoning") { Tag = 2 },
-                },
+            {
+                new TaskDialogCommandLinkButton("OK", "Close this window") { Tag = 0 },
+                new TaskDialogCommandLinkButton("Found a bug? Open a new GitHub bug report.", "(Requires a free account)") { Tag = 1 },
+                new TaskDialogCommandLinkButton("Downgrade to v2...", "I am running Reckoning") { Tag = 2 },
+            },
             SizeToContent = true,
             AllowCancel = true,
             Text = @"This version of the editor has only been tested against the remaster. If you're on the original and are running into errors, consider downgrading.
@@ -52,7 +61,7 @@ partial class MainWindow
 1. Your saves are usually not in the same folder as the game. The editor attemps to make educated guesses as to the save file directory.
 2. When modifying item names, do NOT use special characters.
 3. Editing equipped items is restricted, and even still may cause game crashes.",
-            Footnote = new(" ")
+            Footnote = new($"v{App.Version}")
         });
         if (button is not { Tag: int tag and > 0 })
         {

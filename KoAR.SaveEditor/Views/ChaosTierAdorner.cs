@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using KoAR.Core;
@@ -11,21 +9,9 @@ public sealed class ChaosTierAdorner : IndicatorAdornerBase
 {
     public static readonly DependencyProperty ChaosTierProperty = DependencyProperty.RegisterAttached(nameof(ItemDefinition.ChaosTier), typeof(string), typeof(ChaosTierAdorner),
         new PropertyMetadata(null, ChaosTierAdorner.ChaosTierProperty_ValueChanged));
-    private static readonly Func<FrameworkElement, ChaosTierAdorner>[] _factories;
-    private static readonly DataTemplate[] _contentTemplates = ChaosTierAdorner.InitializeTemplates(out ChaosTierAdorner._factories);
 
-    private static DataTemplate[] InitializeTemplates(out Func<FrameworkElement, ChaosTierAdorner>[] factories)
-    {
-        DataTemplate[] templates = new DataTemplate[6];
-        factories = new Func<FrameworkElement, ChaosTierAdorner>[6];
-        for (char c = 'A'; c <= 'F'; c++)
-        {
-            string tier = c.ToString();
-            templates[c - 'A'] = IndicatorAdornerBase.CreateContentTemplate(background: Brushes.CadetBlue, foreground: Brushes.White, tier);
-            factories[c - 'A'] = element => new(element, tier);
-        }
-        return templates;
-    }
+    private static readonly DataTemplate[] _contentTemplates = ChaosTierAdorner.InitializeTemplates(out ChaosTierAdorner._factories);
+    private static readonly Func<FrameworkElement, ChaosTierAdorner>[] _factories;
 
     private ChaosTierAdorner(FrameworkElement adornedElement, string chaosTier)
         : base(adornedElement, AdornerPosition.UpperRight, ChaosTierAdorner._contentTemplates[chaosTier[0] - 'A']) => this.IsHitTestVisible = false;
@@ -48,5 +34,18 @@ public sealed class ChaosTierAdorner : IndicatorAdornerBase
         {
             IndicatorAdornerBase.DetachAdorner<ChaosTierAdorner>(element);
         }
+    }
+
+    private static DataTemplate[] InitializeTemplates(out Func<FrameworkElement, ChaosTierAdorner>[] factories)
+    {
+        DataTemplate[] templates = new DataTemplate[6];
+        factories = new Func<FrameworkElement, ChaosTierAdorner>[6];
+        for (char c = 'A'; c <= 'F'; c++)
+        {
+            string tier = c.ToString();
+            templates[c - 'A'] = IndicatorAdornerBase.CreateContentTemplate(background: Brushes.CadetBlue, foreground: Brushes.White, tier);
+            factories[c - 'A'] = element => new(element, tier);
+        }
+        return templates;
     }
 }
