@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
-using System.Windows.Interop;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
 using KoAR.SaveEditor.Properties;
@@ -88,7 +87,7 @@ public sealed class MainWindowViewModel : NotifierBase
 
     public UpdateNotifier UpdateNotifier { get; } = new();
 
-    private static IntPtr MainWindowHandle => new WindowInteropHelper(Application.Current.MainWindow).Handle;
+    private static IntPtr MainWindowHandle => ((MainWindow)Application.Current.MainWindow).Handle;
 
     public void OpenFile(string? fileName = default)
     {

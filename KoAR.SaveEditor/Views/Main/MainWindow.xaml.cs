@@ -13,9 +13,9 @@ namespace KoAR.SaveEditor.Views.Main;
 
 partial class MainWindow
 {
-    private IntPtr _handle;
-
     public MainWindow() => this.InitializeComponent();
+
+    public IntPtr Handle { get; private set; }
 
     private MainWindowViewModel ViewModel => (MainWindowViewModel)this.DataContext;
 
@@ -37,13 +37,13 @@ partial class MainWindow
 
     protected override void OnSourceInitialized(EventArgs e)
     {
-        this._handle = ((HwndSource)PresentationSource.FromVisual(this)).Handle;
+        this.Handle = ((HwndSource)PresentationSource.FromVisual(this)).Handle;
         base.OnSourceInitialized(e);
     }
 
     private async void Help_Executed(object sender, ExecutedRoutedEventArgs e)
     {
-        TaskDialogButton button = TaskDialog.ShowDialog(this._handle, new()
+        TaskDialogButton button = TaskDialog.ShowDialog(this.Handle, new()
         {
             Caption = "KoAR Save Editor",
             Heading = "Help",
