@@ -56,7 +56,6 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
         GC.SuppressFinalize(this);
     }
 
-
     public override GeneralTransform GetDesiredTransform(GeneralTransform transform)
     {
         Size size = this.AdornedElement.RenderSize;
@@ -73,8 +72,6 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
             }
         };
     }
-
-
 
     protected static void AttachAdorner<TAdorner>(FrameworkElement element, Func<FrameworkElement, TAdorner>? factory = null)
         where TAdorner : IndicatorAdornerBase => AdornerAttacher<TAdorner>.AttachAdorner(element, factory);
