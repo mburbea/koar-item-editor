@@ -24,7 +24,7 @@ public static class UpdateMethods
     /// Given the path to a zip file containing an update, executes the update process.
     /// </summary>
     /// <param name="zipFilePath">Zip file path.</param>
-    public static async void ExecuteUpdate(string zipFilePath)
+    public static async Task ExecuteUpdate(string zipFilePath)
     {
         string scriptFileName = await UpdateMethods.ExtractPowershellScript().ConfigureAwait(false);
         using Process process = Process.Start(startInfo: new()
