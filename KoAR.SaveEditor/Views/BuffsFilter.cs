@@ -12,14 +12,11 @@ public enum BuffsFilter
 
 public static class BuffsFilterMethods
 {
-    public static bool Matches(this BuffsFilter filter, Buff buff)
+    public static bool Matches(this BuffsFilter filter, Buff buff) => filter switch
     {
-        return filter switch
-        {
-            BuffsFilter.Prefix => (buff.BuffType & BuffTypes.Prefix) == BuffTypes.Prefix,
-            BuffsFilter.Suffix => (buff.BuffType & BuffTypes.Suffix) == BuffTypes.Suffix,
-            BuffsFilter.Item => buff.ApplyType == ApplyType.OnObject,
-            _ => true
-        };
-    }
+        BuffsFilter.Prefix => (buff.BuffType & BuffTypes.Prefix) == BuffTypes.Prefix,
+        BuffsFilter.Suffix => (buff.BuffType & BuffTypes.Suffix) == BuffTypes.Suffix,
+        BuffsFilter.Item => buff.ApplyType == ApplyType.OnObject,
+        _ => true
+    };
 }
