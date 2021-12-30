@@ -184,7 +184,7 @@ public abstract class UpdateViewModelBase : NotifierBase, IDisposable
     {
         if (await this.DownloadUpdateAsync().ConfigureAwait(false))
         {
-            UpdateMethods.ExecuteUpdate(this._zipFilePath);
+            await UpdateMethods.ExecuteUpdate(this._zipFilePath).ConfigureAwait(false);
         }
     }
 

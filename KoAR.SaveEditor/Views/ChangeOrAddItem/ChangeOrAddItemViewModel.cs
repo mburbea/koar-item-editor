@@ -13,7 +13,7 @@ public sealed class ChangeOrAddItemViewModel : NotifierBase
     /// <summary>
     /// <see cref="EquipmentCategory" /> enumeration does not start at 0.  Instead of just using default, gets the first category.
     /// </summary>
-    private static readonly EquipmentCategory _defaultCategory = ((EquipmentCategory[])Enum.GetValues(typeof(EquipmentCategory)))[0];
+    private static readonly EquipmentCategory _defaultCategory = Enum.GetValues<EquipmentCategory>()[0];
 
     private int _armorTypeFilter;
     private EquipmentCategory _category;

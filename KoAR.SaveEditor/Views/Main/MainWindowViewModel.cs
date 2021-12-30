@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
-using System.Windows.Interop;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
 using KoAR.SaveEditor.Properties;
@@ -88,6 +87,8 @@ public sealed class MainWindowViewModel : NotifierBase
 
     public UpdateNotifier UpdateNotifier { get; } = new();
 
+    private static IntPtr MainWindowHandle => ((MainWindow)Application.Current.MainWindow).Handle;
+
     public void OpenFile(string? fileName = default)
     {
         OpenFileDialog dialog = new()
@@ -161,7 +162,7 @@ public sealed class MainWindowViewModel : NotifierBase
         }
         string backupPath = this.GameSave.SaveFile();
         this.HasUnsavedChanges = false;
-        TaskDialog.ShowDialog(new WindowInteropHelper(Application.Current.MainWindow).Handle, new()
+        TaskDialog.ShowDialog(MainWindowViewModel.MainWindowHandle, new()
         {
             Caption = "KoAR Save Editor",
             Heading = "Save Successful!",
@@ -194,7 +195,7 @@ public sealed class MainWindowViewModel : NotifierBase
         {
             return false;
         }
-        TaskDialogButton button = TaskDialog.ShowDialog(new WindowInteropHelper(Application.Current.MainWindow).Handle, new()
+        TaskDialogButton button = TaskDialog.ShowDialog(MainWindowViewModel.MainWindowHandle, new()
         {
             Heading = "Unsaved Changes Detected!",
             Text = "Changed were made to the equipment that have not been saved.",
