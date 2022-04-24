@@ -149,7 +149,7 @@ public sealed partial class Item : IItem
 
     IItemBuffMemory IItem.ItemBuffs => ItemBuffs;
 
-    public static bool IsValidDurability(float durability) => durability >= DurabilityLowerBound && durability <= DurabilityUpperBound;
+    public static bool IsValidDurability(float durability) => durability is >= DurabilityLowerBound and <= DurabilityUpperBound;
 
     internal byte[] Serialize(bool forced = false)
     {

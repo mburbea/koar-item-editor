@@ -21,8 +21,7 @@ public static class ItemSelection
     private static void Item_PreviewMouseLeftButtonDown(object? sender, RoutedEventArgs e)
     {
         DependencyObject d = (DependencyObject)sender!;
-        ListBoxItem? item = d as ListBoxItem ?? d.FindVisualTreeAncestor<ListBoxItem>();
-        if (item != null)
+        if ((d as ListBoxItem ?? d.FindVisualTreeAncestor<ListBoxItem>()) is { } item)
         {
             item.IsSelected = true;
         }

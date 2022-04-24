@@ -60,5 +60,5 @@ public sealed class KeyedDataTemplateSelector : DataTemplateSelector, IDictionar
     [return: MaybeNull]
     public override DataTemplate SelectTemplate(object item, DependencyObject container) => this.GetTemplate(item);
 
-    private DataTemplate? GetTemplate(object key) => key != null && this._dictionary.TryGetValue(key, out DataTemplate? value) ? value : null;
+    private DataTemplate? GetTemplate(object key) => key != null ? this._dictionary.GetValueOrDefault(key) : null;
 }

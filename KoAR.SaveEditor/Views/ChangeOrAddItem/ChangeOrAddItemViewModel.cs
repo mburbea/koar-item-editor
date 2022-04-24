@@ -149,7 +149,7 @@ public sealed class ChangeOrAddItemViewModel : NotifierBase
         this.Definitions = this.GameSave.ItemDefinitions.Where(this.IsMatch).ToArray();
         if (selectedItem == null || !this.Definitions.Contains(selectedItem))
         {
-            this.Definition = this.Definitions.FirstOrDefault();
+            this.Definition = this.Definitions.Count > 0 ? this.Definitions[0] : default;
         }
     }
 

@@ -31,7 +31,7 @@ public static class ValidatingPropertyBehavior
     {
         foreach (ValidationRule rule in validationRules)
         {
-            if (rule.Validate(value, null) is { IsValid: false, ErrorContent: object errorContent })
+            if (rule.Validate(value, null) is { IsValid: false, ErrorContent: { } errorContent })
             {
                 Validation.MarkInvalid(bindingExpression, new(rule, bindingExpression.ParentBindingBase, errorContent, null));
                 return;
@@ -42,8 +42,7 @@ public static class ValidatingPropertyBehavior
 
     private static void Validate(this DependencyObject dependencyObject, DependencyProperty dependencyProperty)
     {
-        BindingExpressionBase bindingExpression = BindingOperations.GetBindingExpressionBase(dependencyObject, dependencyProperty);
-        if (bindingExpression == null)
+        if (BindingOperations.GetBindingExpressionBase(dependencyObject, dependencyProperty) is not { } bindingExpression)
         {
             return;
         }

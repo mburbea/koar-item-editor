@@ -78,8 +78,7 @@ public static class TabContent
 
     private static ContentManager GetContentManager(TabControl tabControl, Border border)
     {
-        ContentManager? manager = TabContent.GetContentManager(tabControl);
-        if (manager == null)
+        if (TabContent.GetContentManager(tabControl) is not { } manager)
         {
             TabContent.SetContentManager(tabControl, manager = new(tabControl));
         }
@@ -137,9 +136,9 @@ public static class TabContent
 
     private static void TabControlProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        if (e.NewValue != null)
+        if (e.NewValue is TabControl tabControl)
         {
-            TabContent.GetContentManager((TabControl)e.NewValue, (Border)d).UpdateSelectedTab();
+            TabContent.GetContentManager(tabControl, (Border)d).UpdateSelectedTab();
         }
     }
 

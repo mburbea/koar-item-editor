@@ -33,8 +33,7 @@ public sealed class JsonSnakeCaseNamingPolicy : JsonNamingPolicy
             {
                 case UnicodeCategory.UppercaseLetter:
                 case UnicodeCategory.TitlecaseLetter:
-                    if (previousCategory == UnicodeCategory.SpaceSeparator ||
-                        previousCategory == UnicodeCategory.LowercaseLetter ||
+                    if (previousCategory is UnicodeCategory.SpaceSeparator or UnicodeCategory.LowercaseLetter ||
                         previousCategory != UnicodeCategory.DecimalDigitNumber &&
                         index > 0 &&
                         index + 1 < name.Length &&

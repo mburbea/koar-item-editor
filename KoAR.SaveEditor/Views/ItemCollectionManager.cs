@@ -182,28 +182,28 @@ public sealed class ItemCollectionManager : Control
 
     private static void CollectionView_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        ItemCollectionManager itemsView = (ItemCollectionManager)d;
-        if (e.OldValue != null)
+        ItemCollectionManager manager = (ItemCollectionManager)d;
+        if (e.OldValue is ListCollectionView previous)
         {
-            CollectionChangedEventManager.RemoveHandler((ListCollectionView)e.OldValue, itemsView.CollectionView_CollectionChanged);
+            CollectionChangedEventManager.RemoveHandler(previous, manager.CollectionView_CollectionChanged);
         }
-        if (e.NewValue != null)
+        if (e.NewValue is ListCollectionView next)
         {
-            CollectionChangedEventManager.AddHandler((ListCollectionView)e.NewValue, itemsView.CollectionView_CollectionChanged);
-            itemsView.Dispatcher.InvokeAsync(itemsView.OnViewChanged);
+            CollectionChangedEventManager.AddHandler(next, manager.CollectionView_CollectionChanged);
+            manager.Dispatcher.InvokeAsync(manager.OnViewChanged);
         }
     }
 
     private static void ItemsProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        ItemCollectionManager itemsView = (ItemCollectionManager)d;
-        itemsView.Mode = e.NewValue is IEnumerable<ItemModelBase<StashItem>> ? Mode.Stash : default;
-        itemsView.CollectionView = e.NewValue == null ? null : new ListCollectionView((IList)e.NewValue)
+        ItemCollectionManager manager = (ItemCollectionManager)d;
+        manager.Mode = e.NewValue is IEnumerable<ItemModelBase<StashItem>> ? Mode.Stash : default;
+        manager.CollectionView = e.NewValue is not IList list ? null : new ListCollectionView(list)
         {
             SortDescriptions =
             {
                 new(nameof(ItemModelBase.Category), ListSortDirection.Ascending),
-                new(itemsView.SortProperty, itemsView.SortDirection),
+                new(manager.SortProperty, manager.SortDirection),
                 new(nameof(ItemModelBase.DisplayName), ListSortDirection.Ascending)
             }
         };

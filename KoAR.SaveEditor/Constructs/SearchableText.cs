@@ -44,11 +44,11 @@ public sealed class SearchableText : Control
 
     private static IReadOnlyList<Segment> ComputeSegments(string? text, string? searchText)
     {
-        if (text == null || text.Length == 0)
+        if (string.IsNullOrEmpty(text))
         {
             return Array.Empty<Segment>();
         }
-        if (searchText == null || searchText.Length == 0 || searchText.Length > text.Length)
+        if (string.IsNullOrEmpty(searchText) || searchText.Length > text.Length)
         {
             return new[] { (Segment)text };
         }
@@ -87,27 +87,8 @@ public sealed class SearchableText : Control
         control.Segments = SearchableText.ComputeSegments((string?)e.NewValue, control.SearchText);
     }
 
-    public readonly struct Segment : IEquatable<Segment>
+    public readonly record struct Segment(string Text, bool IsMatch)
     {
-        public Segment(string text, bool isMatch)
-        {
-            (this.Text, this.IsMatch) = (text, isMatch);
-        }
-
-        public bool IsMatch { get; }
-
-        public string Text { get; }
-
         public static implicit operator Segment(string text) => new(text, false);
-
-        public static bool operator ==(Segment left, Segment right) => left.Equals(right);
-
-        public static bool operator !=(Segment left, Segment right) => !left.Equals(right);
-
-        public bool Equals(Segment other) => (this.Text, this.IsMatch) == (other.Text, other.IsMatch);
-
-        public override bool Equals(object? obj) => obj is Segment other && this.Equals(other);
-
-        public override int GetHashCode() => HashCode.Combine(this.Text, this.IsMatch);
     }
 }

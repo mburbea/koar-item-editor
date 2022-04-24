@@ -16,12 +16,10 @@ public static class TextBoxUpdateSource
 
     private static void TextBox_PreviewKeyDown(object? sender, KeyEventArgs e)
     {
-        if (e.Key != Key.Enter || sender is not TextBox textBox)
-        {
-            return;
-        }
-        BindingExpressionBase? expression = BindingOperations.GetBindingExpressionBase(textBox, TextBox.TextProperty);
-        if (expression == null || !expression.ValidateWithoutUpdate())
+        if (e.Key != Key.Enter || 
+            sender is not TextBox textBox || 
+            BindingOperations.GetBindingExpressionBase(textBox, TextBox.TextProperty) is not { } expression || 
+            !expression.ValidateWithoutUpdate())
         {
             return;
         }
@@ -31,7 +29,7 @@ public static class TextBoxUpdateSource
             Binding binding => binding.Mode,
             _ => BindingMode.OneTime
         };
-        if (mode == BindingMode.Default || mode == BindingMode.TwoWay || mode == BindingMode.OneWayToSource)
+        if (mode is BindingMode.Default or BindingMode.TwoWay or BindingMode.OneWayToSource)
         {
             expression.UpdateSource();
         }

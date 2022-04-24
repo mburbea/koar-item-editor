@@ -15,11 +15,6 @@ partial class UpdateControl
         this.Loaded += this.UpdateControl_Loaded;
     }
 
-    protected override void OnInitialized(EventArgs e)
-    {
-        base.OnInitialized(e);
-    }
-
     protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
     {
         if (e.Property == FrameworkElement.DataContextProperty && e.NewValue is UpdateViewModelBase viewModel)
