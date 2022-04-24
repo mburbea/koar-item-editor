@@ -87,7 +87,7 @@ public sealed class SearchableText : Control
         control.Segments = SearchableText.ComputeSegments((string?)e.NewValue, control.SearchText);
     }
 
-    public record struct Segment(string Text, bool IsMatch)
+    public readonly record struct Segment(string Text, bool IsMatch)
     {
         public static implicit operator Segment(string text) => new(text, false);
     }
