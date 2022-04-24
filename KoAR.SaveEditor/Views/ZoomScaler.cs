@@ -31,8 +31,7 @@ public sealed class ZoomScaler : Control
 
     private static void AttachToTarget(FrameworkElement target)
     {
-        Window? window = target as Window ?? Window.GetWindow(target);
-        if (window == null)
+        if ((target as Window ?? Window.GetWindow(target)) is not { } window)
         {
             target.Loaded += ZoomScaler.Target_Loaded;
             return;
@@ -48,8 +47,7 @@ public sealed class ZoomScaler : Control
 
     private static void DetachFromTarget(FrameworkElement target)
     {
-        Window? window = target as Window ?? Window.GetWindow(target);
-        if (window == null)
+        if ((target as Window ?? Window.GetWindow(target)) is not { } window)
         {
             target.Loaded -= ZoomScaler.Target_Loaded;
             return;
@@ -73,13 +71,13 @@ public sealed class ZoomScaler : Control
 
     private static void TargetProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        if (e.OldValue != null)
+        if (e.OldValue is FrameworkElement previous)
         {
-            ZoomScaler.DetachFromTarget((FrameworkElement)e.OldValue);
+            ZoomScaler.DetachFromTarget(previous);
         }
-        if (e.NewValue != null)
+        if (e.NewValue is FrameworkElement next)
         {
-            ZoomScaler.AttachToTarget((FrameworkElement)e.NewValue);
+            ZoomScaler.AttachToTarget(next);
         }
     }
 

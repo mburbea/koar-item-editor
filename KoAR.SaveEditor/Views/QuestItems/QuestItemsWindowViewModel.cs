@@ -19,8 +19,9 @@ public sealed class QuestItemsWindowViewModel : NotifierBase, IDisposable
         this._mainWindowViewModel = mainWindowViewModel;
         GameSave gameSave = this._mainWindowViewModel.GameSave!;
         List<QuestItemModel> items = new(gameSave.QuestItems.Count);
-        foreach (QuestItemModel item in gameSave.QuestItems.Select(item => new QuestItemModel(item)))
+        foreach (QuestItem questItem in gameSave.QuestItems)
         {
+            QuestItemModel item = new(questItem);
             item.IsUnsellableChanged += this.Item_IsUnsellableChanged;
             items.Add(item);
         }

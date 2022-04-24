@@ -116,14 +116,17 @@ public static class UpdateMethods
 
     private static HttpClient InitializeClient()
     {
-        HttpClient client = new(new SocketsHttpHandler { AutomaticDecompression = DecompressionMethods.All });
+        using StreamReader reader = new(UpdateMethods.GetResourceFileStream("github.credentials"));
+        HttpClient client = new(new HttpClientHandler { AutomaticDecompression = DecompressionMethods.All })
+        {
+            DefaultRequestHeaders =
+            {
+                Authorization = Convert.ToBase64String(Encoding.ASCII.GetBytes(reader.ReadToEnd())) is { Length: > 0 } credentials ? new("Basic", credentials) : null
+            }
+        };
         client.DefaultRequestHeaders.Accept.TryParseAdd("application/vnd.github.v3+json");
         client.DefaultRequestHeaders.AcceptEncoding.TryParseAdd("gzip, deflate, br");
         client.DefaultRequestHeaders.UserAgent.TryParseAdd("application/vnd.github.v3+json");
-        using StreamReader reader = new(UpdateMethods.GetResourceFileStream("github.credentials"));
-        client.DefaultRequestHeaders.Authorization = Convert.ToBase64String(Encoding.ASCII.GetBytes(reader.ReadToEnd())) is { Length: > 0 } credentials
-            ? new("Basic", credentials)
-            : null;
         return client;
     }
 

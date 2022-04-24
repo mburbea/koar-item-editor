@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -202,11 +203,11 @@ public abstract class UpdateViewModelBase : NotifierBase, IDisposable
             using HttpClient client = new();
             using Stream stream = await client.GetStreamAsync(release.ZipFileUri, cancellationToken);
             using FileStream fileStream = File.Create(this._zipFilePath);
-            byte[] buffer = new byte[8192];
+            using IMemoryOwner<byte> buffer = MemoryPool<byte>.Shared.Rent(32768);
             while (bytesTransferred < release.ZipFileSize)
             {
-                int count = await stream.ReadAsync(buffer.AsMemory(0, buffer.Length), cancellationToken).ConfigureAwait(false);
-                await fileStream.WriteAsync(buffer.AsMemory(0, count), cancellationToken).ConfigureAwait(false);
+                int count = await stream.ReadAsync(buffer.Memory, cancellationToken).ConfigureAwait(false);
+                await fileStream.WriteAsync(buffer.Memory[0..count], cancellationToken).ConfigureAwait(false);
                 bytesTransferred += count;
                 bytesPerInterval += count;
             }

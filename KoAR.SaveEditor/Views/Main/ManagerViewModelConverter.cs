@@ -13,7 +13,7 @@ public sealed class ManagerViewModelConverter : IMultiValueConverter
     {
         if (values.Length >= 2 && values[0] is MainWindowViewModel viewModel && values[1] is Mode mode)
         {
-            return mode == Mode.Inventory ? (object?)viewModel.InventoryManager : viewModel.StashManager;
+            return mode == Mode.Inventory ? viewModel.InventoryManager : viewModel.StashManager;
         }
         return DependencyProperty.UnsetValue;
     }

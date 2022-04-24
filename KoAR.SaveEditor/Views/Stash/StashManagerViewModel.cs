@@ -28,11 +28,11 @@ public sealed class StashManagerViewModel : ManagerViewModelBase<StashItemModel>
             Owner = Application.Current.MainWindow,
             DataContext = viewModel
         };
-        if (view.ShowDialog() != true || viewModel.Definition == null)
+        if (view.ShowDialog() != true || viewModel.Definition is not { } definition)
         {
             return;
         }
-        StashItem stashItem = this.GameSave.Stash!.AddItem(viewModel.Definition);
+        StashItem stashItem = this.GameSave.Stash!.AddItem(definition);
         this.AddItem(new(stashItem));
         this.MainWindowViewModel.RegisterUnsavedChange();
     }

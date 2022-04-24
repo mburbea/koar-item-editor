@@ -11,7 +11,7 @@ public sealed class Disposable : IDisposable
 
     public void Dispose()
     {
-        if (Interlocked.Exchange(ref this._action, null) is Action action)
+        if (Interlocked.Exchange(ref this._action, null) is { } action)
         {
             action();
         }
