@@ -196,6 +196,6 @@ public static class TabContent
             return contentPresenter;
         }
 
-        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e) => this.UpdateSelectedTab();
+        private void TabControl_SelectionChanged(object? sender, SelectionChangedEventArgs e) => this.UpdateSelectedTab();
     }
 }

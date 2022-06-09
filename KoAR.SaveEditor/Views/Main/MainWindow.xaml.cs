@@ -41,7 +41,7 @@ partial class MainWindow
         base.OnSourceInitialized(e);
     }
 
-    private async void Help_Executed(object sender, ExecutedRoutedEventArgs e)
+    private async void Help_Executed(object? sender, ExecutedRoutedEventArgs e)
     {
         TaskDialogButton button = TaskDialog.ShowDialog(this.Handle, new()
         {
@@ -96,9 +96,9 @@ partial class MainWindow
         }
     }
 
-    private void Open_Executed(object sender, ExecutedRoutedEventArgs e) => this.ViewModel.OpenFile();
+    private void Open_Executed(object? sender, ExecutedRoutedEventArgs e) => this.ViewModel.OpenFile();
 
-    private void Save_CanExecute(object sender, CanExecuteRoutedEventArgs e) => e.CanExecute = this.ViewModel.HasUnsavedChanges;
+    private void Save_CanExecute(object? sender, CanExecuteRoutedEventArgs e) => e.CanExecute = this.ViewModel.HasUnsavedChanges;
 
-    private void Save_Executed(object sender, ExecutedRoutedEventArgs e) => this.ViewModel.SaveFile();
+    private void Save_Executed(object? sender, ExecutedRoutedEventArgs e) => this.ViewModel.SaveFile();
 }

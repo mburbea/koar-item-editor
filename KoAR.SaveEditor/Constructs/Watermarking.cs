@@ -74,9 +74,9 @@ public static class Watermarking
 
     private static void SetAdorner(TextBoxBase textBox, WatermarkAdorner? adorner) => textBox.SetValue(Watermarking._adornerProperty, adorner);
 
-    private static void TextBox_Loaded(object sender, RoutedEventArgs e)
+    private static void TextBox_Loaded(object? sender, RoutedEventArgs e)
     {
-        TextBoxBase textBox = (TextBoxBase)sender;
+        TextBoxBase textBox = (TextBoxBase)sender!;
         textBox.Loaded -= Watermarking.TextBox_Loaded;
         if (Watermarking.GetContent(textBox) is object content)
         {

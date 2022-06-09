@@ -24,7 +24,7 @@ partial class UpdateControl
         base.OnPropertyChanged(e);
     }
 
-    private void RichTextBox_Loaded(object sender, RoutedEventArgs e) => ((RichTextBox)sender).Document = ((UpdateViewModelBase)this.DataContext).Document;
+    private void RichTextBox_Loaded(object? sender, RoutedEventArgs e) => ((RichTextBox)sender!).Document = ((UpdateViewModelBase)this.DataContext).Document;
 
     private void UpdateControl_Loaded(object? sender, RoutedEventArgs e)
     {

@@ -85,7 +85,7 @@ public sealed class ScrollingTabControl : TabControl
         }
     }
 
-    private void LeftButton_Click(object sender, RoutedEventArgs e)
+    private void LeftButton_Click(object? sender, RoutedEventArgs e)
     {
         if (this._scrollViewer == null || this._headerPanel == null)
         {
@@ -98,7 +98,7 @@ public sealed class ScrollingTabControl : TabControl
         }
     }
 
-    private void RightButton_Click(object sender, RoutedEventArgs e)
+    private void RightButton_Click(object? sender, RoutedEventArgs e)
     {
         if (this._scrollViewer == null || this._headerPanel == null)
         {
@@ -144,18 +144,18 @@ public sealed class ScrollingTabControl : TabControl
         }
     }
 
-    private void ScrollViewer_Loaded(object sender, RoutedEventArgs e)
+    private void ScrollViewer_Loaded(object? sender, RoutedEventArgs e)
     {
-        ScrollViewer scrollViewer = (ScrollViewer)sender;
+        ScrollViewer scrollViewer = (ScrollViewer)sender!;
         scrollViewer.Loaded -= this.ScrollViewer_Loaded;
         this.UpdateScrollButtonsAvailability();
     }
 
-    private void ScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e) => this.UpdateScrollButtonsAvailability();
+    private void ScrollViewer_ScrollChanged(object? sender, ScrollChangedEventArgs e) => this.UpdateScrollButtonsAvailability();
 
-    private void TabItem_Loaded(object sender, RoutedEventArgs e)
+    private void TabItem_Loaded(object? sender, RoutedEventArgs e)
     {
-        TabItem tabItem = (TabItem)sender;
+        TabItem tabItem = (TabItem)sender!;
         tabItem.Loaded -= this.TabItem_Loaded;
         this.ScrollToSelectedItem();
     }
@@ -180,7 +180,7 @@ public sealed class ScrollingTabControl : TabControl
         }
     }
 
-    private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+    private void Window_PreviewKeyDown(object? sender, KeyEventArgs e)
     {
         if (!this.IsVisible || this.Items.IsEmpty || e.Key != Key.Tab || (Keyboard.Modifiers & ModifierKeys.Control) != ModifierKeys.Control)
         {

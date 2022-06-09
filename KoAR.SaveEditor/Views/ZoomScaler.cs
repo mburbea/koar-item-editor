@@ -57,14 +57,14 @@ public sealed class ZoomScaler : Control
         window.RemoveHandler(UIElement.PreviewMouseWheelEvent, new MouseWheelEventHandler(ZoomScaler.Window_PreviewMouseWheel));
     }
 
-    private static void ResetZoomCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+    private static void ResetZoomCommand_Executed(object? sender, ExecutedRoutedEventArgs e)
     {
         Settings.Default.ZoomScale = 1d;
     }
 
-    private static void Target_Loaded(object sender, RoutedEventArgs e)
+    private static void Target_Loaded(object? sender, RoutedEventArgs e)
     {
-        FrameworkElement target = (FrameworkElement)sender;
+        FrameworkElement target = (FrameworkElement)sender!;
         target.Loaded -= ZoomScaler.Target_Loaded;
         ZoomScaler.AttachToTarget(target);
     }
@@ -81,7 +81,7 @@ public sealed class ZoomScaler : Control
         }
     }
 
-    private static void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+    private static void Window_PreviewKeyDown(object? sender, KeyEventArgs e)
     {
         if ((Keyboard.Modifiers & ModifierKeys.Control) != ModifierKeys.Control)
         {
@@ -97,7 +97,7 @@ public sealed class ZoomScaler : Control
         };
     }
 
-    private static void Window_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+    private static void Window_PreviewMouseWheel(object? sender, MouseWheelEventArgs e)
     {
         if ((Keyboard.Modifiers & ModifierKeys.Control) != ModifierKeys.Control)
         {

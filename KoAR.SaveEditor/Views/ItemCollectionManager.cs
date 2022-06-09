@@ -153,7 +153,7 @@ public sealed class ItemCollectionManager : Control
 
     private void CollectionView_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e) => this.Dispatcher.InvokeAsync(this.OnViewChanged);
 
-    private void GridViewColumn_Click(object sender, RoutedEventArgs e)
+    private void GridViewColumn_Click(object? sender, RoutedEventArgs e)
     {
         if (e.OriginalSource is GridViewColumnHeader header && ItemCollectionManager.GetPropertyName(header.Column) is { } propertyName && this.CollectionView?.SortDescriptions is { } descriptions)
         {
