@@ -63,7 +63,7 @@ partial class App
         base.OnStartup(e);
     }
 
-    private void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+    private void App_DispatcherUnhandledException(object? sender, DispatcherUnhandledExceptionEventArgs e)
     {
         App.ShowExceptionDialog("Unhandled Error Encountered", e.Exception);
         Environment.Exit(0);

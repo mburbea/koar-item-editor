@@ -41,5 +41,5 @@ public static class ListViewAutoSize
         }
     }
 
-    private static void AutoSizeCommand_Executed(object sender, ExecutedRoutedEventArgs e) => ListViewAutoSize.AutoSizeColumns((ListView)sender);
+    private static void AutoSizeCommand_Executed(object? sender, ExecutedRoutedEventArgs e) => ListViewAutoSize.AutoSizeColumns((ListView)sender!);
 }

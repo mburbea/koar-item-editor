@@ -102,7 +102,7 @@ public sealed class BuffCollectionManager : Control
         }
     }
 
-    private static void CopyCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+    private static void CopyCommand_Executed(object? sender, ExecutedRoutedEventArgs e)
     {
         TreeViewItem item = (TreeViewItem)e.OriginalSource;
         Buff buff = (Buff)ItemsControl.ItemsControlFromItemContainer(item).ItemContainerGenerator.ItemFromContainer(item);

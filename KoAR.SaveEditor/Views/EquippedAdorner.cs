@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Media;
 using KoAR.SaveEditor.Constructs;
 
@@ -11,7 +12,8 @@ public sealed class EquippedAdorner : IndicatorAdornerBase
 
     private static readonly DataTemplate _contentTemplate = IndicatorAdornerBase.CreateContentTemplate(background: Brushes.LimeGreen, foreground: Brushes.White, "E");
 
-    private EquippedAdorner(FrameworkElement adornedElement)
+    [Obsolete($"To be invoked via {nameof(IndicatorAdornerBase.AttachAdorner)} only.")]
+    public EquippedAdorner(FrameworkElement adornedElement)
         : base(adornedElement, AdornerPosition.LowerLeft, EquippedAdorner._contentTemplate) => this.ToolTip = "Equipped";
 
     public static bool GetIsEquipped(FrameworkElement element) => (bool)element.GetValue(EquippedAdorner.IsEquippedProperty);

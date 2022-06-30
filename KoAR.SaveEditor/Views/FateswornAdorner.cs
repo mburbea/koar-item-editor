@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Media;
 using KoAR.Core;
 using KoAR.SaveEditor.Constructs;
@@ -12,7 +13,8 @@ public sealed class FateswornAdorner : IndicatorAdornerBase
 
     private static readonly DataTemplate _contentTemplate = IndicatorAdornerBase.CreateContentTemplate(background: Brushes.MediumPurple, foreground: Brushes.White, "F");
 
-    private FateswornAdorner(FrameworkElement adornedElement)
+    [Obsolete($"To be invoked via {nameof(IndicatorAdornerBase.AttachAdorner)} only.")]
+    public FateswornAdorner(FrameworkElement adornedElement)
         : base(adornedElement, AdornerPosition.LowerRight, FateswornAdorner._contentTemplate) => this.ToolTip = "Fatesworn";
 
     public static bool GetRequiresFatesworn(FrameworkElement element) => (bool)element.GetValue(FateswornAdorner.RequiresFateswornProperty);
