@@ -117,7 +117,7 @@ public static class UpdateMethods
     private static HttpClient InitializeClient()
     {
         using StreamReader reader = new(UpdateMethods.GetResourceFileStream("github.credentials"));
-        HttpClient client = new(new HttpClientHandler { AutomaticDecompression = DecompressionMethods.All })
+        HttpClient client = new(new SocketsHttpHandler { AutomaticDecompression = DecompressionMethods.All })
         {
             DefaultRequestHeaders =
             {

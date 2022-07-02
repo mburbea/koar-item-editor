@@ -9,7 +9,7 @@ namespace KoAR.SaveEditor.Views;
 public sealed class FateswornAdorner : IndicatorAdornerBase
 {
     public static readonly DependencyProperty RequiresFateswornProperty = DependencyProperty.RegisterAttached(nameof(IDefinition.RequiresFatesworn), typeof(bool), typeof(FateswornAdorner),
-        new PropertyMetadata(BooleanBoxes.False, FateswornAdorner.RequiresFateswornProperty_ValueChanged));
+        new(BooleanBoxes.False, FateswornAdorner.RequiresFateswornProperty_ValueChanged));
 
     private static readonly DataTemplate _contentTemplate = IndicatorAdornerBase.CreateContentTemplate(background: Brushes.MediumPurple, foreground: Brushes.White, "F");
 

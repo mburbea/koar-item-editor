@@ -19,7 +19,7 @@ public abstract class ManagerViewModelBase<TItem> : NotifierBase, IDisposable
     {
         this.MainWindowViewModel = mainWindowViewModel;
         this._itemsProjection = itemsProjection;
-        this._filteredItems = this._items = new NotifyingCollection<TItem>();
+        this._filteredItems = this._items = new();
         this.ItemFilters.FilterChange += this.ItemFilters_FilterChange;
         this.RepopulateItems();
     }

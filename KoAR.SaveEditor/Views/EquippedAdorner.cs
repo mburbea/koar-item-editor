@@ -8,7 +8,7 @@ namespace KoAR.SaveEditor.Views;
 public sealed class EquippedAdorner : IndicatorAdornerBase
 {
     public static readonly DependencyProperty IsEquippedProperty = DependencyProperty.RegisterAttached(nameof(ItemModelBase.IsEquipped), typeof(bool), typeof(EquippedAdorner),
-        new PropertyMetadata(BooleanBoxes.False, EquippedAdorner.IsEquippedProperty_ValueChanged));
+        new(BooleanBoxes.False, EquippedAdorner.IsEquippedProperty_ValueChanged));
 
     private static readonly DataTemplate _contentTemplate = IndicatorAdornerBase.CreateContentTemplate(background: Brushes.LimeGreen, foreground: Brushes.White, "E");
 

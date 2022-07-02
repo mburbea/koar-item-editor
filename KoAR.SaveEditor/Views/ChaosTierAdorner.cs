@@ -8,7 +8,7 @@ namespace KoAR.SaveEditor.Views;
 public sealed class ChaosTierAdorner : IndicatorAdornerBase
 {
     public static readonly DependencyProperty ChaosTierProperty = DependencyProperty.RegisterAttached(nameof(ItemDefinition.ChaosTier), typeof(string), typeof(ChaosTierAdorner),
-        new PropertyMetadata(null, ChaosTierAdorner.ChaosTierProperty_ValueChanged));
+        new(null, ChaosTierAdorner.ChaosTierProperty_ValueChanged));
 
     private static readonly DataTemplate[] _contentTemplates = ChaosTierAdorner.InitializeTemplates(out ChaosTierAdorner._factories);
     private static readonly Func<FrameworkElement, ChaosTierAdorner>[] _factories;

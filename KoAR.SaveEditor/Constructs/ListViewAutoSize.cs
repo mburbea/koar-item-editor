@@ -8,8 +8,8 @@ public static class ListViewAutoSize
 {
     public static readonly RoutedUICommand AutoSizeCommand = new("AutoSize Columns", nameof(ListViewAutoSize.AutoSizeCommand), typeof(ListViewAutoSize));
 
-    public static readonly DependencyProperty SkipAutoSizeProperty = DependencyProperty.RegisterAttached("SkipAutoSize", typeof(bool), typeof(ListViewAutoSize),
-        new PropertyMetadata(BooleanBoxes.False));
+    public static readonly DependencyProperty SkipAutoSizeProperty = DependencyProperty.RegisterAttached("SkipAutoSize", typeof(bool), typeof(ListViewAutoSize), 
+        new(BooleanBoxes.False));
 
     static ListViewAutoSize() => CommandManager.RegisterClassCommandBinding(typeof(ListView), new(ListViewAutoSize.AutoSizeCommand, ListViewAutoSize.AutoSizeCommand_Executed));
 
