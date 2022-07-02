@@ -9,19 +9,19 @@ public sealed class QuestItemModel
 
     public QuestItemModel(QuestItem item) => this._item = item;
 
-    public event EventHandler? IsUnsellableChanged;
+    public event EventHandler? IsSellableChanged;
 
-    public bool IsUnsellable
+    public bool IsSellable
     {
-        get => this._item.IsUnsellable;
+        get => !this._item.IsUnsellable;
         set
         {
-            if (value == this._item.IsUnsellable)
+            if (!value == this._item.IsUnsellable)
             {
                 return;
             }
-            this._item.IsUnsellable = value;
-            this.IsUnsellableChanged?.Invoke(this, EventArgs.Empty);
+            this._item.IsUnsellable = !value;
+            this.IsSellableChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 
