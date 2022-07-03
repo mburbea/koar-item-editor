@@ -16,7 +16,7 @@ public sealed class QuestItemModel
         get => !this._item.IsUnsellable;
         set
         {
-            if (!value == this._item.IsUnsellable)
+            if (value != this._item.IsUnsellable)
             {
                 return;
             }
