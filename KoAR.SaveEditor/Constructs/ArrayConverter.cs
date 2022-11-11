@@ -10,6 +10,6 @@ public sealed class ArrayConverter : IValueConverter
 
     object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        return value is object[] { Length: 1 } array ? array[0] : value;
+        return value is object[] and [object item] ? item : value;
     }
 }

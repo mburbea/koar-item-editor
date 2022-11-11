@@ -2,8 +2,8 @@
   <PropertyGroup>
     <ProjectGuid>{F0B155CB-061D-4E8C-BEEC-F0BDCF1BF9E0}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <LangVersion>10.0</LangVersion>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <LangVersion>11.0</LangVersion>
+    <TargetFramework>net7.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -217,7 +217,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="MdXaml_migfree" Version="1.14.0" />
+    <PackageReference Include="MdXaml_migfree" Version="1.15.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\KoAR.Core\KoAR.Core.csproj" />

@@ -22,21 +22,21 @@ public sealed class QuestItemsWindowViewModel : NotifierBase, IDisposable
         foreach (QuestItem questItem in gameSave.QuestItems)
         {
             QuestItemModel item = new(questItem);
-            item.IsUnsellableChanged += this.Item_IsUnsellableChanged;
+            item.IsSellableChanged += this.Item_IsSellableChanged;
             items.Add(item);
         }
         this.Items = this._filteredItems = items;
         this.ResetFiltersCommand = new(this.ResetFilters);
     }
 
-    public bool? AllItemsUnsellable
+    public bool? AllItemsSellable
     {
-        get => this.FilteredItems.GetSelectAllCheckBoxValue(item => item.IsUnsellable);
+        get => this.FilteredItems.GetSelectAllCheckBoxValue(item => item.IsSellable);
         set
         {
             foreach (QuestItemModel item in this.FilteredItems)
             {
-                item.IsUnsellable = value.GetValueOrDefault();
+                item.IsSellable = value.GetValueOrDefault();
             }
         }
     }
@@ -67,13 +67,13 @@ public sealed class QuestItemsWindowViewModel : NotifierBase, IDisposable
     {
         foreach (QuestItemModel item in this.Items)
         {
-            item.IsUnsellableChanged -= this.Item_IsUnsellableChanged;
+            item.IsSellableChanged -= this.Item_IsSellableChanged;
         }
     }
 
-    private void Item_IsUnsellableChanged(object? sender, EventArgs e)
+    private void Item_IsSellableChanged(object? sender, EventArgs e)
     {
-        this.OnPropertyChanged(nameof(this.AllItemsUnsellable));
+        this.OnPropertyChanged(nameof(this.AllItemsSellable));
         this._mainWindowViewModel.RegisterUnsavedChange();
     }
 
@@ -82,7 +82,7 @@ public sealed class QuestItemsWindowViewModel : NotifierBase, IDisposable
         this.FilteredItems = this._nameFilter.Length != 0
             ? this.Items.Where(item => item.Name.IndexOf(this._nameFilter, StringComparison.InvariantCultureIgnoreCase) != -1).ToList()
             : this.Items;
-        this.OnPropertyChanged(nameof(this.AllItemsUnsellable));
+        this.OnPropertyChanged(nameof(this.AllItemsSellable));
     }
 
     private void ResetFilters()

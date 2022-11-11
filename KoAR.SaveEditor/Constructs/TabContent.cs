@@ -66,7 +66,7 @@ public static class TabContent
         FrameworkElementFactory factory = new(typeof(Border));
         factory.SetBinding(TabContent._tabControlProperty, new Binding
         {
-            RelativeSource = new RelativeSource { AncestorType = typeof(TabControl) }
+            RelativeSource = new() { AncestorType = typeof(TabControl) }
         });
         return new() { VisualTree = factory };
     }
