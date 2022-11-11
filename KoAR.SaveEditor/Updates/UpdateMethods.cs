@@ -147,7 +147,7 @@ public static partial class UpdateMethods
 
         public string TagName { get; set; } = string.Empty;
 
-        public Version Version => this._version ??= new(this.TagName.Length != 0 && Release.VersionRegex().IsMatch(this.TagName) ? this.TagName[1..] : "0.0.0");
+        public Version Version => this._version ??= new(this.TagName is { Length: not 0 } && Release.VersionRegex().IsMatch(this.TagName) ? this.TagName[1..] : "0.0.0");
 
         public ReleaseAsset? ZipFileAsset => this._zipFileAsset ??= this.Assets.FirstOrDefault(asset => asset.ContentType == "application/zip");
 
