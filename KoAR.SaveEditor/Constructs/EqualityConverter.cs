@@ -9,7 +9,7 @@ public sealed class EqualityConverter : IMultiValueConverter, IValueConverter
 {
     object IMultiValueConverter.Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
     {
-        return values is not { Length: >= 2 } ? DependencyProperty.UnsetValue : BooleanBoxes.GetBox(Object.Equals(values[0], values[1]));
+        return values is [object x, object y, ..] ? BooleanBoxes.GetBox(Object.Equals(x, y)) : DependencyProperty.UnsetValue;
     }
 
     object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
