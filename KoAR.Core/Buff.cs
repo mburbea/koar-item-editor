@@ -4,7 +4,6 @@ using System.Text.Json.Serialization;
 
 namespace KoAR.Core;
 
-
 public record Buff(uint Id, string? Modifier = null, string Name = null!, string? Flavor = null, Rarity Rarity = default, 
     BuffTypes BuffType = default, ApplyType ApplyType = default) : IDefinition
 {

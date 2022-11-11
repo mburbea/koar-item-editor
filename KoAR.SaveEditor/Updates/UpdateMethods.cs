@@ -15,7 +15,7 @@ using KoAR.Core;
 
 namespace KoAR.SaveEditor.Updates;
 
-public static class UpdateMethods
+public static partial class UpdateMethods
 {
     private static readonly HttpClient _client = UpdateMethods.InitializeClient();
     private static readonly JsonSerializerOptions _jsonOptions = new() { PropertyNamingPolicy = JsonSnakeCaseNamingPolicy.Instance };
@@ -94,7 +94,7 @@ public static class UpdateMethods
         try
         {
             string uri = $"https://api.github.com/repos/mburbea/koar-item-editor/{suffix}";
-            return await UpdateMethods._client.GetFromJsonAsync<T>(uri, UpdateMethods._jsonOptions, cancellationToken).ConfigureAwait(false);
+            return await UpdateMethods._client.GetFromJsonAsync<T>(uri, _jsonOptions, cancellationToken).ConfigureAwait(false);
         }
         catch (HttpRequestException e) when (e.StatusCode == HttpStatusCode.NotFound)
         {
@@ -117,7 +117,7 @@ public static class UpdateMethods
     private static HttpClient InitializeClient()
     {
         using StreamReader reader = new(UpdateMethods.GetResourceFileStream("github.credentials"));
-        HttpClient client = new(new HttpClientHandler { AutomaticDecompression = DecompressionMethods.All })
+        HttpClient client = new(new SocketsHttpHandler { AutomaticDecompression = DecompressionMethods.All })
         {
             DefaultRequestHeaders =
             {
@@ -130,10 +130,8 @@ public static class UpdateMethods
         return client;
     }
 
-    private sealed class Release : IReleaseInfo
+    private sealed partial class Release : IReleaseInfo
     {
-        private static readonly Regex _regex = new(@"^v\d+\.\d+\.\d+$", RegexOptions.Compiled);
-
         private Version? _version;
         private ReleaseAsset? _zipFileAsset;
 
@@ -149,13 +147,16 @@ public static class UpdateMethods
 
         public string TagName { get; set; } = string.Empty;
 
-        public Version Version => this._version ??= new(this.TagName.Length != 0 && Release._regex.IsMatch(this.TagName) ? this.TagName[1..] : "0.0.0");
+        public Version Version => this._version ??= new(this.TagName.Length != 0 && Release.VersionRegex().IsMatch(this.TagName) ? this.TagName[1..] : "0.0.0");
 
         public ReleaseAsset? ZipFileAsset => this._zipFileAsset ??= this.Assets.FirstOrDefault(asset => asset.ContentType == "application/zip");
 
         public int ZipFileSize => this.ZipFileAsset?.Size ?? 0;
 
         public string ZipFileUri => this.ZipFileAsset?.BrowserDownloadUrl ?? string.Empty;
+
+        [GeneratedRegex("^v\\d+\\.\\d+\\.\\d+$", RegexOptions.Compiled)]
+        private static partial Regex VersionRegex();
     }
 
     private sealed class ReleaseAsset

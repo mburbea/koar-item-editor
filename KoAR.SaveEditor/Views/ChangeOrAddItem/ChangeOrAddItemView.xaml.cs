@@ -5,7 +5,7 @@ namespace KoAR.SaveEditor.Views.ChangeOrAddItem;
 
 partial class ChangeOrAddItemView
 {
-    static ChangeOrAddItemView() => CommandManager.RegisterClassCommandBinding(typeof(ChangeOrAddItemView), new CommandBinding(ApplicationCommands.Close, (sender, e) => ((Window)sender).Close()));
+    static ChangeOrAddItemView() => CommandManager.RegisterClassCommandBinding(typeof(ChangeOrAddItemView), new(ApplicationCommands.Close, (sender, e) => ((Window)sender).Close()));
 
     public ChangeOrAddItemView() => this.InitializeComponent();
 

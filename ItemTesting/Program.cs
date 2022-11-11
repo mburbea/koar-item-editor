@@ -70,7 +70,7 @@ namespace ItemTesting;
 //            using var adapter = new DbDataReaderAdapter(table);
 //            bulk.WriteToServer(adapter);
 //        }
-static class Program
+static partial class Program
 {
     static void ParseOutItemInformationTemplate()
     {
@@ -250,7 +250,7 @@ static class Program
     }
     static readonly Dictionary<uint, string> SimtypeDict = BuildSimtypeDict();
     static readonly Dictionary<uint, string> LuaDict = BuildSimtypeDict(@"C:\e\symbol_table_luascript.bin");
-    static readonly HashSet<string> Supers;
+    //static readonly HashSet<string> Supers;
     static readonly Dictionary<string, uint> ReverseSimtype = SimtypeDict.ToDictionary(x => x.Value, x => x.Key);
     static readonly bool WhoCares = CreateBatchArchive(@"C:\e\134225858_ksmt.batch", @"..\..\..\simtypes_unpacked.zip");
 
@@ -325,6 +325,7 @@ static class Program
         }
     }
 
+
     static HashSet<uint> BuildVariants()
     {
         var scalingVariants = new HashSet<uint>();
@@ -357,12 +358,12 @@ static class Program
                 continue;
             }
             var parentName = SimtypeDict[parentId];
-            if(Regex.IsMatch(name, @"primal\d\d$", RegexOptions.Compiled))
+            if(PrimalRegex().IsMatch(name))
             {
                 scalingVariants.Add(id);
                 continue;
             }
-            if (name.AsSpan(0, name.LastIndexOf('_') is int ix and > -1 ? ix : (name.Length - 1)).SequenceEqual(parentName.AsSpan(0, parentName.LastIndexOf('_') is int pix and > -1 ? pix : (parentName.Length - 1)))) 
+            if (name.AsSpan(0, name.LastIndexOf('_') is int ix and > -1 ? ix : name.Length - 1).SequenceEqual(parentName.AsSpan(0, parentName.LastIndexOf('_') is int pix and > -1 ? pix : parentName.Length - 1))) 
             {
                 scalingVariants.Add(id);
                 continue;
@@ -395,6 +396,9 @@ static class Program
         WriteParentFile(gs);
         File.WriteAllLines(@"C:\e\o\crap.csv", gs.Items.Where(x => x.Definition.ChaosTier != null).Select(x => x.Definition.Name));
     }
+
+    [GeneratedRegex("primal\\d\\d$", RegexOptions.Compiled)]
+    private static partial Regex PrimalRegex();
 }
 
 
