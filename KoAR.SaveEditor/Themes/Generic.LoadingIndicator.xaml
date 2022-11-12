@@ -3,7 +3,6 @@
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs"
     xmlns:s="clr-namespace:System;assembly=System.Runtime">
     <Style TargetType="{x:Type constructs:LoadingIndicator}">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="Width" Value="125" />
         <Setter Property="Height" Value="125" />
         <Setter Property="IsHitTestVisible" Value="False" />

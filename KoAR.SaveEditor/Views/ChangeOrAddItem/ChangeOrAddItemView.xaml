@@ -10,7 +10,8 @@
     xmlns:s="clr-namespace:System;assembly=System.Runtime"
     xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
     mc:Ignorable="d" d:DataContext="{d:DesignInstance local:ChangeOrAddItemViewModel}"
-    Icon="/app.ico" SizeToContent="WidthAndHeight" MinWidth="400" WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
+    Icon="/app.ico" SizeToContent="WidthAndHeight" MinWidth="400" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+    views:FocusVisualStyleKiller.Kill="True">
     <Window.Resources>
         <ResourceDictionary>
             <constructs:ArrayConverter x:Key="ArrayConverter" />
@@ -30,12 +31,8 @@
     <StackPanel Margin="4">
         <StackPanel.Resources>
             <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
-                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                 <Setter Property="VerticalAlignment" Value="Center" />
                 <Setter Property="Margin" Value="2" />
-            </Style>
-            <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
             </Style>
             <CollectionViewSource x:Key="Definitions" Source="{Binding Definitions}">
                 <CollectionViewSource.SortDescriptions>
@@ -102,12 +99,10 @@
                             <Setter Property="ItemContainerStyle">
                                 <Setter.Value>
                                     <Style TargetType="{x:Type ListBoxItem}">
-                                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                                         <Setter Property="Template">
                                             <Setter.Value>
                                                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                                    <RadioButton x:Name="PART_Button" FocusVisualStyle="{x:Null}" Content="{TemplateBinding Content}" 
-                                                        IsChecked="{Binding IsSelected, RelativeSource={RelativeSource TemplatedParent}}">
+                                                    <RadioButton x:Name="PART_Button" Content="{TemplateBinding Content}" IsChecked="{Binding IsSelected, RelativeSource={RelativeSource TemplatedParent}}">
                                                         <RadioButton.Style>
                                                             <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource {x:Type RadioButton}}">
                                                                 <Setter Property="ContentTemplate" Value="{Binding Tag, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" />
@@ -174,8 +169,8 @@
                         </ListBox>
                     </GroupBox>
                 </UniformGrid>
-                <CheckBox Margin="4" Content="Fatesworn Only?" IsChecked="{Binding FateswornFilter}" FocusVisualStyle="{x:Null}" HorizontalAlignment="Stretch" Grid.Row="3"
-                            Visibility="{Binding GameSave.IsFateswornAware, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <CheckBox Margin="4" Content="Fatesworn Only?" IsChecked="{Binding FateswornFilter}" HorizontalAlignment="Stretch" Grid.Row="3"
+                    Visibility="{Binding GameSave.IsFateswornAware, Converter={StaticResource BooleanToVisibilityConverter}}" />
             </Grid>
         </GroupBox>
         <ComboBox ItemsSource="{Binding Source={StaticResource Definitions}}" SelectedItem="{Binding Definition}" TextSearch.TextPath="Name"
@@ -200,7 +195,7 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-        <CheckBox Margin="4" Content="Retain current buffs and stats" IsChecked="{Binding RetainStats}" FocusVisualStyle="{x:Null}" HorizontalAlignment="Stretch">
+        <CheckBox Margin="4" Content="Retain current buffs and stats" IsChecked="{Binding RetainStats}" HorizontalAlignment="Stretch">
             <CheckBox.Style>
                 <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
                     <Style.Triggers>
@@ -212,8 +207,8 @@
             </CheckBox.Style>
         </CheckBox>        
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="OK" Command="{Binding ProcessCommand}" Margin="4" IsDefault="True" FocusVisualStyle="{x:Null}" MinWidth="100" />
-            <Button Content="Cancel" Command="Close" Margin="4" FocusVisualStyle="{x:Null}" MinWidth="100" />
+            <Button Content="OK" Command="{Binding ProcessCommand}" Margin="4" IsDefault="True" MinWidth="100" />
+            <Button Content="Cancel" Command="Close" Margin="4" MinWidth="100" />
         </StackPanel>
     </StackPanel>
 </Window>

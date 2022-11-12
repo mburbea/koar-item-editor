@@ -6,7 +6,6 @@
         <ResourceDictionary Source="/PresentationFramework.Aero;component/Themes/Aero.NormalColor.xaml" />
     </ResourceDictionary.MergedDictionaries>
     <Style TargetType="{x:Type views:ZoomScaler}">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type views:ZoomScaler}">
@@ -17,15 +16,9 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="{Binding ZoomScale, Source={x:Static p:Settings.Default}, StringFormat='##0%'}" VerticalAlignment="Center" TextAlignment="Right" />
-                        <Slider Grid.Column="1" Value="{Binding ZoomScale, Source={x:Static p:Settings.Default}}" FocusVisualStyle="{x:Null}" Margin="4,0" VerticalAlignment="Center" 
-                            Minimum="{Binding MinZoomScale, Mode=OneTime, Source={x:Static p:Settings.Default}}" Maximum="{Binding MaxZoomScale, Mode=OneTime, Source={x:Static p:Settings.Default}}">
-                            <Slider.Resources>
-                                <Style TargetType="{x:Type Thumb}" BasedOn="{StaticResource {x:Type Thumb}}">
-                                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                                </Style>
-                            </Slider.Resources>
-                        </Slider>
-                        <Button Command="{x:Static views:ZoomScaler.ResetZoomCommand}" Style="{StaticResource {x:Type Button}}" Grid.Column="2" FocusVisualStyle="{x:Null}" IsDefault="True" Content="Reset" />
+                        <Slider Grid.Column="1" Value="{Binding ZoomScale, Source={x:Static p:Settings.Default}}" Margin="4,0" VerticalAlignment="Center" 
+                            Minimum="{Binding MinZoomScale, Mode=OneTime, Source={x:Static p:Settings.Default}}" Maximum="{Binding MaxZoomScale, Mode=OneTime, Source={x:Static p:Settings.Default}}" />
+                        <Button Command="{x:Static views:ZoomScaler.ResetZoomCommand}" Style="{StaticResource {x:Type Button}}" Grid.Column="2" IsDefault="True" Content="Reset" />
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

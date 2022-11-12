@@ -16,7 +16,6 @@
     <Grid>
         <Grid.Resources>
             <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                 <Setter Property="Validation.ErrorTemplate" Value="{StaticResource TextBoxErrorTemplate}" />
             </Style>
         </Grid.Resources>
@@ -30,7 +29,7 @@
             <views:ItemCollectionManager Items="{Binding FilteredItems}" SelectedItem="{Binding SelectedItem}" AllItemsStolen="{Binding AllItemsStolen, Mode=OneWay}" 
                 DeleteItemCommand="{Binding DeleteItemCommand}" SearchText="{Binding ItemFilters.ItemName}" />
         </DockPanel>
-        <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Stretch" Background="{x:Static SystemColors.ControlBrush}" FocusVisualStyle="{x:Null}" />
+        <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Stretch" Background="{x:Static SystemColors.ControlBrush}" />
         <Grid Grid.Column="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -46,10 +45,10 @@
                     <TextBlock Text="Stash Count:" Margin="2" VerticalAlignment="Center" TextAlignment="Right"/>
                     <TextBox Grid.Column="1" MinWidth="100" Margin="2" IsReadOnly="True" Background="{x:Static SystemColors.ControlBrush}"
                         Text="{Binding Items.Count, Mode=OneWay}" TextAlignment="Right" />
-                    <Button Grid.Column="2" Margin="2" Command="{Binding AddItemCommand}" Content="_Add Item" FocusVisualStyle="{x:Null}" />
+                    <Button Grid.Column="2" Margin="2" Command="{Binding AddItemCommand}" Content="_Add Item" />
                 </Grid>
             </GroupBox>
-            <ScrollViewer Grid.Row="1" FocusVisualStyle="{x:Null}" Margin="0,0,4,4" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+            <ScrollViewer Grid.Row="1" Margin="0,0,4,4" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                 <StackPanel Grid.IsSharedSizeScope="True">
                     <StackPanel.Resources>
                         <Style TargetType="{x:Type views:BuffCollectionManager}">

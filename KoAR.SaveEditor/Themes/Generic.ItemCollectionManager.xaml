@@ -59,7 +59,6 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Margin" Value="2" />
         <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
@@ -84,7 +83,7 @@
                     </ControlTemplate.Resources>
                     <ListView x:Name="PART_ListView" ItemsSource="{TemplateBinding CollectionView}" TextSearch.TextPath="DisplayName" AlternationCount="2"
                         SelectedItem="{Binding SelectedItem, RelativeSource={RelativeSource TemplatedParent}}" VirtualizingPanel.IsVirtualizing="True"
-                        BorderBrush="LightGray" SelectionMode="Single" FocusVisualStyle="{x:Null}" VirtualizingPanel.ScrollUnit="Pixel">
+                        BorderBrush="LightGray" SelectionMode="Single" VirtualizingPanel.ScrollUnit="Pixel">
                         <ListView.Resources>
                             <constructs:TransportObject x:Key="Mode" Value="{Binding Mode, RelativeSource={RelativeSource AncestorType={x:Type views:ItemCollectionManager}}}" />
                             <constructs:TransportObject x:Key="ChangeDefinitionCommand" Value="{Binding ChangeDefinitionCommand, RelativeSource={RelativeSource AncestorType={x:Type views:ItemCollectionManager}}}" />
@@ -96,7 +95,7 @@
                                             <Setter.Value>
                                                 <DataTemplate>
                                                     <StackPanel Orientation="Horizontal">
-                                                        <ContentControl Content="{Binding}" FocusVisualStyle="{x:Null}" />
+                                                        <ContentControl Content="{Binding}" />
                                                         <TextBlock FontFamily="Segoe UI Symbol">
                                                             <TextBlock.Style>
                                                                 <Style TargetType="{x:Type TextBlock}">
@@ -146,8 +145,8 @@
                             </Style>
                         </ListView.ItemContainerStyle>
                         <ListView.ContextMenu>
-                            <ContextMenu FocusVisualStyle="{x:Null}">
-                                <MenuItem Command="{x:Static constructs:ListViewAutoSize.AutoSizeCommand}" FocusVisualStyle="{x:Null}" />
+                            <ContextMenu>
+                                <MenuItem Command="{x:Static constructs:ListViewAutoSize.AutoSizeCommand}" />
                             </ContextMenu>
                         </ListView.ContextMenu>
                         <ListView.View>
@@ -385,7 +384,7 @@
                                 <GridViewColumn Width="Auto" views:ItemCollectionManager.PropertyName="IsStolen">
                                     <GridViewColumn.Header>
                                         <StackPanel Orientation="Horizontal">
-                                            <CheckBox Margin="2" FocusVisualStyle="{x:Null}" VerticalAlignment="Center"
+                                            <CheckBox Margin="2" VerticalAlignment="Center"
                                                 IsChecked="{Binding AllItemsStolen, RelativeSource={RelativeSource TemplatedParent}}">
                                                 <CheckBox.Style>
                                                     <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
@@ -402,7 +401,7 @@
                                     </GridViewColumn.Header>
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate DataType="{x:Type views:ItemModelBase}">
-                                            <CheckBox FocusVisualStyle="{x:Null}" HorizontalAlignment="Center" IsChecked="{Binding IsStolen}">
+                                            <CheckBox HorizontalAlignment="Center" IsChecked="{Binding IsStolen}">
                                                 <CheckBox.Style>
                                                     <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
                                                         <Style.Triggers>
@@ -420,7 +419,7 @@
                                     constructs:ColumnVisibility.IsHidden="{Binding Value, Source={StaticResource Mode}, Converter={StaticResource EqualityConverter}, ConverterParameter={x:Static views:Mode.Stash}}">
                                     <GridViewColumn.Header>
                                         <StackPanel Orientation="Horizontal">
-                                            <CheckBox Margin="2" FocusVisualStyle="{x:Null}" VerticalAlignment="Center">
+                                            <CheckBox Margin="2" VerticalAlignment="Center">
                                                 <CheckBox.Style>
                                                     <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
                                                         <Style.Triggers>
@@ -436,7 +435,7 @@
                                     </GridViewColumn.Header>
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate DataType="{x:Type inventory:ItemModel}">
-                                            <CheckBox FocusVisualStyle="{x:Null}" HorizontalAlignment="Center">
+                                            <CheckBox HorizontalAlignment="Center">
                                                 <CheckBox.Style>
                                                     <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
                                                         <Style.Triggers>
@@ -454,7 +453,7 @@
                                     constructs:ColumnVisibility.IsHidden="{Binding Value, Source={StaticResource Mode}, Converter={StaticResource EqualityConverter}, ConverterParameter={x:Static views:Mode.Stash}}">
                                     <GridViewColumn.Header>
                                         <StackPanel Orientation="Horizontal">
-                                            <CheckBox Margin="2" FocusVisualStyle="{x:Null}" VerticalAlignment="Center">
+                                            <CheckBox Margin="2" VerticalAlignment="Center">
                                                 <CheckBox.Style>
                                                     <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
                                                         <Style.Triggers>
@@ -470,7 +469,7 @@
                                     </GridViewColumn.Header>
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate DataType="{x:Type inventory:ItemModel}">
-                                            <CheckBox FocusVisualStyle="{x:Null}" HorizontalAlignment="Center">
+                                            <CheckBox HorizontalAlignment="Center">
                                                 <CheckBox.Style>
                                                     <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
                                                         <Style.Triggers>
