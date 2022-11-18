@@ -12,5 +12,5 @@ public sealed class TransportObject : Freezable
         set => this.SetValue(TransportObject.ValueProperty, value);
     }
 
-    protected override Freezable CreateInstanceCore() => new TransportObject();
+    protected override TransportObject CreateInstanceCore() => new();
 }
