@@ -1,0 +1,8 @@
+{
+	"scripts" : [
+		{
+			"trigger": "ConsumableManager",
+			"path": ".\\mods\\f2Console.lua"
+		}
+	]
+}
