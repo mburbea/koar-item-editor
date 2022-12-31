@@ -35,15 +35,14 @@
     <EmbeddedResource Include="Data.zip" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="StringLiteralGenerator" Version="2.0.0" />
-    <PackageReference Include="System.IO.Hashing" Version="7.0.0" />
-  </ItemGroup>
-  <ItemGroup>
     <MySourceFiles Include="$(MSBuildProjectDirectory)\Data\*.*" />
   </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <MySourceFiles Remove="Data\definitions.csv" />
 	<MySourceFiles Remove="Data\simtype.csv" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.IO.Hashing" Version="7.0.0" />
   </ItemGroup>
   <Target Name="CopyToOut" BeforeTargets="BeforeBuild">
       <Copy SourceFiles="@(MySourceFiles)" DestinationFolder="$(OutDir)\Data" />

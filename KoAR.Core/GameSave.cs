@@ -1,5 +1,4 @@
-﻿using StringLiteral;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -148,9 +147,9 @@ public sealed partial class GameSave
 
         static int GetBagOffset(ReadOnlySpan<byte> data)
         {
-            var inventoryLimit = Utf8InventoryLimit();
-            var increaseAmount = Utf8IncreaseAmount();
-            var currentInventoryCount = Utf8CurrentInventoryCount();
+            var inventoryLimit = Utf8InventoryLimit;
+            var increaseAmount = Utf8IncreaseAmount;
+            var currentInventoryCount = Utf8CurrentInventoryCount;
             var curInvCountOffset = data.IndexOf(currentInventoryCount) + currentInventoryCount.Length;
             var inventoryLimitOffset = data.IndexOf(inventoryLimit) + inventoryLimit.Length;
             var increaseAmountOffset = data.IndexOf(increaseAmount) + increaseAmount.Length;
@@ -188,14 +187,12 @@ public sealed partial class GameSave
         }
     }
 
-    [Utf8("inventory_limit")]
-    private static partial ReadOnlySpan<byte> Utf8InventoryLimit();
 
-    [Utf8("increase_amount")]
-    private static partial ReadOnlySpan<byte> Utf8IncreaseAmount();
+    private static ReadOnlySpan<byte> Utf8InventoryLimit => "inventory_limit"u8;
 
-    [Utf8("current_inventory_count")]
-    private static partial ReadOnlySpan<byte> Utf8CurrentInventoryCount();
+    private static ReadOnlySpan<byte> Utf8IncreaseAmount => "increase_amount"u8;
+
+    private static ReadOnlySpan<byte> Utf8CurrentInventoryCount => "current_inventory_count"u8;
 
     public Encoding Encoding => IsRemaster ? Encoding.UTF8 : Encoding.Default;
     public bool IsRemaster { get; }
