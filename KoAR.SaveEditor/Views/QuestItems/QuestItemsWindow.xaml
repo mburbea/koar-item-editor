@@ -3,12 +3,14 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:views="clr-namespace:KoAR.SaveEditor.Views"
     xmlns:local="clr-namespace:KoAR.SaveEditor.Views.QuestItems"
     xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs"
     xmlns:sc="clr-namespace:System.ComponentModel;assembly=WindowsBase"
     mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type local:QuestItemsWindowViewModel}}"
     WindowStartupLocation="CenterOwner" Title="Quest Items - KoAR Save Editor" 
-    Height="450" Width="500" ResizeMode="NoResize">
+    Height="450" Width="500" ResizeMode="NoResize"
+    views:FocusVisualStyleKiller.Kill="True">
     <Window.Resources>
         <constructs:EqualityConverter x:Key="EqualityConverter" />
         <CollectionViewSource x:Key="FilteredItems" Source="{Binding FilteredItems}">
@@ -50,9 +52,9 @@
                     </Style>
                 </TextBox.Style>
             </TextBox>
-            <Button Grid.Column="2" Content="Reset" Command="{Binding ResetFiltersCommand}" Margin="2" FocusVisualStyle="{x:Null}" />
+            <Button Grid.Column="2" Content="Reset" Command="{Binding ResetFiltersCommand}" Margin="2" />
             <ListView Grid.Row="1" Grid.ColumnSpan="3" Margin="2" ItemsSource="{Binding Source={StaticResource FilteredItems}}" 
-                SelectionMode="Single" ScrollViewer.HorizontalScrollBarVisibility="Disabled" FocusVisualStyle="{x:Null}">
+                SelectionMode="Single" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="{x:Type ListViewItem}">
                         <Setter Property="constructs:ItemSelection.SelectItemOnClick" Value="{Binding IsVisible, RelativeSource={RelativeSource Self}}" />
@@ -71,13 +73,13 @@
                         <GridViewColumn Width="Auto">
                             <GridViewColumn.Header>
                                 <StackPanel Orientation="Horizontal">
-                                    <CheckBox FocusVisualStyle="{x:Null}" VerticalAlignment="Center" IsChecked="{Binding AllItemsSellable}" />
+                                    <CheckBox VerticalAlignment="Center" IsChecked="{Binding AllItemsSellable}" />
                                     <TextBlock Margin="2,0" Text="Sellable?" VerticalAlignment="Center" />
                                 </StackPanel>
                             </GridViewColumn.Header>
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate DataType="{x:Type local:QuestItemModel}">
-                                    <CheckBox FocusVisualStyle="{x:Null}" HorizontalAlignment="Center" IsChecked="{Binding IsSellable}" />
+                                    <CheckBox HorizontalAlignment="Center" IsChecked="{Binding IsSellable}" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>

@@ -10,7 +10,6 @@
     <constructs:EqualityConverter x:Key="EqualityConverter" />
     <constructs:ComboPanelMaxWidthConverter x:Key="MaxWidthConverter" />
     <Style TargetType="{x:Type views:BuffSelector}">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type views:BuffSelector}">
@@ -32,7 +31,7 @@
                         </Border.Resources>
                         <ComboBox x:Name="PART_ComboBox" ItemsSource="{Binding Source={StaticResource DataContainers}}"
                             SelectedValuePath="Data" SelectedValue="{Binding SelectedBuff, RelativeSource={RelativeSource TemplatedParent}}"
-                            HorizontalContentAlignment="Stretch" FocusVisualStyle="{x:Null}" TextSearch.TextPath="Data.ShortDisplayText"
+                            HorizontalContentAlignment="Stretch" TextSearch.TextPath="Data.ShortDisplayText"
                             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                             <ComboBox.ItemsPanel>
                                 <ItemsPanelTemplate>
@@ -57,11 +56,6 @@
                                     </DataTemplate.Triggers>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
-                            <ComboBox.ItemContainerStyle>
-                                <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                                </Style>
-                            </ComboBox.ItemContainerStyle>
                         </ComboBox>
                     </Border>
                 </ControlTemplate>

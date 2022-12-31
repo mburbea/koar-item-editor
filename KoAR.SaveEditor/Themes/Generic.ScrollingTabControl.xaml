@@ -7,14 +7,6 @@
         <ResourceDictionary Source="/PresentationFramework.Aero;component/Themes/Aero.NormalColor.xaml" />
     </ResourceDictionary.MergedDictionaries>
     <Style TargetType="{x:Type constructs:ScrollingTabControl}">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-        <Setter Property="ItemContainerStyle">
-            <Setter.Value>
-                <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource {x:Type TabItem}}">
-                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                </Style>
-            </Setter.Value>
-        </Setter>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type constructs:ScrollingTabControl}">
@@ -36,7 +28,6 @@
                                 <Setter Property="IsTabStop" Value="False"/>
                                 <Setter Property="Focusable" Value="False"/>
                                 <Setter Property="ClickMode" Value="Press"/>
-                                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                                 <Setter Property="Background" Value="{StaticResource ButtonNormalBackground}" />
                                 <Setter Property="BorderBrush" Value="#707070"/>
                                 <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
@@ -79,7 +70,7 @@
                                 </RepeatButton.LayoutTransform>
                             </RepeatButton>
                             <ScrollViewer x:Name="PART_ScrollViewer" IsTabStop="False" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Hidden" 
-                                BorderThickness="0" Padding="0" Grid.Column="1" FocusVisualStyle="{x:Null}" Margin="0,0,0,-1">
+                                BorderThickness="0" Padding="0" Grid.Column="1" Margin="0,0,0,-1">
                                 <TabPanel x:Name="PART_HeaderPanel" IsItemsHost="True" KeyboardNavigation.TabIndex="1" Margin="0,2,0,0" />
                             </ScrollViewer>
                             <RepeatButton Grid.Column="2" x:Name="PART_RightButton" />

@@ -31,7 +31,7 @@ public sealed class LoadingIndicator : Control
     {
         object IMultiValueConverter.Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (parameter is not DependencyProperty property || values is not { Length: 2 } || values[0] is not double width || values[1] is not string name)
+            if (parameter is not DependencyProperty property || values is not [double width, string name])
             {
                 return DependencyProperty.UnsetValue;
             }

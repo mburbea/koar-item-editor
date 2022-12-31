@@ -34,12 +34,11 @@
         <TextBlock Grid.Row="1" Text="Target Version:" TextAlignment="Right" FontWeight="SemiBold" Margin="2" />
         <TextBlock Grid.Row="1" Grid.Column="1" Margin="2" Text="{Binding Target.Version, StringFormat='v{0}'}" />
         <TextBlock Grid.Row="2" Text="Release Notes:" TextAlignment="Right" FontWeight="SemiBold" Margin="2" VerticalAlignment="Top" />
-        <RichTextBox Grid.Row="2" Grid.Column="1" FocusVisualStyle="{x:Null}" IsReadOnly="True" Margin="2" VerticalScrollBarVisibility="Auto" Loaded="RichTextBox_Loaded" />
+        <RichTextBox Grid.Row="2" Grid.Column="1" IsReadOnly="True" Margin="2" VerticalScrollBarVisibility="Auto" Loaded="RichTextBox_Loaded" />
         <StackPanel Grid.Row="3" Grid.ColumnSpan="2">
             <StackPanel.Resources>
                 <local:ByteGroupsConverter x:Key="ByteGroupsConverter" />
                 <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
-                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                     <Setter Property="MinWidth" Value="175" />
                     <Setter Property="Margin" Value="2" />
                 </Style>

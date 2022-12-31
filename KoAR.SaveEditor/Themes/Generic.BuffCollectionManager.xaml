@@ -48,23 +48,21 @@
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
-                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                 <Setter Property="VerticalAlignment" Value="Center" />
                 <Setter Property="Margin" Value="2" />
                 <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
             </Style>
         </Style.Resources>
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type views:BuffCollectionManager}">
-                    <GroupBox Header="{TemplateBinding Header}" HeaderTemplate="{TemplateBinding HeaderTemplate}" FocusVisualStyle="{x:Null}">
+                    <GroupBox Header="{TemplateBinding Header}" HeaderTemplate="{TemplateBinding HeaderTemplate}">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <TreeView x:Name="PART_TreeView" Grid.ColumnSpan="2" BorderBrush="LightGray" ScrollViewer.HorizontalScrollBarVisibility="Disabled" FocusVisualStyle="{x:Null}" Height="150"
+                            <TreeView x:Name="PART_TreeView" Grid.ColumnSpan="2" BorderBrush="LightGray" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Height="150"
                                 ItemsSource="{TemplateBinding Collection}" AlternationCount="2" Foreground="{TemplateBinding Foreground}" ItemTemplate="{StaticResource BuffTemplate}">
                                 <TreeView.Style>
                                     <Style TargetType="{x:Type TreeView}" BasedOn="{StaticResource {x:Type TreeView}}">
@@ -208,7 +206,7 @@
                                     </Style>
                                 </TreeView.ItemContainerStyle>
                             </TreeView>
-                            <GroupBox Header="Add Buff:" BorderThickness="1" BorderBrush="LightGray" FocusVisualStyle="{x:Null}">
+                            <GroupBox Header="Add Buff:" BorderThickness="1" BorderBrush="LightGray">
                                 <GroupBox.Style>
                                     <Style TargetType="{x:Type GroupBox}">
                                         <Style.Triggers>
@@ -248,7 +246,7 @@
                                         </TextBox.Text>
                                     </TextBox>
                                     <Button Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="2" Command="{TemplateBinding AddBuffCommand}" 
-                                        CommandParameter="{TemplateBinding PendingBuffId}" Content="Add" FocusVisualStyle="{x:Null}" />
+                                        CommandParameter="{TemplateBinding PendingBuffId}" Content="Add" />
                                 </Grid>
                             </GroupBox>
                         </Grid>

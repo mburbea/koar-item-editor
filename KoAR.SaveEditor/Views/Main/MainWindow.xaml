@@ -14,7 +14,8 @@
     xmlns:aero="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
     mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type local:MainWindowViewModel}}"
     Width="1366" Height="768" WindowStartupLocation="CenterScreen" 
-    Icon="/app.ico" ResizeMode="CanResizeWithGrip">
+    Icon="/app.ico" ResizeMode="CanResizeWithGrip"
+    views:FocusVisualStyleKiller.Kill="True">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -107,14 +108,13 @@
                             </Setter.Value>
                         </Setter>
                         <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
-                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                         <Setter Property="Margin" Value="2" />
                         <Setter Property="VerticalAlignment" Value="Center" />
                     </Style>
                 </DockPanel.Resources>
                 <Button ToolTip="Open File..." Command="Open" Style="{StaticResource ToolButtonStyle}" Tag="{StaticResource Open}" />
                 <Button ToolTip="Save" Command="Save" Style="{StaticResource ToolButtonStyle}" Tag="{StaticResource Save}" />
-                <ToggleButton x:Name="OpenZoomPopup" FocusVisualStyle="{x:Null}" ToolTip="Zoom" Margin="2" VerticalAlignment="Center">
+                <ToggleButton x:Name="OpenZoomPopup" ToolTip="Zoom" Margin="2" VerticalAlignment="Center">
                     <ToggleButton.Style>
                         <Style TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource {x:Type ToggleButton}}">
                             <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
@@ -189,7 +189,6 @@
                                 </Setter.Value>
                             </Setter>
                             <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
-                            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                             <Setter Property="Margin" Value="2" />
                             <Setter Property="VerticalAlignment" Value="Center" />
                             <Setter Property="ContentTemplate" Value="{StaticResource DownloadIndicatorTemplate}" />
@@ -221,8 +220,8 @@
                     TextAlignment="Right" VerticalAlignment="Center" FontWeight="Light" Opacity="0.66" Margin="0,0,8,0" />
             </DockPanel>
         </Border>
-        <TabControl x:Name="PART_TabControl" ItemsSource="{Binding Source={StaticResource Modes}}" SelectedItem="{Binding Mode}" FocusVisualStyle="{x:Null}" 
-            Margin="-1,0,-1,4" TabStripPlacement="Bottom" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="1"
+        <TabControl x:Name="PART_TabControl" ItemsSource="{Binding Source={StaticResource Modes}}" SelectedItem="{Binding Mode}" Margin="-1,0,-1,4" 
+            TabStripPlacement="Bottom" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="1"
             constructs:TabContent.Persist="{Binding IsVisible, RelativeSource={RelativeSource Self}}" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}">
             <TabControl.Style>
                 <Style TargetType="{x:Type TabControl}" BasedOn="{StaticResource {x:Type TabControl}}">
@@ -277,7 +276,6 @@
                                 Value="Stash cannot be located in save. This can be because the stash has not been discovered or your character is in the same area as the stash." />
                         </MultiDataTrigger>
                     </Style.Triggers>
-                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                     <Setter Property="Tag">
                         <Setter.Value>
                             <MultiBinding Converter="{StaticResource ManagerViewModelConverter}">
