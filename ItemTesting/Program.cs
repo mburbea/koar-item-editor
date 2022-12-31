@@ -129,7 +129,7 @@ static partial class Program
             File.WriteAllText(Path.Combine(outPath, fileInfo.Name["symbol_table_".Length..^4] + ".lua"),
                 "return {\n" + string.Join(",\n", Enumerable.Range(0, elementCount)
                 .Select(x => (id: BitConverter.ToInt32(data, 4 + x * 12), s: BitConverter.ToInt32(data, 4 + x * 12 + 4), e: BitConverter.ToInt32(data, 4 + x * 12 + 8)))
-                .Select(y => $"{{'{y.id:X6}','{Encoding.Default.GetString(data[(firstString + y.s)..(firstString + y.e - 1)])}'}}")) + "\n}");
+                .Select(y => $"{{{y.id},'{Encoding.Default.GetString(data[(firstString + y.s)..(firstString + y.e - 1)])}'}}")) + "\n}");
         }
     }
 
@@ -179,10 +179,10 @@ static partial class Program
 
     static bool CreateBatchArchive(string file, string outZip)
     {
-        if (File.Exists(outZip))
-        {
-            return true;
-        }
+        //if (File.Exists(outZip))
+        //{
+        //    return true;
+        //}
         using var zip = new ZipArchive(File.Create(outZip), ZipArchiveMode.Create);
         ReadOnlySpan<byte> data = File.ReadAllBytes(file);
         int entryCount = BitConverter.ToInt32(data);
@@ -230,6 +230,7 @@ static partial class Program
 
     static Dictionary<uint, uint> BuildParentDict()
     {
+        if (WhoCares) Console.WriteLine("WHOCARES!?");
         using var zarchive = ZipFile.OpenRead(@"..\..\..\simtypes_unpacked.zip");
         var buffer = (stackalloc byte[44]);
         var dictionary = new Dictionary<uint, uint>();
@@ -388,8 +389,9 @@ static partial class Program
         ConvertSymbolsToCsv(@"C:\e\", @"C:\e\o");
         CreateBatchArchive2(@"C:\e\134230570_klua.batch",@"C:\e\o\klua.zip");
         ParseOutItemInformationTemplate();
-        ConvertSymbolsToLua(@"C:\e\", @"C:\Program Files (x86)\Steam\steamapps\common\Kingdoms of Amalur Re-Reckoning\mods\resources\","simtype","buff");
-        
+        ConvertSymbolsToLua(@"C:\e\", @"C:\Program Files (x86)\Steam\steamapps\common\Kingdoms of Amalur Re-Reckoning\mods\resources\", "simtype", "buff");
+
+
 
         const string path = @"..\..\..\..\svd_fmt_5_19.sav";
         GameSave gs = new(path);

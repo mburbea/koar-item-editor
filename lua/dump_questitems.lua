@@ -63,7 +63,7 @@ for _,row in ipairs(simtypes) do
         local simtype = SIMTYPE_ID(v)
         if(TYPE.is_quest_item(simtype)) then
             tbl[#tbl + 1] = {
-                id =  tonumber(k,16),
+                id = k,
                 name = simtype,
                 internal_name = v,
             }

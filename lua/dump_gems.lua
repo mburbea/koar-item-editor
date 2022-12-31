@@ -69,7 +69,7 @@ for _,row in ipairs(simtypes) do
             if (socketType ~= nil) then
                 local buffs = TableConcat(ACTOR.get_socket_owner_buffs(item),ACTOR.get_socket_self_buffs(item))
                 tbl[#tbl + 1] = {
-                    type_id = tonumber(k,16),
+                    type_id = k,
                     name = simtype,
                     internal_name = v,
                     buff_id = translate_to_int_array(buffs)[1] or 0,
