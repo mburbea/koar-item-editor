@@ -49,7 +49,7 @@ public sealed class ItemCollectionManager : Control
     public static readonly DependencyProperty SortPropertyProperty = DependencyProperty.RegisterAttached(nameof(ItemCollectionManager.SortProperty), typeof(string), typeof(ItemCollectionManager),
         new(nameof(ItemModelBase.Level)));
 
-    private static readonly DependencyPropertyKey _collectionViewPropertyKey = DependencyProperty.RegisterReadOnly(nameof(ItemCollectionManager.CollectionView), typeof(CollectionView), typeof(ItemCollectionManager),
+    private static readonly DependencyPropertyKey _collectionViewPropertyKey = DependencyProperty.RegisterReadOnly(nameof(ItemCollectionManager.CollectionView), typeof(ListCollectionView), typeof(ItemCollectionManager),
         new(ItemCollectionManager.CollectionView_ValueChanged));
 
     private static readonly DependencyPropertyKey _modePropertyKey = DependencyProperty.RegisterReadOnly(nameof(ItemCollectionManager.Mode), typeof(Mode), typeof(ItemCollectionManager),
@@ -88,9 +88,9 @@ public sealed class ItemCollectionManager : Control
         set => this.SetValue(ItemCollectionManager.ChangeDefinitionCommandProperty, value);
     }
 
-    public ICollectionView? CollectionView
+    public ListCollectionView? CollectionView
     {
-        get => (ICollectionView?)this.GetValue(ItemCollectionManager.CollectionViewProperty);
+        get => (ListCollectionView?)this.GetValue(ItemCollectionManager.CollectionViewProperty);
         private set => this.SetValue(ItemCollectionManager._collectionViewPropertyKey, value);
     }
 
@@ -155,16 +155,18 @@ public sealed class ItemCollectionManager : Control
 
     private void GridViewColumn_Click(object? sender, RoutedEventArgs e)
     {
-        if (e.OriginalSource is GridViewColumnHeader header && ItemCollectionManager.GetPropertyName(header.Column) is { } propertyName && this.CollectionView?.SortDescriptions is { } descriptions)
+        if (e.OriginalSource is not GridViewColumnHeader header ||
+            ItemCollectionManager.GetPropertyName(header.Column) is not { } name ||
+            this.CollectionView?.SortDescriptions is not ([_, { Direction: { } direction, PropertyName: { } propertyName }, _] descriptions))
         {
-            SortDescription current = descriptions[1];
-            descriptions[1] = new(
-                this.SortProperty = propertyName,
-                this.SortDirection = propertyName == current.PropertyName
-                    ? (ListSortDirection)((int)current.Direction ^ 1)
-                    : ListSortDirection.Ascending
-            );
+            return;
         }
+        descriptions[1] = new(
+            this.SortProperty = name,
+            this.SortDirection = name == propertyName
+                ? (ListSortDirection)((int)direction ^ 1)
+                : ListSortDirection.Ascending
+        );
     }
 
     private void OnViewChanged()
@@ -198,7 +200,7 @@ public sealed class ItemCollectionManager : Control
     {
         ItemCollectionManager manager = (ItemCollectionManager)d;
         manager.Mode = e.NewValue is IEnumerable<ItemModelBase<StashItem>> ? Mode.Stash : default;
-        manager.CollectionView = e.NewValue is not IList list ? null : new ListCollectionView(list)
+        manager.CollectionView = e.NewValue is not IList list ? null : new(list)
         {
             SortDescriptions =
             {

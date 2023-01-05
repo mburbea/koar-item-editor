@@ -28,7 +28,7 @@ public sealed class StashManagerViewModel : ManagerViewModelBase<StashItemModel>
             Owner = Application.Current.MainWindow,
             DataContext = viewModel
         };
-        if (view.ShowDialog() != true || viewModel.Definition is not { } definition)
+        if (view.ShowDialog() is not true || viewModel.Definition is not { } definition)
         {
             return;
         }
