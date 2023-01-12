@@ -134,11 +134,12 @@ public sealed class InventoryManagerViewModel : ManagerViewModelBase<ItemModel>
             Owner = Application.Current.MainWindow,
             DataContext = viewModel
         };
-        if (view.ShowDialog() == true && viewModel.Definition != null)
+        if (view.ShowDialog() is not true || viewModel.Definition == null)
         {
-            item.ChangeDefinition(viewModel.Definition, viewModel.RetainStats);
-            this.GameSave.WriteEquipmentBytes(item.Item, true);
+            return;
         }
+        item.ChangeDefinition(viewModel.Definition, viewModel.RetainStats);
+        this.GameSave.WriteEquipmentBytes(item.Item, true);
     }
 
     private void DeleteItemBuff(Buff buff) => this.SelectedItem?.RemoveItemBuff(buff);

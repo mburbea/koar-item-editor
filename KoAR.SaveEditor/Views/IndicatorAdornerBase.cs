@@ -58,8 +58,7 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
 
     public override GeneralTransform GetDesiredTransform(GeneralTransform transform)
     {
-        Size size = this.AdornedElement.RenderSize;
-        if (size.IsEmpty)
+        if (this.AdornedElement.RenderSize is not { IsEmpty: false } size)
         {
             return base.GetDesiredTransform(transform);
         }
@@ -114,8 +113,7 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
 
     protected override void OnRender(DrawingContext drawingContext)
     {
-        Size size = this.AdornedElement.RenderSize;
-        if (size.IsEmpty)
+        if (this.AdornedElement.RenderSize is not { IsEmpty: false } size)
         {
             return;
         }
