@@ -30,15 +30,15 @@ public static class Watermarking
     private static void AdornerProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         TextBoxBase textBox = (TextBoxBase)d;
-        if (e.OldValue != null)
+        if (e.OldValue is WatermarkAdorner previous)
         {
-            using WatermarkAdorner adorner = (WatermarkAdorner)e.OldValue;
-            AdornerLayer adornerLayer = adorner.FindVisualTreeAncestor<AdornerLayer>() ?? AdornerLayer.GetAdornerLayer(textBox);
-            adornerLayer.Remove(adorner);
+            AdornerLayer adornerLayer = previous.FindVisualTreeAncestor<AdornerLayer>() ?? AdornerLayer.GetAdornerLayer(textBox);
+            adornerLayer.Remove(previous);
+            previous.Dispose();
         }
-        if (e.NewValue != null)
+        if (e.NewValue is WatermarkAdorner next)
         {
-            AdornerLayer.GetAdornerLayer(textBox).Add((WatermarkAdorner)e.NewValue);
+            AdornerLayer.GetAdornerLayer(textBox).Add(next);
         }
     }
 

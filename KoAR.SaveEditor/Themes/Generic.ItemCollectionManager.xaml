@@ -14,8 +14,6 @@
     <constructs:FloatConverter x:Key="SingleConverter" />
     <constructs:EqualityConverter x:Key="EqualityConverter" />
     <constructs:StringIsNullOrEmptyConverter x:Key="StringIsNullOrEmptyConverter" />
-    <constructs:HexConverter x:Key="HexConverter" />
-    <constructs:LittleEndianConverter x:Key="LittleEndianConverter" />
     <constructs:AndConverter x:Key="AndConverter" />
     <constructs:GrayscaleConverter x:Key="GrayscaleConverter" />
     <constructs:IsTypeConverter x:Key="IsTypeConverter" />
