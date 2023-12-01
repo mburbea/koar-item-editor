@@ -35,13 +35,13 @@ public readonly struct DataContainer(object? data) : IComparable, IComparable<Da
 
     private sealed class DataContainerCollectionConverter : IValueConverter
     {
-        private static readonly Func<object, DataContainer> _getContainer = value => value is DataContainer container ? container : new(value);
-
         object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return value is IEnumerable collection
-                ? collection.Cast<object>().Select(DataContainerCollectionConverter._getContainer).ToArray()
-                : [DataContainerCollectionConverter._getContainer(value)];
+                ? collection.Cast<object>().Select(GetContainer).ToArray()
+                : [GetContainer(value)];
+
+            static DataContainer GetContainer(object value) => value is DataContainer container ? container : new(value);
         }
 
         object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();

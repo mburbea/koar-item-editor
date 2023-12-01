@@ -25,16 +25,16 @@ public sealed class SocketIcon : Control
         SocketIcon.IconNameProperty = SocketIcon._iconNamePropertyKey.DependencyProperty;
     }
 
-    public Socket Socket
-    {
-        get => (Socket)this.GetValue(SocketIcon.SocketProperty);
-        set => this.SetValue(SocketIcon.SocketProperty, value);
-    }
-
     public string? IconName
     {
         get => (string?)this.GetValue(SocketIcon.IconNameProperty);
         private set => this.SetValue(SocketIcon._iconNamePropertyKey, value);
+    }
+
+    public Socket Socket
+    {
+        get => (Socket)this.GetValue(SocketIcon.SocketProperty);
+        set => this.SetValue(SocketIcon.SocketProperty, value);
     }
 
     private static void SocketProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

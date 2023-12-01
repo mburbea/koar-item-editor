@@ -16,9 +16,9 @@ public static class TextBoxUpdateSource
 
     private static void TextBox_PreviewKeyDown(object? sender, KeyEventArgs e)
     {
-        if (e.Key != Key.Enter || 
-            sender is not TextBox textBox || 
-            BindingOperations.GetBindingExpressionBase(textBox, TextBox.TextProperty) is not { } expression || 
+        if (e.Key != Key.Enter ||
+            sender is not TextBox textBox ||
+            BindingOperations.GetBindingExpressionBase(textBox, TextBox.TextProperty) is not { } expression ||
             !expression.ValidateWithoutUpdate())
         {
             return;

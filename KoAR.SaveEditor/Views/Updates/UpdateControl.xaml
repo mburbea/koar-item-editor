@@ -1,13 +1,13 @@
 ﻿<UserControl x:Class="KoAR.SaveEditor.Views.Updates.UpdateControl"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-    xmlns:editor="clr-namespace:KoAR.SaveEditor"
-    xmlns:local="clr-namespace:KoAR.SaveEditor.Views.Updates"
-    xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs"
-    xmlns:s="clr-namespace:System;assembly=System.Runtime"
-    mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type local:UpdateViewModelBase}}">
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:editor="clr-namespace:KoAR.SaveEditor"
+             xmlns:constructs="clr-namespace:KoAR.SaveEditor.Constructs"
+             xmlns:local="clr-namespace:KoAR.SaveEditor.Views.Updates"
+             xmlns:s="clr-namespace:System;assembly=System.Runtime"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type local:UpdateViewModelBase}}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -30,7 +30,7 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <TextBlock Grid.Row="0" Text="Current Version:" TextAlignment="Right" FontWeight="SemiBold" Margin="2" />
-        <TextBlock Grid.Row="0" Grid.Column="1" Margin="2" Text="{Binding Source={x:Static editor:App.Version}, StringFormat='v{0}'}"/>
+        <TextBlock Grid.Row="0" Grid.Column="1" Margin="2" Text="{Binding Source={x:Static editor:App.Version}, StringFormat='v{0}'}" />
         <TextBlock Grid.Row="1" Text="Target Version:" TextAlignment="Right" FontWeight="SemiBold" Margin="2" />
         <TextBlock Grid.Row="1" Grid.Column="1" Margin="2" Text="{Binding Target.Version, StringFormat='v{0}'}" />
         <TextBlock Grid.Row="2" Text="Release Notes:" TextAlignment="Right" FontWeight="SemiBold" Margin="2" VerticalAlignment="Top" />

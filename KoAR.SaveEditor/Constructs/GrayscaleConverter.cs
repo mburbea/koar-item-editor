@@ -18,7 +18,7 @@ public sealed class GrayscaleConverter : IValueConverter
 
     object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
 
-    private static BitmapSource Convert(BitmapSource source)
+    private static FormatConvertedBitmap Convert(BitmapSource source)
     {
         FormatConvertedBitmap bitmap = new();
         bitmap.BeginInit();

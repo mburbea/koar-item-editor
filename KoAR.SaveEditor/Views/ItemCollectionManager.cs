@@ -37,11 +37,11 @@ public sealed class ItemCollectionManager : Control
     public static readonly DependencyProperty PropertyNameProperty = DependencyProperty.RegisterAttached("PropertyName", typeof(string), typeof(ItemCollectionManager),
         new());
 
-    public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register(nameof(ItemCollectionManager.SelectedItem), typeof(object), typeof(ItemCollectionManager),
-        new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
-
     public static readonly DependencyProperty SearchTextProperty = DependencyProperty.RegisterAttached(nameof(ItemCollectionManager.SearchText), typeof(string), typeof(ItemCollectionManager),
         new());
+
+    public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register(nameof(ItemCollectionManager.SelectedItem), typeof(object), typeof(ItemCollectionManager),
+            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
     public static readonly DependencyProperty SortDirectionProperty = DependencyProperty.RegisterAttached(nameof(ItemCollectionManager.SortDirection), typeof(ListSortDirection), typeof(ItemCollectionManager),
         new());
@@ -151,6 +151,35 @@ public sealed class ItemCollectionManager : Control
         this._listView.AddHandler(ButtonBase.ClickEvent, new RoutedEventHandler(this.GridViewColumn_Click));
     }
 
+    private static void CollectionView_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        ItemCollectionManager manager = (ItemCollectionManager)d;
+        if (e.OldValue is ListCollectionView previous)
+        {
+            CollectionChangedEventManager.RemoveHandler(previous, manager.CollectionView_CollectionChanged);
+        }
+        if (e.NewValue is ListCollectionView next)
+        {
+            CollectionChangedEventManager.AddHandler(next, manager.CollectionView_CollectionChanged);
+            manager.Dispatcher.InvokeAsync(manager.OnViewChanged);
+        }
+    }
+
+    private static void ItemsProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        ItemCollectionManager manager = (ItemCollectionManager)d;
+        manager.Mode = e.NewValue is IEnumerable<ItemModelBase<StashItem>> ? Mode.Stash : default;
+        manager.CollectionView = e.NewValue is not IList list ? null : new(list)
+        {
+            SortDescriptions =
+            {
+                new(nameof(ItemModelBase.Category), ListSortDirection.Ascending),
+                new(manager.SortProperty, manager.SortDirection),
+                new(nameof(ItemModelBase.DisplayName), ListSortDirection.Ascending)
+            }
+        };
+    }
+
     private void CollectionView_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e) => this.Dispatcher.InvokeAsync(this.OnViewChanged);
 
     private void GridViewColumn_Click(object? sender, RoutedEventArgs e)
@@ -180,34 +209,5 @@ public sealed class ItemCollectionManager : Control
         {
             this._listView.ScrollIntoView(view.GetItemAt(0));
         }
-    }
-
-    private static void CollectionView_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-    {
-        ItemCollectionManager manager = (ItemCollectionManager)d;
-        if (e.OldValue is ListCollectionView previous)
-        {
-            CollectionChangedEventManager.RemoveHandler(previous, manager.CollectionView_CollectionChanged);
-        }
-        if (e.NewValue is ListCollectionView next)
-        {
-            CollectionChangedEventManager.AddHandler(next, manager.CollectionView_CollectionChanged);
-            manager.Dispatcher.InvokeAsync(manager.OnViewChanged);
-        }
-    }
-
-    private static void ItemsProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-    {
-        ItemCollectionManager manager = (ItemCollectionManager)d;
-        manager.Mode = e.NewValue is IEnumerable<ItemModelBase<StashItem>> ? Mode.Stash : default;
-        manager.CollectionView = e.NewValue is not IList list ? null : new(list)
-        {
-            SortDescriptions =
-            {
-                new(nameof(ItemModelBase.Category), ListSortDirection.Ascending),
-                new(manager.SortProperty, manager.SortDirection),
-                new(nameof(ItemModelBase.DisplayName), ListSortDirection.Ascending)
-            }
-        };
     }
 }

@@ -20,8 +20,8 @@ public sealed class ChangeOrAddItemViewModel : NotifierBase
     private ItemDefinition? _definition;
     private IReadOnlyList<ItemDefinition>? _definitions;
     private int _elementFilter;
-    private int _rarityFilter;
     private int _fateswornFilter;
+    private int _rarityFilter;
     private bool _retainStats;
 
     public ChangeOrAddItemViewModel(GameSave gameSave, ItemModelBase? item = null)
@@ -107,9 +107,9 @@ public sealed class ChangeOrAddItemViewModel : NotifierBase
             {
                 this.OnFilterChanged();
             }
-
         }
     }
+
     public GameSave GameSave { get; }
 
     public ItemModelBase? Item { get; }

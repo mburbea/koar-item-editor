@@ -17,6 +17,8 @@ public abstract class ItemModelBase(IItem item) : NotifierBase, IDisposable
         set => throw new NotSupportedException();
     }
 
+    public ItemDefinition Definition => item.Definition;
+
     public string DefinitionDisplayName => this.Definition.AffixableName && (this.Prefix ?? this.Suffix) != null
         ? $"{this.Prefix?.Modifier} {this.Definition.CategoryDisplayName} {this.Suffix?.Modifier}".Trim()
         : this.Definition.Name;
@@ -33,6 +35,8 @@ public abstract class ItemModelBase(IItem item) : NotifierBase, IDisposable
         set => throw new NotSupportedException();
     }
 
+    public bool IsUnknown => this.Category == EquipmentCategory.Unknown;
+    
     public IItem Item => item;
 
     public abstract IReadOnlyList<Buff> ItemBuffs { get; }
@@ -71,11 +75,7 @@ public abstract class ItemModelBase(IItem item) : NotifierBase, IDisposable
         set => throw new NotSupportedException();
     }
 
-    public ItemDefinition Definition => item.Definition;
-
     public abstract bool UnsupportedFormat { get; }
-
-    public bool IsUnknown => this.Category == EquipmentCategory.Unknown;
 
     public void Dispose()
     {

@@ -68,6 +68,7 @@ public sealed class LoadingEllipseLocationExtension : MarkupExtension
         Path = new(FrameworkElement.NameProperty),
         RelativeSource = RelativeSource.Self,
     };
+
     private static readonly Binding _tagBinding = new()
     {
         Path = new(Control.TagProperty),

@@ -13,10 +13,6 @@ public static class ListViewAutoSize
 
     static ListViewAutoSize() => CommandManager.RegisterClassCommandBinding(typeof(ListView), new(ListViewAutoSize.AutoSizeCommand, ListViewAutoSize.AutoSizeCommand_Executed));
 
-    public static bool GetSkipAutoSize(GridViewColumn column) => column != null && (bool)column.GetValue(ListViewAutoSize.SkipAutoSizeProperty);
-
-    public static void SetSkipAutoSize(GridViewColumn column, bool value) => column?.SetValue(ListViewAutoSize.SkipAutoSizeProperty, BooleanBoxes.GetBox(value));
-
     public static void AutoSizeColumns(ListView? listView)
     {
         if (listView?.View is GridView view)
@@ -24,6 +20,10 @@ public static class ListViewAutoSize
             ListViewAutoSize.AutoSizeColumns(view);
         }
     }
+
+    public static bool GetSkipAutoSize(GridViewColumn column) => column != null && (bool)column.GetValue(ListViewAutoSize.SkipAutoSizeProperty);
+
+    public static void SetSkipAutoSize(GridViewColumn column, bool value) => column?.SetValue(ListViewAutoSize.SkipAutoSizeProperty, BooleanBoxes.GetBox(value));
 
     private static void AutoSizeColumns(GridView view)
     {

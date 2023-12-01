@@ -98,7 +98,7 @@ public sealed class MainWindowViewModel : NotifierBase
             Filter = "Save Files (*.sav)|*.sav|PS4 Save Files (*.bin)|*.bin|Switch Save Files|*.*",
             FilterIndex = Settings.Default.LastFilterUsed,
             CheckFileExists = true,
-            FileName = fileName ?? String.Empty,
+            FileName = fileName ?? string.Empty,
             InitialDirectory = Path.GetFullPath(string.IsNullOrEmpty(Settings.Default.LastDirectory)
                 ? Amalur.FindSaveGameDirectory()
                 : Settings.Default.LastDirectory)

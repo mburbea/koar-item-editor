@@ -11,13 +11,13 @@ public sealed class BuffSelector : Control
     public static readonly DependencyProperty BuffsProperty = DependencyProperty.Register(nameof(BuffSelector.Buffs), typeof(IReadOnlyCollection<Buff>), typeof(BuffSelector),
         new(BuffSelector.BuffsProperty_ValueChanged));
 
+    public static readonly DependencyProperty FilteredItemsProperty;
+
     public static readonly DependencyProperty FilterProperty = DependencyProperty.Register(nameof(BuffSelector.Filter), typeof(BuffsFilter), typeof(BuffSelector),
-        new(BuffSelector.FilterProperty_ValueChanged));
+            new(BuffSelector.FilterProperty_ValueChanged));
 
     public static readonly DependencyProperty SelectedBuffProperty = DependencyProperty.Register(nameof(BuffSelector.SelectedBuff), typeof(Buff), typeof(BuffSelector),
         new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
-
-    public static readonly DependencyProperty FilteredItemsProperty;
 
     private static readonly DependencyPropertyKey _filteredItemsPropertyKey = DependencyProperty.RegisterReadOnly(nameof(BuffSelector.FilteredItems), typeof(IReadOnlyList<Buff>), typeof(BuffSelector),
         new());

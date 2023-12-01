@@ -45,7 +45,9 @@ partial class App
         }
     }
 
-    private static Version ParseVersion(string text) => new(text.IndexOf('+') is int index and not -1 ? text[..index] : text);
+    private static Version ParseVersion(string text) => new(
+        text.IndexOf('+') is int index and not -1 ? text[..index] : text
+    );
 
     protected override void OnExit(ExitEventArgs e)
     {

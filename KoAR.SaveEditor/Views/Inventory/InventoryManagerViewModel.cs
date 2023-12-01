@@ -25,18 +25,6 @@ public sealed class InventoryManagerViewModel : ManagerViewModelBase<ItemModel>
 
     public DelegateCommand<uint> AddPlayerBuffCommand { get; }
 
-    public new bool? AllItemsStolen
-    {
-        get => base.AllItemsStolen;
-        set
-        {
-            foreach (ItemModel item in this.FilteredItems)
-            {
-                item.IsStolen = value.GetValueOrDefault();
-            }
-        }
-    }
-
     public bool? AllItemsSellable
     {
         get => this.FilteredItems.GetSelectAllCheckBoxValue(item => item.IsSellable);
@@ -57,6 +45,18 @@ public sealed class InventoryManagerViewModel : ManagerViewModelBase<ItemModel>
             foreach (ItemModel item in this.FilteredItems)
             {
                 item.IsStashable = value.GetValueOrDefault();
+            }
+        }
+    }
+
+    public new bool? AllItemsStolen
+    {
+        get => base.AllItemsStolen;
+        set
+        {
+            foreach (ItemModel item in this.FilteredItems)
+            {
+                item.IsStolen = value.GetValueOrDefault();
             }
         }
     }
@@ -134,11 +134,11 @@ public sealed class InventoryManagerViewModel : ManagerViewModelBase<ItemModel>
             Owner = Application.Current.MainWindow,
             DataContext = viewModel
         };
-        if (view.ShowDialog() is not true || viewModel.Definition == null)
+        if (view.ShowDialog() is not true || viewModel.Definition is not { } definition)
         {
             return;
         }
-        item.ChangeDefinition(viewModel.Definition, viewModel.RetainStats);
+        item.ChangeDefinition(definition, viewModel.RetainStats);
         this.GameSave.WriteEquipmentBytes(item.Item, true);
     }
 
