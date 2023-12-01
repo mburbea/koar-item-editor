@@ -2,19 +2,13 @@
 
 namespace KoAR.Core;
 
-public sealed class QuestItem
+public sealed class QuestItem(GameSave gameSave, QuestItemDefinition definition, int offset)
 {
-    private readonly GameSave _gameSave;
-    private readonly QuestItemDefinition _definition;
+    internal int Offset { get; set; } = offset;
 
-    public QuestItem(GameSave gameSave, QuestItemDefinition definition, int offset) =>
-        (_gameSave, _definition, Offset) = (gameSave, definition, offset);
+    private ref InventoryFlags Flags => ref Unsafe.As<byte, InventoryFlags>(ref gameSave.Body[Offset]);
 
-    internal int Offset { get; set; }
-
-    private ref InventoryFlags Flags => ref Unsafe.As<byte, InventoryFlags>(ref _gameSave.Body[Offset]);
-
-    public string Name => _definition.Name;
+    public string Name => definition.Name;
 
     public bool IsUnsellable
     {

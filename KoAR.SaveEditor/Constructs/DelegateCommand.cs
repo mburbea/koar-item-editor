@@ -5,21 +5,20 @@ namespace KoAR.SaveEditor.Constructs;
 
 public sealed class DelegateCommand(Action execute, Func<bool>? canExecute = null) : ICommand
 {
-    private readonly Func<bool>? _canExecute = canExecute;
     private readonly Action _execute = execute ?? throw new ArgumentNullException(nameof(execute));
 
     event EventHandler? ICommand.CanExecuteChanged
     {
         add
         {
-            if (this._canExecute != null)
+            if (canExecute != null)
             {
                 CommandManager.RequerySuggested += value;
             }
         }
         remove
         {
-            if (this._canExecute != null)
+            if (canExecute != null)
             {
                 CommandManager.RequerySuggested -= value;
             }
@@ -28,7 +27,7 @@ public sealed class DelegateCommand(Action execute, Func<bool>? canExecute = nul
 
     bool ICommand.CanExecute(object? parameter) => this.CanExecute();
 
-    public bool CanExecute() => this._canExecute == null || this._canExecute();
+    public bool CanExecute() => canExecute == null || canExecute();
 
     void ICommand.Execute(object? parameter) => this.Execute();
 

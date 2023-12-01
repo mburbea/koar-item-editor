@@ -80,7 +80,7 @@ public sealed class QuestItemsWindowViewModel : NotifierBase, IDisposable
     private void OnFilterChanged()
     {
         this.FilteredItems = this._nameFilter.Length != 0
-            ? this.Items.Where(item => item.Name.IndexOf(this._nameFilter, StringComparison.InvariantCultureIgnoreCase) != -1).ToList()
+            ? this.Items.Where(item => item.Name.Contains(this._nameFilter, StringComparison.InvariantCultureIgnoreCase)).ToList()
             : this.Items;
         this.OnPropertyChanged(nameof(this.AllItemsSellable));
     }

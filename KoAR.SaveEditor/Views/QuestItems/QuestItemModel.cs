@@ -5,23 +5,21 @@ namespace KoAR.SaveEditor.Views.QuestItems;
 
 public sealed class QuestItemModel(QuestItem item)
 {
-    private readonly QuestItem _item = item;
-
     public event EventHandler? IsSellableChanged;
 
     public bool IsSellable
     {
-        get => !this._item.IsUnsellable;
+        get => !item.IsUnsellable;
         set
         {
-            if (value != this._item.IsUnsellable)
+            if (value != item.IsUnsellable)
             {
                 return;
             }
-            this._item.IsUnsellable = !value;
+            item.IsUnsellable = !value;
             this.IsSellableChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 
-    public string Name => this._item.Name;
+    public string Name => item.Name;
 }

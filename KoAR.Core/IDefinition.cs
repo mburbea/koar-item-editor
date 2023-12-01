@@ -1,7 +1,6 @@
-﻿namespace KoAR.Core
+﻿namespace KoAR.Core;
+
+public interface IDefinition
 {
-    public interface IDefinition
-    {
-        bool RequiresFatesworn { get; }
-    }
+    bool RequiresFatesworn { get; }
 }

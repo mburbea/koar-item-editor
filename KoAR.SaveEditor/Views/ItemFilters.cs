@@ -155,6 +155,6 @@ public static class ItemFiltersMethods
             (filters.Rarity == default || filters.Rarity == item.Rarity) &&
             (filters.Element == default || filters.Element == item.Definition.Element) &&
             (filters.ArmorType == default || filters.ArmorType == item.Definition.ArmorType) &&
-            (filters.ItemName.Length == 0 || item.DisplayName.IndexOf(filters.ItemName, StringComparison.InvariantCultureIgnoreCase) != -1);
+            (filters.ItemName.Length == 0 || item.DisplayName.Contains(filters.ItemName, StringComparison.InvariantCultureIgnoreCase));
     }
 }

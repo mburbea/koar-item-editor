@@ -15,7 +15,7 @@ public sealed class SearchableText : Control
     public static readonly DependencyProperty TextProperty = DependencyProperty.Register(nameof(SearchableText.Text), typeof(string), typeof(SearchableText),
         new(SearchableText.TextProperty_ValueChanged));
 
-    private static readonly DependencyPropertyKey _segmentsPropertyKey = DependencyProperty.RegisterReadOnly(nameof(SearchableText.Segments), typeof(IReadOnlyList<Segment>), typeof(SearchableText),
+    private static readonly DependencyPropertyKey _segmentsPropertyKey = DependencyProperty.RegisterReadOnly(nameof(SearchableText.Segments), typeof(Segment[]), typeof(SearchableText),
         new(Array.Empty<Segment>()));
 
     static SearchableText()
@@ -42,7 +42,7 @@ public sealed class SearchableText : Control
         set => this.SetValue(SearchableText.TextProperty, value);
     }
 
-    private static List<Segment> ComputeSegments(string? text, string? searchText)
+    private static Segment[] ComputeSegments(string? text, string? searchText)
     {
         if (string.IsNullOrEmpty(text))
         {
@@ -72,7 +72,7 @@ public sealed class SearchableText : Control
         {
             list.Add(text[start..]);
         }
-        return list;
+        return [.. list];
     }
 
     private static void SearchTextProperty_ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

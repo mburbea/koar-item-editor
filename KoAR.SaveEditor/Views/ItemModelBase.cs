@@ -5,17 +5,15 @@ using KoAR.SaveEditor.Constructs;
 
 namespace KoAR.SaveEditor.Views;
 
-public abstract class ItemModelBase : NotifierBase, IDisposable
+public abstract class ItemModelBase(IItem item) : NotifierBase, IDisposable
 {
-    protected ItemModelBase(IItem item) => this.Item = item;
-
     public int AffixCount => (this.Prefix == null ? 0 : 1) + (this.Suffix == null ? 0 : 1);
 
     public EquipmentCategory Category => this.Item.Definition.Category;
 
     public virtual float CurrentDurability
     {
-        get => this.Item.CurrentDurability;
+        get => item.CurrentDurability;
         set => throw new NotSupportedException();
     }
 
@@ -25,9 +23,9 @@ public abstract class ItemModelBase : NotifierBase, IDisposable
 
     public string DisplayName => this.HasCustomName ? this.ItemName : this.DefinitionDisplayName;
 
-    public bool HasCustomName => this.Item.HasCustomName;
+    public bool HasCustomName => item.HasCustomName;
 
-    public bool IsEquipped => this.Item.IsEquipped;
+    public bool IsEquipped => item.IsEquipped;
 
     public virtual bool IsStolen
     {
@@ -35,25 +33,25 @@ public abstract class ItemModelBase : NotifierBase, IDisposable
         set => throw new NotSupportedException();
     }
 
-    public IItem Item { get; }
+    public IItem Item => item;
 
     public abstract IReadOnlyList<Buff> ItemBuffs { get; }
 
     public virtual string ItemName
     {
-        get => this.Item.ItemName;
+        get => item.ItemName;
         set => throw new NotSupportedException();
     }
 
     public virtual byte Level
     {
-        get => this.Item.Level;
+        get => item.Level;
         set => throw new NotSupportedException();
     }
 
     public virtual float MaxDurability
     {
-        get => this.Item.MaxDurability;
+        get => item.MaxDurability;
         set => throw new NotSupportedException();
     }
 
@@ -61,19 +59,19 @@ public abstract class ItemModelBase : NotifierBase, IDisposable
 
     public virtual Buff? Prefix
     {
-        get => this.Item.ItemBuffs.Prefix;
+        get => item.ItemBuffs.Prefix;
         set => throw new NotSupportedException();
     }
 
-    public Rarity Rarity => this.Item.Rarity;
+    public Rarity Rarity => item.Rarity;
 
     public virtual Buff? Suffix
     {
-        get => this.Item.ItemBuffs.Suffix;
+        get => item.ItemBuffs.Suffix;
         set => throw new NotSupportedException();
     }
 
-    public ItemDefinition Definition => this.Item.Definition;
+    public ItemDefinition Definition => item.Definition;
 
     public abstract bool UnsupportedFormat { get; }
 
@@ -90,13 +88,8 @@ public abstract class ItemModelBase : NotifierBase, IDisposable
     }
 }
 
-public abstract class ItemModelBase<TItem> : ItemModelBase
+public abstract class ItemModelBase<TItem>(TItem item) : ItemModelBase(item)
     where TItem : IItem
 {
-    protected ItemModelBase(TItem item)
-        : base(item)
-    {
-    }
-
-    public new TItem Item => (TItem)base.Item;
+    public new TItem Item => item;
 }

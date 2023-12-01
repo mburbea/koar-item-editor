@@ -273,7 +273,7 @@ static partial class Program
     static void WriteParentFile(GameSave gs)
     {
         File.WriteAllLines(@"C:\Program Files (x86)\Steam\steamapps\common\Kingdoms of Amalur Re-Reckoning\mods\resources\parent.lua",
-        gs.Items.Select(item => Entry(item)).Prepend("return {").Append("}"));
+        gs.Items.Select(Entry).Prepend("return {").Append("}"));
 
         static string Entry(Item item)
         {
@@ -325,7 +325,6 @@ static partial class Program
             return s + "},";
         }
     }
-
 
     static HashSet<uint> BuildVariants()
     {

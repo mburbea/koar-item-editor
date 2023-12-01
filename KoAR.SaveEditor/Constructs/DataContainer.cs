@@ -12,13 +12,13 @@ public readonly struct DataContainer(object? data) : IComparable, IComparable<Da
 
     public static readonly DataContainer Empty = default;
 
-    public object? Data { get; } = data;
+    public object? Data => data;
 
     public static bool operator !=(DataContainer left, DataContainer right) => !left.Equals(right);
 
     public static bool operator ==(DataContainer left, DataContainer right) => left.Equals(right);
 
-    public int CompareTo(DataContainer other) => Comparer.Default.Compare(this.Data, other.Data);
+    public int CompareTo(DataContainer other) => Comparer.Default.Compare(data, other.Data);
 
     int IComparable.CompareTo(object? obj)
     {
@@ -27,11 +27,11 @@ public readonly struct DataContainer(object? data) : IComparable, IComparable<Da
 
     public override bool Equals(object? obj) => obj is DataContainer other && this.Equals(other);
 
-    public bool Equals(DataContainer other) => Object.Equals(this.Data, other.Data);
+    public bool Equals(DataContainer other) => Object.Equals(data, other.Data);
 
-    public override int GetHashCode() => this.Data == null ? 0 : this.Data.GetHashCode();
+    public override int GetHashCode() => data == null ? 0 : data.GetHashCode();
 
-    public override string? ToString() => this.Data == null ? string.Empty : this.Data.ToString();
+    public override string? ToString() => data == null ? string.Empty : data.ToString();
 
     private sealed class DataContainerCollectionConverter : IValueConverter
     {
