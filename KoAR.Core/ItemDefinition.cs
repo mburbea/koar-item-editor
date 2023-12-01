@@ -16,7 +16,7 @@ public sealed partial class ItemDefinition : IDefinition
         Name = InternalName = $"Unknown Simtype:{typeId}";
         SocketTypes = "";
         ItemBuffs = ItemDefinitionBuffMemory.Empty;
-        PlayerBuffs = Array.Empty<Buff>();
+        PlayerBuffs = [];
     }
 
     private ItemDefinition(EquipmentCategory category, uint typeId, byte level, string name, string internalName, float maxDurability, Rarity rarity,

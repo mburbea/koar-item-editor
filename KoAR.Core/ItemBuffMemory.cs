@@ -8,7 +8,7 @@ namespace KoAR.Core;
 
 public sealed class ItemBuffMemory : IItemBuffMemory
 {
-    internal static List<(Item item, uint instanceId)> SetOfInstances = new();
+    internal static List<(Item item, uint instanceId)> SetOfInstances = [];
     private static class Offsets
     {
         public const int DataLength = 13;
@@ -99,8 +99,8 @@ public sealed class ItemBuffMemory : IItemBuffMemory
         }
         var currentLength = Bytes.Length - 8 - Offsets.FirstActiveBuff;
         var activeBuffBytes = MemoryMarshal.AsBytes(
-            (Prefix?.ApplyType == ApplyType.OnObject ? new[] { new BuffInstance(GetAffixInstanceId(Prefix), Prefix.Id) } : Array.Empty<BuffInstance>())
-            .Concat(Suffix?.ApplyType == ApplyType.OnObject ? new[] { new BuffInstance(GetAffixInstanceId(Suffix), Suffix.Id) } : Array.Empty<BuffInstance>())
+            (Prefix?.ApplyType == ApplyType.OnObject ? [new BuffInstance(GetAffixInstanceId(Prefix), Prefix.Id)] : Array.Empty<BuffInstance>())
+            .Concat(Suffix?.ApplyType == ApplyType.OnObject ? [new BuffInstance(GetAffixInstanceId(Suffix), Suffix.Id)] : Array.Empty<BuffInstance>())
             .Concat(List.Select((buff, i) => new BuffInstance(GetSelfBuffInstanceId(i), buff.Id)))
             .Concat(_item.ItemSockets.Gems
                     .Select((gem, slot) => (gem.Definition.Buff, slot))

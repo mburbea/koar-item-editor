@@ -14,7 +14,7 @@ partial class App
 {
     static App() => Type.GetTypeCode(typeof(PlatformCulture)); // Needed to enforce loading of PresentationFramework.Aero.dll before initializing App.
 
-    public static Version Version { get; } = new(Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>()!.InformationalVersion);
+    public static Version Version { get; } = App.ParseVersion(Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>()!.InformationalVersion);
 
     public static void CreateGithubIssue(string titlePrefix) => App.OpenInBrowser(
         $"https://github.com/mburbea/koar-item-editor/issues/new?labels=bug&template=bug_report.md&title={WebUtility.UrlEncode($"{titlePrefix} (in v{App.Version})")}"
@@ -44,6 +44,8 @@ partial class App
             App.CreateGithubIssue(content);
         }
     }
+
+    private static Version ParseVersion(string text) => new(text.IndexOf('+') is int index and not -1 ? text[..index] : text);
 
     protected override void OnExit(ExitEventArgs e)
     {

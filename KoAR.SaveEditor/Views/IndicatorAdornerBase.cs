@@ -168,7 +168,7 @@ public abstract class IndicatorAdornerBase : Adorner, IDisposable
 
         private static Func<FrameworkElement, TAdorner> CreateDefaultFactory() => Expression.Lambda<Func<FrameworkElement, TAdorner>>(
             Expression.New(
-                typeof(TAdorner).GetConstructor(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { typeof(FrameworkElement) }, null)!,
+                typeof(TAdorner).GetConstructor(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null, [typeof(FrameworkElement)], null)!,
                 IndicatorAdornerBase._elementParameter
             ),
             IndicatorAdornerBase._elementParameter

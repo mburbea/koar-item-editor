@@ -3,16 +3,10 @@ using System.Windows.Input;
 
 namespace KoAR.SaveEditor.Constructs;
 
-public sealed class DelegateCommand : ICommand
+public sealed class DelegateCommand(Action execute, Func<bool>? canExecute = null) : ICommand
 {
-    private readonly Func<bool>? _canExecute;
-    private readonly Action _execute;
-
-    public DelegateCommand(Action execute, Func<bool>? canExecute = null)
-    {
-        this._execute = execute ?? throw new ArgumentNullException(nameof(execute));
-        this._canExecute = canExecute;
-    }
+    private readonly Func<bool>? _canExecute = canExecute;
+    private readonly Action _execute = execute ?? throw new ArgumentNullException(nameof(execute));
 
     event EventHandler? ICommand.CanExecuteChanged
     {
@@ -47,16 +41,9 @@ public sealed class DelegateCommand : ICommand
     }
 }
 
-public sealed class DelegateCommand<T> : ICommand
+public sealed class DelegateCommand<T>(Action<T> execute, Func<T, bool>? canExecute = null) : ICommand
 {
-    private readonly Func<T, bool>? _canExecute;
-    private readonly Action<T> _execute;
-
-    public DelegateCommand(Action<T> execute, Func<T, bool>? canExecute = null)
-    {
-        this._execute = execute ?? throw new ArgumentNullException(nameof(execute));
-        this._canExecute = canExecute;
-    }
+    private readonly Action<T> _execute = execute ?? throw new ArgumentNullException(nameof(execute));
 
     event EventHandler? ICommand.CanExecuteChanged
     {
@@ -66,7 +53,7 @@ public sealed class DelegateCommand<T> : ICommand
 
     bool ICommand.CanExecute(object? parameter) => parameter is T converted && this.CanExecute(converted);
 
-    public bool CanExecute(T parameter) => this._canExecute == null || this._canExecute(parameter);
+    public bool CanExecute(T parameter) => canExecute == null || canExecute(parameter);
 
     void ICommand.Execute(object? parameter)
     {

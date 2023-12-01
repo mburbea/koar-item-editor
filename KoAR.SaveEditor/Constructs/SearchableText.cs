@@ -42,17 +42,17 @@ public sealed class SearchableText : Control
         set => this.SetValue(SearchableText.TextProperty, value);
     }
 
-    private static IReadOnlyList<Segment> ComputeSegments(string? text, string? searchText)
+    private static List<Segment> ComputeSegments(string? text, string? searchText)
     {
         if (string.IsNullOrEmpty(text))
         {
-            return Array.Empty<Segment>();
+            return [];
         }
         if (string.IsNullOrEmpty(searchText) || searchText.Length > text.Length)
         {
-            return new[] { (Segment)text };
+            return [(Segment)text];
         }
-        List<Segment> list = new();
+        List<Segment> list = [];
         int start = 0;
         while (start < text.Length)
         {

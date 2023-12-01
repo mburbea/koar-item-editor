@@ -31,8 +31,7 @@ public sealed class JsonSnakeCaseNamingPolicy : JsonNamingPolicy
             UnicodeCategory currentCategory = char.GetUnicodeCategory(current);
             switch (currentCategory)
             {
-                case UnicodeCategory.UppercaseLetter:
-                case UnicodeCategory.TitlecaseLetter:
+                case UnicodeCategory.UppercaseLetter or UnicodeCategory.TitlecaseLetter:
                     if (previousCategory is UnicodeCategory.SpaceSeparator or UnicodeCategory.LowercaseLetter ||
                         previousCategory != UnicodeCategory.DecimalDigitNumber &&
                         index > 0 &&
@@ -43,8 +42,7 @@ public sealed class JsonSnakeCaseNamingPolicy : JsonNamingPolicy
                     }
                     current = char.ToLowerInvariant(current);
                     break;
-                case UnicodeCategory.LowercaseLetter:
-                case UnicodeCategory.DecimalDigitNumber:
+                case UnicodeCategory.LowercaseLetter or UnicodeCategory.DecimalDigitNumber:
                     if (previousCategory == UnicodeCategory.SpaceSeparator)
                     {
                         builder.Append('_');

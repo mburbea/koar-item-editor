@@ -45,7 +45,7 @@ public sealed partial class Item : IItem
         set => Unsafe.WriteUnaligned(ref Bytes[Offsets.DataLength], value - 17);
     }
 
-    public List<Buff> PlayerBuffs { get; } = new();
+    public List<Buff> PlayerBuffs { get; } = [];
 
     public bool HasCustomName
     {
@@ -224,7 +224,7 @@ public sealed partial class Item : IItem
         {
             0 => Definition.GetSockets(),
             1 when Definition.SocketTypes.Length == 1 => new[] { new Socket(Definition.SocketTypes[0], ItemSockets.Gems[0]) }, // trivial case.
-            _ => Inner(Definition.SocketTypes, ItemSockets.Gems.ToArray())
+            _ => Inner(Definition.SocketTypes, [.. ItemSockets.Gems])
         };
 
         static IEnumerable<Socket> Inner(string sockets, Gem[] gems)

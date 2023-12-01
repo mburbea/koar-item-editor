@@ -80,11 +80,11 @@ public sealed partial class GameSave
             : data.IndexOf(new byte[5] { 0x23, 0xCC, 0x58, 0x00, 0x04 }) is int pix and > -1
                 ? pix
                 : data.IndexOf(new byte[5] { 0x23, 0xCC, 0x58, 0x00, 0x03 });
-        _dataLengthOffsets = new[]{
+        _dataLengthOffsets = [
                 _gameStateStartOffset + 5, // gameStateSize
                 data.IndexOf(new byte[5] { 0x0C, 0xAE, 0x32, 0x00, 0x00 }) + 5, // unknown length 1
                 typeSectionOffset + 5, // type section length
-            };
+            ];
         _itemContainer = new(this, data.IndexOf(new byte[5] { 0xD3, 0x34, 0x43, 0x00, 0x00 }), 0x00_24_D5_68_00_00_00_0Bul);
         _itemBuffsContainer = new(this, data.IndexOf(new byte[5] { 0xBB, 0xD5, 0x43, 0x00, 0x00 }), 0x00_28_60_84_00_00_00_0Bul);
         _itemSocketsContainer = new(this, data.IndexOf(new byte[5] { 0x93, 0xCC, 0x80, 0x00, 0x00 }), 0x00_59_36_38_00_00_00_0Bul);
@@ -225,15 +225,15 @@ public sealed partial class GameSave
 
     public IReadOnlyCollection<ItemDefinition> ItemDefinitions { get; }
 
-    public List<Item> Items { get; } = new();
+    public List<Item> Items { get; } = [];
 
-    public HashSet<Item> EquippedItems { get; } = new();
+    public HashSet<Item> EquippedItems { get; } = [];
 
-    public Dictionary<int, Gem> Gems { get; } = new();
+    public Dictionary<int, Gem> Gems { get; } = [];
 
     public Stash? Stash { get; private set; }
 
-    public List<QuestItem> QuestItems { get; } = new();
+    public List<QuestItem> QuestItems { get; } = [];
 
     internal void UpdateDataLengths(int itemOffset, int delta)
     {

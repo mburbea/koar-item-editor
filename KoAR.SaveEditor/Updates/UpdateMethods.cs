@@ -135,7 +135,7 @@ public static partial class UpdateMethods
         private Version? _version;
         private ReleaseAsset? _zipFileAsset;
 
-        public ReleaseAsset[] Assets { get; set; } = Array.Empty<ReleaseAsset>();
+        public ReleaseAsset[] Assets { get; set; } = [];
 
         public string Body { get; set; } = string.Empty;
 

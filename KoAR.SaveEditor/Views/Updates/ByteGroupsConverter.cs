@@ -7,7 +7,7 @@ namespace KoAR.SaveEditor.Views.Updates;
 
 public sealed class ByteGroupsConverter : IValueConverter
 {
-    private static readonly string[] _groups = { "B", "KB", "MB", "GB", "TB" };
+    private static readonly string[] _groups = ["B", "KB", "MB", "GB", "TB"];
 
     object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {

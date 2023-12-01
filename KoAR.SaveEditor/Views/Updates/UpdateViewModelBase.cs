@@ -18,7 +18,7 @@ namespace KoAR.SaveEditor.Views.Updates;
 
 public abstract class UpdateViewModelBase : NotifierBase, IDisposable
 {
-    private static readonly Brush _alternateBrush = UpdateViewModelBase.CreateAlternateBrush();
+    private static readonly SolidColorBrush _alternateBrush = UpdateViewModelBase.CreateAlternateBrush();
 
     private readonly CancellationTokenSource _cancellationTokenSource = new();
     private readonly Dispatcher _dispatcher = Dispatcher.CurrentDispatcher;
@@ -95,7 +95,7 @@ public abstract class UpdateViewModelBase : NotifierBase, IDisposable
         GC.SuppressFinalize(this);
     }
 
-    private static Brush CreateAlternateBrush()
+    private static SolidColorBrush CreateAlternateBrush()
     {
         SolidColorBrush brush = new(Color.FromArgb(8, 0, 0, 0));
         brush.Freeze();

@@ -7,7 +7,7 @@ namespace KoAR.SaveEditor.Views;
 
 public sealed class BuffDescriptionsConverter : IValueConverter
 {
-    private static readonly BuffDescription[] _empty = { BuffDescription.Empty };
+    private static readonly BuffDescription[] _empty = [BuffDescription.Empty];
 
     object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {

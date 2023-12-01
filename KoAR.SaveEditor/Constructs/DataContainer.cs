@@ -6,15 +6,13 @@ using System.Windows.Data;
 
 namespace KoAR.SaveEditor.Constructs;
 
-public readonly struct DataContainer : IComparable, IComparable<DataContainer>, IEquatable<DataContainer>
+public readonly struct DataContainer(object? data) : IComparable, IComparable<DataContainer>, IEquatable<DataContainer>
 {
     public static readonly IValueConverter CollectionConverter = new DataContainerCollectionConverter();
 
     public static readonly DataContainer Empty = default;
 
-    public DataContainer(object? data) => this.Data = data;
-
-    public object? Data { get; }
+    public object? Data { get; } = data;
 
     public static bool operator !=(DataContainer left, DataContainer right) => !left.Equals(right);
 
@@ -43,7 +41,7 @@ public readonly struct DataContainer : IComparable, IComparable<DataContainer>, 
         {
             return value is IEnumerable collection
                 ? collection.Cast<object>().Select(DataContainerCollectionConverter._getContainer).ToArray()
-                : new[] { DataContainerCollectionConverter._getContainer(value) };
+                : [DataContainerCollectionConverter._getContainer(value)];
         }
 
         object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();

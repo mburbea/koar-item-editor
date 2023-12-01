@@ -3,11 +3,9 @@ using KoAR.Core;
 
 namespace KoAR.SaveEditor.Views.QuestItems;
 
-public sealed class QuestItemModel
+public sealed class QuestItemModel(QuestItem item)
 {
-    private readonly QuestItem _item;
-
-    public QuestItemModel(QuestItem item) => this._item = item;
+    private readonly QuestItem _item = item;
 
     public event EventHandler? IsSellableChanged;
 

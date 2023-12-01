@@ -31,7 +31,7 @@ public partial class StashItem : IItem
 
     protected byte[] Bytes { get; }
 
-    public List<Buff> PlayerBuffs { get; } = new();
+    public List<Buff> PlayerBuffs { get; } = [];
 
     public Gem[] Gems { get; }
 
@@ -79,7 +79,7 @@ public partial class StashItem : IItem
         {
             0 => Definition.GetSockets(),
             1 when Definition.SocketTypes.Length == 1 => new[] { new Socket(Definition.SocketTypes[0], Gems[0]) }, // trivial case.
-            _ => Inner(Definition.SocketTypes, Gems.ToArray())
+            _ => Inner(Definition.SocketTypes, [.. Gems])
         };
 
         static IEnumerable<Socket> Inner(string sockets, Gem[] gems)

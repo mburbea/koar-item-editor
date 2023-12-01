@@ -5,10 +5,9 @@ namespace KoAR.Core;
 public partial class StashItem
 {
     [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Offsets class.")]
-    protected readonly struct Offset
+    protected readonly struct Offset(StashItem item)
     {
-        private readonly StashItem _item;
-        public Offset(StashItem item) => _item = item;
+        private readonly StashItem _item = item;
 
         public readonly int TypeId => 0;
         public readonly int Pocket => 6;

@@ -3,11 +3,9 @@ using System.Threading;
 
 namespace KoAR.SaveEditor.Constructs;
 
-public sealed class Disposable : IDisposable
+public sealed class Disposable(Action? action) : IDisposable
 {
-    private Action? _action;
-
-    public Disposable(Action? action) => this._action = action;
+    private Action? _action = action;
 
     public void Dispose()
     {

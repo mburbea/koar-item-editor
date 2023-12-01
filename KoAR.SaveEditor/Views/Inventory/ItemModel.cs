@@ -158,8 +158,8 @@ public sealed class ItemModel : ItemModelBase<Item>
     private static class ValueSetter<TValue>
     {
         private static readonly PropertyInfo _defaultProperty = typeof(EqualityComparer<TValue>).GetProperty(nameof(EqualityComparer<TValue>.Default), BindingFlags.Public | BindingFlags.Static)!;
-        private static readonly MethodInfo _equalsMethod = typeof(EqualityComparer<TValue>).GetMethod(nameof(EqualityComparer<TValue>.Equals), new[] { typeof(TValue), typeof(TValue) })!;
-        private static readonly Dictionary<string, Func<ItemModel, TValue, bool>> _setters = new();
+        private static readonly MethodInfo _equalsMethod = typeof(EqualityComparer<TValue>).GetMethod(nameof(EqualityComparer<TValue>.Equals), [typeof(TValue), typeof(TValue)])!;
+        private static readonly Dictionary<string, Func<ItemModel, TValue, bool>> _setters = [];
         private static readonly ParameterExpression _valueParameter = Expression.Parameter(typeof(TValue), "value");
 
         public static bool SetValue(ItemModel model, TValue value, string propertyPath, string propertyName)

@@ -10,7 +10,7 @@ namespace KoAR.SaveEditor.Views;
 public abstract class ManagerViewModelBase<TItem> : NotifierBase, IDisposable
     where TItem : ItemModelBase
 {
-    private readonly NotifyingCollection<TItem> _items = new();
+    private readonly NotifyingCollection<TItem> _items = [];
     private readonly Func<GameSave, IEnumerable<TItem>> _itemsProjection;
     private IReadOnlyList<TItem> _filteredItems;
     private TItem? _selectedItem;

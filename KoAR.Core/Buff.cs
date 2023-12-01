@@ -8,7 +8,7 @@ public record Buff(uint Id, string? Modifier = null, string Name = null!, string
     BuffTypes BuffType = default, ApplyType ApplyType = default) : IDefinition
 {
     [JsonPropertyName("desc")]
-    public BuffDescription[] Descriptions { get; set; } = Array.Empty<BuffDescription>();
+    public BuffDescription[] Descriptions { get; set; } = [];
 
     public string TitleText => (((BuffTypes.TransientOrAffix & BuffType) == BuffType ? Modifier : Flavor) ?? Name).Replace('\n', '.');
 
