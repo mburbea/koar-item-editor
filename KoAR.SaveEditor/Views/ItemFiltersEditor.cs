@@ -47,22 +47,17 @@ public sealed class ItemFiltersEditor : Control
 
         object[] IMultiValueConverter.ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture) => throw new NotImplementedException();
 
-        private readonly struct Filters : IItemFilters
+        private readonly struct Filters(EquipmentCategory category, Rarity rarity, Element element, ArmorType armorType, string itemName) : IItemFilters
         {
-            public Filters(EquipmentCategory category, Rarity rarity, Element element, ArmorType armorType, string itemName)
-            {
-                (this.Category, this.Rarity, this.Element, this.ArmorType, this.ItemName) = (category, rarity, element, armorType, itemName);
-            }
+            public ArmorType ArmorType => armorType;
 
-            public ArmorType ArmorType { get; }
+            public EquipmentCategory Category => category;
 
-            public EquipmentCategory Category { get; }
+            public Element Element => element;
 
-            public Element Element { get; }
+            public string ItemName => itemName;
 
-            public string ItemName { get; }
-
-            public Rarity Rarity { get; }
+            public Rarity Rarity => rarity;
         }
     }
 }

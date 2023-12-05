@@ -184,8 +184,8 @@ public sealed class ItemCollectionManager : Control
 
     private void GridViewColumn_Click(object? sender, RoutedEventArgs e)
     {
-        if (e.OriginalSource is not GridViewColumnHeader header ||
-            ItemCollectionManager.GetPropertyName(header.Column) is not { } name ||
+        if (e.OriginalSource is not GridViewColumnHeader { Column: { } column } ||
+            ItemCollectionManager.GetPropertyName(column) is not { } name ||
             this.CollectionView?.SortDescriptions is not ([_, { Direction: { } direction, PropertyName: { } propertyName }, _] descriptions))
         {
             return;
